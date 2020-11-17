@@ -4,7 +4,7 @@
     "type": "project",
     "license": "MIT",
     "require": {
-        "tulia/cms": "dev-master"
+        "tuliacms/cms": "dev-main"
     },
     "------------------": {
         "symfony/cache": "~5.0",
