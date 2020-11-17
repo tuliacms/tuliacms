@@ -1,0 +1,15 @@
+### <tulia:core>
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    RewriteRule ^/?assets/(.*)$ public/assets/$1 [NC,L,QSA,END]
+    RewriteRule ^/?media/(.*)$ public/media/$1 [NC,L,QSA,END]
+    RewriteRule ^/?uploads/(.*)$ public/uploads/$1 [NC,L,QSA,END]
+
+    RewriteRule ^(.*)$ public/index.php [NC,L,QSA,END]
+</IfModule>
+
+<IfModule !mod_rewrite.c>
+    deny from all
+</IfModule>
+### </tulia:core>
