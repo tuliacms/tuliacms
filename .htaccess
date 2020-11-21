@@ -2,6 +2,9 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
+    # Special route to handle images cropping
+    RewriteRule ^/?media/resolve/image/([a-zA-Z0-9-]+)/([a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12})/([^/]+\.[a-z]+)$ public/index.php [NC,L,QSA,END]
+
     RewriteRule ^/?assets/(.*)$ public/assets/$1 [NC,L,QSA,END]
     RewriteRule ^/?media/(.*)$ public/media/$1 [NC,L,QSA,END]
     RewriteRule ^/?uploads/(.*)$ public/uploads/$1 [NC,L,QSA,END]

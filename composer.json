@@ -4,7 +4,7 @@
     "type": "project",
     "license": "MIT",
     "require": {
-        "tuliacms/cms": "dev-main"
+        "tuliacms/cms": "@dev"
     },
     "------------------": {
         "symfony/cache": "~5.0",
@@ -23,6 +23,22 @@
         "phpstan/phpstan": "~0.11",
         "fzaninotto/faker": "~1.8"
     },
+    "repositories": [
+        { "type": "path", "url": "../packages/cms", "options": {"symlink": true} },
+        { "type": "path", "url": "../packages/command-bus", "options": {"symlink": true} },
+        { "type": "path", "url": "../packages/assetter", "options": {"symlink": true} },
+        { "type": "path", "url": "../packages/datatable", "options": {"symlink": true} },
+        { "type": "path", "url": "../packages/dependency-injection", "options": {"symlink": true} },
+        { "type": "path", "url": "../packages/form-builder", "options": {"symlink": true} },
+        { "type": "path", "url": "../packages/framework", "options": {"symlink": true} },
+        { "type": "path", "url": "../packages/hooking", "options": {"symlink": true} },
+        { "type": "path", "url": "../packages/image", "options": {"symlink": true} },
+        { "type": "path", "url": "../packages/routing", "options": {"symlink": true} },
+        { "type": "path", "url": "../packages/shortcode", "options": {"symlink": true} },
+        { "type": "path", "url": "../packages/templating", "options": {"symlink": true} },
+        { "type": "path", "url": "../packages/theme", "options": {"symlink": true} },
+        { "type": "path", "url": "../packages/widget", "options": {"symlink": true} }
+    ],
     "config": {
         "bin-dir": "bin"
     },
@@ -31,5 +47,7 @@
             "Tulia\\Theme\\": "extension/theme",
             "Tulia\\Module\\": "extension/module"
         }
-    }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable" : true
 }
