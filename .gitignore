@@ -9,8 +9,5 @@
 /var
 /vendor
 /extension
-/bin/*
-!/bin/env
-!/bin/console
 
 /public/*
