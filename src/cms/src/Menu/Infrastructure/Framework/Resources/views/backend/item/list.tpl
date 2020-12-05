@@ -14,7 +14,7 @@
 {% block content %}
     <div class="pane pane-lead">
         <div class="pane-header">
-            <div class="pane-buttons">menu.hierarchy
+            <div class="pane-buttons">
                 <a href="{{ path('backend.menu.item.create', { menuId: menu.id }) }}" class="btn btn-success btn-icon-left"><i class="btn-icon fas fa-plus"></i> {{ 'add'|trans }}</a>
                 <a href="{{ path('backend.menu.hierarchy', { menuId: menu.id }) }}" class="btn btn-default btn-icon-left"><i class="btn-icon fa fa-sitemap"></i> {{ 'changeHierarchy'|trans({}, 'menu') }}</a>
             </div>
@@ -23,7 +23,8 @@
         </div>
 
         {{ generator.generate(datatable, {
-            data_endpoint: path('backend.menu.item.datatable', { menuId: menu.id })
+            data_endpoint: path('backend.menu.item.datatable', { menuId: menu.id }),
+            pagination: false
         }) }}
     </div>
 {% endblock %}

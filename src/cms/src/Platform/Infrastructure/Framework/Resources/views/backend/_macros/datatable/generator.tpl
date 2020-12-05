@@ -13,6 +13,7 @@
                 per_page_limit: {{ options.per_page_limit ?? 20 }},
                 columns: {{ front.columns|json_encode|raw }},
                 filters: {{ front.filters|json_encode|raw }},
+                pagination: {{ (options.pagination ?? true) ? 'true' : 'false' }},
                 i18n: {
                     translations: {
                         'moreOptions': '{{ 'moreOptions'|trans }}',
