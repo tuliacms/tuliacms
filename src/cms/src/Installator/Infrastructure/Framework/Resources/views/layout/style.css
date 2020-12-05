@@ -1,0 +1,14 @@
+.intro-vh-centered {position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:700px;}
+.intro-vh-centered .jumbotron {padding:60px 80px;}
+
+.installator-container {max-width:800px;margin:0 auto;}
+.installator-container .header {margin-bottom:30px;}
+
+.footer-info {font-size:11px;margin-bottom:10px;}
+.footer-info p {line-height:26px;}
+.language-selector {display:inline-block;width:auto;padding:0 3px;margin-left:5px;font-size:11px;height:26px;line-height:26px;}
+
+.installator-wrapper {background-color: #e9ecef;padding:15px 15px 30px 15px;margin:20px 0;border-radius:4px;}
+.header h1 {margin:20px 0}
+
+.navigation-buttons {margin-top:15px;}

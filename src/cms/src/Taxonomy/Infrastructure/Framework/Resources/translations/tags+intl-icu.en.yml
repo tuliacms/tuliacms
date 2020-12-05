@@ -1,0 +1,17 @@
+taxonomy: Tag
+taxonomies: Tags
+taxonomySaved: Tag saved
+deleteTaxonomy: Delete tag
+deleteSelectedTaxonomies: Delete selected tags
+areYouSureYouWantToDeleteFollowingTaxonomies: >
+    {hierarchical, select,
+        1 {Are You sure You want to delete following tags and their children?}
+        other {Are You sure You want to delete following tags?}
+    }
+selectedTaxonomiesWereDeleted: Selected tags were deleted.
+previewTaxonomy: Preview tag
+taxonomiesList: Tags list
+editTaxonomy: Edit tag
+createTaxonomy: Create tag
+parentTaxonomy: Parent tag
+rootTaxonomy: Root tag

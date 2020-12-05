@@ -1,0 +1,27 @@
+forms: Forms
+list: Forms list
+form: Form
+deleteForm: Delete form
+createForm: Create form
+formHasBeenSentThankYou: The form has been sent, thank you.
+formNotHasBeenSentTryAgain: The form has not been sent, please try again.
+formSaved: Form saved.
+formNotFound: Form not found.
+editForm: Edit form
+messageTemplate: Message template
+receivers: Receivers
+receiversHelpText: You can type many receivers, separated by coma.
+messageSubject: Message subject
+sender: Sender
+notificationMessages: Notifications
+fields: Fields
+successMessage: Success message
+successMessageHelpText: This message will be shown when user successfully submit his form.
+failMessage: Fail message
+failMessageHelpText: asd
+addField: Add field
+selectFieldType: Select field type
+formFieldNameContainsInvalidName: "Field name must be alphanum with underscore, \"{name}\" given. Please fix the name and save form again."
+widget:
+    name: Contact form
+    description: Shows contact form.

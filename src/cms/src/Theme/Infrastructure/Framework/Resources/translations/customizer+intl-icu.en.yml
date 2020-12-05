@@ -1,0 +1,19 @@
+website: Website
+websiteName: Website name
+websiteFavicon: Website favicon
+publish: Publish
+themeCustomize: Theme customizing
+cancelChangesQuestion: Cancel changes?
+areYouSureToCancelChanges: Are You sure You want to cancel these changes?
+saveChangesQuestion: Save changes?
+areYouSureToSaveChanges: Are You sure? This operation cannot be undone!
+tools: Tools
+copySettingsFromParentTheme: Copy settings
+copySettings: Copy settings
+resetCustomizerSettings: Reset settings
+resetSettings: Reset settings
+layouts: Layouts
+browseLayouts: Browse layouts
+saveCurrentLayout: Save current layout
+multilingualDescription: Fields with this badge will be saved only for current language. Rest of fields are saved for all langauges, even if You edit any of defined languages.
+switchWebsite: Switch Website

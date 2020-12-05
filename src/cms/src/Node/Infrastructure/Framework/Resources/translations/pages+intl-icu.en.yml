@@ -1,0 +1,25 @@
+node: Page
+nodes: Pages
+nodeSaved: Page saved
+trashNode: Trash page
+deleteNode: Delete page
+publishNode: Publish page
+trashSelectedNodes: Trash selected pages
+deleteSelectedNodes: Delete selected pages
+publishSelectedNodes: Publish selected pages
+areYouSureYouWantToTrashFollowingNodes: Are You sure You want to trash following pages?
+areYouSureYouWantToDeleteFollowingNodes: Are You sure You want to delete following pages?
+areYouSureYouWantToPublishFollowingNodes: Are You sure You want to publish following pages?
+selectedNodesWereTrashed: Selected pages were trashed.
+selectedNodesWereDeleted: Selected pages were deleted.
+selectedNodesWerePublished: Selected pages were published.
+selectedNodesWereUpdated: Selected pages were updated.
+previewNode: Preview page
+nodesList: Pages list
+editNode: Edit page
+createNode: Create page
+nodeNotFound: Node not found.
+parentNode: Parent node
+cannotAssignSelfNodeParent: Cannot assign self page as parent. Please select another parent page.
+activityUserCreatedNewNode: "User {username} created new <a href=\"{link}\">page</a>."
+activityUserDeletedNode: "User {username} deleted page."

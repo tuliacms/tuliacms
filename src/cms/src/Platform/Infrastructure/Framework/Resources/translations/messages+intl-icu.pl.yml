@@ -1,0 +1,35 @@
+# labelStatus: "Node status: {status}"
+# invitation_title: >
+#     {organizer_gender, select,
+#         female {{organizer_name} has invited you for her party!}
+#         male   {{organizer_name} has invited you for his party!}
+#         other  {{organizer_name} have invited you for their party!}
+#     }
+
+title: Tytuł
+slug: Slug
+content: Treść
+introduction: Wprowadzenie
+description: Opis
+thumbnail: Miniaturka
+status: Status
+publicationStatus: Status publikacji
+node: Node
+sketch: Szkic
+published: Opublikowany
+trashed: W koszu
+publishedAt: Opublikowany dnia
+category: Kategoria
+save: Zapisz
+cancel: Anuluj
+visibility: Widoczność
+yes: Tak
+no: Nie
+contents: Treści
+administration: Zarządzanie
+dashboard: Kokpit
+settings: Ustawienia
+basics: Podstawowe
+lastActivity: Ostatnia aktywność
+visible: Widoczny
+invisible: Niewidoczny

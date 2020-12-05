@@ -1,0 +1,33 @@
+deleteMenu: Delete menu
+deleteSelectedMenus: Delete selected menus
+areYouSureYouWantToDeleteFollowingMenus: Are You sure You want to delete following Menus?
+addMenu: Add menu
+menuName: Menu name
+pleaseProvideMenuName: Please provide menu name.
+editMenu: Edit menu
+menuUpdated: Menu updated.
+selectedMenusWereDeleted: Selected menus were deleted.
+menuItems: Menu items
+deleteSelectedItems: Delete selected items
+areYouSureYouWantToDeleteFollowingItems: Are You sure You want to delete following Items?
+deleteItem: Delete item
+createItem: Create item
+editItem: Edit item
+itemType: Item type
+itemTypeHomepage: Homepage
+itemTypeHash: Hash
+itemTypeNode: Node
+itemTypeTerm: Term
+itemTypeUrl: URL link
+parentItem: Parent item
+itemHash: Hash
+itemTarget: Target (open in)
+itemTargetAuto: Auto - detect by destination URL
+itemTargetSelf: _self - The same browser window
+itemTargetBlank: _blank - New browser window
+rootItem: Root item
+rootItemSpecial: -- root item --
+itemSaved: Item saved.
+selectedItemsWereDeleted: Selected items were deleted.
+addChildItem: Add child item
+changeHierarchy: Change hierarchy

@@ -1,0 +1,39 @@
+maintenanceMode: Maintenance mode
+maintenanceModeHelp: Maintenance mode turns down website for end users and shows maintenance info on every page. Only users with access to backend can show website on maintenance mode.
+maintenanceMessage: Maintenance message
+maintenanceMessageHelp: Maintenance message will we showed when website is under maintenance mode.
+theme: Website Theme
+themeHelp: Select Your website Theme.
+settingsSaved: Settings saved.
+perPage: Elements per page
+dateFormat: Date format
+websiteName: Website name
+administratorEmail: Administrator e-mail
+administratorEmailHelp: This e-mail is used to notify administrator of website about some important details about website and application.
+mailTransport: E-mail transport
+mailFromEmail: Sender e-mail address
+mailFromName: Sender name
+mailHost: Host (server name)
+mailPort: Port number
+mailUsername: Username (e-mail address)
+mailPassword: Password
+mailEncryption: Encryption
+mailSendmailpath: Sendmail path
+testMessageSentSuccessfull: Test message sent successfull. Please check Your mailbox.
+testMessageNotSendCheckLog: Test message wasn't sent successfull. Please read the log to get more details.
+pleaseTypeValidEmailAddress: Please type a valid e-mail address.
+mailTransportTestMessageLog: Test message submit log
+testMailSubmitAppErrorConnection: Request error occured, probably mail server has technical problems and fails. Please try again later.
+loadingTestMailResult: Loading test mail result
+testMessageSendStatus: Test message send status
+testMessageSubject: This is a test message
+testMessageBody: This test message check if mail settings on Your page are configured properly.
+sendTestMessage: Send test message
+sendTestMessageInfo: Save the settings and send a test message to check the entered data. The message will be sent to the e-mail address provided below.
+mailSenderEmailInfo: As the sender's e-mail address, enter the same e-mail address that you use to log in / add to your SMTP mailbox or the e-mail address created on the server on which the page stands. Some servers prevent you from sending messages when an email address is provided as the sender that is not assigned to the server.
+websiteFavicon: Website favicon
+settingsGroupNotFound: Settings group not found.
+wysiwygEditor: WYSIWYG editor
+wysiwygEditorHelp: Default WYSIWYG editor used in ediiting contents of pages and so on.
+urlSuffix: URL suffix
+frontendRouting: Frontend routing

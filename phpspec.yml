@@ -1,0 +1,13 @@
+suites:
+    tulia.cms:
+        namespace: Tulia\Cms
+        psr4_prefix: Tulia\Cms
+        spec_prefix: spec
+        src_path: '%paths.config%/src/cms/tests'
+        spec_path: '%paths.config%/src/cms/tests'
+    tulia.component.datatable:
+        namespace: Tulia\Component\Datatable
+        psr4_prefix: Tulia\Component\Datatable
+        spec_prefix: spec
+        src_path: '%paths.config%/src/component/datatable/tests'
+        spec_path: '%paths.config%/src/component/datatable/tests'

@@ -1,0 +1,9 @@
+themeActivated: Theme activated.
+childOfTheme: "Child of theme {name}."
+activeTheme: Active theme
+customize: Customize
+activate: Activate
+defaultThemeInUse: Default Theme in use.
+youUseDefaultThemeInfo: |
+    You use Default Theme now, which is not customizable. Select one of the available themes to configure Your website for Your needs.
+    You may also install new themes using installator or extensions directory. Make You website Beautiful!

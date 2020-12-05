@@ -1,0 +1,26 @@
+.my-account {
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.my-account .sidebar {
+    flex: 0 0 250px;
+    max-width: 250px;
+}
+
+.my-account .main-content {
+    flex: 1 1 auto;
+    max-width: 100%;
+    padding-left: 50px;
+}
+
+.my-account .avatar {
+    height: 0;
+    padding-bottom: 100%;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+.my-account .username {
+    text-align: center;
+    padding: 20px;
+}

@@ -1,0 +1,22 @@
+tuliaCmsInstallator: Tulia CMS Installator
+continueInstallation: Continue
+database: Database
+host: Host
+databaseName: Database name
+port: Port
+username: Username
+tablePrefix: Table prefix
+tablePrefixInfo: Prefix will be added to all database tables. It's a required field.
+requirements: Requirements
+requirementsMetInfo: The requirements all seems to be met. You can continue the installation.
+requirementsNotMetInfo: The requirements have not been met. Please fix these requirements and refresh page to install Tulia CMS.
+databaseConnectionError: Database connection can not be established. Please verify given credentials.
+databaseConnectionErrorInvalidHost: Database connection can not be established. Please verify given host.
+installatorIntroWelcome: Welcome in the Tulia CMS installator. It will guide you painlessly through the installation process :)
+letsStart: Lets start
+goBack: Go back
+released: released
+website: Website
+administrator: Administrator
+install: Install
+readyToInstall: Ready to install

@@ -1,0 +1,34 @@
+widgets: Widgets
+createdWidgets: Created widgets
+availableWidgets: Available widgets
+addWidget: Add widget
+space: Space
+allSpaces: All spaces
+editWidget: Edit widget
+widgetNotFound: Widget not found.
+widgetSaved: Widget saved.
+status: Status
+look: Look
+styles: Styles
+stylesDescription: Styles are predefined looks of widget, provided by theme.
+widgetOptions: Widget options
+title: Title
+titleDescription: Title of the widget, showed in front. Leave empty to hide title.
+deleteWidget: Delete widget
+widgetType: Widget type
+deleteSelectedWidgets: Delete selected widgets
+areYouSureYouWantToDeleteFollowingWidgets: Are You sure You want to delete following widgets?
+selectedWidgetsWereDeleted: Selected widgets were deleted.
+widgetSpaceIs: "Space: {space}"
+
+# Predefined widgets translations
+widget:
+    menu:
+        name: Menu
+        description: Created horizontal or vertical menu.
+    text:
+        name: Text
+        description: Shows WYSIWYG editor to place any text content.
+    features:
+        name: Features
+        description: List of features with texts and icons.
