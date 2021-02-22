@@ -4,19 +4,14 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\User\Infrastructure\Framework\Validator;
 
-use Tulia\Cms\Options\OptionsInterface;
+use Tulia\Cms\Options\Application\Service\Options;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class PasswordValidatorFactory
 {
-    /**
-     * @param OptionsInterface $options
-     *
-     * @return PasswordValidatorInterface
-     */
-    public static function factory(OptionsInterface $options): PasswordValidatorInterface
+    public static function factory(Options $options): PasswordValidatorInterface
     {
         $validator = new PasswordValidator();
         $validator->setMinLength((int) $options->get('users.password.min_length', 4));

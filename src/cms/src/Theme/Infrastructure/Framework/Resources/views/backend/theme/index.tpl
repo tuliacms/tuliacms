@@ -58,8 +58,9 @@
                                     <a href="{{ path('backend.theme.customize.current') }}" class="btn btn-sm btn-primary">{{ 'customize'|trans({}, 'themes') }}</a>
                                 {% endif %}
                                 {% if theme != item %}
-                                    <form action="{{ path('backend.theme.activate', { theme: item.name }) }}" method="POST">
+                                    <form action="{{ path('backend.theme.activate') }}" method="POST">
                                         {{ csrf_field('theme.activate') }}
+                                        <input type="hidden" name="theme" value="{{ item.name }}" />
                                         <button type="submit" class="btn btn-sm btn-secondary tulia-click-page-loader">{{ 'activate'|trans({}, 'themes') }}</button>
                                     </form>
                                 {% endif %}

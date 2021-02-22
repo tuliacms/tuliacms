@@ -8,7 +8,7 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Cms\Metadata\Syncer\SyncerInterface;
-use Tulia\Cms\Options\OptionsInterface;
+use Tulia\Cms\Options\Application\Service\Options;
 use Tulia\Cms\Platform\Infrastructure\Bus\Event\EventBusInterface;
 use Tulia\Cms\Platform\Infrastructure\DataManipulation\Hydrator\HydratorInterface;
 use Tulia\Cms\User\Application\Command\UserStorage;
@@ -87,14 +87,14 @@ $builder->setDefinition(AuthenticatedUserProviderInterface::class, Authenticated
 $builder->setDefinition(PasswordValidatorInterface::class, PasswordValidator::class, [
     'factory' => [PasswordValidatorFactory::class, 'factory'],
     'arguments' => [
-        service(OptionsInterface::class),
+        service(Options::class),
     ],
 ]);
 
 $builder->setDefinition(UsernameValidatorInterface::class, UsernameValidator::class, [
     'factory' => [UsernameValidatorFactory::class, 'factory'],
     'arguments' => [
-        service(OptionsInterface::class),
+        service(Options::class),
     ],
 ]);
 

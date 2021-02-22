@@ -2,7 +2,7 @@
 
 /** @var ContainerBuilderInterface $builder */
 
-use Tulia\Cms\Options\OptionsInterface;
+use Tulia\Cms\Options\Application\Service\Options;
 use Tulia\Cms\WysiwygEditor\Infrastructure\Framework\Twig\Extension\WysiwygEditorExtension;
 use Tulia\Cms\WysiwygEditor\Application\DefaultEditor;
 use Tulia\Cms\WysiwygEditor\Application\Registry;
@@ -10,12 +10,12 @@ use Tulia\Cms\WysiwygEditor\Application\RegistryInterface;
 use Tulia\Component\DependencyInjection\ContainerBuilderInterface;
 
 $builder->setDefinition(RegistryInterface::class, Registry::class, [
-    'factory' => function (iterable $editors, OptionsInterface $options) {
+    'factory' => function (iterable $editors, Options $options) {
         return new Registry($editors, $options->get('wysiwyg_editor'));
     },
     'arguments' => [
         tagged('wysiwyg_editor'),
-        service(OptionsInterface::class)
+        service(Options::class)
     ],
 ]);
 

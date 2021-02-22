@@ -5,7 +5,7 @@
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Cms\BackendMenu\Application\Helper\BuilderHelperInterface;
-use Tulia\Cms\Options\OptionsInterface;
+use Tulia\Cms\Options\Application\Service\Options;
 use Tulia\Cms\Platform\Infrastructure\Utilities\DateTime\DateFormatterInterface;
 use Tulia\Cms\Settings\CmsSettingsGroup;
 use Tulia\Cms\Settings\Infrastructure\Cms\BackendMenu\SettingsMenuBuilder;
@@ -28,7 +28,7 @@ $builder->setDefinition(SearchProvider::class, SearchProvider::class, [
     'arguments' => [
         service(RegistryInterface::class),
         service(FormFactoryInterface::class),
-        service(OptionsInterface::class),
+        service(Options::class),
         service(TranslatorInterface::class),
         service(RouterInterface::class),
     ],
@@ -65,4 +65,8 @@ $builder->mergeParameter('translation.directory_list', [
 $builder->mergeParameter('templating.paths', [
     'cms/settings' => dirname(__DIR__) . '/views/frontend',
     'backend/settings' => dirname(__DIR__) . '/views/backend',
+]);
+
+$builder->mergeParameter('settings.providers', [
+    dirname(__DIR__) . '/config/settings.php',
 ]);

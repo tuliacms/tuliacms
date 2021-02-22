@@ -5,11 +5,14 @@ declare(strict_types=1);
 namespace Tulia\Cms\Theme\UI\Web\Controller\Backend;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Tulia\Cms\Platform\Infrastructure\DefaultTheme\DefaultTheme;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
-use Tulia\Cms\Theme\DefaultTheme\DefaultTheme;
+use Tulia\Cms\Theme\Application\Service\ThemeActivator;
+use Tulia\Cms\Theme\Domain\Event\ThemeNotFoundException;
 use Tulia\Component\Templating\ViewInterface;
 use Tulia\Component\Theme\Activator\ActivatorInterface;
 use Tulia\Component\Theme\ManagerInterface;
+use Tulia\Framework\Http\Request;
 use Tulia\Framework\Security\Http\Csrf\Annotation\CsrfToken;
 
 /**
@@ -23,11 +26,17 @@ class Theme extends AbstractController
     protected $manager;
 
     /**
+     * @var ThemeActivator
+     */
+    private $themeActivator;
+
+    /**
      * @param ManagerInterface $manager
      */
-    public function __construct(ManagerInterface $manager)
+    public function __construct(ManagerInterface $manager, ThemeActivator $themeActivator)
     {
         $this->manager = $manager;
+        $this->themeActivator = $themeActivator;
     }
 
     /**
@@ -58,15 +67,13 @@ class Theme extends AbstractController
      *
      * @CsrfToken(id="theme.activate")
      */
-    public function activate(ActivatorInterface $activator, string $theme): RedirectResponse
+    public function activate(Request $request): RedirectResponse
     {
-        $theme = $this->manager->getStorage()->get($theme);
-
-        if (! $theme) {
+        try {
+            $this->themeActivator->activateTheme($request->request->get('theme'));
+        } catch (ThemeNotFoundException $e) {
             return $this->redirect('backend.theme');
         }
-
-        $activator->activate($theme->getName());
 
         $this->setFlash('success', $this->trans('themeActivated', [], 'themes'));
         return $this->redirect('backend.theme');

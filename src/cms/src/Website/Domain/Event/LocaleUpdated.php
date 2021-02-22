@@ -42,15 +42,6 @@ class LocaleUpdated extends DomainEvent
      */
     protected $isDefault;
 
-    /**
-     * @param AggregateId $id
-     * @param string $code
-     * @param string $domain
-     * @param string|null $localePrefix
-     * @param string|null $pathPrefix
-     * @param string $sslMode
-     * @param bool $isDefault
-     */
     public function __construct(
         AggregateId $id,
         string $code,
@@ -83,49 +74,31 @@ class LocaleUpdated extends DomainEvent
         );
     }
 
-    /**
-     * @return string
-     */
     public function getCode(): string
     {
         return $this->code;
     }
 
-    /**
-     * @return string
-     */
     public function getDomain(): string
     {
         return $this->domain;
     }
 
-    /**
-     * @return string|null
-     */
     public function getLocalePrefix(): ?string
     {
         return $this->localePrefix;
     }
 
-    /**
-     * @return string|null
-     */
     public function getPathPrefix(): ?string
     {
         return $this->pathPrefix;
     }
 
-    /**
-     * @return string
-     */
     public function getSslMode(): string
     {
         return $this->sslMode;
     }
 
-    /**
-     * @return bool
-     */
     public function isDefault(): bool
     {
         return $this->isDefault;

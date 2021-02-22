@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Platform\Infrastructure\Mail;
 
-use Tulia\Cms\Options\OptionsInterface;
+use Tulia\Cms\Options\Application\Service\Options;
 
 /**
  * @author Adam Banaszkiewicz
@@ -14,14 +14,14 @@ class Swiftmailer implements MailerInterface
     private $mailer;
 
     /**
-     * @var OptionsInterface
+     * @var Options
      */
     private $options;
 
     /**
-     * @param OptionsInterface $options
+     * @param Options $options
      */
-    public function __construct(OptionsInterface $options)
+    public function __construct(Options $options)
     {
         $this->options = $options;
     }

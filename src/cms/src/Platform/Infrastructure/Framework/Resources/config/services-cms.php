@@ -9,11 +9,15 @@ use Tulia\Cms\Metadata\Storage\DatabaseStorage as MetadataDatabaseStorage;
 use Tulia\Cms\Metadata\Storage\StorageInterface as MetadataStorageInterface;
 use Tulia\Cms\Metadata\Syncer\DatabaseStorageSyncer;
 use Tulia\Cms\Metadata\Syncer\SyncerInterface;
-use Tulia\Cms\Options\Options;
-use Tulia\Cms\Options\OptionsInterface;
-use Tulia\Cms\Options\Storage\DatabaseStorage as OptionsDatabaseStorage;
-use Tulia\Cms\Options\Storage\StorageInterface as OptionsStorageInterface;
-use Tulia\Cms\Options\Twig\Extension\OptionsExtension;
+use Tulia\Cms\Options\Application\EventListener\CreateOptionsForNewWebsite;
+use Tulia\Cms\Options\Application\Service\Options;
+use Tulia\Cms\Options\Application\Service\OptionsCreator;
+use Tulia\Cms\Options\Application\Service\RegisteredOptionsCollector;
+use Tulia\Cms\Options\Infrastructure\Persistence\ReadModel\Options\DbalOptionsFinder;
+use Tulia\Cms\Options\Infrastructure\Persistence\ReadModel\Options\OptionsFinderInterface;
+use Tulia\Cms\Options\Infrastructure\Persistence\WriteModel\OptionsRepository\DbalOptionsRepository;
+use Tulia\Cms\Options\Infrastructure\Persistence\WriteModel\OptionsRepository\OptionsRepositoryInterface;
+use Tulia\Cms\Options\Infrastructure\Framework\Twig\Extension\OptionsExtension;
 use Tulia\Cms\Platform\Infrastructure\Bus\Event\EventBusInterface;
 use Tulia\Cms\Platform\Infrastructure\Bus\Event\PsrEventDispatcher;
 use Tulia\Cms\Platform\Infrastructure\DataManipulation\Hydrator\HydratorInterface;
@@ -25,6 +29,7 @@ use Tulia\Cms\Platform\Infrastructure\Utilities\DateTime\DateFormatterInterface;
 use Tulia\Cms\Platform\Infrastructure\Utilities\DateTime\DateFormatterTranslatorAware;
 use Tulia\Cms\Platform\Infrastructure\Utilities\DateTime\OptionsFormatterFactory;
 use Tulia\Cms\Platform\Infrastructure\Framework\Twig\Extension\DatetimeExtension;
+use Tulia\Cms\Website\Domain\Event\WebsiteCreated;
 use Tulia\Component\DependencyInjection\ContainerBuilderInterface;
 use Tulia\Component\FormBuilder\Builder\BootstrapAccordionGroupBuilder;
 use Tulia\Component\FormBuilder\Builder\BootstrapTabsGroupBuilder;
@@ -81,7 +86,7 @@ $builder->setDefinition(HydratorInterface::class, OcramiusHydrator::class);
 $builder->setDefinition(DateFormatterInterface::class, DateFormatterTranslatorAware::class, [
     'factory' => [OptionsFormatterFactory::class, 'factory'],
     'arguments' => [
-        service(OptionsInterface::class),
+        service(Options::class),
         service(TranslatorInterface::class),
     ],
 ]);
@@ -114,22 +119,9 @@ $builder->setDefinition(MetadataStorageInterface::class, MetadataDatabaseStorage
     ],
 ]);
 
-$builder->setDefinition(OptionsInterface::class, Options::class, [
-    'arguments' => [
-        service(OptionsStorageInterface::class),
-    ],
-]);
-
-$builder->setDefinition(OptionsStorageInterface::class, OptionsDatabaseStorage::class, [
-    'arguments' => [
-        service(ConnectionInterface::class),
-        service(CurrentWebsiteInterface::class),
-    ],
-]);
-
 $builder->setDefinition(OptionsExtension::class, OptionsExtension::class, [
     'arguments' => [
-        service(OptionsInterface::class),
+        service(Options::class),
     ],
     'tags' => [ tag('twig.extension') ],
 ]);
@@ -189,12 +181,53 @@ $builder->setDefinition(DefaultFormAttributesExtension::class, DefaultFormAttrib
 
 $builder->setDefinition(MailerInterface::class, Swiftmailer::class, [
     'arguments' => [
-        service(OptionsInterface::class),
+        service(Options::class),
     ],
 ]);
 
 $builder->setDefinition(BootstrapCheckboxRadioStyleExtension::class, BootstrapCheckboxRadioStyleExtension::class, [
     'tags' => [ tag('form.type_extension') ],
+]);
+
+$builder->setDefinition(OptionsRepositoryInterface::class, DbalOptionsRepository::class, [
+    'arguments' => [
+        service(ConnectionInterface::class),
+        service(HydratorInterface::class),
+    ],
+]);
+
+$builder->setDefinition(OptionsFinderInterface::class, DbalOptionsFinder::class, [
+    'arguments' => [
+        service(ConnectionInterface::class),
+    ],
+]);
+
+$builder->setDefinition(Options::class, Options::class, [
+    'arguments' => [
+        service(OptionsFinderInterface::class),
+        service(OptionsRepositoryInterface::class),
+        service(CurrentWebsiteInterface::class),
+    ],
+]);
+
+$builder->setDefinition(OptionsCreator::class, OptionsCreator::class, [
+    'arguments' => [
+        service(RegisteredOptionsCollector::class),
+        service(OptionsRepositoryInterface::class),
+    ],
+]);
+
+$builder->setDefinition(RegisteredOptionsCollector::class, RegisteredOptionsCollector::class, [
+    'arguments' => [
+        parameter('settings.providers'),
+    ],
+]);
+
+$builder->setDefinition(CreateOptionsForNewWebsite::class, CreateOptionsForNewWebsite::class, [
+    'arguments' => [
+        service(OptionsCreator::class),
+    ],
+    'tags' => [ tag_event_listener(WebsiteCreated::class) ],
 ]);
 
 $builder->setDefinition(BootstrapAccordionGroupBuilder::class, BootstrapAccordionGroupBuilder::class, [

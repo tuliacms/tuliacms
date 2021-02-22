@@ -16,10 +16,6 @@ class WebsiteRenamed extends DomainEvent
      */
     private $name;
 
-    /**
-     * @param AggregateId $id
-     * @param string $name
-     */
     public function __construct(AggregateId $id, string $name)
     {
         parent::__construct($id);
@@ -27,9 +23,6 @@ class WebsiteRenamed extends DomainEvent
         $this->name = $name;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;

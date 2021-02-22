@@ -17,17 +17,11 @@ abstract class DomainEvent extends PlatformDomainEvent
      */
     private $websiteId;
 
-    /**
-     * @param AggregateId $websiteId
-     */
     public function __construct(AggregateId $websiteId)
     {
         $this->websiteId = $websiteId;
     }
 
-    /**
-     * @return AggregateId
-     */
     public function getWebsiteId(): AggregateId
     {
         return $this->websiteId;

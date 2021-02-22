@@ -28,12 +28,6 @@ class WebsiteCreated extends DomainEvent
      */
     private $locales;
 
-    /**
-     * @param AggregateId $id
-     * @param string $name
-     * @param string $backendPrefix
-     * @param LocaleCollection $locales
-     */
     public function __construct(AggregateId $id, string $name, string $backendPrefix, LocaleCollection $locales)
     {
         parent::__construct($id);
@@ -43,17 +37,11 @@ class WebsiteCreated extends DomainEvent
         $this->locales = $locales;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @return string
-     */
     public function getBackendPrefix(): string
     {
         return $this->backendPrefix;

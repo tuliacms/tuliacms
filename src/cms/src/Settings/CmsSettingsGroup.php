@@ -54,25 +54,6 @@ class CmsSettingsGroup extends AbstractGroup
             'url_suffix'          => $this->getOption('url_suffix'),
         ];
 
-        /*$this->options->create('website_name', '', true, true);
-        $this->options->create('website_favicon', '', false, false);
-        $this->options->create('administrator_email', '', false, false);
-        $this->options->create('maintenance_mode', '', false, true);
-        $this->options->create('maintenance_message', '', true, false);
-        $this->options->create('date_format', '', false, true);
-        $this->options->create('theme', '', false, true);
-        $this->options->create('wysiwyg_editor', '', false, true);
-        $this->options->create('mail.transport', '', false, false);
-        $this->options->create('mail.from_email', '', false, false);
-        $this->options->create('mail.from_name', '', false, false);
-        $this->options->create('mail.host', '', false, false);
-        $this->options->create('mail.port', '', false, false);
-        $this->options->create('mail.username', '', false, false);
-        $this->options->create('mail.password', '', false, false);
-        $this->options->create('mail.encryption', '', false, false);
-        $this->options->create('mail.sendmailpath', '', false, false);
-        $this->options->create('url_suffix', '/', false, true);*/
-
         return $this->createForm(SettingsForm::class, $data);
     }
 

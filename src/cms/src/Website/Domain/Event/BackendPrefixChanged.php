@@ -16,10 +16,6 @@ class BackendPrefixChanged extends DomainEvent
      */
     private $backendPrefix;
 
-    /**
-     * @param AggregateId $id
-     * @param string $backendPrefix
-     */
     public function __construct(AggregateId $id, string $backendPrefix)
     {
         parent::__construct($id);
@@ -27,9 +23,6 @@ class BackendPrefixChanged extends DomainEvent
         $this->backendPrefix = $backendPrefix;
     }
 
-    /**
-     * @return string
-     */
     public function getBackendPrefix(): string
     {
         return $this->backendPrefix;

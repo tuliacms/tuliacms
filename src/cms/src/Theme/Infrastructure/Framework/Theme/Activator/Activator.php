@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Theme\Infrastructure\Framework\Theme\Activator;
 
-use Tulia\Cms\Options\OptionsInterface;
-use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
-use Tulia\Component\Routing\Website\WebsiteInterface;
+use Tulia\Cms\Options\Application\Service\Options;
 use Tulia\Component\Theme\Exception\MissingThemeException;
 use Tulia\Component\Theme\Storage\StorageInterface;
 use Tulia\Component\Theme\Activator\ActivatorInterface;
@@ -22,18 +20,12 @@ class Activator implements ActivatorInterface
     protected $storage;
 
     /**
-     * @var OptionsInterface
+     * @var Options
      */
     protected $options;
 
-    /**
-     * @param StorageInterface $storage
-     * @param OptionsInterface $options
-     */
-    public function __construct(
-        StorageInterface $storage,
-        OptionsInterface $options
-    ) {
+    public function __construct(StorageInterface $storage, Options $options)
+    {
         $this->storage = $storage;
         $this->options = $options;
     }

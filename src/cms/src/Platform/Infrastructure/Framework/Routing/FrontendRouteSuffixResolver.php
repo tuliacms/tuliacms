@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Platform\Infrastructure\Framework\Routing;
 
-use Tulia\Cms\Options\OptionsInterface;
+use Tulia\Cms\Options\Application\Service\Options;
 
 /**
  * @author Adam Banaszkiewicz
@@ -12,7 +12,7 @@ use Tulia\Cms\Options\OptionsInterface;
 class FrontendRouteSuffixResolver
 {
     /**
-     * @var OptionsInterface
+     * @var Options
      */
     protected $options;
 
@@ -22,9 +22,9 @@ class FrontendRouteSuffixResolver
     private $suffix;
 
     /**
-     * @param OptionsInterface $options
+     * @param Options $options
      */
-    public function __construct(OptionsInterface $options)
+    public function __construct(Options $options)
     {
         $this->options = $options;
     }

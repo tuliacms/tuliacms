@@ -6,6 +6,8 @@ namespace Tulia\Cms\User\UI\Web\Controller;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
+use Tulia\Cms\User\Application\Command\UserStorage;
+use Tulia\Cms\User\Application\Model\User as ApplicationUser;
 use Tulia\Cms\User\Application\Service\AuthenticatedUserProviderInterface;
 use Tulia\Cms\User\Query\Enum\ScopeEnum;
 use Tulia\Cms\User\Query\Exception\MultipleFetchException;
@@ -107,16 +109,17 @@ class MyAccount extends AbstractController
     /**
      * @CsrfToken(id="password_form")
      */
-    public function password(Request $request)
+    public function password(Request $request, UserStorage $userStorage)
     {
         $user = $this->getUserInstance();
         $form = $this->createForm(PasswordForm::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $user->setPassword($form->getData()['password']);
+            $model = ApplicationUser::fromQueryModel($user);
+            $model->setPassword($form->getData()['password']);
 
-            $this->repository->save($user);
+            $userStorage->save($model);
 
             $this->setFlash('success', $this->trans('userSaved', [], 'users'));
             return $this->redirect('backend.me.password');

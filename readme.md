@@ -10,9 +10,9 @@
 
 1. Wykonaj polecenia po kolei:
 
-    - `tulia/bin/env docker:start`
-    - `tulia/bin/env composer:install`
-    - `tulia/bin/env hosts:install`
+    - `bin/docker start`
+    - `bin/docker hosts:install`
+    - `bin/composer install`
 
 2. Zaloguj się do bazy danych za pomocą danych:
 
@@ -37,9 +37,12 @@
 ### Backend
 
 Login: `admin`<br />
-Hasło: `q1w2e3R$T%Y^`
+Hasło: `MyP4$$w0rdT04Dm!n`
 
-### Baza danych
+### Baza danych (phpmyadmin)
 
 Login: `root`<br />
-hasło: `root`
+Hasło: `root`
+
+Port (lokalny): `3306`
+Port (zewnętrzny): `33061`

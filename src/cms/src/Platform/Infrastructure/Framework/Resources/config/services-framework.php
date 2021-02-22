@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Tulia\Cms\Options\OptionsInterface;
+use Tulia\Cms\Options\Application\Service\Options;
 use Tulia\Cms\Platform\Infrastructure\Framework\EventListener\ExceptionListener\RequestCsrfTokenExceptionListener;
 use Tulia\Cms\Platform\Infrastructure\Framework\Routing\EventListener\RouteCollector;
 use Tulia\Cms\Platform\Infrastructure\Framework\Routing\FrontendRouteSuffixResolver;
@@ -46,7 +46,7 @@ $builder->setDefinition(ImageManagerInterface::class, ImageManager::class, [
 
 $builder->setDefinition(FrontendRouteSuffixResolver::class, FrontendRouteSuffixResolver::class, [
     'arguments' => [
-        service(OptionsInterface::class),
+        service(Options::class),
     ],
 ]);
 

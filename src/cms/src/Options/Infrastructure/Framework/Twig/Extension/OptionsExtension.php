@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Options\Twig\Extension;
+namespace Tulia\Cms\Options\Infrastructure\Framework\Twig\Extension;
 
-use Tulia\Cms\Options\OptionsInterface;
+use Tulia\Cms\Options\Application\Service\Options;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -14,14 +14,14 @@ use Twig\TwigFunction;
 class OptionsExtension extends AbstractExtension
 {
     /**
-     * @var OptionsInterface
+     * @var Options
      */
     protected $options;
 
     /**
-     * @param OptionsInterface $options
+     * @param Options $options
      */
-    public function __construct(OptionsInterface $options)
+    public function __construct(Options $options)
     {
         $this->options = $options;
     }

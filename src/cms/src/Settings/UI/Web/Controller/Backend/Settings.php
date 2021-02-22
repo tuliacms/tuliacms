@@ -9,7 +9,7 @@ use Swift_Plugins_LoggerPlugin;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Tulia\Cms\Options\OptionsInterface;
+use Tulia\Cms\Options\Application\Service\Options;
 use Tulia\Cms\Platform\Infrastructure\Mail\MailerInterface;
 use Tulia\Cms\Settings\RegistryInterface;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
@@ -49,7 +49,7 @@ class Settings extends AbstractController
      *
      * @CsrfToken(id="settings_form")
      */
-    public function show(Request $request, FormFactoryInterface $formFactory, OptionsInterface $options, ?string $group = null)
+    public function show(Request $request, FormFactoryInterface $formFactory, Options $options, ?string $group = null)
     {
         if (!$group) {
             return $this->redirect('backend.settings', ['group' => 'cms']);

@@ -55,6 +55,7 @@ then
     sudo -- sh -c -e "echo '127.0.0.1 pl.tulia.loc' >> /etc/hosts";
     sudo -- sh -c -e "echo '127.0.0.1 de.tulia.loc' >> /etc/hosts";
     sudo -- sh -c -e "echo '127.0.0.1 doc.tulia.loc' >> /etc/hosts";
+    sudo -- sh -c -e "echo '127.0.0.1 editor.tulia.loc' >> /etc/hosts";
 else
     echo "Command not found"
 fi

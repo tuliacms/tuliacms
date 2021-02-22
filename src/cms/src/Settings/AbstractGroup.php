@@ -6,8 +6,7 @@ namespace Tulia\Cms\Settings;
 
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
-use Tulia\Cms\Options\OptionsInterface;
-use Tulia\Framework\Http\Request;
+use Tulia\Cms\Options\Application\Service\Options;
 
 /**
  * @author Adam Banaszkiewicz
@@ -20,7 +19,7 @@ abstract class AbstractGroup implements GroupInterface
     protected $formFactory;
 
     /**
-     * @var OptionsInterface
+     * @var Options
      */
     protected $options;
 
@@ -109,9 +108,9 @@ abstract class AbstractGroup implements GroupInterface
     }
 
     /**
-     * @param OptionsInterface $options
+     * @param Options $options
      */
-    public function setOptions(OptionsInterface $options): void
+    public function setOptions(Options $options): void
     {
         $this->options = $options;
     }

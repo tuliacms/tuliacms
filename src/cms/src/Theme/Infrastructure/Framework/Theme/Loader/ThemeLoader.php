@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Theme\Infrastructure\Framework\Theme\Loader;
 
-use Tulia\Cms\Options\OptionsInterface;
+use Tulia\Cms\Options\Application\Service\Options;
 use Tulia\Component\Theme\Storage\StorageInterface;
 use Tulia\Component\Theme\ThemeInterface;
 use Tulia\Component\Theme\Loader\ThemeLoader\ThemeLoaderInterface;
@@ -21,15 +21,15 @@ class ThemeLoader implements ThemeLoaderInterface
     protected $storage;
 
     /**
-     * @var OptionsInterface
+     * @var Options
      */
     protected $options;
 
     /**
      * @param StorageInterface $storage
-     * @param OptionsInterface $options
+     * @param Options $options
      */
-    public function __construct(StorageInterface $storage, OptionsInterface $options)
+    public function __construct(StorageInterface $storage, Options $options)
     {
         $this->storage = $storage;
         $this->options = $options;

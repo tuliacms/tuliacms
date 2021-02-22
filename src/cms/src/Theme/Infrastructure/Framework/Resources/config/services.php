@@ -2,9 +2,11 @@
 
 use Requtize\Assetter\AssetterInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Tulia\Cms\BackendMenu\Application\Helper\BuilderHelperInterface;
 use Tulia\Cms\FrontendToolbar\Application\Helper\HelperInterface;
-use Tulia\Cms\Options\OptionsInterface;
+use Tulia\Cms\Options\Application\Service\Options;
+use Tulia\Cms\Theme\Application\Service\ThemeActivator;
 use Tulia\Cms\Theme\Infrastructure\Cms\FrontendToolbar\LinksProvider;
 use Tulia\Cms\Theme\Infrastructure\Filemanager\ImageSize\ThemeConfigurationProvider;
 use Tulia\Cms\Theme\Infrastructure\Framework\Theme\Activator\Activator;
@@ -33,7 +35,7 @@ use Tulia\Framework\Kernel\Event\RequestEvent;
 $builder->setDefinition(ThemeLoaderInterface::class, ThemeLoader::class, [
     'arguments' => [
         service(StorageInterface::class),
-        service(OptionsInterface::class),
+        service(Options::class),
     ],
 ]);
 
@@ -46,7 +48,7 @@ $builder->setDefinition(StorageInterface::class, ArrayStorage::class, [
 $builder->setDefinition(ActivatorInterface::class, Activator::class, [
     'arguments' => [
         service(StorageInterface::class),
-        service(OptionsInterface::class),
+        service(Options::class),
     ],
 ]);
 
@@ -95,6 +97,15 @@ $builder->setDefinition(LinksProvider::class, LinksProvider::class, [
         service(HelperInterface::class),
     ],
     'tags' => [ tag('frontend_toolbar.links.provider') ],
+]);
+
+$builder->setDefinition(ThemeActivator::class, ThemeActivator::class, [
+    'arguments' => [
+        service(ManagerInterface::class),
+        service(ActivatorInterface::class),
+        service(EventDispatcherInterface::class),
+        service(CurrentWebsiteInterface::class),
+    ],
 ]);
 
 

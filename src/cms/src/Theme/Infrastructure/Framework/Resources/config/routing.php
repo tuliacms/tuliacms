@@ -9,7 +9,7 @@ $collection->group('backend', function (RouteCollectionInterface $collection) {
         'controller' => 'Tulia\Cms\Theme\UI\Web\Controller\Backend\Theme::index',
     ]);
 
-    $collection->add('theme.activate', '/theme/activate/{theme}', [
+    $collection->add('theme.activate', '/theme/activate', [
         'controller' => 'Tulia\Cms\Theme\UI\Web\Controller\Backend\Theme::activate',
         'methods' => [ 'POST' ],
     ]);
