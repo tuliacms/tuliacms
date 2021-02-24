@@ -156,7 +156,7 @@ class MenuItem extends AbstractController
             $manager->save($form);
 
             $this->setFlash('success', $this->trans('itemSaved', [], 'menu'));
-            return $this->redirect('backend.menu.item.edit', [ 'menuId' => $model->getMenuId(),  'id' => $model->getId() ]);
+            return $this->redirect('backend.menu.item', [ 'menuId' => $model->getMenuId() ]);
         }
 
         return $this->view('@backend/menu/item/create.tpl', [
@@ -197,7 +197,7 @@ class MenuItem extends AbstractController
             $manager->save($form);
 
             $this->setFlash('success', $this->trans('itemSaved', [], 'menu'));
-            return $this->redirect('backend.menu.item.edit', [ 'menuId' => $model->getMenuId(),  'id' => $model->getId() ]);
+            return $this->redirect('backend.menu.item', [ 'menuId' => $model->getMenuId() ]);
         }
 
         return $this->view('@backend/menu/item/edit.tpl', [
