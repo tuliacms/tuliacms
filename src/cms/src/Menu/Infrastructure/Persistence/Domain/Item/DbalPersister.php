@@ -30,7 +30,7 @@ class DbalPersister extends AbstractLocalizablePersister
         $mainTable = [];
         $mainTable['id']         = $data['id'];
         $mainTable['parent_id']  = $data['parent'];
-        $mainTable['level']      = $data['level'];
+        $mainTable['level']      = (int) $data['level'];
         $mainTable['menu_id']    = $data['menu'];
         $mainTable['position']   = $data['position'];
         $mainTable['type']       = $data['type'];
@@ -51,7 +51,7 @@ class DbalPersister extends AbstractLocalizablePersister
         $mainTable = [];
         $mainTable['id']         = $data['id'];
         $mainTable['parent_id']  = $data['parent'];
-        $mainTable['level']      = $data['level'];
+        $mainTable['level']      = (int) $data['level'];
         $mainTable['menu_id']    = $data['menu'];
         $mainTable['position']   = $data['position'];
         $mainTable['type']       = $data['type'];
