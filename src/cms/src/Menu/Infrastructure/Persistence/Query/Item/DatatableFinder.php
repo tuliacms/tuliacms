@@ -119,7 +119,7 @@ class DatatableFinder extends AbstractDatatableFinder
     {
         $queryBuilder
             ->from('#__menu_item', 'tm')
-            ->addSelect('tm.menu_id')
+            ->addSelect('tm.menu_id, tm.level, tm.parent_id')
             ->leftJoin('tm', '#__menu_item_lang', 'tl', 'tm.id = tl.menu_item_id AND tl.locale = :locale')
             ->where('tm.menu_id = :menu_id')
             ->setParameter('menu_id', $this->menuId, PDO::PARAM_STR)
@@ -149,15 +149,18 @@ class DatatableFinder extends AbstractDatatableFinder
                 $badges .= '<span class="badge badge-info" data-toggle="tooltip" title="' . $missingLocale . '"><i class="dropdown-icon fas fa-language"></i></span> ';
             }
 
+            $row['level'] = (int) $row['level'];
+
             $row['name'] = sprintf(
-                '<a href="%2$s" title="%1$s" class="link-title">%3$s %1$s</a>',
+                '<a href="%2$s" title="%1$s" class="link-title">%4$s %3$s %1$s</a>',
                 $row['name'],
                 $this->router->generate('backend.menu.item.edit', ['menuId' => $row['menu_id'], 'id' => $row['id']]),
-                $badges
+                $badges,
+                str_repeat('-- &nbsp;', $row['level'])
             );
         }
 
-        return $result;
+        return $this->sort($result);
     }
 
     /**
@@ -172,5 +175,23 @@ class DatatableFinder extends AbstractDatatableFinder
             'main' => '<a href="' . $editLink . '" class="btn btn-secondary btn-icon-only"><i class="btn-icon fas fa-pen"></i></a>',
             '<a href="" class="dropdown-item-with-icon dropdown-item-danger" title="' . $delete . '"><i class="dropdown-icon fas fa-times"></i> ' . $delete . '</a>',
         ];
+    }
+
+    private function sort(array $items, int $level = 0, string $parent = null): array
+    {
+        $result = [];
+
+        foreach ($items as $item) {
+            if ($item['level'] === $level && $item['parent_id'] === $parent) {
+                $result[] = [$item];
+                $result[] = $this->sort($items, $level + 1, $item['id']);
+            }
+        }
+
+        if ($result === []) {
+            return [];
+        }
+
+        return array_merge(...$result);
     }
 }
