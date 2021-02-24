@@ -148,7 +148,7 @@ myAccountUsername: "My profile - {username}"
 emptyTableListAddSomethingToStart: There is no element added right now. Add something to start.
 clearSearch: Clear search
 missingTranslationInThisLocale: Missing translation in this locale
-missingTranslationInThisLocaleSaveToSaveInThisLocale: Missing translation of this element in current locale. Now You can see it's content in default locale (the same content is available in front). Translate the content and save to make sure this item has own, translated content in this locale.
+missingTranslationInThisLocaleSaveToSaveInThisLocale: Missing translation of this element in current locale. Now You can see it's content in default locale (the same content is available in front). Translate the content and save it to make sure this item has own, translated content in this locale.
 apply: Apply
 thereAreNoOtherSettings: There are no other settings right now.
 locale: Locale
