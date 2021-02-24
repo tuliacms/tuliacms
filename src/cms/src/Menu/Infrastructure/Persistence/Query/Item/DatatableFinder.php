@@ -166,7 +166,7 @@ class DatatableFinder extends AbstractDatatableFinder
     public function buildActions(array $row): array
     {
         $editLink = $this->router->generate('backend.menu.item.edit', ['menuId' => $row['menu_id'], 'id' => $row['id']]);
-        $delete = $this->translator->trans('deleteWidget', [], 'widgets');
+        $delete = $this->translator->trans('deleteItem', [], 'menu');
 
         return [
             'main' => '<a href="' . $editLink . '" class="btn btn-secondary btn-icon-only"><i class="btn-icon fas fa-pen"></i></a>',
