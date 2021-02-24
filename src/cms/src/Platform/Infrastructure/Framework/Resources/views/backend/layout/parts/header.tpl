@@ -15,7 +15,7 @@
                     <button type="button" class="btn btn-icon-only action-btn toggle-fullscreen"><i class="btn-icon fas fa-expand"></i></button>
                 </div>
                 {% set __currentWebsite = current_website() %}
-                {% if websites_list()|length > 1 %}
+                {% if website_list()|length > 1 %}
                     <div class="action-box language-selector noselect" data-toggle="tooltip" data-placement="left" title="{{ 'switchWebsite'|trans }}">
                         <div class="dropdown">
                             {% set __websiteId = __currentWebsite.id %}
@@ -24,7 +24,7 @@
                                 {{ __currentWebsite.name }}
                             </button>
                             <div class="dropdown-menu">
-                                {% for item in websites_list() %}
+                                {% for item in website_list() %}
                                     <a class="dropdown-item{{ item.id == __websiteId ? ' active' : '' }}" href="{{ item.backendAddress }}" data-website-id="{{ item.id }}">
                                         <span>{{ item.name }}</span>
                                     </a>

@@ -56,7 +56,7 @@ class WebsiteExtension extends AbstractExtension
             }, [
                  'is_safe' => [ 'html' ]
             ]),
-            new TwigFunction('websites_list', function () {
+            new TwigFunction('website_list', function () {
                 return $this->registry;
             }, [
                  'is_safe' => [ 'html' ]
