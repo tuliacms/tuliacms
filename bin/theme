@@ -19,12 +19,12 @@ function docker_execute() {
 
 if [ $action = 'gulp:install' ]
 then
-    workdir="$workdir/tuliacms/extension/theme/$2/Resources/public/app"
+    workdir="$workdir/tuliacms/extension/theme/$2/Resources/public"
     cmd="npm install"
     docker_execute "$cmd"
 elif [ $action = 'gulp' ]
 then
-    workdir="$workdir/tuliacms/extension/theme/$2/Resources/public/app"
+    workdir="$workdir/tuliacms/extension/theme/$2/Resources/public"
     cmd="gulp ${@:3}"
     docker_execute "$cmd"
 else
