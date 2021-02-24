@@ -52,6 +52,21 @@ class Menu extends AggregateRoot
         $this->recordThat(new Event\MenuCreated($id, $websiteId));
     }
 
+    public static function reconstruct(array $data): self
+    {
+        $self = new self(new AggregateId($data['id']), $data['website_id']);
+        $self->name = $data['name'];
+
+        foreach ($data['items'] as $item) {
+            $self->addItem($item);
+        }
+
+        $self->collectDomainEvents();
+        $self->itemsChanges = [];
+
+        return $self;
+    }
+
     /**
      * @return AggregateId
      */

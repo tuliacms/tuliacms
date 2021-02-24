@@ -249,7 +249,7 @@ class Item
         do {
             $parent = $item->getParent();
 
-            if ($parent->getId()->equals($this->getId()) || $parent->getId()->equals($item->getId())) {
+            if ($parent && ($parent->getId()->equals($this->getId()) || $parent->getId()->equals($item->getId()))) {
                 throw new ParentItemReccurencyException();
             }
         } while ($item->getParent());

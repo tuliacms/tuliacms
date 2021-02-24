@@ -28,15 +28,12 @@ class DataTransformer
 
     public function arrayToAggregate(array $item): Aggregate
     {
-        /** @var Aggregate $aggregate */
-        $aggregate = $this->hydrator->hydrate([
-            'id'        => new AggregateId($item['id']),
-            'websiteId' => $item['website_id'],
-            'name'      => $item['name'],
-            'items'     => $item['items'],
-        ], Aggregate::class);
-
-        return $aggregate;
+        return Aggregate::reconstruct([
+            'id'         => $item['id'],
+            'website_id' => $item['website_id'],
+            'name'       => $item['name'],
+            'items'      => $item['items'],
+        ]);
     }
 
     public function aggregateToInsert(Aggregate $aggregate): array
