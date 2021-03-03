@@ -4,6 +4,7 @@
 
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Cms\Menu\Application\Command\ItemStorage;
 use Tulia\Cms\Menu\Application\Command\MenuStorage;
@@ -95,5 +96,6 @@ $builder->setDefinition(DatatableFinder::class, DatatableFinder::class, [
         service(CurrentWebsiteInterface::class),
         service(RouterInterface::class),
         service(TranslatorInterface::class),
+        service(CsrfTokenManagerInterface::class),
     ],
 ]);

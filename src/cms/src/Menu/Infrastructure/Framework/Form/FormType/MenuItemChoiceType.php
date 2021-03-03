@@ -119,9 +119,11 @@ class MenuItemChoiceType extends ChoiceType
             return [];
         }
 
+        $items = $this->sort($source->getItems()->all());
+
         $choices = [];
 
-        foreach ($source->getItems() as $item) {
+        foreach ($items as $item) {
             $name = $item->getName();
 
             if ($item->getLevel()) {
@@ -132,5 +134,23 @@ class MenuItemChoiceType extends ChoiceType
         }
 
         return $choices;
+    }
+
+    private function sort(array $items, int $level = 0, string $parent = null): array
+    {
+        $result = [];
+
+        foreach ($items as $item) {
+            if ($item->getLevel() === $level && $item->getParentId() === $parent) {
+                $result[] = [$item];
+                $result[] = $this->sort($items, $level + 1, $item->getId());
+            }
+        }
+
+        if ($result === []) {
+            return [];
+        }
+
+        return array_merge(...$result);
     }
 }

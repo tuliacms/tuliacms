@@ -7,7 +7,7 @@ namespace Tulia\Cms\Menu\UI\Web\Controller\Backend;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Tulia\Cms\Menu\Application\Command\MenuStorage;
+use Tulia\Cms\Menu\Application\Command\ItemStorage;
 use Tulia\Cms\Menu\Application\Model\Item as ApplicationItem;
 use Tulia\Cms\Menu\Infrastructure\Builder\Type\RegistryInterface;
 use Tulia\Cms\Menu\Infrastructure\Persistence\Query\Item\DatatableFinder;
@@ -39,9 +39,9 @@ class MenuItem extends AbstractController
     protected $menuFinderFactory;
 
     /**
-     * @var MenuStorage
+     * @var ItemStorage
      */
-    protected $menuStorage;
+    protected $itemStorage;
 
     /**
      * @var RegistryInterface
@@ -55,18 +55,18 @@ class MenuItem extends AbstractController
 
     /**
      * @param FinderFactoryInterface $menuFinderFactory
-     * @param MenuStorage $menuStorage
+     * @param ItemStorage $itemStorage
      * @param RegistryInterface $menuTypeRegistry
      * @param ContainerInterface $container
      */
     public function __construct(
         FinderFactoryInterface $menuFinderFactory,
-        MenuStorage $menuStorage,
+        ItemStorage $itemStorage,
         RegistryInterface $menuTypeRegistry,
         ContainerInterface $container
     ) {
         $this->menuFinderFactory = $menuFinderFactory;
-        $this->menuStorage       = $menuStorage;
+        $this->itemStorage       = $itemStorage;
         $this->menuTypeRegistry  = $menuTypeRegistry;
         $this->container         = $container;
     }
@@ -220,10 +220,12 @@ class MenuItem extends AbstractController
      */
     public function delete(Request $request, string $menuId): RedirectResponse
     {
+        $menu = $this->findMenu($menuId);
+
         foreach ($request->request->get('ids', []) as $id) {
             try {
-                $item = $this->findItem($id);
-                $this->menuStorage->delete(ApplicationItem::fromQueryModel($item));
+                $model = $this->getMenuItem($menu, $id);
+                $this->itemStorage->delete(ApplicationItem::fromQueryModel($model));
             } catch (NotFoundHttpException $e) {
                 continue;
             }

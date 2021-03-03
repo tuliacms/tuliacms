@@ -24,13 +24,15 @@
 
 ## Adresy URL
 
-| Service      | Link                                          |
-|--------------|-----------------------------------------------|
-| Frontend     | http://tulia.loc/                             |
-| Backend      | http://tulia.loc/administrator/               |
-| Baza danych  | http://localhost:8000/                        |
-| Mailhog      | http://localhost:8025/                        |
-| Dokumentacja | http://doc.tulia.loc/docs/pl/current/szablony |
+| Service       | Access Address                                |
+|---------------|-----------------------------------------------|
+| Frontend      | http://tulia.loc/                             |
+| Backend       | http://tulia.loc/administrator/               |
+| Baza danych   | http://localhost:8000/                        |
+| Mailhog       | http://localhost:8025/                        |
+| Elasticsearch | http://localhost:9200/                        |
+| Kibana        | http://localhost:5601/                        |
+| Dokumentacja  | http://doc.tulia.loc/docs/pl/current/szablony |
 
 ## Dane do logowania
 

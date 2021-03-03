@@ -124,16 +124,16 @@ class DbalRepository
     }
 
     /**
-     * @param Item $item
+     * @param ItemId $id
      */
-    public function delete(Item $item): void
+    public function delete(ItemId $id): void
     {
-        $this->connection->delete('#__menu_item_lang', ['menu_item_id' => $item->getId()->getId()]);
-        $this->connection->delete('#__menu_item', ['id' => $item->getId()->getId()]);
+        $this->connection->delete('#__menu_item_lang', ['menu_item_id' => $id->getId()]);
+        $this->connection->delete('#__menu_item', ['id' => $id->getId()]);
 
         $this->metadata->delete(
             MetadataEnum::MENUITEM_GROUP,
-            $item->getId()->getId()
+            $id->getId()
         );
     }
 

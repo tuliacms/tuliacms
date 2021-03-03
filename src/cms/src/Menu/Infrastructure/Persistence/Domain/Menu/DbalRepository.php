@@ -92,7 +92,7 @@ class DbalRepository implements RepositoryInterface
                     $this->itemDbalRepository->save($menu->getItem(new ItemId($id)));
                 }
                 if ($change['type'] === 'remove') {
-                    $this->itemDbalRepository->delete($menu->getItem(new ItemId($id)));
+                    $this->itemDbalRepository->delete(new ItemId($id));
                 }
             }
         });

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Menu\Infrastructure\Persistence\Query\Item;
 
 use PDO;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Component\Datatable\Finder\AbstractDatatableFinder;
 use Tulia\Component\Routing\RouterInterface;
@@ -33,21 +34,22 @@ class DatatableFinder extends AbstractDatatableFinder
     private $menuId;
 
     /**
-     * @param ConnectionInterface $connection
-     * @param CurrentWebsiteInterface $currentWebsite
-     * @param RouterInterface $router
-     * @param TranslatorInterface $translator
+     * @var CsrfTokenManagerInterface
      */
+    private $csrfTokenManager;
+
     public function __construct(
         ConnectionInterface $connection,
         CurrentWebsiteInterface $currentWebsite,
         RouterInterface $router,
-        TranslatorInterface $translator
+        TranslatorInterface $translator,
+        CsrfTokenManagerInterface $csrfTokenManager
     ) {
         parent::__construct($connection, $currentWebsite);
 
         $this->router = $router;
         $this->translator = $translator;
+        $this->csrfTokenManager = $csrfTokenManager;
     }
 
     public function setMenuId(string $menuId): void
@@ -169,11 +171,26 @@ class DatatableFinder extends AbstractDatatableFinder
     public function buildActions(array $row): array
     {
         $editLink = $this->router->generate('backend.menu.item.edit', ['menuId' => $row['menu_id'], 'id' => $row['id']]);
+        $deleteLink = $this->router->generate('backend.menu.item.delete', ['menuId' => $row['menu_id']]);
+        $deleteCsrfToken = $this->csrfTokenManager->getToken('menu.item.delete');
         $delete = $this->translator->trans('deleteItem', [], 'menu');
 
         return [
             'main' => '<a href="' . $editLink . '" class="btn btn-secondary btn-icon-only"><i class="btn-icon fas fa-pen"></i></a>',
-            '<a href="" class="dropdown-item-with-icon dropdown-item-danger" title="' . $delete . '"><i class="dropdown-icon fas fa-times"></i> ' . $delete . '</a>',
+            '<a
+                href="#"
+                class="dropdown-item-with-icon dropdown-item-danger"
+                title="' . $delete . '"
+                data-component="action"
+                data-settings="{
+                    \'action\': \'delete\',
+                    \'url\': \'' . $deleteLink . '\',
+                    \'data\': {
+                        \'ids\': [\'' . $row['id'] . '\']
+                    },
+                    \'csrf_token\': \'' . $deleteCsrfToken->getValue() . '\'
+                }"
+            ><i class="dropdown-icon fas fa-times"></i> ' . $delete . '</a>',
         ];
     }
 
