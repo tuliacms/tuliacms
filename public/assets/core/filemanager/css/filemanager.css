@@ -1,0 +1,64 @@
+.filemanager {display:none;position:fixed;z-index:1000;left:0;top:0;right:0;bottom:0;}
+.filemanager.fm-opened {display:block;}
+.filemanager .fm-bg {position:absolute;left:0;top:0;right:0;bottom:0;z-index:1;background-color:rgba(0,0,0,.6);}
+.filemanager .fm-bg:hover {cursor:pointer;}
+.filemanager .fm-fg {position:absolute;left:30px;top:30px;right:30px;bottom:30px;z-index:10;background-color:#fff;border-radius:3px;}
+.filemanager .fm-toolbar {position:absolute;left:0;top:0;right:0;height:50px;border-bottom:1px solid #ddd;display:flex;}
+.filemanager .fm-tree {position:absolute;left:0;top:50px;bottom:50px;width:260px;border-right:1px solid #ddd;}
+.filemanager .fm-body {position:absolute;left:260px;top:50px;right:0;bottom:50px;overflow:auto;}
+.filemanager .fm-bottombar {position:absolute;left:0;bottom:0;right:0;height:50px;border-top:1px solid #ddd;display:flex;justify-content:space-between;}
+
+.filemanager .fm-bottombar .fm-status {flex:1 1 auto;line-height:50px;padding:0 15px;}
+.filemanager .fm-bottombar .fm-select-btn {flex:1 1 auto;padding:7px;text-align:right;}
+.filemanager .fm-bottombar .fm-upload-progressbar {position:absolute;left:0;top:0;right:0;}
+.filemanager .fm-bottombar .fm-upload-progressbar .fm-meter {height:4px;display:block;background-color:red;width:10%;transition:.12s all;}
+
+.filemanager .fm-upload-btn {position:relative;height:50px;padding:7px;overflow:hidden;flex:0 0 260px;max-width:260px;width:260px;}
+.filemanager .fm-upload-btn .btn {width:100%;font-size:14px;}
+.filemanager .fm-upload-btn .btn:hover {cursor:pointer;}
+.filemanager .fm-upload-btn input[type=file] {position:absolute;left:0;top:0;width:1000px;height:1000px;opacity:0;}
+.filemanager .fm-upload-btn input[type=file]:hover {cursor:pointer;}
+
+.filemanager .fm-buttons {flex:1 1 auto;max-width:100%;padding:7px;}
+.filemanager .fm-buttons .btn {margin-right:5px;}
+
+.filemanager .fm-close {flex:0 0 50px;max-width:50px;}
+.filemanager .fm-close button {background-color:transparent;padding:0;height:50px;width:50px;line-height:50px;text-align:center;border:none;font-size:16px;transition:.12s all;}
+.filemanager .fm-close button:hover {cursor:pointer;background-color:rgba(0,0,0,.1);}
+
+.filemanager .fm-files-list-loader {position:absolute;left:0;top:0;right:0;bottom:0;display:none;}
+.filemanager .fm-files-list-loader:before {content:"\f1ce";font-weight:bold;width:50px;height:50px;font-size:50px;text-align:center;line-height:50px;display:block;position:absolute;left:50%;top:50%;z-index:-1;transform:translate(-50%,-50%);font-family:"Font Awesome 5 Free", serif;animation: fa-spin 2s linear infinite;}
+.filemanager .fm-files-list-loader.fm-active {display:block;}
+.filemanager .fm-files-list {position:relative;overflow:auto;display:flex;flex-wrap:wrap;}
+.filemanager .fm-file-outer {flex: 0 0 180px;padding:10px;overflow:hidden;}
+.filemanager .fm-file {position:relative;}
+.filemanager .fm-file-preview {width:100%;height:0;position:relative;padding-bottom:78%;}
+.filemanager .fm-file-preview span.fm-file-image {display:block;position:absolute;left:0;top:0;right:0;bottom:0;border-radius:6px;background-position:center center;background-size:cover;background-repeat:no-repeat;}
+.filemanager .fm-file-preview span.fm-file-image:before {content:"\f15b";font-weight:bold;width:42px;height:42px;font-size:42px;text-align:center;line-height:42px;display:block;position:absolute;left:50%;top:50%;z-index:-1;transform:translate(-50%,-50%);font-family:"Font Awesome 5 Free", serif;}
+.filemanager .fm-file-preview .fm-file-check {opacity:0;position:absolute;z-index:100;top:0;right:0;overflow:hidden;width:50px;height:50px;padding:4px 6px;text-align:right;line-height:1;border-radius:0 4px 0 0;transition:.12s all;}
+.filemanager .fm-file-preview .fm-file-check:before {position:absolute;content:"";display:block;top:-14px;right:-12px;z-index:-1;height:29px;width:73px;text-align:center;background-color:#96dc27;transform:rotate(45deg);transform-origin:bottom;}
+.filemanager .fm-file-preview .fm-file-check:after {content:"\f00c";font-weight:bold;font-family:"Font Awesome 5 Free", serif;color:#fff;font-size:10px;}
+.filemanager .fm-file-preview:before {position:absolute;content:"";display:block;pointer-events:none;left:-2px;top:-2px;bottom:-2px;right:-2px;border:2px solid #1860c3;border-radius:8px;opacity:0;transition:.12s all;}
+.filemanager .fm-file-name {text-align:center;margin-top:5px;text-overflow: ellipsis;overflow: hidden;white-space: nowrap;}
+.filemanager .fm-file-extension {opacity:0;text-transform:uppercase;font-size:9px;padding:4px 3px 3px 3px;position:absolute;left:0;top:0;z-index:100;background-color:rgba(255, 255, 255, 0.6);border-radius:6px 0 3px 0;line-height:1;transition:.12s all;}
+
+.filemanager .fm-file-type-directory .fm-file-preview span.fm-file-image:before {content:"\f07b"}
+.filemanager .fm-file-type-document .fm-file-preview span.fm-file-image:before {content:"\f15c"}
+.filemanager .fm-file-type-archive .fm-file-preview span.fm-file-image:before {content:"\f1c6"}
+.filemanager .fm-file-type-image .fm-file-preview span.fm-file-image:before {content:"\f1c5"}
+.filemanager .fm-file-type-pdf .fm-file-preview span.fm-file-image:before {content:"\f1c1"}
+
+.filemanager .fm-file:hover {cursor:pointer;}
+.filemanager .fm-file:hover .fm-file-preview:before {opacity:1}
+.filemanager .fm-file:hover .fm-file-extension {opacity:1;}
+
+.filemanager .fm-file-active .fm-file-preview .fm-file-check {opacity:1;}
+.filemanager .fm-file-active .fm-file-preview:before {border-color:#96dc27;opacity:1;}
+
+.filemanager .btn {box-shadow:none;}
+.filemanager .fm-hidden {display:none;}
+
+.filemanager .fm-dragondrop-area {display:block;left:30px;top:30px;right:30px;bottom:30px;position:absolute;z-index:100;border-radius:3px;background-color:rgba(255,255,255,.7);}
+.filemanager .fm-dragondrop-area > div {display:table;width:100%;height:100%;}
+.filemanager .fm-dragondrop-area > div > div {display:table-cell;vertical-align:middle;text-align:center;color:#fff;font-size:40px;text-shadow:0 0 6px rgba(0,0,0,.8)}
+.filemanager .fm-dragondrop-area.fm-hidden {display:none;}

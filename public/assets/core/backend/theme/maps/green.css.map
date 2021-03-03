@@ -1,0 +1,1 @@
+{"version":3,"file":"../sass/green.css","sources":["green.scss"],"sourcesContent":["body[data-theme=green] {background-color: green;}\n"],"names":[],"mappings":"AAAA,AAAA,IAAI,CAAA,AAAA,UAAC,CAAD,KAAC,AAAA,EAAkB;EAAC,gBAAgB,EAAE,KAAK,GAAG","sourceRoot":"src/sass"}

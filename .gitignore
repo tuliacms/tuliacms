@@ -9,4 +9,7 @@
 /var
 /vendor
 
-/public/*
+/public/uploads/*
+/public/media/*
+/public/assets/module/*
+/public/assets/theme/*
