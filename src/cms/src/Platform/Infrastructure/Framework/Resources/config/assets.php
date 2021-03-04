@@ -113,7 +113,7 @@ return [
     'fileapi' => [
         'priority' => 500,
         'group' => 'head',
-        'scripts' => [ '/assets/core/fileapi/dist/FileAPI.html5.min.js' ],
+        'scripts' => [ '/assets/core/fileapi/FileAPI.html5.min.js' ],
     ],
     'masonry' => [
         'priority' => 500,
