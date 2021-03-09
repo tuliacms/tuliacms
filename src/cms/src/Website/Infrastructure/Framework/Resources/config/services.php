@@ -79,6 +79,7 @@ $builder->setDefinition(DatabaseStorage::class, DatabaseStorage::class, [
     'arguments' => [
         service(ConnectionInterface::class),
         service(StorageInterface::class),
+        parameter('website.default_website')
     ],
 ]);
 
@@ -99,23 +100,35 @@ if (tulia_installed()) {
     ]);
 } else {
     $builder->setDefinition(RegistryInterface::class, Registry::class, [
-        'factory' => function () {
+        'factory' => function (array $defaultWebsite) {
             $websites = new Registry();
+            $locales = [];
 
             // Installation locales that are supported with translations
-            $localeEn = new Locale('en_US', $_SERVER['HTTP_HOST'], null, null, SslModeEnum::ALLOWED_BOTH, true);
-            $localePl = new Locale('pl_PL', $_SERVER['HTTP_HOST'], '/pl', null, SslModeEnum::ALLOWED_BOTH, false);
+            foreach ($defaultWebsite['locales'] as $locale) {
+                $locales[] = new Locale(
+                    $locale['code'],
+                    $locale['domain'],
+                    $locale['locale_prefix'],
+                    $locale['path_prefix'],
+                    $locale['ssl_mode'],
+                    $locale['is_default'],
+                );
+            }
 
             $websites->add(new Website(
-                'f19b16b2-f52b-442a-aee2-8e0f4fed31b7',
-                [$localeEn, $localePl],
-                $localeEn,
-                '/administrator',
-                'Default website'
+                $defaultWebsite['id'],
+                $locales,
+                $locales[0],
+                $defaultWebsite['backend_prefix'],
+                $defaultWebsite['name'],
             ));
 
             return $websites;
         },
+        'arguments' => [
+            parameter('website.default_website'),
+        ],
     ]);
 }
 
@@ -134,4 +147,29 @@ $builder->mergeParameter('translation.directory_list', [
 
 $builder->mergeParameter('templating.paths', [
     'backend/website' => dirname(__DIR__) . '/views/backend',
+]);
+
+$builder->mergeParameter('website.default_website', [
+    'id' => 'f19b16b2-f52b-442a-aee2-8e0f4fed31b7',
+    'name' => 'Default website',
+    'backend_prefix' => '/administrator',
+    'locales' => [
+        [
+            'code' => 'en_US',
+            'domain' => $_SERVER['HTTP_HOST'] ?? 'localhost',
+            'locale_prefix' => null,
+            'path_prefix' => null,
+            'ssl_mode' => SslModeEnum::ALLOWED_BOTH,
+            // Please, keep default locale first in this list!
+            'is_default' => true
+        ],
+        [
+            'code' => 'pl_PL',
+            'domain' => $_SERVER['HTTP_HOST'] ?? 'localhost',
+            'locale_prefix' => '/pl',
+            'path_prefix' => null,
+            'ssl_mode' => SslModeEnum::ALLOWED_BOTH,
+            'is_default' => false
+        ],
+    ],
 ]);

@@ -1,4 +1,4 @@
-{% extends '@installator/layout/base.tpl' %}
+{% extends '@cms/installator/layout/base.tpl' %}
 
 {% set showHeader = false %}
 {% set showFooter = false %}

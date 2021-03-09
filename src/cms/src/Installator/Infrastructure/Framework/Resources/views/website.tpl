@@ -1,4 +1,4 @@
-{% extends '@installator/layout/base.tpl' %}
+{% extends '@cms/installator/layout/base.tpl' %}
 
 {% import '@backend/website/parts/macros.tpl' as this %}
 

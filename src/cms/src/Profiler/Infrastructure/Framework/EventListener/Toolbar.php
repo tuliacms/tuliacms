@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Profiler\Infrastructure\Framework\EventListener;
 
 use Symfony\Component\HttpFoundation\Response;
+use Tulia\Component\Routing\Exception\RouteNotFoundException;
 use Tulia\Component\Routing\RouterInterface;
 use Tulia\Component\Templating\EngineInterface;
 use Tulia\Component\Templating\View;
@@ -75,7 +76,12 @@ class Toolbar
 
     private function renderDebugbar(Response $response): string
     {
-        $route = $this->router->generate('profiler.toolbar', [ 'token' => $response->headers->get('X-Debug-Token') ]);
+        try {
+            $route = $this->router->generate('profiler.toolbar', ['token' => $response->headers->get('X-Debug-Token')]);
+        } catch (RouteNotFoundException $e) {
+            return '';
+        }
+
         $nonce = $this->csp->createNonce();
 
         $this->csp->addNonce('script-src', $nonce);

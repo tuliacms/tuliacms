@@ -13,6 +13,7 @@ use Tulia\Component\Image\ImageManager;
 use Tulia\Component\Image\ImageManagerInterface;
 use Tulia\Component\Routing\RouteCollectionInterface;
 use Tulia\Component\Routing\RouterInterface;
+use Tulia\Framework\Database\Command\GenerateDatabase;
 use Tulia\Framework\Database\ConnectionInterface;
 use Tulia\Framework\Database\VoidConnection;
 use Tulia\Framework\Kernel\Event\BootstrapEvent;
@@ -60,6 +61,12 @@ $builder->setDefinition(DatatableFactory::class, DatatableFactory::class, [
 $builder->setDefinition(PluginsRegistry::class, PluginsRegistry::class, [
     'arguments' => [
         tagged('datatable.plugin'),
+    ],
+]);
+
+$builder->setDefinition(GenerateDatabase::class, GenerateDatabase::class, [
+    'tags' => [
+        tag_console_command('generate:database')
     ],
 ]);
 

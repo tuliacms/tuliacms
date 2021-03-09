@@ -10,10 +10,10 @@ include __DIR__ . '/vendor/autoload.php';
 $dotenv = new Dotenv();
 $dotenv->loadEnv(__DIR__ . '/.env');
 
-if (isset($installation)) {
-    $_ENV['APP_STATUS'] = 'INSTALLATION';
-} else {
+if (file_exists(__DIR__ . '/.env')) {
     $_ENV['APP_STATUS'] = 'WORKING';
+} else {
+    $_ENV['APP_STATUS'] = 'INSTALLATION';
 }
 
 if ($_SERVER['APP_ENV'] === 'dev') {

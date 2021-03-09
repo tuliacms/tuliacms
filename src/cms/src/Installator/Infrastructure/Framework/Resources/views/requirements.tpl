@@ -1,4 +1,4 @@
-{% extends '@installator/layout/base.tpl' %}
+{% extends '@cms/installator/layout/base.tpl' %}
 
 {% block body %}
     <div class="installator-wrapper">
@@ -11,11 +11,11 @@
                     <table class="table table-striped table-bordered">
                         <tbody>
                             {% for item in requirements %}
-                                {% if item.status == constant('\\Tulia\\Cms\\Platform\\Infrastructure\\Utilities\\Requirements\\Requirement::STATUS_REQUIRE') %}
+                                {% if item.status == constant('\\Tulia\\Cms\\Installator\\Application\\Requirements\\Requirement::STATUS_REQUIRE') %}
                                     {% set rowClass = 'table-danger' %}
                                     {% set name = item.name %}
                                     {% set solution = item.solution %}
-                                {% elseif item.status == constant('\\Tulia\\Cms\\Platform\\Infrastructure\\Utilities\\Requirements\\Requirement::STATUS_WARNING') %}
+                                {% elseif item.status == constant('\\Tulia\\Cms\\Installator\\Application\\Requirements\\Requirement::STATUS_WARNING') %}
                                     {% set rowClass = 'table-warning' %}
                                     {% set name = item.name %}
                                     {% set solution = item.solution %}

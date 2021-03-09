@@ -24,7 +24,7 @@ class Installator extends AbstractController
     public function index(Request $request): ViewInterface
     {
         $this->finishStep($request, 'index');
-        return $this->view('@installator/index.tpl');
+        return $this->view('@cms/installator/index.tpl');
     }
 
     public function requirements(Request $request)
@@ -42,7 +42,7 @@ class Installator extends AbstractController
             $this->resetStep($request, 'requirements');
         }
 
-        return $this->view('@installator/requirements.tpl', [
+        return $this->view('@cms/installator/requirements.tpl', [
             'requirements'   => $requirements,
             'allowGoFurther' => $requirementsMet,
         ]);
@@ -99,7 +99,7 @@ class Installator extends AbstractController
             }
         }
 
-        return $this->view('@installator/database.tpl', [
+        return $this->view('@cms/installator/database.tpl', [
             'form' => $form->createView(),
             'connectionError' => $connectionError,
         ]);
@@ -136,7 +136,7 @@ class Installator extends AbstractController
             return $this->redirect('installator.user');
         }
 
-        return $this->view('@installator/website.tpl', [
+        return $this->view('@cms/installator/website.tpl', [
             'form' => $form->createView(),
             'locale_defaults' => [
                 'domain' => $request->getHttpHost(),
@@ -170,7 +170,7 @@ class Installator extends AbstractController
             return $this->redirect('installator.install');
         }
 
-        return $this->view('@installator/user.tpl', [
+        return $this->view('@cms/installator/user.tpl', [
             'form' => $form->createView(),
         ]);
     }
@@ -181,12 +181,12 @@ class Installator extends AbstractController
             return $this->redirect('installator.user');
         }
 
-        return $this->view('@installator/install.tpl');
+        return $this->view('@cms/installator/install.tpl');
     }
 
     public function finish()
     {
-        return $this->view('@installator/finish.tpl');
+        return $this->view('@cms/installator/finish.tpl');
     }
 
     private function stepFinished(Request $request, string $step): bool
