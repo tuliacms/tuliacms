@@ -27,6 +27,6 @@ if ($_SERVER['APP_DEBUG']) {
 }
 
 $kernel = new TuliaKernel($_SERVER['APP_ENV'], (bool) $_SERVER['APP_DEBUG']);
-$kernel->setProjectDir(dirname(__DIR__, 2));
+$kernel->setProjectDir(dirname(__DIR__, 1));
 $application = new Application($kernel);
 $application->run($input);
