@@ -70,7 +70,7 @@ $builder->setDefinition(GenerateDatabase::class, GenerateDatabase::class, [
     ],
 ]);
 
-if (tulia_installed() === false) {
+if (!tulia_installed() && !tulia_configured()) {
     $builder->setDefinition(ConnectionInterface::class, VoidConnection::class, [
         'factory' => 'Doctrine\DBAL\DriverManager::getConnection',
         'arguments' => [

@@ -27,12 +27,16 @@ $collection->add('installator.user', '/user', [
     'methods' => [ 'GET', 'POST' ],
 ]);
 
+$collection->add('installator.preinstall', '/preinstall', [
+    'controller' => 'Tulia\Cms\Installator\UI\Web\Controller\Installator::preinstall',
+]);
+
 $collection->add('installator.install', '/install', [
     'controller' => 'Tulia\Cms\Installator\UI\Web\Controller\Installator::install',
 ]);
 
-$collection->add('installator.cmd', '/cmd', [
-    'controller' => 'Tulia\Cms\Installator\UI\Web\Controller\Installator::cmd',
+$collection->add('installator.steps.prepare', '/step/prepare', [
+    'controller' => 'Tulia\Cms\Installator\UI\Web\Controller\Steps::prepare',
 ]);
 
 $collection->add('installator.finish', '/finish', [

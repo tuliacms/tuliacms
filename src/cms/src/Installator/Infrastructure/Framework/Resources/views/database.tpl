@@ -19,16 +19,16 @@
                         <input type="password" name="password" style="display: block;position: fixed;left:-1000px;top:-1000px;opacity:0;" tabindex="-1" />
                         {{ form_errors(form) }}
                         <div class="row">
-                            <div class="col-6">{{ form_row(form.host) }}</div>
-                            <div class="col-6">{{ form_row(form.name) }}</div>
+                            <div class="col-6">{{ form_row(form.host, { attr: { tabindex: 1 } }) }}</div>
+                            <div class="col-6">{{ form_row(form.name, { attr: { tabindex: 4 } }) }}</div>
                         </div>
                         <div class="row">
-                            <div class="col-6">{{ form_row(form.port) }}</div>
-                            <div class="col-6">{{ form_row(form.username) }}</div>
+                            <div class="col-6">{{ form_row(form.port, { attr: { tabindex: 2 } }) }}</div>
+                            <div class="col-6">{{ form_row(form.username, { attr: { tabindex: 5 } }) }}</div>
                         </div>
                         <div class="row">
-                            <div class="col-6">{{ form_row(form.prefix) }}</div>
-                            <div class="col-6">{{ form_row(form.password) }}</div>
+                            <div class="col-6">{{ form_row(form.prefix, { attr: { tabindex: 3 } }) }}</div>
+                            <div class="col-6">{{ form_row(form.password, { attr: { tabindex: 6 } }) }}</div>
                         </div>
                         <div class="row navigation-buttons">
                             <div class="col">

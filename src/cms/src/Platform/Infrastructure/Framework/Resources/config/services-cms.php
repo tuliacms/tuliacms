@@ -312,5 +312,5 @@ $builder->mergeParameter('translation.directory_list', [
 ]);
 
 $builder->mergeParameter('migrations.paths', [
-    'Tulia\Cms\Migrations' => dirname(__DIR__, 7) . '/migrations',
+    'Tulia\Cms\Migrations' => dirname(__DIR__, 6) . '/migrations',
 ]);

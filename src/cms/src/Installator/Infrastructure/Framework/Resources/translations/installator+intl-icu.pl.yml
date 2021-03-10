@@ -20,3 +20,5 @@ website: Strona
 administrator: Administrator
 install: Instaluj
 readyToInstall: Gotowy do instalacji
+installation: Instalacja systemu
+pleaseWaitUntilEnd: Proszę czekać aż instalacja dobiegnie końca.

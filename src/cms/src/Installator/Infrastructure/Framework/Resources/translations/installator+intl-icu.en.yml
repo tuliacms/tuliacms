@@ -20,3 +20,5 @@ website: Website
 administrator: Administrator
 install: Install
 readyToInstall: Ready to install
+installation: System installation
+pleaseWaitUntilEnd: Please wait until the installation is complete.

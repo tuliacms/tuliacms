@@ -7,13 +7,17 @@ use Symfony\Component\Dotenv\Dotenv;
 
 include __DIR__ . '/vendor/autoload.php';
 
+$envExists = file_exists(__DIR__ . '/.env');
+
 $dotenv = new Dotenv();
 $dotenv->loadEnv(__DIR__ . '/.env');
 
-if (file_exists(__DIR__ . '/.env')) {
-    $_ENV['APP_STATUS'] = 'WORKING';
+if ($envExists === false) {
+    $_ENV['APP_STATUS'] = 'RAW';
+} elseif ($envExists && empty($_ENV['APP_KEY'])) {
+    $_ENV['APP_STATUS'] = 'CONFIGURED';
 } else {
-    $_ENV['APP_STATUS'] = 'INSTALLATION';
+    $_ENV['APP_STATUS'] = 'INSTALLED';
 }
 
 if ($_SERVER['APP_ENV'] === 'dev') {
@@ -32,5 +36,10 @@ if ($_SERVER['APP_DEBUG']) {
 
 function tulia_installed(): bool
 {
-    return $_ENV['APP_STATUS'] !== 'INSTALLATION';
+    return $_ENV['APP_STATUS'] === 'INSTALLED';
+}
+
+function tulia_configured(): bool
+{
+    return $_ENV['APP_STATUS'] === 'CONFIGURED';
 }

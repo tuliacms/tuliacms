@@ -8,6 +8,7 @@ use CLosure;
 use Doctrine\DBAL\Connection as DoctrineConnection;
 use Doctrine\DBAL\Cache\QueryCacheProfile;
 use Doctrine\DBAL\DBALException;
+use phpDocumentor\Reflection\Types\Parent_;
 use Tulia\Framework\Database\Query\QueryBuilder;
 use Tulia\Framework\Database\Schema\SchemaManager;
 
@@ -45,6 +46,22 @@ class Connection extends DoctrineConnection implements ConnectionInterface
         $args[0] = $this->prepareTablePrefix($args[0]);
 
         return parent::query(...$args);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function exec($sql)
+    {
+        return parent::exec($this->prepareTablePrefix($sql));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function executeStatement($sql, array $params = [], array $types = [])
+    {
+        return parent::executeStatement($this->prepareTablePrefix($sql), $params, $types);
     }
 
     /**

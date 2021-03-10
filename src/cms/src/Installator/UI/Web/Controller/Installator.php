@@ -6,10 +6,9 @@ namespace Tulia\Cms\Installator\UI\Web\Controller;
 
 use Doctrine\DBAL\DriverManager;
 use Tulia\Cms\Installator\Application\Requirements\Requirements;
-use Tulia\Cms\Installator\UI\Web\Form\Installator\DatabaseForm;
-use Tulia\Cms\Installator\UI\Web\Form\Installator\UserForm;
-use Tulia\Cms\Installator\UI\Web\Form\Installator\WebsiteForm;
-use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
+use Tulia\Cms\Installator\UI\Web\Form\DatabaseForm;
+use Tulia\Cms\Installator\UI\Web\Form\UserForm;
+use Tulia\Cms\Installator\UI\Web\Form\WebsiteForm;
 use Tulia\Cms\Website\Application\Service\BackendPrefixGenerator;
 use Tulia\Component\Routing\Enum\SslModeEnum;
 use Tulia\Component\Templating\ViewInterface;
@@ -19,7 +18,7 @@ use Tulia\Framework\Security\Http\Csrf\Annotation\CsrfToken;
 /**
  * @author Adam Banaszkiewicz
  */
-class Installator extends AbstractController
+class Installator extends AbstractInstallationController
 {
     public function index(Request $request): ViewInterface
     {
@@ -60,7 +59,7 @@ class Installator extends AbstractController
         $credentials = $request->getSession()->get('installator.db');
 
         $form = $this->createForm(DatabaseForm::class, [
-            'host'     => $credentials['host'] ?? 'localhost',
+            'host'     => $credentials['host'] ?? 'tulia_mysql',
             'port'     => $credentials['port'] ?? '3306',
             'prefix'   => $credentials['prefix'] ?? 'tulia_',
             'name'     => $credentials['name'] ?? '',
@@ -167,12 +166,23 @@ class Installator extends AbstractController
 
             $this->finishStep($request, 'user');
 
-            return $this->redirect('installator.install');
+            return $this->redirect('installator.preinstall');
         }
 
         return $this->view('@cms/installator/user.tpl', [
             'form' => $form->createView(),
         ]);
+    }
+
+    public function preinstall(Request $request)
+    {
+        if ($this->stepFinished($request, 'user') === false) {
+            return $this->redirect('installator.user');
+        }
+
+        $this->finishStep($request, 'preinstall');
+
+        return $this->view('@cms/installator/preinstall.tpl');
     }
 
     public function install(Request $request)
@@ -187,36 +197,5 @@ class Installator extends AbstractController
     public function finish()
     {
         return $this->view('@cms/installator/finish.tpl');
-    }
-
-    private function stepFinished(Request $request, string $step): bool
-    {
-        $steps = $request->getSession()->get('installator.steps', []);
-
-        return \is_array($steps) && \in_array($step, $steps, true);
-    }
-
-    private function finishStep(Request $request, string $step): void
-    {
-        $steps = $request->getSession()->get('installator.steps', []);
-
-        if (\is_array($steps) === false) {
-            $steps = [];
-        }
-
-        $steps[] = $step;
-
-        $request->getSession()->set('installator.steps', array_unique($steps));
-    }
-
-    private function resetStep(Request $request, string $step): void
-    {
-        $steps = $request->getSession()->get('installator.steps', []);
-
-        if (\is_array($steps) && ($key = array_search($step, $steps, true)) !== false) {
-            unset($steps[$key]);
-        }
-
-        $request->getSession()->set('installator.steps', $steps);
     }
 }

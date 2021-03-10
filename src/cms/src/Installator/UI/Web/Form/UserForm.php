@@ -2,16 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Installator\UI\Web\Form\Installator;
+namespace Tulia\Cms\Installator\UI\Web\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type;
 use Symfony\Component\Validator\Constraints as Assert;
-use Tulia\Cms\User\Validator\Constraints\EmailUnique;
-use Tulia\Cms\User\Validator\Constraints\Password;
-use Tulia\Cms\User\Validator\Constraints\Username;
-use Tulia\Cms\User\Validator\Constraints\UsernameUnique;
+use Tulia\Cms\User\Infrastructure\Framework\Validator\Constraints\Password;
+use Tulia\Cms\User\Infrastructure\Framework\Validator\Constraints\Username;
 
 /**
  * @author Adam Banaszkiewicz

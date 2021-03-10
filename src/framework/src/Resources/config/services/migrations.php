@@ -20,6 +20,7 @@ use Doctrine\Migrations\Tools\Console\Command\VersionCommand;
 use Tulia\Framework\Database\ConnectionInterface;
 use Tulia\Component\DependencyInjection\ContainerBuilderInterface;
 use Tulia\Framework\Migrations\Configuration\RuntimeConfiguration;
+use Tulia\Framework\Migrations\Migrator;
 
 /** @var ContainerBuilderInterface $builder */
 
@@ -42,6 +43,12 @@ $builder->setDefinition(DependencyFactory::class, ExistingConfiguration::class, 
     'arguments' => [
         service(ConfigurationLoader::class),
         service(ConnectionLoader::class),
+    ],
+]);
+
+$builder->setDefinition(Migrator::class, Migrator::class, [
+    'arguments' => [
+        service(DependencyFactory::class)
     ],
 ]);
 

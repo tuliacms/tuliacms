@@ -34,5 +34,6 @@
 
     {{ theme_body() }}
     <style>{% include relative(_self, 'style.css') %}</style>
+    {% block javascripts %}{% endblock %}
 </body>
 </html>
