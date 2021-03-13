@@ -24,15 +24,12 @@
 {% block javascripts %}
     <script nonce="{{ csp_nonce() }}">
         let beginStep = function (callback) {
-            $.ajax({
+            /*$.ajax({
                 url: '{{ path('installator.steps.prepare') }}',
                 success: function () {
                     callback('databaseInstallation');
                 }
-            });
-        };
-
-        let databaseInstallationStep = function (callback) {
+            });*/
             setTimeout(function () {
                 callback('userAccount');
             }, 1000);
@@ -51,6 +48,12 @@
         };
 
         let assetsInstallationStep = function (callback) {
+            /*$.ajax({
+                url: '{{ path('installator.steps.assets') }}',
+                success: function () {
+                    callback('databaseInstallation');
+                }
+            });*/
             setTimeout(function () {
                 callback('finish');
             }, 1000);
@@ -68,14 +71,9 @@
                 percentage: 10,
                 callback: beginStep,
             },
-            'databaseInstallation': {
-                name: 'Instalacja bazy danych...',
-                percentage: 30,
-                callback: databaseInstallationStep,
-            },
             'userAccount': {
                 name: 'Tworzenie konta użytkownika...',
-                percentage: 40,
+                percentage: 30,
                 callback: userAccountStep,
             },
             'websiteConfigure': {

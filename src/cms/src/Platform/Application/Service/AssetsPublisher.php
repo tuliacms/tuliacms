@@ -16,9 +16,22 @@ class AssetsPublisher
      */
     private $publicDir;
 
-    public function __construct(string $publicDir)
+    /**
+     * @var array
+     */
+    private $maps;
+
+    public function __construct(string $publicDir, array $maps = [])
     {
         $this->publicDir = $publicDir;
+        $this->maps = $maps;
+    }
+
+    public function publishRegisteredAssets(): void
+    {
+        foreach ($this->maps as $source => $target) {
+            $this->publish($source, $target);
+        }
     }
 
     public function publish(string $source, string $targetname): bool

@@ -252,15 +252,14 @@ $builder->setDefinition(CreateOptionsForNewWebsite::class, CreateOptionsForNewWe
 $builder->setDefinition(AssetsPublisher::class, AssetsPublisher::class, [
     'arguments' => [
         parameter('kernel.public_dir'),
+        parameter('public.paths'),
     ],
 ]);
 
 $builder->setDefinition(AssetsPublish::class, AssetsPublish::class, [
     'arguments' => [
         service(AssetsPublisher::class),
-        [
-            dirname(__DIR__, 5) . '/FrontendToolbar/Infrastructure/Framework/Resources/public/dist' => '/core/frontend-toolbar',
-        ],
+        parameter('public.paths'),
         parameter('kernel.project_dir'),
     ],
     'tags' => [
@@ -351,4 +350,8 @@ $builder->mergeParameter('translation.directory_list', [
 
 $builder->mergeParameter('migrations.paths', [
     'Tulia\Cms\Migrations' => dirname(__DIR__, 6) . '/migrations',
+]);
+
+$builder->mergeParameter('public.paths', [
+    dirname(__DIR__, 5) . '/FrontendToolbar/Infrastructure/Framework/Resources/public/dist' => '/core/frontend-toolbar',
 ]);

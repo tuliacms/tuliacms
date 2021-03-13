@@ -22,6 +22,11 @@ CREATE TABLE `#__parameter` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 EOL
 );
+        $this->addSql(<<<EOL
+ALTER TABLE `#__parameter`
+  ADD PRIMARY KEY (`name`);
+EOL
+);
 
         $this->addSql(<<<EOL
 INSERT INTO `#__parameter` (`name`, `value`, `type`) VALUES

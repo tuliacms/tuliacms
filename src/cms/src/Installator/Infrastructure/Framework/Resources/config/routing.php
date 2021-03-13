@@ -39,6 +39,10 @@ $collection->add('installator.steps.prepare', '/step/prepare', [
     'controller' => 'Tulia\Cms\Installator\UI\Web\Controller\Steps::prepare',
 ]);
 
+$collection->add('installator.steps.assets', '/step/assets', [
+    'controller' => 'Tulia\Cms\Installator\UI\Web\Controller\Steps::assets',
+]);
+
 $collection->add('installator.finish', '/finish', [
     'controller' => 'Tulia\Cms\Installator\UI\Web\Controller\Installator::finish',
 ]);
