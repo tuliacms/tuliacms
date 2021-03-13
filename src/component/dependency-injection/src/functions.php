@@ -24,7 +24,7 @@ function service(string $service): string
 
 /**
  * @param string $name
- *
+ * @param bool $optional
  * @return string
  */
 function parameter(string $name, bool $optional = false): string
