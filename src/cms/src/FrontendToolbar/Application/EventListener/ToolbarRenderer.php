@@ -43,10 +43,15 @@ class ToolbarRenderer
             return;
         }
 
+        $stylepath = $request->getUriForPath('/assets/core/frontend-toolbar/css/bundle.min.css');
+        $scriptpath = $request->getUriForPath('/assets/core/frontend-toolbar/js/bundle.min.js');
+
         $response = $event->getResponse();
         $content = $response->getContent();
 
         $toolbar = $this->builder->build($request);
+        $toolbar .= '<link rel="stylesheet" type="text/css" href="' . $stylepath . '" />';
+        $toolbar .= '<script src="' . $scriptpath . '"></script>';
 
         $content = str_replace('</body>', $toolbar . '</body>', $content);
 
