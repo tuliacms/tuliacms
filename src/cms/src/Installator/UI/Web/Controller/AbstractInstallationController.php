@@ -42,4 +42,9 @@ abstract class AbstractInstallationController extends AbstractController
 
         $request->getSession()->set('installator.steps', $steps);
     }
+
+    protected function resetSteps(Request $request): void
+    {
+        $request->getSession()->set('installator.steps', []);
+    }
 }

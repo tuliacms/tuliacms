@@ -79,6 +79,7 @@ DATABASE_USER={$credentials['username']}
 DATABASE_PASS={$credentials['password']}
 DATABASE_TYPE=pdo_mysql
 DATABASE_PREFIX={$credentials['prefix']}
+
 EOF
         );
     }

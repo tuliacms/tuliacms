@@ -94,6 +94,10 @@ class ContextListener
      */
     private function refreshUser(TokenInterface $token): TokenInterface
     {
+        if (! tulia_installed()) {
+            return new AnonymousToken('tulia', 'anon.', []);
+        }
+
         $user = $token->getUser();
 
         if (!$user instanceof UserInterface) {

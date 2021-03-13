@@ -25,14 +25,14 @@ class Security extends AbstractController
      *
      * @return ViewInterface|RedirectResponse
      */
-    public function login(AuthenticationUtils $authenticationUtils)
+    public function login(AuthenticationUtils $authenticationUtils, Request $request)
     {
         if ($this->isLoggedIn()) {
             return $this->redirect('backend');
         }
 
         return $this->view('@backend/security/login.tpl', [
-            'last_username' => $authenticationUtils->getLastUsername(),
+            'last_username' => $request->query->get('username', $authenticationUtils->getLastUsername()),
             'error'         => $authenticationUtils->getLastAuthenticationError(),
             'bgImages'      => $this->getCollection(),
         ]);

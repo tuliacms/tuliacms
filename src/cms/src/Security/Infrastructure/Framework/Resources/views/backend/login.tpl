@@ -229,15 +229,27 @@
             };
 
             this.showViewbox = function (id) {
-                if(this.viewbox)
-                {
+                if (this.viewbox) {
                     $('#' + this.viewbox).removeClass('active');
                 }
 
-                $('#' + id)
-                    .addClass('active')
-                    .find('.form-control-autofocus')
-                    .trigger('focus');
+                let cont = $('#' + id);
+
+                cont.addClass('active');
+
+                let inputs = cont.find('.form-control-autofocus');
+                let focused = false;
+
+                inputs.each(function () {
+                    if (focused) {
+                        return;
+                    }
+
+                    if ($(this).val() === '') {
+                        $(this).trigger('focus');
+                        focused = true;
+                    }
+                });
 
                 this.viewbox = id;
             };
@@ -309,7 +321,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="fas fa-user"></i></span>
                                     </div>
-                                    <input type="text" class="form-control form-control-autofocus" id="username" name="username" value="{{ last_username }}" placeholder="{{ 'username'|trans }}" autofocus />
+                                    <input type="text" class="form-control form-control-autofocus" id="username" name="username" value="{{ last_username }}" placeholder="{{ 'username'|trans }}" />
                                 </div>
                             </fieldset>
                             <fieldset class="form-group">
@@ -318,7 +330,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="fas fa-key"></i></span>
                                     </div>
-                                    <input type="password" class="form-control" id="password" name="password" placeholder="{{ 'password'|trans }}" />
+                                    <input type="password" class="form-control form-control-autofocus" id="password" name="password" placeholder="{{ 'password'|trans }}" />
                                 </div>
                             </fieldset>
                             <button type="submit" class="btn btn-primary login-btn">{{ 'signIn'|trans }}</button>

@@ -4,6 +4,7 @@ use Doctrine\Migrations\Configuration\Migration\ConfigurationLoader;
 use Tulia\Cms\Installator\Application\Service\Steps\AdminAccountInstallator;
 use Tulia\Cms\Installator\Application\Service\Steps\AssetsInstallator;
 use Tulia\Cms\Installator\Application\Service\Steps\DatabaseInstallator;
+use Tulia\Cms\Installator\Application\Service\Steps\InstallationFinisher;
 use Tulia\Cms\Installator\Application\Service\Steps\WebsiteInstallator;
 use Tulia\Cms\Platform\Application\Service\AssetsPublisher;
 use Tulia\Cms\Platform\Shared\Uuid\UuidGeneratorInterface;
@@ -37,6 +38,13 @@ $builder->setDefinition(WebsiteInstallator::class, WebsiteInstallator::class, [
     'arguments' => [
         service(WebsiteStorage::class),
         service(UuidGeneratorInterface::class),
+    ],
+]);
+
+$builder->setDefinition(InstallationFinisher::class, InstallationFinisher::class, [
+    'arguments' => [
+        service(UuidGeneratorInterface::class),
+        parameter('kernel.project_dir'),
     ],
 ]);
 
