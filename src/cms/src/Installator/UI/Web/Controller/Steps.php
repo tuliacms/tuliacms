@@ -10,6 +10,7 @@ use Tulia\Cms\Installator\Application\Exception\UnknownMigrationVersionException
 use Tulia\Cms\Installator\Application\Service\Steps\AdminAccountInstallator;
 use Tulia\Cms\Installator\Application\Service\Steps\AssetsInstallator;
 use Tulia\Cms\Installator\Application\Service\Steps\DatabaseInstallator;
+use Tulia\Cms\Installator\Application\Service\Steps\WebsiteInstallator;
 use Tulia\Cms\Platform\Application\Service\AssetsPublisher;
 use Tulia\Framework\Http\Request;
 use Tulia\Framework\Kernel\Exception\NotFoundHttpException;
@@ -34,14 +35,21 @@ class Steps extends AbstractInstallationController
      */
     private $adminAccountInstallator;
 
+    /**
+     * @var WebsiteInstallator
+     */
+    private $websiteInstallator;
+
     public function __construct(
         DatabaseInstallator $databaseInstallator,
         AssetsInstallator $assetsInstallator,
-        AdminAccountInstallator $adminAccountInstallator
+        AdminAccountInstallator $adminAccountInstallator,
+        WebsiteInstallator $websiteInstallator
     ) {
         $this->databaseInstallator = $databaseInstallator;
         $this->assetsInstallator = $assetsInstallator;
         $this->adminAccountInstallator = $adminAccountInstallator;
+        $this->websiteInstallator = $websiteInstallator;
     }
 
     public function prepare(Request $request): JsonResponse
@@ -90,6 +98,19 @@ class Steps extends AbstractInstallationController
         $this->assetsInstallator->install();
 
         $this->finishStep($request, 'steps.admin_account');
+
+        return new JsonResponse();
+    }
+
+    public function website(Request $request): JsonResponse
+    {
+        if ($this->stepFinished($request, 'steps.assets') === false) {
+            //throw new NotFoundHttpException('Please finish assets step first.');
+        }
+
+        $this->websiteInstallator->install($request->getSession()->get('installator.website'));
+
+        $this->finishStep($request, 'steps.website');
 
         return new JsonResponse();
     }

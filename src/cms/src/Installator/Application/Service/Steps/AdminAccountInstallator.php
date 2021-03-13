@@ -17,6 +17,7 @@ class AdminAccountInstallator
      * @var UserStorage
      */
     private $userStorage;
+
     /**
      * @var UuidGeneratorInterface
      */

@@ -4,9 +4,11 @@ use Doctrine\Migrations\Configuration\Migration\ConfigurationLoader;
 use Tulia\Cms\Installator\Application\Service\Steps\AdminAccountInstallator;
 use Tulia\Cms\Installator\Application\Service\Steps\AssetsInstallator;
 use Tulia\Cms\Installator\Application\Service\Steps\DatabaseInstallator;
+use Tulia\Cms\Installator\Application\Service\Steps\WebsiteInstallator;
 use Tulia\Cms\Platform\Application\Service\AssetsPublisher;
 use Tulia\Cms\Platform\Shared\Uuid\UuidGeneratorInterface;
 use Tulia\Cms\User\Application\Command\UserStorage;
+use Tulia\Cms\Website\Application\Command\WebsiteStorage;
 use Tulia\Component\DependencyInjection\ContainerBuilderInterface;
 
 /** @var ContainerBuilderInterface $builder */
@@ -27,6 +29,13 @@ $builder->setDefinition(AssetsInstallator::class, AssetsInstallator::class, [
 $builder->setDefinition(AdminAccountInstallator::class, AdminAccountInstallator::class, [
     'arguments' => [
         service(UserStorage::class),
+        service(UuidGeneratorInterface::class),
+    ],
+]);
+
+$builder->setDefinition(WebsiteInstallator::class, WebsiteInstallator::class, [
+    'arguments' => [
+        service(WebsiteStorage::class),
         service(UuidGeneratorInterface::class),
     ],
 ]);

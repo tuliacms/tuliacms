@@ -48,6 +48,12 @@
         };
 
         let websiteConfigureStep = function (callback) {
+            /*$.ajax({
+                url: '{{ path('installator.steps.website') }}',
+                success: function () {
+                    callback('databaseInstallation');
+                }
+            });*/
             setTimeout(function () {
                 callback('assetsInstallation');
             }, 1000);

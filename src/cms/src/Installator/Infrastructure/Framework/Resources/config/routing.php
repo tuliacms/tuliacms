@@ -43,6 +43,10 @@ $collection->add('installator.steps.admin_account', '/step/admin-account', [
     'controller' => 'Tulia\Cms\Installator\UI\Web\Controller\Steps::adminAccount',
 ]);
 
+$collection->add('installator.steps.website', '/step/website', [
+    'controller' => 'Tulia\Cms\Installator\UI\Web\Controller\Steps::website',
+]);
+
 $collection->add('installator.steps.assets', '/step/assets', [
     'controller' => 'Tulia\Cms\Installator\UI\Web\Controller\Steps::assets',
 ]);
