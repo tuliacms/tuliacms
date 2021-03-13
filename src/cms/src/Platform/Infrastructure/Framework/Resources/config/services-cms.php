@@ -18,6 +18,7 @@ use Tulia\Cms\Options\Infrastructure\Persistence\ReadModel\Options\OptionsFinder
 use Tulia\Cms\Options\Infrastructure\Persistence\WriteModel\OptionsRepository\DbalOptionsRepository;
 use Tulia\Cms\Options\Infrastructure\Persistence\WriteModel\OptionsRepository\OptionsRepositoryInterface;
 use Tulia\Cms\Options\Infrastructure\Framework\Twig\Extension\OptionsExtension;
+use Tulia\Cms\Platform\Application\Service\AssetsPublisher;
 use Tulia\Cms\Platform\Infrastructure\Bus\Event\EventBusInterface;
 use Tulia\Cms\Platform\Infrastructure\Bus\Event\PsrEventDispatcher;
 use Tulia\Cms\Platform\Infrastructure\DataManipulation\Hydrator\HydratorInterface;
@@ -51,9 +52,27 @@ use Tulia\Cms\Platform\Infrastructure\Framework\Twig\Extension\DocumentExtension
 use Tulia\Cms\Platform\Infrastructure\Framework\Twig\Extension\UtilsExtension;
 use Tulia\Cms\Platform\Shared\Document\DocumentInterface;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\TypeaheadType;
+use Tulia\Cms\Platform\UI\CLI\Command\AssetsPublish;
 use Tulia\Framework\Kernel\Event\RequestEvent;
 
 /** @var ContainerBuilderInterface $builder */
+
+/*$services
+    ->set(UtilsExtension::class)->end()
+
+    ->set(TypeaheadType::class)
+        ->arg(service(RouterInterface::class))
+        ->tag('form.type')
+    ->end()
+
+    ->set(DateFormatterInterface::class, DateFormatterTranslatorAware::class)
+        ->factory([OptionsFormatterFactory::class, 'factory'])
+        ->arg(service(Options::class))
+        ->arg(service(TranslatorInterface::class))
+        ->arg(tagged('metadata.registrator'))
+        ->arg(param('metadata.registrator'))
+    ->end()
+;*/
 
 $builder->mergeParameter('assets', include __DIR__ . '/assets.php');
 
@@ -228,6 +247,25 @@ $builder->setDefinition(CreateOptionsForNewWebsite::class, CreateOptionsForNewWe
         service(OptionsCreator::class),
     ],
     'tags' => [ tag_event_listener(WebsiteCreated::class) ],
+]);
+
+$builder->setDefinition(AssetsPublisher::class, AssetsPublisher::class, [
+    'arguments' => [
+        parameter('kernel.public_dir'),
+    ],
+]);
+
+$builder->setDefinition(AssetsPublish::class, AssetsPublish::class, [
+    'arguments' => [
+        service(AssetsPublisher::class),
+        [
+            dirname(__DIR__, 5) . '/FrontendToolbar/Infrastructure/Framework/Resources/public/dist' => '/core/frontend-toolbar',
+        ],
+        parameter('kernel.project_dir'),
+    ],
+    'tags' => [
+        tag_console_command('assets:publish'),
+    ],
 ]);
 
 $builder->setDefinition(BootstrapAccordionGroupBuilder::class, BootstrapAccordionGroupBuilder::class, [
