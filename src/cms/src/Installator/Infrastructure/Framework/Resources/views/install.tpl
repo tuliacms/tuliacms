@@ -36,6 +36,12 @@
         };
 
         let userAccountStep = function (callback) {
+            /*$.ajax({
+                url: '{{ path('installator.steps.admin_account') }}',
+                success: function () {
+                    callback('databaseInstallation');
+                }
+            });*/
             setTimeout(function () {
                 callback('websiteConfigure');
             }, 1000);

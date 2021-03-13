@@ -12,6 +12,7 @@ use Tulia\Cms\Options\Application\Service\Options;
 use Tulia\Cms\Platform\Infrastructure\Bus\Event\EventBusInterface;
 use Tulia\Cms\Platform\Infrastructure\DataManipulation\Hydrator\HydratorInterface;
 use Tulia\Cms\User\Application\Command\UserStorage;
+use Tulia\Cms\User\Application\Event\UserPreCreateEvent;
 use Tulia\Cms\User\Application\Event\UserPreDeleteEvent;
 use Tulia\Cms\User\Application\Event\UserPreUpdateEvent;
 use Tulia\Cms\User\Application\EventListener\MetadataLoader;
@@ -206,6 +207,7 @@ $builder->setDefinition(PasswordEncoder::class, PasswordEncoder::class, [
     ],
     'tags' => [
         tag_event_listener(UserPreUpdateEvent::class, 1000),
+        tag_event_listener(UserPreCreateEvent::class, 1000),
     ],
 ]);
 

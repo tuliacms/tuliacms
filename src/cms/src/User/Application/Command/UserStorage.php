@@ -43,29 +43,29 @@ class UserStorage
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function save(ApplicationUser $node): void
+    public function save(ApplicationUser $user): void
     {
         $aggregateExists = false;
 
         try {
-            $aggregate = $this->repository->find(new AggregateId($node->getId()));
+            $aggregate = $this->repository->find(new AggregateId($user->getId()));
 
             // We can assign $aggregateExists only after call find() in repository,
             // to handle exception when node not exists, and perform proper action when node not exists.
             $aggregateExists = true;
         } catch (UserNotFoundException $exception) {
-            $aggregate = new Aggregate(new AggregateId($node->getId()));
+            $aggregate = new Aggregate(new AggregateId($user->getId()));
         }
 
         if ($aggregateExists) {
-            $event = new UserPreUpdateEvent($node);
+            $event = new UserPreUpdateEvent($user);
             $this->eventDispatcher->dispatch($event);
 
             if ($event->isPropagationStopped()) {
                 return;
             }
         } else {
-            $event = new UserPreCreateEvent($node);
+            $event = new UserPreCreateEvent($user);
             $this->eventDispatcher->dispatch($event);
 
             if ($event->isPropagationStopped()) {
@@ -73,27 +73,27 @@ class UserStorage
             }
         }
 
-        $this->updateAggregate($node, $aggregate);
+        $this->updateAggregate($user, $aggregate);
 
         $this->repository->save($aggregate);
         $this->eventDispatcher->dispatchCollection($aggregate->collectDomainEvents());
 
         if ($aggregateExists) {
-            $this->eventDispatcher->dispatch(new UserUpdatedEvent($node));
+            $this->eventDispatcher->dispatch(new UserUpdatedEvent($user));
         } else {
-            $this->eventDispatcher->dispatch(new UserCreatedEvent($node));
+            $this->eventDispatcher->dispatch(new UserCreatedEvent($user));
         }
     }
 
-    public function delete(ApplicationUser $node): void
+    public function delete(ApplicationUser $user): void
     {
         try {
-            $aggregate = $this->repository->find(new AggregateId($node->getId()));
+            $aggregate = $this->repository->find(new AggregateId($user->getId()));
         } catch (UserNotFoundException $exception) {
             return;
         }
 
-        $event = new UserPreDeleteEvent($node);
+        $event = new UserPreDeleteEvent($user);
         $this->eventDispatcher->dispatch($event);
 
         if ($event->isPropagationStopped()) {
@@ -102,7 +102,7 @@ class UserStorage
 
         $this->repository->delete($aggregate);
         $this->eventDispatcher->dispatch(new UserDeleted($aggregate->getId()));
-        $this->eventDispatcher->dispatch(new UserDeletedEvent($node));
+        $this->eventDispatcher->dispatch(new UserDeletedEvent($user));
     }
 
     private function updateAggregate(ApplicationUser $user, Aggregate $aggregate): void

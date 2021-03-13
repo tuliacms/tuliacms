@@ -39,6 +39,10 @@ $collection->add('installator.steps.prepare', '/step/prepare', [
     'controller' => 'Tulia\Cms\Installator\UI\Web\Controller\Steps::prepare',
 ]);
 
+$collection->add('installator.steps.admin_account', '/step/admin-account', [
+    'controller' => 'Tulia\Cms\Installator\UI\Web\Controller\Steps::adminAccount',
+]);
+
 $collection->add('installator.steps.assets', '/step/assets', [
     'controller' => 'Tulia\Cms\Installator\UI\Web\Controller\Steps::assets',
 ]);

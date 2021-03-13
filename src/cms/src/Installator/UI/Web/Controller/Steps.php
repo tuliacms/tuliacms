@@ -7,6 +7,7 @@ namespace Tulia\Cms\Installator\UI\Web\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Tulia\Cms\Installator\Application\Exception\UnknownMigrationVersionException;
+use Tulia\Cms\Installator\Application\Service\Steps\AdminAccountInstallator;
 use Tulia\Cms\Installator\Application\Service\Steps\AssetsInstallator;
 use Tulia\Cms\Installator\Application\Service\Steps\DatabaseInstallator;
 use Tulia\Cms\Platform\Application\Service\AssetsPublisher;
@@ -28,12 +29,19 @@ class Steps extends AbstractInstallationController
      */
     private $assetsInstallator;
 
+    /**
+     * @var AdminAccountInstallator
+     */
+    private $adminAccountInstallator;
+
     public function __construct(
         DatabaseInstallator $databaseInstallator,
-        AssetsInstallator $assetsInstallator
+        AssetsInstallator $assetsInstallator,
+        AdminAccountInstallator $adminAccountInstallator
     ) {
         $this->databaseInstallator = $databaseInstallator;
         $this->assetsInstallator = $assetsInstallator;
+        $this->adminAccountInstallator = $adminAccountInstallator;
     }
 
     public function prepare(Request $request): JsonResponse
@@ -57,15 +65,31 @@ class Steps extends AbstractInstallationController
         return new JsonResponse();
     }
 
-    public function assets(Request $request): JsonResponse
+    public function adminAccount(Request $request): JsonResponse
     {
         if ($this->stepFinished($request, 'steps.prepare') === false) {
             throw new NotFoundHttpException('Please finish prepare step first.');
         }
 
-        $this->assetsInstallator->install();
+        $this->adminAccountInstallator->install(
+            $request->getSession()->get('installator.user'),
+            $request->getSession()->get('installator.website')['code']
+        );
 
         $this->finishStep($request, 'steps.assets');
+
+        return new JsonResponse();
+    }
+
+    public function assets(Request $request): JsonResponse
+    {
+        if ($this->stepFinished($request, 'steps.assets') === false) {
+            throw new NotFoundHttpException('Please finish assets step first.');
+        }
+
+        $this->assetsInstallator->install();
+
+        $this->finishStep($request, 'steps.admin_account');
 
         return new JsonResponse();
     }
