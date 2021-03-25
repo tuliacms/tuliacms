@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\WysiwygEditor\Infrastructure\Framework\Twig\Extension;
+namespace Tulia\Cms\WysiwygEditor\Core\Infrastructure\Framework\Twig\Extension;
 
-use Tulia\Cms\WysiwygEditor\Application\RegistryInterface;
+use Tulia\Cms\WysiwygEditor\Core\Application\RegistryInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 

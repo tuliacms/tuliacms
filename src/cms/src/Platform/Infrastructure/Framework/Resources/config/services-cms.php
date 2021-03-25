@@ -317,7 +317,7 @@ include __DIR__ . '/../../../../../Widget/Infrastructure/Framework/Resources/con
 include __DIR__ . '/../../../../../Taxonomy/Infrastructure/Framework/Resources/config/services.php';
 
 /** Modules */
-include __DIR__ . '/../../../../../WysiwygEditor/Infrastructure/Framework/Resources/config/services.php';
+include __DIR__ . '/../../../../../WysiwygEditor/Core/Infrastructure/Framework/Resources/config/services.php';
 include __DIR__ . '/../../../../../Filemanager/Infrastructure/Framework/Resources/config/services.php';
 include __DIR__ . '/../../../../../Settings/Infrastructure/Framework/Resources/config/services.php';
 include __DIR__ . '/../../../../../Theme/Infrastructure/Framework/Resources/config/services.php';

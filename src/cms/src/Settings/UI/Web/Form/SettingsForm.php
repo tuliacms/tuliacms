@@ -10,8 +10,8 @@ use Symfony\Component\Form\Extension\Core\Type;
 use Symfony\Component\Validator\Constraints as Assert;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\FilepickerType;
 use Tulia\Cms\Platform\Infrastructure\Utilities\DateTime\DateFormatterInterface;
-use Tulia\Cms\WysiwygEditor\Application\RegistryInterface;
-use Tulia\Cms\WysiwygEditor\Application\WysiwygEditorInterface;
+use Tulia\Cms\WysiwygEditor\Core\Application\RegistryInterface;
+use Tulia\Cms\WysiwygEditor\Core\Application\WysiwygEditorInterface;
 
 /**
  * @author Adam Banaszkiewicz

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\WysiwygEditor\Infrastructure\Framework\Form\FormType;
+namespace Tulia\Cms\WysiwygEditor\Core\Infrastructure\Framework\Form\FormType;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;

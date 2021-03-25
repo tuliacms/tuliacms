@@ -134,8 +134,7 @@ return [
     'backend.theme' => [
         'priority' => 100,
         'scripts' => [
-            '/assets/core/backend/theme/js/script.js',
-            '/assets/core/backend/theme/js/search-anything.js',
+            '/assets/core/backend/theme/js/bundle.min.js',
         ],
         'require' => [ 'vue', 'simplebar', 'lodash', 'backend.theme.head' ],
     ],
@@ -178,5 +177,10 @@ return [
             '/assets/core/filemanager/js/src/upload.js',
             '/assets/core/filemanager/js/src/config.js',
         ],
+    ],
+    'tulia-editor' => [
+        'group' => 'head',
+        'styles' => [ '/assets/core/tulia-editor/css/tulia-editor.min.css' ],
+        'scripts' => [ '/assets/core/tulia-editor/js/tulia-editor.min.js', '/assets/core/tulia-editor/js/tulia-editor.run.js' ],
     ],
 ];

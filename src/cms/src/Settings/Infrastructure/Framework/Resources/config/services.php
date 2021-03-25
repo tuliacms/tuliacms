@@ -13,7 +13,7 @@ use Tulia\Cms\Settings\Infrastructure\Cms\SearchAnything\SearchProvider;
 use Tulia\Cms\Settings\Registry;
 use Tulia\Cms\Settings\RegistryInterface;
 use Tulia\Cms\Settings\UI\Web\Form\SettingsForm;
-use Tulia\Cms\WysiwygEditor\Application\RegistryInterface as WysiwygEditorRegistry;
+use Tulia\Cms\WysiwygEditor\Core\Application\RegistryInterface as WysiwygEditorRegistry;
 use Tulia\Component\DependencyInjection\ContainerBuilderInterface;
 use Tulia\Component\Routing\RouterInterface;
 

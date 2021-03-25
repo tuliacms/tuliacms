@@ -1,1 +1,0 @@
-{"version":3,"file":"../sass/red.css","sources":["red.scss"],"sourcesContent":["body[data-theme=red] {background-color: red;}\n"],"names":[],"mappings":"AAAA,AAAA,IAAI,CAAA,AAAA,UAAC,CAAD,GAAC,AAAA,EAAgB;EAAC,gBAAgB,EAAE,GAAG,GAAG","sourceRoot":"src/sass"}

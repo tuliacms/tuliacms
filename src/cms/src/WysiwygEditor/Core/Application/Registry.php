@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\WysiwygEditor\Application;
+namespace Tulia\Cms\WysiwygEditor\Core\Application;
 
 /**
  * @author Adam Banaszkiewicz
