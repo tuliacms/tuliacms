@@ -1,9 +1,5 @@
 <?php declare(strict_types=1);
 
-use Tulia\Component\Routing\RouteCollectionInterface;
-
-/** @var RouteCollectionInterface $collection */
-
 include __DIR__ . '/../../../../../Node/Infrastructure/Framework/Resources/config/routing.php';
 include __DIR__ . '/../../../../../Menu/Infrastructure/Framework/Resources/config/routing.php';
 include __DIR__ . '/../../../../../Website/Infrastructure/Framework/Resources/config/routing.php';

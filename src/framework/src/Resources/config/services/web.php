@@ -6,7 +6,7 @@ use Tulia\Framework\Twig\Extension\RequestExtension;
 
 /** @var ContainerBuilderInterface $builder */
 
-$builder->setDefinition(RequestStack::class, RequestStack::class);
+//$builder->setDefinition(RequestStack::class, RequestStack::class);
 
 $builder->setDefinition(RequestExtension::class, RequestExtension::class, [
     'arguments' => [

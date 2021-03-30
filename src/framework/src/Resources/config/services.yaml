@@ -1,0 +1,14 @@
+imports:
+    - { resource: services/command_bus.yaml }
+    - { resource: services/kernel.yaml }
+    - { resource: services/routing.yaml }
+    - { resource: services/web.yaml }
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    Tulia\Framework\:
+        resource: '../../*'
+        exclude: '../../{Extension,Resources}'

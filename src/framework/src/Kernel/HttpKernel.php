@@ -17,32 +17,11 @@ use Tulia\Framework\Kernel\Controller\ControllerResolverInterface;
  */
 class HttpKernel implements HttpKernelInterface
 {
-    /**
-     * @var EventDispatcherInterface
-     */
-    protected $dispatcher;
+    protected EventDispatcherInterface $dispatcher;
+    protected ControllerResolverInterface $controllerResolver;
+    protected ArgumentResolverInterface $argumentResolver;
+    protected RequestStack $requestStack;
 
-    /**
-     * @var ControllerResolverInterface
-     */
-    protected $controllerResolver;
-
-    /**
-     * @var ArgumentResolverInterface
-     */
-    protected $argumentResolver;
-
-    /**
-     * @var RequestStack
-     */
-    protected $requestStack;
-
-    /**
-     * @param EventDispatcherInterface    $dispatcher
-     * @param ControllerResolverInterface $controllerResolver
-     * @param ArgumentResolverInterface   $argumentResolver
-     * @param RequestStack                $requestStack
-     */
     public function __construct(EventDispatcherInterface $dispatcher, ControllerResolverInterface $controllerResolver, ArgumentResolverInterface $argumentResolver, RequestStack $requestStack)
     {
         $this->dispatcher         = $dispatcher;
@@ -117,6 +96,7 @@ class HttpKernel implements HttpKernelInterface
      * @return Response
      * @throws Exception\ControllerDoesNotReturnResponseException
      * @throws Exception\ControllerNotCallableException
+     * @throws Exception\NotFoundHttpException
      */
     private function handleRaw(Request $request): Response
     {
@@ -128,6 +108,10 @@ class HttpKernel implements HttpKernelInterface
         }
 
         $controller = $this->controllerResolver->getController($request);
+
+        if (! $controller) {
+            throw new Exception\NotFoundHttpException('Controller not resolved. Did You properly register Routing?');
+        }
 
         $event = new Event\ControllerEvent($this, $request, $controller);
         $this->dispatcher->dispatch($event);

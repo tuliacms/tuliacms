@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Component\Routing\EventListener;
 
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Tulia\Component\Routing\Enum\SslModeEnum;
@@ -15,26 +16,24 @@ use Tulia\Framework\Kernel\Event\BootstrapEvent;
 /**
  * @author Adam Banaszkiewicz
  */
-class WebsiteResolver
+class WebsiteResolver implements EventSubscriberInterface
 {
-    /**
-     * @var RegistryInterface
-     */
-    protected $websites;
+    protected RegistryInterface $websites;
+    protected CurrentWebsiteInterface $currentWebsite;
 
-    /**
-     * @var CurrentWebsiteInterface
-     */
-    protected $currentWebsite;
-
-    /**
-     * @param RegistryInterface $websites
-     * @param CurrentWebsiteInterface $currentWebsite
-     */
     public function __construct(RegistryInterface $websites, CurrentWebsiteInterface $currentWebsite)
     {
-        $this->websites       = $websites;
+        $this->websites = $websites;
         $this->currentWebsite = $currentWebsite;
+    }
+
+    public static function getSubscribedEvents(): array
+    {
+        return [
+            BootstrapEvent::class => [
+                ['handle', 9900]
+            ],
+        ];
     }
 
     public function handle(BootstrapEvent $event): void

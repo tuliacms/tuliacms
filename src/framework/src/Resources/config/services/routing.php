@@ -32,44 +32,44 @@ use Tulia\Framework\Kernel\Event\BootstrapEvent;
 use Tulia\Framework\Kernel\Event\RequestEvent;
 
 /** @var ContainerBuilderInterface $builder */
-$builder->setDefinition(RouteCollectionInterface::class, RouteCollection::class);
+/*$builder->setDefinition(RouteCollectionInterface::class, RouteCollection::class);*/
 
-$builder->setDefinition(MatcherInterface::class, DelegatingMatcher::class, [
+/*$builder->setDefinition(MatcherInterface::class, DelegatingMatcher::class, [
     'arguments' => [
         tagged('router.matcher'),
     ],
-]);
+]);*/
 
-$builder->setDefinition(Matcher::class, Matcher::class, [
+/*$builder->setDefinition(Matcher::class, Matcher::class, [
     'arguments' => [
         service(RouteCollectionInterface::class),
     ],
     'tags' => [ tag('router.matcher') ],
-]);
+]);*/
 
-$builder->setDefinition(Generator::class, Generator::class, [
+/*$builder->setDefinition(Generator::class, Generator::class, [
     'arguments' => [
         service(RouteCollectionInterface::class),
     ],
     'tags' => [ tag('router.generator') ],
-]);
+]);*/
 
-$builder->setDefinition(GeneratorInterface::class, DelegatingGenerator::class, [
+/*$builder->setDefinition(GeneratorInterface::class, DelegatingGenerator::class, [
     'arguments' => [
         tagged('router.generator'),
     ],
-]);
+]);*/
 
-$builder->setDefinition(RouterInterface::class, Router::class, [
+/*$builder->setDefinition(RouterInterface::class, Router::class, [
     'arguments' => [
         service(CurrentWebsiteInterface::class),
         service(MatcherInterface::class),
         service(GeneratorInterface::class),
         service(RequestContextInterface::class),
     ],
-]);
+]);*/
 
-$builder->setDefinition(RegistryInterface::class, Registry::class, [
+/*$builder->setDefinition(RegistryInterface::class, Registry::class, [
     'factory' => function () {
         $websites = new Registry();
 
@@ -86,20 +86,20 @@ $builder->setDefinition(RegistryInterface::class, Registry::class, [
 
         return $websites;
     },
-]);
+]);*/
 
-$builder->setDefinition(StorageInterface::class, ArrayStorage::class);
+/*$builder->setDefinition(StorageInterface::class, ArrayStorage::class);*/
 
-$builder->setDefinition(CurrentWebsiteInterface::class, CurrentWebsite::class);
+/*$builder->setDefinition(CurrentWebsiteInterface::class, CurrentWebsite::class);*/
 
-$builder->setDefinition(RequestContextInterface::class, DynamicRequestContext::class, [
+/*$builder->setDefinition(RequestContextInterface::class, DynamicRequestContext::class, [
     'arguments' => [
         service(RequestStack::class),
         service(CurrentWebsiteInterface::class),
     ],
-]);
+]);*/
 
-$builder->setDefinition(RequestMatcher::class, RequestMatcher::class, [
+/*$builder->setDefinition(RequestMatcher::class, RequestMatcher::class, [
     'arguments' => [
         service(RouterInterface::class),
         service(CurrentWebsiteInterface::class),
@@ -107,27 +107,27 @@ $builder->setDefinition(RequestMatcher::class, RequestMatcher::class, [
     'tags' => [
         tag_event_listener(RequestEvent::class, 200, 'onRequest'),
     ]
-]);
+]);*/
 
-$builder->setDefinition(BackendResolver::class, BackendResolver::class, [
+/*$builder->setDefinition(BackendResolver::class, BackendResolver::class, [
     'arguments' => [
         service(CurrentWebsiteInterface::class),
     ],
     'tags' => [
         tag_event_listener(BootstrapEvent::class, 9800),
     ]
-]);
+]);*/
 
-$builder->setDefinition(LocaleResolver::class, LocaleResolver::class, [
+/*$builder->setDefinition(LocaleResolver::class, LocaleResolver::class, [
     'arguments' => [
         service(CurrentWebsiteInterface::class),
     ],
     'tags' => [
         tag_event_listener(BootstrapEvent::class, 9500),
     ]
-]);
+]);*/
 
-$builder->setDefinition(WebsiteResolver::class, WebsiteResolver::class, [
+/*$builder->setDefinition(WebsiteResolver::class, WebsiteResolver::class, [
     'arguments' => [
         service(RegistryInterface::class),
         service(CurrentWebsiteInterface::class),
@@ -135,7 +135,7 @@ $builder->setDefinition(WebsiteResolver::class, WebsiteResolver::class, [
     'tags' => [
         tag_event_listener(BootstrapEvent::class, 9900),
     ]
-]);
+]);*/
 
 $builder->setDefinition(RoutingExtension::class, RoutingExtension::class, [
     'arguments' => [

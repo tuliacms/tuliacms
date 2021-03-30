@@ -1,0 +1,32 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    Tulia\Component\Routing\:
+        resource: '../../../../../component/routing/src/*'
+
+    Tulia\Component\Routing\RouterInterface:
+        class: Tulia\Component\Routing\Router
+
+    Tulia\Component\Routing\Request\RequestContextInterface:
+        class: Tulia\Component\Routing\Request\DynamicRequestContext
+
+    Tulia\Component\Routing\Integration\FastRoute\Generator:
+        tags: [ router.generator ]
+
+    Tulia\Component\Routing\Integration\FastRoute\Matcher:
+        tags: [ router.matcher ]
+
+    Tulia\Component\Routing\Matcher\MatcherInterface:
+        class: Tulia\Component\Routing\Matcher\DelegatingMatcher
+        arguments:
+            - !tagged_iterator router.matcher
+
+    Tulia\Component\Routing\Generator\GeneratorInterface:
+        class: Tulia\Component\Routing\Generator\DelegatingGenerator
+        arguments:
+            - !tagged_iterator router.generator
+
+    Tulia\Component\Routing\Website\RegistryInterface:
+        factory: [ Tulia\Component\Routing\Website\GenericWebsiteRegistryFactory, factory ]

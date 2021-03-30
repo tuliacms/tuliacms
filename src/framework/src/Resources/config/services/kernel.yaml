@@ -1,0 +1,13 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    Tulia\Framework\Kernel\HttpKernelInterface:
+        class: Tulia\Framework\Kernel\HttpKernel
+        public: true
+
+    Psr\EventDispatcher\EventDispatcherInterface:
+        class: Symfony\Component\EventDispatcher\EventDispatcher
+
+    Symfony\Contracts\EventDispatcher\EventDispatcherInterface: '@Psr\EventDispatcher\EventDispatcherInterface'

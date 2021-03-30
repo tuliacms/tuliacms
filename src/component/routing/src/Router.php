@@ -15,35 +15,14 @@ use Tulia\Component\Routing\Website\Locale\LocaleInterface;
  */
 class Router implements RouterInterface
 {
-    /**
-     * @var CurrentWebsiteInterface
-     */
-    protected $currentWebsite;
+    protected CurrentWebsiteInterface $currentWebsite;
+    protected MatcherInterface $matcher;
+    protected GeneratorInterface $generator;
+    protected RequestContextInterface $requestContext;
 
-    /**
-     * @var MatcherInterface
-     */
-    protected $matcher;
-
-    /**
-     * @var GeneratorInterface
-     */
-    protected $generator;
-
-    /**
-     * @var RequestContextInterface
-     */
-    protected $requestContext;
-
-    /**
-     * @param CurrentWebsiteInterface $currentWebsite
-     * @param MatcherInterface $matcher
-     * @param GeneratorInterface $generator
-     * @param RequestContextInterface $requestContext
-     */
     public function __construct(
-        CurrentWebsiteInterface $currentWebsite,
         MatcherInterface $matcher,
+        CurrentWebsiteInterface $currentWebsite,
         GeneratorInterface $generator,
         RequestContextInterface $requestContext
     ) {

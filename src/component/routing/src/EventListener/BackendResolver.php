@@ -4,30 +4,31 @@ declare(strict_types=1);
 
 namespace Tulia\Component\Routing\EventListener;
 
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 use Tulia\Framework\Kernel\Event\BootstrapEvent;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class BackendResolver
+class BackendResolver implements EventSubscriberInterface
 {
-    /**
-     * @var CurrentWebsiteInterface
-     */
-    protected $currentWebsite;
+    protected CurrentWebsiteInterface $currentWebsite;
 
-    /**
-     * @param CurrentWebsiteInterface $currentWebsite
-     */
     public function __construct(CurrentWebsiteInterface $currentWebsite)
     {
         $this->currentWebsite = $currentWebsite;
     }
 
-    /**
-     * @param BootstrapEvent $event
-     */
+    public static function getSubscribedEvents(): array
+    {
+        return [
+            BootstrapEvent::class => [
+                ['handle', 9800]
+            ],
+        ];
+    }
+
     public function handle(BootstrapEvent $event): void
     {
         $request = $event->getRequest();
@@ -41,11 +42,6 @@ class BackendResolver
         $request->attributes->add($parameters);
     }
 
-    /**
-     * @param array $parameters
-     *
-     * @return array
-     */
     protected function resolveBackend(array $parameters): array
     {
         $parameters['_is_backend'] = false;

@@ -5,56 +5,64 @@ declare(strict_types=1);
 namespace Tulia\Framework\Kernel;
 
 use Psr\Container\ContainerInterface as PsrContainerInterface;
+use spec\Tulia\Cms\ContactForms\Infrastructure\Persistence\Domain\DbalFormPersisterSpec;
+use Symfony\Component\Config\Loader\DelegatingLoader;
+use Symfony\Component\Config\Loader\LoaderInterface;
+use Symfony\Component\Config\Loader\LoaderResolver;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Loader\ClosureLoader;
+use Symfony\Component\DependencyInjection\Loader\DirectoryLoader;
+use Symfony\Component\DependencyInjection\Loader\GlobFileLoader;
+use Symfony\Component\DependencyInjection\Loader\IniFileLoader;
+use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
+use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\DependencyInjection\MergeExtensionConfigurationPass;
+use Tulia\Component\Theme\Configuration\ConfigurationInterface;
 use Tulia\Component\Theme\ThemeInterface;
+use Tulia\Framework\Package\FrameworkExtension;
+use Tulia\Framework\Kernel\Config\FileLocator;
 use Tulia\Framework\Module\AbstractModule;
+use Tulia\Framework\Package\FrameworkPackage;
+use Tulia\Framework\Package\PackageInterface;
 use Tulia\Framework\Theme\ConfigurationLoader as ThemeConfigurationLoader;
 use Tulia\Framework\Module\ConfigurationLoader as ModuleConfigurationLoader;
 use Tulia\Framework\Http\Request;
-use Tulia\Component\DependencyInjection\ContainerBuilderInterface;
-use Tulia\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * @author Adam Banaszkiewicz
  */
 abstract class Kernel implements KernelInterface
 {
-    protected $environment;
-    protected $debug;
-    protected $projectDir;
+    public const CONFIG_EXTENSIONS = '.{php,xml,yaml,yml}';
 
-    protected $themes = [];
-    protected $modules = [];
+    protected string $environment;
+    protected string $projectDir;
 
-    protected $startTime = 0.0;
-    protected $booted    = false;
+    protected array $themes = [];
+    protected array $modules = [];
+    protected array $packages = [];
 
-    /**
-     * @var PsrContainerInterface
-     */
-    protected $container;
+    protected float $startTime = 0.0;
+    protected bool $debug;
+    protected bool $booted = false;
 
-    /**
-     * @param string $environment
-     * @param bool $debug
-     */
+    protected PsrContainerInterface $container;
+
     public function __construct(string $environment, bool $debug)
     {
         $this->environment = $environment;
-        $this->debug       = $debug;
+        $this->debug = $debug;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getStartTime(): float
     {
         return $this->startTime;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getEnvironment(): string
     {
         return $this->environment;
@@ -65,17 +73,11 @@ abstract class Kernel implements KernelInterface
         return $this->debug;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getContainer(): PsrContainerInterface
     {
         return $this->container;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function handle(Request $request): Response
     {
         $this->boot();
@@ -85,10 +87,7 @@ abstract class Kernel implements KernelInterface
         return $kernel->handle($request);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function terminate(Request $request, Response $response)
+    public function terminate(Request $request, Response $response): void
     {
         if (! $this->booted) {
             return;
@@ -97,60 +96,38 @@ abstract class Kernel implements KernelInterface
         $this->getHttpKernel()->terminate($request, $response);
     }
 
-    /**
-     * @return HttpKernelInterface
-     */
     public function getHttpKernel(): HttpKernelInterface
     {
         return $this->container->get(HttpKernelInterface::class);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getCacheDir(): string
     {
-        return $this->getProjectDir().'/var/cache/'.$this->environment;
+        return $this->getProjectDir() . '/var/cache/'.$this->environment;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getProjectDir(): string
     {
         return $this->projectDir;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setProjectDir(string $projectDir): void
     {
         $this->projectDir = $projectDir;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getLogDir(): string
     {
-        return $this->getProjectDir().'/var/log';
+        return $this->getProjectDir() . '/var/log';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getExtensionsDir(): string
     {
-        return $this->getProjectDir().'/extension';
+        return $this->getProjectDir() . '/extension';
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function configureContainer(ContainerBuilderInterface $builder): void
+    public function configureContainer(ContainerBuilder $c, LoaderInterface $loader): void
     {
-
     }
 
     public function boot(): void
@@ -161,23 +138,73 @@ abstract class Kernel implements KernelInterface
 
         $this->startTime = microtime(true);
 
-        $builder = new ContainerBuilder();
+        $this->packages[] = new FrameworkPackage();
 
-        foreach ($this->getKernelParameters() as $id => $value) {
-            $builder->setParameter($id, $value);
-        }
+        $container = new ContainerBuilder();
+        $container->getParameterBag()->add($this->getKernelParameters());
+        $container->addObjectResource($this);
+        $this->prepareContainer($container);
 
-        include __DIR__ . '/../Resources/config/services.php';
+        $loader = $this->getContainerLoader($container);
+        $this->registerContainerConfiguration($loader);
 
-        $this->configureContainer($builder);
-        $this->configureContainerForModules($builder);
-        $this->configureContainerForThemes($builder);
+        $this->configureContainer($container, $loader);
 
-        $this->container = $builder->compile();
-        $this->container->set(KernelInterface::class, $this);
-        $this->container->lock();
+        $container->compile();
 
         $this->booted = true;
+
+        $this->container = $container;
+    }
+
+    public function registerContainerConfiguration(LoaderInterface $loader): void
+    {
+        $loader->load(__DIR__ . '/../Resources/config/services.yaml');
+    }
+
+    private function prepareContainer(ContainerBuilder $container): void
+    {
+        $extensions = [];
+
+        /** @var PackageInterface $package */
+        foreach ($this->packages as $package) {
+            if ($extension = $package->getContainerExtension()) {
+                $container->registerExtension($extension);
+            }
+
+            if ($this->debug) {
+                $container->addObjectResource($package);
+            }
+        }
+
+        /** @var PackageInterface $package */
+        foreach ($this->packages as $package) {
+            $package->build($container);
+        }
+
+        //$this->build($container);
+
+        foreach ($container->getExtensions() as $extension) {
+            $extensions[] = $extension->getAlias();
+        }
+
+        $container->getCompilerPassConfig()->setMergePass(new MergeExtensionConfigurationPass($extensions));
+    }
+
+    protected function getContainerLoader(ContainerBuilder $container): DelegatingLoader
+    {
+        $locator = new FileLocator($this);
+        $resolver = new LoaderResolver([
+            new XmlFileLoader($container, $locator),
+            new YamlFileLoader($container, $locator),
+            new IniFileLoader($container, $locator),
+            new PhpFileLoader($container, $locator),
+            new GlobFileLoader($container, $locator),
+            new DirectoryLoader($container, $locator),
+            new ClosureLoader($container),
+        ]);
+
+        return new DelegatingLoader($resolver);
     }
 
     protected function configureContainerForThemes(ContainerBuilderInterface $builder): void
@@ -232,9 +259,6 @@ abstract class Kernel implements KernelInterface
         $builder->setParameter('kernel.modules', $this->modules);
     }
 
-    /**
-     * @return array
-     */
     protected function getKernelParameters(): array
     {
         return [

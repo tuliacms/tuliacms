@@ -4,30 +4,31 @@ declare(strict_types=1);
 
 namespace Tulia\Component\Routing\EventListener;
 
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 use Tulia\Framework\Kernel\Event\BootstrapEvent;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class LocaleResolver
+class LocaleResolver implements EventSubscriberInterface
 {
-    /**
-     * @var CurrentWebsiteInterface
-     */
-    protected $currentWebsite;
+    protected CurrentWebsiteInterface $currentWebsite;
 
-    /**
-     * @param CurrentWebsiteInterface $currentWebsite
-     */
     public function __construct(CurrentWebsiteInterface $currentWebsite)
     {
         $this->currentWebsite = $currentWebsite;
     }
 
-    /**
-     * @param BootstrapEvent $event
-     */
+    public static function getSubscribedEvents(): array
+    {
+        return [
+            BootstrapEvent::class => [
+                ['handle', 9500]
+            ],
+        ];
+    }
+
     public function handle(BootstrapEvent $event): void
     {
         $request = $event->getRequest();
@@ -40,11 +41,6 @@ class LocaleResolver
         $request->setDefaultLocale($this->currentWebsite->getDefaultLocale()->getCode());
     }
 
-    /**
-     * @param array $parameters
-     *
-     * @return array
-     */
     protected function resolveLocale(array $parameters): array
     {
         $locale = $this->currentWebsite->getLocale();

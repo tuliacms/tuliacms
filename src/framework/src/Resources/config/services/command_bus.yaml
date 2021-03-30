@@ -1,0 +1,7 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    Tulia\Component\CommandBus\Locator\LocatorInterface:
+        class: Tulia\Component\CommandBus\Locator\ArrayLocator

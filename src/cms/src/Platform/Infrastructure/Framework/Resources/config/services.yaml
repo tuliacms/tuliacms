@@ -1,0 +1,18 @@
+imports:
+    - { resource: services/routing.yaml }
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    Tulia\Cms\Platform\:
+        resource: '../../../../*'
+        exclude:
+            - '../../../../**/Domain/**'
+            - '../../../../**/Model/**'
+            - '../../../../**/*Exception.php'
+            - '../../../../**/*Trait.php'
+            - '../../../../**/*View.php'
+            - '../../../../**/*Response.php'
+            - '../../../../**/*Event.php'

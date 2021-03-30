@@ -11,24 +11,11 @@ use Tulia\Component\Routing\RouteCollectionInterface;
  */
 class RouteCollector
 {
-    /**
-     * @var RouteCollectionInterface
-     */
-    protected $collection;
+    protected RouteCollectionInterface $collection;
 
-    /**
-     * @var string
-     */
-    protected $projectDir;
-
-    /**
-     * @param RouteCollectionInterface $collection
-     * @param string                   $projectDir
-     */
-    public function __construct(RouteCollectionInterface $collection, string $projectDir)
+    public function __construct(RouteCollectionInterface $collection)
     {
         $this->collection = $collection;
-        $this->projectDir = $projectDir;
     }
 
     public function collect(): void

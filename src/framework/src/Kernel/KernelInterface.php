@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace Tulia\Framework\Kernel;
 
 use Psr\Container\ContainerInterface as PsrContainerInterface;
+use Symfony\Component\Config\Loader\LoaderInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpFoundation\Response;
-use Tulia\Component\DependencyInjection\ContainerBuilderInterface;
 use Tulia\Framework\Http\Request;
 
 /**
@@ -71,8 +72,7 @@ interface KernelInterface
      */
     public function isDebug(): bool;
 
-    /**
-     * @param ContainerBuilderInterface $builder
-     */
-    public function configureContainer(ContainerBuilderInterface $builder): void;
+    public function configureContainer(ContainerBuilder $c, LoaderInterface $loader): void;
+
+    public function registerContainerConfiguration(LoaderInterface $loader): void;
 }
