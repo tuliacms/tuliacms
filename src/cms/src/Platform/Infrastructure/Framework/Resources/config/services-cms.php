@@ -102,13 +102,13 @@ $builder->setDefinition(EventBusInterface::class, PsrEventDispatcher::class, [
 
 $builder->setDefinition(HydratorInterface::class, OcramiusHydrator::class);
 
-$builder->setDefinition(DateFormatterInterface::class, DateFormatterTranslatorAware::class, [
+/*$builder->setDefinition(DateFormatterInterface::class, DateFormatterTranslatorAware::class, [
     'factory' => [OptionsFormatterFactory::class, 'factory'],
     'arguments' => [
         service(Options::class),
         service(TranslatorInterface::class),
     ],
-]);
+]);*/
 
 $builder->setDefinition(DatetimeExtension::class, DatetimeExtension::class, [
     'arguments' => [

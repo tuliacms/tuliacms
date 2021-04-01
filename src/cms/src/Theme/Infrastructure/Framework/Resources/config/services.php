@@ -32,12 +32,12 @@ use Tulia\Framework\Kernel\Event\RequestEvent;
 
 /** @var ContainerBuilderInterface $builder */
 
-$builder->setDefinition(ThemeLoaderInterface::class, ThemeLoader::class, [
+/*$builder->setDefinition(ThemeLoaderInterface::class, ThemeLoader::class, [
     'arguments' => [
         service(StorageInterface::class),
         service(Options::class),
     ],
-]);
+]);*/
 
 $builder->setDefinition(StorageInterface::class, ArrayStorage::class, [
     'arguments' => [

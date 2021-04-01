@@ -1,7 +1,13 @@
 imports:
     - { resource: services/command_bus.yaml }
+    - { resource: services/database.yaml }
+    - { resource: services/hooking.yaml }
     - { resource: services/kernel.yaml }
+    - { resource: services/security.yaml }
+    - { resource: services/session.yaml }
     - { resource: services/templating.yaml }
+    - { resource: services/translation.yaml }
+    - { resource: services/theme.yaml }
     - { resource: services/twig.yaml }
     - { resource: services/routing.yaml }
     - { resource: services/web.yaml }
@@ -10,6 +16,11 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
+        bind:
+            $projectDir: '%kernel.project_dir%'
+    _instanceof:
+        Twig\Extension\AbstractExtension:
+            tags: [ twig.extension ]
 
     Tulia\Framework\:
         resource: '../../*'

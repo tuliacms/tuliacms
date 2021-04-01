@@ -1,0 +1,13 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    Tulia\Cms\Breadcrumbs\Infrastructure\Framework\Twig\Extension\BreadcrumbsExtension:
+        tags: [ twig.extension ]
+
+    Tulia\Cms\Breadcrumbs\Application\GeneratorInterface:
+        class: Tulia\Cms\Breadcrumbs\Application\Generator
+
+    Tulia\Cms\Breadcrumbs\Application\Crumbs\RegistryInterface:
+        class: Tulia\Cms\Breadcrumbs\Application\Crumbs\Registry

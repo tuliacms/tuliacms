@@ -1,10 +1,14 @@
 imports:
     - { resource: services/routing.yaml }
+    - { resource: services/utils.yaml }
 
 services:
     _defaults:
         autowire: true
         autoconfigure: true
+    _instanceof:
+        Twig\Extension\AbstractExtension:
+            tags: [ twig.extension ]
 
     Tulia\Cms\Platform\:
         resource: '../../../../*'

@@ -20,7 +20,7 @@ use Tulia\Framework\Kernel\KernelInterface;
 /** @var ContainerBuilderInterface $builder */
 
 /*$builder->setDefinition(KernelInterface::class, Kernel::class);*/
-$builder->setDefinition(EventDispatcherInterface::class, EventDispatcher::class, [
+/*$builder->setDefinition(EventDispatcherInterface::class, EventDispatcher::class, [
     'pass_tagged_lazy' => [
         'event_listener' => function (ContainerInterface $container, EventDispatcherInterface $dispatcher, string $service, array $tag) {
             $method = $tag['method'] ?? 'handle';
@@ -39,7 +39,7 @@ $builder->setDefinition(EventDispatcherInterface::class, EventDispatcher::class,
             );
         },
     ],
-]);
+]);*/
 
 /*$builder->setAlias(SymfonyEventDispatcherInterface::class, EventDispatcherInterface::class);
 
@@ -65,4 +65,4 @@ $builder->setDefinition(ArgumentResolverInterface::class, ArgumentResolver::clas
     ]
 ]);
 
-$builder->setDefinition(LoggerInterface::class, Logger::class);
+/*$builder->setDefinition(LoggerInterface::class, Logger::class);*/

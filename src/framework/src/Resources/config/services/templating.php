@@ -104,6 +104,6 @@ $builder->setDefinition(AppExtension::class, AppExtension::class, [
     'tags' => [ tag('twig.extension') ],
 ]);
 
-$builder->setDefinition(FormExtension::class, FormExtension::class, [
+/*$builder->setDefinition(FormExtension::class, FormExtension::class, [
     'tags' => [ tag('twig.extension') ],
-]);
+]);*/

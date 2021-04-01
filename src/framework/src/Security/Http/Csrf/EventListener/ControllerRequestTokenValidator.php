@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Framework\Security\Http\Csrf\EventListener;
 
 use Psr\Log\LoggerInterface;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Tulia\Framework\Annotations\AnnotationsReader;
@@ -16,7 +17,7 @@ use Tulia\Framework\Security\Http\Csrf\Exception\RequestCsrfTokenException;
 /**
  * @author Adam Banaszkiewicz
  */
-class ControllerRequestTokenValidator
+class ControllerRequestTokenValidator implements EventSubscriberInterface
 {
     /**
      * @var CsrfTokenManagerInterface
@@ -38,9 +39,13 @@ class ControllerRequestTokenValidator
         $this->logger = $logger;
     }
 
-    /**
-     * @param RequestEvent $event
-     */
+    public static function getSubscribedEvents(): array
+    {
+        return [
+            RequestEvent::class => 'handle',
+        ];
+    }
+
     public function handle(RequestEvent $event): void
     {
         $request = $event->getRequest();

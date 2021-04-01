@@ -13,14 +13,8 @@ use Twig\TwigFunction;
  */
 class DatetimeExtension extends AbstractExtension
 {
-    /**
-     * @var DateFormatterInterface
-     */
-    protected $formatter;
+    protected DateFormatterInterface $formatter;
 
-    /**
-     * @param DateFormatterInterface $formatter
-     */
     public function __construct(DateFormatterInterface $formatter)
     {
         $this->formatter = $formatter;

@@ -34,11 +34,11 @@ $builder->setDefinition(ManagerInterface::class, Manager::class, [
 
 $builder->setDefinition(StorageInterface::class, ArrayStorage::class);
 
-$builder->setDefinition(ResolverAggregateInterface::class, ResolverAggregate::class, [
+/*$builder->setDefinition(ResolverAggregateInterface::class, ResolverAggregate::class, [
     'arguments' => [
         tagged('theme.resolver'),
     ],
-]);
+]);*/
 
 $builder->setDefinition(ThemeLoaderInterface::class, VoidThemeLoader::class);
 
@@ -86,21 +86,21 @@ $builder->setDefinition(ModuleDependenciesLoader::class, ModuleDependenciesLoade
     ],
 ]);
 
-$builder->setDefinition(ThemeExtension::class, ThemeExtension::class, [
+/*$builder->setDefinition(ThemeExtension::class, ThemeExtension::class, [
     'arguments' => [
         service(ManagerInterface::class),
     ],
     'tags' => [ tag('twig.extension') ],
-]);
+]);*/
 
-$builder->setDefinition(NamespaceLoader::class, NamespaceLoader::class, [
+/*$builder->setDefinition(NamespaceLoader::class, NamespaceLoader::class, [
     'arguments' => [
         service(ManagerInterface::class),
     ],
     'tags' => [ tag('twig.loader') ],
-]);
+]);*/
 
 
-$builder->mergeParameter('twig.loader.array.templates', [
+/*$builder->mergeParameter('twig.loader.array.templates', [
     'theme' => "{% extends [ '@theme/layout.tpl', '@parent/layout.tpl' ] %}",
-]);
+]);*/

@@ -13,14 +13,8 @@ use Twig\TwigFunction;
  */
 class MenuExtension extends AbstractExtension
 {
-    /**
-     * @var BuilderInterface
-     */
-    protected $builder;
+    protected BuilderInterface $builder;
 
-    /**
-     * @param BuilderInterface $builder
-     */
     public function __construct(BuilderInterface $builder)
     {
         $this->builder = $builder;

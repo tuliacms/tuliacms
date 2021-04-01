@@ -30,6 +30,7 @@ use Tulia\Component\Routing\Website\Website;
 use Tulia\Component\Routing\Website\Locale\Locale;
 use Tulia\Framework\Kernel\Event\BootstrapEvent;
 use Tulia\Framework\Kernel\Event\RequestEvent;
+use Tulia\Framework\Twig\Extension\WebsiteExtension;
 
 /** @var ContainerBuilderInterface $builder */
 /*$builder->setDefinition(RouteCollectionInterface::class, RouteCollection::class);*/
@@ -135,6 +136,14 @@ use Tulia\Framework\Kernel\Event\RequestEvent;
     'tags' => [
         tag_event_listener(BootstrapEvent::class, 9900),
     ]
+]);*/
+
+/*$builder->setDefinition(WebsiteExtension::class, WebsiteExtension::class, [
+    'arguments' => [
+        service(CurrentWebsiteInterface::class),
+        service(RegistryInterface::class),
+    ],
+    'tags' => [ tag('twig.extension') ],
 ]);*/
 
 $builder->setDefinition(RoutingExtension::class, RoutingExtension::class, [

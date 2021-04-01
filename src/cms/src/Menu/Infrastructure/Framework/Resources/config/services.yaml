@@ -1,0 +1,14 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    Tulia\Cms\Menu\:
+        resource: '../../../../*'
+
+    Tulia\Cms\Menu\Infrastructure\Framework\Twig\Extension\MenuExtension:
+        tags: [ twig.extension ]
+
+    Tulia\Cms\Menu\Application\Query\Finder\FinderFactory:
+        bind:
+            $queryClass: Tulia\Cms\Menu\Infrastructure\Persistence\Query\Menu\DbalQuery

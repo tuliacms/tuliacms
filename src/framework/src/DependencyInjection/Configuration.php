@@ -7,6 +7,8 @@ namespace Tulia\Framework\DependencyInjection;
 use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
+use Tulia\Component\Theme\Customizer\Builder\BuilderInterface;
+use Tulia\Component\Theme\Customizer\Changeset\Changeset;
 
 /**
  * @author Adam Banaszkiewicz
@@ -31,6 +33,8 @@ class Configuration implements ConfigurationInterface
         $this->registerAssetterConfiguration($root);
         $this->registerTwigConfiguration($root);
         $this->registerTemplatingConfiguration($root);
+        $this->registerThemeConfiguration($root);
+        $this->registerTranslationConfiguration($root);
 
         return $treeBuilder;
     }
@@ -45,19 +49,37 @@ class Configuration implements ConfigurationInterface
                             ->children()
                                 ->arrayNode('array')
                                     ->children()
-                                        ->scalarNode('templates')->defaultValue([])->end()
+                                        ->arrayNode('templates')
+                                            ->useAttributeAsKey('name')
+                                            ->arrayPrototype()
+                                                ->addDefaultsIfNotSet()
+                                                ->children()
+                                                    ->scalarNode('template')->isRequired()->end()
+                                                ->end()
+                                            ->end()
+                                        ->end()
                                     ->end()
                                 ->end()
                                 ->arrayNode('filesystem')
                                     ->children()
-                                        ->scalarNode('paths')->defaultValue([])->end()
+                                        ->arrayNode('paths')
+                                            ->useAttributeAsKey('name')
+                                            ->arrayPrototype()
+                                                ->addDefaultsIfNotSet()
+                                                ->children()
+                                                    ->scalarNode('path')->isRequired()->end()
+                                                ->end()
+                                            ->end()
+                                        ->end()
                                     ->end()
                                 ->end()
                             ->end()
                         ->end()
                         ->arrayNode('layout')
                             ->children()
-                                ->scalarNode('themes')->defaultValue([])->end()
+                                ->arrayNode('themes')
+                                    ->scalarPrototype()
+                                ->end()
                             ->end()
                         ->end()
                     ->end()
@@ -122,6 +144,50 @@ class Configuration implements ConfigurationInterface
                                 ->end()
                             ->end()
                         ->end()
+                    ->end()
+                ->end()
+            ->end()
+        ;
+    }
+
+    private function registerThemeConfiguration(NodeDefinition $root): void
+    {
+        $root
+            ->children()
+                ->arrayNode('theme')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->arrayNode('customizer')
+                            ->addDefaultsIfNotSet()
+                            ->children()
+                                ->arrayNode('builder')
+                                    ->addDefaultsIfNotSet()
+                                    ->children()
+                                        ->scalarNode('base_class')->defaultValue(BuilderInterface::class)->end()
+                                    ->end()
+                                ->end()
+                            ->end()
+                        ->end()
+                        ->arrayNode('changeset')
+                            ->addDefaultsIfNotSet()
+                            ->children()
+                                ->scalarNode('base_class')->defaultValue(Changeset::class)->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
+            ->end()
+        ;
+    }
+
+    private function registerTranslationConfiguration(NodeDefinition $root): void
+    {
+        $root
+            ->children()
+                ->arrayNode('translation')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->scalarNode('directory_list')->defaultValue([])->end()
                     ->end()
                 ->end()
             ->end()

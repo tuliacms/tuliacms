@@ -10,4 +10,7 @@ services:
     Psr\EventDispatcher\EventDispatcherInterface:
         class: Symfony\Component\EventDispatcher\EventDispatcher
 
+    Psr\Log\LoggerInterface:
+        class: Symfony\Component\HttpKernel\Log\Logger
+
     Symfony\Contracts\EventDispatcher\EventDispatcherInterface: '@Psr\EventDispatcher\EventDispatcherInterface'

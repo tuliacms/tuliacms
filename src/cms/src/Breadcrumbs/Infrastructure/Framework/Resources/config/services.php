@@ -13,13 +13,13 @@ use Tulia\Cms\Platform\Shared\Document\DocumentInterface;
 
 /** @var ContainerBuilderInterface $builder */
 
-$builder->setDefinition(BreadcrumbsExtension::class, BreadcrumbsExtension::class, [
+/*$builder->setDefinition(BreadcrumbsExtension::class, BreadcrumbsExtension::class, [
     'arguments' => [
         service(GeneratorInterface::class),
         service(DocumentInterface::class),
     ],
     'tags' => [ tag('twig.extension') ],
-]);
+]);*/
 
 $builder->setDefinition(GeneratorInterface::class, Generator::class, [
     'arguments' => [

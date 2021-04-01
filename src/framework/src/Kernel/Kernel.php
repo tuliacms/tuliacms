@@ -151,16 +151,15 @@ abstract class Kernel implements KernelInterface
 
         $this->configureContainer($container, $loader);
 
-        $container->compile();
+        $container->compile(true);
 
         $this->booted = true;
-
         $this->container = $container;
     }
 
     public function registerContainerConfiguration(LoaderInterface $loader): void
     {
-        $loader->load(__DIR__ . '/../Resources/config/services.yaml');
+        $loader->load(__DIR__ . '/../Resources/config/config.yaml');
     }
 
     private function prepareContainer(ContainerBuilder $container): void

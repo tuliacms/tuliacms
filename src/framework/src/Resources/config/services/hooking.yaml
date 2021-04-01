@@ -1,0 +1,7 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    Tulia\Component\Hooking\:
+        resource: '../../../../../component/hooking/src/*'

@@ -1,0 +1,23 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    SessionHandlerInterface:
+        class: Symfony\Component\HttpFoundation\Session\Storage\Handler\NativeFileSessionHandler
+
+    Symfony\Component\HttpFoundation\Session\Storage\SessionStorageInterface:
+        class: Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage
+        bind:
+            $options:
+                cookie_httponly: true
+                cookie_lifetime: 3600
+                cookie_path: '/'
+                cookie_secure: false #@todo "!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off'"
+                name: 'tuliasid'
+
+    Symfony\Component\HttpFoundation\Session\SessionInterface:
+        class: Symfony\Component\HttpFoundation\Session\Session
+
+    Tulia\Framework\Http\Session\SessionRegistrator:
+        tags: [ event_subscriber ]

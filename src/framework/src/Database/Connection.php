@@ -8,7 +8,6 @@ use CLosure;
 use Doctrine\DBAL\Connection as DoctrineConnection;
 use Doctrine\DBAL\Cache\QueryCacheProfile;
 use Doctrine\DBAL\DBALException;
-use phpDocumentor\Reflection\Types\Parent_;
 use Tulia\Framework\Database\Query\QueryBuilder;
 use Tulia\Framework\Database\Schema\SchemaManager;
 

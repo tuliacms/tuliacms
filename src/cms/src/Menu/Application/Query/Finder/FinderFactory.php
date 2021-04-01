@@ -27,17 +27,12 @@ class FinderFactory implements FinderFactoryInterface
      */
     private $queryClass;
 
-    /**
-     * @param ConnectionInterface $connection
-     * @param CurrentWebsiteInterface $currentWebsite
-     * @param string $queryClass
-     */
     public function __construct(
         ConnectionInterface $connection,
         CurrentWebsiteInterface $currentWebsite,
         string $queryClass
     ) {
-        $this->connection     = $connection;
+        $this->connection = $connection;
         $this->currentWebsite = $currentWebsite;
         $this->queryClass = $queryClass;
     }

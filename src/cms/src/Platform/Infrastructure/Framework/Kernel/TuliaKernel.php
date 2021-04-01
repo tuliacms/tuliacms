@@ -31,10 +31,13 @@ class TuliaKernel extends Kernel
 
             $loader->load(sprintf($base, '', Kernel::CONFIG_EXTENSIONS), 'glob');
             $loader->load(sprintf($base, '-' . $env, Kernel::CONFIG_EXTENSIONS), 'glob');
-        }
 
-        //include __DIR__ . '/../Resources/config/services-framework.php';
-        //include __DIR__ . '/../Resources/config/services-cms.php';
+           //$loader->load($confDir.'/{packages}/*'.self::CONFIG_EXTS, 'glob');
+           //$loader->load($confDir.'/{packages}/'.$this->environment.'/**/*'.self::CONFIG_EXTS, 'glob');
+           //$loader->load($confDir.'/{services}'.self::CONFIG_EXTS, 'glob');
+           //$loader->load($confDir.'/{services}_'.$this->environment.self::CONFIG_EXTS, 'glob');
+           //$loader->load($confDir.'/{services}/**/*'.self::CONFIG_EXTS, 'glob'); // <-- this
+        }
 
         /*$builder->prependExtension(new ParametersExtension());
         $builder->prependExtension(new ActivityExtension());*/
@@ -48,13 +51,19 @@ class TuliaKernel extends Kernel
         ];
     }
 
-    private function getConfigDirs(): array
+    public static function getConfigDirs(): array
     {
-        $base = dirname(__DIR__, 4);
+        $base = \dirname(__DIR__, 4);
 
         return [
             $base . '/Platform/Infrastructure/Framework/Resources/config',
+            $base . '/BodyClass/Infrastructure/Framework/Resources/config',
+            $base . '/Options/Infrastructure/Framework/Resources/config',
             $base . '/Homepage/Infrastructure/Framework/Resources/config',
+            $base . '/Theme/Infrastructure/Framework/Resources/config',
+            $base . '/Website/Infrastructure/Framework/Resources/config',
+            $base . '/Breadcrumbs/Infrastructure/Framework/Resources/config',
+            $base . '/Menu/Infrastructure/Framework/Resources/config',
         ];
     }
 }

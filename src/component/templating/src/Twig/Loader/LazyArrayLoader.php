@@ -13,19 +13,9 @@ use Twig\Source;
  */
 class LazyArrayLoader implements LoaderInterface
 {
-    /**
-     * @var ArrayLoader
-     */
-    protected $loader;
+    protected ?ArrayLoader $loader = null;
+    protected array $templates = [];
 
-    /**
-     * @var array
-     */
-    protected $templates;
-
-    /**
-     * @param array $templates
-     */
     public function __construct(array $templates)
     {
         $this->templates = $templates;

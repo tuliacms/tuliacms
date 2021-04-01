@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Component\Theme\Customizer;
 
+use IteratorAggregate;
 use Tulia\Component\Theme\Customizer\Builder\Controls\ControlInterface;
 use Tulia\Component\Theme\Customizer\Builder\Section\Section;
 use Tulia\Component\Theme\Customizer\Builder\Section\SectionInterface;
@@ -19,41 +20,13 @@ use Tulia\Component\Theme\ThemeInterface;
  */
 class Customizer implements CustomizerInterface
 {
-    /**
-     * @var ChangesetFactoryInterface
-     */
-    protected $changesetFactory;
+    protected ChangesetFactoryInterface $changesetFactory;
+    protected ThemeBuilderFactoryInterface $builderFactory;
+    protected iterable $providers;
+    protected array $sections = [];
+    protected array $controls = [];
+    protected bool $fetched = false;
 
-    /**
-     * @var ThemeBuilderFactoryInterface
-     */
-    protected $builderFactory;
-
-    /**
-     * @var iterable|array
-     */
-    protected $providers;
-
-    /**
-     * @var array
-     */
-    protected $sections = [];
-
-    /**
-     * @var array
-     */
-    protected $controls = [];
-
-    /**
-     * @var bool
-     */
-    protected $fetched = false;
-
-    /**
-     * @param ChangesetFactoryInterface $changesetFactory
-     * @param ThemeBuilderFactoryInterface $builderFactory
-     * @param iterable|array $providers
-     */
     public function __construct(
         ChangesetFactoryInterface $changesetFactory,
         ThemeBuilderFactoryInterface $builderFactory,

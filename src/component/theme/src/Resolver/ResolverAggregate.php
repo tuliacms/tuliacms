@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Component\Theme\Resolver;
 
+use IteratorAggregate;
 use Tulia\Component\Theme\ThemeInterface;
 
 /**
@@ -12,24 +13,13 @@ use Tulia\Component\Theme\ThemeInterface;
 class ResolverAggregate implements ResolverAggregateInterface
 {
     /**
-     * @var iterable
+     * @var ResolverInterface[]
      */
-    protected $resolvers = [];
+    protected iterable $resolvers;
 
-    /**
-     * @param iterable $resolvers
-     */
     public function __construct(iterable $resolvers)
     {
         $this->resolvers = $resolvers;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function addResolver(ResolverInterface $resolver): void
-    {
-        $this->resolvers[] = $resolver;
     }
 
     /**

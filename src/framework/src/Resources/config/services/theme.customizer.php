@@ -31,20 +31,20 @@ use Tulia\Component\Theme\Resolver\CustomizerResolver;
 
 /** @var ContainerBuilderInterface $builder */
 
-$builder->setDefinition(CustomizerInterface::class, Customizer::class, [
+/*$builder->setDefinition(CustomizerInterface::class, Customizer::class, [
     'arguments' => [
         service(ChangesetFactoryInterface::class),
         service(ThemeBuilderFactoryInterface::class),
         tagged('theme.customizer.provider'),
     ],
-]);
+]);*/
 
-$builder->setDefinition(ThemeBuilderFactoryInterface::class, ThemeBuilderFactory::class, [
+/*$builder->setDefinition(ThemeBuilderFactoryInterface::class, ThemeBuilderFactory::class, [
     'arguments' => [
         service(ContainerInterface::class),
         parameter('theme.customizer.builder.base_class'),
     ],
-]);
+]);*/
 
 $builder->setDefinition(BuilderInterface::class, Builder::class, [
     'arguments' => [
@@ -112,4 +112,4 @@ $builder->setDefinition(DetectorInterface::class, RequestStackDetector::class, [
 
 
 $builder->setParameter('theme.changeset.base_class', Changeset::class);
-$builder->setParameter('theme.customizer.builder.base_class', BuilderInterface::class);
+/*$builder->setParameter('theme.customizer.builder.base_class', BuilderInterface::class);*/

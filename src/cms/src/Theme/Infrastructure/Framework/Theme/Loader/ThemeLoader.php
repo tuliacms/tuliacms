@@ -15,20 +15,9 @@ use Tulia\Cms\Platform\Infrastructure\DefaultTheme\DefaultTheme;
  */
 class ThemeLoader implements ThemeLoaderInterface
 {
-    /**
-     * @var StorageInterface
-     */
-    protected $storage;
+    protected StorageInterface$storage;
+    protected Options $options;
 
-    /**
-     * @var Options
-     */
-    protected $options;
-
-    /**
-     * @param StorageInterface $storage
-     * @param Options $options
-     */
     public function __construct(StorageInterface $storage, Options $options)
     {
         $this->storage = $storage;

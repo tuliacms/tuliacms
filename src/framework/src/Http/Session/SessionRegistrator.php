@@ -4,33 +4,31 @@ declare(strict_types=1);
 
 namespace Tulia\Framework\Http\Session;
 
-use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\HttpFoundation\Session\Storage\Handler\NativeFileSessionHandler;
-use Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage;
 use Tulia\Framework\Kernel\Event\RequestEvent;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class SessionRegistrator
+class SessionRegistrator implements EventSubscriberInterface
 {
-    /**
-     * @var SessionInterface
-     */
-    protected $session;
+    protected SessionInterface $session;
 
-    /**
-     * @param SessionInterface $session
-     */
     public function __construct(SessionInterface $session)
     {
         $this->session = $session;
     }
 
-    /**
-     * @param RequestEvent $event
-     */
+    public static function getSubscribedEvents(): array
+    {
+        return [
+            RequestEvent::class => [
+                ['register', 2000],
+            ],
+        ];
+    }
+
     public function register(RequestEvent $event): void
     {
         $request = $event->getRequest();

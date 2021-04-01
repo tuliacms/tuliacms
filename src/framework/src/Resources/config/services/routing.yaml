@@ -30,3 +30,6 @@ services:
 
     Tulia\Component\Routing\Website\RegistryInterface:
         factory: [ Tulia\Component\Routing\Website\GenericWebsiteRegistryFactory, factory ]
+
+    Tulia\Component\Routing\Twig\RoutingExtension:
+        tags: [ twig.extension ]

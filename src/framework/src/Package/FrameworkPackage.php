@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Framework\Package;
 
+use Symfony\Component\DependencyInjection\Compiler\ValidateEnvPlaceholdersPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\EventDispatcher\DependencyInjection\RegisterListenersPass;
@@ -36,6 +37,7 @@ class FrameworkPackage extends AbstractPackage
             'event_dispatcher.event_aliases'
         ));
 
+        $builder->addCompilerPass(new ValidateEnvPlaceholdersPass());
         $builder->addCompilerPass(new CommandBusPass());
         $builder->addCompilerPass(new TemplatingPass());
         $builder->addCompilerPass(new TwigPass());

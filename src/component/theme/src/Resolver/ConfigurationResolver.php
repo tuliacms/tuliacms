@@ -17,25 +17,9 @@ use Tulia\Component\Theme\Configuration\Configuration;
  */
 class ConfigurationResolver implements ResolverInterface
 {
-    /**
-     * @var ManagerInterface
-     */
-    protected $manager;
+    protected ManagerInterface $manager;
+    protected DetectorInterface $detector;
 
-    /**
-     * @var DetectorInterface
-     */
-    protected $detector;
-
-    /**
-     * @var bool
-     */
-    protected $customizer;
-
-    /**
-     * @param ManagerInterface $manager
-     * @param DetectorInterface $detector
-     */
     public function __construct(ManagerInterface $manager, DetectorInterface $detector)
     {
         $this->manager = $manager;

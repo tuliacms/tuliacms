@@ -1,0 +1,15 @@
+services:
+    Tulia\Framework\Database\ConnectionInterface:
+        class: Tulia\Framework\Database\Connection
+        factory: Doctrine\DBAL\DriverManager::getConnection
+        arguments:
+            -
+                dbname: '%env(string:DATABASE_NAME)%'
+                user: '%env(string:DATABASE_USER)%'
+                password: '%env(string:DATABASE_PASS)%'
+                host: '%env(string:DATABASE_HOST)%'
+                port: '%env(int:DATABASE_PORT)%'
+                driver: '%env(string:DATABASE_TYPE)%'
+                wrapperClass: Tulia\Framework\Database\Connection
+                driverOptions:
+                    1002: "SET NAMES 'UTF8'"

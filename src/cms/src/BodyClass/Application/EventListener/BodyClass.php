@@ -4,30 +4,29 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\BodyClass\Application\EventListener;
 
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Tulia\Cms\BodyClass\Application\Event\CollectBodyClassEvent;
 use Tulia\Component\Theme\Customizer\DetectorInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class BodyClass
+class BodyClass implements EventSubscriberInterface
 {
-    /**
-     * @var DetectorInterface
-     */
-    private $detector;
+    private DetectorInterface $detector;
 
-    /**
-     * @param DetectorInterface $detector
-     */
     public function __construct(DetectorInterface $detector)
     {
         $this->detector = $detector;
     }
 
-    /**
-     * @param CollectBodyClassEvent $event
-     */
+    public static function getSubscribedEvents(): array
+    {
+        return [
+            CollectBodyClassEvent::class => 'handle',
+        ];
+    }
+
     public function handle(CollectBodyClassEvent $event): void
     {
         $request = $event->getRequest();

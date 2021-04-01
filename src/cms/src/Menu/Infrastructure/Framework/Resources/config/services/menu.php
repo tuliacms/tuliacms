@@ -31,13 +31,13 @@ use Tulia\Cms\Menu\Application\Event\MenuDeletedEvent;
 use Tulia\Cms\Menu\Application\Event\MenuUpdatedEvent;
 use Tulia\Cms\Menu\UI\Web\BackendMenu\MenuMenuBuilder;
 
-$builder->setDefinition(FinderFactoryInterface::class, FinderFactory::class, [
+/*$builder->setDefinition(FinderFactoryInterface::class, FinderFactory::class, [
     'arguments' => [
         service(ConnectionInterface::class),
         service(CurrentWebsiteInterface::class),
         DbalQuery::class,
     ],
-]);
+]);*/
 
 $builder->setDefinition(RepositoryInterface::class, DbalRepository::class, [
     'arguments' => [

@@ -1,0 +1,10 @@
+services:
+    _defaults:
+        autoconfigure: true
+        autowire: true
+
+    Tulia\Cms\BodyClass\Infrastructure\Framework\Twig\Extension\BodyClassExtension:
+        tags: [ twig.extension ]
+
+    Tulia\Cms\BodyClass\Application\EventListener\BodyClass:
+        tags: [ event_subscriber ]
