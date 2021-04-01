@@ -17,14 +17,8 @@ use Twig\Error\SyntaxError;
  */
 class Engine implements EngineInterface
 {
-    /**
-     * @var Environment
-     */
-    protected $twig;
+    protected Environment $twig;
 
-    /**
-     * @param Environment $twig
-     */
     public function __construct(Environment $twig)
     {
         $this->twig = $twig;

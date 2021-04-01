@@ -4,33 +4,31 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Homepage\UI\Web\Tiles;
 
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Cms\Dashboard\Tiles\Event\CollectTilesEvent;
 use Tulia\Cms\Dashboard\Tiles\Tile;
 use Tulia\Component\Routing\RouterInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class SystemTiles
+class SystemTiles implements EventSubscriberInterface
 {
-    /**
-     * @var RouterInterface
-     */
-    protected $router;
+    protected RouterInterface $router;
+    protected TranslatorInterface $translator;
 
-    /**
-     * @var TranslatorInterface
-     */
-    protected $translator;
-
-    /**
-     * @param RouterInterface $router
-     */
     public function __construct(RouterInterface $router, TranslatorInterface $translator)
     {
         $this->router     = $router;
         $this->translator = $translator;
+    }
+
+    public static function getSubscribedEvents(): array
+    {
+        return [
+            CollectTilesEvent::class => 'handle',
+        ];
     }
 
     public function handle(CollectTilesEvent $event): void

@@ -12,8 +12,6 @@ use Symfony\Component\DependencyInjection\Extension\ExtensionInterface as Contai
  */
 abstract class AbstractPackage implements PackageInterface
 {
-    private string $path;
-
     public function build(ContainerBuilder $builder): void
     {
     }
@@ -21,15 +19,5 @@ abstract class AbstractPackage implements PackageInterface
     public function getContainerExtension(): ?ContainerExtensionInterface
     {
         return null;
-    }
-
-    public function getPath(): string
-    {
-        if (null === $this->path) {
-            $reflected = new \ReflectionObject($this);
-            $this->path = \dirname($reflected->getFileName());
-        }
-
-        return $this->path;
     }
 }

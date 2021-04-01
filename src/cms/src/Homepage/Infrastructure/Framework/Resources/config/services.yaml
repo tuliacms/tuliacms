@@ -1,0 +1,13 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    Tulia\Cms\Homepage\Infrastructure\Framework\Twig\Extension\HomepageExtension:
+        tags: [ twig.extension ]
+
+    Tulia\Cms\Homepage\Infrastructure\Cms\BackendMenu\DefaultCmsMenuBuilder:
+        tags: [ backend_menu.builder ]
+
+    Tulia\Cms\Homepage\UI\Web\Tiles\SystemTiles:
+        tags: [ event_subscriber ]

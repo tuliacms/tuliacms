@@ -72,6 +72,8 @@ interface KernelInterface
      */
     public function isDebug(): bool;
 
+    public function registerPackages(): array;
+
     public function configureContainer(ContainerBuilder $c, LoaderInterface $loader): void;
 
     public function registerContainerConfiguration(LoaderInterface $loader): void;

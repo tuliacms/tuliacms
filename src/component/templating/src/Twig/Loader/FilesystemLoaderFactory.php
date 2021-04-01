@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Component\Templating\Twig\Loader;
 
+use Twig\Error\LoaderError;
 use Twig\Loader\FilesystemLoader;
 
 /**
@@ -13,9 +14,8 @@ class FilesystemLoaderFactory
 {
     /**
      * @param array $paths
-     *
      * @return FilesystemLoader
-     * @throws \Twig_Error_Loader
+     * @throws LoaderError
      */
     public static function factory(array $paths): FilesystemLoader
     {

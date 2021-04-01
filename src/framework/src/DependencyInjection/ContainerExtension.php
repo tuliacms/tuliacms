@@ -23,6 +23,13 @@ class ContainerExtension extends Extension
     {
         $configuration = new Configuration();
         $configs = $this->processConfiguration($configuration, $configs);
+        //dump($configs);exit;
+
+        $container->setParameter('framework.assetter.assets', $configs['assetter']['assets'] ?? []);
+        $container->setParameter('framework.twig.loader.array.templates', $configs['twig']['loader']['array']['templates'] ?? []);
+        $container->setParameter('framework.twig.loader.filesystem.paths', $configs['twig']['loader']['filesystem']['paths'] ?? []);
+        $container->setParameter('framework.templating.paths', $configs['templating']['paths'] ?? []);
+        $container->setParameter('framework.templating.namespace_overwrite', $configs['templating']['namespace_overwrite'] ?? []);
 
         //$loader = new YamlFileLoader($container, new FileLocator(__DIR__));
         //$loader->load('services.yaml');

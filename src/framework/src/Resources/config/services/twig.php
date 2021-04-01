@@ -26,7 +26,7 @@ try {
     $debug = false;
 }
 
-$builder->setDefinition(Environment::class, Environment::class, [
+/*$builder->setDefinition(Environment::class, Environment::class, [
     'factory' => function (LoaderInterface $loader, RuntimeLoaderInterface $runtimeLoader, Profile $profile, bool $debug) {
         $twig = new Environment($loader, [
             'debug' => $debug,
@@ -50,27 +50,27 @@ $builder->setDefinition(Environment::class, Environment::class, [
     'pass_tagged' => [
         'twig.extension' => 'addExtension',
     ],
-]);
+]);*/
 
-$builder->setDefinition(RuntimeLoaderInterface::class, ContainerRuntimeLoader::class, [
+/*$builder->setDefinition(RuntimeLoaderInterface::class, ContainerRuntimeLoader::class, [
     'arguments' => [
         service(ContainerInterface::class),
     ],
-]);
+]);*/
 
-$builder->setDefinition(LoaderInterface::class, ChainLoader::class, [
+/*$builder->setDefinition(LoaderInterface::class, ChainLoader::class, [
     'pass_tagged' => [
         'twig.loader' => 'addLoader',
     ],
-]);
+]);*/
 
-$builder->setDefinition(FilesystemLoader::class, FilesystemLoader::class, [
+/*$builder->setDefinition(FilesystemLoader::class, FilesystemLoader::class, [
     'factory' => [ FilesystemLoaderFactory::class, 'factory' ],
     'arguments' => [
         parameter('twig.loader.filesystem.paths'),
     ],
     'tags' => [ tag('twig.loader') ],
-]);
+]);*/
 
 $builder->setDefinition(AdvancedFilesystemLoader::class, AdvancedFilesystemLoader::class, [
     'factory' => function ($filter, $paths) {
@@ -88,35 +88,35 @@ $builder->setDefinition(AdvancedFilesystemLoader::class, AdvancedFilesystemLoade
     'tags' => [ tag('twig.loader') ],
 ]);
 
-$builder->setDefinition(LazyArrayLoader::class, LazyArrayLoader::class, [
+/*$builder->setDefinition(LazyArrayLoader::class, LazyArrayLoader::class, [
     'arguments' => [
         parameter('twig.loader.array.templates'),
     ],
     'tags' => [ tag('twig.loader') ],
-]);
+]);*/
 
-$builder->setDefinition(StringLoaderExtension::class, StringLoaderExtension::class, [
+/*$builder->setDefinition(StringLoaderExtension::class, StringLoaderExtension::class, [
     'tags' => [ tag('twig.extension') ],
-]);
+]);*/
 
 
 /**
  * Twig profiler.
  */
-$builder->setDefinition(Profile::class, Profile::class);
+/*$builder->setDefinition(Profile::class, Profile::class);*/
 
-$builder->setDefinition(TwigDataCollector::class, TwigDataCollector::class, [
+/*$builder->setDefinition(TwigDataCollector::class, TwigDataCollector::class, [
     'arguments' => [
         service(Profile::class),
         service(Environment::class),
     ],
     'tags' => [ tag('profiler.data_collector') ],
-]);
+]);*/
 
 /**
  * Default parameters.
  */
-$builder->mergeParameter('twig.loader.array.templates', []);
+/*$builder->mergeParameter('twig.loader.array.templates', []);*/
 $builder->mergeParameter('twig.loader.filesystem.paths', [
     $builder->getParameter('kernel.system_dir') . '/vendor/symfony/twig-bridge/Resources/views/Form',
     'root' => $builder->getParameter('kernel.project_dir'),

@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Tulia\Component\Templating\ViewFilter;
 
-use Tulia\Component\Templating\ViewInterface;
-
 /**
  * @author Adam Banaszkiewicz
  */
@@ -14,14 +12,11 @@ class DelegatingFilter implements FilterInterface
     /**
      * @var FilterInterface[]
      */
-    private $filters;
+    private array $filters;
 
-    /**
-     * @param FilterInterface[] $filters
-     */
-    public function __construct(iterable $filters)
+    public function addFilter(FilterInterface $filter): void
     {
-        $this->filters = $filters;
+        $this->filters[] = $filter;
     }
 
     /**

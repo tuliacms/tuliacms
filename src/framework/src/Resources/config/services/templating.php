@@ -23,7 +23,7 @@ use Twig\Environment;
 
 /** @var ContainerBuilderInterface $builder */
 
-$builder->setDefinition(Config::class, Config::class, [
+/*$builder->setDefinition(Config::class, Config::class, [
     'factory' => function ($config) {
         return new Config([
             'namespace_overwrite' => $config,
@@ -32,30 +32,30 @@ $builder->setDefinition(Config::class, Config::class, [
     'arguments' => [
         parameter('templating.namespace_overwrite'),
     ],
-]);
+]);*/
 
-$builder->setDefinition(EngineInterface::class, Engine::class, [
+/*$builder->setDefinition(EngineInterface::class, Engine::class, [
     'arguments' => [
         service(Environment::class),
     ],
-]);
+]);*/
 
-$builder->setDefinition(FilterInterface::class, DelegatingFilter::class, [
+/*$builder->setDefinition(FilterInterface::class, DelegatingFilter::class, [
     'arguments' => [
         tagged('templating.view_filter'),
     ],
-]);
+]);*/
 
-$builder->setDefinition(ResponseViewRenderer::class, ResponseViewRenderer::class, [
+/*$builder->setDefinition(ResponseViewRenderer::class, ResponseViewRenderer::class, [
     'arguments' => [
         service(EngineInterface::class),
     ],
     'tags' => [
         tag_event_listener(ViewEvent::class, 500, 'onKernelView'),
     ],
-]);
+]);*/
 
-$builder->setDefinition(AssetterInterface::class, Assetter::class, [
+/*$builder->setDefinition(AssetterInterface::class, Assetter::class, [
     'factory' => [ Factory::class, 'factory' ],
     'arguments' => [
         parameter('assets'),
@@ -63,7 +63,7 @@ $builder->setDefinition(AssetterInterface::class, Assetter::class, [
             'global_revision' => Version::VERSION,
         ],
     ],
-]);
+]);*/
 
 $builder->setDefinition(AssetsDocumentLoader::class, AssetsDocumentLoader::class, [
     'arguments' => [
@@ -75,20 +75,20 @@ $builder->setDefinition(AssetsDocumentLoader::class, AssetsDocumentLoader::class
     ],
 ]);
 
-$builder->setDefinition(ViewNamespaceOverwriteFilter::class, ViewNamespaceOverwriteFilter::class, [
+/*$builder->setDefinition(ViewNamespaceOverwriteFilter::class, ViewNamespaceOverwriteFilter::class, [
     'arguments' => [
         service(Config::class),
     ],
     'tags' => [ tag('templating.view_filter') ],
-]);
+]);*/
 
 
 /**
  * Twig Extensions.
  */
-$builder->setDefinition(BaseTwigExtension::class, BaseTwigExtension::class, [
+/*$builder->setDefinition(BaseTwigExtension::class, BaseTwigExtension::class, [
     'tags' => [ tag('twig.extension') ],
-]);
+]);*/
 
 $builder->setDefinition(AssetterExtention::class, AssetterExtention::class, [
     'arguments' => [
@@ -99,7 +99,7 @@ $builder->setDefinition(AssetterExtention::class, AssetterExtention::class, [
 
 $builder->setDefinition(AppExtension::class, AppExtension::class, [
     'arguments' => [
-        service( RequestStack::class),
+        service(RequestStack::class),
     ],
     'tags' => [ tag('twig.extension') ],
 ]);

@@ -5,12 +5,10 @@ declare(strict_types=1);
 namespace Tulia\Framework\Kernel;
 
 use Psr\Container\ContainerInterface as PsrContainerInterface;
-use spec\Tulia\Cms\ContactForms\Infrastructure\Persistence\Domain\DbalFormPersisterSpec;
 use Symfony\Component\Config\Loader\DelegatingLoader;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\Config\Loader\LoaderResolver;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Loader\ClosureLoader;
 use Symfony\Component\DependencyInjection\Loader\DirectoryLoader;
 use Symfony\Component\DependencyInjection\Loader\GlobFileLoader;
@@ -18,12 +16,10 @@ use Symfony\Component\DependencyInjection\Loader\IniFileLoader;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\DependencyInjection\MergeExtensionConfigurationPass;
 use Tulia\Component\Theme\Configuration\ConfigurationInterface;
 use Tulia\Component\Theme\ThemeInterface;
-use Tulia\Framework\Package\FrameworkExtension;
 use Tulia\Framework\Kernel\Config\FileLocator;
 use Tulia\Framework\Module\AbstractModule;
 use Tulia\Framework\Package\FrameworkPackage;
@@ -130,6 +126,11 @@ abstract class Kernel implements KernelInterface
     {
     }
 
+    public function registerPackages(): array
+    {
+        return [];
+    }
+
     public function boot(): void
     {
         if ($this->booted) {
@@ -138,7 +139,7 @@ abstract class Kernel implements KernelInterface
 
         $this->startTime = microtime(true);
 
-        $this->packages[] = new FrameworkPackage();
+        $this->packages = $this->registerPackages();
 
         $container = new ContainerBuilder();
         $container->getParameterBag()->add($this->getKernelParameters());

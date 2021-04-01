@@ -14,18 +14,18 @@ use Twig\Source;
  */
 class AdvancedFilesystemLoader implements LoaderInterface
 {
-    protected $paths = [];
-    protected $cache = [];
-    protected $errorCache = [];
+    protected array $paths = [];
+    protected array $cache = [];
+    protected array $errorCache = [];
 
-    private $rootPath;
-    private $filter;
+    private string $rootPath;
+    private FilterInterface $filter;
 
     public function __construct(FilterInterface $filter, $paths = [], string $rootPath = null)
     {
-        $this->rootPath = ($rootPath ?? getcwd()).\DIRECTORY_SEPARATOR;
+        $this->rootPath = ($rootPath ?? getcwd()) . \DIRECTORY_SEPARATOR;
         if (false !== $realPath = realpath($this->rootPath)) {
-            $this->rootPath = $realPath.\DIRECTORY_SEPARATOR;
+            $this->rootPath = $realPath . \DIRECTORY_SEPARATOR;
         }
 
         foreach ($paths as $prefix => $path) {
@@ -112,10 +112,7 @@ class AdvancedFilesystemLoader implements LoaderInterface
         return filemtime($path) < $time;
     }
 
-    /**
-     * @return string|null
-     */
-    protected function findTemplate(string $name, bool $throw = true)
+    protected function findTemplate(string $name, bool $throw = true): ?string
     {
         $name = $this->normalizeName($name);
 

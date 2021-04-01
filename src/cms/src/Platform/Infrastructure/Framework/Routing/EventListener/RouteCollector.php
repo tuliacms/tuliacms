@@ -4,18 +4,29 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Platform\Infrastructure\Framework\Routing\EventListener;
 
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Tulia\Component\Routing\RouteCollectionInterface;
+use Tulia\Framework\Kernel\Event\BootstrapEvent;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class RouteCollector
+class RouteCollector implements EventSubscriberInterface
 {
     protected RouteCollectionInterface $collection;
 
     public function __construct(RouteCollectionInterface $collection)
     {
         $this->collection = $collection;
+    }
+
+    public static function getSubscribedEvents(): array
+    {
+        return [
+            BootstrapEvent::class => [
+                ['collect', 1000],
+            ],
+        ];
     }
 
     public function collect(): void

@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Component\Templating\EventListener;
 
-/**
- * @author Adam Banaszkiewicz
- */
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -19,18 +17,22 @@ use Tulia\Component\Templating\View;
 /**
  * @author Adam Banaszkiewicz
  */
-class ResponseViewRenderer
+class ResponseViewRenderer implements EventSubscriberInterface
 {
-    protected $engine;
+    protected Engine $engine;
 
-    /**
-     * ResponseViewRenderer constructor.
-     *
-     * @param Engine $engine
-     */
     public function __construct(Engine $engine)
     {
         $this->engine = $engine;
+    }
+
+    public static function getSubscribedEvents(): array
+    {
+        return [
+            ViewEvent::class => [
+                ['onKernelView', 500],
+            ],
+        ];
     }
 
     /**

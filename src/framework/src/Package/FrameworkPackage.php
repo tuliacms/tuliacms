@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace Tulia\Framework\Package;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Extension\ExtensionInterface as ContainerExtensionInterface;
+use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\EventDispatcher\DependencyInjection\RegisterListenersPass;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Tulia\Framework\DependencyInjection\CompilerPass\CommandBusPass;
+use Tulia\Framework\DependencyInjection\CompilerPass\TemplatingPass;
+use Tulia\Framework\DependencyInjection\CompilerPass\TwigPass;
 use Tulia\Framework\DependencyInjection\ContainerExtension;
 
 /**
@@ -16,7 +19,7 @@ use Tulia\Framework\DependencyInjection\ContainerExtension;
  */
 class FrameworkPackage extends AbstractPackage
 {
-    public function getContainerExtension(): ?ContainerExtensionInterface
+    public function getContainerExtension(): ExtensionInterface
     {
         return new ContainerExtension();
     }
@@ -32,10 +35,9 @@ class FrameworkPackage extends AbstractPackage
             'event_subscriber',
             'event_dispatcher.event_aliases'
         ));
-    }
 
-    public function getPath(): string
-    {
-        return dirname(__DIR__);
+        $builder->addCompilerPass(new CommandBusPass());
+        $builder->addCompilerPass(new TemplatingPass());
+        $builder->addCompilerPass(new TwigPass());
     }
 }

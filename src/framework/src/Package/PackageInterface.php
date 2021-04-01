@@ -15,6 +15,4 @@ interface PackageInterface
     public function build(ContainerBuilder $builder): void;
 
     public function getContainerExtension(): ?ContainerExtensionInterface;
-
-    public function getPath(): string;
 }

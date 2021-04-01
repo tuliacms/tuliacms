@@ -9,26 +9,12 @@ use Tulia\Component\Templating\Config;
 /**
  * @author Adam Banaszkiewicz
  */
-class ViewNamespaceOverwriteFilter
+class ViewNamespaceOverwriteFilter implements FilterInterface
 {
-    /**
-     * @var Config
-     */
-    private $config;
+    private Config $config;
+    private array $workingMap = [];
+    private array $views = [];
 
-    /**
-     * @var array
-     */
-    private $workingMap = [];
-
-    /**
-     * @var array
-     */
-    private $views = [];
-
-    /**
-     * @param array $config
-     */
     public function __construct(Config $config)
     {
         $this->config = $config;

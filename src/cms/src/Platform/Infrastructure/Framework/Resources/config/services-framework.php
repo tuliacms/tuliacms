@@ -31,7 +31,7 @@ $builder->setDefinition(RequestCsrfTokenExceptionListener::class, RequestCsrfTok
     ],
 ]);
 
-$builder->setDefinition(RouteCollector::class, RouteCollector::class, [
+/*$builder->setDefinition(RouteCollector::class, RouteCollector::class, [
     'arguments' => [
         service(RouteCollectionInterface::class),
         parameter('kernel.project_dir'),
@@ -39,7 +39,7 @@ $builder->setDefinition(RouteCollector::class, RouteCollector::class, [
     'tags' => [
         tag_event_listener(BootstrapEvent::class, 1000, 'collect'),
     ]
-]);
+]);*/
 
 $builder->setDefinition(ImageManagerInterface::class, ImageManager::class, [
     'factory' => DriverFactory::class . '::create',
@@ -86,12 +86,12 @@ if (!tulia_installed() && !tulia_configured()) {
 
 $builder->setParameter('security.authentication.login_path', 'backend.login');
 
-$builder->mergeParameter('templating.namespace_overwrite',  [
+/*$builder->mergeParameter('templating.namespace_overwrite',  [
     '@parent/' => '@theme/',
     '@cms/'    => '@parent/overwrite/cms/',
     '@module/' => '@parent/overwrite/module/',
     '@widget/' => '@parent/overwrite/widget/',
-]);
+]);*/
 
 $builder->mergeParameter('twig.loader.filesystem.paths', [
     'backend' => dirname(__DIR__) . '/views/backend',

@@ -74,7 +74,7 @@ use Tulia\Framework\Kernel\Event\RequestEvent;
     ->end()
 ;*/
 
-$builder->mergeParameter('assets', include __DIR__ . '/assets.php');
+/*$builder->mergeParameter('assets', include __DIR__ . '/assets.php');*/
 
 $builder->setDefinition(TypeaheadType::class, TypeaheadType::class, [
     'arguments' => [
