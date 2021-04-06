@@ -13,10 +13,8 @@ interface ArgumentResolverInterface
 {
     /**
      * @param Request $request
-     *
-     * @param         $class
-     * @param string  $method
-     *
+     * @param $class
+     * @param string $method
      * @return array
      */
     public function getArguments(Request $request, $class, string $method): array;

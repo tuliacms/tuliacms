@@ -1,2 +1,6 @@
 imports:
     - { resource: security.csrf.yaml }
+    - { resource: security.core.user.yaml }
+    - { resource: security.core.encoder.yaml }
+    - { resource: security.core.authorisation.yaml }
+    - { resource: security.core.authentication.yaml }

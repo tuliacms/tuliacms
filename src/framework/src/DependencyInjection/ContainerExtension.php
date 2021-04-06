@@ -34,6 +34,7 @@ class ContainerExtension extends Extension
         $container->setParameter('framework.theme.customizer.builder.base_class', $configs['theme']['customizer']['builder']['base_class']);
         $container->setParameter('framework.theme.changeset.base_class', $configs['theme']['changeset']['base_class']);
         $container->setParameter('framework.translation.directory_list', $configs['translation']['directory_list']);
+        $container->setParameter('framework.migrations.paths', $configs['migrations']['paths']);
 
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yaml');

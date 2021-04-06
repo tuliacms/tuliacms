@@ -13,3 +13,5 @@ services:
                 wrapperClass: Tulia\Framework\Database\Connection
                 driverOptions:
                     1002: "SET NAMES 'UTF8'"
+
+    Doctrine\DBAL\Connection: '@Tulia\Framework\Database\ConnectionInterface'

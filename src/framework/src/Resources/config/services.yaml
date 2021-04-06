@@ -3,13 +3,14 @@ imports:
     - { resource: services/database.yaml }
     - { resource: services/hooking.yaml }
     - { resource: services/kernel.yaml }
+    - { resource: services/migrations.yaml }
+    - { resource: services/routing.yaml }
     - { resource: services/security.yaml }
     - { resource: services/session.yaml }
     - { resource: services/templating.yaml }
-    - { resource: services/translation.yaml }
     - { resource: services/theme.yaml }
+    - { resource: services/translation.yaml }
     - { resource: services/twig.yaml }
-    - { resource: services/routing.yaml }
     - { resource: services/web.yaml }
 
 services:

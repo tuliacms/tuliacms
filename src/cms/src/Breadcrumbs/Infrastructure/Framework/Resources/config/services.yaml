@@ -11,3 +11,8 @@ services:
 
     Tulia\Cms\Breadcrumbs\Application\Crumbs\RegistryInterface:
         class: Tulia\Cms\Breadcrumbs\Application\Crumbs\Registry
+        arguments:
+            - !tagged_iterator breadcrumbs.resolver
+
+    Tulia\Cms\Breadcrumbs\Application\Crumbs\HomepageResolver:
+        tags: [ breadcrumbs.resolver ]

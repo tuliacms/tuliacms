@@ -1,0 +1,34 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface:
+        class: Symfony\Component\Security\Core\Authentication\AuthenticationProviderManager
+        factory: Tulia\Framework\Security\Authentication\AuthenticationProviderManagerFactory::factory
+        bind:
+            $providers: !tagged_iterator security.authentication_provider
+            $debug: '%kernel.debug%'
+
+    Symfony\Component\Security\Core\Authentication\Provider\DaoAuthenticationProvider:
+        tags: [ security.authentication_provider ]
+        bind:
+            $providerKey: tulia
+            #$hideUserNotFoundExceptions: ! $builder->getParameter('kernel.debug') @todo
+
+    Symfony\Component\Security\Core\Authentication\Provider\AnonymousAuthenticationProvider:
+        tags: [ security.authentication_provider ]
+        bind:
+            $secret: tulia
+
+    Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface:
+        class: Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage
+
+    Symfony\Component\Security\Core\Authentication\AuthenticationTrustResolverInterface:
+        class: Symfony\Component\Security\Core\Authentication\AuthenticationTrustResolver
+
+    Tulia\Framework\Security\Authentication\LoginServiceInterface:
+        class: Tulia\Framework\Security\Authentication\LoginService
+
+    Tulia\Framework\Security\Authentication\LogoutServiceInterface:
+        class: Tulia\Framework\Security\Authentication\LogoutService

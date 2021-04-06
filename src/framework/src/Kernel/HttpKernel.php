@@ -24,10 +24,10 @@ class HttpKernel implements HttpKernelInterface
 
     public function __construct(EventDispatcherInterface $dispatcher, ControllerResolverInterface $controllerResolver, ArgumentResolverInterface $argumentResolver, RequestStack $requestStack)
     {
-        $this->dispatcher         = $dispatcher;
+        $this->dispatcher = $dispatcher;
         $this->controllerResolver = $controllerResolver;
-        $this->argumentResolver   = $argumentResolver;
-        $this->requestStack       = $requestStack;
+        $this->argumentResolver = $argumentResolver;
+        $this->requestStack = $requestStack;
     }
 
     /**

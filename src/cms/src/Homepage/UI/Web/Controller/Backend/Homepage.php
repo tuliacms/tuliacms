@@ -17,7 +17,7 @@ class Homepage extends AbstractController
     /**
      * @return ViewInterface
      */
-    public function index(DependencyFactory $dependencyFactory): ViewInterface
+    public function index(/*DependencyFactory $dependencyFactory*/): ViewInterface
     {
         /*$input = new ArrayInput([]);
 

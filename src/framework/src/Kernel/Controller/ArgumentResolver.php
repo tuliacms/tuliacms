@@ -13,14 +13,8 @@ use Tulia\Framework\Kernel\Exception\ArgumentNotResolvedException;
  */
 class ArgumentResolver implements ArgumentResolverInterface
 {
-    /**
-     * @var ContainerInterface
-     */
-    protected $container;
+    protected ContainerInterface $container;
 
-    /**
-     * @param ContainerInterface $container
-     */
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
@@ -88,7 +82,9 @@ class ArgumentResolver implements ArgumentResolverInterface
              * - Container (services)
              * - Routing (default parameters)
              */
-            return null;
+            if ($param->getType()->allowsNull()) {
+                return null;
+            }
 
             throw new ArgumentNotResolvedException(sprintf('Argument $%s, typed as %s, not resolved as any known service. Maybe You forgot add use statement with fully qualified namespace in Your file?', $param->getName(), $type));
         }

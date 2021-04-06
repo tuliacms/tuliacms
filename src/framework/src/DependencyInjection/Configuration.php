@@ -35,6 +35,7 @@ class Configuration implements ConfigurationInterface
         $this->registerTemplatingConfiguration($root);
         $this->registerThemeConfiguration($root);
         $this->registerTranslationConfiguration($root);
+        $this->registerMigrationConfiguration($root);
 
         return $treeBuilder;
     }
@@ -188,6 +189,20 @@ class Configuration implements ConfigurationInterface
                     ->addDefaultsIfNotSet()
                     ->children()
                         ->scalarNode('directory_list')->defaultValue([])->end()
+                    ->end()
+                ->end()
+            ->end()
+        ;
+    }
+
+    private function registerMigrationConfiguration(NodeDefinition $root): void
+    {
+        $root
+            ->children()
+                ->arrayNode('migrations')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->scalarNode('paths')->defaultValue([])->end()
                     ->end()
                 ->end()
             ->end()

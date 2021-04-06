@@ -14,20 +14,9 @@ use Twig\TwigFunction;
  */
 class BreadcrumbsExtension extends AbstractExtension
 {
-    /**
-     * @var GeneratorInterface
-     */
-    protected $generator;
+    protected GeneratorInterface $generator;
+    protected DocumentInterface $document;
 
-    /**
-     * @var DocumentInterface
-     */
-    protected $document;
-
-    /**
-     * @param GeneratorInterface $generator
-     * @param DocumentInterface $document
-     */
     public function __construct(
         GeneratorInterface $generator,
         DocumentInterface $document

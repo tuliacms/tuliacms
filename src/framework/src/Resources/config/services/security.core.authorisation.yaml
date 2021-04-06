@@ -1,0 +1,18 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface:
+        class: Symfony\Component\Security\Core\Authorization\AccessDecisionManager
+        bind:
+            $voters: !tagged_iterator security.voter
+
+    Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface:
+        class: Symfony\Component\Security\Core\Authorization\AuthorizationChecker
+
+    Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter:
+        tags: [ security.voter ]
+
+    Tulia\Framework\Security\Authorisation\Voter\BackendVoter:
+        tags: [ security.voter ]

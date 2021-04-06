@@ -270,6 +270,7 @@ abstract class Kernel implements KernelInterface
             'kernel.logs_dir'    => realpath($this->getLogDir()) ?: $this->getLogDir(),
             'kernel.environment' => $this->environment,
             'kernel.debug'       => $this->debug,
+            'kernel.modules'     => [], // @todo Pass list of modules to the parameter
         ];
     }
 }

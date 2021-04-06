@@ -12,11 +12,8 @@ class Registry implements RegistryInterface
     /**
      * @var ResolverInterface[]
      */
-    protected $resolvers;
+    protected iterable $resolvers;
 
-    /**
-     * @param iterable $resolvers
-     */
     public function __construct(iterable $resolvers)
     {
         $this->resolvers = $resolvers;
