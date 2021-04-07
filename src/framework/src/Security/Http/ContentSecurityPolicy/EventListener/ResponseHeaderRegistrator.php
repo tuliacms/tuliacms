@@ -4,30 +4,31 @@ declare(strict_types=1);
 
 namespace Tulia\Framework\Security\Http\ContentSecurityPolicy\EventListener;
 
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Tulia\Framework\Kernel\Event\ResponseEvent;
 use Tulia\Framework\Security\Http\ContentSecurityPolicy\ContentSecurityPolicyInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class ResponseHeaderRegistrator
+class ResponseHeaderRegistrator implements EventSubscriberInterface
 {
-    /**
-     * @var ContentSecurityPolicyInterface
-     */
-    protected $csp;
+    protected ContentSecurityPolicyInterface $csp;
 
-    /**
-     * @param ContentSecurityPolicyInterface $csp
-     */
     public function __construct(ContentSecurityPolicyInterface $csp)
     {
         $this->csp = $csp;
     }
 
-    /**
-     * @param ResponseEvent $event
-     */
+    public static function getSubscribedEvents(): array
+    {
+        return [
+            ResponseEvent:: class => [
+                ['appendHeadersToResponse', -9999]
+            ]
+        ];
+    }
+
     public function appendHeadersToResponse(ResponseEvent $event): void
     {
         $route = $event->getRequest()->attributes->get('_route');

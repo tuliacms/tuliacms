@@ -4,11 +4,6 @@ services:
         autoconfigure: true
         bind:
             $assets: '%framework.assetter.assets%'
-    _instanceof:
-        Twig\Extension\AbstractExtension:
-            tags: [ twig.extension ]
-        Symfony\Component\EventDispatcher\EventSubscriberInterface:
-            tags: [ event_subscriber ]
 
     Tulia\Component\Templating\:
         resource: '../../../../../component/templating/src/*'

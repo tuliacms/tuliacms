@@ -47,7 +47,7 @@ $builder->setDefinition(TwigRendererEngine::class, TwigRendererEngine::class, [
     ],
 ]);
 
-$builder->setDefinition(HttpFoundationExtension::class, HttpFoundationExtension::class, [
+/*$builder->setDefinition(HttpFoundationExtension::class, HttpFoundationExtension::class, [
     'tags' => [ tag('form.extension') ],
 ]);
 
@@ -81,4 +81,4 @@ $builder->setDefinition(FormDataCollector::class, FormDataCollector::class, [
         service(FormDataExtractorInterface::class),
     ],
     'tags' => [ tag('profiler.data_collector') ],
-]);
+]);*/

@@ -1,6 +1,7 @@
 imports:
     - { resource: services/command_bus.yaml }
     - { resource: services/database.yaml }
+    - { resource: services/form_builder.yaml }
     - { resource: services/hooking.yaml }
     - { resource: services/kernel.yaml }
     - { resource: services/migrations.yaml }
@@ -19,10 +20,8 @@ services:
         autoconfigure: true
         bind:
             $projectDir: '%kernel.project_dir%'
-    _instanceof:
-        Twig\Extension\AbstractExtension:
-            tags: [ twig.extension ]
 
     Tulia\Framework\:
         resource: '../../*'
-        exclude: '../../{Extension,Resources}'
+        exclude:
+            - '../../{Extension,Resources,Security}'

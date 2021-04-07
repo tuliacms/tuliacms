@@ -5,37 +5,26 @@ declare(strict_types=1);
 namespace Tulia\Framework\Security\Http\Firewall;
 
 use Psr\Log\LoggerInterface;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Tulia\Component\Routing\Exception\RouteNotFoundException;
 use Tulia\Framework\Kernel\Event\RequestEvent;
+use Tulia\Framework\Kernel\Event\ResponseEvent;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class AnonymousAuthenticationListener
+class AnonymousAuthenticationListener implements EventSubscriberInterface
 {
-    /**
-     * @var TokenStorageInterface
-     */
-    protected $tokenStorage;
+    protected TokenStorageInterface $tokenStorage;
+    protected AuthenticationManagerInterface$authenticationManager;
 
-    /**
-     * @var AuthenticationManagerInterface
-     */
-    protected $authenticationManager;
-
-
-    /**
-     * @param TokenStorageInterface $tokenStorage
-     * @param AuthenticationManagerInterface|null $authenticationManager
-     * @param LoggerInterface|null $logger
-     */
     public function __construct(
         TokenStorageInterface $tokenStorage,
         AuthenticationManagerInterface $authenticationManager = null,
-        LoggerInterface $logger = null
+        ?LoggerInterface $logger = null
     )
     {
         $this->tokenStorage = $tokenStorage;
@@ -43,11 +32,13 @@ class AnonymousAuthenticationListener
         /*$this->logger = $logger;*/
     }
 
-    /**
-     * @param RequestEvent $event
-     *
-     * @throws RouteNotFoundException
-     */
+    public static function getSubscribedEvents(): array
+    {
+        return [
+            RequestEvent::class => ['onRequest', 500],
+        ];
+    }
+
     public function onRequest(RequestEvent $event): void
     {
         if (null !== $this->tokenStorage->getToken()) {

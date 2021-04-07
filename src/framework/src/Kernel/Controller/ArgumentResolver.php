@@ -22,7 +22,6 @@ class ArgumentResolver implements ArgumentResolverInterface
 
     /**
      * {@inheritdoc}
-     * @throws \ReflectionException|ArgumentNotResolvedException
      */
     public function getArguments(Request $request, $class, string $method): array
     {

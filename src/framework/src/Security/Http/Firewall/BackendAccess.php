@@ -4,62 +4,42 @@ declare(strict_types=1);
 
 namespace Tulia\Framework\Security\Http\Firewall;
 
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
-use Tulia\Component\Routing\Exception\RouteNotFoundException;
-use Tulia\Component\Routing\Generator\GeneratorInterface;
 use Tulia\Component\Routing\RouterInterface;
 use Tulia\Framework\Kernel\Event\RequestEvent;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class BackendAccess
+class BackendAccess implements EventSubscriberInterface
 {
-    /**
-     * @var TokenStorageInterface
-     */
-    protected $tokenStorage;
+    protected TokenStorageInterface $tokenStorage;
+    protected AccessDecisionManagerInterface $accessDecisionManager;
+    protected RouterInterface $router;
+    protected string $loginPath;
 
-    /**
-     * @var AccessDecisionManagerInterface
-     */
-    protected $accessDecisionManager;
-
-    /**
-     * @var GeneratorInterface
-     */
-    protected $router;
-
-    /**
-     * @var string
-     */
-    protected $loginPath;
-
-    /**
-     * @param TokenStorageInterface          $tokenStorage
-     * @param AccessDecisionManagerInterface $accessDecisionManager
-     * @param GeneratorInterface             $router
-     * @param string                         $loginPath
-     */
     public function __construct(
         TokenStorageInterface $tokenStorage,
         AccessDecisionManagerInterface $accessDecisionManager,
         RouterInterface $router,
         string $loginPath
     ) {
-        $this->tokenStorage          = $tokenStorage;
+        $this->tokenStorage = $tokenStorage;
         $this->accessDecisionManager = $accessDecisionManager;
-        $this->router                 = $router;
-        $this->loginPath             = $loginPath;
+        $this->router = $router;
+        $this->loginPath = $loginPath;
     }
 
-    /**
-     * @param RequestEvent $event
-     *
-     * @throws RouteNotFoundException
-     */
+    public static function getSubscribedEvents(): array
+    {
+        return [
+            RequestEvent::class => ['onRequest', 100],
+        ];
+    }
+
     public function onRequest(RequestEvent $event): void
     {
         $request = $event->getRequest();

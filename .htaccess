@@ -9,6 +9,7 @@
     RewriteRule ^/?media/(.*)$ public/media/$1 [NC,L,QSA,END]
     RewriteRule ^/?uploads/(.*)$ public/uploads/$1 [NC,L,QSA,END]
 
+    #RewriteRule ^(.*)$ public/sf-test/public/index.php [NC,L,QSA,END]
     RewriteRule ^(.*)$ public/index.php [NC,L,QSA,END]
 </IfModule>
 

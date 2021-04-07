@@ -20,4 +20,4 @@ services:
         class: Symfony\Component\HttpFoundation\Session\Session
 
     Tulia\Framework\Http\Session\SessionRegistrator:
-        tags: [ event_subscriber ]
+        tags: [ kernel.event_subscriber ]

@@ -22,7 +22,7 @@ use Tulia\Cms\Taxonomy\Query\Model\Term as QueryTerm;
 use Tulia\Cms\Taxonomy\UI\Web\Form\TermFormManagerFactory;
 use Tulia\Component\Templating\ViewInterface;
 use Tulia\Framework\Http\Request;
-use Tulia\Framework\Kernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Tulia\Framework\Security\Http\Csrf\Annotation\CsrfToken;
 
 /**

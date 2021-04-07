@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Framework\Security\Http\Firewall;
 
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -17,33 +18,27 @@ use Tulia\Framework\Kernel\Event\ResponseEvent;
 /**
  * @author Adam Banaszkiewicz
  */
-class ContextListener
+class ContextListener implements EventSubscriberInterface
 {
     private const SESSION_KEY = '_security_user_token';
 
-    /**
-     * @var iterable
-     */
-    protected $userProviders;
+    protected iterable $userProviders;
+    protected TokenStorageInterface $tokenStorage;
 
-    /**
-     * @var TokenStorageInterface
-     */
-    protected $tokenStorage;
-
-    /**
-     * @param iterable              $userProviders
-     * @param TokenStorageInterface $tokenStorage
-     */
     public function __construct(iterable $userProviders, TokenStorageInterface $tokenStorage)
     {
         $this->userProviders = $userProviders;
         $this->tokenStorage  = $tokenStorage;
     }
 
-    /**
-     * @param RequestEvent $event
-     */
+    public static function getSubscribedEvents(): array
+    {
+        return [
+            RequestEvent::class => ['onRequest', 1000],
+            ResponseEvent::class => ['onResponse', 1000],
+        ];
+    }
+
     public function onRequest(RequestEvent $event): void
     {
         $request = $event->getRequest();
@@ -69,9 +64,6 @@ class ContextListener
         $this->tokenStorage->setToken($token);
     }
 
-    /**
-     * @param ResponseEvent $event
-     */
     public function onResponse(ResponseEvent $event): void
     {
         $request = $event->getRequest();
@@ -87,11 +79,6 @@ class ContextListener
         }
     }
 
-    /**
-     * @param TokenInterface $token
-     *
-     * @return TokenInterface
-     */
     private function refreshUser(TokenInterface $token): TokenInterface
     {
         if (! tulia_installed()) {

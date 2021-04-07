@@ -7,4 +7,4 @@ services:
         tags: [ twig.extension ]
 
     Tulia\Cms\BodyClass\Application\EventListener\BodyClass:
-        tags: [ event_subscriber ]
+        tags: [ kernel.event_subscriber ]

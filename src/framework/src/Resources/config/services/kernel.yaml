@@ -14,3 +14,13 @@ services:
         class: Symfony\Component\HttpKernel\Log\Logger
 
     Symfony\Contracts\EventDispatcher\EventDispatcherInterface: '@Psr\EventDispatcher\EventDispatcherInterface'
+
+    Psr\Container\ContainerInterface: '@service_container'
+    Symfony\Component\DependencyInjection\Container: '@service_container'
+
+    Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface:
+        class: Symfony\Component\DependencyInjection\ParameterBag\ContainerBag
+
+    parameter_bag: '@Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface'
+
+    Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface: '@Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface'

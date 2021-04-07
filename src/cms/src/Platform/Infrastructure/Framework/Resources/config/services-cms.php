@@ -146,12 +146,12 @@ $builder->setDefinition(OptionsExtension::class, OptionsExtension::class, [
 ]);
 
 
-$builder->setDefinition(RegistryInterface::class, Registry::class, [
+/*$builder->setDefinition(RegistryInterface::class, Registry::class, [
     'arguments' => [
         tagged('form_extension'),
         tagged('form_extension_aggregate'),
     ],
-]);
+]);*/
 
 $builder->setDefinition(ManagerFactoryInterface::class, ManagerFactory::class, [
     'arguments' => [
@@ -160,30 +160,30 @@ $builder->setDefinition(ManagerFactoryInterface::class, ManagerFactory::class, [
     ],
 ]);
 
-$builder->setDefinition(BuilderInterface::class, Builder::class, [
+/*$builder->setDefinition(BuilderInterface::class, Builder::class, [
     'arguments' => [
         tagged('form_extension.group_builder'),
     ],
-]);
+]);*/
 
-$builder->setDefinition(FormRestExtension::class, FormRestExtension::class, [
+/*$builder->setDefinition(FormRestExtension::class, FormRestExtension::class, [
     'tags' => [ tag('form_extension') ],
-]);
+]);*/
 
-$builder->setDefinition(BootstrapAccordionGroupBuilder::class, BootstrapAccordionGroupBuilder::class, [
+/*$builder->setDefinition(BootstrapAccordionGroupBuilder::class, BootstrapAccordionGroupBuilder::class, [
     'tags' => [ tag('form_extension.group_builder') ],
 ]);
 
 $builder->setDefinition(BootstrapTabsGroupBuilder::class, BootstrapTabsGroupBuilder::class, [
     'tags' => [ tag('form_extension.group_builder') ],
-]);
+]);*/
 
-$builder->setDefinition(FormExtension::class, FormExtension::class, [
+/*$builder->setDefinition(FormExtension::class, FormExtension::class, [
     'arguments' => [
         service(BuilderInterface::class),
     ],
     'tags' => [ tag('twig.extension') ],
-]);
+]);*/
 
 $builder->setDefinition(ForwardSlashBackendFixer::class, ForwardSlashBackendFixer::class, [
     'arguments' => [
@@ -249,7 +249,7 @@ $builder->setDefinition(CreateOptionsForNewWebsite::class, CreateOptionsForNewWe
     'tags' => [ tag_event_listener(WebsiteCreated::class) ],
 ]);
 
-$builder->setDefinition(AssetsPublisher::class, AssetsPublisher::class, [
+/*$builder->setDefinition(AssetsPublisher::class, AssetsPublisher::class, [
     'arguments' => [
         parameter('kernel.public_dir'),
         parameter('public.paths'),
@@ -265,9 +265,9 @@ $builder->setDefinition(AssetsPublish::class, AssetsPublish::class, [
     'tags' => [
         tag_console_command('assets:publish'),
     ],
-]);
+]);*/
 
-$builder->setDefinition(BootstrapAccordionGroupBuilder::class, BootstrapAccordionGroupBuilder::class, [
+/*$builder->setDefinition(BootstrapAccordionGroupBuilder::class, BootstrapAccordionGroupBuilder::class, [
     'arguments' => [
         'sidebar',
         <<<EOF
@@ -287,9 +287,9 @@ $builder->setDefinition(BootstrapAccordionGroupBuilder::class, BootstrapAccordio
 EOF
     ],
     'tags' => [ tag('form_extension.group_builder') ],
-]);
+]);*/
 
-$builder->setDefinition(BootstrapTabsGroupBuilder::class, BootstrapTabsGroupBuilder::class, [
+/*$builder->setDefinition(BootstrapTabsGroupBuilder::class, BootstrapTabsGroupBuilder::class, [
     'arguments' => [
         'default',
         <<<EOF
@@ -304,7 +304,7 @@ $builder->setDefinition(BootstrapTabsGroupBuilder::class, BootstrapTabsGroupBuil
 EOF
     ],
     'tags' => [ tag('form_extension.group_builder') ],
-]);
+]);*/
 
 
 

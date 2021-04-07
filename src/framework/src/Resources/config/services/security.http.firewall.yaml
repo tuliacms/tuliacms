@@ -1,0 +1,32 @@
+parameters:
+    security.authentication.login_path: backend.login
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    Tulia\Framework\Security\Http\Firewall\ContextListener:
+        autoconfigure: false
+        autowire: false
+        tags: [ kernel.event_subscriber ]
+        arguments:
+            - !tagged_iterator security.user_provider
+            - '@Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface'
+
+    Tulia\Framework\Security\Http\Firewall\AnonymousAuthenticationListener:
+        tags: [ kernel.event_subscriber ]
+
+    Tulia\Framework\Security\Http\Firewall\BackendAccess:
+        tags: [ kernel.event_subscriber ]
+        bind:
+            $loginPath: '%security.authentication.login_path%'
+
+    #$builder->setDefinition(Firewall::class, Firewall::class, [
+    #    'arguments' => [
+    #        service(FirewallMapInterface::class),
+    #        service(EventDispatcherInterface::class),
+    #    ],
+    #]);
+    #
+    #$builder->setDefinition(FirewallMapInterface::class, FirewallMap::class);

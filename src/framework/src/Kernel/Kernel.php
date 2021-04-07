@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace Tulia\Framework\Kernel;
 
 use Psr\Container\ContainerInterface as PsrContainerInterface;
+use Symfony\Component\Config\ConfigCache;
 use Symfony\Component\Config\Loader\DelegatingLoader;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\Config\Loader\LoaderResolver;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
 use Symfony\Component\DependencyInjection\Loader\ClosureLoader;
 use Symfony\Component\DependencyInjection\Loader\DirectoryLoader;
 use Symfony\Component\DependencyInjection\Loader\GlobFileLoader;
@@ -141,17 +143,31 @@ abstract class Kernel implements KernelInterface
 
         $this->packages = $this->registerPackages();
 
-        $container = new ContainerBuilder();
-        $container->getParameterBag()->add($this->getKernelParameters());
-        $container->addObjectResource($this);
-        $this->prepareContainer($container);
+        $file = $this->getCacheDir() .'/cache/container.php';
+        $containerConfigCache = new ConfigCache($file, $this->debug);
 
-        $loader = $this->getContainerLoader($container);
-        $this->registerContainerConfiguration($loader);
+        //if (!$containerConfigCache->isFresh()) {
+            $container = new ContainerBuilder();
+            $container->getParameterBag()->add($this->getKernelParameters());
+            $container->addObjectResource($this);
+            $this->prepareContainer($container);
 
-        $this->configureContainer($container, $loader);
+            $loader = $this->getContainerLoader($container);
+            $this->registerContainerConfiguration($loader);
 
-        $container->compile(true);
+            $this->configureContainer($container, $loader);
+
+            $container->compile(true);
+
+            $dumper = new PhpDumper($container);
+            $containerConfigCache->write(
+                $dumper->dump(['class' => 'MyCachedContainer']),
+                $container->getResources()
+            );
+        //}
+
+        require_once $file;
+        $container = new \MyCachedContainer();
 
         $this->booted = true;
         $this->container = $container;

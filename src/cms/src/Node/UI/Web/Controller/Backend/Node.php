@@ -25,7 +25,7 @@ use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Node\UI\Web\Form\NodeFormManagerFactory;
 use Tulia\Component\Templating\ViewInterface;
 use Tulia\Framework\Http\Request;
-use Tulia\Framework\Kernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Tulia\Framework\Security\Http\Csrf\Annotation\CsrfToken;
 
 /**

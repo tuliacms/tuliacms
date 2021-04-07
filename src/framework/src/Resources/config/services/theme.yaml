@@ -2,9 +2,6 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
-    _instanceof:
-        Twig\Extension\AbstractExtension:
-            tags: [ twig.extension ]
 
     Tulia\Component\Theme\:
         resource: '../../../../../component/theme/src/*'

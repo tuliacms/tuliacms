@@ -20,38 +20,49 @@ use Tulia\Framework\Security\Http\Csrf\Annotation\CsrfToken;
  */
 class Security extends AbstractController
 {
+    private AuthenticationUtils $authenticationUtils;
+    private LoginServiceInterface $loginService;
+    private LogoutServiceInterface $logoutService;
+
+    public function __construct(
+        AuthenticationUtils $authenticationUtils,
+        LoginServiceInterface $loginService,
+        LogoutServiceInterface $logoutService
+    ) {
+        $this->authenticationUtils = $authenticationUtils;
+        $this->loginService = $loginService;
+        $this->logoutService = $logoutService;
+    }
+
     /**
-     * @param AuthenticationUtils $authenticationUtils
-     *
      * @return ViewInterface|RedirectResponse
      */
-    public function login(AuthenticationUtils $authenticationUtils, Request $request)
+    public function login(Request $request)
     {
         if ($this->isLoggedIn()) {
             return $this->redirect('backend');
         }
 
         return $this->view('@backend/security/login.tpl', [
-            'last_username' => $request->query->get('username', $authenticationUtils->getLastUsername()),
-            'error'         => $authenticationUtils->getLastAuthenticationError(),
+            'last_username' => $request->query->get('username', $this->authenticationUtils->getLastUsername()),
+            'error'         => $this->authenticationUtils->getLastAuthenticationError(),
             'bgImages'      => $this->getCollection(),
         ]);
     }
 
     /**
      * @param Request $request
-     * @param LoginServiceInterface $loginService
      *
      * @return RedirectResponse
      *
      * @CsrfToken(id="authenticate")
      */
-    public function loginProcess(Request $request, LoginServiceInterface $loginService): RedirectResponse
+    public function loginProcess(Request $request): RedirectResponse
     {
         try {
             $credentials = new LoginFormCredentials($request->get('username'), $request->get('password'));
 
-            $loginService->login($credentials);
+            $this->loginService->login($credentials);
 
             return $this->redirect('backend');
         } catch (LoginException $e) {
@@ -59,14 +70,9 @@ class Security extends AbstractController
         }
     }
 
-    /**
-     * @param LogoutServiceInterface $logoutService
-     *
-     * @return RedirectResponse
-     */
-    public function logout(LogoutServiceInterface $logoutService): RedirectResponse
+    public function logout(): RedirectResponse
     {
-        $logoutService->logout();
+        $this->logoutService->logout();
 
         return $this->redirect('backend.login');
     }

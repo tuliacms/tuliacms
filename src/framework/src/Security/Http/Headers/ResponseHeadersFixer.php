@@ -4,16 +4,21 @@ declare(strict_types=1);
 
 namespace Tulia\Framework\Security\Http\Headers;
 
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Tulia\Framework\Kernel\Event\ResponseEvent;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class ResponseHeadersFixer
+class ResponseHeadersFixer implements EventSubscriberInterface
 {
-    /**
-     * @param ResponseEvent $event
-     */
+    public static function getSubscribedEvents(): array
+    {
+        return [
+            ResponseEvent::class => ['removeHeaders', 0],
+        ];
+    }
+
     public function removeHeaders(ResponseEvent $event): void
     {
         $response = $event->getResponse();

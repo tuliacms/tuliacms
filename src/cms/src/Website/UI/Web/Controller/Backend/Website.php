@@ -19,7 +19,7 @@ use Tulia\Cms\Website\Query\Model\Website as QueryModelWebsite;
 use Tulia\Cms\Website\UI\Web\Form\WebsiteFormManagerFactory;
 use Tulia\Component\Templating\ViewInterface;
 use Tulia\Framework\Http\Request;
-use Tulia\Framework\Kernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Tulia\Framework\Security\Http\Csrf\Annotation\CsrfToken;
 
 /**

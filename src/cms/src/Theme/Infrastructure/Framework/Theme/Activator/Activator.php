@@ -14,15 +14,8 @@ use Tulia\Component\Theme\Activator\ActivatorInterface;
  */
 class Activator implements ActivatorInterface
 {
-    /**
-     * @var StorageInterface
-     */
-    protected $storage;
-
-    /**
-     * @var Options
-     */
-    protected $options;
+    protected StorageInterface $storage;
+    protected Options $options;
 
     public function __construct(StorageInterface $storage, Options $options)
     {

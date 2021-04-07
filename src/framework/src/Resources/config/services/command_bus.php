@@ -8,11 +8,11 @@ use Tulia\Component\CommandBus\Locator\ArrayLocator;
 use Tulia\Component\CommandBus\Locator\LocatorInterface;
 use Tulia\Component\DependencyInjection\ContainerBuilderInterface;
 
-$builder->setDefinition(CommandBusInterface::class, CommandBus::class, [
+/*$builder->setDefinition(CommandBusInterface::class, CommandBus::class, [
     'arguments' => [
         service(LocatorInterface::class),
     ],
-]);
+]);*/
 
 $builder->setDefinition(LocatorInterface::class, ArrayLocator::class, [
     'pass_tagged' => [

@@ -45,12 +45,12 @@ $builder->setDefinition(StorageInterface::class, ArrayStorage::class, [
     ],
 ]);
 
-$builder->setDefinition(ActivatorInterface::class, Activator::class, [
+/*$builder->setDefinition(ActivatorInterface::class, Activator::class, [
     'arguments' => [
         service(StorageInterface::class),
         service(Options::class),
     ],
-]);
+]);*/
 
 $builder->setDefinition(ChangesetStorageInterface::class, DatabaseStorage::class, [
     'arguments' => [

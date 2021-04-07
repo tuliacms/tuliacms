@@ -3,5 +3,5 @@ services:
         autowire: true
         autoconfigure: true
 
-    Tulia\Cms\Platform\Infrastructure\Framework\Routing\EventListener\RouteCollector:
+    Tulia\Framework\Security\Http\Headers\ResponseHeadersFixer:
         tags: [ kernel.event_subscriber ]

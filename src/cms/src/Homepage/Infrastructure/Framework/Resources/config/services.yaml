@@ -10,4 +10,4 @@
 #        tags: [ backend_menu.builder ]
 #
 #    Tulia\Cms\Homepage\UI\Web\Tiles\SystemTiles:
-#        tags: [ event_subscriber ]
+#        tags: [ kernel.event_subscriber ]

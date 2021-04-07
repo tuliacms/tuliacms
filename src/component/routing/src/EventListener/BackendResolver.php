@@ -23,9 +23,7 @@ class BackendResolver implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            BootstrapEvent::class => [
-                ['handle', 9800]
-            ],
+            BootstrapEvent::class => ['handle', 9800],
         ];
     }
 
@@ -47,7 +45,7 @@ class BackendResolver implements EventSubscriberInterface
         $parameters['_is_backend'] = false;
 
         if (strpos($parameters['_content_path'], $parameters['_backend_prefix']) === 0) {
-            $parameters['_is_backend']   = true;
+            $parameters['_is_backend'] = true;
             $parameters['_content_path'] = substr($parameters['_content_path'], \strlen($parameters['_backend_prefix']));
         }
 

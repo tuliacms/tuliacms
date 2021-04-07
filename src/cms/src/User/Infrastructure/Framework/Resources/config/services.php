@@ -85,19 +85,19 @@ $builder->setDefinition(AuthenticatedUserProviderInterface::class, Authenticated
     ],
 ]);
 
-$builder->setDefinition(PasswordValidatorInterface::class, PasswordValidator::class, [
+/*$builder->setDefinition(PasswordValidatorInterface::class, PasswordValidator::class, [
     'factory' => [PasswordValidatorFactory::class, 'factory'],
     'arguments' => [
         service(Options::class),
     ],
-]);
+]);*/
 
-$builder->setDefinition(UsernameValidatorInterface::class, UsernameValidator::class, [
+/*$builder->setDefinition(UsernameValidatorInterface::class, UsernameValidator::class, [
     'factory' => [UsernameValidatorFactory::class, 'factory'],
     'arguments' => [
         service(Options::class),
     ],
-]);
+]);*/
 
 $builder->setDefinition(DbalPersister::class, DbalPersister::class, [
     'arguments' => [
@@ -138,9 +138,9 @@ $builder->setDefinition(MyAccountFormManagerFactory::class, MyAccountFormManager
     ],
 ]);
 
-$builder->setDefinition(DefaultMetadataRegistrator::class, DefaultMetadataRegistrator::class, [
+/*$builder->setDefinition(DefaultMetadataRegistrator::class, DefaultMetadataRegistrator::class, [
     'tags' => [ tag('metadata.registrator') ],
-]);
+]);*/
 
 $builder->setDefinition(PasswordValidatorConstraint::class, PasswordValidatorConstraint::class, [
     'arguments' => [
@@ -173,9 +173,9 @@ $builder->setDefinition(UserFactoryInterface::class, UserFactory::class, [
     ],
 ]);
 
-$builder->setDefinition(SettingsGroup::class, SettingsGroup::class, [
+/*$builder->setDefinition(SettingsGroup::class, SettingsGroup::class, [
     'tags' => [ tag('settings.group') ],
-]);
+]);*/
 
 $builder->setDefinition(UploaderInterface::class, Uploader::class, [
     'arguments' => [

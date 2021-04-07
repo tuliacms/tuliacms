@@ -5,3 +5,6 @@ services:
 
     Tulia\Component\CommandBus\Locator\LocatorInterface:
         class: Tulia\Component\CommandBus\Locator\ArrayLocator
+
+    Tulia\Component\CommandBus\CommandBusInterface:
+        class: Tulia\Component\CommandBus\CommandBus

@@ -11,25 +11,18 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 class AssetsPublisher
 {
-    /**
-     * @var string
-     */
-    private $publicDir;
+    private string $publicDir;
+    private array $assetsPublicPaths;
 
-    /**
-     * @var array
-     */
-    private $maps;
-
-    public function __construct(string $publicDir, array $maps = [])
+    public function __construct(string $publicDir, array $assetsPublicPaths = [])
     {
         $this->publicDir = $publicDir;
-        $this->maps = $maps;
+        $this->assetsPublicPaths = $assetsPublicPaths;
     }
 
     public function publishRegisteredAssets(): void
     {
-        foreach ($this->maps as $source => $target) {
+        foreach ($this->assetsPublicPaths as $source => $target) {
             $this->publish($source, $target);
         }
     }

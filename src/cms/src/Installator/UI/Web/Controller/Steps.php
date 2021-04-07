@@ -14,7 +14,7 @@ use Tulia\Cms\Installator\Application\Service\Steps\InstallationFinisher;
 use Tulia\Cms\Installator\Application\Service\Steps\WebsiteInstallator;
 use Tulia\Cms\Platform\Application\Service\AssetsPublisher;
 use Tulia\Framework\Http\Request;
-use Tulia\Framework\Kernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * @author Adam Banaszkiewicz

@@ -19,50 +19,24 @@ use Tulia\Framework\Database\ConnectionInterface;
  */
 class DbalRepository
 {
-    /**
-     * @var ConnectionInterface
-     */
-    protected $connection;
+    protected ConnectionInterface $connection;
+    protected DbalPersister $persister;
+    protected CurrentWebsiteInterface $currentWebsite;
+    protected HydratorInterface $hydrator;
+    protected SyncerInterface $metadata;
 
-    /**
-     * @var DbalPersister
-     */
-    protected $persister;
-
-    /**
-     * @var CurrentWebsiteInterface
-     */
-    protected $currentWebsite;
-
-    /**
-     * @var HydratorInterface
-     */
-    protected $hydrator;
-
-    /**
-     * @var SyncerInterface
-     */
-    protected $metadata;
-
-    /**
-     * @param ConnectionInterface $connection
-     * @param DbalPersister $persister
-     * @param CurrentWebsiteInterface $currentWebsite
-     * @param HydratorInterface $hydrator
-     * @param SyncerInterface $metadata
-     */
     public function __construct(
         ConnectionInterface $connection,
         DbalPersister $persister,
         CurrentWebsiteInterface $currentWebsite,
-        HydratorInterface $hydrator,
-        SyncerInterface $metadata
+        HydratorInterface $hydrator
+        //SyncerInterface $metadata
     ) {
         $this->connection      = $connection;
         $this->persister       = $persister;
         $this->currentWebsite  = $currentWebsite;
         $this->hydrator        = $hydrator;
-        $this->metadata        = $metadata;
+        //$this->metadata        = $metadata;
     }
 
     /**

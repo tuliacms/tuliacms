@@ -11,3 +11,6 @@ services:
 
     Tulia\Cms\Theme\Infrastructure\Framework\Twig\Extension\ThemeExtension:
         tags: [ twig.extension ]
+
+    Tulia\Component\Theme\Activator\ActivatorInterface:
+        class: Tulia\Cms\Theme\Infrastructure\Framework\Theme\Activator\Activator

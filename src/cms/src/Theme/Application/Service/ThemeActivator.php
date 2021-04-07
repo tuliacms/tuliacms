@@ -16,25 +16,10 @@ use Tulia\Component\Theme\ManagerInterface;
  */
 class ThemeActivator
 {
-    /**
-     * @var ManagerInterface
-     */
-    private $manager;
-
-    /**
-     * @var ActivatorInterface
-     */
-    private $activator;
-
-    /**
-     * @var EventDispatcherInterface
-     */
-    private $eventDispatcher;
-
-    /**
-     * @var CurrentWebsiteInterface
-     */
-    private $currentWebsite;
+    private ManagerInterface $manager;
+    private ActivatorInterface $activator;
+    private EventDispatcherInterface $eventDispatcher;
+    private CurrentWebsiteInterface $currentWebsite;
 
     public function __construct(
         ManagerInterface $manager,

@@ -64,6 +64,8 @@ class TuliaKernel extends Kernel
             $base . '/Website/Infrastructure/Framework/Resources/config',
             $base . '/Breadcrumbs/Infrastructure/Framework/Resources/config',
             $base . '/Menu/Infrastructure/Framework/Resources/config',
+            $base . '/Security/Infrastructure/Framework/Resources/config',
+            $base . '/User/Infrastructure/Framework/Resources/config',
         ];
     }
 }

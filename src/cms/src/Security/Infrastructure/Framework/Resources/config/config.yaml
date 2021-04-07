@@ -1,0 +1,7 @@
+framework:
+    templating:
+        paths:
+            - { name: backend/security, path: '%kernel.project_dir%/src/cms/src/Security/Infrastructure/Framework/Resources/views/backend' }
+    #translation:
+        #directory_list:
+        #    - { path: '%kernel.project_dir%/src/cms/src/Security/Infrastructure/Framework/Resources/translations' }

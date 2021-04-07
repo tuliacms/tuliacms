@@ -14,25 +14,14 @@ use Tulia\Framework\Console\Command\Command;
  */
 class AssetsPublish extends Command
 {
-    /**
-     * @var AssetsPublisher
-     */
-    private $assetsPublisher;
+    private AssetsPublisher $assetsPublisher;
+    private array $assetsPublicPaths;
+    private string $rootDir;
 
-    /**
-     * @var array
-     */
-    private $maps;
-
-    /**
-     * @var string
-     */
-    private $rootDir;
-
-    public function __construct(AssetsPublisher $assetsPublisher, array $maps, string $rootDir)
+    public function __construct(AssetsPublisher $assetsPublisher, array $assetsPublicPaths, string $rootDir)
     {
         $this->assetsPublisher = $assetsPublisher;
-        $this->maps = $maps;
+        $this->assetsPublicPaths = $assetsPublicPaths;
         $this->rootDir = $rootDir;
 
         parent::__construct();
@@ -48,7 +37,7 @@ class AssetsPublish extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        foreach ($this->maps as $source => $target) {
+        foreach ($this->assetsPublicPaths as $source => $target) {
             $sourceHumanized = str_replace($this->rootDir, '', $source);
             $targetHumanized = '/public/assets' . $target;
 

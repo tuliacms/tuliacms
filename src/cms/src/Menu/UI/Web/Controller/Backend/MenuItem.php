@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Menu\UI\Web\Controller\Backend;
 
-use Psr\Container\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Tulia\Cms\Menu\Application\Command\ItemStorage;
@@ -25,7 +24,7 @@ use Tulia\Component\Datatable\DatatableFactory;
 use Tulia\Component\DependencyInjection\Exception\MissingServiceException;
 use Tulia\Component\Templating\ViewInterface;
 use Tulia\Framework\Http\Request;
-use Tulia\Framework\Kernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Tulia\Framework\Security\Http\Csrf\Annotation\CsrfToken;
 
 /**
@@ -49,26 +48,18 @@ class MenuItem extends AbstractController
     protected $menuTypeRegistry;
 
     /**
-     * @var ContainerInterface
-     */
-    protected $container;
-
-    /**
      * @param FinderFactoryInterface $menuFinderFactory
      * @param ItemStorage $itemStorage
      * @param RegistryInterface $menuTypeRegistry
-     * @param ContainerInterface $container
      */
     public function __construct(
         FinderFactoryInterface $menuFinderFactory,
         ItemStorage $itemStorage,
-        RegistryInterface $menuTypeRegistry,
-        ContainerInterface $container
+        RegistryInterface $menuTypeRegistry
     ) {
         $this->menuFinderFactory = $menuFinderFactory;
         $this->itemStorage       = $itemStorage;
         $this->menuTypeRegistry  = $menuTypeRegistry;
-        $this->container         = $container;
     }
 
     /**

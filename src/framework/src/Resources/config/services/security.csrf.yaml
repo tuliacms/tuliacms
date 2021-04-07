@@ -15,4 +15,4 @@ services:
         tags: [ twig.extension ]
 
     Tulia\Framework\Security\Http\Csrf\EventListener\ControllerRequestTokenValidator:
-        tags: [ event_subscriber ]
+        tags: [ kernel.event_subscriber ]

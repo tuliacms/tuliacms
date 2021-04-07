@@ -7,6 +7,7 @@ namespace Tulia\Framework\Kernel\Controller;
 use Psr\Container\ContainerInterface;
 use Tulia\Component\DependencyInjection\ContainerAwareInterface;
 use Tulia\Framework\Http\Request;
+use Tulia\Framework\Kernel\Exception\ArgumentNotResolvedException;
 use Tulia\Framework\Kernel\Exception\ControllerNotCallableException;
 
 /**
@@ -14,15 +15,8 @@ use Tulia\Framework\Kernel\Exception\ControllerNotCallableException;
  */
 class ControllerResolver implements ControllerResolverInterface
 {
-    /**
-     * @var ContainerInterface
-     */
-    protected $container;
-
-    /**
-     * @var ArgumentResolver
-     */
-    protected $argumentResolver;
+    protected ContainerInterface $container;
+    protected ArgumentResolver $argumentResolver;
 
     /**
      * @param ContainerInterface $container
@@ -30,7 +24,7 @@ class ControllerResolver implements ControllerResolverInterface
      */
     public function __construct(ContainerInterface $container, ArgumentResolver $argumentResolver)
     {
-        $this->container        = $container;
+        $this->container = $container;
         $this->argumentResolver = $argumentResolver;
     }
 
@@ -52,7 +46,13 @@ class ControllerResolver implements ControllerResolverInterface
             if (strpos($controller, '::') >= 0) {
                 [ $classname, $method ] = explode('::', $controller);
 
-                $callable = [ $this->instantiateController($request, $classname), $method ];
+                $class = $this->instantiateController($request, $classname);
+
+                /*if (method_exists($class, 'setContainer')) {
+                    $class->setContainer($this->container);
+                }*/
+
+                $callable = [ $class, $method ];
 
                 if (\is_callable($callable) === false) {
                     throw new ControllerNotCallableException(sprintf('Controller "%s" is not callable. Missing class or method?', $controller));
@@ -63,25 +63,23 @@ class ControllerResolver implements ControllerResolverInterface
         return $callable;
     }
 
-    /**
-     * @param string $controller
-     *
-     * @return mixed
-     * @throws \ReflectionException
-     */
-    private function instantiateController(Request $request, string $controller)
+    private function instantiateController(Request $request, string $controller): object
     {
         if ($this->container->has($controller)) {
             return $this->container->get($controller);
         }
 
-        $arguments = $this->argumentResolver->getArguments($request, $controller, '__construct');
+        try {
+            $arguments = $this->argumentResolver->getArguments($request, $controller, '__construct');
+        } catch (ArgumentNotResolvedException $e) {
+            throw new \InvalidArgumentException(sprintf('Cannot instantiate %s, because: %s', $controller, $e->getMessage()));
+        }
 
         $object = new $controller(...$arguments);
 
-        if ($object instanceof ContainerAwareInterface) {
+        /*if ($object instanceof ContainerAwareInterface) {
             $object->setContainer($this->container);
-        }
+        }*/
 
         return $object;
     }

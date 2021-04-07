@@ -26,7 +26,7 @@ use Tulia\Component\Datatable\DatatableFactory;
 use Tulia\Component\FormBuilder\Manager\ManagerFactoryInterface;
 use Tulia\Component\Templating\ViewInterface;
 use Tulia\Framework\Http\Request;
-use Tulia\Framework\Kernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Tulia\Framework\Security\Http\Csrf\Annotation\CsrfToken;
 
 /**
