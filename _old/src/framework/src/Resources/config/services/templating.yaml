@@ -1,0 +1,31 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        bind:
+            $assets: '%framework.assetter.assets%'
+
+    #Tulia\Component\Templating\:
+    #    resource: '../../../../../component/templating/src/*'
+    #    exclude:
+    #        - '../../../../../component/templating/src/**/*Exception.php'
+
+    #Requtize\Assetter\AssetterInterface:
+    #    class: Requtize\Assetter\Assetter
+    #    factory: [ Tulia\Component\Templating\Assetter\Factory, factory ]
+    #    bind:
+    #        $config:
+    #            global_revision: !php/const Tulia\Cms\Platform\Version::VERSION
+
+    #Tulia\Component\Templating\ViewFilter\ViewNamespaceOverwriteFilter:
+    #    tags: [ templating.view_filter ]
+
+    #Tulia\Component\Templating\Config:
+    #    arguments:
+    #        - { namespace_overwrite: '%framework.templating.namespace_overwrite%' }
+
+    #Tulia\Component\Templating\ViewFilter\FilterInterface:
+    #    class: Tulia\Component\Templating\ViewFilter\DelegatingFilter
+
+    #Symfony\Bridge\Twig\Extension\FormExtension:
+    #    tags: [ twig.extension ]

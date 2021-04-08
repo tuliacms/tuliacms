@@ -1,0 +1,15 @@
+# Local env files must not be in repo
+/.env
+/.env.local
+/.env.test
+
+# Editors config
+/.idea
+
+/var
+/vendor
+
+/public/uploads/*
+/public/media/*
+/public/assets/module/*
+/public/assets/theme/*

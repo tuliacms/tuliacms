@@ -1,0 +1,2 @@
+homepage:
+    resource: '../../../../../Cms/Homepage/Infrastructure/Framework/Resources/config/routing.yml'

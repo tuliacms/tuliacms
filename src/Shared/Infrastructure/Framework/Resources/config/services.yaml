@@ -1,0 +1,5 @@
+imports:
+    - { resource: 'services/assetter.yml' }
+    - { resource: 'services/templating.yml' }
+    - { resource: '../../../../../Cms/Homepage/Infrastructure/Framework/Resources/config/services.yml' }
+    - { resource: '../../../../../Cms/Homepage/Infrastructure/Framework/Resources/config/config.yml' }
