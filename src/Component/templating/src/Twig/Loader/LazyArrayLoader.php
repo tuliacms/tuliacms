@@ -18,7 +18,6 @@ class LazyArrayLoader implements LoaderInterface
 
     public function __construct(array $templates)
     {
-        dump($templates);exit;
         $this->templates = $templates;
     }
 

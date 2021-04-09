@@ -14,7 +14,7 @@ use Tulia\Cms\Platform\Shared\Uuid\UuidGeneratorInterface;
 
 /** @var ContainerBuilderInterface $builder */
 
-$builder->setDefinition(UuidGeneratorInterface::class, RamseyUuidGenerator::class);
+/*$builder->setDefinition(UuidGeneratorInterface::class, RamseyUuidGenerator::class);*/
 $builder->setDefinition(BreadcrumbsInterface::class, Breadcrumbs::class);
 $builder->setDefinition(DocumentInterface::class, Document::class);
 $builder->setDefinition(SymfonyStringGenerator::class, SymfonyStringGenerator::class);

@@ -1,0 +1,35 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    Tulia\Component\Theme\:
+        resource: '../../../../../../Component/theme/src/*'
+        exclude:
+            - '../../../../../Component/theme/src/src/**/*Exception.php'
+            # Exclude folowing due to `iterable` typehint of the `tagged_iterator`.
+            - '../../../../../Component/theme/src/src/Resolver/ResolverAggregate.php'
+
+    Tulia\Component\Theme\TwigBridge\Loader\NamespaceLoader:
+        tags: [ twig.loader ]
+
+    Tulia\Component\Theme\Resolver\CustomizerResolver:
+        tags: [ theme.resolver ]
+
+    Tulia\Component\Theme\Resolver\ConfigurationResolver:
+        tags: [ theme.resolver ]
+
+    Tulia\Component\Theme\Resolver\ResolverAggregateInterface:
+        class: Tulia\Component\Theme\Resolver\ResolverAggregate
+        arguments:
+            - !tagged_iterator theme.resolver
+
+    Tulia\Component\Theme\Customizer\CustomizerInterface:
+        class: Tulia\Component\Theme\Customizer\Customizer
+        bind:
+            $providers: !tagged_iterator theme.customizer.provider
+
+    Tulia\Component\Theme\Customizer\Builder\ThemeBuilderFactoryInterface:
+        class: Tulia\Component\Theme\Customizer\Builder\ThemeBuilderFactory
+        bind:
+            $builder: '%framework.theme.customizer.builder.base_class%'

@@ -1,0 +1,9 @@
+services:
+    Tulia\Cms\Shared\Infrastructure\Routing\ChainRouterInterface:
+        class: Tulia\Cms\Shared\Infrastructure\Routing\ChainRouter
+
+    Tulia\Cms\Shared\Infrastructure\Routing\SymfonyRouterDecorator:
+        decorates: router.default
+        arguments:
+            - '@.inner'
+            - '@Tulia\Cms\Shared\Infrastructure\Routing\ChainRouterInterface'

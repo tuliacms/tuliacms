@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Platform\Shared\Uuid;
+namespace Tulia\Cms\Shared\Infrastructure\Utils\Uuid;
 
 use Ramsey\Uuid\Uuid;
+use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
 
 /**
  * @author Adam Banaszkiewicz

@@ -9,12 +9,6 @@ namespace Tulia\Cms\Platform\Shared;
  */
 class Unit
 {
-    /**
-     * @param int $bytes
-     * @param int $decimals
-     *
-     * @return string
-     */
     public static function bytesFormat(int $bytes, int $decimals = 2): string
     {
         $size = ['B','kB','MB','GB','TB','PB','EB','ZB','YB'];

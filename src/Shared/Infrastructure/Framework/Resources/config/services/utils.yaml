@@ -1,0 +1,7 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    Tulia\Cms\Shared\Ports\Infrastructure\Utils\Uuid\UuidGeneratorInterface:
+        class: Tulia\Cms\Shared\Infrastructure\Utils\Uuid\RamseyUuidGenerator

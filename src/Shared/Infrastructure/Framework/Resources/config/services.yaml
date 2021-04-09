@@ -1,5 +1,11 @@
 imports:
-    - { resource: 'services/assetter.yml' }
-    - { resource: 'services/templating.yml' }
-    - { resource: '../../../../../Cms/Homepage/Infrastructure/Framework/Resources/config/services.yml' }
-    - { resource: '../../../../../Cms/Homepage/Infrastructure/Framework/Resources/config/config.yml' }
+    - { resource: 'services/assetter.yaml' }
+    #- { resource: 'services/theme.yaml' }
+    - { resource: 'services/templating.yaml' }
+    - { resource: 'services/utils.yaml' }
+    - { resource: 'services/routing.yaml' }
+    #- { resource: '../../../../../Cms/Options/Infrastructure/Framework/Resources/config/services.yaml' }
+    - { resource: '../../../../../Cms/Homepage/Infrastructure/Framework/Resources/config/config.yaml' }
+    - { resource: '../../../../../Cms/Homepage/Infrastructure/Framework/Resources/config/services.yaml' }
+    #- { resource: '../../../../../Cms/Theme/Infrastructure/Framework/Resources/config/config.yaml' }
+    #- { resource: '../../../../../Cms/Theme/Infrastructure/Framework/Resources/config/services.yaml' }

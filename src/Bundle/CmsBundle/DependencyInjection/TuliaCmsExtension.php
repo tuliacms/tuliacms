@@ -29,11 +29,13 @@ class TuliaCmsExtension extends FrameworkExtension
     {
         parent::load($configs, $container);
 
-        $config = $this->getProcessedConfigs()[0];
-        dump($this->getProcessedConfigs());exit;
-        $container->setParameter('framework.twig.loader.array.templates', $this->prepareTwigArrayLoaderTemplates($this->getProcessedConfigs()[2]['twig']['loader']['array']['templates'] ?? []));
+        $configuration = $this->getConfiguration($configs, $container);
+        $config = $this->processConfiguration($configuration, $configs);
+
+        $container->setParameter('framework.twig.loader.array.templates', $this->prepareTwigArrayLoaderTemplates($config['twig']['loader']['array']['templates'] ?? []));
         $container->setParameter('framework.templating.paths', $this->prepareTemplatingPaths($config['templating']['paths'] ?? []));
         $container->setParameter('framework.templating.namespace_overwrite', $config['templating']['namespace_overwrite'] ?? []);
+        $container->setParameter('framework.theme.customizer.builder.base_class', $config['theme']['customizer']['builder']['base_class']);
 
         $this->registerViewFilters($container);
     }

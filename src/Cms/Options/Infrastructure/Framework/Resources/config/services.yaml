@@ -5,6 +5,3 @@ services:
 
     Tulia\Cms\Options\:
         resource: '../../../../*'
-
-    Tulia\Cms\Options\Infrastructure\Framework\Twig\Extension\OptionsExtension:
-        tags: [ twig.extension ]
