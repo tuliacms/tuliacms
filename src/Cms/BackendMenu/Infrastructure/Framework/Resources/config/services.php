@@ -10,7 +10,7 @@ use Tulia\Cms\BackendMenu\Application\HtmlBuilder;
 use Tulia\Cms\BackendMenu\Application\HtmlBuilderInterface;
 use Tulia\Cms\BackendMenu\Infrastructure\Framework\Twig\BackendMenuExtension;
 use Tulia\Component\DependencyInjection\ContainerBuilderInterface;
-use Tulia\Component\Routing\RouterInterface;
+use Symfony\Component\Routing\RouterInterface;
 
 $builder->setDefinition(HtmlBuilderInterface::class, HtmlBuilder::class, [
     'arguments' => [

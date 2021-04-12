@@ -5,34 +5,18 @@ declare(strict_types=1);
 namespace Tulia\Cms\Website\Query;
 
 use Psr\EventDispatcher\EventDispatcherInterface;
+use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 use Tulia\Component\Routing\Website\Locale\Storage\StorageInterface;
-use Tulia\Framework\Database\ConnectionInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class FinderFactory implements FinderFactoryInterface
 {
-    /**
-     * @var ConnectionInterface
-     */
-    protected $connection;
+    protected ConnectionInterface $connection;
+    protected EventDispatcherInterface $eventDispatcher;
+    protected StorageInterface $storage;
 
-    /**
-     * @var EventDispatcherInterface
-     */
-    protected $eventDispatcher;
-
-    /**
-     * @var StorageInterface
-     */
-    protected $storage;
-
-    /**
-     * @param ConnectionInterface $connection
-     * @param EventDispatcherInterface $eventDispatcher
-     * @param StorageInterface $storage
-     */
     public function __construct(
         ConnectionInterface $connection,
         EventDispatcherInterface $eventDispatcher,

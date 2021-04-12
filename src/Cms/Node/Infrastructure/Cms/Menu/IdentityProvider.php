@@ -7,7 +7,7 @@ namespace Tulia\Cms\Node\Infrastructure\Cms\Menu;
 use Tulia\Cms\Menu\Infrastructure\Builder\Identity\Identity;
 use Tulia\Cms\Menu\Infrastructure\Builder\Identity\IdentityInterface;
 use Tulia\Cms\Menu\Infrastructure\Builder\Identity\IdentityProviderInterface;
-use Tulia\Component\Routing\RouterInterface;
+use Symfony\Component\Routing\RouterInterface;
 
 /**
  * @author Adam Banaszkiewicz

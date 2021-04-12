@@ -4,47 +4,26 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Infrastructure\Cms\Breadcrumbs;
 
+use Symfony\Component\Routing\RouterInterface;
 use Tulia\Cms\Breadcrumbs\Application\Crumbs\ResolverInterface;
 use Tulia\Cms\Node\Infrastructure\NodeType\RegistryInterface as NodeTypeRegistry;
 use Tulia\Cms\Node\Query\Enum\ScopeEnum;
 use Tulia\Cms\Node\Query\FinderFactoryInterface as NodeFinderFactoryInterface;
 use Tulia\Cms\Node\Query\Model\Node;
 use Tulia\Cms\Taxonomy\Query\FinderFactoryInterface as TermFinderFactoryInterface;
-use Tulia\Component\Routing\RouterInterface;
 use Tulia\Cms\Platform\Shared\Breadcrumbs\BreadcrumbsInterface;
-use Tulia\Framework\Http\Request;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class CrumbsResolver implements ResolverInterface
 {
-    /**
-     * @var RouterInterface
-     */
-    protected $router;
+    protected RouterInterface $router;
+    protected NodeTypeRegistry $nodeTypeRegistry;
+    protected NodeTypeRegistry $nodeFinderFactory;
+    protected TermFinderFactoryInterface $termFinderFactory;
 
-    /**
-     * @var NodeTypeRegistry
-     */
-    protected $nodeTypeRegistry;
-
-    /**
-     * @var NodeTypeRegistry
-     */
-    protected $nodeFinderFactory;
-
-    /**
-     * @var TermFinderFactoryInterface
-     */
-    protected $termFinderFactory;
-
-    /**
-     * @param RouterInterface $router
-     * @param NodeTypeRegistry $nodeTypeRegistry
-     * @param NodeFinderFactoryInterface $nodeFinderFactory
-     * @param TermFinderFactoryInterface $termFinderFactory
-     */
     public function __construct(
         RouterInterface $router,
         NodeTypeRegistry $nodeTypeRegistry,

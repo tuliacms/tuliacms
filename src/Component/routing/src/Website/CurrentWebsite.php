@@ -12,15 +12,7 @@ use Tulia\Component\Routing\Website\Locale\LocaleInterface;
  */
 class CurrentWebsite implements CurrentWebsiteInterface
 {
-    /**
-     * @var WebsiteInterface
-     */
-    protected $currentWebsite;
-
-    /**
-     * @var LocaleInterface
-     */
-    protected $locale;
+    protected WebsiteInterface $currentWebsite;
 
     /**
      * {@inheritdoc}

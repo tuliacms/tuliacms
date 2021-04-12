@@ -12,10 +12,12 @@ use Tulia\Cms\Options\Application\Service\Options;
  */
 class OptionsFormatterFactory
 {
-    public static function factory(Options $options, TranslatorInterface $translator): DateFormatterTranslatorAware
+    public static function factory(TranslatorInterface $translator): DateFormatterTranslatorAware
     {
         $formatter = new DateFormatterTranslatorAware($translator);
-        $formatter->setFormat($options->get('date_format', 'j F, Y'));
+        $formatter->setFormat('j F, Y');
+        // @todo Format date from the Options
+        //$formatter->setFormat($options->get('date_format', 'j F, Y'));
 
         return $formatter;
     }

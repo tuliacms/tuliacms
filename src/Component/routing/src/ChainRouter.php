@@ -2,18 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Shared\Infrastructure\Routing;
+namespace Tulia\Component\Routing;
 
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Exception\InvalidParameterException;
-use Symfony\Component\Routing\Exception\MethodNotAllowedException;
-use Symfony\Component\Routing\Exception\MissingMandatoryParametersException;
-use Symfony\Component\Routing\Exception\NoConfigurationException;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use Symfony\Component\Routing\Exception\RouteNotFoundException;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RequestContextAwareInterface;
 use Symfony\Component\Routing\RouteCollection;
@@ -43,10 +35,7 @@ class ChainRouter implements ChainRouterInterface
         $this->routeCollection = new RouteCollection();
     }
 
-    /**
-     * @return RequestContext
-     */
-    public function getContext()
+    public function getContext(): RequestContext
     {
         if (!$this->context) {
             $this->context = new RequestContext();
@@ -55,9 +44,6 @@ class ChainRouter implements ChainRouterInterface
         return $this->context;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function add(RouterInterface $router, int $priority = 0): void
     {
         if (empty($this->routers[$priority])) {
@@ -96,12 +82,12 @@ class ChainRouter implements ChainRouterInterface
         $this->context = $context;
     }
 
-    public function getRouteCollection()
+    public function getRouteCollection(): RouteCollection
     {
         // TODO: Implement getRouteCollection() method.
     }
 
-    public function generate(string $name, array $parameters = [], int $referenceType = self::ABSOLUTE_PATH)
+    public function generate(string $name, array $parameters = [], int $referenceType = self::ABSOLUTE_PATH): string
     {
         // TODO: Implement generate() method.
     }
@@ -118,7 +104,7 @@ class ChainRouter implements ChainRouterInterface
 
     protected function doMatch(string $pathinfo, Request $request = null): array
     {
-        dump($pathinfo);exit;
+        dump($pathinfo, $request);exit;
     }
 
     protected function sortRouters(): array

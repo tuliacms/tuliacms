@@ -5,28 +5,17 @@ declare(strict_types=1);
 namespace Tulia\Cms\User\Query;
 
 use Psr\EventDispatcher\EventDispatcherInterface;
+use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 use Tulia\Cms\User\Query\Model\Collection;
-use Tulia\Framework\Database\ConnectionInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class FinderFactory implements FinderFactoryInterface
 {
-    /**
-     * @var ConnectionInterface
-     */
-    protected $connection;
+    protected ConnectionInterface $connection;
+    protected EventDispatcherInterface $eventDispatcher;
 
-    /**
-     * @var EventDispatcherInterface
-     */
-    protected $eventDispatcher;
-
-    /**
-     * @param ConnectionInterface $connection
-     * @param EventDispatcherInterface $eventDispatcher
-     */
     public function __construct(
         ConnectionInterface $connection,
         EventDispatcherInterface $eventDispatcher

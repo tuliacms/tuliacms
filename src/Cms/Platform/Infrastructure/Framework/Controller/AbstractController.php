@@ -19,7 +19,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Cms\User\Application\Service\AuthenticatedUserProviderInterface;
 use Tulia\Cms\User\Query\Model\User;
 use Tulia\Component\CommandBus\CommandBusInterface;
-use Tulia\Component\Routing\RouterInterface;
+use Symfony\Component\Routing\RouterInterface;
 use Tulia\Cms\Platform\Shared\Document\DocumentInterface;
 use Tulia\Cms\Platform\Shared\Uuid\UuidGeneratorInterface;
 use Tulia\Component\Templating\View;

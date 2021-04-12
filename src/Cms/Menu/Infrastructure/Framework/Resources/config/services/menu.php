@@ -21,7 +21,7 @@ use Tulia\Cms\Platform\Infrastructure\Bus\Event\EventBusInterface;
 use Tulia\Cms\Platform\Infrastructure\DataManipulation\Hydrator\HydratorInterface;
 use Tulia\Cms\BackendMenu\Application\Helper\BuilderHelperInterface;
 use Tulia\Component\DependencyInjection\ContainerBuilderInterface;
-use Tulia\Component\Routing\RouterInterface;
+use Symfony\Component\Routing\RouterInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 use Tulia\Cms\Platform\Shared\Uuid\UuidGeneratorInterface;
 use Tulia\Framework\Database\ConnectionInterface;

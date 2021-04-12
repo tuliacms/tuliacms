@@ -65,7 +65,7 @@ use Tulia\Cms\Taxonomy\Query\FinderFactoryInterface as TermFinderFactoryInterfac
 use Tulia\Cms\User\Application\Service\AuthenticatedUserProviderInterface;
 use Tulia\Component\DependencyInjection\ContainerBuilderInterface;
 use Tulia\Component\FormBuilder\Manager\ManagerFactoryInterface;
-use Tulia\Component\Routing\RouterInterface;
+use Symfony\Component\Routing\RouterInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 use Tulia\Component\Shortcode\ProcessorInterface;
 use Tulia\Cms\Platform\Shared\Slug\SluggerInterface;

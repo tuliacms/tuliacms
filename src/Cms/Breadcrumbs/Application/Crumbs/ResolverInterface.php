@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Breadcrumbs\Application\Crumbs;
 
+use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\Platform\Shared\Breadcrumbs\BreadcrumbsInterface;
-use Tulia\Framework\Http\Request;
 
 /**
  * @author Adam Banaszkiewicz

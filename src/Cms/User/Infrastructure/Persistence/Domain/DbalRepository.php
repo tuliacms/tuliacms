@@ -7,53 +7,32 @@ namespace Tulia\Cms\User\Infrastructure\Persistence\Domain;
 use Tulia\Cms\Metadata\Metadata;
 use Tulia\Cms\Metadata\Syncer\SyncerInterface;
 use Tulia\Cms\Platform\Infrastructure\DataManipulation\Hydrator\HydratorInterface;
+use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 use Tulia\Cms\User\Domain\Aggregate\User;
 use Tulia\Cms\User\Domain\Exception\UserNotFoundException;
 use Tulia\Cms\User\Domain\RepositoryInterface;
 use Tulia\Cms\User\Domain\ValueObject\AggregateId;
-use Tulia\Framework\Database\ConnectionInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class DbalRepository implements RepositoryInterface
 {
-    /**
-     * @var ConnectionInterface
-     */
-    protected $connection;
+    protected ConnectionInterface $connection;
+    protected DbalPersister $persister;
+    protected HydratorInterface $hydrator;
+    protected SyncerInterface $metadata;
 
-    /**
-     * @var DbalPersister
-     */
-    protected $persister;
-
-    /**
-     * @var HydratorInterface
-     */
-    protected $hydrator;
-
-    /**
-     * @var SyncerInterface
-     */
-    protected $metadata;
-
-    /**
-     * @param ConnectionInterface $connection
-     * @param DbalPersister $persister
-     * @param HydratorInterface $hydrator
-     * @param SyncerInterface $metadata
-     */
     public function __construct(
         ConnectionInterface $connection,
         DbalPersister $persister,
-        HydratorInterface $hydrator,
-        SyncerInterface $metadata
+        HydratorInterface $hydrator/*,
+        SyncerInterface $metadata*/
     ) {
-        $this->connection      = $connection;
-        $this->persister       = $persister;
-        $this->hydrator        = $hydrator;
-        $this->metadata        = $metadata;
+        $this->connection = $connection;
+        $this->persister = $persister;
+        $this->hydrator = $hydrator;
+        /*$this->metadata = $metadata;*/
     }
 
     /**

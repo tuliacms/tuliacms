@@ -7,7 +7,7 @@ namespace Tulia\Cms\ContactForms\Application\Builder;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Tulia\Cms\ContactForms\Query\Model\Form as Model;
-use Tulia\Component\Routing\RouterInterface;
+use Symfony\Component\Routing\RouterInterface;
 
 /**
  * @author Adam Banaszkiewicz

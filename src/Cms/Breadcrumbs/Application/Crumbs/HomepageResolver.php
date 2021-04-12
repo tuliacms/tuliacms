@@ -4,30 +4,19 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Breadcrumbs\Application\Crumbs;
 
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Tulia\Component\Routing\RouterInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\Platform\Shared\Breadcrumbs\BreadcrumbsInterface;
-use Tulia\Framework\Http\Request;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class HomepageResolver implements ResolverInterface
 {
-    /**
-     * @var TranslatorInterface
-     */
-    protected $translator;
+    protected TranslatorInterface $translator;
+    protected RouterInterface $router;
 
-    /**
-     * @var RouterInterface
-     */
-    protected $router;
-
-    /**
-     * @param TranslatorInterface $translator
-     * @param RouterInterface $router
-     */
     public function __construct(TranslatorInterface $translator, RouterInterface $router)
     {
         $this->translator = $translator;

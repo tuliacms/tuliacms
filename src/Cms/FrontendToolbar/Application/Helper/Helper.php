@@ -6,7 +6,7 @@ namespace Tulia\Cms\FrontendToolbar\Application\Helper;
 
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Component\Routing\Exception\RouteNotFoundException;
-use Tulia\Component\Routing\RouterInterface;
+use Symfony\Component\Routing\RouterInterface;
 use Tulia\Component\Templating\EngineInterface;
 use Tulia\Component\Templating\ViewInterface;
 

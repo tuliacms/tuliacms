@@ -16,10 +16,7 @@ use Tulia\Component\Routing\Website\WebsiteInterface;
  */
 class Matcher
 {
-    /**
-     * @var array
-     */
-    private static $staticCache = [];
+    private static array $staticCache = [];
 
     /**
      * @param iterable $websites

@@ -9,7 +9,7 @@ use Tulia\Cms\Node\Infrastructure\NodeType\RegistryInterface;
 use Tulia\Cms\Node\Query\Model\Node;
 use Tulia\Cms\EditLinks\Application\Event\CollectEditLinksEvent;
 use Tulia\Component\Routing\Exception\RouteNotFoundException;
-use Tulia\Component\Routing\RouterInterface;
+use Symfony\Component\Routing\RouterInterface;
 
 /**
  * @author Adam Banaszkiewicz

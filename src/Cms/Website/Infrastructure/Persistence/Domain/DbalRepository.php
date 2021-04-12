@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Website\Infrastructure\Persistence\Domain;
 
+use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 use Tulia\Cms\Website\Domain\Aggregate\Locale;
 use Tulia\Cms\Website\Domain\Aggregate\LocaleCollection;
 use Tulia\Cms\Website\Domain\Aggregate\Website;
@@ -11,33 +12,16 @@ use Tulia\Cms\Website\Domain\Exception\WebsiteNotFoundException;
 use Tulia\Cms\Website\Domain\ValueObject\AggregateId;
 use Tulia\Cms\Website\Domain\RepositoryInterface;
 use Tulia\Cms\Platform\Infrastructure\DataManipulation\Hydrator\HydratorInterface;
-use Tulia\Framework\Database\ConnectionInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class DbalRepository implements RepositoryInterface
 {
-    /**
-     * @var ConnectionInterface
-     */
-    protected $connection;
+    protected ConnectionInterface $connection;
+    protected DbalPersister $persister;
+    protected HydratorInterface $hydrator;
 
-    /**
-     * @var DbalPersister
-     */
-    protected $persister;
-
-    /**
-     * @var HydratorInterface
-     */
-    protected $hydrator;
-
-    /**
-     * @param ConnectionInterface $connection
-     * @param DbalPersister $persister
-     * @param HydratorInterface $hydrator
-     */
     public function __construct(
         ConnectionInterface $connection,
         DbalPersister $persister,

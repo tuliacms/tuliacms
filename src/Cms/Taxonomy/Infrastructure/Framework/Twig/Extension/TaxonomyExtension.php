@@ -6,7 +6,7 @@ namespace Tulia\Cms\Taxonomy\Infrastructure\Framework\Twig\Extension;
 
 use Tulia\Cms\Taxonomy\Query\Model\Term;
 use Tulia\Component\Routing\Exception\RoutingException;
-use Tulia\Component\Routing\RouterInterface;
+use Symfony\Component\Routing\RouterInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 

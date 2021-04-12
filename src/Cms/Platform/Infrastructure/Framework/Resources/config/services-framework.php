@@ -12,7 +12,7 @@ use Tulia\Component\Image\DriverFactory;
 use Tulia\Component\Image\ImageManager;
 use Tulia\Component\Image\ImageManagerInterface;
 use Tulia\Component\Routing\RouteCollectionInterface;
-use Tulia\Component\Routing\RouterInterface;
+use Symfony\Component\Routing\RouterInterface;
 use Tulia\Framework\Database\Command\GenerateDatabase;
 use Tulia\Framework\Database\ConnectionInterface;
 use Tulia\Framework\Database\VoidConnection;

@@ -8,21 +8,15 @@ use Tulia\Cms\Breadcrumbs\Application\Crumbs\Homepage;
 use Tulia\Cms\Breadcrumbs\Application\Crumbs\RegistryInterface;
 use Tulia\Cms\Platform\Shared\Breadcrumbs\Breadcrumbs;
 use Tulia\Cms\Platform\Shared\Breadcrumbs\BreadcrumbsInterface;
-use Tulia\Framework\Http\Request;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class Generator implements GeneratorInterface
 {
-    /**
-     * @var RegistryInterface
-     */
-    protected $registry;
+    protected RegistryInterface $registry;
 
-    /**
-     * @param RegistryInterface $registry
-     */
     public function __construct(RegistryInterface $registry)
     {
         $this->registry = $registry;

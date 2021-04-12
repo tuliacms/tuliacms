@@ -4,28 +4,20 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType;
 
-use InvalidArgumentException;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Tulia\Component\Routing\Exception\RouteNotFoundException;
-use Tulia\Component\Routing\RouterInterface;
+use Symfony\Component\Routing\RouterInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class TypeaheadType extends AbstractType
 {
-    /**
-     * @var RouterInterface
-     */
-    protected $router;
+    protected RouterInterface $router;
 
-    /**
-     * @param RouterInterface  $router
-     */
     public function __construct(RouterInterface $router)
     {
         $this->router = $router;

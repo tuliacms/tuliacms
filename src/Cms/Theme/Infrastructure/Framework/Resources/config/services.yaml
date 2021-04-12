@@ -7,7 +7,6 @@ services:
         resource: '../../../../*'
         exclude:
             - '../../../../Application/Service/ThemeActivator.php'
-            - '../../../../Infrastructure/Framework/Twig/Extension/ThemeExtension.php'
             - '../../../../UI/Web/Controller/Backend/Theme.php'
 
     Tulia\Component\Theme\Loader\ThemeLoader\ThemeLoaderInterface:

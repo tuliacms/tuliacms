@@ -4,28 +4,17 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\User\Infrastructure\Persistence\Domain;
 
+use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
-use Tulia\Framework\Database\ConnectionInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class DbalPersister
 {
-    /**
-     * @var ConnectionInterface
-     */
-    protected $connection;
+    protected ConnectionInterface $connection;
+    protected CurrentWebsiteInterface $currentWebsite;
 
-    /**
-     * @var CurrentWebsiteInterface
-     */
-    protected $currentWebsite;
-
-    /**
-     * @param ConnectionInterface $connection
-     * @param CurrentWebsiteInterface $currentWebsite
-     */
     public function __construct(
         ConnectionInterface $connection,
         CurrentWebsiteInterface $currentWebsite

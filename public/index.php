@@ -3,7 +3,7 @@
 use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\ErrorHandler\Debug;
 use Symfony\Component\HttpFoundation\Request;
-use Tulia\Cms\Shared\Infrastructure\Framework\Kernel\Kernel;
+use Tulia\Cms\Platform\Infrastructure\Framework\Kernel\TuliaKernel;
 
 require dirname(__DIR__).'/vendor/autoload.php';
 
@@ -15,7 +15,7 @@ if ($_SERVER['APP_DEBUG']) {
     Debug::enable();
 }
 
-$kernel = new Kernel($_SERVER['APP_ENV'], (bool) $_SERVER['APP_DEBUG']);
+$kernel = new TuliaKernel($_SERVER['APP_ENV'], (bool) $_SERVER['APP_DEBUG']);
 $request = Request::createFromGlobals();
 $response = $kernel->handle($request);
 $response->send();

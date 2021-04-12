@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Tulia\Component\Routing\EventListener;
 
+use Symfony\Component\HttpKernel\Event\RequestEvent;
+use Symfony\Component\Routing\RouterInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
-use Tulia\Framework\Kernel\Event\RequestEvent;
-use Tulia\Component\Routing\RouterInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -26,9 +26,7 @@ class RequestMatcher implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            RequestEvent::class => [
-                ['onRequest', 200]
-            ],
+            RequestEvent::class => ['onRequest', 200],
         ];
     }
 
@@ -40,7 +38,7 @@ class RequestMatcher implements EventSubscriberInterface
             return;
         }
 
-        $result = $this->matcher->match(urldecode($request->getContentPath()));
+        $result = $this->matcher->match(urldecode($request->attributes->get('_content_path')));
 
         $request->attributes->add($result);
     }

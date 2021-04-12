@@ -8,7 +8,9 @@ use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Tulia\Bundle\CmsBundle\DependencyInjection\CompilerPass\CommandBusPass;
+use Tulia\Bundle\CmsBundle\DependencyInjection\CompilerPass\RoutingPass;
 use Tulia\Bundle\CmsBundle\DependencyInjection\CompilerPass\TemplatingPass;
+use Tulia\Bundle\CmsBundle\DependencyInjection\CompilerPass\ThemePass;
 use Tulia\Bundle\CmsBundle\DependencyInjection\TuliaCmsExtension;
 
 /**
@@ -39,5 +41,7 @@ class TuliaCmsBundle extends FrameworkBundle
 
         $container->addCompilerPass(new TemplatingPass());
         $container->addCompilerPass(new CommandBusPass());
+        $container->addCompilerPass(new RoutingPass());
+        $container->addCompilerPass(new ThemePass());
     }
 }

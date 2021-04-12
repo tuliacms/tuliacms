@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Platform\UI\CLI\Command;
 
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Tulia\Cms\Platform\Application\Service\AssetsPublisher;
-use Tulia\Framework\Console\Command\Command;
 
 /**
  * @author Adam Banaszkiewicz

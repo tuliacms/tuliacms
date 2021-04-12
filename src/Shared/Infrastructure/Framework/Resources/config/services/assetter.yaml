@@ -3,6 +3,6 @@ services:
         class: Requtize\Assetter\Assetter
         factory: Tulia\Component\Templating\Assetter\Factory::factory
         bind:
-            $assets: [] # @todo '%framework.assetter.assets%'
+            $assets: '%framework.assetter.assets%'
             $config:
                 global_revision: !php/const Tulia\Cms\Platform\Version::VERSION

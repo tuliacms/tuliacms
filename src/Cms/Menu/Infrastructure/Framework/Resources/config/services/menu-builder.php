@@ -17,7 +17,7 @@ use Tulia\Cms\Menu\Infrastructure\Builder\Type\Registry as TypeRegistry;
 use Tulia\Cms\Menu\Infrastructure\Builder\Type\RegistryInterface as TypeRegistryInterface;
 use Tulia\Cms\Menu\Application\Query\Finder\FinderFactoryInterface;
 use Tulia\Component\DependencyInjection\ContainerBuilderInterface;
-use Tulia\Component\Routing\RouterInterface;
+use Symfony\Component\Routing\RouterInterface;
 
 $builder->setDefinition(IdentityRegistryInterface::class, IdentityRegistry::class, [
     'arguments' => [

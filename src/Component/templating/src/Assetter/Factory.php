@@ -17,7 +17,7 @@ class Factory
     {
         $config = array_merge([
             'global_revision' => null,
-            'default_group'   => 'body',
+            'default_group' => 'body',
         ], $config);
 
         $assets = self::prepareAssetsRevisions($assets, $config);

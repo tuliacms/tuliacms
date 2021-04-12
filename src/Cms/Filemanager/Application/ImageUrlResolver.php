@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Filemanager\Application;
 
 use Tulia\Cms\Filemanager\File;
-use Tulia\Component\Routing\RouterInterface;
+use Symfony\Component\Routing\RouterInterface;
 
 /**
  * @author Adam Banaszkiewicz

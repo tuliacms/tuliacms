@@ -6,7 +6,7 @@ namespace Tulia\Cms\Profiler\Infrastructure\Framework\EventListener;
 
 use Symfony\Component\HttpFoundation\Response;
 use Tulia\Component\Routing\Exception\RouteNotFoundException;
-use Tulia\Component\Routing\RouterInterface;
+use Symfony\Component\Routing\RouterInterface;
 use Tulia\Component\Templating\EngineInterface;
 use Tulia\Component\Templating\View;
 use Tulia\Framework\Kernel\Event\ResponseEvent;

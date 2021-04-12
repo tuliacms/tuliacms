@@ -7,7 +7,7 @@ namespace Tulia\Cms\BackendMenu\Application\Helper;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Component\Routing\Exception\RouteNotFoundException;
-use Tulia\Component\Routing\RouterInterface;
+use Symfony\Component\Routing\RouterInterface;
 
 /**
  * @author Adam Banaszkiewicz

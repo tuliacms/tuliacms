@@ -10,33 +10,17 @@ use Tulia\Cms\Menu\Domain\Menu\Model\ValueObject\AggregateId;
 use Tulia\Cms\Menu\Domain\Menu\Model\Aggregate\Menu;
 use Tulia\Cms\Menu\Domain\Menu\Model\ValueObject\ItemId;
 use Tulia\Cms\Menu\Infrastructure\Persistence\Domain\Item\DbalRepository as ItemDbalRepository;
-use Tulia\Framework\Database\ConnectionInterface;
+use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class DbalRepository implements RepositoryInterface
 {
-    /**
-     * @var ConnectionInterface
-     */
-    protected $connection;
+    protected ConnectionInterface $connection;
+    protected DataTransformer $transformer;
+    protected ItemDbalRepository $itemDbalRepository;
 
-    /**
-     * @var DataTransformer
-     */
-    protected $transformer;
-
-    /**
-     * @var ItemDbalRepository
-     */
-    protected $itemDbalRepository;
-
-    /**
-     * @param ConnectionInterface $connection
-     * @param DataTransformer $transformer
-     * @param ItemDbalRepository $itemDbalRepository
-     */
     public function __construct(
         ConnectionInterface $connection,
         DataTransformer $transformer,

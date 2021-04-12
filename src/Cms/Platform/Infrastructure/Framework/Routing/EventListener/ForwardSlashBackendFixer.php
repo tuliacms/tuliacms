@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Platform\Infrastructure\Framework\Routing\EventListener;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Tulia\Component\Routing\RouterInterface;
+use Symfony\Component\Routing\RouterInterface;
 use Tulia\Framework\Kernel\Event\RequestEvent;
 
 /**

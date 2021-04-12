@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\BackendMenu\Application\Helper;
 
-use Tulia\Component\Routing\RouterInterface;
+use Symfony\Component\Routing\RouterInterface;
 
 /**
  * @author Adam Banaszkiewicz

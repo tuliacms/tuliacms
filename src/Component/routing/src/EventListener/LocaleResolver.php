@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Component\Routing\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 use Tulia\Framework\Kernel\Event\BootstrapEvent;
 
@@ -23,13 +24,11 @@ class LocaleResolver implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            BootstrapEvent::class => [
-                ['handle', 9500]
-            ],
+            RequestEvent::class => ['handle', 9500],
         ];
     }
 
-    public function handle(BootstrapEvent $event): void
+    public function handle(RequestEvent $event): void
     {
         $request = $event->getRequest();
         $parameters = $this->resolveLocale($request->attributes->all());
@@ -37,8 +36,8 @@ class LocaleResolver implements EventSubscriberInterface
         $request->attributes->add($parameters);
 
         $request->setLocale($result['_locale'] ?? $parameters['_locale'] ?? 'en_US');
-        $request->setContentLocale($result['_content_locale'] ?? $parameters['_content_locale'] ?? 'en_US');
         $request->setDefaultLocale($this->currentWebsite->getDefaultLocale()->getCode());
+        $request->attributes->set('_content_locale', $result['_content_locale'] ?? $parameters['_content_locale'] ?? 'en_US');
     }
 
     protected function resolveLocale(array $parameters): array

@@ -6,21 +6,15 @@ namespace Tulia\Cms\Menu\Infrastructure\Persistence\Query\Menu;
 
 use PDO;
 use Tulia\Cms\Menu\Application\Query\Finder\AbstractQuery;
-use Tulia\Framework\Database\ConnectionInterface;
+use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class DbalQuery extends AbstractQuery
 {
-    /**
-     * @var ConnectionInterface
-     */
-    protected $connection;
+    protected ConnectionInterface $connection;
 
-    /**
-     * @param ConnectionInterface $connection
-     */
     public function __construct(ConnectionInterface $connection)
     {
         $this->connection = $connection;

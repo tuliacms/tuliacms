@@ -54,7 +54,7 @@ use Tulia\Cms\Taxonomy\UI\Web\Form\TermForm;
 use Tulia\Cms\Taxonomy\UI\Web\Form\TermFormManagerFactory;
 use Tulia\Component\DependencyInjection\ContainerBuilderInterface;
 use Tulia\Component\FormBuilder\Manager\ManagerFactoryInterface;
-use Tulia\Component\Routing\RouterInterface;
+use Symfony\Component\Routing\RouterInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 use Tulia\Cms\Platform\Shared\Slug\SluggerInterface;
 use Tulia\Cms\Platform\Shared\Uuid\UuidGeneratorInterface;

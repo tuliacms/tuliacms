@@ -47,7 +47,7 @@ use Tulia\Component\DependencyInjection\ContainerBuilderInterface;
 use Tulia\Cms\ContactForms\Infrastructure\Cms\BackendMenu\MenuBuilder;
 use Tulia\Cms\ContactForms\Infrastructure\Cms\Shortcode\ContactForm;
 use Tulia\Cms\ContactForms\Infrastructure\Twig\Extension\FormExtension;
-use Tulia\Component\Routing\RouterInterface;
+use Symfony\Component\Routing\RouterInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 use Tulia\Cms\Platform\Shared\Uuid\UuidGeneratorInterface;
 use Tulia\Component\Templating\EngineInterface;

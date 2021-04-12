@@ -21,7 +21,7 @@ use Tulia\Cms\Filemanager\Infrastructure\Cms\Shortcode\Image;
 use Tulia\Cms\Filemanager\Infrastructure\Framework\Twig\Extension\FilemanagerExtension;
 use Tulia\Component\DependencyInjection\ContainerBuilderInterface;
 use Tulia\Component\Image\ImageManagerInterface;
-use Tulia\Component\Routing\RouterInterface;
+use Symfony\Component\Routing\RouterInterface;
 use Tulia\Cms\Platform\Shared\Slug\SluggerInterface;
 use Tulia\Cms\Platform\Shared\Uuid\UuidGeneratorInterface;
 use Tulia\Component\Templating\EngineInterface;

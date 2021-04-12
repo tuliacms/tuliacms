@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Framework\Twig\Extension;
+namespace Tulia\Cms\Platform\Infrastructure\Framework\Twig\Extension;
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Tulia\Framework\Http\Request;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -27,13 +27,8 @@ class RequestExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('file_path', function (?string $filepath) {
-                return $this->getRequest()->getUriForPath($filepath);
-            }, [
-                'is_safe' => [ 'html' ]
-            ]),
             new TwigFunction('is_homepage', function () {
-                return $this->getRequest()->getContentPath() === '/';
+                return $this->getRequest()->attributes->get('_content_path') === '/';
             }, [
                 'is_safe' => [ 'html' ]
             ]),
@@ -62,13 +57,13 @@ class RequestExtension extends AbstractExtension
                             $htmlClass[] = $options['html-class-base'];
                         }
 
-                        $htmlClass[] = $options['html-class-prefix'].$classname;
+                        $htmlClass[] = $options['html-class-prefix'] . $classname;
 
                         if ($options['dismissable']) {
                             $htmlClass[] = 'alert-dismissible fade show';
                         }
 
-                        $result .= '<div class="'.implode(' ', $htmlClass).'">'.$message.($options['dismissable'] ? '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' : '' ).'</div>';
+                        $result .= '<div class="' . implode(' ', $htmlClass) . '">' . $message . ($options['dismissable'] ? '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' : '' ) . '</div>';
                     }
                 }
 
@@ -79,14 +74,9 @@ class RequestExtension extends AbstractExtension
         ];
     }
 
-    /**
-     * @param array $types
-     *
-     * @return array
-     */
     protected function getFlashes(array $types = []): array
     {
-        $types    = $types === [] ? [ 'info', 'success', 'warning', 'danger' ] : $types;
+        $types = $types === [] ? [ 'info', 'success', 'warning', 'danger' ] : $types;
         $flashbag = $this->getRequest()->getSession()->getFlashBag();
         $flashes  = [];
 
@@ -97,9 +87,6 @@ class RequestExtension extends AbstractExtension
         return $flashes;
     }
 
-    /**
-     * @return Request
-     */
     protected function getRequest(): Request
     {
         /** @var Request $request */

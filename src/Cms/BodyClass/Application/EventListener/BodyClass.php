@@ -31,7 +31,7 @@ class BodyClass implements EventSubscriberInterface
     {
         $request = $event->getRequest();
 
-        if ($request->getContentPath() === '/') {
+        if ($request->attributes->get('_content_path') === '/') {
             $event->add('homepage');
         }
 
@@ -39,6 +39,6 @@ class BodyClass implements EventSubscriberInterface
             $event->add('customizer');
         }
 
-        $event->add('locale-' . $request->getContentLocale());
+        $event->add('locale-' . $request->attributes->get('_content_locale'));
     }
 }

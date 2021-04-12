@@ -9,7 +9,7 @@ use Tulia\Cms\Taxonomy\Application\TaxonomyType\RegistryInterface;
 use Tulia\Cms\Taxonomy\Query\Model\Term;
 use Tulia\Cms\EditLinks\Application\Event\CollectEditLinksEvent;
 use Tulia\Component\Routing\Exception\RouteNotFoundException;
-use Tulia\Component\Routing\RouterInterface;
+use Symfony\Component\Routing\RouterInterface;
 
 /**
  * @author Adam Banaszkiewicz

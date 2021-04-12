@@ -11,7 +11,7 @@ use Tulia\Cms\Node\Application\Event\NodeDeletedEvent;
 use Tulia\Cms\Node\Application\Model\Node;
 use Tulia\Cms\Node\Infrastructure\NodeType\RegistryInterface;
 use Tulia\Cms\User\Application\Service\AuthenticatedUserProviderInterface;
-use Tulia\Component\Routing\RouterInterface;
+use Symfony\Component\Routing\RouterInterface;
 
 /**
  * @author Adam Banaszkiewicz

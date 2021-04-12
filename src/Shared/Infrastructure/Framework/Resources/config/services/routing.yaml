@@ -1,9 +1,21 @@
 services:
-    Tulia\Cms\Shared\Infrastructure\Routing\ChainRouterInterface:
-        class: Tulia\Cms\Shared\Infrastructure\Routing\ChainRouter
+    _defaults:
+        autowire: true
+        autoconfigure: true
 
-    Tulia\Cms\Shared\Infrastructure\Routing\SymfonyRouterDecorator:
+    Tulia\Component\Routing\:
+        resource: '../../../../../../Component/routing/src/*'
+        exclude:
+            - '../../../../../Component/routing/src/**/*Exception.php'
+            - '../../../../../Component/routing/src/SymfonyRouterDecorator.php'
+
+    Tulia\Component\Routing\SymfonyRouterDecorator:
         decorates: router.default
+        autowire: false
+        autoconfigure: false
         arguments:
             - '@.inner'
-            - '@Tulia\Cms\Shared\Infrastructure\Routing\ChainRouterInterface'
+            - '@Tulia\Component\Routing\ChainRouterInterface'
+
+    Tulia\Component\Routing\Website\RegistryInterface:
+        factory: Tulia\Component\Routing\Website\GenericWebsiteRegistryFactory::factory

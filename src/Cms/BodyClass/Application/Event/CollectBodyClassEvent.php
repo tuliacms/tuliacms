@@ -4,28 +4,17 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\BodyClass\Application\Event;
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\EventDispatcher\Event;
-use Tulia\Framework\Http\Request;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class CollectBodyClassEvent extends Event
 {
-    /**
-     * @var Request
-     */
-    protected $request;
+    protected Request $request;
+    protected array $classes = [];
 
-    /**
-     * @var array
-     */
-    protected $classes = [];
-
-    /**
-     * @param Request $request
-     * @param array $classes
-     */
     public function __construct(Request $request, array $classes = [])
     {
         $this->request = $request;

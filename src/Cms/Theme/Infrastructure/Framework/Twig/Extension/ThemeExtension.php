@@ -13,18 +13,12 @@ use Twig\TwigFunction;
  */
 class ThemeExtension extends AbstractExtension
 {
-    /**
-     * @var HookerInterface
-     */
-    private $hooker;
+    private HookerInterface $hooker;
 
-    /**
-     * @param HookerInterface $hooker
-     */
-    public function __construct(HookerInterface $hooker)
+    /*public function __construct(HookerInterface $hooker)
     {
         $this->hooker = $hooker;
-    }
+    }*/
 
     /**
      * {@inheritdoc}
@@ -33,12 +27,12 @@ class ThemeExtension extends AbstractExtension
     {
         return [
             new TwigFunction('theme_head', function () {
-                return $this->hooker->doAction('theme-head');
+                //return $this->hooker->doAction('theme-head');
             }, [
                 'is_safe' => [ 'html' ]
             ]),
             new TwigFunction('theme_body', function () {
-                return $this->hooker->doAction('theme-body');
+                //return $this->hooker->doAction('theme-body');
             }, [
                 'is_safe' => [ 'html' ]
             ]),

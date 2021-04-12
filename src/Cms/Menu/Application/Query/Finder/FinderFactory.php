@@ -4,28 +4,17 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Menu\Application\Query\Finder;
 
+use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
-use Tulia\Framework\Database\ConnectionInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class FinderFactory implements FinderFactoryInterface
 {
-    /**
-     * @var ConnectionInterface
-     */
-    protected $connection;
-
-    /**
-     * @var CurrentWebsiteInterface
-     */
-    protected $currentWebsite;
-
-    /**
-     * @var string
-     */
-    private $queryClass;
+    protected ConnectionInterface $connection;
+    protected CurrentWebsiteInterface $currentWebsite;
+    private string $queryClass;
 
     public function __construct(
         ConnectionInterface $connection,

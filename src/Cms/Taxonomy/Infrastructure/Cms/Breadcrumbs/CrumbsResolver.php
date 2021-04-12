@@ -4,40 +4,24 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Taxonomy\Infrastructure\Cms\Breadcrumbs;
 
+use Symfony\Component\Routing\RouterInterface;
 use Tulia\Cms\Breadcrumbs\Application\Crumbs\ResolverInterface;
 use Tulia\Cms\Taxonomy\Application\TaxonomyType\RegistryInterface;
 use Tulia\Cms\Taxonomy\Query\Enum\ScopeEnum;
 use Tulia\Cms\Taxonomy\Query\Model\Term;
 use Tulia\Cms\Taxonomy\Query\FinderFactoryInterface;
-use Tulia\Component\Routing\RouterInterface;
 use Tulia\Cms\Platform\Shared\Breadcrumbs\BreadcrumbsInterface;
-use Tulia\Framework\Http\Request;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class CrumbsResolver implements ResolverInterface
 {
-    /**
-     * @var RouterInterface
-     */
-    protected $router;
+    protected RouterInterface $router;
+    protected RegistryInterface $typeRegistry;
+    protected FinderFactoryInterface $finderFactory;
 
-    /**
-     * @var RegistryInterface
-     */
-    protected $typeRegistry;
-
-    /**
-     * @var FinderFactoryInterface
-     */
-    protected $finderFactory;
-
-    /**
-     * @param RouterInterface $router
-     * @param RegistryInterface $typeRegistry
-     * @param FinderFactoryInterface $finderFactory
-     */
     public function __construct(
         RouterInterface $router,
         RegistryInterface $typeRegistry,

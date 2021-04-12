@@ -2,6 +2,3 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
-
-    Tulia\Cms\Platform\Infrastructure\Framework\Routing\EventListener\RouteCollector:
-        tags: [ kernel.event_subscriber ]

@@ -42,7 +42,7 @@ use Tulia\Component\FormBuilder\Manager\ManagerFactoryInterface;
 use Tulia\Component\FormBuilder\Registry;
 use Tulia\Component\FormBuilder\RegistryInterface;
 use Tulia\Component\FormBuilder\Twig\Extension\FormExtension;
-use Tulia\Component\Routing\RouterInterface;
+use Symfony\Component\Routing\RouterInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 use Tulia\Cms\Platform\Shared\Uuid\UuidGeneratorInterface;
 use Tulia\Framework\Database\ConnectionInterface;

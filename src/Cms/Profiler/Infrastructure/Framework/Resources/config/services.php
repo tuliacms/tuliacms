@@ -2,7 +2,7 @@
 
 use Tulia\Cms\Profiler\Infrastructure\Framework\EventListener\Toolbar;
 use Tulia\Component\DependencyInjection\ContainerBuilderInterface;
-use Tulia\Component\Routing\RouterInterface;
+use Symfony\Component\Routing\RouterInterface;
 use Tulia\Component\Templating\EngineInterface;
 use Tulia\Framework\Kernel\Event\ResponseEvent;
 use Tulia\Framework\Kernel\Profiler\Profiler;

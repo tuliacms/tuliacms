@@ -13,25 +13,10 @@ use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
  */
 class Options
 {
-    /**
-     * @var OptionsFinderInterface
-     */
-    private $finder;
-
-    /**
-     * @var OptionsRepositoryInterface
-     */
-    private $repository;
-
-    /**
-     * @var CurrentWebsiteInterface
-     */
-    private $currentWebsite;
-
-    /**
-     * @var array
-     */
-    private $cache = [];
+    private OptionsFinderInterface $finder;
+    private OptionsRepositoryInterface $repository;
+    private CurrentWebsiteInterface $currentWebsite;
+    private array $cache = [];
 
     public function __construct(OptionsFinderInterface $finder, OptionsRepositoryInterface $repository, CurrentWebsiteInterface $currentWebsite)
     {

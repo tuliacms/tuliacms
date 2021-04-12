@@ -7,7 +7,7 @@ namespace Tulia\Cms\Menu\Infrastructure\Persistence\Query\Menu;
 use PDO;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Component\Datatable\Finder\AbstractDatatableFinder;
-use Tulia\Component\Routing\RouterInterface;
+use Symfony\Component\Routing\RouterInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 use Tulia\Framework\Database\ConnectionInterface;
 use Doctrine\DBAL\Query\QueryBuilder;

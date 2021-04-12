@@ -7,7 +7,7 @@ namespace Tulia\Cms\Widget\Infrastructure\Persistence\Query;
 use PDO;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Component\Datatable\Finder\AbstractDatatableFinder;
-use Tulia\Component\Routing\RouterInterface;
+use Symfony\Component\Routing\RouterInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 use Tulia\Component\Theme\ManagerInterface;
 use Tulia\Component\Widget\Registry\WidgetRegistryInterface;

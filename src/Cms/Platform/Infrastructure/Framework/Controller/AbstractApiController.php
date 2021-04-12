@@ -8,7 +8,7 @@ use Psr\Container\ContainerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Component\DependencyInjection\ContainerAwareInterface;
 use Tulia\Component\Routing\Generator\GeneratorInterface;
-use Tulia\Component\Routing\RouterInterface;
+use Symfony\Component\Routing\RouterInterface;
 
 /**
  * @author Adam Banaszkiewicz

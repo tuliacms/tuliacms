@@ -19,7 +19,6 @@ use Tulia\Cms\User\UI\Web\Form\MyAccount\MyAccountFormManagerFactory;
 use Tulia\Cms\User\UI\Web\Form\PasswordForm;
 use Tulia\Component\FormBuilder\Manager\ManagerFactoryInterface;
 use Tulia\Component\Templating\ViewInterface;
-use Tulia\Framework\Http\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Tulia\Framework\Security\Http\Csrf\Annotation\CsrfToken;
 
@@ -28,27 +27,11 @@ use Tulia\Framework\Security\Http\Csrf\Annotation\CsrfToken;
  */
 class MyAccount extends AbstractController
 {
-    /**
-     * @var AuthenticatedUserProviderInterface
-     */
-    protected $authenticatedUserProvider;
+    protected AuthenticatedUserProviderInterface $authenticatedUserProvider;
+    protected FinderFactoryInterface $finderFactory;
+    protected ManagerFactoryInterface $managerFactory;
 
-    /**
-     * @var FinderFactoryInterface
-     */
-    protected $finderFactory;
-
-    /**
-     * @var ManagerFactoryInterface
-     */
-    protected $managerFactory;
-
-    /**
-     * @param AuthenticatedUserProviderInterface $authenticatedUserProvider
-     * @param FinderFactoryInterface $finderFactory
-     * @param ManagerFactoryInterface $managerFactory
-     */
-    public function __construct(
+    /*public function __construct(
         AuthenticatedUserProviderInterface $authenticatedUserProvider,
         FinderFactoryInterface $finderFactory,
         ManagerFactoryInterface $managerFactory
@@ -56,7 +39,7 @@ class MyAccount extends AbstractController
         $this->authenticatedUserProvider = $authenticatedUserProvider;
         $this->finderFactory  = $finderFactory;
         $this->managerFactory = $managerFactory;
-    }
+    }*/
 
     public function me()
     {

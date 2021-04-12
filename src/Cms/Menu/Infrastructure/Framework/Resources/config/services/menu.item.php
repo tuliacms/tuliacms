@@ -23,7 +23,7 @@ use Tulia\Cms\Platform\Infrastructure\Bus\Event\EventBusInterface;
 use Tulia\Cms\Platform\Infrastructure\DataManipulation\Hydrator\HydratorInterface;
 use Tulia\Component\DependencyInjection\ContainerBuilderInterface;
 use Tulia\Component\FormBuilder\Manager\ManagerFactoryInterface;
-use Tulia\Component\Routing\RouterInterface;
+use Symfony\Component\Routing\RouterInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 use Tulia\Framework\Database\ConnectionInterface;
 use Tulia\Cms\Menu\Infrastructure\Builder\Type\RegistryInterface as TypeRegistry;

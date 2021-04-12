@@ -9,7 +9,10 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;
 use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
 
-class Kernel extends BaseKernel
+/**
+ * @author Adam Banaszkiewicz
+ */
+abstract class Kernel extends BaseKernel
 {
     use MicroKernelTrait;
 
@@ -24,32 +27,48 @@ class Kernel extends BaseKernel
         }
     }
 
+    public function getConfigDirs(): array
+    {
+        return [\dirname(__DIR__) . '/Resources/config'];
+    }
+
+    public function getPublicDir(): string
+    {
+        return $this->getProjectDir() . '/public';
+    }
+
     protected function configureContainer(ContainerConfigurator $container): void
     {
-        $root = \dirname(__DIR__);
+        foreach ($this->getConfigDirs() as $root) {
+            if (is_file($root . '/config.yaml')) {
+                $container->import($root . '/config.yaml');
+            }
 
-        $container->import($root . '/Resources/config/{packages}/*.yaml');
-        $container->import($root . '/Resources/config/{packages}/'.$this->environment.'/*.yaml');
+            $container->import($root . '/{packages}/*.yaml');
+            $container->import($root . '/{packages}/' . $this->environment . '/*.yaml');
 
-        if (is_file($root . '/Resources/config/services.yaml')) {
-            $container->import($root . '/Resources/config/services.yaml');
-            $container->import($root . '/Resources/config/{services}_'.$this->environment.'.yaml');
-        } elseif (is_file($path = $root . '/Resources/config/services.php')) {
-            (require $path)($container->withPath($path), $this);
+            if (is_file($root . '/services.yaml')) {
+                $container->import($root . '/services.yaml');
+                $container->import($root . '/{services}_' . $this->environment . '.yaml');
+            } elseif (is_file($path = $root . '/services.php')) {
+                (require $path)($container->withPath($path), $this);
+            }
         }
+
+        $container->parameters()->set('kernel.public_dir', $this->getPublicDir());
     }
 
     protected function configureRoutes(RoutingConfigurator $routes): void
     {
-        $root = \dirname(__DIR__);
+        foreach ($this->getConfigDirs() as $root) {
+            $routes->import($root . '/{routes}/' . $this->environment . '/*.yaml');
+            $routes->import($root . '/{routes}/*.yaml');
 
-        $routes->import($root . '/Resources/config/{routes}/'.$this->environment.'/*.yaml');
-        $routes->import($root . '/Resources/config/{routes}/*.yaml');
-
-        if (is_file($root . '/Resources/config/routes.yaml')) {
-            $routes->import($root . '/Resources/config/routes.yaml');
-        } elseif (is_file($path = $root . '/Resources/config/routes.php')) {
-            (require $path)($routes->withPath($path), $this);
+            if (is_file($root . '/routes.yaml')) {
+                $routes->import($root . '/routes.yaml');
+            } elseif (is_file($path = $root . '/routes.php')) {
+                (require $path)($routes->withPath($path), $this);
+            }
         }
     }
 }

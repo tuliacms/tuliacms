@@ -4,17 +4,14 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Options\Infrastructure\Persistence\ReadModel\Options;
 
-use Tulia\Framework\Database\ConnectionInterface;
+use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class DbalOptionsFinder implements OptionsFinderInterface
 {
-    /**
-     * @var ConnectionInterface
-     */
-    private $connection;
+    private ConnectionInterface $connection;
 
     public function __construct(ConnectionInterface $connection)
     {

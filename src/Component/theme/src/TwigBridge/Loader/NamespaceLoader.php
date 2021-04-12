@@ -14,19 +14,9 @@ use Twig\Source;
  */
 class NamespaceLoader implements LoaderInterface
 {
-    /**
-     * @var FilesystemLoader
-     */
-    protected $loader;
+    protected ?FilesystemLoader $loader = null;
+    protected ManagerInterface $manager;
 
-    /**
-     * @var ManagerInterface
-     */
-    protected $manager;
-
-    /**
-     * @param ManagerInterface $manager
-     */
     public function __construct(ManagerInterface $manager)
     {
         $this->manager = $manager;

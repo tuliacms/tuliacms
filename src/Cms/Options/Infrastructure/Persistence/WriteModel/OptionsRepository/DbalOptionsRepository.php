@@ -6,22 +6,15 @@ namespace Tulia\Cms\Options\Infrastructure\Persistence\WriteModel\OptionsReposit
 
 use Tulia\Cms\Options\Domain\WriteModel\Model\Option;
 use Tulia\Cms\Platform\Infrastructure\DataManipulation\Hydrator\HydratorInterface;
-use Tulia\Framework\Database\ConnectionInterface;
+use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class DbalOptionsRepository implements OptionsRepositoryInterface
 {
-    /**
-     * @var ConnectionInterface
-     */
-    private $connection;
-
-    /**
-     * @var HydratorInterface
-     */
-    private $hydrator;
+    private ConnectionInterface $connection;
+    private HydratorInterface $hydrator;
 
     public function __construct(ConnectionInterface $connection, HydratorInterface $hydrator)
     {

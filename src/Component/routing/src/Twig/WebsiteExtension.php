@@ -2,9 +2,8 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Framework\Twig\Extension;
+namespace Tulia\Component\Routing\Twig;
 
-use Tulia\Component\Routing\Enum\SslModeEnum;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 use Tulia\Component\Routing\Website\RegistryInterface;
 use Tulia\Component\Routing\Website\WebsiteInterface;
@@ -16,23 +15,13 @@ use Twig\TwigFunction;
  */
 class WebsiteExtension extends AbstractExtension
 {
-    /**
-     * @var CurrentWebsiteInterface
-     */
-    protected $currentWebsite;
+    protected CurrentWebsiteInterface $currentWebsite;
+    protected RegistryInterface $registry;
 
-    /**
-     * @var RegistryInterface
-     */
-    protected $registry;
-
-    /**
-     * @param RegistryInterface $registry
-     */
     public function __construct(CurrentWebsiteInterface $currentWebsite, RegistryInterface $registry)
     {
         $this->currentWebsite = $currentWebsite;
-        $this->registry       = $registry;
+        $this->registry = $registry;
     }
 
     /**

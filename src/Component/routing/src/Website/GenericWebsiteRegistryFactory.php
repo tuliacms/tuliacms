@@ -16,8 +16,8 @@ class GenericWebsiteRegistryFactory
     {
         $websites = new Registry();
 
-        $localeEnUs = new Locale('en_US', $_SERVER['HTTP_HOST'], null, null, SslModeEnum::ALLOWED_BOTH, true);
-        $localePlPl = new Locale('pl_PL', $_SERVER['HTTP_HOST'], null, null, SslModeEnum::ALLOWED_BOTH);
+        $localeEnUs = new Locale('en_US', $_SERVER['HTTP_HOST'], null, '/some-path', SslModeEnum::ALLOWED_BOTH, true);
+        $localePlPl = new Locale('pl_PL', $_SERVER['HTTP_HOST'], null, '/some-path', SslModeEnum::ALLOWED_BOTH);
 
         $websites->add(new Website(
             'f19b16b2-f52b-442a-aee2-8e0f4fed31b7',
@@ -26,6 +26,16 @@ class GenericWebsiteRegistryFactory
             '/administrator',
             'Default website'
         ));
+
+        $localeEnUs = new Locale('en_US', $_SERVER['HTTP_HOST'], null, '', SslModeEnum::ALLOWED_BOTH, true);
+
+        $websites->add(new Website(
+           'f19b16b2-f52b-442a-dds3-8e0f4fed31b7',
+           [$localeEnUs, $localePlPl],
+           $localeEnUs,
+           '/administrator',
+           'EN'
+       ));
 
         return $websites;
     }

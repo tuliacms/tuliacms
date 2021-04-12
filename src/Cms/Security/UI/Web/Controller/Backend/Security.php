@@ -20,7 +20,7 @@ use Tulia\Framework\Security\Http\Csrf\Annotation\CsrfToken;
  */
 class Security extends AbstractController
 {
-    private AuthenticationUtils $authenticationUtils;
+    /*private AuthenticationUtils $authenticationUtils;
     private LoginServiceInterface $loginService;
     private LogoutServiceInterface $logoutService;
 
@@ -32,7 +32,7 @@ class Security extends AbstractController
         $this->authenticationUtils = $authenticationUtils;
         $this->loginService = $loginService;
         $this->logoutService = $logoutService;
-    }
+    }*/
 
     /**
      * @return ViewInterface|RedirectResponse

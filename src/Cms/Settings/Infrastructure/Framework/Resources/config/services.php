@@ -15,7 +15,7 @@ use Tulia\Cms\Settings\RegistryInterface;
 use Tulia\Cms\Settings\UI\Web\Form\SettingsForm;
 use Tulia\Cms\WysiwygEditor\Core\Application\RegistryInterface as WysiwygEditorRegistry;
 use Tulia\Component\DependencyInjection\ContainerBuilderInterface;
-use Tulia\Component\Routing\RouterInterface;
+use Symfony\Component\Routing\RouterInterface;
 
 $builder->setDefinition(RegistryInterface::class, Registry::class, [
     'arguments' => [

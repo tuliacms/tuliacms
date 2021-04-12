@@ -12,7 +12,7 @@ use Tulia\Cms\SearchAnything\Results\Hit;
 use Tulia\Cms\SearchAnything\Results\Results;
 use Tulia\Cms\SearchAnything\Results\ResultsInterface;
 use Tulia\Cms\Settings\RegistryInterface;
-use Tulia\Component\Routing\RouterInterface;
+use Symfony\Component\Routing\RouterInterface;
 
 /**
  * @author Adam Banaszkiewicz

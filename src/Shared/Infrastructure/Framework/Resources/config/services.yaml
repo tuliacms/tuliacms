@@ -1,6 +1,7 @@
 imports:
+    - { resource: 'services/database.yaml' }
     - { resource: 'services/assetter.yaml' }
-    #- { resource: 'services/theme.yaml' }
+    - { resource: 'services/theme.yaml' }
     - { resource: 'services/templating.yaml' }
     - { resource: 'services/utils.yaml' }
     - { resource: 'services/routing.yaml' }

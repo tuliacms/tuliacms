@@ -33,7 +33,7 @@ use Tulia\Cms\Widget\UI\Web\Form\WidgetForm;
 use Tulia\Cms\Widget\UI\Web\Form\WidgetFormManagerFactory;
 use Tulia\Component\DependencyInjection\ContainerBuilderInterface;
 use Tulia\Component\FormBuilder\Manager\ManagerFactoryInterface;
-use Tulia\Component\Routing\RouterInterface;
+use Symfony\Component\Routing\RouterInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 use Tulia\Cms\Platform\Shared\Uuid\UuidGeneratorInterface;
 use Tulia\Component\Templating\Config;

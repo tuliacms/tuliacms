@@ -11,7 +11,7 @@ use Tulia\Cms\FrontendToolbar\Application\Helper\Helper;
 use Tulia\Cms\FrontendToolbar\Application\Helper\HelperInterface;
 use Tulia\Cms\FrontendToolbar\Application\Links\ProviderRegistry;
 use Tulia\Component\DependencyInjection\ContainerBuilderInterface;
-use Tulia\Component\Routing\RouterInterface;
+use Symfony\Component\Routing\RouterInterface;
 use Tulia\Component\Templating\EngineInterface;
 use Tulia\Framework\Kernel\Event\ResponseEvent;
 

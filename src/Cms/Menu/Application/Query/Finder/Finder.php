@@ -8,50 +8,22 @@ use Tulia\Cms\Menu\Application\Query\Finder\Model\Collection;
 use Tulia\Cms\Menu\Application\Query\Finder\Model\Menu;
 use Tulia\Cms\Menu\Application\Query\Finder\Exception\MultipleFetchException;
 use Tulia\Cms\Menu\Application\Query\Finder\Exception\QueryNotFetchedException;
-use Tulia\Framework\Database\ConnectionInterface;
+use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class Finder implements FinderInterface
 {
-    /**
-     * @var ConnectionInterface
-     */
-    protected $connection;
-
-    /**
-     * @var array
-     */
-    protected $params = [];
-
-    /**
-     * @var array
-     */
-    protected $criteria = [];
-
-    /**
-     * @var array
-     */
-    protected $fetchData = [
+    protected ConnectionInterface $connection;
+    protected array $params = [];
+    protected array $criteria = [];
+    protected array $fetchData = [
         'result' => null,
     ];
+    protected ?QueryInterface $query = null;
+    private string $queryClass;
 
-    /**
-     * @var QueryInterface
-     */
-    protected $query;
-
-    /**
-     * @var string
-     */
-    private $queryClass;
-
-    /**
-     * @param ConnectionInterface $connection
-     * @param string $queryClass
-     * @param array $params
-     */
     public function __construct(ConnectionInterface $connection, string $queryClass, array $params)
     {
         $this->connection = $connection;

@@ -7,7 +7,7 @@ namespace Tulia\Cms\Platform\Infrastructure\Framework\EventListener\ExceptionLis
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Tulia\Component\Routing\RouterInterface;
+use Symfony\Component\Routing\RouterInterface;
 use Tulia\Framework\Http\Request;
 use Tulia\Framework\Kernel\Event\ExceptionEvent;
 use Tulia\Framework\Security\Http\Csrf\Exception\RequestCsrfTokenException;

@@ -7,11 +7,11 @@ namespace Tulia\Component\Routing\EventListener;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Tulia\Component\Routing\Enum\SslModeEnum;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 use Tulia\Component\Routing\Website\Matcher\Matcher;
 use Tulia\Component\Routing\Website\RegistryInterface;
-use Tulia\Framework\Kernel\Event\BootstrapEvent;
 
 /**
  * @author Adam Banaszkiewicz
@@ -30,18 +30,16 @@ class WebsiteResolver implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            BootstrapEvent::class => [
-                ['handle', 9900]
-            ],
+            RequestEvent::class => ['handle', 9900],
         ];
     }
 
-    public function handle(BootstrapEvent $event): void
+    public function handle(RequestEvent $event): void
     {
         $request = $event->getRequest();
         $requestScheme = $request->getScheme();
         $requestDomain = $request->getHttpHost();
-        $pathinfo      = $request->getPathInfo();
+        $pathinfo = $request->getPathInfo();
 
         $currentWebsite = Matcher::matchRequestAgainstObjects($request, $this->websites);
 
