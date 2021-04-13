@@ -13,6 +13,7 @@ use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\RouterInterface;
+use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -21,12 +22,18 @@ class SymfonyRouterDecorator implements RouterInterface, RequestMatcherInterface
 {
     private RouterInterface $symfonyRouter;
     private ChainRouterInterface $chainRouter;
+    private CurrentWebsiteInterface $currentWebsite;
     private ?LoggerInterface $logger;
 
-    public function __construct(RouterInterface $symfonyRouter, ChainRouterInterface $chainRouter, LoggerInterface $logger = null)
-    {
+    public function __construct(
+        RouterInterface $symfonyRouter,
+        ChainRouterInterface $chainRouter,
+        CurrentWebsiteInterface $currentWebsite,
+        LoggerInterface $logger = null
+    ) {
         $this->symfonyRouter = $symfonyRouter;
         $this->chainRouter = $chainRouter;
+        $this->currentWebsite = $currentWebsite;
         $this->logger = $logger;
     }
 
@@ -59,7 +66,7 @@ class SymfonyRouterDecorator implements RouterInterface, RequestMatcherInterface
             $path = $router->generate($name, $parameters, $referenceType);
 
             if ($path !== null && $path !== '') {
-                return $path;
+                return $this->appendWebsitePrefixes($path, $parameters, $referenceType);
             }
         }
 
@@ -155,5 +162,23 @@ class SymfonyRouterDecorator implements RouterInterface, RequestMatcherInterface
         if ($this->logger) {
             $this->logger->debug($message);
         }
+    }
+
+    private function appendWebsitePrefixes(string $uri, array $parameters, int $referenceType): string
+    {
+        /** @var array $parts */
+        $parts = parse_url($uri);
+
+        if (! isset($parts['path'])) {
+            $parts['path'] = '/';
+        }
+
+        $parts['path'] = $this->currentWebsite->getPathPrefix() . $this->currentWebsite->getLocalePrefix() . $parts['path'];
+
+        return
+            (isset($parts['scheme']) ? $parts['scheme'] . '://' : '') .
+            ($parts['host'] ?? '') .
+            ($parts['path'] ?? '')
+        ;
     }
 }

@@ -184,9 +184,7 @@ class Website implements WebsiteInterface
 
     /**
      * @param string|LocaleInterface $locale
-     *
      * @return LocaleInterface
-     *
      * @throws LocaleNotExistsException
      */
     private function resolveLocale($locale): LocaleInterface

@@ -19,10 +19,6 @@ class Matcher
     private static array $staticCache = [];
 
     /**
-     * @param iterable $websites
-     *
-     * @return array
-     *
      * @throws WebsiteNotFoundException
      */
     public static function matchGlobalsAgainstArray(iterable $websites): array
@@ -31,11 +27,6 @@ class Matcher
     }
 
     /**
-     * @param Request $request
-     * @param iterable $websites
-     *
-     * @return array
-     *
      * @throws WebsiteNotFoundException
      */
     public static function matchRequestAgainstArray(Request $request, iterable $websites): array
@@ -44,11 +35,6 @@ class Matcher
     }
 
     /**
-     * @param Request $request
-     * @param iterable $websites
-     *
-     * @return WebsiteInterface
-     *
      * @throws WebsiteNotFoundException
      */
     public static function matchRequestAgainstObjects(Request $request, iterable $websites): WebsiteInterface
@@ -65,7 +51,7 @@ class Matcher
             foreach ($website->getLocales() as $locale) {
                 $websitesArray[] = [
                     'id' => $website->getId(),
-                    'locale' => $locale->getCode(),
+                    'code' => $locale->getCode(),
                     'domain' => $locale->getDomain(),
                     'backend_prefix' => $website->getBackendPrefix(),
                     'path_prefix' => (string) $locale->getPathPrefix(),
@@ -78,7 +64,7 @@ class Matcher
 
         foreach ($websites as $website) {
             if ($website->getId() === $websiteFound['id']) {
-                return self::$staticCache[$request->getHttpHost() . $request->getPathInfo()] = Website::withNewLocale($website, $websiteFound['locale']);
+                return self::$staticCache[$request->getHttpHost() . $request->getPathInfo()] = Website::withNewLocale($website, $websiteFound['code']);
             }
         }
 
@@ -86,12 +72,6 @@ class Matcher
     }
 
     /**
-     * @param string $host
-     * @param string $url
-     * @param iterable $websites
-     *
-     * @return array
-     *
      * @throws WebsiteNotFoundException
      */
     public static function matchUrlAgainstArray(string $host, string $url, iterable $websites): array
@@ -101,12 +81,12 @@ class Matcher
          * like: `/gardens` and `/gardens-vip`, and first one was created first. Matcher needs them
          * in proper order, so first we need to check the longest prefixes.
          */
-        /*usort($websites, function ($a, $b) {
+        usort($websites, function ($a, $b) {
             return \strlen($a['path_prefix']) < \strlen($b['path_prefix']);
         });
         usort($websites, function ($a, $b) {
             return \strlen($a['locale_prefix']) < \strlen($b['locale_prefix']);
-        });*/
+        });
 
         $prepared = [];
 

@@ -16,6 +16,9 @@ services:
         arguments:
             - '@.inner'
             - '@Tulia\Component\Routing\ChainRouterInterface'
+            - '@Tulia\Component\Routing\Website\CurrentWebsiteInterface'
 
     Tulia\Component\Routing\Website\RegistryInterface:
-        factory: Tulia\Component\Routing\Website\GenericWebsiteRegistryFactory::factory
+        factory: Tulia\Component\Routing\Website\WebsiteRegistryFactory::factory
+        bind:
+            $source: '%framework.routing.website.list%'

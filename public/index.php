@@ -5,9 +5,9 @@ use Symfony\Component\ErrorHandler\Debug;
 use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\Platform\Infrastructure\Framework\Kernel\TuliaKernel;
 
-require dirname(__DIR__).'/vendor/autoload.php';
+require dirname(__DIR__) . '/vendor/autoload.php';
 
-(new Dotenv())->bootEnv(dirname(__DIR__).'/.env');
+(new Dotenv())->bootEnv(dirname(__DIR__) . '/.env');
 
 if ($_SERVER['APP_DEBUG']) {
     umask(0000);
