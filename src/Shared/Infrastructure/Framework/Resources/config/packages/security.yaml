@@ -1,24 +1,35 @@
 security:
-    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
-        users_in_memory: { memory: null }
+        tulia_user_provider:
+            id: Tulia\Component\Security\Core\User\UserProvider
+    encoders:
+        Tulia\Component\Security\Core\User\User:
+            algorithm: auto
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+        backend:
+            pattern: ^/administrator
+            anonymous: false
+            provider: tulia_user_provider
+            request_matcher: Tulia\Component\Security\BackendRequestMatcher
+            form_login:
+                login_path: backend_login
+                check_path: backend_login
         main:
             anonymous: true
             lazy: true
-            provider: users_in_memory
+            provider: tulia_user_provider
+            guard:
+                authenticators:
+                    - Tulia\Component\Security\Guard\Authenticator\FrontendLoginFormAuthenticator
+            logout:
+                path: /tulia/auth/logout
+                target: /tulia
+                invalidate_session: true
+            form_login:
+                login_path: login
 
-            # activate different ways to authenticate
-            # https://symfony.com/doc/current/security.html#firewalls-authentication
-
-            # https://symfony.com/doc/current/security/impersonating_user.html
-            # switch_user: true
-
-    # Easy way to control access for large sections of your site
-    # Note: Only the *first* access control that matches will be used
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/administrator, roles: ROLE_ADMIN }

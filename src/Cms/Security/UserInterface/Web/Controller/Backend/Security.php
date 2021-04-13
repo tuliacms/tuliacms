@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Security\UI\Web\Controller\Backend;
+namespace Tulia\Cms\Security\UserInterface\Web\Controller\Backend;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Tulia\Component\Templating\ViewInterface;

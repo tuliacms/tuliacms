@@ -18,6 +18,7 @@
       <sourceFolder url="file://$MODULE_DIR$/src/Component/theme/src" isTestSource="false" packagePrefix="Tulia\Component\Theme\" />
       <sourceFolder url="file://$MODULE_DIR$/src/Component/widget/src" isTestSource="false" packagePrefix="Tulia\Component\Widget\" />
       <sourceFolder url="file://$MODULE_DIR$/src/Shared" isTestSource="false" packagePrefix="Tulia\Cms\Shared\" />
+      <sourceFolder url="file://$MODULE_DIR$/src/Component/security/src" isTestSource="false" packagePrefix="Tulia\Component\Security\" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/thunderer/shortcode" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/doctrine/instantiator" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/deprecation-contracts" />

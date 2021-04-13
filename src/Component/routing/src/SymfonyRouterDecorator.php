@@ -178,7 +178,8 @@ class SymfonyRouterDecorator implements RouterInterface, RequestMatcherInterface
         return
             (isset($parts['scheme']) ? $parts['scheme'] . '://' : '') .
             ($parts['host'] ?? '') .
-            ($parts['path'] ?? '')
+            ($parts['path'] ?? '') .
+            (isset($parts['query']) ? '?' . $parts['query'] : '')
         ;
     }
 }
