@@ -15,10 +15,9 @@ class Security extends AbstractController
 {
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
-        // @todo Redirect to homepage when user is already logged in
-        // if ($this->getUser()) {
-        //     return $this->redirectToRoute('target_path');
-        // }
+        if ($this->getUser()) {
+            return $this->redirectToRoute('homepage');
+        }
 
         return $this->render('@cms/security/login.tpl', [
             'last_username' => $authenticationUtils->getLastUsername(),

@@ -66,7 +66,7 @@ class SymfonyRouterDecorator implements RouterInterface, RequestMatcherInterface
             $path = $router->generate($name, $parameters, $referenceType);
 
             if ($path !== null && $path !== '') {
-                return $this->appendWebsitePrefixes($path, $parameters, $referenceType);
+                return $this->appendWebsitePrefixes($name, $path, $parameters, $referenceType);
             }
         }
 
@@ -164,7 +164,7 @@ class SymfonyRouterDecorator implements RouterInterface, RequestMatcherInterface
         }
     }
 
-    private function appendWebsitePrefixes(string $uri, array $parameters, int $referenceType): string
+    private function appendWebsitePrefixes(string $name, string $uri, array $parameters, int $referenceType): string
     {
         /** @var array $parts */
         $parts = parse_url($uri);
@@ -173,7 +173,13 @@ class SymfonyRouterDecorator implements RouterInterface, RequestMatcherInterface
             $parts['path'] = '/';
         }
 
-        $parts['path'] = $this->currentWebsite->getPathPrefix() . $this->currentWebsite->getLocalePrefix() . $parts['path'];
+        if (strpos('backend_', $name) === 0) {
+            $parts['path'] = $this->currentWebsite->getPathPrefix() . $this->currentWebsite->getBackendAddress() . $this->currentWebsite->getLocalePrefix() . $parts['path'];
+        } elseif (strpos('api_', $name) === 0) {
+
+        } else {
+            $parts['path'] = $this->currentWebsite->getPathPrefix() . $this->currentWebsite->getLocalePrefix() . $parts['path'];
+        }
 
         return
             (isset($parts['scheme']) ? $parts['scheme'] . '://' : '') .

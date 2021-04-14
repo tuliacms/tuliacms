@@ -25,8 +25,8 @@ security:
                 authenticators:
                     - Tulia\Component\Security\Guard\Authenticator\FrontendLoginFormAuthenticator
             logout:
-                path: /tulia/auth/logout
-                target: /tulia
+                path: logout
+                target: homepage
                 invalidate_session: true
             form_login:
                 login_path: login

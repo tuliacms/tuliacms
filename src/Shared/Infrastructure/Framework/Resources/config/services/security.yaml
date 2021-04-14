@@ -7,8 +7,3 @@ services:
         resource: '../../../../../../Component/security/src/*'
         exclude:
             - '../../../../../../Component/security/src/Core/User/User.php'
-
-    Tulia\Component\Security\Logout\LogoutListener:
-        tags:
-            -   name: kernel.event_subscriber
-                dispatcher: security.event_dispatcher.main

@@ -24,9 +24,6 @@ use Tulia\Cms\Platform\Shared\Document\DocumentInterface;
 use Tulia\Cms\Platform\Shared\Uuid\UuidGeneratorInterface;
 use Tulia\Component\Templating\View;
 use Tulia\Component\Templating\ViewInterface;
-use Tulia\Framework\Http\Request;
-use Tulia\Framework\Security\Http\Csrf\Exception\RequestCsrfTokenException;
-use Tulia\Framework\Translation\TranslatableInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as SymfonyController;
 
 /**
@@ -109,56 +106,14 @@ abstract class AbstractController extends SymfonyController
         return $this->container->get(UuidGeneratorInterface::class)->generate();
     }
 
-    /**
-     * @param string|null $type
-     * @param array|object $data
-     * @param array $options
-     * @return Form
-     */
-    public function createForm(string $type = null, $data = null, array $options = []): Form
-    {
-        return $this->container->get(FormFactoryInterface::class)->create($type, $data, $options);
-    }
-
     public function getDocument(): DocumentInterface
     {
         return $this->container->get(DocumentInterface::class);
     }
 
-    /**
-     * @param string $attribute
-     * @param mixed $subject
-     * @return bool
-     */
-    public function isGranted($attribute, $subject = null): bool
-    {
-        return $this->container->get(AuthorizationCheckerInterface::class)->isGranted($attribute, $subject);
-    }
-
-    /**
-     * @param string $attribute
-     * @param mixed $subject
-     * @param string $message
-     */
-    public function denyAccessUnlessGranted($attribute, $subject = null, string $message = 'Access Denied.'): void
-    {
-        if (! $this->isGranted($attribute, $subject)) {
-            $exception = $this->createAccessDeniedException($message);
-            $exception->setAttributes($attribute);
-            $exception->setSubject($subject);
-
-            throw $exception;
-        }
-    }
-
     public function isLoggedIn(): bool
     {
         return $this->isGranted('IS_AUTHENTICATED_FULLY');
-    }
-
-    public function createAccessDeniedException(string $message = 'Access Denied.', \Throwable $previous = null): AccessDeniedException
-    {
-        return new AccessDeniedException($message, $previous);
     }
 
     public function getCommandBus(): CommandBusInterface
@@ -178,20 +133,5 @@ abstract class AbstractController extends SymfonyController
         if ($this->isCsrfTokenValid($id, $value) === false) {
             throw new RequestCsrfTokenException('Token '.$id.' not found in Request.');
         }
-    }
-
-    protected function isCsrfTokenValid(string $id, ?string $token): bool
-    {
-        return $this->container->get(CsrfTokenManagerInterface::class)->isTokenValid(new CsrfToken($id, $token));
-    }
-
-    protected function getUser(): User
-    {
-        return $this->container->get(AuthenticatedUserProviderInterface::class)->getUser();
-    }
-
-    protected function generateUrl(string $name, array $params = [], int $type = RouterInterface::TYPE_PATH): string
-    {
-        return $this->container->get(RouterInterface::class)->generate($name, $params, $type);
     }
 }

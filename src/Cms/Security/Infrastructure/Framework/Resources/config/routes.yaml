@@ -5,3 +5,8 @@ login:
 logout:
     path: /auth/logout
     controller: Tulia\Cms\Security\UserInterface\Web\Controller\Frontend\Security::logout
+
+backend_login:
+    path: /auth/login
+    controller: Tulia\Cms\Security\UserInterface\Web\Controller\Backend\Security::login
+    methods: GET|POST

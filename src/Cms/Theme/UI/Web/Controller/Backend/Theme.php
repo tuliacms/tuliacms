@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Tulia\Cms\Platform\Infrastructure\DefaultTheme\DefaultTheme;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Theme\Application\Service\ThemeActivator;
-use Tulia\Cms\Theme\Domain\Event\ThemeNotFoundException;
+use Tulia\Cms\Theme\Application\Exception\ThemeNotFoundException;
 use Tulia\Component\Templating\ViewInterface;
 use Tulia\Component\Theme\Activator\ActivatorInterface;
 use Tulia\Component\Theme\ManagerInterface;

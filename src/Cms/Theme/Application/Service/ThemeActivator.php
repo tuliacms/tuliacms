@@ -6,7 +6,7 @@ namespace Tulia\Cms\Theme\Application\Service;
 
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Tulia\Cms\Theme\Domain\Event\ThemeActivated;
-use Tulia\Cms\Theme\Domain\Event\ThemeNotFoundException;
+use Tulia\Cms\Theme\Application\Exception\ThemeNotFoundException;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 use Tulia\Component\Theme\Activator\ActivatorInterface;
 use Tulia\Component\Theme\ManagerInterface;
