@@ -1,0 +1,41 @@
+.breadcrumbs-container {
+    margin: -$header-margin 0 $header-margin 0;
+    border-bottom: 1px solid rgba(0,0,0,.08);
+}
+
+.breadcrumb {
+    width: $content-width;
+    padding: 0 15px;
+    margin: 0 auto;
+    background-color: transparent;
+    font-size: 14px;
+
+    .breadcrumb-item + .breadcrumb-item::before {
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+    a {
+        padding: 10px 0;
+    }
+
+    a:hover {
+        color: #222;
+    }
+
+    .breadcrumb-item:first-child a {
+        padding-left: 27px;
+        position: relative;
+
+        &:before {
+            display: block;
+            content: "\f015";
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
+        }
+    }
+}

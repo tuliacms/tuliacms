@@ -118,9 +118,9 @@ class SymfonyRouterDecorator implements RouterInterface, RequestMatcherInterface
 
                 return $router->match($pathinfo);
             } catch (ResourceNotFoundException $e) {
-                $this->log('Router ' . get_class($router) . ' was not able to match, message "' . $e->getMessage() . '"');
+                $this->log('Router ' . \get_class($router) . ' was not able to match, message "' . $e->getMessage() . '"');
             } catch (MethodNotAllowedException $e) {
-                $this->log('Router ' . get_class($router) . ' throws MethodNotAllowedException with message "' . $e->getMessage() . '"');
+                $this->log('Router ' . \get_class($router) . ' throws MethodNotAllowedException with message "' . $e->getMessage() . '"');
                 $methodNotAllowedException = $e;
             }
         }

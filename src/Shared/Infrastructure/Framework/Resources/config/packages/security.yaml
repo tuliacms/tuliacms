@@ -10,17 +10,32 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         backend:
-            pattern: ^/administrator
+            stateless: false
             anonymous: false
+            lazy: true
+            context: backend_context
             provider: tulia_user_provider
             request_matcher: Tulia\Component\Security\BackendRequestMatcher
+            guard:
+                authenticators:
+                    - Tulia\Component\Security\Guard\Authenticator\BackendLoginFormAuthenticator
+            logout:
+                path: backend_logout
+                target: backend_homepage
+                invalidate_session: true
             form_login:
                 login_path: backend_login
-                check_path: backend_login
+            remember_me:
+                secret: '%kernel.secret%'
+                lifetime: 604800
+                path: /
         main:
             anonymous: true
+            stateless: false
+            context: backend_context
             lazy: true
             provider: tulia_user_provider
+            request_matcher: Tulia\Component\Security\FrontendRequestMatcher
             guard:
                 authenticators:
                     - Tulia\Component\Security\Guard\Authenticator\FrontendLoginFormAuthenticator
@@ -30,6 +45,13 @@ security:
                 invalidate_session: true
             form_login:
                 login_path: login
+            remember_me:
+                secret: '%kernel.secret%'
+                lifetime: 604800
+                path: /
 
     access_control:
+        - { path: ^/auth/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/administrator/auth/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/administrator, roles: ROLE_ADMIN }

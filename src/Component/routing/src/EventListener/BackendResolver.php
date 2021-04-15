@@ -46,7 +46,7 @@ class BackendResolver implements EventSubscriberInterface
 
         if (strpos($parameters['_content_path'], $parameters['_backend_prefix']) === 0) {
             $parameters['_is_backend'] = true;
-            $parameters['_content_path'] = substr($parameters['_content_path'], \strlen($parameters['_backend_prefix']));
+            //$parameters['_content_path'] = substr($parameters['_content_path'], \strlen($parameters['_backend_prefix']));
         }
 
         return $parameters;

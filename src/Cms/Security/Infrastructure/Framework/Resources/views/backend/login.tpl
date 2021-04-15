@@ -9,7 +9,7 @@
     <title>{% block title %}Tulia CMS - Administration Panel login{% endblock %}</title>
     {% block head %}{% endblock %}
 
-    <script nonce="{{ csp_nonce() }}">
+    <script nonce="{#{{ csp_nonce() }}#}">
         let Tulia = {};
         let bgImages = {{ bgImages|json_encode|raw }};
         let Login = function () {
@@ -131,7 +131,7 @@
                         {% if error %}
                             <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'auth') }}</div>
                         {% endif %}
-                        <form action="{{ path('backend.login.process') }}" method="POST">
+                        <form action="{#{{ path('backend.login.process') }}#}" method="POST">
                             <input type="hidden" name="_token" value="{{ csrf_token('authenticate') }}" />
                             <fieldset class="form-group">
                                 <label class="d-none">{{ 'username'|trans }}</label>
@@ -148,9 +148,15 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="fas fa-key"></i></span>
                                     </div>
-                                    <input type="password" class="form-control form-control-autofocus" id="password" name="password" placeholder="{{ 'password'|trans }}" />
+                                    <input type="password" class="form-control form-control-autofocus" id="password" name="password" placeholder="{{ 'password'|trans }}" value="MyP4$$w0rdT04Dm!n" />
                                 </div>
                             </fieldset>
+                            <div class="checkbox mb-3">
+                                <label>
+                                    <input type="checkbox" name="_remember_me"> Remember me
+                                </label>
+                            </div>
+                            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
                             <button type="submit" class="btn btn-primary login-btn">{{ 'signIn'|trans }}</button>
                             <a href="#" class="btn btn-link" data-show-viewbox="viewbox-password-remember">Forgot password?</a>
                         </form>

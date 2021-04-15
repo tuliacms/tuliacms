@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Tulia\Component\Routing\EventListener;
 
+use Symfony\Component\HttpFoundation\ParameterBag;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\Routing\RouterInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
@@ -14,12 +16,12 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class RequestMatcher implements EventSubscriberInterface
 {
-    protected RouterInterface $matcher;
+    protected RouterInterface $router;
     protected CurrentWebsiteInterface $currentWebsite;
 
-    public function __construct(RouterInterface $matcher, CurrentWebsiteInterface $currentWebsite)
+    public function __construct(RouterInterface $router, CurrentWebsiteInterface $currentWebsite)
     {
-        $this->matcher = $matcher;
+        $this->router = $router;
         $this->currentWebsite = $currentWebsite;
     }
 
@@ -38,8 +40,32 @@ class RequestMatcher implements EventSubscriberInterface
             return;
         }
 
-        $result = $this->matcher->match(urldecode($request->attributes->get('_content_path')));
+        $pathinfo = urldecode($request->attributes->get('_content_path'));
+        $fakeRequest = $this->createRequest($pathinfo, $request->attributes->all());
+        $result = $this->router->matchRequest($fakeRequest);
 
         $request->attributes->add($result);
+    }
+
+    private function createRequest(string $pathinfo, array $attributes): Request
+    {
+        $context = $this->router->getContext();
+        $uri = $pathinfo;
+        $serverData = [];
+
+        $host = $context->getHost() ?: 'localhost';
+
+        if ('https' === $context->getScheme() && 443 !== $context->getHttpsPort()) {
+            $host .= ':' . $context->getHttpsPort();
+        } elseif ('http' === $context->getScheme() && 80 !== $context->getHttpPort()) {
+            $host .= ':' . $context->getHttpPort();
+        }
+
+        $uri = $context->getScheme() . '://' . $host . $uri . '?' . $context->getQueryString();
+
+        $request = Request::create($uri, $context->getMethod(), $context->getParameters(), [], [], $serverData);
+        $request->attributes->add($attributes);
+
+        return $request;
     }
 }
