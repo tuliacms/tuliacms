@@ -13,14 +13,8 @@ use Twig\TwigFunction;
  */
 class DashboardExtension extends AbstractExtension
 {
-    /**
-     * @var Registry
-     */
-    protected $widgetsRegistry;
+    protected Registry $widgetsRegistry;
 
-    /**
-     * @param Registry $widgetsRegistry
-     */
     public function __construct(Registry $widgetsRegistry)
     {
         $this->widgetsRegistry = $widgetsRegistry;

@@ -12,43 +12,24 @@ use Tulia\Cms\Dashboard\Tiles\TileInterface;
  */
 class CollectTilesEvent extends Event
 {
-    /**
-     * @var array
-     */
-    protected $tiles = [];
+    protected array $tiles = [];
+    protected string $group;
 
-    /**
-     * @var string
-     */
-    protected $group;
-
-    /**
-     * @param string $group
-     */
     public function __construct(string $group)
     {
         $this->group = $group;
     }
 
-    /**
-     * @return string
-     */
     public function getGroup(): string
     {
         return $this->group;
     }
 
-    /**
-     * @param TileInterface $tile
-     */
     public function add(TileInterface $tile): void
     {
         $this->tiles[] = $tile;
     }
 
-    /**
-     * @return array
-     */
     public function getAll(): array
     {
         usort($this->tiles, function ($a, $b) {

@@ -108,7 +108,7 @@ class BackendLoginFormAuthenticator extends AbstractFormLoginAuthenticator imple
             return new RedirectResponse($targetPath);
         }*/
 
-        return new RedirectResponse($this->urlGenerator->generate('backend_homepage'));
+        return new RedirectResponse($this->urlGenerator->generate('backend'));
     }
 
     protected function getLoginUrl(): string

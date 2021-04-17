@@ -59,7 +59,7 @@
                                 {% endif %}
                                 {% if theme != item %}
                                     <form action="{{ path('backend.theme.activate') }}" method="POST">
-                                        {{ csrf_field('theme.activate') }}
+                                        <input type="hidden" novalidate="novalidate" name="_token" value="{{ csrf_token('theme.activate') }}" />
                                         <input type="hidden" name="theme" value="{{ item.name }}" />
                                         <button type="submit" class="btn btn-sm btn-secondary tulia-click-page-loader">{{ 'activate'|trans({}, 'themes') }}</button>
                                     </form>

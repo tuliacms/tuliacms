@@ -130,8 +130,8 @@
                             <i class="btn-icon fas fa-user-tie"></i>
                         </button>
                         <div class="dropdown-menu pb-0">
-                            <a class="dropdown-item dropdown-item-with-icon" href="{{ path('backend.me') }}"><i class="dropdown-icon fas fa-user-tie"></i> {{ 'myAccount'|trans }}</a>
-                            <a class="dropdown-item dropdown-item-with-icon" href="{{ path('backend.me.personalization') }}"><i class="dropdown-icon fas fa-cogs"></i> {{ 'personalization'|trans }}</a>
+                            <a class="dropdown-item dropdown-item-with-icon" href="{#{{ path('backend.me') }}#}"><i class="dropdown-icon fas fa-user-tie"></i> {{ 'myAccount'|trans }}</a>
+                            <a class="dropdown-item dropdown-item-with-icon" href="{#{{ path('backend.me.personalization') }}#}"><i class="dropdown-icon fas fa-cogs"></i> {{ 'personalization'|trans }}</a>
                             <a class="dropdown-item dropdown-item-with-icon dropdown-item-logout" href="{{ path('backend.logout') }}"><i class="dropdown-icon fas fa-power-off"></i> {{ 'logout'|trans }}</a>
                         </div>
                     </div>

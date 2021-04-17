@@ -1,0 +1,10 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    Tulia\Cms\Activity\:
+        resource: '../../../../*'
+
+    Tulia\Cms\Activity\Infrastructure\Cms\Dashboard\Widget\ActivityWidget:
+        tags: [ dashboard.widget ]

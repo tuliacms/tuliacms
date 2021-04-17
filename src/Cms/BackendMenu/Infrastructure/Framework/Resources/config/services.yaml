@@ -1,0 +1,12 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    Tulia\Cms\BackendMenu\:
+        resource: '../../../../*'
+
+    Tulia\Cms\BackendMenu\Application\HtmlBuilderInterface:
+        class: Tulia\Cms\BackendMenu\Application\HtmlBuilder
+        bind:
+            $builders: !tagged_iterator backend_menu.builder

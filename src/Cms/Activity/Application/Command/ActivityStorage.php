@@ -6,8 +6,8 @@ namespace Tulia\Cms\Activity\Application\Command;
 
 use Tulia\Cms\Activity\Application\Model\Row;
 use Tulia\Cms\Activity\Infrastructure\Persistence\Command\RepositoryInterface;
+use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
-use Tulia\Cms\Platform\Shared\Uuid\UuidGeneratorInterface;
 use Tulia\Cms\Platform\Infrastructure\DataManipulation\Hydrator\HydratorInterface;
 
 /**
@@ -15,25 +15,10 @@ use Tulia\Cms\Platform\Infrastructure\DataManipulation\Hydrator\HydratorInterfac
  */
 class ActivityStorage
 {
-    /**
-     * @var RepositoryInterface
-     */
-    private $repository;
-
-    /**
-     * @var CurrentWebsiteInterface
-     */
-    private $currentWebsite;
-
-    /**
-     * @var UuidGeneratorInterface
-     */
-    private $uuidGenerator;
-
-    /**
-     * @var HydratorInterface
-     */
-    private $hydrator;
+    private RepositoryInterface $repository;
+    private CurrentWebsiteInterface $currentWebsite;
+    private UuidGeneratorInterface $uuidGenerator;
+    private HydratorInterface $hydrator;
 
     public function __construct(
         RepositoryInterface $repository,

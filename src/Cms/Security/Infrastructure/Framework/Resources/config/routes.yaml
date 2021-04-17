@@ -6,15 +6,11 @@ logout:
     path: /auth/logout
     controller: Tulia\Cms\Security\UserInterface\Web\Controller\Frontend\Security::logout
 
-profile:
-    path: /profile
-    controller: Tulia\Cms\Security\UserInterface\Web\Controller\Frontend\Security::profile
-
-backend_login:
+backend.login:
     path: /administrator/auth/login
     controller: Tulia\Cms\Security\UserInterface\Web\Controller\Backend\Security::login
     methods: GET|POST
-backend_logout:
+backend.logout:
     path: /administrator/auth/logout
     controller: Tulia\Cms\Security\UserInterface\Web\Controller\Backend\Security::logout
     methods: GET|POST

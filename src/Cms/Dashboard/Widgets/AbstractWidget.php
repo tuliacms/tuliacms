@@ -12,10 +12,7 @@ use Tulia\Component\Templating\EngineInterface;
  */
 abstract class AbstractWidget implements WidgetInterface
 {
-    /**
-     * @var EngineInterface
-     */
-    private $engine;
+    private EngineInterface $engine;
 
     /**
      * {@inheritdoc}
@@ -27,20 +24,11 @@ abstract class AbstractWidget implements WidgetInterface
      */
     abstract public function supports(string $group): bool;
 
-    /**
-     * @param EngineInterface $engine
-     */
     public function setTemplating(EngineInterface $engine): void
     {
         $this->engine = $engine;
     }
 
-    /**
-     * @param string $view
-     * @param array $data
-     *
-     * @return string
-     */
     public function view(string $view, array $data = []): string
     {
         return $this->engine->render(new View($view, $data));

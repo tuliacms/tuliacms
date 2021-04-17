@@ -6,25 +6,18 @@ namespace Tulia\Cms\User\Query;
 
 use Exception;
 use PDO;
+use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
 use Tulia\Cms\User\Query\Model\Collection;
 use Tulia\Cms\User\Query\Model\User;
 use Tulia\Cms\User\Query\Exception\QueryException;
-use Tulia\Framework\Database\Connection;
-use Tulia\Framework\Database\Query\QueryBuilder;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class Query
 {
-    /**
-     * @var QueryBuilder
-     */
-    protected $queryBuilder;
+    protected QueryBuilder $queryBuilder;
 
-    /**
-     * @param QueryBuilder $queryBuilder
-     */
     public function __construct(QueryBuilder $queryBuilder)
     {
         $this->queryBuilder = $queryBuilder;

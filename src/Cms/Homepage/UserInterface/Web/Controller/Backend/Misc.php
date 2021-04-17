@@ -13,11 +13,6 @@ use Tulia\Component\Templating\ViewInterface;
  */
 class Misc extends AbstractController
 {
-    /**
-     * @param ManagerInterface $manager
-     *
-     * @return ViewInterface
-     */
     public function system(ManagerInterface $manager): ViewInterface
     {
         return $this->view('@backend/homepage/misc/system.tpl', [
@@ -25,11 +20,6 @@ class Misc extends AbstractController
         ]);
     }
 
-    /**
-     * @param ManagerInterface $manager
-     *
-     * @return ViewInterface
-     */
     public function tools(ManagerInterface $manager): ViewInterface
     {
         return $this->view('@backend/homepage/misc/tools.tpl', [

@@ -1,0 +1,11 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    Tulia\Cms\Dashboard\:
+        resource: '../../../../*'
+
+    Tulia\Cms\Dashboard\Widgets\Registry:
+        bind:
+            $widgets: !tagged_iterator dashboard.widget

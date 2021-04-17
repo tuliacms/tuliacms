@@ -74,7 +74,7 @@ class RequestCsrfTokenExceptionListener
         }
 
         if ($request->isBackend()) {
-            $route = 'backend.homepage';
+            $route = 'backend';
         } else {
             $route = 'homepage';
         }

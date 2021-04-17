@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Tulia\Cms\User\Query;
 
 use Psr\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\User\Query\Model\Collection;
 use Tulia\Cms\User\Query\Model\User;
 use Tulia\Cms\User\Query\Exception\MultipleFetchException;
 use Tulia\Cms\User\Query\Exception\QueryException;
 use Tulia\Cms\User\Query\Exception\QueryNotFetchedException;
 use Tulia\Cms\Platform\Shared\Pagination\Paginator;
-use Tulia\Framework\Http\Request;
 
 /**
  * @author Adam Banaszkiewicz

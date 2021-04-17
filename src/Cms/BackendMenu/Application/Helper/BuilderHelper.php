@@ -14,34 +14,14 @@ use Symfony\Component\Routing\RouterInterface;
  */
 class BuilderHelper implements BuilderHelperInterface
 {
-    /**
-     * @var TranslatorInterface
-     */
-    protected $translator;
+    protected TranslatorInterface$translator;
+    protected RequestStack $stack;
+    protected RouterInterface $router;
+    protected string $homepageRoute;
 
-    /**
-     * @var TranslatorInterface
-     */
-    protected $stack;
+    private ?string $pathinfo = null;
+    private ?bool $isHomepage = null;
 
-    /**
-     * @var RouterInterface
-     */
-    protected $router;
-
-    /**
-     * @var string
-     */
-    protected $homepageRoute;
-
-    private $pathinfo;
-    private $isHomepage;
-
-    /**
-     * @param RequestStack          $stack
-     * @param TranslatorInterface   $translator
-     * @param RouterInterface $router
-     */
     public function __construct(
         RequestStack $stack,
         TranslatorInterface $translator,
@@ -99,7 +79,7 @@ class BuilderHelper implements BuilderHelperInterface
      *
      * @throws RouteNotFoundException
      */
-    public function generateUrl(string $route, array $parameters = [], int $referenceType = RouterInterface::TYPE_PATH): string
+    public function generateUrl(string $route, array $parameters = [], int $referenceType = RouterInterface::ABSOLUTE_PATH): string
     {
         return $this->router->generate($route, $parameters, $referenceType);
     }

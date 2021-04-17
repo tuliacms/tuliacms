@@ -61,7 +61,7 @@ $builder->setDefinition(ChangesetStorageInterface::class, DatabaseStorage::class
     ],
 ]);
 
-$builder->setDefinition(AssetsLoader::class, AssetsLoader::class, [
+/*$builder->setDefinition(AssetsLoader::class, AssetsLoader::class, [
     'arguments' => [
         service(AssetterInterface::class),
         service(DetectorInterface::class),
@@ -69,7 +69,7 @@ $builder->setDefinition(AssetsLoader::class, AssetsLoader::class, [
     'tags' => [
         tag_event_listener(RequestEvent::class),
     ],
-]);
+]);*/
 
 $builder->setDefinition(AppearenceMenuBuilder::class, AppearenceMenuBuilder::class, [
     'arguments' => [
@@ -111,14 +111,14 @@ $builder->setDefinition(ThemeActivator::class, ThemeActivator::class, [
 
 $builder->setParameter('theme.changeset.base_class', Changeset::class);
 
-$builder->mergeParameter('translation.directory_list', [
+/*$builder->mergeParameter('translation.directory_list', [
     dirname(__DIR__) . '/translations',
-]);
+]);*/
 
-$builder->mergeParameter('templating.paths', [
+/*$builder->mergeParameter('templating.paths', [
     'cms/theme' => dirname(__DIR__) . '/views/frontend',
     'backend/theme' => dirname(__DIR__) . '/views/backend',
-]);
-$builder->mergeParameter('twig.loader.array.templates', [
+]);*/
+/*$builder->mergeParameter('twig.loader.array.templates', [
     'backend' => "{% extends '@backend/layout/layout.tpl' %}",
-]);
+]);*/

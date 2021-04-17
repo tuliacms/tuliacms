@@ -7,3 +7,6 @@ services:
         resource: '../../../../../../Component/security/src/*'
         exclude:
             - '../../../../../../Component/security/src/Core/User/User.php'
+
+    Tulia\Component\Security\Http\Twig\CspExtension:
+        tags: [ twig.extension ]

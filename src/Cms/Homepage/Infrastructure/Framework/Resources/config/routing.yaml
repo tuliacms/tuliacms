@@ -1,7 +1,0 @@
-homepage:
-    path: /
-    controller: Tulia\Cms\Homepage\UserInterface\Web\Controller\Frontend\Homepage::index
-
-backend_homepage:
-    path: /administrator/
-    controller: Tulia\Cms\Homepage\UserInterface\Web\Controller\Backend\Homepage::index

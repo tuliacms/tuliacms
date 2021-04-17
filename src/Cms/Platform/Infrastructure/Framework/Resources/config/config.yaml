@@ -2,9 +2,21 @@ imports:
     - { resource: assets.yaml }
 
 framework:
+    translator:
+        default_path: '%kernel.project_dir%/src/Cms/Platform/Infrastructure/Framework/Resources/translations'
     templating:
         namespace_overwrite:
             - { from: '@parent/', to: '@theme/' }
             - { from: '@cms/',    to: '@parent/overwrite/cms/' }
             - { from: '@module/', to: '@parent/overwrite/module/' }
             - { from: '@widget/', to: '@parent/overwrite/widget/' }
+        paths:
+            - { name: backend/layout, path: '%kernel.project_dir%/src/Cms/Platform/Infrastructure/Framework/Resources/views/backend/layout' }
+    twig:
+        loader:
+            array:
+                templates:
+                    backend:
+                        template: "{% extends '@backend/layout/layout.tpl' %}"
+                    theme:
+                        template: "{% extends [ '@theme/layout.tpl', '@parent/layout.tpl' ] %}"

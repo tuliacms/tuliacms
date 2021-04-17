@@ -94,7 +94,7 @@
                 </div>
                 <div class="modal-body">
                     <form action="{{ path('backend.website.delete') }}" method="POST" id="website-delete-form">
-                        {{ csrf_field('website.delete') }}
+                        <input type="hidden" novalidate="novalidate" name="_token" value="{{ csrf_token('website.delete') }}" />
                         <input type="hidden" name="id" />
                         <p>{{ 'removeWebsiteDataLossInformation'|trans({}, 'websites') }}</p>
                     </form>

@@ -1,0 +1,15 @@
+homepage:
+    path: /
+    controller: Tulia\Cms\Homepage\UserInterface\Web\Controller\Frontend\Homepage::index
+
+backend:
+    path: /administrator/
+    controller: Tulia\Cms\Homepage\UserInterface\Web\Controller\Backend\Homepage::index
+
+backend.tools:
+    path: /administrator/tools
+    controller: Tulia\Cms\Homepage\UserInterface\Web\Controller\Backend\Misc::tools
+
+backend.system:
+    path: /administrator/system
+    controller: Tulia\Cms\Homepage\UserInterface\Web\Controller\Backend\Misc::system

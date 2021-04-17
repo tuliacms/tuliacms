@@ -21,7 +21,7 @@ class Security extends AbstractController
     public function login(Request $request, AuthenticationUtils $authenticationUtils)
     {
         if ($this->getUser()) {
-            return $this->redirectToRoute('backend_homepage');
+            return $this->redirectToRoute('backend');
         }
 
         return $this->view('@backend/security/login.tpl', [

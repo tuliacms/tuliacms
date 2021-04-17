@@ -12,6 +12,7 @@ use Tulia\Bundle\CmsBundle\DependencyInjection\CompilerPass\RoutingPass;
 use Tulia\Bundle\CmsBundle\DependencyInjection\CompilerPass\TemplatingPass;
 use Tulia\Bundle\CmsBundle\DependencyInjection\CompilerPass\ThemePass;
 use Tulia\Bundle\CmsBundle\DependencyInjection\TuliaCmsExtension;
+use Tulia\Cms\Dashboard\Infrastructure\Framework\DependencyInjection\DashboardPass;
 use Tulia\Component\Security\DependencyInjection\CompilerPass\SecurityPass;
 
 /**
@@ -45,5 +46,6 @@ class TuliaCmsBundle extends FrameworkBundle
         $container->addCompilerPass(new RoutingPass(__DIR__ . '/../../../config/dynamic/websites.php'));
         $container->addCompilerPass(new ThemePass());
         $container->addCompilerPass(new SecurityPass());
+        $container->addCompilerPass(new DashboardPass());
     }
 }

@@ -12,14 +12,8 @@ use Tulia\Cms\Dashboard\Tiles\Event\CollectTilesEvent;
  */
 class Manager implements ManagerInterface
 {
-    /**
-     * @var EventDispatcherInterface
-     */
-    protected $dispatcher;
+    protected EventDispatcherInterface $dispatcher;
 
-    /**
-     * @param EventDispatcherInterface $dispatcher
-     */
     public function __construct(EventDispatcherInterface $dispatcher)
     {
         $this->dispatcher = $dispatcher;

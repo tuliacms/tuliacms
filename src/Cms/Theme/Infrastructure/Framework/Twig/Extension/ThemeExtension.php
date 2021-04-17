@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Theme\Infrastructure\Framework\Twig\Extension;
 
-use Tulia\Component\Hooking\HookerInterface;
+use Requtize\Assetter\AssetterInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -13,12 +13,12 @@ use Twig\TwigFunction;
  */
 class ThemeExtension extends AbstractExtension
 {
-    private HookerInterface $hooker;
+    private AssetterInterface $assetter;
 
-    /*public function __construct(HookerInterface $hooker)
+    public function __construct(AssetterInterface $assetter)
     {
-        $this->hooker = $hooker;
-    }*/
+        $this->assetter = $assetter;
+    }
 
     /**
      * {@inheritdoc}
@@ -27,12 +27,12 @@ class ThemeExtension extends AbstractExtension
     {
         return [
             new TwigFunction('theme_head', function () {
-                //return $this->hooker->doAction('theme-head');
+                return $this->assetter->build('head')->all();
             }, [
                 'is_safe' => [ 'html' ]
             ]),
             new TwigFunction('theme_body', function () {
-                //return $this->hooker->doAction('theme-body');
+                return $this->assetter->build()->all();
             }, [
                 'is_safe' => [ 'html' ]
             ]),

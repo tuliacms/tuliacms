@@ -14,20 +14,9 @@ use Tulia\Cms\BackendMenu\Application\HtmlBuilderInterface;
  */
 class BackendMenuExtension extends AbstractExtension
 {
-    /**
-     * @var HtmlBuilderInterface
-     */
-    protected $builder;
+    protected HtmlBuilderInterface $builder;
+    protected RequestStack $requestStack;
 
-    /**
-     * @var RequestStack
-     */
-    protected $requestStack;
-
-    /**
-     * @param HtmlBuilderInterface $builder
-     * @param RequestStack         $requestStack
-     */
     public function __construct(HtmlBuilderInterface $builder, RequestStack $requestStack)
     {
         $this->builder      = $builder;

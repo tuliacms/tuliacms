@@ -12,20 +12,9 @@ use Tulia\Cms\BackendMenu\Application\Registry\ItemRegistry;
  */
 class HtmlBuilder implements HtmlBuilderInterface
 {
-    /**
-     * @var BuilderHelperInterface
-     */
-    protected $helper;
-
-    /**
-     * @var array
-     */
-    protected $builders = [];
-
-    /**
-     * @var array
-     */
-    protected $defaults = [
+    protected BuilderHelperInterface $helper;
+    protected array $builders = [];
+    protected array $defaults = [
         /**
          * IDs of opened elements.
          */

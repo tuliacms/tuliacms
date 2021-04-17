@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Tulia\Cms\User\Query;
 
 use Psr\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 use Tulia\Cms\User\Query\Model\Collection;
 use Tulia\Cms\User\Query\Model\User;
 use Tulia\Cms\User\Query\Event\QueryFilterEvent;
@@ -12,51 +14,22 @@ use Tulia\Cms\User\Query\Event\QueryPrepareEvent;
 use Tulia\Cms\User\Query\Exception\MultipleFetchException;
 use Tulia\Cms\User\Query\Exception\QueryNotFetchedException;
 use Tulia\Cms\Platform\Shared\Pagination\Paginator;
-use Tulia\Framework\Database\ConnectionInterface;
-use Tulia\Framework\Http\Request;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class Finder implements FinderInterface
 {
-    /**
-     * @var ConnectionInterface
-     */
-    protected $connection;
-
-    /**
-     * @var array
-     */
-    protected $params = [];
-
-    /**
-     * @var array
-     */
-    protected $criteria = [];
-
-    /**
-     * @var array
-     */
-    protected $fetchData = [
+    protected ConnectionInterface $connection;
+    protected array $params = [];
+    protected array $criteria = [];
+    protected array $fetchData = [
         'result' => null,
         'total_count' => null,
     ];
+    protected ?Query $query = null;
+    protected EventDispatcherInterface $eventDispatcher;
 
-    /**
-     * @var Query
-     */
-    protected $query;
-
-    /**
-     * @var EventDispatcherInterface
-     */
-    protected $eventDispatcher;
-
-    /**
-     * @param ConnectionInterface $connection
-     * @param array $params
-     */
     public function __construct(ConnectionInterface $connection, array $params)
     {
         $this->connection = $connection;

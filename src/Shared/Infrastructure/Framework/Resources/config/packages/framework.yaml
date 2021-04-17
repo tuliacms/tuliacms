@@ -11,10 +11,3 @@ framework:
     #fragments: true
     php_errors:
         log: true
-    twig:
-        loader:
-            array:
-                templates:
-                    theme:
-                        template: "{% extends [ '@theme/layout.tpl', '@parent/layout.tpl' ] %}"
-

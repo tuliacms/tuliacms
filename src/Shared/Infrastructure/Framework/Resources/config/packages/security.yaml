@@ -21,7 +21,7 @@ security:
                     - Tulia\Component\Security\Guard\Authenticator\BackendLoginFormAuthenticator
             logout:
                 path: backend_logout
-                target: backend_homepage
+                target: backend
                 invalidate_session: true
             form_login:
                 login_path: backend_login
