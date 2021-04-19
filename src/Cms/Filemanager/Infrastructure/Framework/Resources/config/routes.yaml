@@ -1,0 +1,10 @@
+backend.filemanager.endpoint:
+    path: /administrator/filemanager/endpoint
+    controller: Tulia\Cms\Filemanager\UserInterface\Web\Controller\Filemanager::endpoint
+    methods: POST
+
+filemanager.resolve.image.size:
+    path: /media/resolve/image/{size}/{id}/{filename}
+    controller: Tulia\Cms\Filemanager\UserInterface\Web\Controller\Image::size
+    defaults:
+        size: original

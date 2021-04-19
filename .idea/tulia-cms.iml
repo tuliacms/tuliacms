@@ -23,6 +23,7 @@
       <excludeFolder url="file://$MODULE_DIR$/var/cache" />
       <excludeFolder url="file://$MODULE_DIR$/_old" />
       <excludeFolder url="file://$MODULE_DIR$/public/uploads" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/ausi/slug-generator" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

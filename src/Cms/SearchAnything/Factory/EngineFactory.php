@@ -14,13 +14,10 @@ use Tulia\Cms\SearchAnything\Provider\ProviderInterface;
 class EngineFactory implements EngineFactoryInterface
 {
     /**
-     * @var iterable
+     * @var ProviderInterface[]
      */
-    protected $providers;
+    protected iterable $providers;
 
-    /**
-     * @param iterable $providers
-     */
     public function __construct(iterable $providers)
     {
         $this->providers = $providers;
@@ -37,7 +34,6 @@ class EngineFactory implements EngineFactoryInterface
     {
         $providers = [];
 
-        /** @var ProviderInterface $provider */
         foreach ($this->providers as $provider) {
             $providers[$provider->getId()] = $provider;
         }

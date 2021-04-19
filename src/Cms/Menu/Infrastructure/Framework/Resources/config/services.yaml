@@ -5,6 +5,8 @@ services:
 
     Tulia\Cms\Menu\:
         resource: '../../../../*'
+        exclude:
+            - '../../../../Infrastructure/Framework/Resources/*'
 
     Tulia\Cms\Menu\Infrastructure\Framework\Twig\Extension\MenuExtension:
         tags: [ twig.extension ]

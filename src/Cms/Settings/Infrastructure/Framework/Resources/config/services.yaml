@@ -5,6 +5,8 @@ services:
 
     Tulia\Cms\Settings\:
         resource: '../../../../*'
+        exclude:
+            - '../../../../Infrastructure/Framework/Resources/*'
 
     Tulia\Cms\Settings\RegistryInterface:
         class: Tulia\Cms\Settings\Registry

@@ -17,20 +17,9 @@ use Symfony\Component\Routing\RouterInterface;
  */
 class SearchProvider extends AbstractProvider
 {
-    /**
-     * @var FinderFactoryInterface
-     */
-    protected $finderFactory;
+    protected FinderFactoryInterface $finderFactory;
+    protected RouterInterface $router;
 
-    /**
-     * @var RouterInterface
-     */
-    protected $router;
-
-    /**
-     * @param FinderFactoryInterface $finderFactory
-     * @param RouterInterface $router
-     */
     public function __construct(
         FinderFactoryInterface $finderFactory,
         RouterInterface $router
@@ -52,9 +41,8 @@ class SearchProvider extends AbstractProvider
         $results = new Results();
 
         foreach ($finder->getResult() as $menu) {
-            $hit = new Hit($menu->getName(), $this->router->generate('backend.menu.item.edit', [
-                'menuId' => $menu->getMenuId(),
-                'id' => $menu->getId(),
+            $hit = new Hit($menu->getName(), $this->router->generate('backend.menu.item.list', [
+                'menuId' => $menu->getId(),
             ]));
             $hit->setId($menu->getId());
 

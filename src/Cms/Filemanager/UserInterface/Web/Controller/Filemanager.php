@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Filemanager\UI\Web\Controller;
+namespace Tulia\Cms\Filemanager\UserInterface\Web\Controller;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Tulia\Cms\Filemanager\CommandPropagatorInterface;

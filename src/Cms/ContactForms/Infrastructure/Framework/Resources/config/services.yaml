@@ -10,6 +10,8 @@ services:
 
     Tulia\Cms\ContactForms\:
         resource: '../../../../*'
+        exclude:
+            - '../../../../Infrastructure/Framework/Resources/*'
 
     Tulia\Cms\ContactForms\Application\FieldType\Parser\RegistryInterface:
         class: Tulia\Cms\ContactForms\Application\FieldType\Parser\Registry

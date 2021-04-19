@@ -42,27 +42,27 @@ $builder->setDefinition(CommandPropagatorInterface::class, CommandPropagator::cl
     ],
 ]);
 
-$builder->setDefinition(CommandRegistryInterface::class, CommandRegistry::class, [
+/*$builder->setDefinition(CommandRegistryInterface::class, CommandRegistry::class, [
     'arguments' => [
         tagged('filemanager.command'),
     ],
-]);
+]);*/
 
-$builder->setDefinition(DirectoryTree::class, DirectoryTree::class, [
+/*$builder->setDefinition(DirectoryTree::class, DirectoryTree::class, [
     'arguments' => [
         service(ConnectionInterface::class),
     ],
     'tags' => [ tag('filemanager.command') ],
-]);
+]);*/
 
-$builder->setDefinition(Ls::class, Ls::class, [
+/*$builder->setDefinition(Ls::class, Ls::class, [
     'arguments' => [
         service(ConnectionInterface::class),
         service(FinderFactoryInterface::class),
         service(FileResponseFormatter::class),
     ],
     'tags' => [ tag('filemanager.command') ],
-]);
+]);*/
 
 $builder->setDefinition(Upload::class, Upload::class, [
     'arguments' => [
@@ -77,13 +77,13 @@ $builder->setDefinition(Upload::class, Upload::class, [
     'tags' => [ tag('filemanager.command') ],
 ]);
 
-$builder->setDefinition(Gallery::class, Gallery::class, [
+/*$builder->setDefinition(Gallery::class, Gallery::class, [
     'tags' => [ tag('shortcode.compiler') ],
 ]);
 
 $builder->setDefinition(Image::class, Image::class, [
     'tags' => [ tag('shortcode.compiler') ],
-]);
+]);*/
 
 $builder->setDefinition(ImageUrlResolver::class, ImageUrlResolver::class, [
     'arguments' => [
@@ -100,7 +100,7 @@ $builder->setDefinition(FilemanagerExtension::class, FilemanagerExtension::class
     'tags' => [ tag('twig.extension') ],
 ]);
 
-$builder->setDefinition(Cropper::class, Cropper::class, [
+/*$builder->setDefinition(Cropper::class, Cropper::class, [
     'arguments' => [
         service(ImageManagerInterface::class),
         service(ImageSizeRegistry::class),
@@ -112,7 +112,7 @@ $builder->setDefinition(ImageSizeRegistry::class, ImageSizeRegistry::class, [
     'arguments' => [
         tagged('filemanager.image_size.provider'),
     ],
-]);
+]);*/
 
 $builder->setDefinition(DefaultSizesProvider::class, DefaultSizesProvider::class, [
     'tags' => [ tag('filemanager.image_size.provider') ],
@@ -133,7 +133,6 @@ $builder->setDefinition(FilepickerControl::class, FilepickerControl::class, [
 
 
 
-$builder->mergeParameter('templating.paths', [
-    'cms/filemanager' => dirname(__DIR__, 1) . '/views/frontend',
+/*$builder->mergeParameter('templating.paths', [
     'backend/filemanager' => dirname(__DIR__, 1) . '/views/backend',
-]);
+]);*/

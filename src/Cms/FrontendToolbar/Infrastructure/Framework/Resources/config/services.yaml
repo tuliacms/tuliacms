@@ -5,6 +5,8 @@ services:
 
     Tulia\Cms\FrontendToolbar\:
         resource: '../../../../*'
+        exclude:
+            - '../../../../Infrastructure/Framework/Resources/*'
 
     Tulia\Cms\FrontendToolbar\Application\Links\ProviderRegistry:
         bind:

@@ -1,0 +1,14 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    Tulia\Cms\SearchAnything\:
+        resource: '../../../../*'
+        exclude:
+            - '../../../../Infrastructure/Framework/Resources/*'
+
+    Tulia\Cms\SearchAnything\Factory\EngineFactoryInterface:
+        class: Tulia\Cms\SearchAnything\Factory\EngineFactory
+        bind:
+            $providers: !tagged_iterator search.provider

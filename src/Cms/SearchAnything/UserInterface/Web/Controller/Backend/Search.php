@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\SearchAnything\UI\Web\Controller\Backend;
+namespace Tulia\Cms\SearchAnything\UserInterface\Web\Controller\Backend;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Tulia\Cms\SearchAnything\Factory\EngineFactoryInterface;

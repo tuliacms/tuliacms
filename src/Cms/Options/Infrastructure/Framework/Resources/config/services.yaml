@@ -5,3 +5,5 @@ services:
 
     Tulia\Cms\Options\:
         resource: '../../../../*'
+        exclude:
+            - '../../../../Infrastructure/Framework/Resources/*'

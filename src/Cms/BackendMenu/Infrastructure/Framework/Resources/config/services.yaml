@@ -5,6 +5,8 @@ services:
 
     Tulia\Cms\BackendMenu\:
         resource: '../../../../*'
+        exclude:
+            - '../../../../Infrastructure/Framework/Resources/*'
 
     Tulia\Cms\BackendMenu\Application\HtmlBuilderInterface:
         class: Tulia\Cms\BackendMenu\Application\HtmlBuilder

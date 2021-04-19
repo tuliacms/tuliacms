@@ -5,6 +5,8 @@ services:
 
     Tulia\Cms\Dashboard\:
         resource: '../../../../*'
+        exclude:
+            - '../../../../Infrastructure/Framework/Resources/*'
 
     Tulia\Cms\Dashboard\Widgets\Registry:
         bind:

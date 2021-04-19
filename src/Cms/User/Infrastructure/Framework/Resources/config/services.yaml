@@ -5,6 +5,8 @@ services:
 
     Tulia\Cms\User\:
         resource: '../../../../*'
+        exclude:
+            - '../../../../Infrastructure/Framework/Resources/*'
 
     Tulia\Cms\User\Infrastructure\Framework\Validator\PasswordValidatorInterface:
         class: Tulia\Cms\User\Infrastructure\Framework\Validator\PasswordValidator

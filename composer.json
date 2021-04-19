@@ -47,7 +47,8 @@
         "requtize/assetter": "dev-master",
         "psr/container": "~1.0",
         "ocramius/generated-hydrator": "~3.0",
-        "swiftmailer/swiftmailer": "~6.2"
+        "swiftmailer/swiftmailer": "~6.2",
+        "ausi/slug-generator": "~1.1"
     },
     "require-dev": {
         "symfony/debug-pack": "*",

@@ -18,34 +18,18 @@ use Symfony\Component\Routing\RouterInterface;
  */
 class SearchProvider extends AbstractProvider
 {
-    /**
-     * @var FinderFactoryInterface
-     */
-    protected $finderFactory;
+    protected FinderFactoryInterface $finderFactory;
+    protected RouterInterface $router;
+    protected TranslatorInterface $translator;
 
-    /**
-     * @var RouterInterface
-     */
-    protected $router;
-
-    /**
-     * @var TranslatorInterface
-     */
-    protected $translator;
-
-    /**
-     * @param FinderFactoryInterface $finderFactory
-     * @param RouterInterface $router
-     * @param TranslatorInterface $translator
-     */
     public function __construct(
         FinderFactoryInterface $finderFactory,
         RouterInterface $router,
         TranslatorInterface $translator
     ) {
         $this->finderFactory = $finderFactory;
-        $this->router        = $router;
-        $this->translator    = $translator;
+        $this->router = $router;
+        $this->translator = $translator;
     }
 
     public function search(string $query, int $limit = 5, int $page = 1): ResultsInterface
@@ -57,7 +41,7 @@ class SearchProvider extends AbstractProvider
             'page'     => $page,
             'count_found_rows' => true,
         ]);
-        $finder->fetchRaw();
+        $finder->fetch();
 
         $results = new Results();
 

@@ -41,9 +41,9 @@ $builder->setDefinition(RequestCsrfTokenExceptionListener::class, RequestCsrfTok
     ]
 ]);*/
 
-$builder->setDefinition(ImageManagerInterface::class, ImageManager::class, [
+/*$builder->setDefinition(ImageManagerInterface::class, ImageManager::class, [
     'factory' => DriverFactory::class . '::create',
-]);
+]);*/
 
 $builder->setDefinition(FrontendRouteSuffixResolver::class, FrontendRouteSuffixResolver::class, [
     'arguments' => [

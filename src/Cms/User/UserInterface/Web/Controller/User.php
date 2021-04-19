@@ -38,12 +38,7 @@ class User extends AbstractController
     protected ManagerFactoryInterface $managerFactory;
     protected UserStorage $storage;
 
-    /**
-     * @param FinderFactoryInterface $finderFactory
-     * @param ManagerFactoryInterface $managerFactory
-     * @param UserStorage $storage
-     */
-    /*public function __construct(
+    public function __construct(
         FinderFactoryInterface $finderFactory,
         ManagerFactoryInterface $managerFactory,
         UserStorage $storage
@@ -51,7 +46,7 @@ class User extends AbstractController
         $this->finderFactory  = $finderFactory;
         $this->managerFactory = $managerFactory;
         $this->storage        = $storage;
-    }*/
+    }
 
     /**
      * @return RedirectResponse

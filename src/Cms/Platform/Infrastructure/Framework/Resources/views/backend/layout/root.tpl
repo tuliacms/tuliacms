@@ -9,7 +9,7 @@
             let Tulia = {};{% assets ['backend'] %}
             Tulia.Globals = {
                 search_anything: {
-                    endpoint: '{#{{ path('backend.search.root') }}#}'
+                    endpoint: '{{ path('backend.search.root') }}'
                 }
             };
         </script>

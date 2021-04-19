@@ -5,6 +5,8 @@ services:
 
     Tulia\Cms\Homepage\:
         resource: '../../../../*'
+        exclude:
+            - '../../../../Infrastructure/Framework/Resources/*'
 
     Tulia\Cms\Homepage\UserInterface\Web\Controller\:
         resource: '../../../../UserInterface/Web/Controller'

@@ -7,3 +7,5 @@ services:
 
     Tulia\Cms\Widget\:
         resource: '../../../../*'
+        exclude:
+            - '../../../../Infrastructure/Framework/Resources/*'

@@ -42,12 +42,12 @@
                 <div class="pane-header">
                     <i class="pane-header-icon tsa-loading-show fas fa-circle-notch fa-spin d-none"></i>
                     <i class="pane-header-icon tsa-loading-hide fas fa-search"></i>
-                    <h1 class="pane-title">{{ 'searchResultsForQuery'|trans({ query: '<span class="tsa-query-preview"></span>' }) }}</h1>
+                    <h1 class="pane-title">{{ 'searchResultsForQuery'|trans({ query: '<span class="tsa-query-preview"></span>' })|raw }}</h1>
                 </div>
                 <div class="pane-body">
                     <div class="search-results"></div>
                     <div class="search-loader">
-                        {{ 'searchingInProgress'|trans({ query: '<b><span class="tsa-query-preview"></span></b>' }) }}
+                        {{ 'searchingInProgress'|trans({ query: '<b><span class="tsa-query-preview"></span></b>' })|raw }}
                     </div>
                 </div>
             </div>
