@@ -11,7 +11,7 @@ use Tulia\Cms\Filemanager\CollectionInterface;
 use Tulia\Cms\Filemanager\File;
 use Tulia\Cms\Filemanager\Exception\QueryException;
 use Tulia\Framework\Database\Connection;
-use Tulia\Framework\Database\Query\QueryBuilder;
+use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
 
 /**
  * @author Adam Banaszkiewicz

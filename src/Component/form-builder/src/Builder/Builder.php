@@ -11,14 +11,8 @@ use Tulia\Component\FormBuilder\Manager\ManagerInterface;
  */
 class Builder implements BuilderInterface
 {
-    /**
-     * @var iterable
-     */
-    protected $builders;
+    protected iterable $builders;
 
-    /**
-     * @param iterable $builders
-     */
     public function __construct(iterable $builders)
     {
         $this->builders = $builders;

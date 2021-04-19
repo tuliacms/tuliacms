@@ -6,7 +6,7 @@ namespace Tulia\Cms\Platform\Infrastructure\Framework\DependencyInjection;
 
 use Tulia\Component\DependencyInjection\ContainerInterface;
 use Tulia\Component\DependencyInjection\Extension\AbstractExtension;
-use Tulia\Framework\Database\ConnectionInterface;
+use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 
 /**
  * @author Adam Banaszkiewicz

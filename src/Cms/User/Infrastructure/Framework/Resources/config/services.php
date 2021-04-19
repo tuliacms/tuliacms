@@ -60,8 +60,8 @@ use Tulia\Component\DependencyInjection\ContainerBuilderInterface;
 use Tulia\Component\FormBuilder\Manager\ManagerFactoryInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
-use Tulia\Cms\Platform\Shared\Uuid\UuidGeneratorInterface;
-use Tulia\Framework\Database\ConnectionInterface;
+use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
+use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 use Tulia\Framework\Kernel\Event\RequestEvent;
 
 $builder->setDefinition(FinderFactoryInterface::class, FinderFactory::class, [
@@ -297,11 +297,11 @@ $builder->setDefinition(DatatableFinder::class, DatatableFinder::class, [
 ]);
 
 
-$builder->mergeParameter('translation.directory_list', [
+/*$builder->mergeParameter('translation.directory_list', [
     dirname(__DIR__) . '/translations',
 ]);
 
 $builder->mergeParameter('templating.paths', [
     'cms/user' => dirname(__DIR__) . '/views/frontend',
     'backend/user' => dirname(__DIR__) . '/views/backend',
-]);
+]);*/

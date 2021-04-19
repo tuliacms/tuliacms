@@ -45,7 +45,7 @@ class ViewNamespaceOverwriteFilter implements FilterInterface
     {
         foreach ($this->views as $key => $view) {
             foreach ($this->workingMap as $from => $to) {
-                if (strpos($view, $from) === 0) {
+                if (strpos((string) $view, (string) $from) === 0) {
                     $overwritten = str_replace($from, $to, $view);
 
                     $this->views[] = $overwritten;

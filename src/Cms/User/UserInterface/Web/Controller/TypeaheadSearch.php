@@ -8,7 +8,7 @@ use Tulia\Cms\Platform\Infrastructure\Framework\Controller\TypeaheadFormTypeSear
 use Tulia\Cms\User\Infrastructure\Cms\Metadata\MetadataEnum;
 use Tulia\Cms\User\Query\Enum\ScopeEnum;
 use Tulia\Cms\User\Query\FinderFactoryInterface;
-use Tulia\Framework\Http\Request;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author Adam Banaszkiewicz

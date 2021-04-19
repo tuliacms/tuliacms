@@ -12,7 +12,7 @@ use Tulia\Cms\Filemanager\Event\QueryPrepareEvent;
 use Tulia\Cms\Filemanager\FileInterface;
 use Tulia\Cms\Filemanager\Exception\MultipleFetchException;
 use Tulia\Cms\Filemanager\Exception\QueryNotFetchedException;
-use Tulia\Framework\Database\ConnectionInterface;
+use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 
 /**
  * @author Adam Banaszkiewicz

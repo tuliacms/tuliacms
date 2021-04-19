@@ -10,7 +10,7 @@ use PhpSpec\ObjectBehavior;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Component\Datatable\Finder\FinderInterface;
 use Tulia\Component\Datatable\Plugin\AbstractPlugin;
-use Tulia\Framework\Http\Request;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author Adam Banaszkiewicz

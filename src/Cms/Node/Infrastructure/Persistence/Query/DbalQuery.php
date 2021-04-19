@@ -9,8 +9,8 @@ use Exception;
 use Tulia\Cms\Node\Query\Exception\QueryException;
 use Tulia\Cms\Node\Query\AbstractQuery;
 use Tulia\Framework\Database\Connection;
-use Tulia\Framework\Database\ConnectionInterface;
-use Tulia\Framework\Database\Query\QueryBuilder;
+use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
+use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
 
 /**
  * @author Adam Banaszkiewicz

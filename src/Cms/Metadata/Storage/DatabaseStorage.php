@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Tulia\Cms\Metadata\Storage;
 
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
-use Tulia\Cms\Platform\Shared\Uuid\UuidGeneratorInterface;
-use Tulia\Framework\Database\ConnectionInterface;
+use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
+use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 
 /**
  * @author Adam Banaszkiewicz

@@ -49,27 +49,27 @@ use Tulia\Cms\ContactForms\Infrastructure\Cms\Shortcode\ContactForm;
 use Tulia\Cms\ContactForms\Infrastructure\Twig\Extension\FormExtension;
 use Symfony\Component\Routing\RouterInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
-use Tulia\Cms\Platform\Shared\Uuid\UuidGeneratorInterface;
+use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
 use Tulia\Component\Templating\EngineInterface;
-use Tulia\Framework\Database\ConnectionInterface;
+use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 use Tulia\Cms\ContactForms\Application\FieldType\Core as FieldType;
 
-$builder->setDefinition(MenuBuilder::class, MenuBuilder::class, [
+/*$builder->setDefinition(MenuBuilder::class, MenuBuilder::class, [
     'arguments' => [
         '@' . BuilderHelperInterface::class,
     ],
     'tags' => [ tag('backend_menu.builder') ],
-]);
+]);*/
 
-$builder->setDefinition(ContactForm::class, ContactForm::class, [
+/*$builder->setDefinition(ContactForm::class, ContactForm::class, [
     'tags' => [ tag('shortcode.compiler') ],
-]);
+]);*/
 
-$builder->setDefinition(FieldParserRegistryInterface::class, FieldParserRegistry::class, [
+/*$builder->setDefinition(FieldParserRegistryInterface::class, FieldParserRegistry::class, [
     'arguments' => [
         tagged('cms.form.field_parser'),
     ],
-]);
+]);*/
 
 $builder->setDefinition(FieldsParserInterface::class, FieldsParser::class, [
     'arguments' => [
@@ -77,11 +77,11 @@ $builder->setDefinition(FieldsParserInterface::class, FieldsParser::class, [
     ],
 ]);
 
-$builder->setDefinition(FieldTypeRegistryInterface::class, FieldTypeRegistry::class, [
+/*$builder->setDefinition(FieldTypeRegistryInterface::class, FieldTypeRegistry::class, [
     'arguments' => [
         tagged('cms.form.field_type'),
     ],
-]);
+]);*/
 
 $builder->setDefinition(BuilderInterface::class, Builder::class, [
     'arguments' => [
@@ -97,12 +97,12 @@ $builder->setDefinition(SenderInterface::class, Sender::class, [
     ],
 ]);
 
-$builder->setDefinition(Form::class, Form::class, [
+/*$builder->setDefinition(Form::class, Form::class, [
     'arguments' => [
         service(FieldTypeRegistryInterface::class),
     ],
     'tags' => [ tag('form.type') ],
-]);
+]);*/
 
 $builder->setDefinition(FormExtension::class, FormExtension::class, [
     'arguments' => [
@@ -112,16 +112,16 @@ $builder->setDefinition(FormExtension::class, FormExtension::class, [
     'tags' => [ tag('twig.extension') ],
 ]);
 
-$builder->setDefinition(FinderFactoryInterface::class, FinderFactory::class, [
+/*$builder->setDefinition(FinderFactoryInterface::class, FinderFactory::class, [
     'arguments' => [
         service(ConnectionInterface::class),
         service(EventDispatcherInterface::class),
         service(CurrentWebsiteInterface::class),
         DbalQuery::class,
     ],
-]);
+]);*/
 
-$builder->setDefinition(SearchProvider::class, SearchProvider::class, [
+/*$builder->setDefinition(SearchProvider::class, SearchProvider::class, [
     'arguments' => [
         service(FinderFactoryInterface::class),
         service(RouterInterface::class),
@@ -130,7 +130,7 @@ $builder->setDefinition(SearchProvider::class, SearchProvider::class, [
     'tags' => [
         tag('search.provider', 600),
     ],
-]);
+]);*/
 
 $builder->setDefinition(FormManagerFactory::class, FormManagerFactory::class, [
     'arguments' => [
@@ -175,14 +175,14 @@ $builder->setDefinition(DbalFieldsTemplate::class, DbalFieldsTemplate::class, [
     ],
 ]);
 
-$builder->setDefinition(FieldsTemplateChangedListener::class, FieldsTemplateChangedListener::class, [
+/*$builder->setDefinition(FieldsTemplateChangedListener::class, FieldsTemplateChangedListener::class, [
     'arguments' => [
         service(FieldsTemplateViewUpdater::class),
     ],
     'tags' => [
         tag_event_listener(FieldsTemplateChanged::class),
     ],
-]);
+]);*/
 
 $builder->setDefinition(FieldsTemplateViewUpdater::class, FieldsTemplateViewUpdater::class, [
     'arguments' => [
@@ -221,9 +221,9 @@ $builder->setDefinition(FormDataExtractorInterface::class, FormDataExtractor::cl
     ],
 ]);
 
-$builder->setDefinition(ContactFormWidget::class, ContactFormWidget::class, [
+/*$builder->setDefinition(ContactFormWidget::class, ContactFormWidget::class, [
     'tags' => [ tag('widget') ],
-]);
+]);*/
 
 $builder->setDefinition(ContactFormForm::class, ContactFormForm::class, [
     'arguments' => [
@@ -232,70 +232,70 @@ $builder->setDefinition(ContactFormForm::class, ContactFormForm::class, [
     'tags' => [ tag('form.type') ],
 ]);
 
-$builder->setDefinition(FieldType\TextType::class, FieldType\TextType::class, [
+/*$builder->setDefinition(FieldType\TextType::class, FieldType\TextType::class, [
     'tags' => [ tag('cms.form.field_type') ],
-]);
-$builder->setDefinition(FieldType\TextParser::class, FieldType\TextParser::class, [
+]);*/
+/*$builder->setDefinition(FieldType\TextParser::class, FieldType\TextParser::class, [
     'tags' => [ tag('cms.form.field_parser') ],
-]);
-$builder->setDefinition(FieldType\TextareaType::class, FieldType\TextareaType::class, [
+]);*/
+/*$builder->setDefinition(FieldType\TextareaType::class, FieldType\TextareaType::class, [
     'tags' => [ tag('cms.form.field_type') ],
-]);
-$builder->setDefinition(FieldType\TextareaParser::class, FieldType\TextareaParser::class, [
+]);*/
+/*$builder->setDefinition(FieldType\TextareaParser::class, FieldType\TextareaParser::class, [
     'tags' => [ tag('cms.form.field_parser') ],
-]);
-$builder->setDefinition(FieldType\CheckboxType::class, FieldType\CheckboxType::class, [
+]);*/
+/*$builder->setDefinition(FieldType\CheckboxType::class, FieldType\CheckboxType::class, [
     'arguments' => [
         service(TranslatorInterface::class),
     ],
     'tags' => [ tag('cms.form.field_type') ],
-]);
-$builder->setDefinition(FieldType\CheckboxParser::class, FieldType\CheckboxParser::class, [
+]);*/
+/*$builder->setDefinition(FieldType\CheckboxParser::class, FieldType\CheckboxParser::class, [
     'tags' => [ tag('cms.form.field_parser') ],
-]);
-$builder->setDefinition(FieldType\EmailType::class, FieldType\EmailType::class, [
+]);*/
+/*$builder->setDefinition(FieldType\EmailType::class, FieldType\EmailType::class, [
     'tags' => [ tag('cms.form.field_type') ],
-]);
-$builder->setDefinition(FieldType\EmailParser::class, FieldType\EmailParser::class, [
+]);*/
+/*$builder->setDefinition(FieldType\EmailParser::class, FieldType\EmailParser::class, [
     'tags' => [ tag('cms.form.field_parser') ],
-]);
-$builder->setDefinition(FieldType\SelectType::class, FieldType\SelectType::class, [
+]);*/
+/*$builder->setDefinition(FieldType\SelectType::class, FieldType\SelectType::class, [
     'tags' => [ tag('cms.form.field_type') ],
-]);
-$builder->setDefinition(FieldType\SelectParser::class, FieldType\SelectParser::class, [
+]);*/
+/*$builder->setDefinition(FieldType\SelectParser::class, FieldType\SelectParser::class, [
     'tags' => [ tag('cms.form.field_parser') ],
-]);
-$builder->setDefinition(FieldType\RadioType::class, FieldType\RadioType::class, [
+]);*/
+/*$builder->setDefinition(FieldType\RadioType::class, FieldType\RadioType::class, [
     'tags' => [ tag('cms.form.field_type') ],
-]);
-$builder->setDefinition(FieldType\RadioParser::class, FieldType\RadioParser::class, [
+]);*/
+/*$builder->setDefinition(FieldType\RadioParser::class, FieldType\RadioParser::class, [
     'tags' => [ tag('cms.form.field_parser') ],
-]);
-$builder->setDefinition(FieldType\ConsentType::class, FieldType\ConsentType::class, [
+]);*/
+/*$builder->setDefinition(FieldType\ConsentType::class, FieldType\ConsentType::class, [
     'arguments' => [
         service(TranslatorInterface::class),
     ],
     'tags' => [ tag('cms.form.field_type') ],
-]);
-$builder->setDefinition(FieldType\ConsentParser::class, FieldType\ConsentParser::class, [
+]);*/
+/*$builder->setDefinition(FieldType\ConsentParser::class, FieldType\ConsentParser::class, [
     'tags' => [ tag('cms.form.field_parser') ],
-]);
-$builder->setDefinition(FieldType\SubmitType::class, FieldType\SubmitType::class, [
+]);*/
+/*$builder->setDefinition(FieldType\SubmitType::class, FieldType\SubmitType::class, [
     'tags' => [ tag('cms.form.field_type') ],
-]);
-$builder->setDefinition(FieldType\SubmitParser::class, FieldType\SubmitParser::class, [
+]);*/
+/*$builder->setDefinition(FieldType\SubmitParser::class, FieldType\SubmitParser::class, [
     'tags' => [ tag('cms.form.field_parser') ],
-]);
+]);*/
 
 
 
-$builder->mergeParameter('translation.directory_list', [
+/*$builder->mergeParameter('translation.directory_list', [
     dirname(__DIR__) . '/translations',
 ]);
 
 $builder->mergeParameter('templating.paths', [
     'backend/forms' => dirname(__DIR__) . '/views/backend',
-]);
+]);*/
 
 $builder->mergeParameter('twig.loader.array.templates', [
     'render_form' => "

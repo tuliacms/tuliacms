@@ -135,8 +135,8 @@ class Form
         $form->setReplyTo($data['reply_to'] ?? null);
         $form->setName($data['name'] ?? '');
         $form->setSubject($data['subject'] ?? '');
-        $form->setMessageTemplate($data['message_template'] ?? null);
-        $form->setFieldsTemplate($data['fields_template'] ?? null);
+        $form->setMessageTemplate($data['message_template'] ?? '');
+        $form->setFieldsTemplate($data['fields_template'] ?? '');
         $form->setFieldsView($data['fields_view'] ?? null);
 
         return $form;

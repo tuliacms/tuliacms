@@ -12,7 +12,7 @@ use Tulia\Cms\Taxonomy\Infrastructure\Persistence\TermPath\StorageInterface;
 use Tulia\Cms\Taxonomy\Query\Enum\ScopeEnum;
 use Tulia\Cms\Taxonomy\Query\FinderFactoryInterface;
 use Tulia\Cms\Taxonomy\Query\Model\Term;
-use Tulia\Framework\Database\ConnectionInterface;
+use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 
 /**
  * @author Adam Banaszkiewicz

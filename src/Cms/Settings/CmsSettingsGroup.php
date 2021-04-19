@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Settings;
 
 use Symfony\Component\Form\FormInterface;
-use Tulia\Cms\Settings\UI\Web\Form\SettingsForm;
+use Tulia\Cms\Settings\UserInterface\Web\Form\SettingsForm;
 
 /**
  * @author Adam Banaszkiewicz

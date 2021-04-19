@@ -6,7 +6,7 @@ namespace Tulia\Cms\ContactForms\Query\Factory;
 
 use Tulia\Cms\ContactForms\Query\Model\Form;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
-use Tulia\Cms\Platform\Shared\Uuid\UuidGeneratorInterface;
+use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
 
 /**
  * @author Adam Banaszkiewicz

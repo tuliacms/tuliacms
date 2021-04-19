@@ -4,9 +4,14 @@ declare(strict_types=1);
 
 namespace Tulia\Component\Routing\EventListener;
 
-use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
+use Symfony\Component\HttpKernel\EventListener\RouterListener;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\Routing\Exception\MethodNotAllowedException;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\RouterInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -18,21 +23,26 @@ class RequestMatcher implements EventSubscriberInterface
 {
     protected RouterInterface $router;
     protected CurrentWebsiteInterface $currentWebsite;
+    protected RouterListener $symfonyListener;
 
-    public function __construct(RouterInterface $router, CurrentWebsiteInterface $currentWebsite)
-    {
+    public function __construct(
+        RouterInterface $router,
+        CurrentWebsiteInterface $currentWebsite,
+        RouterListener $symfonyListener
+    ) {
         $this->router = $router;
         $this->currentWebsite = $currentWebsite;
+        $this->symfonyListener = $symfonyListener;
     }
 
     public static function getSubscribedEvents(): array
     {
         return [
-            RequestEvent::class => ['onRequest', 200],
+            KernelEvents::REQUEST => ['onKernelRequest', 200],
         ];
     }
 
-    public function onRequest(RequestEvent $event): void
+    public function onKernelRequest(RequestEvent $event): void
     {
         $request = $event->getRequest();
 
@@ -42,9 +52,11 @@ class RequestMatcher implements EventSubscriberInterface
 
         $pathinfo = urldecode($request->attributes->get('_content_path'));
         $fakeRequest = $this->createRequest($pathinfo, $request->attributes->all());
-        $result = $this->router->matchRequest($fakeRequest);
+        $fakeEvent = new RequestEvent($event->getKernel(), $fakeRequest, $event->getRequestType());
 
-        $request->attributes->add($result);
+        $this->symfonyListener->onKernelRequest($fakeEvent);
+
+        $request->attributes->replace($fakeRequest->attributes->all());
     }
 
     private function createRequest(string $pathinfo, array $attributes): Request

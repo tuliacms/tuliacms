@@ -11,8 +11,8 @@ use Tulia\Component\Theme\Customizer\Changeset\Factory\ChangesetFactoryInterface
 use Tulia\Component\Theme\Customizer\Changeset\Storage\StorageInterface;
 use Tulia\Component\Theme\Enum\ChangesetTypeEnum;
 use Tulia\Component\Theme\Exception\ChangesetNotFoundException;
-use Tulia\Framework\Database\ConnectionInterface;
-use Tulia\Framework\Http\Request;
+use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author Adam Banaszkiewicz

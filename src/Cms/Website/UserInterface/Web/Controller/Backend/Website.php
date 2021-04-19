@@ -20,41 +20,34 @@ use Tulia\Cms\Website\Query\Model\Website as QueryModelWebsite;
 use Tulia\Cms\Website\UserInterface\Web\Form\WebsiteFormManagerFactory;
 use Tulia\Component\Templating\ViewInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Tulia\Framework\Security\Http\Csrf\Annotation\CsrfToken;
+use Tulia\Component\Security\Http\Csrf\Annotation\CsrfToken;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class Website extends AbstractController
 {
-    /**
-     * @var FinderFactoryInterface
-     */
-    protected $finderFactory;
+    protected FinderFactoryInterface $finderFactory;
 
-    /**
-     * @param FinderFactoryInterface $finderFactory
-     */
     public function __construct(FinderFactoryInterface $finderFactory)
     {
         $this->finderFactory = $finderFactory;
     }
 
+    public function index(): RedirectResponse
+    {
+        return $this->redirectToRoute('backend.website.list');
+    }
+
     /**
-     * @param string|null $list
-     *
      * @return RedirectResponse|ViewInterface
      *
      * @throws MultipleFetchException
      * @throws QueryException
      * @throws QueryNotFetchedException
      */
-    public function list(string $list = null)
+    public function list()
     {
-        if ($list !== 'list') {
-            return $this->redirectToRoute('backend.website', ['list' => 'list']);
-        }
-
         $finder = $this->finderFactory->getInstance(ScopeEnum::BACKEND_LISTING);
         $finder->fetchRaw();
 

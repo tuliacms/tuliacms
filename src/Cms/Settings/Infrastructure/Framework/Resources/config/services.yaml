@@ -1,0 +1,24 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    Tulia\Cms\Settings\:
+        resource: '../../../../*'
+
+    Tulia\Cms\Settings\RegistryInterface:
+        class: Tulia\Cms\Settings\Registry
+        bind:
+            $factories: !tagged_iterator settings.group_factory
+            $groups: !tagged_iterator settings.group
+
+    Tulia\Cms\Settings\Infrastructure\Cms\SearchAnything\SearchProvider:
+        tags:
+            - { name: search.provider, priority: 600 }
+
+    Tulia\Cms\Settings\CmsSettingsGroup:
+        tags:
+            - { name: settings.group, priority: 1000 }
+
+    Tulia\Cms\Settings\Infrastructure\Cms\BackendMenu\SettingsMenuBuilder:
+        tags: [ backend_menu.builder ]

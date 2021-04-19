@@ -6,7 +6,7 @@ namespace Tulia\Cms\User\Query\Factory;
 
 use Tulia\Cms\User\Infrastructure\Cms\Metadata\Loader;
 use Tulia\Cms\User\Query\Model\User;
-use Tulia\Cms\Platform\Shared\Uuid\UuidGeneratorInterface;
+use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
 
 /**
  * @author Adam Banaszkiewicz

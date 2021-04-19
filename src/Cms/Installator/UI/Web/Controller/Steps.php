@@ -13,7 +13,7 @@ use Tulia\Cms\Installator\Application\Service\Steps\DatabaseInstallator;
 use Tulia\Cms\Installator\Application\Service\Steps\InstallationFinisher;
 use Tulia\Cms\Installator\Application\Service\Steps\WebsiteInstallator;
 use Tulia\Cms\Platform\Application\Service\AssetsPublisher;
-use Tulia\Framework\Http\Request;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**

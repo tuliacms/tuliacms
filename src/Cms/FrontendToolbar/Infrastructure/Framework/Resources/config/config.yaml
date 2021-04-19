@@ -1,0 +1,7 @@
+framework:
+    translator:
+        paths:
+            - '%kernel.project_dir%/src/Cms/FrontendToolbar/Infrastructure/Framework/Resources/translations'
+    templating:
+        paths:
+            - { name: cms/frontend_toolbar, path: '%kernel.project_dir%/src/Cms/FrontendToolbar/Infrastructure/Framework/Resources/views/frontend' }

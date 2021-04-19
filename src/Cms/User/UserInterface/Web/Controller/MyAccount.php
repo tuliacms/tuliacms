@@ -20,7 +20,7 @@ use Tulia\Cms\User\UserInterface\Web\Form\PasswordForm;
 use Tulia\Component\FormBuilder\Manager\ManagerFactoryInterface;
 use Tulia\Component\Templating\ViewInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Tulia\Framework\Security\Http\Csrf\Annotation\CsrfToken;
+use Tulia\Component\Security\Http\Csrf\Annotation\CsrfToken;
 
 /**
  * @author Adam Banaszkiewicz

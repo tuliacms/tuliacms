@@ -69,9 +69,9 @@ use Symfony\Component\Routing\RouterInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 use Tulia\Component\Shortcode\ProcessorInterface;
 use Tulia\Cms\Platform\Shared\Slug\SluggerInterface;
-use Tulia\Cms\Platform\Shared\Uuid\UuidGeneratorInterface;
+use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
 use Tulia\Component\Templating\EngineInterface;
-use Tulia\Framework\Database\ConnectionInterface;
+use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 
 /** @var ContainerBuilderInterface $builder */
 

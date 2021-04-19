@@ -24,9 +24,9 @@ use Tulia\Cms\Taxonomy\Query\FinderFactoryInterface as TaxonomyFinderFactory;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Node\UI\Web\Form\NodeFormManagerFactory;
 use Tulia\Component\Templating\ViewInterface;
-use Tulia\Framework\Http\Request;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Tulia\Framework\Security\Http\Csrf\Annotation\CsrfToken;
+use Tulia\Component\Security\Http\Csrf\Annotation\CsrfToken;
 
 /**
  * @author Adam Banaszkiewicz

@@ -13,9 +13,8 @@ class WebsitePrefixesResolver
 {
     private CurrentWebsiteInterface $currentWebsite;
 
-    public function __construct(
-        CurrentWebsiteInterface $currentWebsite
-    ) {
+    public function __construct(CurrentWebsiteInterface $currentWebsite)
+    {
         $this->currentWebsite = $currentWebsite;
     }
 

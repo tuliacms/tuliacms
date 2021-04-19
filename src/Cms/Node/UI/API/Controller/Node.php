@@ -11,7 +11,7 @@ use Tulia\Cms\Node\Query\CriteriaBuilder\RequestCriteriaBuilder;
 use Tulia\Cms\Node\Query\FinderFactoryInterface;
 use Tulia\Cms\Node\Query\Enum\ScopeEnum;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractApiController;
-use Tulia\Framework\Http\Request;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author Adam Banaszkiewicz

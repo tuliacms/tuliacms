@@ -4,49 +4,39 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Platform\Infrastructure\Framework\Controller;
 
-use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
-use Symfony\Component\Form\Form;
-use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Security\Csrf\CsrfToken;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Tulia\Cms\User\Application\Service\AuthenticatedUserProviderInterface;
-use Tulia\Cms\User\Query\Model\User;
 use Tulia\Component\CommandBus\CommandBusInterface;
-use Symfony\Component\Routing\RouterInterface;
 use Tulia\Cms\Platform\Shared\Document\DocumentInterface;
-use Tulia\Cms\Platform\Shared\Uuid\UuidGeneratorInterface;
+use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
 use Tulia\Component\Templating\View;
 use Tulia\Component\Templating\ViewInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as SymfonyController;
+use Tulia\Component\Security\Http\Csrf\Exception\RequestCsrfTokenException;
 
 /**
  * @author Adam Banaszkiewicz
  */
 abstract class AbstractController extends SymfonyController
 {
-    /*public static function getSubscribedServices(): array
+    public static function getSubscribedServices(): array
     {
         return parent::getSubscribedServices() + [
             RequestStack::class,
             TranslatorInterface::class,
-            RouterInterface::class,
-            UuidGeneratorInterface::class,
-            FormFactoryInterface::class,
-            DocumentInterface::class,
-            AuthorizationCheckerInterface::class,
-            CommandBusInterface::class,
-            CsrfTokenManagerInterface::class,
-            AuthenticatedUserProviderInterface::class,
-            ContainerBagInterface::class
+            //RouterInterface::class,
+            //UuidGeneratorInterface::class,
+            //FormFactoryInterface::class,
+            //DocumentInterface::class,
+            //AuthorizationCheckerInterface::class,
+            //CommandBusInterface::class,
+            //CsrfTokenManagerInterface::class,
+            //AuthenticatedUserProviderInterface::class,
+            //ContainerBagInterface::class
         ];
-    }*/
+    }
 
     public function setFlash(string $type, string $message): void
     {

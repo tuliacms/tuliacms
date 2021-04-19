@@ -10,14 +10,10 @@ namespace Tulia\Cms\ContactForms\Application\FieldType;
 class Registry implements RegistryInterface
 {
     /**
-     * @var array|TypeInterface[]
+     * @var TypeInterface[]
      */
-    private $types = [];
-
-    /**
-     * @var iterable
-     */
-    private $sourceTypes;
+    private array $types = [];
+    private iterable $sourceTypes;
 
     public function __construct(iterable $sourceTypes)
     {

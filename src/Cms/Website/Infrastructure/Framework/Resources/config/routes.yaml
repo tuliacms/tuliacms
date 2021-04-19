@@ -13,6 +13,10 @@ backend.website.delete:
     controller: Tulia\Cms\Website\UserInterface\Web\Controller\Backend\Website::delete
     methods: POST
 
-backend.website:
-    path: /administrator/website/{?list}
+backend.website.list:
+    path: /administrator/website/list
     controller: Tulia\Cms\Website\UserInterface\Web\Controller\Backend\Website::list
+
+backend.website:
+    path: /administrator/website
+    controller: Tulia\Cms\Website\UserInterface\Web\Controller\Backend\Website::index

@@ -1,0 +1,15 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    Tulia\Cms\Metadata\Registrator\RegistryInterface:
+        class: Tulia\Cms\Metadata\Registrator\Registry
+        bind:
+            $registrators: !tagged_iterator metadata.registrator
+
+    Tulia\Cms\Metadata\Syncer\SyncerInterface:
+        class: Tulia\Cms\Metadata\Syncer\DatabaseStorageSyncer
+
+    Tulia\Cms\Metadata\Storage\StorageInterface:
+        class: Tulia\Cms\Metadata\Storage\DatabaseStorage

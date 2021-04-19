@@ -27,7 +27,7 @@ use Tulia\Component\Theme\Loader\ThemeLoader\ThemeLoaderInterface;
 use Tulia\Component\Theme\Storage\ArrayStorage;
 use Tulia\Component\Theme\Storage\StorageInterface;
 use Tulia\Component\Theme\Customizer\Changeset\Storage\StorageInterface as ChangesetStorageInterface;
-use Tulia\Framework\Database\ConnectionInterface;
+use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 use Tulia\Framework\Kernel\Event\RequestEvent;
 
 /** @var ContainerBuilderInterface $builder */

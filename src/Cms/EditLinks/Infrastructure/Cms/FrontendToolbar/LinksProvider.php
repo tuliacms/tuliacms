@@ -9,7 +9,7 @@ use Tulia\Cms\FrontendToolbar\Application\Links\Link;
 use Tulia\Cms\FrontendToolbar\Application\Links\Links;
 use Tulia\Cms\FrontendToolbar\Application\Links\AbstractProvider;
 use Tulia\Component\Templating\View;
-use Tulia\Framework\Http\Request;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author Adam Banaszkiewicz

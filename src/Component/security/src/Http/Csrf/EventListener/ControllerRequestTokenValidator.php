@@ -9,10 +9,10 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
-use Tulia\Framework\Annotations\AnnotationsReader;
-use Tulia\Framework\Security\Http\Csrf\Annotation\CsrfToken;
-use Tulia\Framework\Security\Http\Csrf\Annotation\IgnoreCsrfToken;
-use Tulia\Framework\Security\Http\Csrf\Exception\RequestCsrfTokenException;
+use Tulia\Cms\Shared\Infrastructure\Utils\Annotations\AnnotationsReader;
+use Tulia\Component\Security\Http\Csrf\Annotation\CsrfToken;
+use Tulia\Component\Security\Http\Csrf\Annotation\IgnoreCsrfToken;
+use Tulia\Component\Security\Http\Csrf\Exception\RequestCsrfTokenException;
 
 /**
  * @author Adam Banaszkiewicz

@@ -32,7 +32,7 @@ class UserLocaleResolver
     {
         $request = $event->getRequest();
 
-        if (!$request->isBackend()) {
+        if (!$request->attributes->get('_is_backend')) {
             return;
         }
 

@@ -14,14 +14,8 @@ use Tulia\Cms\Menu\Application\Query\Finder\Model\Item;
  */
 class Loader implements LoaderInterface
 {
-    /**
-     * @var SyncerInterface
-     */
-    protected $syncer;
+    protected SyncerInterface $syncer;
 
-    /**
-     * @param SyncerInterface $syncer
-     */
     public function __construct(SyncerInterface $syncer)
     {
         $this->syncer = $syncer;

@@ -13,14 +13,8 @@ use Tulia\Cms\User\Query\Model\User;
  */
 class Loader
 {
-    /**
-     * @var SyncerInterface
-     */
-    protected $syncer;
+    protected SyncerInterface $syncer;
 
-    /**
-     * @param SyncerInterface $syncer
-     */
     public function __construct(SyncerInterface $syncer)
     {
         $this->syncer = $syncer;

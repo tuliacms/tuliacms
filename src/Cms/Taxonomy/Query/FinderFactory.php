@@ -7,7 +7,7 @@ namespace Tulia\Cms\Taxonomy\Query;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Tulia\Cms\Taxonomy\Query\Model\Collection;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
-use Tulia\Framework\Database\ConnectionInterface;
+use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 
 /**
  * @author Adam Banaszkiewicz

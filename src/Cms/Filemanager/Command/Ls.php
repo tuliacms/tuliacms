@@ -8,8 +8,8 @@ use Tulia\Cms\Filemanager\Command\Helper\FileResponseFormatter;
 use Tulia\Cms\Filemanager\Enum\ScopeEnum;
 use Tulia\Cms\Filemanager\File;
 use Tulia\Cms\Filemanager\Query\FinderFactoryInterface;
-use Tulia\Framework\Database\ConnectionInterface;
-use Tulia\Framework\Http\Request;
+use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author Adam Banaszkiewicz

@@ -22,3 +22,7 @@ services:
         factory: Tulia\Component\Routing\Website\WebsiteRegistryFactory::factory
         bind:
             $source: '%framework.routing.website.list%'
+
+    Tulia\Component\Routing\EventListener\RequestMatcher:
+        bind:
+            $symfonyListener: '@router_listener'

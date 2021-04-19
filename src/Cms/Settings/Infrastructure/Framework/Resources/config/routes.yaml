@@ -1,0 +1,11 @@
+backend.settings.send_test_email:
+    path: /administrator/settings/send-test-email
+    controller: Tulia\Cms\Settings\UserInterface\Web\Controller\Backend\Settings::sendTestEmail
+    methods: POST
+
+backend.settings:
+    path: /administrator/settings/{group}
+    controller: Tulia\Cms\Settings\UserInterface\Web\Controller\Backend\Settings::show
+    methods: GET|POST
+    defaults:
+        group: null

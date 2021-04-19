@@ -4,32 +4,30 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\FrontendToolbar\Application\EventListener;
 
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Tulia\Cms\FrontendToolbar\Application\Builder\Builder;
-use Tulia\Framework\Kernel\Event\ResponseEvent;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class ToolbarRenderer
+class ToolbarRenderer implements EventSubscriberInterface
 {
-    /**
-     * @var Builder
-     */
-    private $builder;
-    /**
-     * @var AuthorizationCheckerInterface
-     */
-    private $authorizationChecker;
+    private Builder $builder;
+    private AuthorizationCheckerInterface $authorizationChecker;
 
-    /**
-     * @param Builder $builder
-     * @param AuthorizationCheckerInterface $authorizationChecker
-     */
     public function __construct(Builder $builder, AuthorizationCheckerInterface $authorizationChecker)
     {
         $this->builder = $builder;
         $this->authorizationChecker = $authorizationChecker;
+    }
+
+    public static function getSubscribedEvents(): array
+    {
+        return [
+            ResponseEvent::class => '__invoke',
+        ];
     }
 
     public function __invoke(ResponseEvent $event): void
@@ -37,9 +35,14 @@ class ToolbarRenderer
         $request = $event->getRequest();
 
         if (
-            $request->isBackend()
-            || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') === false
+            $request->attributes->get('_is_backend')
+            || strncmp($request->getPathInfo(), '/_wdt', 5) === 0
+            || strncmp($request->getPathInfo(), '/_profiler', 10) === 0
         ) {
+            return;
+        }
+
+        if ($this->authorizationChecker->isGranted('ROLE_ADMIN') === false) {
             return;
         }
 

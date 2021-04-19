@@ -7,7 +7,7 @@ namespace Tulia\Cms\Node\Infrastructure\Persistence\Domain;
 use Tulia\Cms\Node\Domain\Enum\TermTypeEnum;
 use Tulia\Cms\Platform\Domain\ValueObject\ImmutableDateTime;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
-use Tulia\Framework\Database\ConnectionInterface;
+use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 
 /**
  * @author Adam Banaszkiewicz

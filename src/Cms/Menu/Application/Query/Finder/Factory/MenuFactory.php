@@ -8,7 +8,7 @@ use Tulia\Cms\Menu\Infrastructure\Cms\Metadata\Item\LoaderInterface;
 use Tulia\Cms\Menu\Application\Query\Finder\Model\Item;
 use Tulia\Cms\Menu\Application\Query\Finder\Model\Menu;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
-use Tulia\Cms\Platform\Shared\Uuid\UuidGeneratorInterface;
+use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
 
 /**
  * @author Adam Banaszkiewicz

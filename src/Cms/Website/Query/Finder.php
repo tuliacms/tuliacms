@@ -27,7 +27,7 @@ class Finder implements FinderInterface
         'result'      => null,
         'total_count' => null,
     ];
-    protected Query $query;
+    protected ?Query $query = null;
     protected EventDispatcherInterface $eventDispatcher;
 
     public function __construct(ConnectionInterface $connection, StorageInterface $storage, array $params)

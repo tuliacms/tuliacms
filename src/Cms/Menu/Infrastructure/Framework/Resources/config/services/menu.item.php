@@ -17,7 +17,7 @@ use Tulia\Cms\Menu\Infrastructure\Persistence\Domain\Item\DbalPersister;
 use Tulia\Cms\Menu\Infrastructure\Persistence\Domain\Item\DbalRepository;
 use Tulia\Cms\Menu\Infrastructure\Persistence\Query\Item\DatatableFinder;
 use Tulia\Cms\Menu\Application\Query\Finder\FinderFactoryInterface;
-use Tulia\Cms\Menu\UI\Web\Form\MenuItemFormManagerFactory;
+use Tulia\Cms\Menu\UserInterface\Web\Form\MenuItemFormManagerFactory;
 use Tulia\Cms\Metadata\Syncer\SyncerInterface;
 use Tulia\Cms\Platform\Infrastructure\Bus\Event\EventBusInterface;
 use Tulia\Cms\Platform\Infrastructure\DataManipulation\Hydrator\HydratorInterface;
@@ -25,9 +25,9 @@ use Tulia\Component\DependencyInjection\ContainerBuilderInterface;
 use Tulia\Component\FormBuilder\Manager\ManagerFactoryInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
-use Tulia\Framework\Database\ConnectionInterface;
+use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 use Tulia\Cms\Menu\Infrastructure\Builder\Type\RegistryInterface as TypeRegistry;
-use Tulia\Cms\Menu\UI\Web\Form\MenuItemForm;
+use Tulia\Cms\Menu\UserInterface\Web\Form\MenuItemForm;
 
 $builder->setDefinition(DbalPersister::class, DbalPersister::class, [
     'arguments' => [
@@ -66,15 +66,15 @@ $builder->setDefinition(ItemStorage::class, ItemStorage::class, [
     ],
 ]);
 
-$builder->setDefinition(SearchProvider::class, SearchProvider::class, [
+/*$builder->setDefinition(SearchProvider::class, SearchProvider::class, [
     'arguments' => [
         service(FinderFactoryInterface::class),
         service(RouterInterface::class),
     ],
     'tags' => [ tag('search.provider', 500) ],
-]);
+]);*/
 
-$builder->setDefinition(MenuItemChoiceType::class, MenuItemChoiceType::class, [
+/*$builder->setDefinition(MenuItemChoiceType::class, MenuItemChoiceType::class, [
     'arguments' => [
         service(FinderFactoryInterface::class),
         service(TranslatorInterface::class),
@@ -88,7 +88,7 @@ $builder->setDefinition(MenuItemForm::class, MenuItemForm::class, [
         service(TranslatorInterface::class),
     ],
     'tags' => [ tag('form.type') ],
-]);
+]);*/
 
 $builder->setDefinition(DatatableFinder::class, DatatableFinder::class, [
     'arguments' => [

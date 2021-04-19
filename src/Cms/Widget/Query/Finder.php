@@ -12,8 +12,8 @@ use Tulia\Cms\Widget\Query\Event\QueryPrepareEvent;
 use Tulia\Cms\Widget\Query\Model\Collection;
 use Tulia\Cms\Widget\Query\Model\Widget;
 use Tulia\Cms\Platform\Shared\Pagination\Paginator;
-use Tulia\Framework\Database\ConnectionInterface;
-use Tulia\Framework\Http\Request;
+use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author Adam Banaszkiewicz

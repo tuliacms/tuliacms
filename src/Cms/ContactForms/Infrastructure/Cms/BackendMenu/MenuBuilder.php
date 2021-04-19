@@ -37,7 +37,7 @@ class MenuBuilder implements BuilderInterface
 
         $registry->add('forms.list', [
             'label'    => $this->helper->trans('list', [], 'forms'),
-            'link'     => $this->helper->generateUrl('backend.form.homepage'),
+            'link'     => $this->helper->generateUrl('backend.form'),
             'parent'   => 'forms',
         ]);
     }

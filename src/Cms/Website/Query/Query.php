@@ -4,45 +4,31 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Website\Query;
 
-use PDO;
 use Exception;
+use PDO;
+use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
+use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 use Tulia\Cms\Website\Query\Exception\QueryException;
 use Tulia\Cms\Website\Query\Model\Collection;
 use Tulia\Cms\Website\Query\Model\CollectionInterface;
 use Tulia\Cms\Website\Query\Model\Locale;
 use Tulia\Cms\Website\Query\Model\Website;
 use Tulia\Component\Routing\Website\Locale\Storage\StorageInterface;
-use Tulia\Framework\Database\Connection;
-use Tulia\Framework\Database\ConnectionInterface;
-use Tulia\Framework\Database\Query\QueryBuilder;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class Query
 {
-    /**
-     * @var QueryBuilder
-     */
-    protected $queryBuilder;
+    protected QueryBuilder $queryBuilder;
+    protected StorageInterface $storage;
 
-    /**
-     * @var StorageInterface
-     */
-    protected $storage;
-
-    /**
-     * @param QueryBuilder $queryBuilder
-     */
     public function __construct(QueryBuilder $queryBuilder, StorageInterface $storage)
     {
         $this->queryBuilder = $queryBuilder;
         $this->storage      = $storage;
     }
 
-    /**
-     * @return array
-     */
     public function getBaseQueryArray(): array
     {
         return [
@@ -101,11 +87,6 @@ class Query
         return $this->createCollection($this->execute(array_merge($this->getBaseQueryArray(), $query)));
     }
 
-    /**
-     * @param array $query
-     *
-     * @return int
-     */
     public function count(array $query): int
     {
         $base = $this->getBaseQueryArray();
@@ -115,11 +96,6 @@ class Query
         return $this->getCountFromResult($this->execute(array_merge($base, $query)));
     }
 
-    /**
-     * @param array $query
-     *
-     * @return int
-     */
     public function countRaw(array $query): int
     {
         $base = $this->getBaseQueryArray();
@@ -128,11 +104,6 @@ class Query
         return $this->getCountFromResult($this->execute(array_merge($base, $query)));
     }
 
-    /**
-     * @param array $query
-     *
-     * @return array
-     */
     public function execute(array $query): array
     {
         $this->searchById($query);
@@ -192,19 +163,11 @@ class Query
         return $collection;
     }
 
-    /**
-     * @param array $result
-     *
-     * @return int
-     */
     protected function getCountFromResult(array $result): int
     {
         return (int) ($result[0]['count'] ?? 0);
     }
 
-    /**
-     * @param array $query
-     */
     protected function setDefaults(array $query): void
     {
         if ($query['count'] === true) {
@@ -218,9 +181,6 @@ class Query
         $this->queryBuilder->from('#__website', 'tm');
     }
 
-    /**
-     * @param array $query
-     */
     protected function searchById(array $query): void
     {
         if ($query['id']) {
@@ -243,9 +203,6 @@ class Query
         }
     }
 
-    /**
-     * @param array $query
-     */
     protected function buildActivity(array $query): void
     {
         if (! $query['active']) {

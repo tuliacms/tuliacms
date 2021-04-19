@@ -1,28 +1,28 @@
 backend.theme:
     path: /administrator/theme/list
-    controller: Tulia\Cms\Theme\UI\Web\Controller\Backend\Theme::index
+    controller: Tulia\Cms\Theme\UserInterface\Web\Controller\Backend\Theme::index
 backend.theme.activate:
     path: /administrator/theme/activate
-    controller: Tulia\Cms\Theme\UI\Web\Controller\Backend\Theme::activate
+    controller: Tulia\Cms\Theme\UserInterface\Web\Controller\Backend\Theme::activate
     methods: POST
 backend.theme.customize.current:
     path: /administrator/theme/customize
-    controller: Tulia\Cms\Theme\UI\Web\Controller\Backend\Customizer::customizeRedirect
+    controller: Tulia\Cms\Theme\UserInterface\Web\Controller\Backend\Customizer::customizeRedirect
 backend.theme.customize.left:
     path: /administrator/theme/customize/left/{changeset}
-    controller: Tulia\Cms\Theme\UI\Web\Controller\Backend\Customizer::left
+    controller: Tulia\Cms\Theme\UserInterface\Web\Controller\Backend\Customizer::left
 backend.theme.customize.reset:
     path: /administrator/theme/customize/reset
-    controller: Tulia\Cms\Theme\UI\Web\Controller\Backend\Customizer::reset
+    controller: Tulia\Cms\Theme\UserInterface\Web\Controller\Backend\Customizer::reset
 backend.theme.customize.copy_changeset_from_parent:
     path: /administrator/theme/customize/copy-changeset-from-parent/{theme}
-    controller: Tulia\Cms\Theme\UI\Web\Controller\Backend\Customizer::copyChangesetFromParent
+    controller: Tulia\Cms\Theme\UserInterface\Web\Controller\Backend\Customizer::copyChangesetFromParent
 backend.theme.customize.save:
     path: /administrator/theme/customize/save/{theme}/{changeset}
-    controller: Tulia\Cms\Theme\UI\Web\Controller\Backend\Customizer::save
+    controller: Tulia\Cms\Theme\UserInterface\Web\Controller\Backend\Customizer::save
     methods: POST
 backend.theme.customize:
     path: /administrator/theme/customize/{theme}/{?changeset}
-    controller: Tulia\Cms\Theme\UI\Web\Controller\Backend\Customizer::customize
+    controller: Tulia\Cms\Theme\UserInterface\Web\Controller\Backend\Customizer::customize
     defaults:
         changeset: null

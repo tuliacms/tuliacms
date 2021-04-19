@@ -6,27 +6,16 @@ namespace Tulia\Cms\Widget\Query\Factory;
 
 use Tulia\Cms\Widget\Query\Model\Widget;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
-use Tulia\Cms\Platform\Shared\Uuid\UuidGeneratorInterface;
+use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class WidgetFactory implements WidgetFactoryInterface
 {
-    /**
-     * @var UuidGeneratorInterface
-     */
-    protected $uuidGenerator;
+    protected UuidGeneratorInterface $uuidGenerator;
+    protected CurrentWebsiteInterface $currentWebsite;
 
-    /**
-     * @var CurrentWebsiteInterface
-     */
-    protected $currentWebsite;
-
-    /**
-     * @param UuidGeneratorInterface $uuidGenerator
-     * @param CurrentWebsiteInterface $currentWebsite
-     */
     public function __construct(
         UuidGeneratorInterface $uuidGenerator,
         CurrentWebsiteInterface $currentWebsite

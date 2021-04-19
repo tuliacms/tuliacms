@@ -12,12 +12,8 @@ class Registry implements RegistryInterface
     /**
      * @var array|FieldParserInterface[]
      */
-    private $parsers = [];
-
-    /**
-     * @var iterable
-     */
-    private $sourceParsers;
+    private array $parsers = [];
+    private iterable $sourceParsers;
 
     public function __construct(iterable $sourceParsers)
     {

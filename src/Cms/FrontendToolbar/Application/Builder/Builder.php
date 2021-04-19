@@ -8,7 +8,7 @@ use Tulia\Cms\FrontendToolbar\Application\Links\Links;
 use Tulia\Cms\FrontendToolbar\Application\Links\ProviderRegistry;
 use Tulia\Component\Templating\EngineInterface;
 use Tulia\Component\Templating\View;
-use Tulia\Framework\Http\Request;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author Adam Banaszkiewicz

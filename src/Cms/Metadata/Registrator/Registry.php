@@ -9,14 +9,8 @@ namespace Tulia\Cms\Metadata\Registrator;
  */
 class Registry implements RegistryInterface
 {
-    /**
-     * @var array
-     */
-    protected $contentTypesFields = [];
+    protected array $contentTypesFields = [];
 
-    /**
-     * @param array|iterable $registrators
-     */
     public function __construct(iterable $registrators = [])
     {
         foreach ($registrators as $registrator) {

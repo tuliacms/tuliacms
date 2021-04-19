@@ -14,7 +14,7 @@ use Tulia\Component\Image\ImageManagerInterface;
 use Tulia\Component\Routing\RouteCollectionInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Tulia\Framework\Database\Command\GenerateDatabase;
-use Tulia\Framework\Database\ConnectionInterface;
+use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 use Tulia\Framework\Database\VoidConnection;
 use Tulia\Framework\Kernel\Event\BootstrapEvent;
 use Tulia\Framework\Kernel\Event\ExceptionEvent;

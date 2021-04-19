@@ -5,31 +5,20 @@ declare(strict_types=1);
 namespace Tulia\Cms\Metadata\Syncer;
 
 use Tulia\Cms\Metadata\Registrator\RegistryInterface;
-use Tulia\Cms\Metadata\Storage\DatabaseStorage;
 use Tulia\Cms\Metadata\MetadataInterface;
+use Tulia\Cms\Metadata\Storage\StorageInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class DatabaseStorageSyncer implements SyncerInterface
 {
-    /**
-     * @var DatabaseStorage
-     */
-    protected $storage;
+    protected StorageInterface $storage;
+    protected RegistryInterface $registry;
 
-    /**
-     * @var RegistryInterface
-     */
-    protected $registry;
-
-    /**
-     * @param DatabaseStorage $storage
-     * @param RegistryInterface $registry
-     */
-    public function __construct(DatabaseStorage $storage, RegistryInterface $registry)
+    public function __construct(StorageInterface $storage, RegistryInterface $registry)
     {
-        $this->storage  = $storage;
+        $this->storage = $storage;
         $this->registry = $registry;
     }
 

@@ -29,14 +29,14 @@ class DbalRepository
         ConnectionInterface $connection,
         DbalPersister $persister,
         CurrentWebsiteInterface $currentWebsite,
-        HydratorInterface $hydrator
-        //SyncerInterface $metadata
+        HydratorInterface $hydrator,
+        SyncerInterface $metadata
     ) {
         $this->connection      = $connection;
         $this->persister       = $persister;
         $this->currentWebsite  = $currentWebsite;
         $this->hydrator        = $hydrator;
-        //$this->metadata        = $metadata;
+        $this->metadata        = $metadata;
     }
 
     /**

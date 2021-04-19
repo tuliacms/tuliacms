@@ -8,8 +8,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Tulia\Cms\Filemanager\CommandPropagatorInterface;
 use Tulia\Cms\Filemanager\Exception\CommandNotFoundException;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
-use Tulia\Framework\Http\Request;
-use Tulia\Framework\Security\Http\Csrf\Annotation\IgnoreCsrfToken;
+use Symfony\Component\HttpFoundation\Request;
+use Tulia\Component\Security\Http\Csrf\Annotation\IgnoreCsrfToken;
 
 /**
  * @IgnoreCsrfToken

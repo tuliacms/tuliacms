@@ -84,7 +84,7 @@ class SymfonyRouterDecorator implements RouterInterface, RequestMatcherInterface
 
     public function matchRequest(Request $request): array
     {
-        return $this->doMatch($request->getPathInfo(), $request);
+        return $this->doMatch($request->attributes->get('_content_path', $request->getPathInfo()), $request);
     }
 
     public function warmUp(string $cacheDir): array
@@ -100,6 +100,9 @@ class SymfonyRouterDecorator implements RouterInterface, RequestMatcherInterface
         return array_merge(...$result);
     }
 
+    /**
+     * @return RouterInterface[]|RequestMatcherInterface[]
+     */
     public function routers(): array
     {
         return array_merge([$this->symfonyRouter], $this->chainRouter->all());

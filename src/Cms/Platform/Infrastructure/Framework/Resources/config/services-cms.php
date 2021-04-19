@@ -44,8 +44,8 @@ use Tulia\Component\FormBuilder\RegistryInterface;
 use Tulia\Component\FormBuilder\Twig\Extension\FormExtension;
 use Symfony\Component\Routing\RouterInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
-use Tulia\Cms\Platform\Shared\Uuid\UuidGeneratorInterface;
-use Tulia\Framework\Database\ConnectionInterface;
+use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
+use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\Extension\BootstrapCheckboxRadioStyleExtension;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\Extension\DefaultFormAttributesExtension;
 use Tulia\Cms\Platform\Infrastructure\Framework\Twig\Extension\DocumentExtension;
@@ -117,26 +117,26 @@ $builder->setDefinition(DatetimeExtension::class, DatetimeExtension::class, [
     'tags' => [ tag('twig.extension') ],
 ]);
 
-$builder->setDefinition(MetadataRegistryInterface::class, MetadataRegistry::class, [
+/*$builder->setDefinition(MetadataRegistryInterface::class, MetadataRegistry::class, [
     'arguments' => [
         tagged('metadata.registrator'),
     ],
-]);
+]);*/
 
-$builder->setDefinition(SyncerInterface::class, DatabaseStorageSyncer::class, [
+/*$builder->setDefinition(SyncerInterface::class, DatabaseStorageSyncer::class, [
     'arguments' => [
         service(MetadataStorageInterface::class),
         service(MetadataRegistryInterface::class),
     ],
-]);
+]);*/
 
-$builder->setDefinition(MetadataStorageInterface::class, MetadataDatabaseStorage::class, [
+/*$builder->setDefinition(MetadataStorageInterface::class, MetadataDatabaseStorage::class, [
     'arguments' => [
         service(ConnectionInterface::class),
         service(UuidGeneratorInterface::class),
         service(CurrentWebsiteInterface::class),
     ],
-]);
+]);*/
 
 $builder->setDefinition(OptionsExtension::class, OptionsExtension::class, [
     'arguments' => [

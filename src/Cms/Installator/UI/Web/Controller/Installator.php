@@ -12,8 +12,8 @@ use Tulia\Cms\Installator\UI\Web\Form\WebsiteForm;
 use Tulia\Cms\Website\Application\Service\BackendPrefixGenerator;
 use Tulia\Component\Routing\Enum\SslModeEnum;
 use Tulia\Component\Templating\ViewInterface;
-use Tulia\Framework\Http\Request;
-use Tulia\Framework\Security\Http\Csrf\Annotation\CsrfToken;
+use Symfony\Component\HttpFoundation\Request;
+use Tulia\Component\Security\Http\Csrf\Annotation\CsrfToken;
 
 /**
  * @author Adam Banaszkiewicz

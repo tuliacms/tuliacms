@@ -7,7 +7,7 @@ namespace Tulia\Cms\Node\Query\Factory;
 use Tulia\Cms\Node\Infrastructure\Cms\Metadata\Loader;
 use Tulia\Cms\Node\Query\Model\Node;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
-use Tulia\Cms\Platform\Shared\Uuid\UuidGeneratorInterface;
+use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
 
 /**
  * @author Adam Banaszkiewicz

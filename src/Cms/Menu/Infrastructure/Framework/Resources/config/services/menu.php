@@ -23,13 +23,13 @@ use Tulia\Cms\BackendMenu\Application\Helper\BuilderHelperInterface;
 use Tulia\Component\DependencyInjection\ContainerBuilderInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
-use Tulia\Cms\Platform\Shared\Uuid\UuidGeneratorInterface;
-use Tulia\Framework\Database\ConnectionInterface;
+use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
+use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Tulia\Cms\Menu\Application\Event\MenuCreatedEvent;
 use Tulia\Cms\Menu\Application\Event\MenuDeletedEvent;
 use Tulia\Cms\Menu\Application\Event\MenuUpdatedEvent;
-use Tulia\Cms\Menu\UI\Web\BackendMenu\MenuMenuBuilder;
+use Tulia\Cms\Menu\UserInterface\Web\BackendMenu\MenuMenuBuilder;
 
 /*$builder->setDefinition(FinderFactoryInterface::class, FinderFactory::class, [
     'arguments' => [
@@ -75,7 +75,7 @@ $builder->setDefinition(MenuExtension::class, MenuExtension::class, [
     'tags' => [ tag('twig.extension') ],
 ]);
 
-$builder->setDefinition(MenuMenuBuilder::class, MenuMenuBuilder::class, [
+/*$builder->setDefinition(MenuMenuBuilder::class, MenuMenuBuilder::class, [
     'arguments' => [
         service(BuilderHelperInterface::class),
         service(FinderFactoryInterface::class),
@@ -88,7 +88,7 @@ $builder->setDefinition(MenuMenuBuilder::class, MenuMenuBuilder::class, [
         tag_event_listener(MenuUpdatedEvent::class, 0, 'clearCache'),
         tag_event_listener(MenuDeletedEvent::class, 0, 'clearCache'),
     ],
-]);
+]);*/
 
 $builder->setDefinition(DatatableFinder::class, DatatableFinder::class, [
     'arguments' => [

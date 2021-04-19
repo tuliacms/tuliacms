@@ -1,0 +1,19 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    Tulia\Cms\WysiwygEditor\:
+        resource: '../../../../../*'
+
+    Tulia\Cms\WysiwygEditor\Core\Application\RegistryInterface:
+        class: Tulia\Cms\WysiwygEditor\Core\Application\Registry
+        factory: Tulia\Cms\WysiwygEditor\Core\Application\RegistryFactory::create
+        bind:
+            $editors: !tagged_iterator wysiwyg_editor
+
+    Tulia\Cms\WysiwygEditor\Core\Application\DefaultEditor:
+        tags: [ wysiwyg_editor ]
+
+    Tulia\Cms\WysiwygEditor\TuliaEditor\Domain\Editor:
+        tags: [ wysiwyg_editor ]

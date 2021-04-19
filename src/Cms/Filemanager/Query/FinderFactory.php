@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Filemanager\Query;
 
 use Psr\EventDispatcher\EventDispatcherInterface;
-use Tulia\Framework\Database\ConnectionInterface;
+use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 
 /**
  * @author Adam Banaszkiewicz

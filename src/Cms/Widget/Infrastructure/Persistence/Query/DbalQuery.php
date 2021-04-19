@@ -6,25 +6,18 @@ namespace Tulia\Cms\Widget\Infrastructure\Persistence\Query;
 
 use PDO;
 use Exception;
+use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
 use Tulia\Cms\Widget\Query\Exception\QueryException;
 use Tulia\Cms\Widget\Query\AbstractQuery;
-use Tulia\Framework\Database\Connection;
-use Tulia\Framework\Database\ConnectionInterface;
-use Tulia\Framework\Database\Query\QueryBuilder;
+use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class DbalQuery extends AbstractQuery
 {
-    /**
-     * @var QueryBuilder
-     */
-    protected $queryBuilder;
+    protected QueryBuilder $queryBuilder;
 
-    /**
-     * @param QueryBuilder $queryBuilder
-     */
     public function __construct(QueryBuilder $queryBuilder)
     {
         $this->queryBuilder = $queryBuilder;

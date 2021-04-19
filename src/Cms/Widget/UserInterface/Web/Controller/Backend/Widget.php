@@ -27,7 +27,7 @@ use Tulia\Component\Theme\ManagerInterface;
 use Tulia\Component\Widget\Exception\WidgetNotFoundException;
 use Tulia\Component\Widget\Registry\WidgetRegistryInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Tulia\Framework\Security\Http\Csrf\Annotation\CsrfToken;
+use Tulia\Component\Security\Http\Csrf\Annotation\CsrfToken;
 
 /**
  * @author Adam Banaszkiewicz

@@ -1,0 +1,10 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    Tulia\Cms\EditLinks\:
+        resource: '../../../../*'
+
+    Tulia\Cms\EditLinks\Infrastructure\Cms\FrontendToolbar\LinksProvider:
+        tags: [ frontend_toolbar.links.provider ]

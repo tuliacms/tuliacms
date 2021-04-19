@@ -7,7 +7,7 @@ namespace Tulia\Cms\Node\UI\Web\Controller\Backend;
 use Tulia\Cms\Node\Query\Enum\ScopeEnum;
 use Tulia\Cms\Node\Query\FinderFactoryInterface;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\TypeaheadFormTypeSearch;
-use Tulia\Framework\Http\Request;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author Adam Banaszkiewicz

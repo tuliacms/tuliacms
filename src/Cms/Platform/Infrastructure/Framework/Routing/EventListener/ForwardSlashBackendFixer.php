@@ -33,7 +33,7 @@ class ForwardSlashBackendFixer
     {
         $request = $event->getRequest();
 
-        if ($request->isBackend() === false) {
+        if ($request->attributes->get('_is_backend') === false) {
             return;
         }
 

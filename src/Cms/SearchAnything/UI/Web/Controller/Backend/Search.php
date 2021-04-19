@@ -7,7 +7,7 @@ namespace Tulia\Cms\SearchAnything\UI\Web\Controller\Backend;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Tulia\Cms\SearchAnything\Factory\EngineFactoryInterface;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
-use Tulia\Framework\Http\Request;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author Adam Banaszkiewicz

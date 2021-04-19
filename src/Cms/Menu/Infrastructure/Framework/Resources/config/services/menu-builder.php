@@ -19,11 +19,11 @@ use Tulia\Cms\Menu\Application\Query\Finder\FinderFactoryInterface;
 use Tulia\Component\DependencyInjection\ContainerBuilderInterface;
 use Symfony\Component\Routing\RouterInterface;
 
-$builder->setDefinition(IdentityRegistryInterface::class, IdentityRegistry::class, [
+/*$builder->setDefinition(IdentityRegistryInterface::class, IdentityRegistry::class, [
     'arguments' => [
         tagged('menu.identity_provider'),
     ],
-]);
+]);*/
 
 $builder->setDefinition(HierarchyBuilderInterface::class, HierarchyBuilder::class, [
     'arguments' => [
@@ -41,19 +41,19 @@ $builder->setDefinition(BuilderInterface::class, Builder::class, [
 
 $builder->setDefinition(HtmlBuilderInterface::class, HtmlBuilder::class);
 
-$builder->setDefinition(TypeRegistryInterface::class, TypeRegistry::class, [
+/*$builder->setDefinition(TypeRegistryInterface::class, TypeRegistry::class, [
     'arguments' => [
         tagged('menu.builder.type_registrator'),
     ],
-]);
+]);*/
 
-$builder->setDefinition(DefaultTypesRegistrator::class, DefaultTypesRegistrator::class, [
+/*$builder->setDefinition(DefaultTypesRegistrator::class, DefaultTypesRegistrator::class, [
     'tags' => [ tag('menu.builder.type_registrator') ],
-]);
+]);*/
 
 
 
-$builder->setDefinition(HomepageProvider::class, HomepageProvider::class, [
+/*$builder->setDefinition(HomepageProvider::class, HomepageProvider::class, [
     'arguments' => [
         service(RouterInterface::class),
         'homepage',
@@ -63,4 +63,4 @@ $builder->setDefinition(HomepageProvider::class, HomepageProvider::class, [
 
 $builder->setDefinition(UrlProvider::class, UrlProvider::class, [
     'tags' => [ tag('menu.identity_provider') ],
-]);
+]);*/

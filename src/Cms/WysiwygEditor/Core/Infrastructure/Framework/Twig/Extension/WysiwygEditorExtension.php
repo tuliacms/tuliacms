@@ -13,14 +13,8 @@ use Twig\TwigFunction;
  */
 class WysiwygEditorExtension extends AbstractExtension
 {
-    /**
-     * @var RegistryInterface
-     */
-    protected $registry;
+    protected RegistryInterface $registry;
 
-    /**
-     * @param RegistryInterface $registry
-     */
     public function __construct(RegistryInterface $registry)
     {
         $this->registry = $registry;

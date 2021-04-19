@@ -16,26 +16,10 @@ use Tulia\Component\Widget\WidgetInterface;
  */
 class WidgetFormManagerFactory
 {
-    /**
-     * @var ManagerFactoryInterface
-     */
-    private $managerFactory;
+    private ManagerFactoryInterface $managerFactory;
+    private FormFactoryInterface $formFactory;
+    private WidgetStorage $widgetStorage;
 
-    /**
-     * @var FormFactoryInterface
-     */
-    private $formFactory;
-
-    /**
-     * @var WidgetStorage
-     */
-    private $widgetStorage;
-
-    /**
-     * @param ManagerFactoryInterface $managerFactory
-     * @param FormFactoryInterface $formFactory
-     * @param WidgetStorage $widgetStorage
-     */
     public function __construct(
         ManagerFactoryInterface $managerFactory,
         FormFactoryInterface $formFactory,

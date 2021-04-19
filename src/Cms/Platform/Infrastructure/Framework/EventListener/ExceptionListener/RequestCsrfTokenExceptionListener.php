@@ -6,41 +6,27 @@ namespace Tulia\Cms\Platform\Infrastructure\Framework\EventListener\ExceptionLis
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\Routing\RouterInterface;
-use Tulia\Framework\Http\Request;
-use Tulia\Framework\Kernel\Event\ExceptionEvent;
-use Tulia\Framework\Security\Http\Csrf\Exception\RequestCsrfTokenException;
+use Symfony\Component\HttpFoundation\Request;
+use Tulia\Component\Security\Http\Csrf\Exception\RequestCsrfTokenException;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class RequestCsrfTokenExceptionListener
 {
-    /**
-     * @var RouterInterface
-     */
-    private $router;
+    private RouterInterface $router;
+    private TranslatorInterface $translator;
 
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
-    /**
-     * @param RouterInterface $router
-     * @param TranslatorInterface $translator
-     */
     public function __construct(RouterInterface $router, TranslatorInterface $translator)
     {
         $this->router = $router;
         $this->translator = $translator;
     }
 
-    /**
-     * @param ExceptionEvent $event
-     */
-    public function __invoke(ExceptionEvent $event)
+    public function __invoke(ExceptionEvent $event): void
     {
         if (! $event->getThrowable() instanceof RequestCsrfTokenException) {
             return;
@@ -73,7 +59,7 @@ class RequestCsrfTokenExceptionListener
             return new RedirectResponse($referer, Response::HTTP_FOUND, $headers);
         }
 
-        if ($request->isBackend()) {
+        if ($request->attributes->get('_is_backend')) {
             $route = 'backend';
         } else {
             $route = 'homepage';

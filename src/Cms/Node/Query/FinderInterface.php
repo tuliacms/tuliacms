@@ -11,7 +11,7 @@ use Tulia\Cms\Node\Query\Exception\MultipleFetchException;
 use Tulia\Cms\Node\Query\Exception\QueryException;
 use Tulia\Cms\Node\Query\Exception\QueryNotFetchedException;
 use Tulia\Cms\Platform\Shared\Pagination\Paginator;
-use Tulia\Framework\Http\Request;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author Adam Banaszkiewicz

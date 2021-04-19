@@ -15,7 +15,7 @@ use Tulia\Cms\ContactForms\Domain\ValueObject\ReplyTo;
 use Tulia\Cms\ContactForms\Domain\ValueObject\Sender;
 use Tulia\Cms\Platform\Infrastructure\DataManipulation\Hydrator\HydratorInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
-use Tulia\Framework\Database\ConnectionInterface;
+use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 
 /**
  * @author Adam Banaszkiewicz

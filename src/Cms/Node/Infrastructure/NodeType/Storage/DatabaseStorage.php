@@ -6,7 +6,7 @@ namespace Tulia\Cms\Node\Infrastructure\NodeType\Storage;
 
 use Tulia\Cms\Node\Infrastructure\NodeType\NodeType;
 use Tulia\Cms\Node\Infrastructure\NodeType\NodeTypeInterface;
-use Tulia\Framework\Database\ConnectionInterface;
+use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 
 /**
  * @author Adam Banaszkiewicz

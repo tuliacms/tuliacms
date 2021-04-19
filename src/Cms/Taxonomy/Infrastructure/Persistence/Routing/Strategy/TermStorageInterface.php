@@ -9,7 +9,7 @@ use Exception;
 use Tulia\Cms\Taxonomy\Query\Exception\QueryException;
 use Tulia\Cms\Taxonomy\Query\AbstractQuery;
 use Tulia\Framework\Database\Connection;
-use Tulia\Framework\Database\Query\QueryBuilder;
+use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
 
 /**
  * @author Adam Banaszkiewicz

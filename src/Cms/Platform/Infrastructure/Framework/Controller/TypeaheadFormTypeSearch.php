@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Platform\Infrastructure\Framework\Controller;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Tulia\Framework\Http\Request;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author Adam Banaszkiewicz

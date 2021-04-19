@@ -35,14 +35,14 @@ use Tulia\Component\DependencyInjection\ContainerBuilderInterface;
 use Tulia\Component\FormBuilder\Manager\ManagerFactoryInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
-use Tulia\Cms\Platform\Shared\Uuid\UuidGeneratorInterface;
+use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
 use Tulia\Component\Templating\Config;
 use Tulia\Component\Templating\EngineInterface;
 use Tulia\Component\Templating\Twig\Loader\AdvancedFilesystemLoader;
 use Tulia\Component\Theme\ManagerInterface;
 use Tulia\Component\Widget\Registry\WidgetRegistryInterface;
 use Tulia\Component\Widget\Storage\StorageInterface;
-use Tulia\Framework\Database\ConnectionInterface;
+use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 use Twig\Loader\ArrayLoader;
 
 $builder->setDefinition(StorageInterface::class, DatabaseStorage::class, [

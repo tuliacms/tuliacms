@@ -1,6 +1,7 @@
 imports:
     - { resource: services/routing.yaml }
     - { resource: services/utils.yaml }
+    - { resource: services/metadata.yaml }
 
 services:
     _defaults:

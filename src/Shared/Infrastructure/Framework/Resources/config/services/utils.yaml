@@ -5,3 +5,6 @@ services:
 
     Tulia\Cms\Shared\Ports\Infrastructure\Utils\Uuid\UuidGeneratorInterface:
         class: Tulia\Cms\Shared\Infrastructure\Utils\Uuid\RamseyUuidGenerator
+
+    Tulia\Cms\Shared\Infrastructure\Utils\Annotations\AnnotationsReaderInterface:
+        class: Tulia\Cms\Shared\Infrastructure\Utils\Annotations\AnnotationsReader
