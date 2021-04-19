@@ -5,21 +5,15 @@ declare(strict_types=1);
 namespace Tulia\Cms\Widget\Infrastructure\Persistence\Domain;
 
 use Tulia\Cms\Platform\Infrastructure\Persistence\Domain\AbstractLocalizablePersister;
-use Tulia\Framework\Database\ConnectionInterface;
+use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class DbalPersister extends AbstractLocalizablePersister
 {
-    /**
-     * @var ConnectionInterface
-     */
-    protected $connection;
+    protected ConnectionInterface $connection;
 
-    /**
-     * @param ConnectionInterface $connection
-     */
     public function __construct(ConnectionInterface $connection)
     {
         $this->connection = $connection;

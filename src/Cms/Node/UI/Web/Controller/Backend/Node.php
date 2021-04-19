@@ -138,7 +138,7 @@ class Node extends AbstractController
             $manager->save($form);
 
             $this->setFlash('success', $this->trans('nodeSaved', [], $manager->getNodeType()->getTranslationDomain()));
-            return $this->redirect('backend.node.edit', [ 'id' => $node->getId(), 'node_type' => $manager->getNodeType()->getType() ]);
+            return $this->redirectToRoute('backend.node.edit', [ 'id' => $node->getId(), 'node_type' => $manager->getNodeType()->getType() ]);
         }
 
         return $this->view('@backend/node/create.tpl', [
@@ -179,7 +179,7 @@ class Node extends AbstractController
             $manager->save($form);
 
             $this->setFlash('success', $this->trans('nodeSaved', [], $manager->getNodeType()->getTranslationDomain()));
-            return $this->redirect('backend.node.edit', [ 'id' => $node->getId(), 'node_type' => $manager->getNodeType()->getType() ]);
+            return $this->redirectToRoute('backend.node.edit', [ 'id' => $node->getId(), 'node_type' => $manager->getNodeType()->getType() ]);
         }
 
         return $this->view('@backend/node/edit.tpl', [
@@ -216,7 +216,7 @@ class Node extends AbstractController
             switch ($request->query->get('status')) {
                 case 'trashed'  : $node->setStatus('trashed'); break;
                 case 'published': $node->setStatus('published'); break;
-                default         : return $this->redirect('backend.node', [ 'node_type' => $nodeType->getType() ]);
+                default         : return $this->redirectToRoute('backend.node', [ 'node_type' => $nodeType->getType() ]);
             }
 
             $this->nodeStorage->save(ApplicationNode::fromQueryModel($node));
@@ -229,7 +229,7 @@ class Node extends AbstractController
         }
 
         $this->setFlash('success', $this->trans($message, [], $nodeType->getTranslationDomain()));
-        return $this->redirect('backend.node', [ 'node_type' => $nodeType->getType() ]);
+        return $this->redirectToRoute('backend.node', [ 'node_type' => $nodeType->getType() ]);
     }
 
     /**
@@ -268,7 +268,7 @@ class Node extends AbstractController
             $this->setFlash('success', $this->trans('selectedNodesWereDeleted', [], $nodeType->getTranslationDomain()));
         }
 
-        return $this->redirect('backend.node', [ 'node_type' => $nodeType->getType() ]);
+        return $this->redirectToRoute('backend.node', [ 'node_type' => $nodeType->getType() ]);
     }
 
     /**

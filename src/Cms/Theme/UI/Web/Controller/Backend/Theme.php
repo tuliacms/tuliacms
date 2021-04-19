@@ -72,10 +72,10 @@ class Theme extends AbstractController
         try {
             $this->themeActivator->activateTheme($request->request->get('theme'));
         } catch (ThemeNotFoundException $e) {
-            return $this->redirect('backend.theme');
+            return $this->redirectToRoute('backend.theme');
         }
 
         $this->setFlash('success', $this->trans('themeActivated', [], 'themes'));
-        return $this->redirect('backend.theme');
+        return $this->redirectToRoute('backend.theme');
     }
 }

@@ -1,5 +1,5 @@
 <?php declare(strict_types=1);
-
+return;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Tulia\Cms\Platform\Infrastructure\Bus\Event\EventBusInterface;
@@ -13,7 +13,7 @@ use Tulia\Cms\Website\Query\Factory\WebsiteFactory;
 use Tulia\Cms\Website\Query\Factory\WebsiteFactoryInterface;
 use Tulia\Cms\Website\Query\FinderFactory;
 use Tulia\Cms\Website\Query\FinderFactoryInterface;
-use Tulia\Cms\Website\UI\Web\Form\WebsiteFormManagerFactory;
+use Tulia\Cms\Website\UserInterface\Web\Form\WebsiteFormManagerFactory;
 use Tulia\Component\DependencyInjection\ContainerBuilderInterface;
 use Tulia\Component\FormBuilder\Manager\ManagerFactoryInterface;
 use Tulia\Component\Routing\Enum\SslModeEnum;
@@ -30,7 +30,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /** @var ContainerBuilderInterface $builder */
 
-$builder->setDefinition(FinderFactoryInterface::class, FinderFactory::class, [
+/*$builder->setDefinition(FinderFactoryInterface::class, FinderFactory::class, [
     'arguments' => [
         service(ConnectionInterface::class),
         service(EventDispatcherInterface::class),
@@ -42,46 +42,46 @@ $builder->setDefinition(DbalPersister::class, DbalPersister::class, [
     'arguments' => [
         service(ConnectionInterface::class),
     ],
-]);
+]);*/
 
-$builder->setDefinition(RepositoryInterface::class, DbalRepository::class, [
+/*$builder->setDefinition(RepositoryInterface::class, DbalRepository::class, [
     'arguments' => [
         service(ConnectionInterface::class),
         service(DbalPersister::class),
         service(HydratorInterface::class),
     ],
-]);
+]);*/
 
-$builder->setDefinition(WebsiteFactoryInterface::class, WebsiteFactory::class, [
+/*$builder->setDefinition(WebsiteFactoryInterface::class, WebsiteFactory::class, [
     'arguments' => [
         service(UuidGeneratorInterface::class),
         service(CurrentWebsiteInterface::class),
     ],
-]);
+]);*/
 
-$builder->setDefinition(WebsiteStorage::class, WebsiteStorage::class, [
+/*$builder->setDefinition(WebsiteStorage::class, WebsiteStorage::class, [
     'arguments' => [
         service(RepositoryInterface::class),
         service(EventBusInterface::class),
     ],
-]);
+]);*/
 
-$builder->setDefinition(WebsiteFormManagerFactory::class, WebsiteFormManagerFactory::class, [
+/*$builder->setDefinition(WebsiteFormManagerFactory::class, WebsiteFormManagerFactory::class, [
     'arguments' => [
         service(ManagerFactoryInterface::class),
         service(FormFactoryInterface::class),
         service(WebsiteStorage::class),
     ],
-]);
+]);*/
 
 
-$builder->setDefinition(DatabaseStorage::class, DatabaseStorage::class, [
+/*$builder->setDefinition(DatabaseStorage::class, DatabaseStorage::class, [
     'arguments' => [
         service(ConnectionInterface::class),
         service(StorageInterface::class),
         parameter('website.default_website')
     ],
-]);
+]);*/
 
 if (tulia_installed()) {
     $builder->setDefinition(RegistryInterface::class, Registry::class, [

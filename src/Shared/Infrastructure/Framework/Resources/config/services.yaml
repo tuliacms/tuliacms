@@ -6,6 +6,8 @@ imports:
     - { resource: 'services/utils.yaml' }
     - { resource: 'services/routing.yaml' }
     - { resource: 'services/security.yaml' }
+    - { resource: 'services/widget.yaml' }
+    - { resource: 'services/datatable.yaml' }
     #- { resource: '../../../../../Cms/Options/Infrastructure/Framework/Resources/config/services.yaml' }
     - { resource: '../../../../../Cms/Homepage/Infrastructure/Framework/Resources/config/config.yaml' }
     - { resource: '../../../../../Cms/Homepage/Infrastructure/Framework/Resources/config/services.yaml' }

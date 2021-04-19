@@ -26,20 +26,9 @@ use Tulia\Cms\Platform\Infrastructure\Bus\Event\EventBusInterface;
  */
 class WebsiteStorage
 {
-    /**
-     * @var RepositoryInterface
-     */
-    private $repository;
+    private RepositoryInterface $repository;
+    private EventBusInterface $eventDispatcher;
 
-    /**
-     * @var EventBusInterface
-     */
-    private $eventDispatcher;
-
-    /**
-     * @param RepositoryInterface $repository
-     * @param EventBusInterface $eventDispatcher
-     */
     public function __construct(RepositoryInterface $repository, EventBusInterface $eventDispatcher)
     {
         $this->repository      = $repository;

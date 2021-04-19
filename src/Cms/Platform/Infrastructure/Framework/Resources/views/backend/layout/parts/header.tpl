@@ -44,7 +44,7 @@
                             {% set _route = app.request.attributes.get('_route') %}
                             {% set _route_params = app.request.attributes.get('_route_params')|default([]) %}
                         {% else %}
-                            {% set _route = 'backend' %}
+                            {% set _route = 'backend.homepage' %}
                             {% set _route_params = [] %}
                         {% endif %}
                         {% set _route_params = _route_params|merge(app.request.query.all) %}

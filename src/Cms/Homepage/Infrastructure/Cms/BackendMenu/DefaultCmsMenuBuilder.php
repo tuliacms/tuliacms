@@ -31,7 +31,7 @@ class DefaultCmsMenuBuilder implements BuilderInterface
     {
         $registry->add('dashboard', [
             'label'    => $this->helper->trans('dashboard'),
-            'link'     => $this->helper->generateUrl('backend'),
+            'link'     => $this->helper->generateUrl('backend.homepage'),
             'priority' => 5000,
             'icon'     => 'fas fa-tachometer-alt',
             'active'   => false,

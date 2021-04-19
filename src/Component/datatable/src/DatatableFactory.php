@@ -4,25 +4,18 @@ declare(strict_types=1);
 
 namespace Tulia\Component\Datatable;
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Component\Datatable\Finder\FinderInterface;
 use Tulia\Component\Datatable\Plugin\PluginsRegistry;
-use Tulia\Framework\Http\Request;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class DatatableFactory
 {
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
-    /**
-     * @var PluginsRegistry
-     */
-    private $pluginsRegistry;
+    private TranslatorInterface $translator;
+    private PluginsRegistry $pluginsRegistry;
 
     public function __construct(TranslatorInterface $translator, PluginsRegistry $pluginsRegistry)
     {

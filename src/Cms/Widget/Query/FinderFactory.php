@@ -5,45 +5,25 @@ declare(strict_types=1);
 namespace Tulia\Cms\Widget\Query;
 
 use Psr\EventDispatcher\EventDispatcherInterface;
+use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
+use Tulia\Cms\Widget\Infrastructure\Persistence\Query\DbalQuery;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
-use Tulia\Framework\Database\ConnectionInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class FinderFactory implements FinderFactoryInterface
 {
-    /**
-     * @var ConnectionInterface
-     */
-    protected $connection;
+    protected ConnectionInterface $connection;
+    protected EventDispatcherInterface $eventDispatcher;
+    protected CurrentWebsiteInterface $currentWebsite;
+    protected string $queryClass;
 
-    /**
-     * @var EventDispatcherInterface
-     */
-    protected $eventDispatcher;
-
-    /**
-     * @var CurrentWebsiteInterface
-     */
-    protected $currentWebsite;
-
-    /**
-     * @var string
-     */
-    protected $queryClass;
-
-    /**
-     * @param ConnectionInterface $connection
-     * @param EventDispatcherInterface $eventDispatcher
-     * @param CurrentWebsiteInterface $currentWebsite
-     * @param string $queryClass
-     */
     public function __construct(
         ConnectionInterface $connection,
         EventDispatcherInterface $eventDispatcher,
         CurrentWebsiteInterface $currentWebsite,
-        string $queryClass
+        string $queryClass = DbalQuery::class
     ) {
         $this->connection      = $connection;
         $this->eventDispatcher = $eventDispatcher;

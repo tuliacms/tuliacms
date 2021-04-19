@@ -12,14 +12,8 @@ use Tulia\Component\Widget\WidgetInterface;
  */
 class WidgetRegistry implements WidgetRegistryInterface
 {
-    /**
-     * @var iterable
-     */
-    protected $widgets = [];
+    protected iterable $widgets = [];
 
-    /**
-     * @param iterable $widgets
-     */
     public function __construct(iterable $widgets)
     {
         $this->widgets = $widgets;

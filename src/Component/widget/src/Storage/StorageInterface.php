@@ -9,22 +9,9 @@ namespace Tulia\Component\Widget\Storage;
  */
 interface StorageInterface
 {
-    /**
-     * @return array
-     */
-    public function all(): array;
+    public function all(?string $space): array;
 
-    /**
-     * @param string $id
-     *
-     * @return array|null
-     */
     public function findById(string $id): ?array;
 
-    /**
-     * @param string $space
-     *
-     * @return array
-     */
     public function findBySpace(string $space): array;
 }

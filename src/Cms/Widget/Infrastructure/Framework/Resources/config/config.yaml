@@ -1,0 +1,14 @@
+framework:
+    templating:
+        paths:
+            - { name: backend/widget, path: '%kernel.project_dir%/src/Cms/Widget/Infrastructure/Framework/Resources/views/backend' }
+            - { name: widget-base, path: '%kernel.project_dir%/src/Cms/Widget/Infrastructure/Framework/Resources/views/widget-base' }
+    translator:
+        paths:
+            - '%kernel.project_dir%/src/Cms/Widget/Infrastructure/Framework/Resources/translations'
+    twig:
+        loader:
+            array:
+                templates:
+                    widget:
+                        template: "{% extends [ '@theme/widget.tpl', '@parent/widget.tpl', '@widget-base/widget.tpl' ] %}"

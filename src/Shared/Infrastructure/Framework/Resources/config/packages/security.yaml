@@ -20,11 +20,11 @@ security:
                 authenticators:
                     - Tulia\Component\Security\Guard\Authenticator\BackendLoginFormAuthenticator
             logout:
-                path: backend_logout
-                target: backend
+                path: backend.logout
+                target: backend.homepage
                 invalidate_session: true
             form_login:
-                login_path: backend_login
+                login_path: backend.login
             remember_me:
                 secret: '%kernel.secret%'
                 lifetime: 604800

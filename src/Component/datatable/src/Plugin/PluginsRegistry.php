@@ -14,11 +14,8 @@ class PluginsRegistry
     /**
      * @var PluginInterface[]
      */
-    private $plugins;
+    private iterable $plugins;
 
-    /**
-     * @param iterable $plugins
-     */
     public function __construct(iterable $plugins)
     {
         $this->plugins = $plugins;

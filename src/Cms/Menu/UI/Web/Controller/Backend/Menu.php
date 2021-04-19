@@ -87,7 +87,7 @@ class Menu extends AbstractController
         $this->menuStorage->save(ApplicationModelMenu::fromQueryModel($menu));
 
         $this->setFlash('success', $this->trans('menuCreated', [], 'menu'));
-        return $this->redirect('backend.menu');
+        return $this->redirectToRoute('backend.menu');
     }
 
     /**
@@ -114,7 +114,7 @@ class Menu extends AbstractController
         $this->menuStorage->save(ApplicationModelMenu::fromQueryModel($menu));
 
         $this->setFlash('success', $this->trans('menuUpdated', [], 'menu'));
-        return $this->redirect('backend.menu');
+        return $this->redirectToRoute('backend.menu');
     }
 
     /**
@@ -139,6 +139,6 @@ class Menu extends AbstractController
         }
 
         $this->setFlash('success', $this->trans('selectedMenusWereDeleted', [], 'menu'));
-        return $this->redirect('backend.menu');
+        return $this->redirectToRoute('backend.menu');
     }
 }

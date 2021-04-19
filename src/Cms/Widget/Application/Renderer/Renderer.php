@@ -14,26 +14,10 @@ use Tulia\Component\Widget\Storage\StorageInterface;
  */
 class Renderer implements RendererInterface
 {
-    /**
-     * @var StorageInterface
-     */
-    protected $storage;
+    protected StorageInterface $storage;
+    protected WidgetRegistryInterface $registry;
+    protected EngineInterface $engine;
 
-    /**
-     * @var WidgetRegistryInterface
-     */
-    protected $registry;
-
-    /**
-     * @var EngineInterface
-     */
-    protected $engine;
-
-    /**
-     * @param StorageInterface $storage
-     * @param WidgetRegistryInterface $registry
-     * @param EngineInterface $engine
-     */
     public function __construct(
         StorageInterface $storage,
         WidgetRegistryInterface $registry,

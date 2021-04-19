@@ -69,7 +69,7 @@ class MenuItem extends AbstractController
      */
     public function index(string $menuId): RedirectResponse
     {
-        return $this->redirect('backend.menu.item.list', [
+        return $this->redirectToRoute('backend.menu.item.list', [
             'menuId' => $menuId,
         ]);
     }
@@ -147,7 +147,7 @@ class MenuItem extends AbstractController
             $manager->save($form);
 
             $this->setFlash('success', $this->trans('itemSaved', [], 'menu'));
-            return $this->redirect('backend.menu.item', [ 'menuId' => $model->getMenuId() ]);
+            return $this->redirectToRoute('backend.menu.item', [ 'menuId' => $model->getMenuId() ]);
         }
 
         return $this->view('@backend/menu/item/create.tpl', [
@@ -188,7 +188,7 @@ class MenuItem extends AbstractController
             $manager->save($form);
 
             $this->setFlash('success', $this->trans('itemSaved', [], 'menu'));
-            return $this->redirect('backend.menu.item', [ 'menuId' => $model->getMenuId() ]);
+            return $this->redirectToRoute('backend.menu.item', [ 'menuId' => $model->getMenuId() ]);
         }
 
         return $this->view('@backend/menu/item/edit.tpl', [
@@ -223,7 +223,7 @@ class MenuItem extends AbstractController
         }
 
         $this->setFlash('success', $this->trans('selectedItemsWereDeleted', [], 'menu'));
-        return $this->redirect('backend.menu.item.list', [ 'menuId' => $menuId ]);
+        return $this->redirectToRoute('backend.menu.item.list', [ 'menuId' => $menuId ]);
     }
 
     /**

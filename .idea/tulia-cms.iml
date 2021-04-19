@@ -3,7 +3,7 @@
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/packages/cms/spec" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" packagePrefix="App\Tests\" />
+      <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" packagePrefix="Tulia\Tests\" />
       <sourceFolder url="file://$MODULE_DIR$/src/Bundle" isTestSource="false" packagePrefix="Tulia\Bundle\" />
       <sourceFolder url="file://$MODULE_DIR$/src/Cms" isTestSource="false" packagePrefix="Tulia\Cms\" />
       <sourceFolder url="file://$MODULE_DIR$/src/Component/command-bus/src" isTestSource="false" packagePrefix="Tulia\Component\CommandBus\" />
@@ -19,6 +19,7 @@
       <sourceFolder url="file://$MODULE_DIR$/src/Component/widget/src" isTestSource="false" packagePrefix="Tulia\Component\Widget\" />
       <sourceFolder url="file://$MODULE_DIR$/src/Shared" isTestSource="false" packagePrefix="Tulia\Cms\Shared\" />
       <sourceFolder url="file://$MODULE_DIR$/src/Component/security/src" isTestSource="false" packagePrefix="Tulia\Component\Security\" />
+      <sourceFolder url="file://$MODULE_DIR$/src/Component/routing/tests" isTestSource="true" packagePrefix="Tulia\Component\Routing\Tests\" />
       <excludeFolder url="file://$MODULE_DIR$/var/cache" />
       <excludeFolder url="file://$MODULE_DIR$/_old" />
       <excludeFolder url="file://$MODULE_DIR$/public/uploads" />

@@ -125,7 +125,7 @@ class Term extends AbstractController
             $manager->save($form);
 
             $this->setFlash('success', $this->trans('termSaved', [], $manager->getTaxonomyType()->getTranslationDomain()));
-            return $this->redirect('backend.term.edit', [ 'id' => $term->getId(), 'taxonomy_type' => $manager->getTaxonomyType()->getType() ]);
+            return $this->redirectToRoute('backend.term.edit', [ 'id' => $term->getId(), 'taxonomy_type' => $manager->getTaxonomyType()->getType() ]);
         }
 
         return $this->view('@backend/taxonomy/term/create.tpl', [
@@ -166,7 +166,7 @@ class Term extends AbstractController
             $manager->save($form);
 
             $this->setFlash('success', $this->trans('termSaved', [], $manager->getTaxonomyType()->getTranslationDomain()));
-            return $this->redirect('backend.term.edit', [ 'id' => $term->getId(), 'taxonomy_type' => $manager->getTaxonomyType()->getType() ]);
+            return $this->redirectToRoute('backend.term.edit', [ 'id' => $term->getId(), 'taxonomy_type' => $manager->getTaxonomyType()->getType() ]);
         }
 
         return $this->view('@backend/taxonomy/term/edit.tpl', [
@@ -213,7 +213,7 @@ class Term extends AbstractController
             $this->setFlash('success', $this->trans('selectedNodesWereDeleted', [], $taxonomyType->getTranslationDomain()));
         }
 
-        return $this->redirect('backend.term', [ 'taxonomy_type' => $taxonomyType->getType() ]);
+        return $this->redirectToRoute('backend.term', [ 'taxonomy_type' => $taxonomyType->getType() ]);
     }
 
     /**

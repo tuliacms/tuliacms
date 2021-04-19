@@ -190,14 +190,14 @@ $builder->setDefinition(DatatableFinder::class, DatatableFinder::class, [
     ],
 ]);
 
-$builder->mergeParameter('translation.directory_list', [
+/*$builder->mergeParameter('translation.directory_list', [
     dirname(__DIR__) . '/translations',
-]);
+]);*/
 
-$builder->mergeParameter('templating.paths', [
+/*$builder->mergeParameter('templating.paths', [
     'backend/widget' => dirname(__DIR__) . '/views/backend',
     'widget-base' => dirname(__DIR__) . '/views/widget-base',
-]);
-$builder->mergeParameter('twig.loader.array.templates', [
+]);*/
+/*$builder->mergeParameter('twig.loader.array.templates', [
     'widget' => "{% extends [ '@theme/widget.tpl', '@parent/widget.tpl', '@widget-base/widget.tpl' ] %}",
-]);
+]);*/

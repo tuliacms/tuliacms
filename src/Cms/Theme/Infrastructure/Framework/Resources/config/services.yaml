@@ -14,3 +14,6 @@ services:
 
     Tulia\Component\Theme\Activator\ActivatorInterface:
         class: Tulia\Cms\Theme\Infrastructure\Framework\Theme\Activator\Activator
+
+    Tulia\Cms\Theme\Infrastructure\Cms\BackendMenu\AppearenceMenuBuilder:
+        tags: [ backend_menu.builder ]

@@ -1,6 +1,5 @@
 imports:
     - { resource: assets.yaml }
-
 framework:
     translator:
         default_path: '%kernel.project_dir%/src/Cms/Platform/Infrastructure/Framework/Resources/translations'
@@ -12,6 +11,7 @@ framework:
             - { from: '@widget/', to: '@parent/overwrite/widget/' }
         paths:
             - { name: backend/layout, path: '%kernel.project_dir%/src/Cms/Platform/Infrastructure/Framework/Resources/views/backend/layout' }
+            - { name: _theme_views/DefaultTheme, path: '%kernel.project_dir%/src/Cms/Platform/Infrastructure/DefaultTheme/Resources/views' }
     twig:
         loader:
             array:
@@ -20,3 +20,6 @@ framework:
                         template: "{% extends '@backend/layout/layout.tpl' %}"
                     theme:
                         template: "{% extends [ '@theme/layout.tpl', '@parent/layout.tpl' ] %}"
+twig:
+    paths:
+        '%kernel.project_dir%/src/Cms/Platform/Infrastructure/Framework/Resources/views/backend': backend

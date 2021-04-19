@@ -5,7 +5,7 @@
 {% block content %}{% endblock %}
 
 {% block breadcrumbsHome %}
-    <li class="breadcrumb-item"><a href="{{ path('backend') }}">{{ 'breadcrumbsHome'|trans }}</a></li>
+    <li class="breadcrumb-item"><a href="{{ path('backend.homepage') }}">{{ 'breadcrumbsHome'|trans }}</a></li>
 {% endblock %}
 {% block breadcrumbs %}{% endblock %}
 

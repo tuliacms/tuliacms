@@ -7,7 +7,6 @@ namespace Tulia\Component\Routing\EventListener;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
-use Tulia\Framework\Kernel\Event\BootstrapEvent;
 
 /**
  * @author Adam Banaszkiewicz
@@ -50,7 +49,19 @@ class LocaleResolver implements EventSubscriberInterface
 
         if ($locale->getLocalePrefix()) {
             $parameters['_is_locale_in_path'] = true;
-            $parameters['_content_path'] = substr($parameters['_content_path'], \strlen($locale->getLocalePrefix()));
+
+            if ($parameters['_is_backend']) {
+                $parameters['_content_path'] = str_replace(
+                    $parameters['_backend_prefix'] . $locale->getLocalePrefix(),
+                    $parameters['_backend_prefix'],
+                    $parameters['_content_path']
+                );
+            } else {
+                $parameters['_content_path'] = substr(
+                    $parameters['_content_path'],
+                    \strlen($locale->getLocalePrefix())
+                );
+            }
         }
 
         return $parameters;

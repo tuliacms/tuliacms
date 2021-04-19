@@ -22,9 +22,9 @@ class FinderFactory implements FinderFactoryInterface
         EventDispatcherInterface $eventDispatcher,
         StorageInterface $storage
     ) {
-        $this->connection      = $connection;
+        $this->connection = $connection;
         $this->eventDispatcher = $eventDispatcher;
-        $this->storage         = $storage;
+        $this->storage = $storage;
     }
 
     /**

@@ -52,7 +52,7 @@ class Settings extends AbstractController
     public function show(Request $request, FormFactoryInterface $formFactory, Options $options, ?string $group = null)
     {
         if (!$group) {
-            return $this->redirect('backend.settings', ['group' => 'cms']);
+            return $this->redirectToRoute('backend.settings', ['group' => 'cms']);
         }
 
         if ($this->settings->hasGroup($group) === false) {
@@ -69,7 +69,7 @@ class Settings extends AbstractController
             $groupObj->saveAction($form->getData());
 
             $this->setFlash('success', $this->trans('settingsSaved', [], 'settings'));
-            return $this->redirect('backend.settings', [ 'group' => $groupObj->getId() ]);
+            return $this->redirectToRoute('backend.settings', [ 'group' => $groupObj->getId() ]);
         }
 
         $view = $groupObj->buildView();

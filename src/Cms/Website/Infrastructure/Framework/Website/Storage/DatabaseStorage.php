@@ -4,35 +4,20 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Website\Infrastructure\Framework\Website\Storage;
 
+use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 use Tulia\Component\Routing\Website\Locale\Locale;
 use Tulia\Component\Routing\Website\Locale\Storage\StorageInterface;
 use Tulia\Component\Routing\Website\Website;
-use Tulia\Framework\Database\ConnectionInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class DatabaseStorage
 {
-    /**
-     * @var StorageInterface
-     */
-    protected $storage;
+    protected StorageInterface $storage;
+    protected ConnectionInterface $connection;
+    private static array $cache = [];
 
-    /**
-     * @var ConnectionInterface
-     */
-    protected $connection;
-
-    /**
-     * @var array
-     */
-    private static $cache = [];
-
-    /**
-     * @param ConnectionInterface $connection
-     * @param StorageInterface $storage
-     */
     public function __construct(ConnectionInterface $connection, StorageInterface $storage)
     {
         $this->connection = $connection;

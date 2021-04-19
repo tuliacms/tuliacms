@@ -14,20 +14,9 @@ use Twig\TwigFunction;
  */
 class WidgetExtension extends AbstractExtension
 {
-    /**
-     * @var RendererInterface
-     */
-    protected $renderer;
+    protected RendererInterface $renderer;
+    protected StorageInterface $storage;
 
-    /**
-     * @var StorageInterface
-     */
-    protected $storage;
-
-    /**
-     * @param RendererInterface $renderer
-     * @param StorageInterface $storage
-     */
     public function __construct(RendererInterface $renderer, StorageInterface $storage)
     {
         $this->renderer = $renderer;

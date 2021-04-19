@@ -19,25 +19,14 @@ use Tulia\Component\Datatable\Plugin\PluginInterface;
  */
 class Datatable
 {
-    /**
-     * @var FinderInterface
-     */
-    private $finder;
-
-    /**
-     * @var Request
-     */
-    private $request;
-
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
+    private FinderInterface $finder;
+    private Request $request;
+    private TranslatorInterface $translator;
 
     /**
      * @var array|PluginInterface[]
      */
-    protected $plugins = [];
+    protected array $plugins = [];
 
     public function __construct(FinderInterface $finder, Request $request, TranslatorInterface $translator, array $plugins = [])
     {

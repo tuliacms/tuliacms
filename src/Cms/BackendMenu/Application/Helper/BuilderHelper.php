@@ -26,7 +26,7 @@ class BuilderHelper implements BuilderHelperInterface
         RequestStack $stack,
         TranslatorInterface $translator,
         RouterInterface $router,
-        string $homepageRoute = 'backend'
+        string $homepageRoute = 'backend.homepage'
     ) {
         $this->stack         = $stack;
         $this->translator    = $translator;

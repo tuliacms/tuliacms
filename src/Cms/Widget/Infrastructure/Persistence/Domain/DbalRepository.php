@@ -4,45 +4,24 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Widget\Infrastructure\Persistence\Domain;
 
+use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 use Tulia\Cms\Widget\Domain\Exception\WidgetNotFoundException;
 use Tulia\Cms\Widget\Domain\ValueObject\AggregateId;
 use Tulia\Cms\Widget\Domain\Aggregate\Widget;
 use Tulia\Cms\Widget\Domain\RepositoryInterface;
 use Tulia\Cms\Platform\Infrastructure\DataManipulation\Hydrator\HydratorInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
-use Tulia\Framework\Database\ConnectionInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class DbalRepository implements RepositoryInterface
 {
-    /**
-     * @var ConnectionInterface
-     */
-    protected $connection;
+    protected ConnectionInterface $connection;
+    protected DbalPersister $persister;
+    protected HydratorInterface $hydrator;
+    private CurrentWebsiteInterface $currentWebsite;
 
-    /**
-     * @var DbalPersister
-     */
-    protected $persister;
-
-    /**
-     * @var HydratorInterface
-     */
-    protected $hydrator;
-
-    /**
-     * @var CurrentWebsiteInterface
-     */
-    private $currentWebsite;
-
-    /**
-     * @param ConnectionInterface $connection
-     * @param DbalPersister $persister
-     * @param HydratorInterface $hydrator
-     * @param CurrentWebsiteInterface $currentWebsite
-     */
     public function __construct(
         ConnectionInterface $connection,
         DbalPersister $persister,

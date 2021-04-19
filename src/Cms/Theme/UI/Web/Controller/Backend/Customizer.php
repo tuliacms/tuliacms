@@ -72,7 +72,7 @@ class Customizer extends AbstractController
         $theme = $this->manager->getTheme();
 
         if (! $theme) {
-            return $this->redirect('backend.theme');
+            return $this->redirectToRoute('backend.theme');
         }
 
         $changeset = $this->storage->getTemporaryCopyOfActiveChangeset($theme->getName());
@@ -89,7 +89,7 @@ class Customizer extends AbstractController
             $parameters['returnUrl'] = $request->query->get('returnUrl');
         }
 
-        return $this->redirect('backend.theme.customize', $parameters);
+        return $this->redirectToRoute('backend.theme.customize', $parameters);
     }
 
     /**
@@ -112,11 +112,11 @@ class Customizer extends AbstractController
         $storage = $this->manager->getStorage();
 
         if ($storage->has($theme) === false) {
-            return $this->redirect('backend.theme');
+            return $this->redirectToRoute('backend.theme');
         }
 
         if (!$changeset) {
-            return $this->redirect('backend.theme.customize.current');
+            return $this->redirectToRoute('backend.theme.customize.current');
         }
 
         $themeObject = $storage->get($theme);
@@ -128,7 +128,7 @@ class Customizer extends AbstractController
             : new Changeset($changeset);
 
         if ($changesetItem->getType() !== ChangesetTypeEnum::TEMPORARY) {
-            return $this->redirect('backend.theme.customize.current');
+            return $this->redirectToRoute('backend.theme.customize.current');
         }
 
         $this->customizer->configureFieldsTypes($changesetItem);
@@ -176,7 +176,7 @@ class Customizer extends AbstractController
         $storage = $this->manager->getStorage();
 
         if ($storage->has($theme) === false) {
-            return $this->redirect('backend.theme');
+            return $this->redirectToRoute('backend.theme');
         }
 
         $themeObject = $storage->get($theme);
@@ -240,7 +240,7 @@ class Customizer extends AbstractController
             $changesetItem = $this->storage->get($changeset);
 
             if ($changesetItem->getType() !== ChangesetTypeEnum::TEMPORARY) {
-                return $this->redirect('backend.theme');
+                return $this->redirectToRoute('backend.theme');
             }
 
             $this->storage->remove($changesetItem);
@@ -250,7 +250,7 @@ class Customizer extends AbstractController
             return $this->redirectToUrl($request->getUriForPath($request->query->get('returnUrl')));
         }
 
-        return $this->redirect('backend.theme');
+        return $this->redirectToRoute('backend.theme');
     }
 
     /**
@@ -265,11 +265,11 @@ class Customizer extends AbstractController
         $theme = $this->manager->getStorage()->get($theme);
 
         if (! $theme) {
-            return $this->redirect('backend.theme.customize.current');
+            return $this->redirectToRoute('backend.theme.customize.current');
         }
 
         if (! $theme->getParent()) {
-            return $this->redirect('backend.theme.customize.current');
+            return $this->redirectToRoute('backend.theme.customize.current');
         }
 
         $parent  = $this->manager->getStorage()->get($theme->getParent());
@@ -277,7 +277,7 @@ class Customizer extends AbstractController
         $changeset = $this->storage->getActiveChangeset($parent->getName());
 
         if (!$changeset) {
-            return $this->redirect('backend.theme.customize.current');
+            return $this->redirectToRoute('backend.theme.customize.current');
         }
 
         $this->customizer->configureFieldsTypes($changeset, $theme);
@@ -291,7 +291,7 @@ class Customizer extends AbstractController
         $changeset->setTheme($theme->getName());
         $this->storage->save($changeset);
 
-        return $this->redirect('backend.theme.customize.current');
+        return $this->redirectToRoute('backend.theme.customize.current');
     }
 
     /**
@@ -306,7 +306,7 @@ class Customizer extends AbstractController
         $theme = $this->manager->getStorage()->get($theme);
 
         if (! $theme) {
-            return $this->redirect('backend.theme.customize.current');
+            return $this->redirectToRoute('backend.theme.customize.current');
         }
 
         $changeset = $this->storage->getActiveChangeset($theme->getName());
@@ -315,6 +315,6 @@ class Customizer extends AbstractController
             $this->storage->remove($changeset);
         }
 
-        return $this->redirect('backend.theme.customize.current');
+        return $this->redirectToRoute('backend.theme.customize.current');
     }
 }

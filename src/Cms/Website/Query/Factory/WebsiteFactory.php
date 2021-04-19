@@ -5,32 +5,21 @@ declare(strict_types=1);
 namespace Tulia\Cms\Website\Query\Factory;
 
 use Symfony\Component\HttpFoundation\Request;
+use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
 use Tulia\Cms\Website\Application\Service\BackendPrefixGenerator;
 use Tulia\Cms\Website\Query\Model\Locale;
 use Tulia\Cms\Website\Query\Model\Website;
 use Tulia\Component\Routing\Enum\SslModeEnum;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
-use Tulia\Cms\Platform\Shared\Uuid\UuidGeneratorInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class WebsiteFactory implements WebsiteFactoryInterface
 {
-    /**
-     * @var UuidGeneratorInterface
-     */
-    protected $uuidGenerator;
+    protected UuidGeneratorInterface $uuidGenerator;
+    protected CurrentWebsiteInterface $currentWebsite;
 
-    /**
-     * @var CurrentWebsiteInterface
-     */
-    protected $currentWebsite;
-
-    /**
-     * @param UuidGeneratorInterface $uuidGenerator
-     * @param CurrentWebsiteInterface $currentWebsite
-     */
     public function __construct(
         UuidGeneratorInterface $uuidGenerator,
         CurrentWebsiteInterface $currentWebsite

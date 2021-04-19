@@ -48,7 +48,7 @@ class Form extends AbstractController
      */
     public function index(): RedirectResponse
     {
-        return $this->redirect('backend.form.list');
+        return $this->redirectToRoute('backend.form.list');
     }
 
     /**
@@ -96,7 +96,7 @@ class Form extends AbstractController
                 $manager->save($form);
 
                 $this->setFlash('success', $this->trans('formSaved', [], 'forms'));
-                return $this->redirect('backend.form.edit', [ 'id' => $model->getId() ]);
+                return $this->redirectToRoute('backend.form.edit', [ 'id' => $model->getId() ]);
             } catch (InvalidFieldNameException $e) {
                 $error = new FormError($this->trans('formFieldNameContainsInvalidName', ['name' => $e->getName()], 'forms'));
                 $form->get('fields_source')->addError($error);
@@ -130,7 +130,7 @@ class Form extends AbstractController
                 $manager->save($form);
 
                 $this->setFlash('success', $this->trans('formSaved', [], 'forms'));
-                return $this->redirect('backend.form.edit', [ 'id' => $model->getId() ]);
+                return $this->redirectToRoute('backend.form.edit', [ 'id' => $model->getId() ]);
             } catch (InvalidFieldNameException $e) {
                 $error = new FormError($this->trans('formFieldNameContainsInvalidName', ['name' => $e->getName()], 'forms'));
                 $form->get('fields_template')->addError($error);

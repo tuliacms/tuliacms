@@ -23,7 +23,8 @@ class SymfonyRouterDecorator implements RouterInterface, RequestMatcherInterface
     private RouterInterface $symfonyRouter;
     private ChainRouterInterface $chainRouter;
     private CurrentWebsiteInterface $currentWebsite;
-    private ?LoggerInterface $logger;
+    private ?LoggerInterface $logger = null;
+    private ?WebsitePrefixesResolver $websitePrefixesResolver = null;
 
     public function __construct(
         RouterInterface $symfonyRouter,
@@ -62,11 +63,14 @@ class SymfonyRouterDecorator implements RouterInterface, RequestMatcherInterface
 
     public function generate(string $name, array $parameters = [], int $referenceType = self::ABSOLUTE_PATH): string
     {
+        $originalParameters = $parameters;
+        unset($parameters['_locale']);
+
         foreach ($this->routers() as $router) {
             $path = $router->generate($name, $parameters, $referenceType);
 
             if ($path !== null && $path !== '') {
-                return $this->appendWebsitePrefixes($name, $path, $parameters, $referenceType);
+                return $this->getWebsitePrefixesResolver()->appendWebsitePrefixes($name, $path, $originalParameters);
             }
         }
 
@@ -164,28 +168,12 @@ class SymfonyRouterDecorator implements RouterInterface, RequestMatcherInterface
         }
     }
 
-    private function appendWebsitePrefixes(string $name, string $uri, array $parameters, int $referenceType): string
+    private function getWebsitePrefixesResolver(): WebsitePrefixesResolver
     {
-        /** @var array $parts */
-        $parts = parse_url($uri);
-
-        if (! isset($parts['path'])) {
-            $parts['path'] = '/';
+        if ($this->websitePrefixesResolver === null) {
+            $this->websitePrefixesResolver = new WebsitePrefixesResolver($this->currentWebsite);
         }
 
-        if (strpos('backend_', $name) === 0) {
-            $parts['path'] = $this->currentWebsite->getPathPrefix() . $this->currentWebsite->getBackendAddress() . $this->currentWebsite->getLocalePrefix() . $parts['path'];
-        } elseif (strpos('api_', $name) === 0) {
-
-        } else {
-            $parts['path'] = $this->currentWebsite->getPathPrefix() . $this->currentWebsite->getLocalePrefix() . $parts['path'];
-        }
-
-        return
-            (isset($parts['scheme']) ? $parts['scheme'] . '://' : '') .
-            ($parts['host'] ?? '') .
-            ($parts['path'] ?? '') .
-            (isset($parts['query']) ? '?' . $parts['query'] : '')
-        ;
+        return $this->websitePrefixesResolver;
     }
 }

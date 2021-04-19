@@ -32,9 +32,8 @@ class BackendResolver implements EventSubscriberInterface
         $request = $event->getRequest();
 
         $parameters = [];
-        $parameters['_content_path']   = $request->attributes->get('_content_path');
+        $parameters['_content_path'] = $request->attributes->get('_content_path');
         $parameters['_backend_prefix'] = $this->currentWebsite->getBackendPrefix();
-
         $parameters = $this->resolveBackend($parameters);
 
         $request->attributes->add($parameters);
@@ -46,7 +45,6 @@ class BackendResolver implements EventSubscriberInterface
 
         if (strpos($parameters['_content_path'], $parameters['_backend_prefix']) === 0) {
             $parameters['_is_backend'] = true;
-            //$parameters['_content_path'] = substr($parameters['_content_path'], \strlen($parameters['_backend_prefix']));
         }
 
         return $parameters;

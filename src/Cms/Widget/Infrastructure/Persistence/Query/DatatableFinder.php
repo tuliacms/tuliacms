@@ -6,12 +6,12 @@ namespace Tulia\Cms\Widget\Infrastructure\Persistence\Query;
 
 use PDO;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 use Tulia\Component\Datatable\Finder\AbstractDatatableFinder;
 use Symfony\Component\Routing\RouterInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 use Tulia\Component\Theme\ManagerInterface;
 use Tulia\Component\Widget\Registry\WidgetRegistryInterface;
-use Tulia\Framework\Database\ConnectionInterface;
 use Doctrine\DBAL\Query\QueryBuilder;
 
 /**
@@ -19,34 +19,11 @@ use Doctrine\DBAL\Query\QueryBuilder;
  */
 class DatatableFinder extends AbstractDatatableFinder
 {
-    /**
-     * @var RouterInterface
-     */
-    private $router;
+    private RouterInterface $router;
+    private TranslatorInterface $translator;
+    private WidgetRegistryInterface $widgetRegistry;
+    private ManagerInterface $themeManager;
 
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
-    /**
-     * @var WidgetRegistryInterface
-     */
-    private $widgetRegistry;
-
-    /**
-     * @var ManagerInterface
-     */
-    private $themeManager;
-
-    /**
-     * @param ConnectionInterface $connection
-     * @param CurrentWebsiteInterface $currentWebsite
-     * @param RouterInterface $router
-     * @param TranslatorInterface $translator
-     * @param WidgetRegistryInterface $widgetRegistry
-     * @param ManagerInterface $themeManager
-     */
     public function __construct(
         ConnectionInterface $connection,
         CurrentWebsiteInterface $currentWebsite,

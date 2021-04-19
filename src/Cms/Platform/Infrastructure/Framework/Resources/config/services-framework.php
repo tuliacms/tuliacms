@@ -84,7 +84,7 @@ if (!tulia_installed() && !tulia_configured()) {
 
 
 
-$builder->setParameter('security.authentication.login_path', 'backend.login');
+/*$builder->setParameter('security.authentication.login_path', 'backend.login');*/
 
 /*$builder->mergeParameter('templating.namespace_overwrite',  [
     '@parent/' => '@theme/',
@@ -93,10 +93,10 @@ $builder->setParameter('security.authentication.login_path', 'backend.login');
     '@widget/' => '@parent/overwrite/widget/',
 ]);*/
 
-$builder->mergeParameter('twig.loader.filesystem.paths', [
+/*$builder->mergeParameter('twig.loader.filesystem.paths', [
     'backend' => dirname(__DIR__) . '/views/backend',
-]);
+]);*/
 
-$builder->mergeParameter('templating.paths', [
+/*$builder->mergeParameter('templating.paths', [
     '_theme_views/DefaultTheme' => dirname(__DIR__, 3) . "/DefaultTheme/Resources/views",
-]);
+]);*/
