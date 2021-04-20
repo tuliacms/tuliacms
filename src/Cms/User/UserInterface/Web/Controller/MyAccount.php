@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\User\UserInterface\Web\Controller;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\User\Application\Command\UserStorage;
 use Tulia\Cms\User\Application\Model\User as ApplicationUser;
@@ -31,7 +32,7 @@ class MyAccount extends AbstractController
     protected FinderFactoryInterface $finderFactory;
     protected ManagerFactoryInterface $managerFactory;
 
-    /*public function __construct(
+    public function __construct(
         AuthenticatedUserProviderInterface $authenticatedUserProvider,
         FinderFactoryInterface $finderFactory,
         ManagerFactoryInterface $managerFactory
@@ -39,9 +40,9 @@ class MyAccount extends AbstractController
         $this->authenticatedUserProvider = $authenticatedUserProvider;
         $this->finderFactory  = $finderFactory;
         $this->managerFactory = $managerFactory;
-    }*/
+    }
 
-    public function me()
+    public function me(): ViewInterface
     {
         return $this->view('@backend/user/me/me.tpl', [
             'user' => $this->authenticatedUserProvider->getUser(),

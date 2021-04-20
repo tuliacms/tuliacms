@@ -24,6 +24,6 @@ services:
             - '../../../../**/*Response.php'
             - '../../../../**/*Event.php'
 
-    Tulia\Cms\Platform\UI\CLI\Command\AssetsPublish:
+    Tulia\Cms\Platform\UserInterface\CLI\Command\AssetsPublish:
         tags:
             - { name: console.command, command: 'assets:publish' }

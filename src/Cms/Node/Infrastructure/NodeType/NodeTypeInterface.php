@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Infrastructure\NodeType;
 
-use Tulia\Cms\Node\UI\Web\Controller\Frontend\Node;
+use Tulia\Cms\Node\UserInterface\Web\Controller\Frontend\Node;
 
 /**
  * @author Adam Banaszkiewicz

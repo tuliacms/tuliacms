@@ -4,37 +4,38 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Application\EventListener;
 
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Tulia\Cms\Node\Application\Event\NodeEvent;
+use Tulia\Cms\Node\Application\Event\NodePreCreateEvent;
+use Tulia\Cms\Node\Application\Event\NodePreUpdateEvent;
 use Tulia\Cms\Node\Query\Exception\MultipleFetchException;
 use Tulia\Cms\Node\Query\Exception\QueryException;
 use Tulia\Cms\Node\Query\Exception\QueryNotFetchedException;
 use Tulia\Cms\Node\Query\FinderFactoryInterface;
 use Tulia\Cms\Node\Query\Enum\ScopeEnum;
 use Tulia\Cms\Node\Query\Model\Node;
-use Tulia\Cms\Platform\Shared\Slug\SluggerInterface;
+use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Slug\SluggerInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class SlugGenerator
+class SlugGenerator implements EventSubscriberInterface
 {
-    /**
-     * @var SluggerInterface
-     */
-    protected $slugger;
+    protected SluggerInterface $slugger;
+    protected FinderFactoryInterface $finderFactory;
 
-    /**
-     * @var FinderFactoryInterface
-     */
-    protected $finderFactory;
-
-    /**
-     * @param SluggerInterface $slugger
-     */
     public function __construct(SluggerInterface $slugger, FinderFactoryInterface $finderFactory)
     {
         $this->slugger       = $slugger;
         $this->finderFactory = $finderFactory;
+    }
+
+    public static function getSubscribedEvents(): array
+    {
+        return [
+            NodePreCreateEvent::class => ['handle', 1000],
+            NodePreUpdateEvent::class => ['handle', 1000],
+        ];
     }
 
     /**

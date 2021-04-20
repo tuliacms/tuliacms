@@ -37,3 +37,9 @@ services:
 
     Tulia\Cms\Filemanager\Infrastructure\Cms\Shortcode\Image:
         tags: [ shortcode.compiler ]
+
+    Tulia\Cms\Filemanager\Application\ImageSize\DefaultSizesProvider:
+        tags: [ filemanager.image_size.provider ]
+
+    Tulia\Cms\Filemanager\Infrastructure\Framework\Theme\Customizer\FilepickerControl:
+        tags: [ theme.customizer.control ]

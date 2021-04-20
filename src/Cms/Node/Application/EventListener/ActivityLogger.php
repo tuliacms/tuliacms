@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Application\EventListener;
 
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Tulia\Cms\Activity\Application\Command\ActivityStorage;
 use Tulia\Cms\Activity\Application\Model\Row;
 use Tulia\Cms\Node\Application\Event\NodeCreatedEvent;
@@ -16,34 +17,13 @@ use Symfony\Component\Routing\RouterInterface;
 /**
  * @author Adam Banaszkiewicz
  */
-class ActivityLogger
+class ActivityLogger implements EventSubscriberInterface
 {
-    /**
-     * @var ActivityStorage
-     */
-    protected $activity;
+    protected ActivityStorage $activity;
+    protected AuthenticatedUserProviderInterface $userProvider;
+    protected RouterInterface $router;
+    protected RegistryInterface $registry;
 
-    /**
-     * @var AuthenticatedUserProviderInterface
-     */
-    protected $userProvider;
-
-    /**
-     * @var RouterInterface
-     */
-    protected $router;
-
-    /**
-     * @var RegistryInterface
-     */
-    protected $registry;
-
-    /**
-     * @param ActivityStorage $activity
-     * @param AuthenticatedUserProviderInterface $userProvider
-     * @param RouterInterface $router
-     * @param RegistryInterface $registry
-     */
     public function __construct(
         ActivityStorage $activity,
         AuthenticatedUserProviderInterface $userProvider,
@@ -56,17 +36,19 @@ class ActivityLogger
         $this->registry     = $registry;
     }
 
-    /**
-     * @param NodeCreatedEvent $event
-     */
+    public static function getSubscribedEvents(): array
+    {
+        return [
+            NodeCreatedEvent::class => ['handleCreated', 0],
+            NodeDeletedEvent::class => ['handleDeleted', 0],
+        ];
+    }
+
     public function handleCreated(NodeCreatedEvent $event): void
     {
         $this->log('activityUserCreatedNewNode', $event->getNode());
     }
 
-    /**
-     * @param NodeDeletedEvent $event
-     */
     public function handleDeleted(NodeDeletedEvent $event): void
     {
         $this->log('activityUserDeletedNode', $event->getNode());

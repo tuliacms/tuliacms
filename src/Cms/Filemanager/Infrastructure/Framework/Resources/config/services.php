@@ -22,7 +22,7 @@ use Tulia\Cms\Filemanager\Infrastructure\Framework\Twig\Extension\FilemanagerExt
 use Tulia\Component\DependencyInjection\ContainerBuilderInterface;
 use Tulia\Component\Image\ImageManagerInterface;
 use Symfony\Component\Routing\RouterInterface;
-use Tulia\Cms\Platform\Shared\Slug\SluggerInterface;
+use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Slug\SluggerInterface;
 use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
 use Tulia\Component\Templating\EngineInterface;
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
@@ -64,7 +64,7 @@ $builder->setDefinition(CommandPropagatorInterface::class, CommandPropagator::cl
     'tags' => [ tag('filemanager.command') ],
 ]);*/
 
-$builder->setDefinition(Upload::class, Upload::class, [
+/*$builder->setDefinition(Upload::class, Upload::class, [
     'arguments' => [
         service(ConnectionInterface::class),
         service(SluggerInterface::class),
@@ -75,7 +75,7 @@ $builder->setDefinition(Upload::class, Upload::class, [
         parameter('kernel.project_dir'),
     ],
     'tags' => [ tag('filemanager.command') ],
-]);
+]);*/
 
 /*$builder->setDefinition(Gallery::class, Gallery::class, [
     'tags' => [ tag('shortcode.compiler') ],
@@ -91,14 +91,14 @@ $builder->setDefinition(ImageUrlResolver::class, ImageUrlResolver::class, [
     ],
 ]);
 
-$builder->setDefinition(FilemanagerExtension::class, FilemanagerExtension::class, [
+/*$builder->setDefinition(FilemanagerExtension::class, FilemanagerExtension::class, [
     'arguments' => [
         service(FinderFactoryInterface::class),
         service(ImageUrlResolver::class),
         parameter('kernel.public_dir'),
     ],
     'tags' => [ tag('twig.extension') ],
-]);
+]);*/
 
 /*$builder->setDefinition(Cropper::class, Cropper::class, [
     'arguments' => [
@@ -114,9 +114,9 @@ $builder->setDefinition(ImageSizeRegistry::class, ImageSizeRegistry::class, [
     ],
 ]);*/
 
-$builder->setDefinition(DefaultSizesProvider::class, DefaultSizesProvider::class, [
+/*$builder->setDefinition(DefaultSizesProvider::class, DefaultSizesProvider::class, [
     'tags' => [ tag('filemanager.image_size.provider') ],
-]);
+]);*/
 
 $builder->setDefinition(FileResponseFormatter::class, FileResponseFormatter::class, [
     'arguments' => [
@@ -124,12 +124,12 @@ $builder->setDefinition(FileResponseFormatter::class, FileResponseFormatter::cla
     ],
 ]);
 
-$builder->setDefinition(FilepickerControl::class, FilepickerControl::class, [
+/*$builder->setDefinition(FilepickerControl::class, FilepickerControl::class, [
     'arguments' => [
         service(EngineInterface::class),
     ],
     'tags' => [ tag('theme.customizer.control') ],
-]);
+]);*/
 
 
 

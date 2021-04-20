@@ -5,6 +5,9 @@ security:
     encoders:
         Tulia\Component\Security\Core\User\User:
             algorithm: auto
+        # todo Find out why save new user without it throws error.
+        Symfony\Component\Security\Core\User\User:
+            algorithm: auto
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/

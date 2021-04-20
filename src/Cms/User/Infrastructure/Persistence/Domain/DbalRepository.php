@@ -26,13 +26,13 @@ class DbalRepository implements RepositoryInterface
     public function __construct(
         ConnectionInterface $connection,
         DbalPersister $persister,
-        HydratorInterface $hydrator/*,
-        SyncerInterface $metadata*/
+        HydratorInterface $hydrator,
+        SyncerInterface $metadata
     ) {
         $this->connection = $connection;
         $this->persister = $persister;
         $this->hydrator = $hydrator;
-        /*$this->metadata = $metadata;*/
+        $this->metadata = $metadata;
     }
 
     /**

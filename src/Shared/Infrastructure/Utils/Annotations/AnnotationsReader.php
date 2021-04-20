@@ -8,6 +8,7 @@ use ReflectionClass;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\Reader;
 use Symfony\Component\HttpFoundation\Request;
+use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Annotations\AnnotationsReaderInterface;
 
 /**
  * @author Adam Banaszkiewicz

@@ -8,8 +8,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\Extension\Core\Type;
 use Symfony\Component\Validator\Constraints as Assert;
-use Tulia\Cms\User\Application\Service\Avatar\Uploader;
 use Tulia\Cms\User\Application\Model\User;
+use Tulia\Cms\User\Application\Service\Avatar\UploaderInterface;
 use Tulia\Component\FormBuilder\AbstractExtension;
 use Tulia\Component\FormBuilder\Section\Section;
 
@@ -18,24 +18,13 @@ use Tulia\Component\FormBuilder\Section\Section;
  */
 class AvatarExtension extends AbstractExtension
 {
-    /**
-     * @var array
-     */
-    protected $scopes = [];
+    protected array $scopes = [];
+    protected UploaderInterface $uploader;
 
-    /**
-     * @var Uploader
-     */
-    protected $uploader;
-
-    /**
-     * @param Uploader $uploader
-     * @param array $scopes
-     */
-    public function __construct(Uploader $uploader, array $scopes)
+    public function __construct(UploaderInterface $uploader, array $scopes)
     {
         $this->uploader = $uploader;
-        $this->scopes   = $scopes;
+        $this->scopes  = $scopes;
     }
 
     /**

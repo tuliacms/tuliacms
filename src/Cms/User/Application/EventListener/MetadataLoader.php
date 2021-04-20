@@ -4,31 +4,29 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\User\Application\EventListener;
 
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Tulia\Cms\User\Infrastructure\Cms\Metadata\Loader;
-use Tulia\Cms\User\Query\Enum\ScopeEnum;
 use Tulia\Cms\User\Query\Event\QueryFilterEvent;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class MetadataLoader
+class MetadataLoader implements EventSubscriberInterface
 {
-    /**
-     * @var Loader
-     */
-    protected $loader;
+    protected Loader $loader;
 
-    /**
-     * @param Loader $loader
-     */
     public function __construct(Loader $loader)
     {
         $this->loader = $loader;
     }
 
-    /**
-     * @param QueryFilterEvent $event
-     */
+    public static function getSubscribedEvents(): array
+    {
+        return [
+            QueryFilterEvent::class => ['handle', 100],
+        ];
+    }
+
     public function handle(QueryFilterEvent $event): void
     {
         foreach ($event->getCollection() as $user) {

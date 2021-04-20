@@ -14,14 +14,8 @@ use Tulia\Cms\User\Query\Model\User;
  */
 class Uploader implements UploaderInterface
 {
-    /**
-     * @var string
-     */
-    protected $publicDir;
+    protected string $publicDir;
 
-    /**
-     * @param string $publicDir
-     */
     public function __construct(string $publicDir)
     {
         $this->publicDir = $publicDir;

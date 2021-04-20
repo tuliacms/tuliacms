@@ -5,9 +5,9 @@ use Tulia\Component\Routing\RouteCollectionInterface;
 /** @var RouteCollectionInterface $collection */
 
 $collection->add('node.get', '/node', [
-    'controller' => 'Tulia\Cms\Node\UI\API\Controller\Node::list',
+    'controller' => 'Tulia\Cms\Node\UserInterface\API\Controller\Node::list',
 ]);
 
 $collection->add('node.single.get', '/node/{id}', [
-    'controller' => 'Tulia\Cms\Node\UI\API\Controller\Node::get',
+    'controller' => 'Tulia\Cms\Node\UserInterface\API\Controller\Node::get',
 ]);

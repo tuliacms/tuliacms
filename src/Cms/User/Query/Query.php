@@ -6,6 +6,7 @@ namespace Tulia\Cms\User\Query;
 
 use Exception;
 use PDO;
+use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Connection;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
 use Tulia\Cms\User\Query\Model\Collection;
 use Tulia\Cms\User\Query\Model\User;

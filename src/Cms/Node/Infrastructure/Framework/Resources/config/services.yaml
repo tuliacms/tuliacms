@@ -1,0 +1,43 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    Tulia\Cms\Node\:
+        resource: '../../../../*'
+        exclude:
+            - '../../../../Infrastructure/Framework/Resources/*'
+
+    Tulia\Cms\Node\Infrastructure\NodeType\RegistryInterface:
+        class: Tulia\Cms\Node\Infrastructure\NodeType\Registry
+        bind:
+            $registrators: !tagged_iterator node.type.registrator
+            $storages: !tagged_iterator node.type.storage
+
+    Tulia\Cms\Node\Infrastructure\NodeType\Storage\DatabaseStorage:
+        tags: [ node.type.storage ]
+
+    Tulia\Cms\Node\Infrastructure\Framework\Routing\Generator:
+        tags: [ router.generator ]
+
+    Tulia\Cms\Node\Infrastructure\Framework\Routing\Matcher:
+        tags: [ router.matcher ]
+
+    Tulia\Cms\Node\Infrastructure\NodeType\DefaultTypesRegistrator:
+        tags: [ node.type.registrator ]
+
+    Tulia\Cms\Node\Infrastructure\Cms\Metadata\DefaultMetadataRegistrator:
+        tags: [ metadata.registrator ]
+
+    Tulia\Cms\Node\Infrastructure\Cms\Menu\IdentityProvider:
+        tags: [ menu.identity_provider ]
+
+    Tulia\Cms\Node\Infrastructure\Cms\Menu\TypeRegistrator:
+        tags: [ menu.builder.type_registrator ]
+
+    Tulia\Cms\Node\Infrastructure\Cms\Settings\SettingsFactory:
+        tags: [ settings.group_factory ]
+
+    Tulia\Cms\Node\Infrastructure\Cms\SearchAnything\SearchProvider:
+        tags:
+            - { name: search.provider, priority: 1000 }

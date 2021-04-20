@@ -13,14 +13,8 @@ use Twig\TwigFunction;
  */
 class UserExtension extends AbstractExtension
 {
-    /**
-     * @var AuthenticatedUserProviderInterface
-     */
-    protected $authenticatedUserProvider;
+    protected AuthenticatedUserProviderInterface $authenticatedUserProvider;
 
-    /**
-     * @param AuthenticatedUserProviderInterface $authenticatedUserProvider
-     */
     public function __construct(AuthenticatedUserProviderInterface $authenticatedUserProvider)
     {
         $this->authenticatedUserProvider  = $authenticatedUserProvider;

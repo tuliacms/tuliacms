@@ -18,14 +18,8 @@ use Tulia\Component\FormBuilder\Section\Section;
  */
 class SecurityExtension extends AbstractExtension
 {
-    /**
-     * @var array
-     */
-    protected $scopes = [];
+    protected array $scopes = [];
 
-    /**
-     * @param array $scopes
-     */
     public function __construct(array $scopes)
     {
         $this->scopes = $scopes;

@@ -11,15 +11,12 @@ use DateTime;
  */
 class DateFormatter implements DateFormatterInterface
 {
-    /**
-     * @var string
-     */
-    protected $format = 'Y.m.d';
+    protected string $format = 'Y.m.d';
 
     /**
      * {@inheritdoc}
      */
-    public function setFormat(string $format)
+    public function setFormat(string $format): void
     {
         $this->format = $format;
     }
@@ -35,7 +32,7 @@ class DateFormatter implements DateFormatterInterface
     /**
      * {@inheritdoc}
      */
-    public function format($date, $format = null)
+    public function format($date, $format = null): string
     {
         $format = $format ?: $this->format;
 

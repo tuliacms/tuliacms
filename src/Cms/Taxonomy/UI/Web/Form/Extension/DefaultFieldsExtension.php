@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Taxonomy\UI\Web\Form\Extension;
 
 use Symfony\Component\Form\FormBuilderInterface;
-use Tulia\Cms\Node\UI\Web\Form\ScopeEnum;
+use Tulia\Cms\Node\UserInterface\Web\Form\ScopeEnum;
 use Tulia\Component\FormBuilder\AbstractExtension;
 use Tulia\Component\FormBuilder\Section\FormRowSection;
 use Tulia\Cms\Taxonomy\Application\Model\Term;

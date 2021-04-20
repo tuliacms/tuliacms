@@ -12,7 +12,6 @@ use Tulia\Cms\User\Application\Command\UserStorage;
 use Tulia\Cms\User\Application\Exception\TranslatableUserException;
 use Tulia\Cms\User\Infrastructure\Persistence\Query\DatatableFinder;
 use Tulia\Cms\User\Query\Enum\ScopeEnum;
-use Tulia\Cms\User\Query\CriteriaBuilder\RequestCriteriaBuilder;
 use Tulia\Cms\User\Query\Exception\MultipleFetchException;
 use Tulia\Cms\User\Query\Exception\QueryException;
 use Tulia\Cms\User\Query\Exception\QueryNotFetchedException;
@@ -43,26 +42,16 @@ class User extends AbstractController
         ManagerFactoryInterface $managerFactory,
         UserStorage $storage
     ) {
-        $this->finderFactory  = $finderFactory;
+        $this->finderFactory = $finderFactory;
         $this->managerFactory = $managerFactory;
-        $this->storage        = $storage;
+        $this->storage = $storage;
     }
 
-    /**
-     * @return RedirectResponse
-     */
     public function index(): RedirectResponse
     {
         return $this->redirectToRoute('backend.user.list');
     }
 
-    /**
-     * @param Request $request
-     * @param DatatableFactory $factory
-     * @param DatatableFinder $finder
-     *
-     * @return ViewInterface
-     */
     public function list(Request $request, DatatableFactory $factory, DatatableFinder $finder): ViewInterface
     {
         return $this->view('@backend/user/user/list.tpl', [
@@ -70,13 +59,6 @@ class User extends AbstractController
         ]);
     }
 
-    /**
-     * @param Request $request
-     * @param DatatableFactory $factory
-     * @param DatatableFinder $finder
-     *
-     * @return JsonResponse
-     */
     public function datatable(Request $request, DatatableFactory $factory, DatatableFinder $finder): JsonResponse
     {
         return $factory->create($finder, $request)->generateResponse();
@@ -86,11 +68,8 @@ class User extends AbstractController
      * @param Request $request
      * @param UserFactoryInterface $userFactory
      * @param UserFormManagerFactory $formFactory
-     *
      * @return RedirectResponse|ViewInterface
-     *
      * @throws LogicException
-     *
      * @CsrfToken(id="user_form")
      */
     public function create(
@@ -98,7 +77,7 @@ class User extends AbstractController
         UserFactoryInterface $userFactory,
         UserFormManagerFactory $formFactory
     ) {
-        $user    = $userFactory->createNew();
+        $user = $userFactory->createNew();
         $manager = $formFactory->create($user);
 
         $form = $manager->createForm();
@@ -112,9 +91,9 @@ class User extends AbstractController
         }
 
         return $this->view('@backend/user/user/create.tpl', [
-            'manager'  => $manager->getManager(),
-            'user'     => $user,
-            'form'     => $form->createView(),
+            'manager' => $manager->getManager(),
+            'user' => $user,
+            'form' => $form->createView(),
         ]);
     }
 
@@ -122,16 +101,13 @@ class User extends AbstractController
      * @param Request $request
      * @param UserFormManagerFactory $formFactory
      * @param string $id
-     *
      * @return RedirectResponse|ViewInterface
-     *
      * @throws MissingHandlerException
      * @throws MultipleFetchException
      * @throws NotFoundHttpException
      * @throws QueryException
      * @throws QueryNotFetchedException
      * @throws LogicException
-     *
      * @CsrfToken(id="user_form")
      */
     public function edit(

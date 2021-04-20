@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\User\Infrastructure\Framework\Translator;
 
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Tulia\Cms\User\Application\Service\AuthenticatedUserProviderInterface;
-use Tulia\Framework\Kernel\Event\RequestEvent;
 
 /**
  * Listener sets current locale in Request to logged-in user defined.
@@ -13,19 +14,20 @@ use Tulia\Framework\Kernel\Event\RequestEvent;
  *
  * @author Adam Banaszkiewicz
  */
-class UserLocaleResolver
+class UserLocaleResolver implements EventSubscriberInterface
 {
-    /**
-     * @var AuthenticatedUserProviderInterface
-     */
-    protected $authenticatedUserProvider;
+    protected AuthenticatedUserProviderInterface $authenticatedUserProvider;
 
-    /**
-     * @param AuthenticatedUserProviderInterface $authenticatedUserProvider
-     */
     public function __construct(AuthenticatedUserProviderInterface $authenticatedUserProvider)
     {
         $this->authenticatedUserProvider = $authenticatedUserProvider;
+    }
+
+    public static function getSubscribedEvents(): array
+    {
+        return [
+            RequestEvent::class => ['handle', 5],
+        ];
     }
 
     public function handle(RequestEvent $event): void

@@ -4,31 +4,33 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\User\Application\EventListener;
 
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Symfony\Component\Security\Core\User\User;
 use Tulia\Cms\User\Application\Event\UserEvent;
+use Tulia\Cms\User\Application\Event\UserPreCreateEvent;
+use Tulia\Cms\User\Application\Event\UserPreUpdateEvent;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class PasswordEncoder
+class PasswordEncoder implements EventSubscriberInterface
 {
-    /**
-     * @var EncoderFactoryInterface
-     */
-    protected $encoder;
+    protected EncoderFactoryInterface $encoder;
 
-    /**
-     * @param EncoderFactoryInterface $encoder
-     */
     public function __construct(EncoderFactoryInterface $encoder)
     {
         $this->encoder = $encoder;
     }
 
-    /**
-     * @param UserEvent $event
-     */
+    public static function getSubscribedEvents(): array
+    {
+        return [
+            UserPreUpdateEvent::class => ['handle', 1000],
+            UserPreCreateEvent::class => ['handle', 1000],
+        ];
+    }
+
     public function handle(UserEvent $event): void
     {
         $user = $event->getUser();

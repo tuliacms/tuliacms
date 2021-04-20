@@ -11,7 +11,7 @@ use Tulia\Cms\Taxonomy\Query\Exception\QueryNotFetchedException;
 use Tulia\Cms\Taxonomy\Query\FinderFactoryInterface;
 use Tulia\Cms\Taxonomy\Query\Enum\ScopeEnum;
 use Tulia\Cms\Taxonomy\Query\Model\Term;
-use Tulia\Cms\Platform\Shared\Slug\SluggerInterface;
+use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Slug\SluggerInterface;
 
 /**
  * @author Adam Banaszkiewicz

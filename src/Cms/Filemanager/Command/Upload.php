@@ -11,7 +11,7 @@ use Tulia\Cms\Filemanager\Command\Helper\FileResponseFormatter;
 use Tulia\Cms\Filemanager\Enum\ScopeEnum;
 use Tulia\Cms\Filemanager\Enum\TypeEnum;
 use Tulia\Cms\Filemanager\Query\FinderFactoryInterface;
-use Tulia\Cms\Platform\Shared\Slug\SluggerInterface;
+use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Slug\SluggerInterface;
 use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 use Symfony\Component\HttpFoundation\Request;

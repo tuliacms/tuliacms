@@ -5,26 +5,18 @@ declare(strict_types=1);
 namespace Tulia\Cms\Platform\Infrastructure\Utilities\DateTime;
 
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Tulia\Cms\Options\Application\Service\Options;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class DateFormatterTranslatorAware extends DateFormatter
 {
-    /**
-     * @var TranslatorInterface
-     */
-    protected $translator;
-
-    /**
-     * @var string
-     */
-    protected $translationDomain = 'messages';
-
-    /**
-     * @var array
-     */
-    protected static $translations = [
+    private TranslatorInterface $translator;
+    private Options $options;
+    private string $translationDomain = 'messages';
+    private array $translated = [];
+    private static array $translations = [
         'January'   => 'january',
         'February'  => 'february',
         'March'     => 'march',
@@ -46,23 +38,16 @@ class DateFormatterTranslatorAware extends DateFormatter
         'Sunday'    => 'sunday',
     ];
 
-    /**
-     * @var array
-     */
-    protected $translated = [];
-
-    /**
-     * @param TranslatorInterface $translator
-     */
-    public function __construct(TranslatorInterface $translator)
+    public function __construct(TranslatorInterface $translator, Options $options)
     {
         $this->translator = $translator;
+        $this->options = $options;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function format($date, $format = null)
+    public function format($date, $format = null): string
     {
         if ($this->translated === []) {
             foreach (static::$translations as $key => $val) {
@@ -73,7 +58,7 @@ class DateFormatterTranslatorAware extends DateFormatter
         return str_replace(
             array_keys($this->translated),
             array_values($this->translated),
-            parent::format($date, $format)
+            parent::format($date, $format ?? $this->options->get('date_format', 'j F, Y'))
         );
     }
 }
