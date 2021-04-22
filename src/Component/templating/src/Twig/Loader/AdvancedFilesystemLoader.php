@@ -151,8 +151,10 @@ class AdvancedFilesystemLoader implements LoaderInterface
                 return null;
             }
 
-            throw $e;
+            throw $lastException;
         }
+
+        return null;
     }
 
     private function getViewPathname(string $name, string $prefix, string $shortname, bool $throw): ?string

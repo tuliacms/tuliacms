@@ -21,7 +21,7 @@ class CrumbsResolver implements ResolverInterface
 {
     protected RouterInterface $router;
     protected NodeTypeRegistry $nodeTypeRegistry;
-    protected NodeTypeRegistry $nodeFinderFactory;
+    protected NodeFinderFactoryInterface $nodeFinderFactory;
     protected TermFinderFactoryInterface $termFinderFactory;
 
     public function __construct(

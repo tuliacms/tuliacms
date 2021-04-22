@@ -41,15 +41,10 @@ class NodeExtension extends AbstractExtension
         ];
     }
 
-    private function generate($identity, array $parameters, int $type): string
+    private function generate($identity, array $parameters, int $type): ?string
     {
-        // @todo generate links to fronted pages in backend panel
-        return '';
         try {
-            $context = clone $this->router->getContext();
-            $context->setBackend(false);
-
-            return $this->router->generate($this->getId($identity), $parameters, $type, $context);
+            return $this->router->generate($this->getId($identity), $parameters, $type);
         } catch (RoutingException $exception) {
             return '';
         }

@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\CacheWarmer\WarmableInterface;
 use Symfony\Component\Routing\Exception\MethodNotAllowedException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RouteCollection;
@@ -61,20 +62,29 @@ class SymfonyRouterDecorator implements RouterInterface, RequestMatcherInterface
         return $collection;
     }
 
-    public function generate(string $name, array $parameters = [], int $referenceType = self::ABSOLUTE_PATH): string
+    public function generate(string $name, array $parameters = [], int $referenceType = self::ABSOLUTE_PATH): ?string
     {
         $originalParameters = $parameters;
         unset($parameters['_locale']);
 
         foreach ($this->routers() as $router) {
-            $path = $router->generate($name, $parameters, $referenceType);
+            try {
+                $router->setContext($this->getContext());
+                $path = $router->generate($name, $parameters, $referenceType);
 
-            if ($path !== null && $path !== '') {
-                return $this->getWebsitePrefixesResolver()->appendWebsitePrefixes($name, $path, $originalParameters);
+                if ($path !== null && $path !== '') {
+                    return $this->getWebsitePrefixesResolver()->appendWebsitePrefixes(
+                        $name,
+                        $path,
+                        $originalParameters
+                    );
+                }
+            } catch (RouteNotFoundException $e) {
+                continue;
             }
         }
 
-        return '';
+        throw new RouteNotFoundException(sprintf('None of the routers in the chain matched route named %s.', $name));
     }
 
     public function match(string $pathinfo): array

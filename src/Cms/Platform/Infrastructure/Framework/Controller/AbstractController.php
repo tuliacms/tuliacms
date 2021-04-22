@@ -29,7 +29,7 @@ abstract class AbstractController extends SymfonyController
             //RouterInterface::class,
             //UuidGeneratorInterface::class,
             //FormFactoryInterface::class,
-            //DocumentInterface::class,
+            DocumentInterface::class,
             //AuthorizationCheckerInterface::class,
             //CommandBusInterface::class,
             //CsrfTokenManagerInterface::class,

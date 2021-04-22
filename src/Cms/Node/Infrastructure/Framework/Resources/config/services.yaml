@@ -29,7 +29,8 @@ services:
         tags: [ router.generator ]
 
     Tulia\Cms\Node\Infrastructure\Framework\Routing\Matcher:
-        tags: [ router.matcher ]
+        tags: [ routing_chain.router ]
+        #tags: [ router.matcher ]
 
     Tulia\Cms\Node\Infrastructure\NodeType\DefaultTypesRegistrator:
         tags: [ node.type.registrator ]

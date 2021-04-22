@@ -16,14 +16,7 @@ use Symfony\Component\Routing\RouterInterface;
  */
 class ChainRouter implements ChainRouterInterface
 {
-    /**
-     * @var RouterInterface[][]
-     */
     private array $routers = [];
-
-    /**
-     * @var RouterInterface[]
-     */
     private array $sortedRouters = [];
     private ?RequestContext $context = null;
     private RouteCollection $routeCollection;
@@ -33,15 +26,6 @@ class ChainRouter implements ChainRouterInterface
     {
         $this->logger = $logger;
         $this->routeCollection = new RouteCollection();
-    }
-
-    public function getContext(): RequestContext
-    {
-        if (!$this->context) {
-            $this->context = new RequestContext();
-        }
-
-        return $this->context;
     }
 
     public function add(RouterInterface $router, int $priority = 0): void
@@ -69,42 +53,6 @@ class ChainRouter implements ChainRouterInterface
         }
 
         return $this->sortedRouters;
-    }
-
-    public function setContext(RequestContext $context): void
-    {
-        foreach ($this->all() as $router) {
-            if ($router instanceof RequestContextAwareInterface) {
-                $router->setContext($context);
-            }
-        }
-
-        $this->context = $context;
-    }
-
-    public function getRouteCollection(): RouteCollection
-    {
-        // TODO: Implement getRouteCollection() method.
-    }
-
-    public function generate(string $name, array $parameters = [], int $referenceType = self::ABSOLUTE_PATH): string
-    {
-        // TODO: Implement generate() method.
-    }
-
-    public function match(string $pathinfo): array
-    {
-        return $this->doMatch($pathinfo);
-    }
-
-    public function matchRequest(Request $request): array
-    {
-        return $this->doMatch($request->getPathInfo(), $request);
-    }
-
-    protected function doMatch(string $pathinfo, Request $request = null): array
-    {
-        dump($pathinfo, $request);exit;
     }
 
     protected function sortRouters(): array

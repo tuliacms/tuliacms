@@ -4,6 +4,18 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Infrastructure\Framework\Routing;
 
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Exception\InvalidParameterException;
+use Symfony\Component\Routing\Exception\MethodNotAllowedException;
+use Symfony\Component\Routing\Exception\MissingMandatoryParametersException;
+use Symfony\Component\Routing\Exception\NoConfigurationException;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
+use Symfony\Component\Routing\RequestContext;
+use Symfony\Component\Routing\RouteCollection;
+use Symfony\Component\Routing\RouterInterface;
 use Tulia\Cms\Node\Infrastructure\NodeType\RegistryInterface;
 use Tulia\Cms\Node\Query\Enum\ScopeEnum;
 use Tulia\Cms\Node\Query\Exception\MultipleFetchException;
@@ -12,52 +24,79 @@ use Tulia\Cms\Node\Query\Exception\QueryNotFetchedException;
 use Tulia\Cms\Node\Query\FinderFactoryInterface;
 use Tulia\Cms\Node\Query\Model\Node;
 use Tulia\Cms\Platform\Infrastructure\Framework\Routing\FrontendRouteSuffixResolver;
-use Tulia\Component\Routing\Matcher\MatcherInterface;
-use Tulia\Component\Routing\Request\RequestContextInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class Matcher implements MatcherInterface
+class Matcher implements RouterInterface, RequestMatcherInterface
 {
-    /**
-     * @var FinderFactoryInterface
-     */
-    protected $finderFactory;
+    protected FinderFactoryInterface $finderFactory;
+    protected RegistryInterface $registry;
+    protected FrontendRouteSuffixResolver $frontendRouteSuffixResolver;
+    protected RequestContext $context;
 
-    /**
-     * @var RegistryInterface
-     */
-    protected $registry;
-
-    /**
-     * @var FrontendRouteSuffixResolver
-     */
-    protected $frontendRouteSuffixResolver;
-
-    /**
-     * @param FinderFactoryInterface $finderFactory
-     * @param RegistryInterface $registry
-     */
     public function __construct(
         FinderFactoryInterface $finderFactory,
         RegistryInterface $registry,
         FrontendRouteSuffixResolver $frontendRouteSuffixResolver
     ) {
         $this->finderFactory = $finderFactory;
-        $this->registry      = $registry;
+        $this->registry = $registry;
         $this->frontendRouteSuffixResolver = $frontendRouteSuffixResolver;
+    }
+
+    public function setContext(RequestContext $context): void
+    {
+        $this->context = $context;
+    }
+
+    public function getContext(): RequestContext
+    {
+        return $this->context;
+    }
+
+    public function getRouteCollection(): RouteCollection
+    {
+        // Dynamic routing don't have any static collection
+        return new RouteCollection();
+    }
+
+    public function generate(string $name, array $parameters = [], int $referenceType = self::ABSOLUTE_PATH)
+    {
+        if (strncmp($name, 'node_', 5) !== 0) {
+            return null;
+        }
+
+        $identity = substr($name, 5);
+
+        $parameters = array_merge([
+            '_locale' => 'pl_PL',//$this->getContext()->getParameter('_content_locale'),
+        ], $parameters);
+
+        try {
+            $node = $this->getNodeForGenerate($identity, $parameters['_locale']);
+
+            if (! $node) {
+                return null;
+            }
+        } catch (\Exception $e) {
+            return null;
+        }
+
+        return $this->frontendRouteSuffixResolver->appendSuffix("/{$node->getSlug()}");
+    }
+
+    public function matchRequest(Request $request): array
+    {
+        return $this->match($request->attributes->get('_content_path', $request->getPathInfo()));
     }
 
     /**
      * {@inheritdoc}
      */
-    public function match(string $pathinfo, RequestContextInterface $context): array
+    public function match(string $pathinfo): array
     {
-        if ($context->isBackend()) {
-            return [];
-        }
-
+        $pathinfo = urldecode($pathinfo);
         $pathinfo = $this->frontendRouteSuffixResolver->removeSuffix($pathinfo);
 
         try {
@@ -102,6 +141,26 @@ class Matcher implements MatcherInterface
             'per_page'  => 1,
             'order_by'  => null,
             'order_dir' => null,
+        ]);
+        $finder->fetch();
+
+        return $finder->getResult()->first();
+    }
+
+    private function getNodeForGenerate($identity, string $locale): ?Node
+    {
+        if ($identity instanceof Node) {
+            if ($identity->getLocale() === $locale) {
+                return $identity;
+            }
+
+            $identity = $identity->getId();
+        }
+
+        $finder = $this->finderFactory->getInstance(ScopeEnum::ROUTING_GENERATOR);
+        $finder->setCriteria([
+            'locale' => $locale,
+            'id'     => $identity,
         ]);
         $finder->fetch();
 

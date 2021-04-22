@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
 /**
  * @author Adam Banaszkiewicz
  */
-interface ChainRouterInterface extends RouterInterface, RequestMatcherInterface
+interface ChainRouterInterface
 {
     public function add(RouterInterface $router, int $priority = 0): void;
 
