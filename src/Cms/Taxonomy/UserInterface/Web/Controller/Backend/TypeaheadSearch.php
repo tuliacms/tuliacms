@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Taxonomy\UI\Web\Controller\Backend;
+namespace Tulia\Cms\Taxonomy\UserInterface\Web\Controller\Backend;
 
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\TypeaheadFormTypeSearch;
 use Tulia\Cms\Taxonomy\Query\Enum\ScopeEnum;

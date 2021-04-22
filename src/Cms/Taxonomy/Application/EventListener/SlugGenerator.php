@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Taxonomy\Application\EventListener;
 
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Tulia\Cms\Taxonomy\Application\Event\TermEvent;
+use Tulia\Cms\Taxonomy\Application\Event\TermPreCreateEvent;
+use Tulia\Cms\Taxonomy\Application\Event\TermPreUpdateEvent;
 use Tulia\Cms\Taxonomy\Query\Exception\MultipleFetchException;
 use Tulia\Cms\Taxonomy\Query\Exception\QueryException;
 use Tulia\Cms\Taxonomy\Query\Exception\QueryNotFetchedException;
@@ -16,25 +19,23 @@ use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Slug\SluggerInterface;
 /**
  * @author Adam Banaszkiewicz
  */
-class SlugGenerator
+class SlugGenerator implements EventSubscriberInterface
 {
-    /**
-     * @var SluggerInterface
-     */
-    protected $slugger;
+    protected SluggerInterface $slugger;
+    protected FinderFactoryInterface $finderFactory;
 
-    /**
-     * @var FinderFactoryInterface
-     */
-    protected $finderFactory;
-
-    /**
-     * @param SluggerInterface $slugger
-     */
     public function __construct(SluggerInterface $slugger, FinderFactoryInterface $finderFactory)
     {
         $this->slugger       = $slugger;
         $this->finderFactory = $finderFactory;
+    }
+
+    public static function getSubscribedEvents(): array
+    {
+        return [
+            TermPreCreateEvent::class => ['handle', 1000],
+            TermPreUpdateEvent::class => ['handle', 1000],
+        ];
     }
 
     /**

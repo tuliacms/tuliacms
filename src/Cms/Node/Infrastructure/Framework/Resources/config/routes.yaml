@@ -1,0 +1,35 @@
+backend.node.create:
+    path: /administrator/node/{node_type}/create
+    controller: Tulia\Cms\Node\UserInterface\Web\Controller\Backend\Node::create
+    methods: GET|POST
+
+backend.node.edit:
+    path: /administrator/node/{node_type}/edit/{id}
+    controller: Tulia\Cms\Node\UserInterface\Web\Controller\Backend\Node::edit
+    methods: GET|POST
+
+backend.node.delete:
+    path: /administrator/node/delete
+    controller: Tulia\Cms\Node\UserInterface\Web\Controller\Backend\Node::delete
+    methods: POST
+
+backend.node.change_status:
+    path: /administrator/node/change-status
+    controller: Tulia\Cms\Node\UserInterface\Web\Controller\Backend\Node::changeStatus
+    methods: POST
+
+backend.node.search.typeahead:
+    path: /administrator/node/search/typeahead
+    controller: Tulia\Cms\Node\UserInterface\Web\Controller\Backend\TypeaheadSearch::handleSearch
+
+backend.node.list:
+    path: /administrator/node/{node_type}/list
+    controller: Tulia\Cms\Node\UserInterface\Web\Controller\Backend\Node::list
+    defaults:
+        node_type: page
+
+backend.node:
+    path: /administrator/node/{node_type}
+    controller: Tulia\Cms\Node\UserInterface\Web\Controller\Backend\Node::index
+    defaults:
+        node_type: page

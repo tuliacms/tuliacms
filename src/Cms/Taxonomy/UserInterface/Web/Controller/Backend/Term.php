@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Taxonomy\UI\Web\Controller\Backend;
+namespace Tulia\Cms\Taxonomy\UserInterface\Web\Controller\Backend;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
@@ -19,7 +19,7 @@ use Tulia\Cms\Taxonomy\Query\Exception\QueryNotFetchedException;
 use Tulia\Cms\Taxonomy\Query\Factory\TermFactoryInterface;
 use Tulia\Cms\Taxonomy\Query\FinderFactoryInterface;
 use Tulia\Cms\Taxonomy\Query\Model\Term as QueryTerm;
-use Tulia\Cms\Taxonomy\UI\Web\Form\TermFormManagerFactory;
+use Tulia\Cms\Taxonomy\UserInterface\Web\Form\TermFormManagerFactory;
 use Tulia\Component\Templating\ViewInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -30,26 +30,10 @@ use Tulia\Component\Security\Http\Csrf\Annotation\CsrfToken;
  */
 class Term extends AbstractController
 {
-    /**
-     * @var RegistryInterface
-     */
-    protected $taxonomyRegistry;
+    protected RegistryInterface $taxonomyRegistry;
+    protected FinderFactoryInterface $finderFactory;
+    protected TermStorage $termStorage;
 
-    /**
-     * @var FinderFactoryInterface
-     */
-    protected $finderFactory;
-
-    /**
-     * @var TermStorage
-     */
-    protected $termStorage;
-
-    /**
-     * @param RegistryInterface $taxonomyRegistry
-     * @param FinderFactoryInterface $finderFactory
-     * @param TermStorage $termStorage
-     */
     public function __construct(
         RegistryInterface $taxonomyRegistry,
         FinderFactoryInterface $finderFactory,
@@ -60,10 +44,14 @@ class Term extends AbstractController
         $this->termStorage      = $termStorage;
     }
 
+    public function index(string $taxonomy_type): RedirectResponse
+    {
+        return $this->redirectToRoute('backend.term.list', ['taxonomy_type' => $taxonomy_type]);
+    }
+
     /**
      * @param Request $request
-     * @param string $taxonomyType
-     * @param string|null $list
+     * @param string $taxonomy_type
      *
      * @return RedirectResponse|ViewInterface
      *
@@ -72,19 +60,9 @@ class Term extends AbstractController
      * @throws QueryException
      * @throws QueryNotFetchedException
      */
-    public function list(Request $request, string $taxonomyType, string $list = null)
+    public function list(Request $request, string $taxonomy_type)
     {
-        if ($list !== 'list') {
-            return $this->redirect(
-                'backend.term',
-                array_merge(
-                    ['list' => 'list', 'taxonomy_type' => $taxonomyType],
-                    $request->query->all()
-                )
-            );
-        }
-
-        $criteria = (new RequestCriteriaBuilder($request))->build([ 'taxonomy_type' => $taxonomyType ]);
+        $criteria = (new RequestCriteriaBuilder($request))->build([ 'taxonomy_type' => $taxonomy_type ]);
         $finder = $this->finderFactory->getInstance(ScopeEnum::BACKEND_LISTING);
         $finder->setCriteria($criteria);
         $finder->fetchRaw();
@@ -99,7 +77,7 @@ class Term extends AbstractController
 
     /**
      * @param Request $request
-     * @param string $taxonomyType
+     * @param string $taxonomy_type
      * @param TermFormManagerFactory $formFactory
      * @param TermFactoryInterface $termFactory
      *
@@ -109,15 +87,15 @@ class Term extends AbstractController
      */
     public function create(
         Request $request,
-        string $taxonomyType,
+        string $taxonomy_type,
         TermFormManagerFactory $formFactory,
         TermFactoryInterface $termFactory
     ) {
         $term = $termFactory->createNew([
-            'type' => $taxonomyType,
+            'type' => $taxonomy_type,
             'visibility' => true,
         ]);
-        $manager = $formFactory->create($taxonomyType, $term);
+        $manager = $formFactory->create($taxonomy_type, $term);
         $form = $manager->createForm();
         $form->handleRequest($request);
 
@@ -139,7 +117,7 @@ class Term extends AbstractController
     /**
      * @param Request $request
      * @param TermFormManagerFactory $factory
-     * @param string $taxonomyType
+     * @param string $taxonomy_type
      * @param string $id
      *
      * @return RedirectResponse|ViewInterface
@@ -154,11 +132,11 @@ class Term extends AbstractController
     public function edit(
         Request $request,
         TermFormManagerFactory $factory,
-        string $taxonomyType,
+        string $taxonomy_type,
         string $id
     ) {
         $term = $this->getTermById($id);
-        $manager = $factory->create($taxonomyType, $term);
+        $manager = $factory->create($taxonomy_type, $term);
         $form = $manager->createForm();
         $form->handleRequest($request);
 

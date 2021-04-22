@@ -34,7 +34,7 @@ class TuliaKernel extends Kernel
             $base . '/SearchAnything/Infrastructure/Framework/Resources/config',
             $base . '/Security/Infrastructure/Framework/Resources/config',
             $base . '/Settings/Infrastructure/Framework/Resources/config',
-            //$base . '/Taxonomy/Infrastructure/Framework/Resources/config',
+            $base . '/Taxonomy/Infrastructure/Framework/Resources/config',
             $base . '/Theme/Infrastructure/Framework/Resources/config',
             $base . '/User/Infrastructure/Framework/Resources/config',
             $base . '/Website/Infrastructure/Framework/Resources/config',

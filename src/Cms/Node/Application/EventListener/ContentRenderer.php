@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Application\EventListener;
 
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Tulia\Cms\Node\Query\Event\QueryFilterEvent;
 use Tulia\Cms\Node\Query\Model\Node;
 use Tulia\Component\Templating\EngineInterface;
@@ -13,33 +14,13 @@ use Tulia\Component\Templating\EngineInterface;
  *
  * @author Adam Banaszkiewicz
  */
-class ContentRenderer
+class ContentRenderer implements EventSubscriberInterface
 {
-    /**
-     * @var EngineInterface
-     */
-    protected $engine;
+    protected EngineInterface $engine;
+    protected string $environment;
+    protected array $scopes;
+    private static array $cache = [];
 
-    /**
-     * @var string
-     */
-    protected $environment;
-
-    /**
-     * @var array
-     */
-    protected $scopes;
-
-    /**
-     * @var array
-     */
-    private static $cache = [];
-
-    /**
-     * @param EngineInterface $engine
-     * @param string $environment
-     * @param array $scopes
-     */
     public function __construct(EngineInterface $engine, string $environment, array $scopes = [])
     {
         $this->engine = $engine;
@@ -47,9 +28,13 @@ class ContentRenderer
         $this->scopes = $scopes;
     }
 
-    /**
-     * @param QueryFilterEvent $event
-     */
+    public static function getSubscribedEvents(): array
+    {
+        return [
+            QueryFilterEvent::class => ['handle', 0],
+        ];
+    }
+
     public function handle(QueryFilterEvent $event): void
     {
         if ($event->hasScope($this->scopes) === false) {

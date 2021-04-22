@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Application\EventListener;
 
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Tulia\Cms\Node\Application\Event\NodePreDeleteEvent;
 use Tulia\Cms\Node\Query\Exception\MultipleFetchException;
 use Tulia\Cms\Node\Query\Exception\QueryException;
@@ -18,19 +19,20 @@ use Tulia\Cms\Node\Query\Enum\ScopeEnum;
  *
  * @author Adam Banaszkiewicz
  */
-class NodeChildrenPreDeleteValidator
+class NodeChildrenPreDeleteValidator implements EventSubscriberInterface
 {
-    /**
-     * @var FinderFactoryInterface
-     */
-    protected $finderFactory;
+    protected FinderFactoryInterface $finderFactory;
 
-    /**
-     * @param FinderFactoryInterface $finderFactory
-     */
     public function __construct(FinderFactoryInterface $finderFactory)
     {
         $this->finderFactory = $finderFactory;
+    }
+
+    public static function getSubscribedEvents(): array
+    {
+        return [
+            NodePreDeleteEvent::class => ['handle', 1000],
+        ];
     }
 
     /**

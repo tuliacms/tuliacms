@@ -1,0 +1,8 @@
+framework:
+    translator:
+        paths:
+            - '%kernel.project_dir%/src/Cms/Taxonomy/Infrastructure/Framework/Resources/translations'
+    templating:
+        paths:
+            - { name: backend/taxonomy, path: '%kernel.project_dir%/src/Cms/Taxonomy/Infrastructure/Framework/Resources/views/backend' }
+            - { name: cms/taxonomy, path: '%kernel.project_dir%/src/Cms/Taxonomy/Infrastructure/Framework/Resources/views/frontend' }

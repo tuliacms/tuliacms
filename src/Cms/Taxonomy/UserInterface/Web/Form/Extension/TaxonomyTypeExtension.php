@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Taxonomy\UI\Web\Form\Extension;
+namespace Tulia\Cms\Taxonomy\UserInterface\Web\Form\Extension;
 
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -11,7 +11,7 @@ use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType;
 use Tulia\Cms\Taxonomy\Application\Model\Term;
 use Tulia\Cms\Taxonomy\Application\TaxonomyType\TaxonomyTypeInterface;
 use Tulia\Cms\Taxonomy\Infrastructure\Framework\Form\FormType\TaxonomyTypeaheadType;
-use Tulia\Cms\Taxonomy\UI\Web\Form\ScopeEnum;
+use Tulia\Cms\Taxonomy\UserInterface\Web\Form\ScopeEnum;
 use Tulia\Component\FormBuilder\AbstractExtension;
 use Tulia\Component\FormBuilder\Section\FormRowSection;
 use Tulia\Component\FormBuilder\Section\Section;

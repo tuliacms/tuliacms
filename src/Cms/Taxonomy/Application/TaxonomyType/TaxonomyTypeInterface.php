@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Taxonomy\Application\TaxonomyType;
 
-use Tulia\Cms\Taxonomy\UI\Web\Controller\Frontend\Term;
+use Tulia\Cms\Taxonomy\UserInterface\Web\Controller\Frontend\Term;
 
 /**
  * @author Adam Banaszkiewicz

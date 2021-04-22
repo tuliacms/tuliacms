@@ -4,17 +4,22 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Taxonomy\Application\EventListener;
 
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Tulia\Cms\Taxonomy\Query\Model\Term;
 use Tulia\Cms\BodyClass\Application\Event\CollectBodyClassEvent;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class BodyClass
+class BodyClass implements EventSubscriberInterface
 {
-    /**
-     * @param CollectBodyClassEvent $event
-     */
+    public static function getSubscribedEvents(): array
+    {
+        return [
+            CollectBodyClassEvent::class => ['handle', 0],
+        ];
+    }
+
     public function handle(CollectBodyClassEvent $event): void
     {
         $term = $event->getRequest()->attributes->get('term');

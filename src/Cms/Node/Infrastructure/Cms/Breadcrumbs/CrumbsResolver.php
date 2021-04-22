@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Infrastructure\Cms\Breadcrumbs;
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
 use Tulia\Cms\Breadcrumbs\Application\Crumbs\ResolverInterface;
 use Tulia\Cms\Node\Infrastructure\NodeType\RegistryInterface as NodeTypeRegistry;
 use Tulia\Cms\Node\Query\Enum\ScopeEnum;
 use Tulia\Cms\Node\Query\FinderFactoryInterface as NodeFinderFactoryInterface;
 use Tulia\Cms\Node\Query\Model\Node;
-use Tulia\Cms\Taxonomy\Query\FinderFactoryInterface as TermFinderFactoryInterface;
 use Tulia\Cms\Platform\Shared\Breadcrumbs\BreadcrumbsInterface;
-use Symfony\Component\HttpFoundation\Request;
+use Tulia\Cms\Taxonomy\Query\FinderFactoryInterface as TermFinderFactoryInterface;
 
 /**
  * @author Adam Banaszkiewicz

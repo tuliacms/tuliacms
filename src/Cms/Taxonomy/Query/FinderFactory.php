@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Taxonomy\Query;
 
 use Psr\EventDispatcher\EventDispatcherInterface;
+use Tulia\Cms\Taxonomy\Infrastructure\Persistence\Query\DbalQuery;
 use Tulia\Cms\Taxonomy\Query\Model\Collection;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
@@ -44,7 +45,7 @@ class FinderFactory implements FinderFactoryInterface
         ConnectionInterface $connection,
         EventDispatcherInterface $eventDispatcher,
         CurrentWebsiteInterface $currentWebsite,
-        string $queryClass
+        string $queryClass = DbalQuery::class
     ) {
         $this->connection      = $connection;
         $this->eventDispatcher = $eventDispatcher;

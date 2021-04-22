@@ -15,14 +15,8 @@ use Twig\TwigFunction;
  */
 class NodeExtension extends AbstractExtension
 {
-    /**
-     * @var RouterInterface
-     */
-    protected $router;
+    protected RouterInterface $router;
 
-    /**
-     * @param RouterInterface $router
-     */
     public function __construct(RouterInterface $router)
     {
         $this->router = $router;
@@ -35,12 +29,12 @@ class NodeExtension extends AbstractExtension
     {
         return [
             new TwigFunction('node_path', function ($identity, array $parameters = []) {
-                return $this->generate($identity, $parameters, RouterInterface::TYPE_PATH);
+                return $this->generate($identity, $parameters, RouterInterface::ABSOLUTE_PATH);
             }, [
                 'is_safe' => [ 'html' ]
             ]),
             new TwigFunction('node_url', function ($identity, array $parameters = []) {
-                return $this->generate($identity, $parameters, RouterInterface::TYPE_URL);
+                return $this->generate($identity, $parameters, RouterInterface::ABSOLUTE_PATH);
             }, [
                 'is_safe' => [ 'html' ]
             ]),
@@ -49,8 +43,10 @@ class NodeExtension extends AbstractExtension
 
     private function generate($identity, array $parameters, int $type): string
     {
+        // @todo generate links to fronted pages in backend panel
+        return '';
         try {
-            $context = clone $this->router->getRequestContext();
+            $context = clone $this->router->getContext();
             $context->setBackend(false);
 
             return $this->router->generate($this->getId($identity), $parameters, $type, $context);

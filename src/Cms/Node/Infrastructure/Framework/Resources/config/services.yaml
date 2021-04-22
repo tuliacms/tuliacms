@@ -1,3 +1,11 @@
+parameters:
+    # List of scopes, where ContentRenderer listener will work. Allows to bind Node's
+    # content rendering in many more scopes than default ones, even for custom created
+    # by extensions.
+    cms.node.finder.content_renderer.scopes:
+        - !php/const Tulia\Cms\Node\Query\Enum\ScopeEnum::SINGLE
+        - !php/const Tulia\Cms\Node\Query\Enum\ScopeEnum::ROUTING_MATCHER
+
 services:
     _defaults:
         autowire: true
@@ -41,3 +49,26 @@ services:
     Tulia\Cms\Node\Infrastructure\Cms\SearchAnything\SearchProvider:
         tags:
             - { name: search.provider, priority: 1000 }
+
+    Tulia\Cms\Node\Application\EventListener\ContentRenderer:
+        bind:
+            $environment: '%kernel.environment%'
+            $scopes: '%cms.node.finder.content_renderer.scopes%'
+
+    Tulia\Cms\Node\UserInterface\Web\Form\Extension\AuthorExtension:
+        tags: [ form_extension ]
+
+    Tulia\Cms\Node\UserInterface\Web\Form\Extension\NodeTypeExtensionAggregate:
+        tags: [ form_extension_aggregate ]
+
+    Tulia\Cms\Node\UserInterface\Web\Form\Extension\DefaultFieldsExtension:
+        tags: [ form_extension ]
+
+    Tulia\Cms\Node\UserInterface\Web\BackendMenu\NodeMenuBuilder:
+        tags: [ backend_menu.builder ]
+
+    Tulia\Cms\Node\Infrastructure\Cms\Breadcrumbs\CrumbsResolver:
+        tags: [ breadcrumbs.resolver ]
+
+    Tulia\Cms\Node\Infrastructure\Cms\Filemanager\ImageSize\DefaultSizesProvider:
+        tags: [ filemanager.image_size.provider ]

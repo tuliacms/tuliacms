@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Application\EventListener;
 
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Tulia\Cms\Node\Application\Event\NodeEvent;
+use Tulia\Cms\Node\Application\Event\NodePreCreateEvent;
+use Tulia\Cms\Node\Application\Event\NodePreUpdateEvent;
 use Tulia\Component\Shortcode\ProcessorInterface;
 
 /**
@@ -14,29 +17,28 @@ use Tulia\Component\Shortcode\ProcessorInterface;
  *
  * @author Adam Banaszkiewicz
  */
-class ContentShortcodeCompiler
+class ContentShortcodeCompiler implements EventSubscriberInterface
 {
-    /**
-     * @var ProcessorInterface
-     */
-    protected $processor;
+    protected ProcessorInterface $processor;
 
-    /**
-     * @param ProcessorInterface $processor
-     */
     public function __construct(ProcessorInterface $processor)
     {
         $this->processor = $processor;
     }
 
-    /**
-     * @param NodeEvent $event
-     */
+    public static function getSubscribedEvents(): array
+    {
+        return [
+            NodePreCreateEvent::class => ['handle', 0],
+            NodePreUpdateEvent::class => ['handle', 0],
+        ];
+    }
+
     public function handle(NodeEvent $event): void
     {
         $node = $event->getNode();
 
-        if (!$node->getContentSource()) {
+        if (! $node->getContentSource()) {
             return;
         }
 

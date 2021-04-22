@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Taxonomy\UI\Web\Form;
+namespace Tulia\Cms\Taxonomy\UserInterface\Web\Form;
 
 use Symfony\Component\Form\FormFactoryInterface;
 use Tulia\Cms\Taxonomy\Application\Command\TermStorage;

@@ -9,25 +9,10 @@ namespace Tulia\Component\FormBuilder;
  */
 class Registry implements RegistryInterface
 {
-    /**
-     * @var array|iterable
-     */
-    protected $extensions = [];
+    protected iterable $extensions = [];
+    protected iterable $extensionsAggregate = [];
+    protected bool $aggregatesUnpacked = false;
 
-    /**
-     * @var array|iterable
-     */
-    protected $extensionsAggregate = [];
-
-    /**
-     * @var bool
-     */
-    protected $aggregatesUnpacked = false;
-
-    /**
-     * @param array|iterable $extensions
-     * @param array|iterable $extensionsAggregate
-     */
     public function __construct(iterable $extensions = [], iterable $extensionsAggregate = [])
     {
         $this->extensions = $extensions;
@@ -43,6 +28,8 @@ class Registry implements RegistryInterface
 
     public function add(ExtensionInterface $extension): void
     {
+        $this->transformGeneratorsToArrays();
+
         $this->extensions[] = $extension;
     }
 
@@ -67,6 +54,8 @@ class Registry implements RegistryInterface
         if ($this->aggregatesUnpacked) {
             return;
         }
+        $this->transformGeneratorsToArrays();
+
 
         /** @var ExtensionAggregateInterface $aggregate */
         foreach ($this->extensionsAggregate as $key => $aggregate) {
@@ -77,5 +66,14 @@ class Registry implements RegistryInterface
         }
 
         $this->aggregatesUnpacked = true;
+    }
+
+    private function transformGeneratorsToArrays(): void
+    {
+        $transformed = [];
+        foreach ($this->extensions as $extension) {
+            $transformed[] = $extension;
+        }
+        $this->extensions = $transformed;
     }
 }

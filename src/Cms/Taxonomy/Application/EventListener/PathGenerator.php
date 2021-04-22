@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Taxonomy\Application\EventListener;
 
+use Tulia\Cms\Taxonomy\Application\Event\TermCreatedEvent;
 use Tulia\Cms\Taxonomy\Application\Event\TermEvent;
+use Tulia\Cms\Taxonomy\Application\Event\TermUpdatedEvent;
 use Tulia\Cms\Taxonomy\Application\TaxonomyType\RegistryInterface;
 use Tulia\Cms\Taxonomy\Domain\Event\SlugChanged;
 use Tulia\Cms\Taxonomy\Infrastructure\Framework\Routing\Strategy\StrategyRegistry;
@@ -19,32 +21,11 @@ use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
  */
 class PathGenerator
 {
-    /**
-     * @var ConnectionInterface
-     */
-    protected $connection;
+    protected ConnectionInterface $connection;
+    protected StorageInterface $storage;
+    protected StrategyRegistry $strategyRegistry;
+    protected RegistryInterface $registry;
 
-    /**
-     * @var StorageInterface
-     */
-    protected $storage;
-
-    /**
-     * @var StrategyRegistry
-     */
-    protected $strategyRegistry;
-
-    /**
-     * @var RegistryInterface
-     */
-    protected $registry;
-
-    /**
-     * @param ConnectionInterface $connection
-     * @param StorageInterface $storage
-     * @param StrategyRegistry $strategyRegistry
-     * @param RegistryInterface $registry
-     */
     public function __construct(
         ConnectionInterface $connection,
         StorageInterface $storage,
@@ -57,9 +38,14 @@ class PathGenerator
         $this->registry = $registry;
     }
 
-    /**
-     * @param TermEvent $event
-     */
+    public static function getSubscribedEvents(): array
+    {
+        return [
+            TermCreatedEvent::class => ['handle', 500],
+            TermUpdatedEvent::class => ['handle', 500],
+        ];
+    }
+
     public function __invoke(TermEvent $event): void
     {
         $term = $event->getTerm();

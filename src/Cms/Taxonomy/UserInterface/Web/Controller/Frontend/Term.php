@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Taxonomy\UI\Web\Controller\Frontend;
+namespace Tulia\Cms\Taxonomy\UserInterface\Web\Controller\Frontend;
 
 use Tulia\Cms\Node\Query\Enum\ScopeEnum;
 use Tulia\Cms\Node\Query\Exception\QueryException;

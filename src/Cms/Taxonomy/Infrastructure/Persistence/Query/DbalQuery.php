@@ -6,9 +6,9 @@ namespace Tulia\Cms\Taxonomy\Infrastructure\Persistence\Query;
 
 use PDO;
 use Exception;
+use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Connection;
 use Tulia\Cms\Taxonomy\Query\Exception\QueryException;
 use Tulia\Cms\Taxonomy\Query\AbstractQuery;
-use Tulia\Framework\Database\Connection;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
 
 /**
@@ -16,14 +16,8 @@ use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder
  */
 class DbalQuery extends AbstractQuery
 {
-    /**
-     * @var QueryBuilder
-     */
-    protected $queryBuilder;
+    protected QueryBuilder $queryBuilder;
 
-    /**
-     * @param QueryBuilder $queryBuilder
-     */
     public function __construct(QueryBuilder $queryBuilder)
     {
         $this->queryBuilder = $queryBuilder;

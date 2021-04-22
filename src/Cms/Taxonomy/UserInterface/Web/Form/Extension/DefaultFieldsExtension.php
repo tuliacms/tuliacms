@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Taxonomy\UI\Web\Form\Extension;
+namespace Tulia\Cms\Taxonomy\UserInterface\Web\Form\Extension;
 
 use Symfony\Component\Form\FormBuilderInterface;
 use Tulia\Cms\Node\UserInterface\Web\Form\ScopeEnum;

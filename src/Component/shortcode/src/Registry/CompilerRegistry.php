@@ -13,14 +13,8 @@ use Tulia\Component\Shortcode\Compiler\ShortcodeCompilerInterface;
  */
 class CompilerRegistry implements CompilerRegistryInterface
 {
-    /**
-     * @var iterable
-     */
-    protected $compilers = [];
+    protected iterable $compilers = [];
 
-    /**
-     * @param iterable $compilers
-     */
     public function __construct(iterable $compilers = [])
     {
         $this->compilers = $compilers;

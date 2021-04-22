@@ -4,36 +4,22 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Taxonomy\Application\EventListener;
 
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Tulia\Cms\EditLinks\Application\Event\CollectEditLinksEvent;
 use Tulia\Cms\Taxonomy\Application\TaxonomyType\RegistryInterface;
 use Tulia\Cms\Taxonomy\Query\Model\Term;
-use Tulia\Cms\EditLinks\Application\Event\CollectEditLinksEvent;
-use Tulia\Component\Routing\Exception\RouteNotFoundException;
-use Symfony\Component\Routing\RouterInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class EditLinks
+class EditLinks implements EventSubscriberInterface
 {
-    /**
-     * @var TranslatorInterface
-     */
-    protected $translator;
+    protected TranslatorInterface $translator;
+    protected RouterInterface $router;
+    protected RegistryInterface $registry;
 
-    /**
-     * @var RouterInterface
-     */
-    protected $router;
-
-    /**
-     * @var RegistryInterface
-     */
-    protected $registry;
-
-    /**
-     * @param TranslatorInterface $translator
-     */
     public function __construct(TranslatorInterface $translator, RouterInterface $router, RegistryInterface $registry)
     {
         $this->translator = $translator;
@@ -41,11 +27,13 @@ class EditLinks
         $this->registry = $registry;
     }
 
-    /**
-     * @param CollectEditLinksEvent $event
-     *
-     * @throws RouteNotFoundException
-     */
+    public static function getSubscribedEvents(): array
+    {
+        return [
+            CollectEditLinksEvent::class => ['handle', 0],
+        ];
+    }
+
     public function handle(CollectEditLinksEvent $event): void
     {
         /** @var Term $term */

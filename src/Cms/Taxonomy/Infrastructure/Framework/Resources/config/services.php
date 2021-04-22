@@ -48,10 +48,10 @@ use Tulia\Cms\Taxonomy\Query\Factory\TermFactory;
 use Tulia\Cms\Taxonomy\Query\Factory\TermFactoryInterface;
 use Tulia\Cms\Taxonomy\Query\FinderFactory;
 use Tulia\Cms\Taxonomy\Query\FinderFactoryInterface;
-use Tulia\Cms\Taxonomy\UI\Web\Form\Extension\DefaultFieldsExtension;
-use Tulia\Cms\Taxonomy\UI\Web\Form\Extension\TaxonomyTypeExtensionAggregate;
-use Tulia\Cms\Taxonomy\UI\Web\Form\TermForm;
-use Tulia\Cms\Taxonomy\UI\Web\Form\TermFormManagerFactory;
+use Tulia\Cms\Taxonomy\UserInterface\Web\Form\Extension\DefaultFieldsExtension;
+use Tulia\Cms\Taxonomy\UserInterface\Web\Form\Extension\TaxonomyTypeExtensionAggregate;
+use Tulia\Cms\Taxonomy\UserInterface\Web\Form\TermForm;
+use Tulia\Cms\Taxonomy\UserInterface\Web\Form\TermFormManagerFactory;
 use Tulia\Component\DependencyInjection\ContainerBuilderInterface;
 use Tulia\Component\FormBuilder\Manager\ManagerFactoryInterface;
 use Symfony\Component\Routing\RouterInterface;
@@ -63,12 +63,12 @@ use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 
 /** @var ContainerBuilderInterface $builder */
 
-$builder->setDefinition(RegistryInterface::class, Registry::class, [
+/*$builder->setDefinition(RegistryInterface::class, Registry::class, [
     'arguments' => [
         tagged('taxonomy.type.registrator'),
         tagged('taxonomy.type.storage'),
     ],
-]);
+]);*/
 
 $builder->setDefinition(Loader::class, Loader::class, [
     'arguments' => [
@@ -93,9 +93,9 @@ $builder->setDefinition(FinderFactoryInterface::class, FinderFactory::class, [
     ],
 ]);
 
-$builder->setDefinition(DefaultTypesRegistrator::class, DefaultTypesRegistrator::class, [
+/*$builder->setDefinition(DefaultTypesRegistrator::class, DefaultTypesRegistrator::class, [
     'tags' => [ tag('taxonomy.type.registrator') ],
-]);
+]);*/
 
 $builder->setDefinition(TermStorage::class, TermStorage::class, [
     'arguments' => [
@@ -120,16 +120,16 @@ $builder->setDefinition(TermFormManagerFactory::class, TermFormManagerFactory::c
     ],
 ]);
 
-$builder->setDefinition(DefaultFieldsExtension::class, DefaultFieldsExtension::class, [
+/*$builder->setDefinition(DefaultFieldsExtension::class, DefaultFieldsExtension::class, [
     'tags' => [ tag('form_extension') ],
-]);
+]);*/
 
-$builder->setDefinition(TaxonomyTypeExtensionAggregate::class, TaxonomyTypeExtensionAggregate::class, [
+/*$builder->setDefinition(TaxonomyTypeExtensionAggregate::class, TaxonomyTypeExtensionAggregate::class, [
     'arguments' => [
         service(RegistryInterface::class),
     ],
     'tags' => [ tag('form_extension_aggregate') ],
-]);
+]);*/
 
 $builder->setDefinition(TaxonomyTypeaheadType::class, TaxonomyTypeaheadType::class, [
     'arguments' => [
@@ -155,20 +155,20 @@ $builder->setDefinition(DbalPersister::class, DbalPersister::class, [
     ],
 ]);
 
-$builder->setDefinition(DefaultMetadataRegistrator::class, DefaultMetadataRegistrator::class, [
+/*$builder->setDefinition(DefaultMetadataRegistrator::class, DefaultMetadataRegistrator::class, [
     'tags' => [ tag('metadata.registrator') ],
-]);
+]);*/
 
-$builder->setDefinition(MetadataLoader::class, MetadataLoader::class, [
+/*$builder->setDefinition(MetadataLoader::class, MetadataLoader::class, [
     'arguments' => [
         service(Loader::class),
     ],
     'tags' => [
         tag_event_listener(QueryFilterEvent::class),
     ],
-]);
+]);*/
 
-$builder->setDefinition(SlugGenerator::class, SlugGenerator::class, [
+/*$builder->setDefinition(SlugGenerator::class, SlugGenerator::class, [
     'arguments' => [
         service(SluggerInterface::class),
         service(FinderFactoryInterface::class),
@@ -177,17 +177,17 @@ $builder->setDefinition(SlugGenerator::class, SlugGenerator::class, [
         tag_event_listener(TermPreCreateEvent::class, 1000),
         tag_event_listener(TermPreUpdateEvent::class, 1000),
     ],
-]);
+]);*/
 
-$builder->setDefinition(Generator::class, Generator::class, [
+/*$builder->setDefinition(Generator::class, Generator::class, [
     'arguments' => [
         service(TermPathStorageInterface::class),
         service(FrontendRouteSuffixResolver::class),
     ],
     'tags' => [ tag('router.generator') ],
-]);
+]);*/
 
-$builder->setDefinition(Matcher::class, Matcher::class, [
+/*$builder->setDefinition(Matcher::class, Matcher::class, [
     'arguments' => [
         service(TermPathStorageInterface::class),
         service(FinderFactoryInterface::class),
@@ -195,29 +195,29 @@ $builder->setDefinition(Matcher::class, Matcher::class, [
         service(FrontendRouteSuffixResolver::class),
     ],
     'tags' => [ tag('router.matcher') ],
-]);
+]);*/
 
-$builder->setDefinition(StrategyRegistry::class, StrategyRegistry::class, [
+/*$builder->setDefinition(StrategyRegistry::class, StrategyRegistry::class, [
     'arguments' => [
         tagged('taxonomy.routing.strategy'),
     ],
-]);
+]);*/
 
-$builder->setDefinition(SimpleStrategy::class, SimpleStrategy::class, [
+/*$builder->setDefinition(SimpleStrategy::class, SimpleStrategy::class, [
     'arguments' => [
         service(TermStorageInterface::class),
     ],
     'tags' => [ tag('taxonomy.routing.strategy') ],
-]);
+]);*/
 
-$builder->setDefinition(FullPathStrategy::class, FullPathStrategy::class, [
+/*$builder->setDefinition(FullPathStrategy::class, FullPathStrategy::class, [
     'arguments' => [
         service(TermStorageInterface::class),
     ],
     'tags' => [ tag('taxonomy.routing.strategy') ],
-]);
+]);*/
 
-$builder->setDefinition(EditLinks::class, EditLinks::class, [
+/*$builder->setDefinition(EditLinks::class, EditLinks::class, [
     'arguments' => [
         service(TranslatorInterface::class),
         service(RouterInterface::class),
@@ -226,9 +226,9 @@ $builder->setDefinition(EditLinks::class, EditLinks::class, [
     'tags' => [
         tag_event_listener(CollectEditLinksEvent::class),
     ],
-]);
+]);*/
 
-$builder->setDefinition(PathGenerator::class, PathGenerator::class, [
+/*$builder->setDefinition(PathGenerator::class, PathGenerator::class, [
     'arguments' => [
         service(ConnectionInterface::class),
         service(TermPathStorageInterface::class),
@@ -239,7 +239,7 @@ $builder->setDefinition(PathGenerator::class, PathGenerator::class, [
         tag_event_listener(TermCreatedEvent::class, 500),
         tag_event_listener(TermUpdatedEvent::class, 500),
     ],
-]);
+]);*/
 
 $builder->setDefinition(TermPathStorageInterface::class, TermPathDbalStorage::class, [
     'arguments' => [
@@ -253,19 +253,19 @@ $builder->setDefinition(TermStorageInterface::class, DbalTermStorage::class, [
     ],
 ]);
 
-$builder->setDefinition(IdentityProvider::class, IdentityProvider::class, [
+/*$builder->setDefinition(IdentityProvider::class, IdentityProvider::class, [
     'arguments' => [
         service(RouterInterface::class),
     ],
     'tags' => [ tag('menu.identity_provider') ],
-]);
+]);*/
 
-$builder->setDefinition(TypeRegistrator::class, TypeRegistrator::class, [
+/*$builder->setDefinition(TypeRegistrator::class, TypeRegistrator::class, [
     'arguments' => [
         service(RegistryInterface::class),
     ],
     'tags' => [ tag('menu.builder.type_registrator') ],
-]);
+]);*/
 
 $builder->setDefinition(Selector::class, Selector::class, [
     'arguments' => [
@@ -275,11 +275,11 @@ $builder->setDefinition(Selector::class, Selector::class, [
     ],
 ]);
 
-$builder->setDefinition(BodyClass::class, BodyClass::class, [
+/*$builder->setDefinition(BodyClass::class, BodyClass::class, [
     'tags' => [
         tag_event_listener(CollectBodyClassEvent::class),
     ],
-]);
+]);*/
 
 $builder->setDefinition(TaxonomyExtension::class, TaxonomyExtension::class, [
     'arguments' => [
@@ -288,21 +288,21 @@ $builder->setDefinition(TaxonomyExtension::class, TaxonomyExtension::class, [
     'tags' => [ tag('twig.extension') ],
 ]);
 
-$builder->setDefinition(CrumbsResolver::class, CrumbsResolver::class, [
+/*$builder->setDefinition(CrumbsResolver::class, CrumbsResolver::class, [
     'arguments' => [
         service(RouterInterface::class),
         service(RegistryInterface::class),
         service(FinderFactoryInterface::class),
     ],
     'tags' => [ tag('breadcrumbs.resolver') ],
-]);
+]);*/
 
 
-$builder->mergeParameter('templating.paths', [
+/*$builder->mergeParameter('templating.paths', [
     'cms/taxonomy' => dirname(__DIR__) . '/views/frontend',
     'backend/taxonomy' => dirname(__DIR__) . '/views/backend',
 ]);
 
 $builder->mergeParameter('translation.directory_list', [
     dirname(__DIR__) . '/translations',
-]);
+]);*/

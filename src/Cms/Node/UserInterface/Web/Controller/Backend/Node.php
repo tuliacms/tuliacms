@@ -63,11 +63,16 @@ class Node extends AbstractController
         $this->nodeStorage   = $nodeStorage;
     }
 
+    public function index(string $node_type): RedirectResponse
+    {
+        return $this->redirectToRoute('backend.node.list', ['node_type' => $node_type]);
+    }
+
     /**
      * @param Request $request
      * @param TaxonomyRegistry $registry
      * @param TaxonomyFinderFactory $taxonomyFinder
-     * @param string $nodeType
+     * @param string $node_type
      * @param string|null $list
      *
      * @return RedirectResponse|ViewInterface
@@ -81,25 +86,14 @@ class Node extends AbstractController
         Request $request,
         TaxonomyRegistry $registry,
         TaxonomyFinderFactory $taxonomyFinder,
-        string $nodeType,
-        string $list = null
+        string $node_type
     ) {
-        if ($list !== 'list') {
-            return $this->redirect(
-                'backend.node',
-                array_merge(
-                    ['list' => 'list', 'node_type' => $nodeType],
-                    $request->query->all()
-                )
-            );
-        }
-
-        $criteria = (new RequestCriteriaBuilder($request))->build([ 'node_type' => $nodeType ]);
+        $criteria = (new RequestCriteriaBuilder($request))->build([ 'node_type' => $node_type ]);
         $finder = $this->finderFactory->getInstance(ScopeEnum::BACKEND_LISTING);
         $finder->setCriteria($criteria);
         $finder->fetchRaw();
 
-        $nodeTypeObject = $this->findNodeType($nodeType);
+        $nodeTypeObject = $this->findNodeType($node_type);
         $nodes = $this->fetchNodesCategories($taxonomyFinder, $finder->getResult());
 
         return $this->view('@backend/node/list.tpl', [
@@ -113,7 +107,7 @@ class Node extends AbstractController
 
     /**
      * @param Request $request
-     * @param string $nodeType
+     * @param string $node_type
      * @param NodeFormManagerFactory $formFactory
      * @param NodeFactoryInterface $nodeFactory
      *
@@ -123,14 +117,14 @@ class Node extends AbstractController
      */
     public function create(
         Request $request,
-        string $nodeType,
+        string $node_type,
         NodeFormManagerFactory $formFactory,
         NodeFactoryInterface $nodeFactory
     ) {
         $node = $nodeFactory->createNew([
-            'type' => $nodeType,
+            'type' => $node_type,
         ]);
-        $manager = $formFactory->create($nodeType, $node);
+        $manager = $formFactory->create($node_type, $node);
         $form = $manager->createForm();
         $form->handleRequest($request);
 
@@ -152,7 +146,7 @@ class Node extends AbstractController
     /**
      * @param Request $request
      * @param NodeFormManagerFactory $factory
-     * @param string $nodeType
+     * @param string $node_type
      * @param string $id
      *
      * @return RedirectResponse|ViewInterface
@@ -167,11 +161,11 @@ class Node extends AbstractController
     public function edit(
         Request $request,
         NodeFormManagerFactory $factory,
-        string $nodeType,
+        string $node_type,
         string $id
     ) {
         $node = $this->getNodeById($id);
-        $manager = $factory->create($nodeType, $node);
+        $manager = $factory->create($node_type, $node);
         $form = $manager->createForm();
         $form->handleRequest($request);
 

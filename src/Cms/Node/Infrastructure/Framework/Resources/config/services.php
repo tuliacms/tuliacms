@@ -261,25 +261,25 @@ $builder->setDefinition(NodeFormManagerFactory::class, NodeFormManagerFactory::c
     ],
 ]);*/
 
-$builder->setDefinition(MetadataLoader::class, MetadataLoader::class, [
+/*$builder->setDefinition(MetadataLoader::class, MetadataLoader::class, [
     'arguments' => [
         service(Loader::class),
     ],
     'tags' => [
         tag_event_listener(QueryFilterEvent::class),
     ],
-]);
+]);*/
 
-$builder->setDefinition(NodeChildrenPreDeleteValidator::class, NodeChildrenPreDeleteValidator::class, [
+/*$builder->setDefinition(NodeChildrenPreDeleteValidator::class, NodeChildrenPreDeleteValidator::class, [
     'arguments' => [
         service(FinderFactoryInterface::class),
     ],
     'tags' => [
         tag_event_listener(NodePreDeleteEvent::class, 1000),
     ],
-]);
+]);*/
 
-$builder->setDefinition(ContentShortcodeCompiler::class, ContentShortcodeCompiler::class, [
+/*$builder->setDefinition(ContentShortcodeCompiler::class, ContentShortcodeCompiler::class, [
     'arguments' => [
         service(ProcessorInterface::class),
     ],
@@ -287,9 +287,9 @@ $builder->setDefinition(ContentShortcodeCompiler::class, ContentShortcodeCompile
         tag_event_listener(NodePreCreateEvent::class),
         tag_event_listener(NodePreUpdateEvent::class),
     ],
-]);
+]);*/
 
-$builder->setDefinition(ContentRenderer::class, ContentRenderer::class, [
+/*$builder->setDefinition(ContentRenderer::class, ContentRenderer::class, [
     'arguments' => [
         service(EngineInterface::class),
         parameter('kernel.environment'),
@@ -298,7 +298,7 @@ $builder->setDefinition(ContentRenderer::class, ContentRenderer::class, [
     'tags' => [
         tag_event_listener(QueryFilterEvent::class),
     ],
-]);
+]);*/
 
 $builder->setDefinition(NodeExtension::class, NodeExtension::class, [
     'arguments' => [
@@ -314,23 +314,23 @@ $builder->setDefinition(NodeForm::class, NodeForm::class, [
     'tags' => [ tag('form.type') ],
 ]);
 
-$builder->setDefinition(AuthorExtension::class, AuthorExtension::class, [
+/*$builder->setDefinition(AuthorExtension::class, AuthorExtension::class, [
     'arguments' => [
         service(AuthenticatedUserProviderInterface::class),
     ],
     'tags' => [ tag('form_extension') ],
-]);
+]);*/
 
-$builder->setDefinition(NodeTypeExtensionAggregate::class, NodeTypeExtensionAggregate::class, [
+/*$builder->setDefinition(NodeTypeExtensionAggregate::class, NodeTypeExtensionAggregate::class, [
     'arguments' => [
         service(RegistryInterface::class),
     ],
     'tags' => [ tag('form_extension_aggregate') ],
-]);
+]);*/
 
-$builder->setDefinition(DefaultFieldsExtension::class, DefaultFieldsExtension::class, [
+/*$builder->setDefinition(DefaultFieldsExtension::class, DefaultFieldsExtension::class, [
     'tags' => [ tag('form_extension') ],
-]);
+]);*/
 
 $builder->setDefinition(NodeTypeaheadType::class, NodeTypeaheadType::class, [
     'arguments' => [
@@ -339,16 +339,16 @@ $builder->setDefinition(NodeTypeaheadType::class, NodeTypeaheadType::class, [
     'tags' => [ tag('form.type') ],
 ]);
 
-$builder->setDefinition(NodeMenuBuilder::class, NodeMenuBuilder::class, [
+/*$builder->setDefinition(NodeMenuBuilder::class, NodeMenuBuilder::class, [
     'arguments' => [
         service(BuilderHelperInterface::class),
         service(RegistryInterface::class),
         service(TaxonomyRegistryInterface::class),
     ],
     'tags' => [ tag('backend_menu.builder') ],
-]);
+]);*/
 
-$builder->setDefinition(CrumbsResolver::class, CrumbsResolver::class, [
+/*$builder->setDefinition(CrumbsResolver::class, CrumbsResolver::class, [
     'arguments' => [
         service(RouterInterface::class),
         service(RegistryInterface::class),
@@ -356,11 +356,11 @@ $builder->setDefinition(CrumbsResolver::class, CrumbsResolver::class, [
         service(TermFinderFactoryInterface::class),
     ],
     'tags' => [ tag('breadcrumbs.resolver') ],
-]);
+]);*/
 
-$builder->setDefinition(DefaultSizesProvider::class, DefaultSizesProvider::class, [
+/*$builder->setDefinition(DefaultSizesProvider::class, DefaultSizesProvider::class, [
     'tags' => [ tag('filemanager.image_size.provider') ],
-]);
+]);*/
 
 
 /**
@@ -368,11 +368,11 @@ $builder->setDefinition(DefaultSizesProvider::class, DefaultSizesProvider::class
  * content rendering in many more scopes than default ones, even for custom created
  * by extensions.
  */
-$builder->mergeParameter('cms.node.finder.content_renderer.scopes', [
+/*$builder->mergeParameter('cms.node.finder.content_renderer.scopes', [
     ScopeEnum::SINGLE,
     ScopeEnum::ROUTING_MATCHER,
-]);
-
+]);*/
+/*
 $builder->mergeParameter('translation.directory_list', [
     dirname(__DIR__) . '/translations',
 ]);
@@ -380,4 +380,4 @@ $builder->mergeParameter('translation.directory_list', [
 $builder->mergeParameter('templating.paths', [
     'cms/node' => dirname(__DIR__) . '/views/frontend',
     'backend/node' => dirname(__DIR__) . '/views/backend',
-]);
+]);*/
