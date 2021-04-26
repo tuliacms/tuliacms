@@ -5,3 +5,5 @@ framework:
     templating:
         paths:
             - { name: cms/frontend_toolbar, path: '%kernel.project_dir%/src/Cms/FrontendToolbar/Infrastructure/Framework/Resources/views/frontend' }
+    public_paths:
+        '%kernel.project_dir%/src/Cms/FrontendToolbar/Infrastructure/Framework/Resources/public/src': '/core/frontend-toolbar'

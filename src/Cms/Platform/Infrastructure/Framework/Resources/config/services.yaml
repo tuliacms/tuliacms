@@ -10,7 +10,7 @@ services:
         bind:
             $publicDir: '%kernel.public_dir%'
             $rootDir: '%kernel.project_dir%'
-            $assetsPublicPaths: [ ] # framework.assets.public.paths
+            $assetsPublicPaths: '%framework.assets.public_paths%'
 
     Tulia\Cms\Platform\:
         resource: '../../../../*'

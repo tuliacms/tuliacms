@@ -20,6 +20,7 @@ class Configuration extends SymfonyConfiguration
         $treeBuilder = parent::getConfigTreeBuilder();
         $root = $treeBuilder->getRootNode();
 
+        $this->registerAssetsConfiguration($root);
         $this->registerAssetterConfiguration($root);
         $this->registerTwigConfiguration($root);
         $this->registerTemplatingConfiguration($root);
@@ -102,6 +103,17 @@ class Configuration extends SymfonyConfiguration
                             ->end()
                         ->end()
                     ->end()
+                ->end()
+            ->end()
+        ;
+    }
+
+    private function registerAssetsConfiguration(NodeDefinition $root): void
+    {
+        $root
+            ->children()
+                ->arrayNode('public_paths')
+                    ->scalarPrototype()->defaultValue([])->end()
                 ->end()
             ->end()
         ;

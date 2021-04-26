@@ -33,6 +33,7 @@ class TuliaCmsExtension extends FrameworkExtension
         $config = $this->processConfiguration($configuration, $configs);
 
         $container->setParameter('framework.assetter.assets', $config['assetter']['assets'] ?? []);
+        $container->setParameter('framework.assets.public_paths', $config['public_paths'] ?? []);
         $container->setParameter('framework.twig.loader.array.templates', $this->prepareTwigArrayLoaderTemplates($config['twig']['loader']['array']['templates'] ?? []));
         $container->setParameter('framework.templating.paths', $this->prepareTemplatingPaths($config['templating']['paths'] ?? []));
         $container->setParameter('framework.templating.namespace_overwrite', $config['templating']['namespace_overwrite'] ?? []);
