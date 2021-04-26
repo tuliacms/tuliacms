@@ -25,12 +25,8 @@ services:
     Tulia\Cms\Node\Infrastructure\NodeType\Storage\DatabaseStorage:
         tags: [ node.type.storage ]
 
-    Tulia\Cms\Node\Infrastructure\Framework\Routing\Generator:
-        tags: [ router.generator ]
-
-    Tulia\Cms\Node\Infrastructure\Framework\Routing\Matcher:
+    Tulia\Cms\Node\Infrastructure\Framework\Routing\Router:
         tags: [ routing_chain.router ]
-        #tags: [ router.matcher ]
 
     Tulia\Cms\Node\Infrastructure\NodeType\DefaultTypesRegistrator:
         tags: [ node.type.registrator ]

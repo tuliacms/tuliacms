@@ -5,13 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Node\Infrastructure\Framework\Routing;
 
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Exception\InvalidParameterException;
-use Symfony\Component\Routing\Exception\MethodNotAllowedException;
-use Symfony\Component\Routing\Exception\MissingMandatoryParametersException;
-use Symfony\Component\Routing\Exception\NoConfigurationException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use Symfony\Component\Routing\Exception\RouteNotFoundException;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RouteCollection;
@@ -28,12 +22,12 @@ use Tulia\Cms\Platform\Infrastructure\Framework\Routing\FrontendRouteSuffixResol
 /**
  * @author Adam Banaszkiewicz
  */
-class Matcher implements RouterInterface, RequestMatcherInterface
+class Router implements RouterInterface, RequestMatcherInterface
 {
     protected FinderFactoryInterface $finderFactory;
     protected RegistryInterface $registry;
     protected FrontendRouteSuffixResolver $frontendRouteSuffixResolver;
-    protected RequestContext $context;
+    protected ?RequestContext $context = null;
 
     public function __construct(
         FinderFactoryInterface $finderFactory,
@@ -61,7 +55,7 @@ class Matcher implements RouterInterface, RequestMatcherInterface
         return new RouteCollection();
     }
 
-    public function generate(string $name, array $parameters = [], int $referenceType = self::ABSOLUTE_PATH)
+    public function generate(string $name, array $parameters = [], int $referenceType = self::ABSOLUTE_PATH): ?string
     {
         if (strncmp($name, 'node_', 5) !== 0) {
             return null;
@@ -70,6 +64,7 @@ class Matcher implements RouterInterface, RequestMatcherInterface
         $identity = substr($name, 5);
 
         $parameters = array_merge([
+            // @todo Fix routing locales
             '_locale' => 'pl_PL',//$this->getContext()->getParameter('_content_locale'),
         ], $parameters);
 
@@ -103,17 +98,17 @@ class Matcher implements RouterInterface, RequestMatcherInterface
             /** @var Node $node */
             $node = $this->getNode(substr($pathinfo, 1));
         } catch (\Exception $e) {
-            return [];
+            throw new ResourceNotFoundException('Node not found with given path.');
         }
 
         if (! $node) {
-            return [];
+            throw new ResourceNotFoundException('Node not found with given path.');
         }
 
         $nodeType = $this->registry->getType($node->getType());
 
         if (! $nodeType || $nodeType->isRoutable() === false) {
-            return [];
+            throw new ResourceNotFoundException('Node type not exists or is not routable.');
         }
 
         return [

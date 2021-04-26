@@ -1,6 +1,7 @@
 doctrine_migrations:
+    storage:
+        table_storage:
+            table_name: '#__migration_versions'
     migrations_paths:
-        # namespace is arbitrary but should be different from App\Migrations
-        # as migrations classes should NOT be autoloaded
-        'DoctrineMigrations': '%kernel.project_dir%/migrations'
+        'Tulia\Cms\Migrations': '%kernel.project_dir%/src/Migrations'
     enable_profiler: '%kernel.debug%'

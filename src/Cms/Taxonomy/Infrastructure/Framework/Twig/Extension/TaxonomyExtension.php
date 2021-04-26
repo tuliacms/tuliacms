@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Taxonomy\Infrastructure\Framework\Twig\Extension;
 
+use Symfony\Component\Routing\RouterInterface;
 use Tulia\Cms\Taxonomy\Query\Model\Term;
 use Tulia\Component\Routing\Exception\RoutingException;
-use Symfony\Component\Routing\RouterInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -15,14 +15,8 @@ use Twig\TwigFunction;
  */
 class TaxonomyExtension extends AbstractExtension
 {
-    /**
-     * @var RouterInterface
-     */
-    protected $router;
+    protected RouterInterface $router;
 
-    /**
-     * @param RouterInterface $router
-     */
     public function __construct(RouterInterface $router)
     {
         $this->router = $router;
@@ -35,12 +29,12 @@ class TaxonomyExtension extends AbstractExtension
     {
         return [
             new TwigFunction('term_path', function ($identity, array $parameters = []) {
-                return $this->generate($identity, $parameters, RouterInterface::TYPE_PATH);
+                return $this->generate($identity, $parameters, RouterInterface::ABSOLUTE_PATH);
             }, [
                 'is_safe' => [ 'html' ]
             ]),
             new TwigFunction('term_url', function ($identity, array $parameters = []) {
-                return $this->generate($identity, $parameters, RouterInterface::TYPE_URL);
+                return $this->generate($identity, $parameters, RouterInterface::ABSOLUTE_URL);
             }, [
                 'is_safe' => [ 'html' ]
             ]),
@@ -50,10 +44,7 @@ class TaxonomyExtension extends AbstractExtension
     private function generate($identity, array $parameters, int $type): string
     {
         try {
-            $context = clone $this->router->getRequestContext();
-            $context->setBackend(false);
-
-            return $this->router->generate($this->getId($identity), $parameters, $type, $context);
+            return $this->router->generate($this->getId($identity), $parameters, $type);
         } catch (RoutingException $exception) {
             return '';
         }

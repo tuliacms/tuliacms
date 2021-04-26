@@ -4,6 +4,12 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Taxonomy\Infrastructure\Framework\Routing;
 
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
+use Symfony\Component\Routing\RequestContext;
+use Symfony\Component\Routing\RouteCollection;
+use Symfony\Component\Routing\RouterInterface;
 use Tulia\Cms\Platform\Infrastructure\Framework\Routing\FrontendRouteSuffixResolver;
 use Tulia\Cms\Taxonomy\Application\TaxonomyType\RegistryInterface;
 use Tulia\Cms\Taxonomy\Application\TaxonomyType\TaxonomyTypeInterface;
@@ -11,40 +17,18 @@ use Tulia\Cms\Taxonomy\Infrastructure\Persistence\TermPath\StorageInterface;
 use Tulia\Cms\Taxonomy\Query\Enum\ScopeEnum;
 use Tulia\Cms\Taxonomy\Query\FinderFactoryInterface;
 use Tulia\Cms\Taxonomy\Query\Model\Term;
-use Tulia\Component\Routing\Matcher\MatcherInterface;
-use Tulia\Component\Routing\Request\RequestContextInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class Matcher implements MatcherInterface
+class Router implements RouterInterface, RequestMatcherInterface
 {
-    /**
-     * @var StorageInterface
-     */
-    protected $storage;
+    protected StorageInterface $storage;
+    protected FinderFactoryInterface $finderFactory;
+    protected RegistryInterface $registry;
+    protected FrontendRouteSuffixResolver $frontendRouteSuffixResolver;
+    protected ?RequestContext $context = null;
 
-    /**
-     * @var FinderFactoryInterface
-     */
-    protected $finderFactory;
-
-    /**
-     * @var RegistryInterface
-     */
-    protected $registry;
-
-    /**
-     * @var FrontendRouteSuffixResolver
-     */
-    protected $frontendRouteSuffixResolver;
-
-    /**
-     * @param StorageInterface $storage
-     * @param FinderFactoryInterface $finderFactory
-     * @param RegistryInterface $registry
-     * @param FrontendRouteSuffixResolver $frontendRouteSuffixResolver
-     */
     public function __construct(
         StorageInterface $storage,
         FinderFactoryInterface $finderFactory,
@@ -57,27 +41,63 @@ class Matcher implements MatcherInterface
         $this->frontendRouteSuffixResolver = $frontendRouteSuffixResolver;
     }
 
+    public function setContext(RequestContext $context): void
+    {
+        $this->context = $context;
+    }
+
+    public function getContext(): RequestContext
+    {
+        return $this->context;
+    }
+
+    public function getRouteCollection(): RouteCollection
+    {
+        // Dynamic routing don't have any static collection
+        return new RouteCollection();
+    }
+
     /**
      * {@inheritdoc}
      */
-    public function match(string $pathinfo, RequestContextInterface $context): array
+    public function generate(string $name, array $parameters = [], int $referenceType = self::ABSOLUTE_PATH): ?string
     {
-        if ($context->isBackend()) {
-            return [];
+        if (strncmp($name, 'term_', 5) !== 0) {
+            return '';
         }
 
+        // @todo Fix routing locales
+        $locale = 'pl_PL';//$context->getContentLocale();
+
+        $path = $this->storage->find(substr($name, 5), $locale)['path'] ?? null;
+
+        return $path ? $this->frontendRouteSuffixResolver->appendSuffix($path) : $path;
+    }
+
+    public function matchRequest(Request $request): array
+    {
+        return $this->match($request->attributes->get('_content_path', $request->getPathInfo()));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function match(string $pathinfo): array
+    {
+        // @todo Fix routing locales
+        $locale = 'pl_PL';//$context->getContentLocale()
         $pathinfo = $this->frontendRouteSuffixResolver->removeSuffix($pathinfo);
-        $termId = $this->storage->findByPath($pathinfo, $context->getContentLocale());
+        $termId = $this->storage->findByPath($pathinfo, $locale);
 
         if ($termId === null) {
-            return [];
+            throw new ResourceNotFoundException('Term not exists for given path.');
         }
 
         /** @var Term $term */
         $term = $this->getTerm($termId);
 
         if ($this->isTermRoutable($term, $termType) === false) {
-            return [];
+            throw new ResourceNotFoundException('Taxonomy type not exists or is not routable.');
         }
 
         return [
@@ -88,13 +108,7 @@ class Matcher implements MatcherInterface
         ];
     }
 
-    /**
-     * @param Term|null $term
-     * @param null|TaxonomyTypeInterface $termType
-     *
-     * @return bool
-     */
-    private function isTermRoutable(?Term $term, &$termType): bool
+    private function isTermRoutable(?Term $term, ?TaxonomyTypeInterface &$termType): bool
     {
         if (! $term instanceof Term) {
             return false;

@@ -4,22 +4,19 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Taxonomy\Application\EventListener;
 
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Tulia\Cms\Taxonomy\Application\Event\TermCreatedEvent;
 use Tulia\Cms\Taxonomy\Application\Event\TermEvent;
 use Tulia\Cms\Taxonomy\Application\Event\TermUpdatedEvent;
 use Tulia\Cms\Taxonomy\Application\TaxonomyType\RegistryInterface;
-use Tulia\Cms\Taxonomy\Domain\Event\SlugChanged;
 use Tulia\Cms\Taxonomy\Infrastructure\Framework\Routing\Strategy\StrategyRegistry;
 use Tulia\Cms\Taxonomy\Infrastructure\Persistence\TermPath\StorageInterface;
-use Tulia\Cms\Taxonomy\Query\Enum\ScopeEnum;
-use Tulia\Cms\Taxonomy\Query\FinderFactoryInterface;
-use Tulia\Cms\Taxonomy\Query\Model\Term;
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class PathGenerator
+class PathGenerator implements EventSubscriberInterface
 {
     protected ConnectionInterface $connection;
     protected StorageInterface $storage;
@@ -41,8 +38,8 @@ class PathGenerator
     public static function getSubscribedEvents(): array
     {
         return [
-            TermCreatedEvent::class => ['handle', 500],
-            TermUpdatedEvent::class => ['handle', 500],
+            TermCreatedEvent::class => ['__invoke', 500],
+            TermUpdatedEvent::class => ['__invoke', 500],
         ];
     }
 

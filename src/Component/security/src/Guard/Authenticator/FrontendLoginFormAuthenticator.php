@@ -55,8 +55,8 @@ class FrontendLoginFormAuthenticator extends AbstractFormLoginAuthenticator impl
     public function getCredentials(Request $request): array
     {
         $credentials = [
-            'username' => $request->request->get('username'),
-            'password' => $request->request->get('password'),
+            'username' => $request->request->get('_username'),
+            'password' => $request->request->get('_password'),
             'csrf_token' => $request->request->get('_csrf_token'),
         ];
         $request->getSession()->set(

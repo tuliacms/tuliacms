@@ -19,14 +19,8 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class Term extends AbstractController
 {
-    /**
-     * @var FinderFactoryInterface
-     */
-    protected $nodeFinderFactory;
+    protected FinderFactoryInterface $nodeFinderFactory;
 
-    /**
-     * @param FinderFactoryInterface $nodeFinderFactory
-     */
     public function __construct(FinderFactoryInterface $nodeFinderFactory)
     {
         $this->nodeFinderFactory = $nodeFinderFactory;
@@ -35,18 +29,17 @@ class Term extends AbstractController
     /**
      * @param QueryModelTerm $term
      * @param Request $request
-     * @param $page
      *
      * @return ViewInterface
      *
      * @throws QueryException
      * @throws QueryNotFetchedException
      */
-    public function show(QueryModelTerm $term, Request $request, $page): ViewInterface
+    public function show(QueryModelTerm $term, Request $request): ViewInterface
     {
         $this->getDocument()->setTitle($term->getName());
 
-        $finder = $this->createNodeFinder($term, (int) $page);
+        $finder = $this->createNodeFinder($term, $request->query->getInt('page', 1));
 
         return $this->view([
             '@cms/taxonomy/term_id:' . $term->getId() . '.tpl',

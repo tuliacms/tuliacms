@@ -28,6 +28,7 @@ security:
                 invalidate_session: true
             form_login:
                 login_path: backend.login
+                check_path: backend.login
             remember_me:
                 secret: '%kernel.secret%'
                 lifetime: 604800
@@ -54,7 +55,7 @@ security:
                 path: /
 
     access_control:
-        - { path: ^/auth/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/auth, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/profile, roles: ROLE_USER }
-        - { path: ^/administrator/auth/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/administrator/auth, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/administrator, roles: ROLE_ADMIN }

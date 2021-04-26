@@ -85,6 +85,7 @@
             "Tulia\\Component\\Theme\\": "src/Component/theme/src",
             "Tulia\\Component\\Widget\\": "src/Component/widget/src",
             "Tulia\\Component\\Security\\": "src/Component/security/src",
+            "Tulia\\Cms\\Migrations\\": "src/Migrations",
             "Tulia\\Cms\\Shared\\": "src/Shared",
             "Tulia\\Cms\\": "src/Cms"
         }

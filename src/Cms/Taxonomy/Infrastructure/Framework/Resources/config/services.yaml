@@ -26,11 +26,8 @@ services:
     Tulia\Cms\Taxonomy\Infrastructure\Cms\Metadata\DefaultMetadataRegistrator:
         tags: [ metadata.registrator ]
 
-    Tulia\Cms\Taxonomy\Infrastructure\Framework\Routing\Generator:
-        tags: [ router.generator ]
-
-    Tulia\Cms\Taxonomy\Infrastructure\Framework\Routing\Matcher:
-        tags: [ router.matcher ]
+    Tulia\Cms\Taxonomy\Infrastructure\Framework\Routing\Router:
+        tags: [ routing_chain.router ]
 
     Tulia\Cms\Taxonomy\Infrastructure\Framework\Routing\Strategy\StrategyRegistry:
         bind:
