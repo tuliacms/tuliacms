@@ -1,0 +1,9 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    Tulia\Cms\Website\:
+        resource: '../../../../*'
+        exclude:
+            - '../../../../Infrastructure/Framework/Resources/*'

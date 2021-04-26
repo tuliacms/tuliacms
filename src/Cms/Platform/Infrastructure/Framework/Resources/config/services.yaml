@@ -1,0 +1,29 @@
+imports:
+    - { resource: services/routing.yaml }
+    - { resource: services/utils.yaml }
+    - { resource: services/metadata.yaml }
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        bind:
+            $publicDir: '%kernel.public_dir%'
+            $rootDir: '%kernel.project_dir%'
+            $assetsPublicPaths: '%framework.assets.public_paths%'
+
+    Tulia\Cms\Platform\:
+        resource: '../../../../*'
+        exclude:
+            - '../../../../**/Resources/**'
+            - '../../../../**/Domain/**'
+            - '../../../../**/Model/**'
+            - '../../../../**/*Exception.php'
+            - '../../../../**/*Trait.php'
+            - '../../../../**/*View.php'
+            - '../../../../**/*Response.php'
+            - '../../../../**/*Event.php'
+
+    Tulia\Cms\Platform\UserInterface\CLI\Command\AssetsPublish:
+        tags:
+            - { name: console.command, command: 'assets:publish' }

@@ -1,0 +1,13 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    Tulia\Cms\FrontendToolbar\:
+        resource: '../../../../*'
+        exclude:
+            - '../../../../Infrastructure/Framework/Resources/*'
+
+    Tulia\Cms\FrontendToolbar\Application\Links\ProviderRegistry:
+        bind:
+            $providers: !tagged_iterator frontend_toolbar.links.provider

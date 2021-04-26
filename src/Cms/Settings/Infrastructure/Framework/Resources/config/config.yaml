@@ -1,0 +1,7 @@
+framework:
+    translator:
+        paths:
+            - '%kernel.project_dir%/src/Cms/Settings/Infrastructure/Framework/Resources/translations'
+    templating:
+        paths:
+            - { name: backend/settings, path: '%kernel.project_dir%/src/Cms/Settings/Infrastructure/Framework/Resources/views/backend' }

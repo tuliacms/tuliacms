@@ -1,0 +1,40 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+    _instanceof:
+        Tulia\Cms\ContactForms\Application\FieldType\TypeInterface:
+            tags: [ cms.form.field_type ]
+        Tulia\Cms\ContactForms\Application\FieldType\Parser\FieldParserInterface:
+            tags: [ cms.form.field_parser ]
+
+    Tulia\Cms\ContactForms\:
+        resource: '../../../../*'
+        exclude:
+            - '../../../../Infrastructure/Framework/Resources/*'
+
+    Tulia\Cms\ContactForms\Application\FieldType\Parser\RegistryInterface:
+        class: Tulia\Cms\ContactForms\Application\FieldType\Parser\Registry
+        bind:
+            $sourceParsers: !tagged_iterator cms.form.field_parser
+
+    Tulia\Cms\ContactForms\Application\FieldType\RegistryInterface:
+        class: Tulia\Cms\ContactForms\Application\FieldType\Registry
+        bind:
+            $sourceTypes: !tagged_iterator cms.form.field_type
+
+    Tulia\Cms\ContactForms\Infrastructure\Cms\BackendMenu\MenuBuilder:
+        tags: [ backend_menu.builder ]
+
+    Tulia\Cms\ContactForms\Infrastructure\Cms\Widget\Predefined\ContactFormWidget:
+        tags: [ widget ]
+
+    Tulia\Cms\ContactForms\Application\Builder\Form:
+        tags: [ form.type ]
+
+    Tulia\Cms\ContactForms\Infrastructure\Cms\Shortcode\ContactForm:
+        tags: [ shortcode.compiler ]
+
+    Tulia\Cms\ContactForms\Infrastructure\Cms\SearchAnything\SearchProvider:
+        tags:
+            - { name: search.provider, priority: 600 }

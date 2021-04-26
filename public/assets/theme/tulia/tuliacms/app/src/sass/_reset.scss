@@ -1,0 +1,28 @@
+a {
+    transition: $transition-duration all;
+
+    &:hover,
+    &:focus {
+        text-decoration: none;
+        color: $primary;
+    }
+}
+
+img {
+    display: inline-block;
+    max-width: 100%
+}
+
+body {
+    font-family: $font-family;
+    font-size: $font-size;
+}
+
+h1, .h1 {
+    margin-bottom: 40px;
+    font-weight: bold;
+}
+
+.h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
+    line-height: 1.3;
+}

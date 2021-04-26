@@ -1,0 +1,45 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+    _instanceof:
+        Tulia\Cms\Filemanager\Command\CommandInterface:
+            tags: [ filemanager.command ]
+
+    Tulia\Cms\Filemanager\:
+        resource: '../../../../*'
+        exclude:
+            - '../../../../Infrastructure/Framework/Resources/*'
+
+    Tulia\Cms\Filemanager\Application\Cropper:
+        bind:
+            $filesDirectory: '%kernel.public_dir%'
+
+    Tulia\Cms\Filemanager\Infrastructure\Framework\Twig\Extension\FilemanagerExtension:
+        bind:
+            $publicDir: '%kernel.public_dir%'
+
+    Tulia\Cms\Filemanager\Application\ImageSize\Registry:
+        bind:
+            $providers: !tagged_iterator filemanager.image_size.provider
+
+    Tulia\Cms\Filemanager\CommandRegistryInterface:
+        class: Tulia\Cms\Filemanager\CommandRegistry
+        bind:
+            $commands: !tagged_iterator filemanager.command
+
+    Tulia\Cms\Filemanager\Command\Upload:
+        bind:
+            $projectDir: '%kernel.project_dir%'
+
+    Tulia\Cms\Filemanager\Infrastructure\Cms\Shortcode\Gallery:
+        tags: [ shortcode.compiler ]
+
+    Tulia\Cms\Filemanager\Infrastructure\Cms\Shortcode\Image:
+        tags: [ shortcode.compiler ]
+
+    Tulia\Cms\Filemanager\Application\ImageSize\DefaultSizesProvider:
+        tags: [ filemanager.image_size.provider ]
+
+    Tulia\Cms\Filemanager\Infrastructure\Framework\Theme\Customizer\FilepickerControl:
+        tags: [ theme.customizer.control ]

@@ -1,0 +1,14 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    Tulia\Cms\Shared\Ports\Infrastructure\Utils\Uuid\UuidGeneratorInterface:
+        class: Tulia\Cms\Shared\Infrastructure\Utils\Uuid\RamseyUuidGenerator
+
+    Tulia\Cms\Shared\Ports\Infrastructure\Utils\Annotations\AnnotationsReaderInterface:
+        class: Tulia\Cms\Shared\Ports\Infrastructure\Utils\Annotations\AnnotationsReader
+
+    Tulia\Cms\Shared\Ports\Infrastructure\Utils\Slug\SluggerInterface:
+        class: Tulia\Cms\Shared\Infrastructure\Utils\Slug\SimpleSlugGenerator
+

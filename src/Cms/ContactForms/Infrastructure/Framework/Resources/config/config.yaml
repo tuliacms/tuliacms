@@ -1,0 +1,8 @@
+framework:
+    translator:
+        paths:
+            - '%kernel.project_dir%/src/Cms/ContactForms/Infrastructure/Framework/Resources/translations'
+    templating:
+        paths:
+            - { name: cms/forms, path: '%kernel.project_dir%/src/Cms/ContactForms/Infrastructure/Framework/Resources/views/frontend' }
+            - { name: backend/forms, path: '%kernel.project_dir%/src/Cms/ContactForms/Infrastructure/Framework/Resources/views/backend' }

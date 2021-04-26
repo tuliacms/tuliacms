@@ -1,14 +1,22 @@
 <?php
 
+use Symfony\Component\Dotenv\Dotenv;
+use Symfony\Component\ErrorHandler\Debug;
+use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\Platform\Infrastructure\Framework\Kernel\TuliaKernel;
-use Tulia\Framework\Http\Request;
 
-include __DIR__ . '/../bootstrap.php';
+require dirname(__DIR__) . '/vendor/autoload.php';
 
+(new Dotenv())->bootEnv(dirname(__DIR__) . '/.env');
+
+if ($_SERVER['APP_DEBUG']) {
+    umask(0000);
+
+    Debug::enable();
+}
+
+$kernel = new TuliaKernel($_SERVER['APP_ENV'], (bool) $_SERVER['APP_DEBUG']);
 $request = Request::createFromGlobals();
-
-$kernel = new TuliaKernel($_ENV['APP_ENV'], $_ENV['APP_DEBUG']);
-$kernel->setProjectDir(dirname(__DIR__));
 $response = $kernel->handle($request);
 $response->send();
 $kernel->terminate($request, $response);

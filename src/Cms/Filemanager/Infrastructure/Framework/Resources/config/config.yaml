@@ -1,0 +1,4 @@
+framework:
+    templating:
+        paths:
+            - { name: backend/filemanager, path: '%kernel.project_dir%/src/Cms/Filemanager/Infrastructure/Framework/Resources/views/backend' }

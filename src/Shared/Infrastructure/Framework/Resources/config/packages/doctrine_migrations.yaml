@@ -1,0 +1,7 @@
+doctrine_migrations:
+    storage:
+        table_storage:
+            table_name: '#__migration_versions'
+    migrations_paths:
+        'Tulia\Cms\Migrations': '%kernel.project_dir%/src/Migrations'
+    enable_profiler: '%kernel.debug%'

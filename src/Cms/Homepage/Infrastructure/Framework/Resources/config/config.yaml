@@ -1,0 +1,5 @@
+framework:
+    templating:
+        paths:
+            - { name: cms/homepage, path: '%kernel.project_dir%/src/Cms/Homepage/Infrastructure/Framework/Resources/views/frontend' }
+            - { name: backend/homepage, path: '%kernel.project_dir%/src/Cms/Homepage/Infrastructure/Framework/Resources/views/backend' }

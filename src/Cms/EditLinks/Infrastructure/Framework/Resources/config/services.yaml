@@ -1,0 +1,12 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    Tulia\Cms\EditLinks\:
+        resource: '../../../../*'
+        exclude:
+            - '../../../../Infrastructure/Framework/Resources/*'
+
+    Tulia\Cms\EditLinks\Infrastructure\Cms\FrontendToolbar\LinksProvider:
+        tags: [ frontend_toolbar.links.provider ]

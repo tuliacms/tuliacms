@@ -1,0 +1,18 @@
+login:
+    path: /auth/login
+    controller: Tulia\Cms\Security\UserInterface\Web\Controller\Frontend\Security::login
+    methods: GET|POST
+
+logout:
+    path: /auth/logout
+    controller: Tulia\Cms\Security\UserInterface\Web\Controller\Frontend\Security::logout
+
+backend.login:
+    path: /administrator/auth/login
+    controller: Tulia\Cms\Security\UserInterface\Web\Controller\Backend\Security::login
+    methods: GET|POST
+
+backend.logout:
+    path: /administrator/auth/logout
+    controller: Tulia\Cms\Security\UserInterface\Web\Controller\Backend\Security::logout
+    methods: GET|POST

@@ -1,0 +1,27 @@
+backend.widget:
+    path: /administrator/widget
+    controller: Tulia\Cms\Widget\UserInterface\Web\Controller\Backend\Widget::index
+
+backend.widget.list:
+    path: /administrator/widget/list
+    controller: Tulia\Cms\Widget\UserInterface\Web\Controller\Backend\Widget::list
+
+backend.widget.datatable:
+    path: /administrator/widget/datatable
+    controller: Tulia\Cms\Widget\UserInterface\Web\Controller\Backend\Widget::datatable
+
+backend.widget.create:
+    path: /administrator/widget/create/{id}
+    controller: Tulia\Cms\Widget\UserInterface\Web\Controller\Backend\Widget::create
+    methods: GET|POST
+
+backend.widget.edit:
+    path: /administrator/widget/edit/{id}
+    controller: Tulia\Cms\Widget\UserInterface\Web\Controller\Backend\Widget::edit
+    methods: GET|POST
+
+backend.widget.delete:
+    path: /administrator/widget/delete
+    controller: Tulia\Cms\Widget\UserInterface\Web\Controller\Backend\Widget::delete
+    methods: GET|POST
+

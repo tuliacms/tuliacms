@@ -1,0 +1,50 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    Tulia\Cms\Menu\:
+        resource: '../../../../*'
+        exclude:
+            - '../../../../Infrastructure/Framework/Resources/*'
+
+    Tulia\Cms\Menu\Infrastructure\Framework\Twig\Extension\MenuExtension:
+        tags: [ twig.extension ]
+
+    Tulia\Cms\Menu\Application\Query\Finder\FinderFactory:
+        bind:
+            $queryClass: Tulia\Cms\Menu\Infrastructure\Persistence\Query\Menu\DbalQuery
+
+    Tulia\Cms\Menu\UserInterface\Web\BackendMenu\MenuMenuBuilder:
+        tags: [ backend_menu.builder ]
+
+    Tulia\Cms\Menu\Infrastructure\Cms\SearchAnything\SearchProvider:
+        tags:
+            - { name: search.provider, priority: 500 }
+
+    Tulia\Cms\Menu\Infrastructure\Framework\Form\FormType\MenuItemChoiceType:
+        tags: [ form.type ]
+
+    Tulia\Cms\Menu\UserInterface\Web\Form\MenuItemForm:
+        tags: [ form.type ]
+
+    Tulia\Cms\Menu\Infrastructure\Builder\Identity\RegistryInterface:
+        class: Tulia\Cms\Menu\Infrastructure\Builder\Identity\Registry
+        bind:
+            $providers: !tagged_iterator menu.identity_provider
+
+    Tulia\Cms\Menu\Infrastructure\Builder\Type\RegistryInterface:
+        class: Tulia\Cms\Menu\Infrastructure\Builder\Type\Registry
+        bind:
+            $registrators: !tagged_iterator menu.builder.type_registrator
+
+    Tulia\Cms\Menu\Infrastructure\Builder\Type\DefaultTypesRegistrator:
+        tags: [ menu.builder.type_registrator ]
+
+    Tulia\Cms\Menu\Infrastructure\Builder\Identity\Providers\HomepageProvider:
+        tags: [ menu.identity_provider ]
+        bind:
+            $homepage: 'homepage'
+
+    Tulia\Cms\Menu\Infrastructure\Builder\Identity\Providers\UrlProvider:
+        tags: [ menu.identity_provider ]

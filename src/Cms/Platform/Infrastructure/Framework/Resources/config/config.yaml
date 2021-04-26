@@ -1,0 +1,27 @@
+imports:
+    - { resource: assets.yaml }
+framework:
+    translator:
+        default_path: '%kernel.project_dir%/src/Cms/Platform/Infrastructure/Framework/Resources/translations'
+    templating:
+        namespace_overwrite:
+            - { from: '@parent/', to: '@theme/' }
+            - { from: '@cms/',    to: '@parent/overwrite/cms/' }
+            - { from: '@module/', to: '@parent/overwrite/module/' }
+            - { from: '@widget/', to: '@parent/overwrite/widget/' }
+        paths:
+            - { name: backend/layout, path: '%kernel.project_dir%/src/Cms/Platform/Infrastructure/Framework/Resources/views/backend/layout' }
+            - { name: _theme_views/DefaultTheme, path: '%kernel.project_dir%/src/Cms/Platform/Infrastructure/DefaultTheme/Resources/views' }
+    twig:
+        loader:
+            array:
+                templates:
+                    backend:
+                        template: "{% extends '@backend/layout/layout.tpl' %}"
+                    theme:
+                        template: "{% extends [ '@theme/layout.tpl', '@parent/layout.tpl' ] %}"
+twig:
+    paths:
+        '%kernel.project_dir%/src/Cms/Platform/Infrastructure/Framework/Resources/views/backend': backend
+        '%kernel.project_dir%/src/Cms/Platform/Infrastructure/Framework/Resources/views/Form': form
+    form_themes: ['@form/cms_form_layout.tpl']

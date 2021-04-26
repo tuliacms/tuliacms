@@ -1,0 +1,61 @@
+security:
+    providers:
+        tulia_user_provider:
+            id: Tulia\Component\Security\Core\User\UserProvider
+    encoders:
+        Tulia\Component\Security\Core\User\User:
+            algorithm: auto
+        # todo Find out why save new user without it throws error.
+        Symfony\Component\Security\Core\User\User:
+            algorithm: auto
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        backend:
+            stateless: false
+            anonymous: false
+            lazy: true
+            context: backend_context
+            provider: tulia_user_provider
+            request_matcher: Tulia\Component\Security\BackendRequestMatcher
+            guard:
+                authenticators:
+                    - Tulia\Component\Security\Guard\Authenticator\BackendLoginFormAuthenticator
+            logout:
+                path: backend.logout
+                target: backend.homepage
+                invalidate_session: true
+            form_login:
+                login_path: backend.login
+                check_path: backend.login
+            remember_me:
+                secret: '%kernel.secret%'
+                lifetime: 604800
+                path: /
+        main:
+            anonymous: true
+            stateless: false
+            context: backend_context
+            lazy: true
+            provider: tulia_user_provider
+            request_matcher: Tulia\Component\Security\FrontendRequestMatcher
+            guard:
+                authenticators:
+                    - Tulia\Component\Security\Guard\Authenticator\FrontendLoginFormAuthenticator
+            logout:
+                path: logout
+                target: homepage
+                invalidate_session: true
+            form_login:
+                login_path: login
+            remember_me:
+                secret: '%kernel.secret%'
+                lifetime: 604800
+                path: /
+
+    access_control:
+        - { path: ^/auth, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/administrator/auth, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/administrator, roles: ROLE_ADMIN }

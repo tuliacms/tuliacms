@@ -1,0 +1,13 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    Tulia\Component\Datatable\:
+        resource: '../../../../../../Component/datatable/src/*'
+        exclude:
+            - '../../../../../Component/datatable/src/src/**/*Exception.php'
+
+    Tulia\Component\Datatable\Plugin\PluginsRegistry:
+        bind:
+            $plugins: !tagged_iterator datatable.plugin

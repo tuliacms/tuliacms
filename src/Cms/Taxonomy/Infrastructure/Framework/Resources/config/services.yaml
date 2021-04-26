@@ -1,0 +1,49 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    Tulia\Cms\Taxonomy\:
+        resource: '../../../../*'
+        exclude:
+            - '../../../../Infrastructure/Framework/Resources/*'
+
+    Tulia\Cms\Taxonomy\Application\TaxonomyType\RegistryInterface:
+        class: Tulia\Cms\Taxonomy\Application\TaxonomyType\Registry
+        bind:
+            $registrators: !tagged_iterator taxonomy.type.registrator
+            $storages: !tagged_iterator taxonomy.type.storage
+
+    Tulia\Cms\Taxonomy\Application\TaxonomyType\DefaultTypesRegistrator:
+        tags: [ taxonomy.type.registrator ]
+
+    Tulia\Cms\Taxonomy\UserInterface\Web\Form\Extension\DefaultFieldsExtension:
+        tags: [ form_extension ]
+
+    Tulia\Cms\Taxonomy\UserInterface\Web\Form\Extension\TaxonomyTypeExtensionAggregate:
+        tags: [ form_extension_aggregate ]
+
+    Tulia\Cms\Taxonomy\Infrastructure\Cms\Metadata\DefaultMetadataRegistrator:
+        tags: [ metadata.registrator ]
+
+    Tulia\Cms\Taxonomy\Infrastructure\Framework\Routing\Router:
+        tags: [ routing_chain.router ]
+
+    Tulia\Cms\Taxonomy\Infrastructure\Framework\Routing\Strategy\StrategyRegistry:
+        bind:
+            $strategies: !tagged_iterator taxonomy.routing.strategy
+
+    Tulia\Cms\Taxonomy\Infrastructure\Framework\Routing\Strategy\SimpleStrategy:
+        tags: [ taxonomy.routing.strategy ]
+
+    Tulia\Cms\Taxonomy\Infrastructure\Framework\Routing\Strategy\FullPathStrategy:
+        tags: [ taxonomy.routing.strategy ]
+
+    Tulia\Cms\Taxonomy\Infrastructure\Cms\Menu\IdentityProvider:
+        tags: [ menu.identity_provider ]
+
+    Tulia\Cms\Taxonomy\Infrastructure\Cms\Menu\TypeRegistrator:
+        tags: [ menu.builder.type_registrator ]
+
+    Tulia\Cms\Taxonomy\Infrastructure\Cms\Breadcrumbs\CrumbsResolver:
+        tags: [ breadcrumbs.resolver ]

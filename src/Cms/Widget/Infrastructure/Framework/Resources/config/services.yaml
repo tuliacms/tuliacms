@@ -1,0 +1,11 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        bind:
+            $storage: '@Tulia\Cms\Widget\Infrastructure\Widget\Storage\DatabaseStorage'
+
+    Tulia\Cms\Widget\:
+        resource: '../../../../*'
+        exclude:
+            - '../../../../Infrastructure/Framework/Resources/*'

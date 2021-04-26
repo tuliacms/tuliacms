@@ -1,0 +1,50 @@
+backend.me:
+    path: /administrator/me
+    controller: Tulia\Cms\User\UserInterface\Web\Controller\MyAccount::me
+    methods: POST|GET
+
+backend.me.personalization:
+    path: /administrator/me/personalization
+    controller: Tulia\Cms\User\UserInterface\Web\Controller\MyAccount::personalization
+    methods: POST|GET
+
+backend.me.edit:
+    path: /administrator/me/edit
+    controller: Tulia\Cms\User\UserInterface\Web\Controller\MyAccount::edit
+    methods: POST|GET
+
+backend.me.password:
+    path: /administrator/me/password
+    controller: Tulia\Cms\User\UserInterface\Web\Controller\MyAccount::password
+    methods: POST|GET
+
+backend.user.create:
+    path: /administrator/user/create
+    controller: Tulia\Cms\User\UserInterface\Web\Controller\User::create
+    methods: POST|GET
+
+backend.user.edit:
+    path: /administrator/user/edit/{id}
+    controller: Tulia\Cms\User\UserInterface\Web\Controller\User::edit
+    methods: POST|GET
+
+backend.user.delete:
+    path: /administrator/user/delete
+    controller: Tulia\Cms\User\UserInterface\Web\Controller\User::delete
+    methods: POST
+
+backend.user.search.typeahead:
+    path: /administrator/user/search/typeahead
+    controller: Tulia\Cms\User\UserInterface\Web\Controller\TypeaheadSearch::handleSearch
+
+backend.user.datatable:
+    path: /administrator/user/datatable
+    controller: Tulia\Cms\User\UserInterface\Web\Controller\User::datatable
+
+backend.user.list:
+    path: /administrator/user/list
+    controller: Tulia\Cms\User\UserInterface\Web\Controller\User::list
+
+backend.user:
+    path: /administrator/user
+    controller: Tulia\Cms\User\UserInterface\Web\Controller\User::index

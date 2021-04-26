@@ -1,8 +1,0 @@
-services:
-    _defaults:
-        autowire: true
-        autoconfigure: true
-
-    Tulia\Cms\Platform\Infrastructure\Utilities\DateTime\DateFormatterInterface:
-        class: Tulia\Cms\Platform\Infrastructure\Utilities\DateTime\DateFormatterTranslatorAware
-        factory: Tulia\Cms\Platform\Infrastructure\Utilities\DateTime\OptionsFormatterFactory::factory
