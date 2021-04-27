@@ -61,10 +61,6 @@ abstract class Kernel extends BaseKernel
     protected function configureRoutes(RoutingConfigurator $routes): void
     {
         foreach ($this->getConfigDirs() as $root) {
-            if (is_file($root . '/routes.yaml')) {
-                $routes->import($root . '/routes.yaml');
-            }
-
             $routes->import($root . '/{routes}/' . $this->environment . '/*.yaml');
             $routes->import($root . '/{routes}/*.yaml');
 

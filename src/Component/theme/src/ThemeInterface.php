@@ -11,18 +11,11 @@ use Tulia\Component\Theme\Configuration\ConfigurationInterface;
  */
 interface ThemeInterface
 {
-    /**
-     * @return bool
-     */
     public function hasConfig(): bool;
 
-    /**
-     * @return ConfigurationInterface
-     */
     public function getConfig(): ConfigurationInterface;
 
-    /**
-     * @param ConfigurationInterface $config
-     */
     public function setConfig(ConfigurationInterface $config): void;
+
+    public function getParent(): ?string;
 }

@@ -18,16 +18,11 @@ class Manager implements ManagerInterface
     protected $resolver;
     protected $loader;
 
-    /**
-     * @param StorageInterface           $storage
-     * @param ResolverAggregateInterface $resolver
-     * @param ThemeLoaderInterface       $loader
-     */
     public function __construct(StorageInterface $storage, ResolverAggregateInterface $resolver, ThemeLoaderInterface $loader)
     {
-        $this->storage  = $storage;
+        $this->storage = $storage;
         $this->resolver = $resolver;
-        $this->loader   = $loader;
+        $this->loader = $loader;
     }
 
     public function getTheme(): ThemeInterface

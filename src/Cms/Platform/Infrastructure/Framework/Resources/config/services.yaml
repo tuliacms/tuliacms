@@ -27,3 +27,9 @@ services:
     Tulia\Cms\Platform\UserInterface\CLI\Command\AssetsPublish:
         tags:
             - { name: console.command, command: 'assets:publish' }
+
+    Tulia\Cms\Platform\Infrastructure\Framework\Theme\Storage\DirectoryDiscoveryStorage:
+        bind:
+            $extensionsDirectory: '%kernel.project_dir%/extension/theme'
+
+    Tulia\Component\Theme\Storage\StorageInterface: '@Tulia\Cms\Platform\Infrastructure\Framework\Theme\Storage\DirectoryDiscoveryStorage'

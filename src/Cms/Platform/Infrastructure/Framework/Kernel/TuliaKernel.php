@@ -40,6 +40,29 @@ class TuliaKernel extends Kernel
             $base . '/Website/Infrastructure/Framework/Resources/config',
             $base . '/Widget/Infrastructure/Framework/Resources/config',
             $base . '/WysiwygEditor/Core/Infrastructure/Framework/Resources/config',
-        ]);
+        ], $this->getActiveThemesConfigDirs());
+    }
+
+    public function getActiveThemesConfigDirs(): array
+    {
+        $filepath = $this->getProjectDir() . '/config/dynamic/themes.php';
+
+        if (is_file($filepath) === false) {
+            return [];
+        }
+
+        $base = \dirname(__DIR__, 6) . '/extension/theme';
+        $themes = include $filepath;
+        $configDirs = [];
+
+        foreach ($themes as $theme) {
+            $path = $base . '/' . $theme . '/Resources/config';
+
+            if (is_dir($path)) {
+                $configDirs[] = $path;
+            }
+        }
+
+        return $configDirs;
     }
 }

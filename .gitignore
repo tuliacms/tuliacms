@@ -24,3 +24,7 @@
 /phpunit.xml
 .phpunit.result.cache
 ###< phpunit/phpunit ###
+
+/.idea/
+/_old/
+/config/themes.php

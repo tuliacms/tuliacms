@@ -21,6 +21,8 @@
       <sourceFolder url="file://$MODULE_DIR$/src/Component/security/src" isTestSource="false" packagePrefix="Tulia\Component\Security\" />
       <sourceFolder url="file://$MODULE_DIR$/src/Component/routing/tests" isTestSource="true" packagePrefix="Tulia\Component\Routing\Tests\" />
       <sourceFolder url="file://$MODULE_DIR$/src/Migrations" isTestSource="false" packagePrefix="Tulia\Cms\Migrations\" />
+      <sourceFolder url="file://$MODULE_DIR$/extension/module" isTestSource="false" packagePrefix="Tulia\Module\" />
+      <sourceFolder url="file://$MODULE_DIR$/extension/theme" isTestSource="false" packagePrefix="Tulia\Theme\" />
       <excludeFolder url="file://$MODULE_DIR$/var/cache" />
       <excludeFolder url="file://$MODULE_DIR$/_old" />
       <excludeFolder url="file://$MODULE_DIR$/public/uploads" />

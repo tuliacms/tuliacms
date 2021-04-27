@@ -73,6 +73,8 @@
     "autoload": {
         "psr-4": {
             "Tulia\\Bundle\\": "src/Bundle",
+            "Tulia\\Theme\\": "extension/theme",
+            "Tulia\\Module\\": "extension/module",
             "Tulia\\Component\\CommandBus\\": "src/Component/command-bus/src",
             "Tulia\\Component\\Datatable\\": "src/Component/datatable/src",
             "Tulia\\Component\\DependencyInjection\\": "src/Component/dependency-injection/src",
