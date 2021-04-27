@@ -1,5 +1,0 @@
-#!/bin/bash
-# author Adam Banaszkiewicz
-
-docker exec -it --workdir="/var/www/html" tulia_www bash
-
