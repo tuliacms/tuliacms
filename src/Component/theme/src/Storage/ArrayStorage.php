@@ -12,14 +12,8 @@ use Tulia\Component\Theme\ThemeInterface;
  */
 class ArrayStorage implements StorageInterface
 {
-    /**
-     * @var iterable
-     */
-    protected $themes = [];
+    protected array $themes = [];
 
-    /**
-     * @param iterable $themes
-     */
     public function __construct(iterable $themes = [])
     {
         foreach($themes as $theme) {

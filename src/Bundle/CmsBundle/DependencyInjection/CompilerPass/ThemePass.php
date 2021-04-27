@@ -15,10 +15,6 @@ class ThemePass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container): void
     {
-        /*$chain = $container->findDefinition(ChainRouterInterface::class);
 
-        foreach ($container->findTaggedServiceIds('routing_chain.router') as $id => $tags) {
-            $chain->addMethodCall('add', [new Reference($id)]);
-        }*/
     }
 }

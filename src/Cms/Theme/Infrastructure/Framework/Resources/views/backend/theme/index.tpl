@@ -28,8 +28,8 @@
             <div class="row">
                 {% for item in themes %}
                     <div class="col-3">
-                        <div class="card{{ theme == item ? ' bg-light' : '' }}">
-                            {% if theme == item %}
+                        <div class="card{{ theme.name == item.name ? ' bg-light' : '' }}">
+                            {% if theme.name == item.name %}
                                 <div class="ribbon"><span>{{ 'activeTheme'|trans({}, 'themes') }}</span></div>
                             {% endif %}
                             {% if item.thumbnail %}
@@ -54,10 +54,10 @@
                                 {% endif %}
                             </div>
                             <div class="card-footer">
-                                {% if theme == item %}
+                                {% if theme.name == item.name %}
                                     <a href="{{ path('backend.theme.customize.current') }}" class="btn btn-sm btn-primary">{{ 'customize'|trans({}, 'themes') }}</a>
                                 {% endif %}
-                                {% if theme != item %}
+                                {% if theme.name != item.name %}
                                     <form action="{{ path('backend.theme.activate') }}" method="POST">
                                         <input type="hidden" novalidate="novalidate" name="_token" value="{{ csrf_token('theme.activate') }}" />
                                         <input type="hidden" name="theme" value="{{ item.name }}" />

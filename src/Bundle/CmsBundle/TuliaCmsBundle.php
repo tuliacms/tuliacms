@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Bundle\CmsBundle;
 
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
+use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Tulia\Bundle\CmsBundle\DependencyInjection\CompilerPass\CommandBusPass;
@@ -40,6 +41,14 @@ class TuliaCmsBundle extends FrameworkBundle
     public function build(ContainerBuilder $container)
     {
         parent::build($container);
+
+        $filepath = $container->getParameter('kernel.project_dir') . '/config/dynamic/themes.php';
+
+        if (is_file($filepath) === false) {
+            file_put_contents($filepath, '<?php return [];');
+        }
+
+        $container->addResource(new FileResource($filepath));
 
         $container->addCompilerPass(new TemplatingPass());
         $container->addCompilerPass(new CommandBusPass());

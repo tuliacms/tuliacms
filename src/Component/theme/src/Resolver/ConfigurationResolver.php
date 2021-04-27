@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tulia\Component\Theme\Resolver;
 
-use Symfony\Component\HttpFoundation\RequestStack;
 use Tulia\Component\Theme\Configuration\ConfigurationInterface;
 use Tulia\Component\Theme\Configuration\ConfiguratorInterface;
 use Tulia\Component\Theme\Customizer\DetectorInterface;
@@ -48,15 +47,11 @@ class ConfigurationResolver implements ResolverInterface
         $theme->setConfig($configuration);
     }
 
-    /**
-     * @param ConfigurationInterface $configuration
-     * @param ThemeInterface $theme
-     */
     private function configure(ConfigurationInterface $configuration, ThemeInterface $theme): void
     {
         $classname = substr(\get_class($theme), 0, -5) . 'Configurator';
 
-        if (class_exists($classname)) {
+        if (class_exists($classname, true)) {
             /** @var ConfiguratorInterface $configurator */
             $configurator = new $classname();
             $configurator->configure($configuration);

@@ -4,7 +4,7 @@ backend.theme:
 backend.theme.activate:
     path: /administrator/theme/activate
     controller: Tulia\Cms\Theme\UserInterface\Web\Controller\Backend\Theme::activate
-    methods: POST
+    methods: GET|POST
 backend.theme.customize.current:
     path: /administrator/theme/customize
     controller: Tulia\Cms\Theme\UserInterface\Web\Controller\Backend\Customizer::customizeRedirect

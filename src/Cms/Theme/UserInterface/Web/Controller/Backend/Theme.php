@@ -5,15 +5,15 @@ declare(strict_types=1);
 namespace Tulia\Cms\Theme\UserInterface\Web\Controller\Backend;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\Platform\Infrastructure\DefaultTheme\DefaultTheme;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
-use Tulia\Cms\Theme\Application\Service\ThemeActivator;
 use Tulia\Cms\Theme\Application\Exception\ThemeNotFoundException;
+use Tulia\Cms\Theme\Application\Service\ThemeActivator;
+use Tulia\Component\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Component\Templating\ViewInterface;
 use Tulia\Component\Theme\Activator\ActivatorInterface;
 use Tulia\Component\Theme\ManagerInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Tulia\Component\Security\Http\Csrf\Annotation\CsrfToken;
 
 /**
  * @author Adam Banaszkiewicz
@@ -29,9 +29,6 @@ class Theme extends AbstractController
         $this->themeActivator = $themeActivator;
     }
 
-    /**
-     * @return ViewInterface
-     */
     public function index(): ViewInterface
     {
         $themes = $this->manager->getThemes();
