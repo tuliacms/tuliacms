@@ -25,5 +25,6 @@
 .phpunit.result.cache
 ###< phpunit/phpunit ###
 
-.idea
-_old
+/.idea/
+/_old/
+/config/themes.php
