@@ -38,17 +38,12 @@ class TuliaCmsBundle extends FrameworkBundle
         return \dirname(__DIR__, 3) . '/vendor/symfony/framework-bundle';
     }
 
-    public function build(ContainerBuilder $container)
+    public function build(ContainerBuilder $container): void
     {
         parent::build($container);
 
-        $filepath = $container->getParameter('kernel.project_dir') . '/config/dynamic/themes.php';
-
-        if (is_file($filepath) === false) {
-            file_put_contents($filepath, '<?php return [];');
-        }
-
-        $container->addResource(new FileResource($filepath));
+        $this->ensureDynamicConfigFileExists($container, '/config/dynamic/themes.php');
+        $this->ensureDynamicConfigFileExists($container, '/config/dynamic/modules.php');
 
         $container->addCompilerPass(new TemplatingPass());
         $container->addCompilerPass(new CommandBusPass());
@@ -56,5 +51,16 @@ class TuliaCmsBundle extends FrameworkBundle
         $container->addCompilerPass(new ThemePass());
         $container->addCompilerPass(new SecurityPass());
         $container->addCompilerPass(new DashboardPass());
+    }
+
+    private function ensureDynamicConfigFileExists(ContainerBuilder $container, string $path): void
+    {
+        $filepath = $container->getParameter('kernel.project_dir') . $path;
+
+        if (is_file($filepath) === false) {
+            file_put_contents($filepath, '<?php return [];');
+        }
+
+        $container->addResource(new FileResource($filepath));
     }
 }

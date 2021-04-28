@@ -5,8 +5,17 @@
 /.env.*.local
 /config/secrets/prod/prod.decrypt.private.php
 /public/bundles/
+/public/assets/module/
+/public/assets/theme/
+/public/uploads/
+/extension/module/
+/extension/theme/
 /var/
 /vendor/
+/.idea/
+/_old/
+/config/dynamic/themes.php
+/config/dynamic/modules.php
 ###< symfony/framework-bundle ###
 
 ###> symfony/phpunit-bridge ###
@@ -25,6 +34,3 @@
 .phpunit.result.cache
 ###< phpunit/phpunit ###
 
-/.idea/
-/_old/
-/config/themes.php
