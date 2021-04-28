@@ -113,6 +113,7 @@ class Configuration extends SymfonyConfiguration
         $root
             ->children()
                 ->arrayNode('public_paths')
+                    ->useAttributeAsKey('name')
                     ->scalarPrototype()->defaultValue([])->end()
                 ->end()
             ->end()
