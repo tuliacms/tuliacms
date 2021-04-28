@@ -17,6 +17,7 @@ class Options
     private OptionsRepositoryInterface $repository;
     private CurrentWebsiteInterface $currentWebsite;
     private array $cache = [];
+    private array $autoloaded = [];
 
     public function __construct(OptionsFinderInterface $finder, OptionsRepositoryInterface $repository, CurrentWebsiteInterface $currentWebsite)
     {
@@ -36,6 +37,8 @@ class Options
     {
         $locale = $this->resolveLocale($locale);
         $websiteId = $this->resolveWebsite($websiteId);
+
+        $this->autoload($websiteId, $locale);
 
         if (isset($this->cache[$websiteId][$locale][$name])) {
             return $this->cache[$websiteId][$locale][$name];
@@ -99,5 +102,15 @@ class Options
         }
 
         return $locale;
+    }
+
+    private function autoload(string $websiteId, string $locale): void
+    {
+        if (isset($this->autoloaded[$websiteId][$locale])) {
+            return;
+        }
+
+        $this->cache[$websiteId][$locale] = $this->finder->autoload($locale, $websiteId);
+        $this->autoloaded[$websiteId][$locale] = true;
     }
 }

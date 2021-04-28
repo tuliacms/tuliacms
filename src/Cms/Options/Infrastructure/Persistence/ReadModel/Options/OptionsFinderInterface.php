@@ -12,4 +12,6 @@ interface OptionsFinderInterface
     public function findByName(string $name, string $locale, string $website);
 
     public function findBulkByName(array $names, string $locale, string $website): array;
+
+    public function autoload(string $locale, string $website): array;
 }

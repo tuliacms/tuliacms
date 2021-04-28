@@ -40,7 +40,7 @@ class DbalOptionsFinder implements OptionsFinderInterface
 
     public function findBulkByName(array $names, string $locale, string $website): array
     {
-        $result = $this->connection->fetchColumn('SELECT tm.name, COALESCE(tl.`value`, tm.`value`) AS `value`
+        $result = $this->connection->fetchAllAssociative('SELECT tm.name, COALESCE(tl.`value`, tm.`value`) AS `value`
             FROM #__option tm
             LEFT JOIN #__option_lang tl
                 ON tm.name = tl.name AND tl.locale = :locale
@@ -49,8 +49,25 @@ class DbalOptionsFinder implements OptionsFinderInterface
             'name'      => $names,
             'locale'    => $locale,
             'websiteId' => $website,
-        ], 0, [
+        ], [
             'name'      => ConnectionInterface::PARAM_ARRAY_STR,
+            'locale'    => \PDO::PARAM_STR,
+            'websiteId' => \PDO::PARAM_STR,
+        ]);
+
+        return array_column($result, 'value', 'name');
+    }
+
+    public function autoload(string $locale, string $website): array
+    {
+        $result = $this->connection->fetchAllAssociative('SELECT tm.name, COALESCE(tl.`value`, tm.`value`) AS `value`
+            FROM #__option tm
+            LEFT JOIN #__option_lang tl
+                ON tm.name = tl.name AND tl.locale = :locale
+            WHERE tm.autoload = 1 AND tm.website_id = :websiteId', [
+            'locale'    => $locale,
+            'websiteId' => $website,
+        ], [
             'locale'    => \PDO::PARAM_STR,
             'websiteId' => \PDO::PARAM_STR,
         ]);
