@@ -100,7 +100,7 @@ class DbalRepository implements RepositoryInterface
         $data = $this->hydrator->extract($website);
         $data['id'] = $website->getId()->getId();
         $data['locales'] = iterator_to_array($data['locales']->getIterator());
-        $data['backend_prefix'] = $data['backendPrefix'];
+        $data['backend_prefix'] = '/administrator';
 
         unset($data['backendPrefix']);
 

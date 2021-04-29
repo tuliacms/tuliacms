@@ -38,19 +38,6 @@ class WebsiteForm extends AbstractType
                     new Assert\NotBlank(),
                 ],
             ])
-            ->add('backend_prefix', Type\TextType::class, [
-                'label' => 'backendPrefix',
-                'help' => 'backendPrefixHelp',
-                'translation_domain' => 'websites',
-                'required' => true,
-                'constraints' => [
-                    new Assert\NotBlank(),
-                    new Assert\Regex([
-                        'pattern' => '/^\/{1}[a-z0-9-_]+$/',
-                        'message' => 'websites.pleaseProvideValidPathWithPrecededSlash'
-                    ]),
-                ]
-            ])
             ->add('locales', CollectionType::class, [
                 'entry_type' => LocaleForm::class,
                 'entry_options' => ['label' => false],

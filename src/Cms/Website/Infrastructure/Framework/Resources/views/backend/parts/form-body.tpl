@@ -25,11 +25,8 @@
         <div class="page-form-header">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-6">
+                    <div class="col-12">
                         {{ form_row(form.name, { attr: { autofocus: 'autofocus' } }) }}
-                    </div>
-                    <div class="col-6">
-                        {{ form_row(form.backend_prefix, { attr: { class: 'website-backend-prefix-input' } }) }}
                     </div>
                 </div>
             </div>

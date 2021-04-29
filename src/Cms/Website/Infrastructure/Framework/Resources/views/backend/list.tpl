@@ -25,7 +25,9 @@
                     <div class="col mb-4">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title">{{ website.name }}</h4>
+                                <a href="{{ path('backend.website.edit', { id: website.id }) }}">
+                                    <h4 class="card-title">{{ website.name }}</h4>
+                                </a>
                                 <small class="text-muted">ID: {{ website.id }}</small>
                             </div>
                             <ul class="list-group list-group-flush">
