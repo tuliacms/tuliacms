@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Options\Application\EventListener;
 
 use Tulia\Cms\Options\Application\Service\OptionsCreator;
-use Tulia\Cms\Website\Domain\Event\WebsiteCreated;
+use Tulia\Cms\Website\Domain\WriteModel\Event\WebsiteCreated;
 
 /**
  * @author Adam Banaszkiewicz

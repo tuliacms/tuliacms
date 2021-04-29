@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Website\Application\Model;
 
-use Tulia\Cms\Website\Query\Model\Website as QueryModelWebsite;
+use Tulia\Cms\Website\Domain\ReadModel\Model\Website as QueryModelWebsite;
 
 /**
  * @author Adam Banaszkiewicz

@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Tulia\Cms\Website\Application\Service;
 
 use Tulia\Cms\Website\Infrastructure\Persistence\Domain\DynamicConfigurationStorage;
-use Tulia\Cms\Website\Query\Enum\ScopeEnum;
-use Tulia\Cms\Website\Query\FinderFactoryInterface;
-use Tulia\Cms\Website\Query\Model\Collection;
+use Tulia\Cms\Website\Domain\ReadModel\Enum\ScopeEnum;
+use Tulia\Cms\Website\Domain\ReadModel\FinderFactoryInterface;
+use Tulia\Cms\Website\Domain\ReadModel\Model\Collection;
 
 /**
  * @author Adam Banaszkiewicz
@@ -25,11 +25,9 @@ class DynamicConfigurationDumper
 
     public function dump(): void
     {
-        $finder = $this->factoryFactory->getInstance(ScopeEnum::INTERNAL);
-        $finder->setCriteria([]);
-        $finder->fetchRaw();
+        $result = $this->factoryFactory->find(['active' => '1'], ScopeEnum::INTERNAL);
 
-        $flattened = $this->flatten($finder->getResult());
+        $flattened = $this->flatten($result);
         $this->storage->save($flattened);
     }
 

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Website\UserInterface\Web\Form\Transformer;
 
-use Tulia\Cms\Website\Query\Model\Locale;
+use Tulia\Cms\Website\Domain\ReadModel\Model\Locale;
 use Tulia\Component\Routing\Website\WebsiteInterface;
 
 /**

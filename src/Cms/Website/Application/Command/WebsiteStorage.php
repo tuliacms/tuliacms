@@ -12,13 +12,13 @@ use Tulia\Cms\Website\Application\Event\WebsitePreUpdateEvent;
 use Tulia\Cms\Website\Application\Event\WebsiteUpdatedEvent;
 use Tulia\Cms\Website\Application\Model\Locale as ApplicationLocale;
 use Tulia\Cms\Website\Application\Model\Website as ApplicationWebsite;
-use Tulia\Cms\Website\Domain\Aggregate\LocaleCollection;
-use Tulia\Cms\Website\Domain\Aggregate\Website as Aggregate;
-use Tulia\Cms\Website\Domain\Aggregate\Locale as AggregateLocale;
-use Tulia\Cms\Website\Domain\Event\WebsiteDeleted;
-use Tulia\Cms\Website\Domain\Exception\WebsiteNotFoundException;
-use Tulia\Cms\Website\Domain\RepositoryInterface;
-use Tulia\Cms\Website\Domain\ValueObject\AggregateId;
+use Tulia\Cms\Website\Domain\WriteModel\Aggregate\LocaleCollection;
+use Tulia\Cms\Website\Domain\WriteModel\Aggregate\Website as Aggregate;
+use Tulia\Cms\Website\Domain\WriteModel\Aggregate\Locale as AggregateLocale;
+use Tulia\Cms\Website\Domain\WriteModel\Event\WebsiteDeleted;
+use Tulia\Cms\Website\Domain\WriteModel\Exception\WebsiteNotFoundException;
+use Tulia\Cms\Website\Domain\WriteModel\Repository;
+use Tulia\Cms\Website\Domain\WriteModel\ValueObject\AggregateId;
 use Tulia\Cms\Platform\Infrastructure\Bus\Event\EventBusInterface;
 
 /**
@@ -26,67 +26,61 @@ use Tulia\Cms\Platform\Infrastructure\Bus\Event\EventBusInterface;
  */
 class WebsiteStorage
 {
-    private RepositoryInterface $repository;
+    private Repository $repository;
     private EventBusInterface $eventDispatcher;
 
-    public function __construct(RepositoryInterface $repository, EventBusInterface $eventDispatcher)
+    public function __construct(Repository $repository, EventBusInterface $eventDispatcher)
     {
-        $this->repository      = $repository;
+        $this->repository = $repository;
         $this->eventDispatcher = $eventDispatcher;
     }
 
     public function save(ApplicationWebsite $website): void
     {
-        $aggregateExists = false;
+        $locales = [];
 
-        try {
-            $aggregate = $this->repository->find(new AggregateId($website->getId()));
-
-            // We can assign $aggregateExists only after call find() in repository,
-            // to handle exception when website not exists, and perform proper action when website not exists.
-            $aggregateExists = true;
-        } catch (WebsiteNotFoundException $exception) {
-            $locales = [];
-
-            /** @var ApplicationLocale $locale */
-            foreach ($website->getLocales() as $locale) {
-                $locales[] = $locale->produceAggregate();
-            }
-
-            $aggregate = new Aggregate(
-                new AggregateId($website->getId()),
-                $website->getName(),
-                $website->getBackendPrefix(),
-                new LocaleCollection($locales)
-            );
+        /** @var ApplicationLocale $locale */
+        foreach ($website->getLocales() as $locale) {
+            $locales[] = $locale->produceAggregate();
         }
 
-        if ($aggregateExists) {
-            $event = new WebsitePreUpdateEvent($website);
-            $this->eventDispatcher->dispatch($event);
+        $aggregate = new Aggregate(
+            new AggregateId($website->getId()),
+            $website->getName(),
+            $website->getBackendPrefix(),
+            new LocaleCollection($locales)
+        );
 
-            if ($event->isPropagationStopped()) {
-                return;
-            }
-        } else {
-            $event = new WebsitePreCreateEvent($website);
-            $this->eventDispatcher->dispatch($event);
+        $event = new WebsitePreCreateEvent($website);
+        $this->eventDispatcher->dispatch($event);
 
-            if ($event->isPropagationStopped()) {
-                return;
-            }
+        if ($event->isPropagationStopped()) {
+            return;
         }
 
         $this->updateAggregate($website, $aggregate);
 
         $this->repository->save($aggregate);
         $this->eventDispatcher->dispatchCollection($aggregate->collectDomainEvents());
+        $this->eventDispatcher->dispatch(new WebsiteCreatedEvent($website));
+    }
 
-        if ($aggregateExists) {
-            $this->eventDispatcher->dispatch(new WebsiteUpdatedEvent($website));
-        } else {
-            $this->eventDispatcher->dispatch(new WebsiteCreatedEvent($website));
+    public function update(ApplicationWebsite $website): void
+    {
+        $aggregate = $this->repository->find(new AggregateId($website->getId()));
+
+        $event = new WebsitePreUpdateEvent($website);
+        $this->eventDispatcher->dispatch($event);
+
+        if ($event->isPropagationStopped()) {
+            return;
         }
+
+        $this->updateAggregate($website, $aggregate);
+
+        $this->repository->update($aggregate);
+        $this->eventDispatcher->dispatchCollection($aggregate->collectDomainEvents());
+        $this->eventDispatcher->dispatch(new WebsiteUpdatedEvent($website));
     }
 
     public function delete(ApplicationWebsite $website): void

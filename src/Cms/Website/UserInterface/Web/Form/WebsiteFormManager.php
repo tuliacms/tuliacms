@@ -8,7 +8,7 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Tulia\Cms\Website\Application\Command\WebsiteStorage;
 use Tulia\Cms\Website\Application\Model\Website as ApplicationWebsite;
-use Tulia\Cms\Website\Query\Model\Website as QueryWebsite;
+use Tulia\Cms\Website\Domain\ReadModel\Model\Website as QueryWebsite;
 use Tulia\Component\FormBuilder\Manager\ManagerFactoryInterface;
 
 /**
@@ -16,37 +16,12 @@ use Tulia\Component\FormBuilder\Manager\ManagerFactoryInterface;
  */
 class WebsiteFormManager
 {
-    /**
-     * @var ManagerFactoryInterface
-     */
-    private $managerFactory;
+    private ManagerFactoryInterface $managerFactory;
+    private FormFactoryInterface $formFactory;
+    private WebsiteStorage $websiteStorage;
+    private ApplicationWebsite $website;
+    private QueryWebsite $sourceWebsite;
 
-    /**
-     * @var FormFactoryInterface
-     */
-    private $formFactory;
-
-    /**
-     * @var WebsiteStorage
-     */
-    private $websiteStorage;
-
-    /**
-     * @var ApplicationWebsite
-     */
-    private $website;
-
-    /**
-     * @var QueryWebsite
-     */
-    private $sourceWebsite;
-
-    /**
-     * @param ManagerFactoryInterface $managerFactory
-     * @param FormFactoryInterface $formFactory
-     * @param WebsiteStorage $websiteStorage
-     * @param QueryWebsite $sourceWebsite
-     */
     public function __construct(
         ManagerFactoryInterface $managerFactory,
         FormFactoryInterface $formFactory,
@@ -54,15 +29,14 @@ class WebsiteFormManager
         QueryWebsite $sourceWebsite
     ) {
         $this->managerFactory = $managerFactory;
-        $this->formFactory    = $formFactory;
+        $this->formFactory = $formFactory;
         $this->websiteStorage = $websiteStorage;
-        $this->sourceWebsite  = $sourceWebsite;
+        $this->sourceWebsite = $sourceWebsite;
     }
 
     public function createForm(): FormInterface
     {
         $this->website = ApplicationWebsite::fromQueryModel($this->sourceWebsite);
-
         return $this->formFactory->create(WebsiteForm::class, $this->website);
     }
 
@@ -70,9 +44,15 @@ class WebsiteFormManager
     {
         /** @var ApplicationWebsite $data */
         $data = $form->getData();
-
         $this->sourceWebsite->setId($data->getId());
-
         $this->websiteStorage->save($data);
+    }
+
+    public function update(FormInterface $form): void
+    {
+        /** @var ApplicationWebsite $data */
+        $data = $form->getData();
+        $this->sourceWebsite->setId($data->getId());
+        $this->websiteStorage->update($data);
     }
 }

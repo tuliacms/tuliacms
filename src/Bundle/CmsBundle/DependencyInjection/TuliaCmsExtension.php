@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\DependencyInjection\FrameworkExtension;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
+use Tulia\Cms\Shared\Domain\ReadModel\Finder\AbstractFinder;
 use Tulia\Component\Templating\ViewFilter\FilterInterface;
 
 /**
@@ -40,6 +41,9 @@ class TuliaCmsExtension extends FrameworkExtension
         $container->setParameter('framework.theme.customizer.builder.base_class', $config['theme']['customizer']['builder']['base_class']);
 
         $this->registerViewFilters($container);
+
+        $container->registerForAutoconfiguration(AbstractFinder::class)
+            ->addTag('finder');
     }
 
     private function prepareTemplatingPaths(array $paths): array

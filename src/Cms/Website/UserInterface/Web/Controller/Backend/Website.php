@@ -10,13 +10,14 @@ use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Website\Application\Command\WebsiteStorage;
 use Tulia\Cms\Website\Application\Exception\TranslatableWebsiteException;
 use Tulia\Cms\Website\Application\Model\Website as ApplicationWebsite;
-use Tulia\Cms\Website\Query\Enum\ScopeEnum;
-use Tulia\Cms\Website\Query\Exception\MultipleFetchException;
-use Tulia\Cms\Website\Query\Exception\QueryException;
-use Tulia\Cms\Website\Query\Exception\QueryNotFetchedException;
-use Tulia\Cms\Website\Query\Factory\WebsiteFactoryInterface;
-use Tulia\Cms\Website\Query\FinderFactoryInterface;
-use Tulia\Cms\Website\Query\Model\Website as QueryModelWebsite;
+use Tulia\Cms\Website\Domain\ReadModel\Enum\ScopeEnum;
+use Tulia\Cms\Website\Domain\ReadModel\Exception\MultipleFetchException;
+use Tulia\Cms\Website\Domain\ReadModel\Exception\QueryException;
+use Tulia\Cms\Website\Domain\ReadModel\Exception\QueryNotFetchedException;
+use Tulia\Cms\Website\Domain\ReadModel\Factory\WebsiteFactoryInterface;
+use Tulia\Cms\Website\Domain\ReadModel\Finder;
+use Tulia\Cms\Website\Domain\ReadModel\FinderFactoryInterface;
+use Tulia\Cms\Website\Domain\ReadModel\Model\Website as QueryModelWebsite;
 use Tulia\Cms\Website\UserInterface\Web\Form\WebsiteFormManagerFactory;
 use Tulia\Component\Templating\ViewInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -28,10 +29,12 @@ use Tulia\Component\Security\Http\Csrf\Annotation\CsrfToken;
 class Website extends AbstractController
 {
     protected FinderFactoryInterface $finderFactory;
+    private Finder $finder;
 
-    public function __construct(FinderFactoryInterface $finderFactory)
+    public function __construct(FinderFactoryInterface $finderFactory, Finder $finder)
     {
         $this->finderFactory = $finderFactory;
+        $this->finder = $finder;
     }
 
     public function index(): RedirectResponse
@@ -41,18 +44,13 @@ class Website extends AbstractController
 
     /**
      * @return RedirectResponse|ViewInterface
-     *
-     * @throws MultipleFetchException
-     * @throws QueryException
-     * @throws QueryNotFetchedException
      */
     public function list()
     {
-        $finder = $this->finderFactory->getInstance(ScopeEnum::BACKEND_LISTING);
-        $finder->fetchRaw();
+        $result = $this->finder->find([], ScopeEnum::BACKEND_LISTING);
 
         return $this->view('@backend/website/list.tpl', [
-            'websites' => $finder->getResult(),
+            'websites' => $result,
         ]);
     }
 
@@ -117,7 +115,7 @@ class Website extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $manager->save($form);
+            $manager->update($form);
 
             $this->setFlash('success', $this->trans('websiteSaved', [], 'websites'));
             return $this->redirectToRoute('backend.website');

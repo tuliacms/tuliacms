@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Tulia\Cms\Website\Application\Model;
 
 use Tulia\Component\Routing\Enum\SslModeEnum;
-use Tulia\Cms\Website\Query\Model\Locale as QueryModelLocale;
-use Tulia\Cms\Website\Domain\Aggregate\Locale as Aggregate;
+use Tulia\Cms\Website\Domain\ReadModel\Model\Locale as QueryModelLocale;
+use Tulia\Cms\Website\Domain\WriteModel\Aggregate\Locale as Aggregate;
 
 /**
  * @author Adam Banaszkiewicz
