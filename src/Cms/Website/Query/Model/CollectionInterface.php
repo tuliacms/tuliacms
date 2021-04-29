@@ -10,37 +10,19 @@ namespace Tulia\Cms\Website\Query\Model;
 interface CollectionInterface extends \ArrayAccess, \IteratorAggregate
 {
     /**
-     * @return array
+     * @return Website[]
      */
     public function all(): array;
 
-    /**
-     * @param $element
-     */
-    public function append($element): void;
+    public function append(Website $element): void;
 
-    /**
-     * @param CollectionInterface $collection
-     */
     public function merge(CollectionInterface $collection): void;
 
-    /**
-     * @param array $nodes
-     */
-    public function replace(array $nodes): void;
+    public function replace(array $elements): void;
 
-    /**
-     * @return int
-     */
     public function count(): int;
 
-    /**
-     * @return Website|null
-     */
     public function first(): ?Website;
 
-    /**
-     * @return array
-     */
     public function toArray(): array;
 }

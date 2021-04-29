@@ -18,4 +18,9 @@ class ScopeEnum
      * Backend, single node fetch, like edit/update/delete node page.
      */
     public const BACKEND_SINGLE = 'backend.single';
+
+    /**
+     * Internal usage. Should not be modified by any plugins/listeners.
+     */
+    public const INTERNAL = 'internal';
 }

@@ -14,8 +14,8 @@
 /vendor/
 /.idea/
 /_old/
-/config/dynamic/themes.php
-/config/dynamic/modules.php
+/config/dynamic/*
+!/config/dynamic/readme.md
 ###< symfony/framework-bundle ###
 
 ###> symfony/phpunit-bridge ###

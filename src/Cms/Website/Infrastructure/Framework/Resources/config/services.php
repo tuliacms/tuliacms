@@ -25,7 +25,7 @@ use Tulia\Component\Routing\Website\RegistryInterface;
 use Tulia\Component\Routing\Website\Website;
 use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
-use Tulia\Cms\Website\UI\Web\Form\FormType\LocaleChoiceType;
+use Tulia\Cms\Website\UserInterface\Web\Form\FormType\LocaleChoiceType;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /** @var ContainerBuilderInterface $builder */

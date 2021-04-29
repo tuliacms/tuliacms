@@ -7,3 +7,11 @@ services:
         resource: '../../../../*'
         exclude:
             - '../../../../Infrastructure/Framework/Resources/*'
+
+    Tulia\Cms\Website\UserInterface\Console\Command\WebsiteDump:
+        tags:
+            - { name: console.command, command: 'website:configuration:dump' }
+
+    Tulia\Cms\Website\Infrastructure\Persistence\Domain\DynamicConfigurationStorage:
+        bind:
+            $filepath: '%kernel.project_dir%/config/dynamic/websites.php'
