@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Website\Domain\ReadModel\Model;
+namespace Tulia\Cms\Website\Domain\ReadModel\Finder\Model;
 
-use Tulia\Cms\Website\Domain\ReadModel\Exception\LocaleNotExistsException;
+use Tulia\Cms\Website\Domain\ReadModel\Finder\Exception\LocaleNotExistsException;
 
 /**
  * @author Adam Banaszkiewicz

@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Website\Domain\ReadModel\Factory;
+namespace Tulia\Cms\Website\Domain\ReadModel\Finder\Factory;
 
 use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
 use Tulia\Cms\Website\Application\Service\BackendPrefixGenerator;
-use Tulia\Cms\Website\Domain\ReadModel\Model\Locale;
-use Tulia\Cms\Website\Domain\ReadModel\Model\Website;
+use Tulia\Cms\Website\Domain\ReadModel\Finder\Model\Locale;
+use Tulia\Cms\Website\Domain\ReadModel\Finder\Model\Website;
 use Tulia\Component\Routing\Enum\SslModeEnum;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 

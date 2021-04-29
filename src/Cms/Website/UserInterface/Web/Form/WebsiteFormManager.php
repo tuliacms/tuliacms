@@ -8,7 +8,7 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Tulia\Cms\Website\Application\Command\WebsiteStorage;
 use Tulia\Cms\Website\Application\Model\Website as ApplicationWebsite;
-use Tulia\Cms\Website\Domain\ReadModel\Model\Website as QueryWebsite;
+use Tulia\Cms\Website\Domain\ReadModel\Finder\Model\Website as QueryWebsite;
 use Tulia\Component\FormBuilder\Manager\ManagerFactoryInterface;
 
 /**

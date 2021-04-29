@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Website\Domain\ReadModel\Factory;
+namespace Tulia\Cms\Website\Domain\ReadModel\Finder\Factory;
 
 use Symfony\Component\HttpFoundation\Request;
-use Tulia\Cms\Website\Domain\ReadModel\Model\Website;
+use Tulia\Cms\Website\Domain\ReadModel\Finder\Model\Website;
 
 /**
  * @author Adam Banaszkiewicz

@@ -12,8 +12,8 @@ use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\AbstractDbalQuery;
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
-use Tulia\Cms\Website\Domain\ReadModel\Model\Locale;
-use Tulia\Cms\Website\Domain\ReadModel\Model\Website;
+use Tulia\Cms\Website\Domain\ReadModel\Finder\Model\Locale;
+use Tulia\Cms\Website\Domain\ReadModel\Finder\Model\Website;
 
 /**
  * @author Adam Banaszkiewicz
@@ -89,11 +89,6 @@ class DbalQuery extends AbstractDbalQuery
         $this->fillWebsitesWithLocales($collection);
 
         return $collection;
-    }
-
-    protected function getCountFromResult(array $result): int
-    {
-        return (int) ($result[0]['count'] ?? 0);
     }
 
     protected function setDefaults(array $query): void

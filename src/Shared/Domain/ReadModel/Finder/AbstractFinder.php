@@ -27,6 +27,19 @@ abstract class AbstractFinder
         $this->eventDispatcher = $eventDispatcher;
     }
 
+    /**
+     * @param array $criteria
+     * @param string $scope
+     * @param array $parameters
+     * @return object|null
+     */
+    public function findOne(array $criteria, string $scope = 'default', array $parameters = [])
+    {
+        $parameters['limit'] = 1;
+
+        return $this->find($criteria, $scope, $parameters)->first();
+    }
+
     public function find(array $criteria, string $scope = 'default', array $parameters = []): Collection
     {
         [$criteria, $scope, $parameters] = $this->prepareFetch($criteria, $scope, $parameters);

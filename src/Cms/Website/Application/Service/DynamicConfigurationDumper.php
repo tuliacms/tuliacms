@@ -4,28 +4,28 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Website\Application\Service;
 
+use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
 use Tulia\Cms\Website\Infrastructure\Persistence\Domain\DynamicConfigurationStorage;
-use Tulia\Cms\Website\Domain\ReadModel\Enum\ScopeEnum;
-use Tulia\Cms\Website\Domain\ReadModel\FinderFactoryInterface;
-use Tulia\Cms\Website\Domain\ReadModel\Model\Collection;
+use Tulia\Cms\Website\Domain\ReadModel\Finder\Enum\ScopeEnum;
+use Tulia\Cms\Website\Domain\ReadModel\Finder\Finder;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class DynamicConfigurationDumper
 {
-    private FinderFactoryInterface $factoryFactory;
+    private Finder $finder;
     private DynamicConfigurationStorage $storage;
 
-    public function __construct(FinderFactoryInterface $factoryFactory, DynamicConfigurationStorage $storage)
+    public function __construct(Finder $finder, DynamicConfigurationStorage $storage)
     {
-        $this->factoryFactory = $factoryFactory;
+        $this->finder = $finder;
         $this->storage = $storage;
     }
 
     public function dump(): void
     {
-        $result = $this->factoryFactory->find(['active' => '1'], ScopeEnum::INTERNAL);
+        $result = $this->finder->find(['active' => '1'], ScopeEnum::INTERNAL);
 
         $flattened = $this->flatten($result);
         $this->storage->save($flattened);

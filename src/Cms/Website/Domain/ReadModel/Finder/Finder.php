@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Website\Domain\ReadModel;
+namespace Tulia\Cms\Website\Domain\ReadModel\Finder;
 
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\AbstractFinder;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\QueryInterface;
