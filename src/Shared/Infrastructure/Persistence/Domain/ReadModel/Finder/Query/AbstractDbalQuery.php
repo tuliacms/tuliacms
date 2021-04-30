@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder;
+namespace Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Query;
 
 use Exception;
 use Doctrine\DBAL\Driver\Exception as DoctrineException;
@@ -14,11 +14,23 @@ use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder
  */
 abstract class AbstractDbalQuery extends AbstractQuery
 {
+    public const STORAGE_NAME = 'doctrine.query-builder';
+
     protected QueryBuilder $queryBuilder;
+
+    public function __construct(QueryBuilder $queryBuilder)
+    {
+        $this->queryBuilder = $queryBuilder;
+    }
+
+    public function getQueryBuilder(): QueryBuilder
+    {
+        return $this->queryBuilder;
+    }
 
     public function getSupportedStorage(): string
     {
-        return 'doctrine.query-builder';
+        return self::STORAGE_NAME;
     }
 
     /**

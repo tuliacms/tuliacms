@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Shared\Domain\ReadModel\Finder\Plugin;
+namespace Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Plugin;
 
 /**
  * @author Adam Banaszkiewicz
@@ -10,4 +10,5 @@ namespace Tulia\Cms\Shared\Domain\ReadModel\Finder\Plugin;
 interface PluginInterface
 {
     public function supportsStorage(string $storage): bool;
+    public function filterCriteria(array $criteria): array;
 }

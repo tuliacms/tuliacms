@@ -2,15 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Website\Infrastructure\Persistence\Domain\ReadModel;
+namespace Tulia\Cms\Website\Infrastructure\Persistence\Domain\ReadModel\Finder\Query;
 
 use Doctrine\DBAL\Connection;
 use Exception;
 use PDO;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Exception\QueryException;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
-use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
-use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\AbstractDbalQuery;
+use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Query\AbstractDbalQuery;
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 use Tulia\Cms\Website\Domain\ReadModel\Finder\Model\Locale;
 use Tulia\Cms\Website\Domain\ReadModel\Finder\Model\Website;
@@ -20,13 +19,6 @@ use Tulia\Cms\Website\Domain\ReadModel\Finder\Model\Website;
  */
 class DbalQuery extends AbstractDbalQuery
 {
-    protected QueryBuilder $queryBuilder;
-
-    public function __construct(QueryBuilder $queryBuilder)
-    {
-        $this->queryBuilder = $queryBuilder;
-    }
-
     public function getBaseQueryArray(): array
     {
         return [
@@ -55,17 +47,25 @@ class DbalQuery extends AbstractDbalQuery
              * provide boolean `true` and Query does care about column name.
              */
             'count' => null,
+            'limit' => null,
         ];
     }
 
-    public function query(array $query, array $parameters = []): Collection
+    public function query(array $criteria): Collection
     {
-        $query = array_merge($this->getBaseQueryArray(), $query);
+        $criteria = array_merge($this->getBaseQueryArray(), $criteria);
+        $criteria = $this->filterCriteria($criteria);
 
-        $this->searchById($query);
-        $this->setDefaults($query);
-        $this->buildActivity($query);
-        $this->buildOrderBy($query);
+        $this->searchById($criteria);
+        $this->setDefaults($criteria);
+        $this->buildActivity($criteria);
+        $this->buildOrderBy($criteria);
+
+        if ($criteria['limit']) {
+            $this->queryBuilder->setMaxResults($criteria['limit']);
+        }
+
+        $this->callPlugins($criteria);
 
         return $this->createCollection($this->queryBuilder->execute()->fetchAllAssociative());
     }
@@ -91,12 +91,12 @@ class DbalQuery extends AbstractDbalQuery
         return $collection;
     }
 
-    protected function setDefaults(array $query): void
+    protected function setDefaults(array $criteria): void
     {
-        if ($query['count'] === true) {
+        if ($criteria['count'] === true) {
             $this->queryBuilder->select('COUNT(tm.id) AS count');
-        } elseif ($query['count']) {
-            $this->queryBuilder->select('COUNT(' . $query['count'] . ') AS count');
+        } elseif ($criteria['count']) {
+            $this->queryBuilder->select('COUNT(' . $criteria['count'] . ') AS count');
         } else {
             $this->queryBuilder->select('tm.*');
         }
@@ -104,20 +104,20 @@ class DbalQuery extends AbstractDbalQuery
         $this->queryBuilder->from('#__website', 'tm');
     }
 
-    protected function searchById(array $query): void
+    protected function searchById(array $criteria): void
     {
-        if ($query['id']) {
+        if ($criteria['id']) {
             $this->queryBuilder
                 ->andWhere('tm.id = :tm_id')
-                ->setParameter('tm_id', $query['id'], PDO::PARAM_STR)
+                ->setParameter('tm_id', $criteria['id'], PDO::PARAM_STR)
                 ->setMaxResults(1);
         }
 
-        if ($query['id__not_in']) {
-            if (\is_array($query['id__not_in']) === false) {
-                $ids = [ $query['id__not_in'] ];
+        if ($criteria['id__not_in']) {
+            if (\is_array($criteria['id__not_in']) === false) {
+                $ids = [ $criteria['id__not_in'] ];
             } else {
-                $ids = $query['id__not_in'];
+                $ids = $criteria['id__not_in'];
             }
 
             $this->queryBuilder
@@ -126,24 +126,21 @@ class DbalQuery extends AbstractDbalQuery
         }
     }
 
-    protected function buildActivity(array $query): void
+    protected function buildActivity(array $criteria): void
     {
-        if (! $query['active']) {
+        if (! $criteria['active']) {
             return;
         }
 
         $this->queryBuilder
             ->andWhere('tm.active = :tm_active')
-            ->setParameter('tm_active', $query['active'], PDO::PARAM_INT);
+            ->setParameter('tm_active', $criteria['active'], PDO::PARAM_INT);
     }
 
-    /**
-     * @param array $query
-     */
-    protected function buildOrderBy(array $query): void
+    protected function buildOrderBy(array $criteria): void
     {
-        if ($query['order_by']) {
-            $this->queryBuilder->addOrderBy($query['order_by'], $query['order_dir']);
+        if ($criteria['order_by']) {
+            $this->queryBuilder->addOrderBy($criteria['order_by'], $criteria['order_dir']);
         }
     }
 

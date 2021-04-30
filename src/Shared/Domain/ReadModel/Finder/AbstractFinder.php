@@ -8,8 +8,8 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Event\QueryFilterEvent;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Event\QueryPrepareEvent;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
-use Tulia\Cms\Shared\Domain\ReadModel\Finder\Plugin\PluginInterface;
-use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\QueryInterface;
+use Tulia\Cms\Shared\Domain\ReadModel\Finder\Plugin\PluginRegistry;
+use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Query\QueryInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -17,6 +17,7 @@ use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\QueryInt
 abstract class AbstractFinder
 {
     protected EventDispatcherInterface $eventDispatcher;
+    protected PluginRegistry $pluginRegistry;
     protected array $plugins = [];
 
     abstract public function getAlias(): string;
@@ -27,46 +28,45 @@ abstract class AbstractFinder
         $this->eventDispatcher = $eventDispatcher;
     }
 
+    public function setPluginsRegistry(PluginRegistry $pluginRegistry): void
+    {
+        $this->pluginRegistry = $pluginRegistry;
+    }
+
     /**
      * @param array $criteria
      * @param string $scope
-     * @param array $parameters
      * @return object|null
      */
-    public function findOne(array $criteria, string $scope = 'default', array $parameters = [])
+    public function findOne(array $criteria, string $scope)
     {
-        $parameters['limit'] = 1;
+        $criteria['limit'] = 1;
 
-        return $this->find($criteria, $scope, $parameters)->first();
+        return $this->find($criteria, $scope)->first();
     }
 
-    public function find(array $criteria, string $scope = 'default', array $parameters = []): Collection
+    public function find(array $criteria, string $scope): Collection
     {
-        [$criteria, $scope, $parameters] = $this->prepareFetch($criteria, $scope, $parameters);
+        [$criteria, $scope] = $this->prepareFetch($criteria, $scope);
         $query = $this->createQuery();
-        $query->setPlugins($this->plugins);
+        $query->setPluginsRegistry($this->pluginRegistry);
 
-        $result = $query->query($criteria, $parameters);
+        $result = $query->query($criteria);
 
-        return $this->afterQuery($result, $criteria, $scope, $parameters);
+        return $this->afterQuery($result, $criteria, $scope);
     }
 
-    public function addPlugin(PluginInterface $plugin): void
+    protected function prepareFetch(array $criteria, string $scope): array
     {
-        $this->plugins[] = $plugin;
-    }
-
-    protected function prepareFetch(array $criteria, string $scope, array $parameters): array
-    {
-        $event = new QueryPrepareEvent($criteria, $scope, $parameters);
+        $event = new QueryPrepareEvent($criteria, $scope, []);
         $this->eventDispatcher->dispatch($event);
 
-        return [$event->getCriteria(), $event->getScope(), $event->getParameters()];
+        return [$event->getCriteria(), $event->getScope()];
     }
 
-    protected function afterQuery(Collection $collection, array $criteria, string $scope, array $parameters): Collection
+    protected function afterQuery(Collection $collection, array $criteria, string $scope): Collection
     {
-        $event = new QueryFilterEvent($collection, $criteria, $scope, $parameters);
+        $event = new QueryFilterEvent($collection, $criteria, $scope, []);
         $this->eventDispatcher->dispatch($event);
 
         return $event->getCollection();
