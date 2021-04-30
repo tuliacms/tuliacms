@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Website\Application\Service;
 
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
-use Tulia\Cms\Website\Infrastructure\Persistence\Domain\DynamicConfigurationStorage;
+use Tulia\Cms\Website\Infrastructure\Persistence\Domain\WriteModel\DynamicConfigurationStorage;
 use Tulia\Cms\Website\Domain\ReadModel\Finder\Enum\ScopeEnum;
 use Tulia\Cms\Website\Domain\ReadModel\Finder\Finder;
 

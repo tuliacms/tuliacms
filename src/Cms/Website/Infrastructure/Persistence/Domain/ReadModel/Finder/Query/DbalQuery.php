@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Website\Infrastructure\Persistence\Domain\ReadModel\Finder\Query;
+namespace Tulia\Cms\Website\Infrastructure\Persistence\Domain\WriteModel\ReadModel\Finder\Query;
 
 use Doctrine\DBAL\Connection;
 use Exception;

@@ -43,7 +43,7 @@
                 self.updatePreview($(this).closest('.locale-container').attr('id'));
             });
 
-            $('.website-backend-prefix-input').on('change keyup keypress keydown', function () {
+            $('.website-backend-prefix-input, .locale-sslmode-select').on('change keyup keypress keydown', function () {
                 self.forms.find('.locale-container').each(function () {
                     self.updatePreview($(this).attr('id'));
                 });
@@ -131,16 +131,25 @@
 
         this.updatePreview = function (id) {
             let form = this.getForm(id);
-            console.log(form, id);
 
             let domain = form.find('.locale-domain-input').val();
             let localePrefix = form.find('.locale-locale-prefix-input').val();
             let pathPrefix = form.find('.locale-path-prefix-input').val();
-            let backendPrefix = $('.website-backend-prefix-input').val();
-            console.log(backendPrefix, $('.website-backend-prefix-input'));
+            let sslMode = form.find('.locale-sslmode-select').val();
+            //let backendPrefix = $('.website-backend-prefix-input').val();
+            let backendPrefix = '/administrator';
+            let protocol = '';
 
-            let frontend = 'http://' + domain + pathPrefix + localePrefix + '/';
-            let backend = 'http://' + domain + pathPrefix + backendPrefix + localePrefix + '/';
+            if (sslMode === 'FORCE_SSL') {
+                protocol = 'https://';
+            } else if(sslMode === 'FORCE_NON_SSL') {
+                protocol = 'http://';
+            } else {
+                protocol = 'http://';
+            }
+
+            let frontend = protocol + domain + pathPrefix + localePrefix + '/';
+            let backend = protocol + domain + pathPrefix + backendPrefix + localePrefix + '/';
 
             form.find('.website-locale-preview-frontend').text(frontend);
             form.find('.website-locale-preview-backend').text(backend);

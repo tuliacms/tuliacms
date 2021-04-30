@@ -62,7 +62,7 @@ class Repository
      */
     public function delete(Website $website): void
     {
-        $this->storage->delete($this->extract($website));
+        $this->storage->delete($website->getId()->getId());
     }
 
     private function extract(Website $website): array

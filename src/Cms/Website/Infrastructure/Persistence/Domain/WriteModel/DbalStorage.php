@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Website\Infrastructure\Persistence\Domain;
+namespace Tulia\Cms\Website\Infrastructure\Persistence\Domain\WriteModel;
 
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 use Tulia\Cms\Website\Ports\Infrastructure\Persistence\Domain\WriteModel\WebsiteStorageInterface;
@@ -128,11 +128,11 @@ class DbalStorage implements WebsiteStorageInterface
     /**
      * {@inheritdoc}
      */
-    public function delete(array $website): void
+    public function delete(string $id): void
     {
-        $this->connection->transactional(function () use ($website) {
-            $this->connection->delete('#__website', ['id' => $website['id']]);
-            $this->connection->delete('#__website_locale', ['website_id' => $website['id']]);
+        $this->connection->transactional(function () use ($id) {
+            $this->connection->delete('#__website', ['id' => $id]);
+            $this->connection->delete('#__website_locale', ['website_id' => $id]);
         });
     }
 

@@ -7,8 +7,8 @@ use Tulia\Cms\Platform\Infrastructure\DataManipulation\Hydrator\HydratorInterfac
 use Tulia\Cms\Website\Infrastructure\Framework\Website\Storage\DatabaseStorage;
 use Tulia\Cms\Website\Application\Command\WebsiteStorage;
 use Tulia\Cms\Website\Domain\WriteModel\RepositoryInterface;
-use Tulia\Cms\Website\Infrastructure\Persistence\Domain\DbalRepository;
-use Tulia\Cms\Website\Infrastructure\Persistence\Domain\DbalStorage;
+use Tulia\Cms\Website\Infrastructure\Persistence\Domain\WriteModel\DbalRepository;
+use Tulia\Cms\Website\Infrastructure\Persistence\Domain\WriteModel\DbalStorage;
 use Tulia\Cms\Website\Domain\ReadModel\Finder\Factory\WebsiteFactory;
 use Tulia\Cms\Website\Domain\ReadModel\Finder\Factory\WebsiteFactoryInterface;
 use Tulia\Cms\Website\Domain\ReadModel\Finder\FinderFactory;

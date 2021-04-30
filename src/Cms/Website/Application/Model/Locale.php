@@ -13,47 +13,18 @@ use Tulia\Cms\Website\Domain\WriteModel\Aggregate\Locale as Aggregate;
  */
 class Locale
 {
-    /**
-     * @var null|string
-     */
-    protected $code;
+    protected ?string $code = null;
+    protected ?string $domain = null;
+    protected ?string $domainDevelopment = null;
+    protected ?string $localePrefix = null;
+    protected ?string $pathPrefix = null;
+    protected string $sslMode;
+    protected bool $isDefault = false;
 
-    /**
-     * @var null|string
-     */
-    protected $domain;
-
-    /**
-     * @var null|string
-     */
-    protected $localePrefix;
-
-    /**
-     * @var null|string
-     */
-    protected $pathPrefix;
-
-    /**
-     * @var string
-     */
-    protected $sslMode;
-
-    /**
-     * @var bool
-     */
-    protected $isDefault = false;
-
-    /**
-     * @param string|null $code
-     * @param string|null $domain
-     * @param string|null $localePrefix
-     * @param string|null $pathPrefix
-     * @param string $sslMode
-     * @param bool $isDefault
-     */
     public function __construct(
         string $code = null,
         string $domain = null,
+        string $domainDevelopment = null,
         string $localePrefix = null,
         string $pathPrefix = null,
         string $sslMode = SslModeEnum::ALLOWED_BOTH,
@@ -61,6 +32,7 @@ class Locale
     ) {
         $this->code = $code;
         $this->domain = $domain;
+        $this->domainDevelopment = $domainDevelopment;
         $this->localePrefix = $localePrefix;
         $this->pathPrefix = $pathPrefix;
         $this->sslMode = $sslMode;
@@ -72,6 +44,7 @@ class Locale
         return new self(
             $locale->getCode(),
             $locale->getDomain(),
+            '',//$locale->getDomainDevelopment(),
             $locale->getLocalePrefix(),
             $locale->getPathPrefix(),
             $locale->getSslMode(),
@@ -89,6 +62,7 @@ class Locale
         return new Aggregate(
             $this->getCode(),
             $this->getDomain(),
+            //$this->getDomainDevelopment(),
             $this->getLocalePrefix(),
             $this->getPathPrefix(),
             $this->getSslMode(),
@@ -96,105 +70,76 @@ class Locale
         );
     }
 
-    /**
-     * @return null|string
-     */
     public function getCode(): ?string
     {
         return $this->code;
     }
 
-    /**
-     * @param null|string $code
-     */
     public function setCode(?string $code): void
     {
         $this->code = $code;
     }
 
-    /**
-     * @return null|string
-     */
     public function getDomain(): ?string
     {
         return $this->domain;
     }
 
-    /**
-     * @param null|string $domain
-     */
     public function setDomain(?string $domain): void
     {
         $this->domain = $domain;
     }
 
-    /**
-     * @return string|null
-     */
+    public function getDomainDevelopment(): ?string
+    {
+        return $this->domainDevelopment;
+    }
+
+    public function setDomainDevelopment(?string $domainDevelopment): void
+    {
+        $this->domainDevelopment = $domainDevelopment;
+    }
+
     public function getLocalePrefix(): ?string
     {
         return $this->localePrefix;
     }
 
-    /**
-     * @param string|null $localePrefix
-     */
     public function setLocalePrefix(?string $localePrefix): void
     {
         $this->localePrefix = $localePrefix;
     }
 
-    /**
-     * @return string|null
-     */
     public function getPathPrefix(): ?string
     {
         return $this->pathPrefix;
     }
 
-    /**
-     * @param string|null $pathPrefix
-     */
     public function setPathPrefix(?string $pathPrefix): void
     {
         $this->pathPrefix = $pathPrefix;
     }
 
-    /**
-     * @return string
-     */
     public function getSslMode(): string
     {
         return $this->sslMode;
     }
 
-    /**
-     * @param string $sslMode
-     */
     public function setSslMode(string $sslMode): void
     {
         $this->sslMode = $sslMode;
     }
 
-    /**
-     * @return bool
-     */
     public function getIsDefault(): bool
     {
         return $this->isDefault;
     }
 
-    /**
-     * @return bool
-     */
     public function isDefault(): bool
     {
         return $this->isDefault;
     }
 
-    /**
-     * @param bool $isDefault
-     */
     public function setIsDefault(bool $isDefault): void
     {
         $this->isDefault = $isDefault;

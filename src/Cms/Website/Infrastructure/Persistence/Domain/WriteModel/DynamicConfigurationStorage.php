@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Website\Infrastructure\Persistence\Domain;
+namespace Tulia\Cms\Website\Infrastructure\Persistence\Domain\WriteModel;
 
 /**
  * @author Adam Banaszkiewicz

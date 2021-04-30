@@ -44,6 +44,23 @@ class LocaleForm extends AbstractType
                     }),
                 ],
             ])
+            ->add('domain_development', Type\TextType::class, [
+                'label' => 'domainDevelopment',
+                'help' => 'domainDevelopmentHelp',
+                'translation_domain' => 'websites',
+                'required' => true,
+                'constraints' => [
+                    new Assert\NotBlank(),
+                    new Assert\Callback(function ($object, ExecutionContextInterface $context) {
+                        if ($object && filter_var($object, FILTER_VALIDATE_DOMAIN, FILTER_FLAG_HOSTNAME) === false) {
+                            $context->buildViolation('domainIsInvalid')
+                                ->setTranslationDomain('websites')
+                                ->atPath('domain_development')
+                                ->addViolation();
+                        }
+                    }),
+                ],
+            ])
             ->add('path_prefix', Type\TextType::class, [
                 'label' => 'pathPrefix',
                 'help' => 'pathPrefixHelp',

@@ -70,11 +70,12 @@
                                                     {{ this.locale_url_preview() }}
 
                                                     {{ form_row(locale.domain, { attr: { class: 'locale-domain-input' } }) }}
+                                                    {{ form_row(locale.domain_development, { attr: { class: 'locale-domain-input' } }) }}
                                                     {{ form_row(locale.path_prefix, { attr: { class: 'locale-path-prefix-input' } }) }}
                                                     {{ form_row(locale.locale_prefix, { attr: { class: 'locale-locale-prefix-input' } }) }}
                                                     {{ form_row(locale.code, { attr: { class: 'locale-code-select' } }) }}
                                                     {{ form_row(locale.is_default, { attr: { class: 'locale-default-select' } }) }}
-                                                    {{ form_row(locale.ssl_mode) }}
+                                                    {{ form_row(locale.ssl_mode, { attr: { class: 'locale-sslmode-select' } }) }}
                                                 </div>
                                                 <div class="card-footer text-right">
                                                     {{ this.locale_remove_button((locale.code.vars.value ~ key)|md5) }}

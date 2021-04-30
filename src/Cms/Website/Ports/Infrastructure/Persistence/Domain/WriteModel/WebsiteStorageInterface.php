@@ -12,5 +12,5 @@ interface WebsiteStorageInterface
     public function find(string $id): ?array;
     public function insert(array $website): void;
     public function update(array $website): void;
-    public function delete(array $website): void;
+    public function delete(string $id): void;
 }

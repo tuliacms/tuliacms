@@ -52,9 +52,7 @@ class Website extends AbstractController
      * @param Request $request
      * @param WebsiteFactoryInterface $websiteFactory
      * @param WebsiteFormManagerFactory $formFactory
-     *
      * @return RedirectResponse|ViewInterface
-     *
      * @CsrfToken(id="website_form")
      */
     public function create(
@@ -88,11 +86,8 @@ class Website extends AbstractController
      * @param string $id
      * @param Request $request
      * @param WebsiteFormManagerFactory $formFactory
-     *
      * @return RedirectResponse|ViewInterface
-     *
      * @throws NotFoundHttpException
-     *
      * @CsrfToken(id="website_form")
      */
     public function edit(
@@ -124,11 +119,9 @@ class Website extends AbstractController
 
     /**
      * @param Request $request
-     *
+     * @param WebsiteStorage $storage
      * @return RedirectResponse
-     *
      * @throws NotFoundHttpException
-     *
      * @CsrfToken(id="website.delete")
      */
     public function delete(Request $request, WebsiteStorage $storage): RedirectResponse
@@ -147,9 +140,7 @@ class Website extends AbstractController
 
     /**
      * @param string $id
-     *
      * @return QueryModelWebsite
-     *
      * @throws NotFoundHttpException
      */
     private function getWebsiteById(string $id): QueryModelWebsite

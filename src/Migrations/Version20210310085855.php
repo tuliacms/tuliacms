@@ -26,7 +26,8 @@ EOL
 CREATE TABLE `#__website_locale` (
   `website_id` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
   `code` varchar(11) COLLATE utf8_unicode_ci NOT NULL,
-  `domain` varchar(127) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `domain` varchar(127) COLLATE utf8_unicode_ci NOT NULL,
+  `domain_development` varchar(127) COLLATE utf8_unicode_ci DEFAULT NULL,
   `path_prefix` varchar(127) COLLATE utf8_unicode_ci DEFAULT NULL,
   `ssl_mode` enum('FORCE_SSL','FORCE_NON_SSL','ALLOWED_BOTH') COLLATE utf8_unicode_ci DEFAULT NULL,
   `locale_prefix` varchar(36) COLLATE utf8_unicode_ci DEFAULT NULL,

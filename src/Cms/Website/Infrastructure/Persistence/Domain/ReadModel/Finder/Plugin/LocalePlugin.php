@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Website\Infrastructure\Persistence\Domain\ReadModel\Finder\Plugin;
+namespace Tulia\Cms\Website\Infrastructure\Persistence\Domain\WriteModel\ReadModel\Finder\Plugin;
 
 use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Plugin\AbstractDbalPlugin;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
