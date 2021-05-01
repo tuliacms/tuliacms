@@ -9,7 +9,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
-use Tulia\Cms\Website\UI\Web\Form\FormType\LocaleChoiceType;
+use Tulia\Cms\Website\UserInterface\Web\Form\FormType\LocaleChoiceType;
 use Tulia\Component\Routing\Enum\SslModeEnum;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 

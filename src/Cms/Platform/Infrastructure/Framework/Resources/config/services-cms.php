@@ -30,7 +30,7 @@ use Tulia\Cms\Platform\Infrastructure\Utilities\DateTime\DateFormatterInterface;
 use Tulia\Cms\Platform\Infrastructure\Utilities\DateTime\DateFormatterTranslatorAware;
 use Tulia\Cms\Platform\Infrastructure\Utilities\DateTime\OptionsFormatterFactory;
 use Tulia\Cms\Platform\Infrastructure\Framework\Twig\Extension\DatetimeExtension;
-use Tulia\Cms\Website\Domain\Event\WebsiteCreated;
+use Tulia\Cms\Website\Domain\WriteModel\Event\WebsiteCreated;
 use Tulia\Component\DependencyInjection\ContainerBuilderInterface;
 use Tulia\Component\FormBuilder\Builder\BootstrapAccordionGroupBuilder;
 use Tulia\Component\FormBuilder\Builder\BootstrapTabsGroupBuilder;

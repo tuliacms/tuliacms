@@ -13,45 +13,31 @@ use Tulia\Component\Routing\Website\Locale\LocaleInterface;
  */
 class Website implements WebsiteInterface
 {
-    /**
-     * @var string
-     */
-    protected $id;
+    protected string $id;
+    protected string $name;
+    protected string $backendPrefix;
+    protected bool $active = true;
+    protected LocaleInterface $locale;
 
     /**
-     * @var string
+     * @var LocaleInterface[]
      */
-    protected $name;
+    protected array $locales = [];
 
-    /**
-     * @var string
-     */
-    protected $backendPrefix;
-
-    /**
-     * @var array|LocaleInterface[]
-     */
-    protected $locales = [];
-
-    /**
-     * @var LocaleInterface
-     */
-    protected $locale;
-
-    /**
-     * @param string $id
-     * @param array $locales
-     * @param LocaleInterface $locale
-     * @param string $backendPrefix
-     * @param string $name
-     */
-    public function __construct(string $id, array $locales, LocaleInterface $locale, string $backendPrefix = '/administrator', string $name = '')
-    {
+    public function __construct(
+        string $id,
+        array $locales,
+        LocaleInterface $locale,
+        string $backendPrefix = '/administrator',
+        string $name = '',
+        bool $active = true
+    ) {
         $this->id = $id;
         $this->locales = $locales;
         $this->locale = $locale;
         $this->backendPrefix = $backendPrefix;
         $this->name = $name;
+        $this->active = $active;
     }
 
     public function __clone()
@@ -103,11 +89,19 @@ class Website implements WebsiteInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getBackendPrefix(): string
     {
         return $this->backendPrefix;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isActive(): bool
+    {
+        return $this->active;
     }
 
     /**

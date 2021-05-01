@@ -51,6 +51,7 @@ class Matcher
             foreach ($website->getLocales() as $locale) {
                 $websitesArray[] = [
                     'id' => $website->getId(),
+                    'active' => $website->isActive(),
                     'code' => $locale->getCode(),
                     'domain' => $locale->getDomain(),
                     'backend_prefix' => $website->getBackendPrefix(),
@@ -124,7 +125,7 @@ class Matcher
          * If none of websites with path prefixes were matched,
          * now we want to match websites only by domain.
          */
-        if (!$currentWebsite) {
+        if (! $currentWebsite) {
             foreach ($prepared as $website) {
                 if (
                     empty($website['prefix'])

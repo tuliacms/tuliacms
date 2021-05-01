@@ -15,20 +15,9 @@ use Tulia\Component\Routing\Website\Locale\Storage\StorageInterface;
  */
 class LocaleChoiceType extends AbstractType
 {
-    /**
-     * @var StorageInterface
-     */
-    protected $storage;
+    protected StorageInterface $storage;
+    protected TranslatorInterface $translator;
 
-    /**
-     * @var TranslatorInterface
-     */
-    protected $translator;
-
-    /**
-     * @param StorageInterface $storage
-     * @param TranslatorInterface $translator
-     */
     public function __construct(StorageInterface $storage, TranslatorInterface $translator)
     {
         $this->storage    = $storage;

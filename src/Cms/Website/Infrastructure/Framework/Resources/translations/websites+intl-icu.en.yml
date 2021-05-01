@@ -43,3 +43,7 @@ showAddresses: Show addresses
 defaultLocale: Default locale
 localeCode: "Locale code: {code}"
 removeWebsiteDataLossInformation: "When You remove a whole website, You also remove all data attached to this website, like nodes, categories, tags, settings and other contents. Please be sure that You really want to do this!"
+domainDevelopment: Development domain
+domainDevelopmentHelp: Development domain for this locale. This domain will be used only when You are developing system on other domain. Simplify deployment system.
+websiteInactive: Inactive
+websiteInactiveHint: This website is inactive, only admins have access to frontend.

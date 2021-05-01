@@ -11,6 +11,7 @@ imports:
     - { resource: 'services/form-builder.yaml' }
     - { resource: 'services/image.yaml' }
     - { resource: 'services/shortcode.yaml' }
+    - { resource: 'services/finder.yaml' }
     #- { resource: '../../../../../Cms/Options/Infrastructure/Framework/Resources/config/services.yaml' }
     - { resource: '../../../../../Cms/Homepage/Infrastructure/Framework/Resources/config/config.yaml' }
     - { resource: '../../../../../Cms/Homepage/Infrastructure/Framework/Resources/config/services.yaml' }

@@ -16,24 +16,8 @@ use Tulia\Component\Routing\Website\WebsiteRegistryFactory;
  */
 class RoutingPass implements CompilerPassInterface
 {
-    private string $websitesFile;
-
-    public function __construct(string $websitesFile)
-    {
-        $this->websitesFile = $websitesFile;
-    }
-
     public function process(ContainerBuilder $container): void
     {
-        if (is_file($this->websitesFile)) {
-            $container->addResource(new FileResource($this->websitesFile));
-            $websites = include $this->websitesFile;
-        } else {
-            $websites = WebsiteRegistryFactory::getDefaultWebsiteConfiguration();
-        }
-
-        $container->setParameter('framework.routing.website.list', $websites);
-
         $chain = $container->findDefinition(ChainRouterInterface::class);
 
         foreach ($container->findTaggedServiceIds('routing_chain.router') as $id => $tags) {

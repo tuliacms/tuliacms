@@ -7,3 +7,7 @@ services:
         resource: '../../../../*'
         exclude:
             - '../../../../Infrastructure/Framework/Resources/*'
+            - '../../../../**/Model/*'
+
+    Tulia\Component\Routing\Website\WebsiteProviderInterface:
+        class: Tulia\Cms\Website\Infrastructure\Framework\Routing\Website\WebsiteProvider

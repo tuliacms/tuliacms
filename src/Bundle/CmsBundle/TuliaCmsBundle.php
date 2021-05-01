@@ -9,6 +9,7 @@ use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Tulia\Bundle\CmsBundle\DependencyInjection\CompilerPass\CommandBusPass;
+use Tulia\Bundle\CmsBundle\DependencyInjection\CompilerPass\FinderPass;
 use Tulia\Bundle\CmsBundle\DependencyInjection\CompilerPass\RoutingPass;
 use Tulia\Bundle\CmsBundle\DependencyInjection\CompilerPass\TemplatingPass;
 use Tulia\Bundle\CmsBundle\DependencyInjection\CompilerPass\ThemePass;
@@ -47,10 +48,11 @@ class TuliaCmsBundle extends FrameworkBundle
 
         $container->addCompilerPass(new TemplatingPass());
         $container->addCompilerPass(new CommandBusPass());
-        $container->addCompilerPass(new RoutingPass(__DIR__ . '/../../../config/dynamic/websites.php'));
+        $container->addCompilerPass(new RoutingPass());
         $container->addCompilerPass(new ThemePass());
         $container->addCompilerPass(new SecurityPass());
         $container->addCompilerPass(new DashboardPass());
+        $container->addCompilerPass(new FinderPass());
     }
 
     private function ensureDynamicConfigFileExists(ContainerBuilder $container, string $path): void

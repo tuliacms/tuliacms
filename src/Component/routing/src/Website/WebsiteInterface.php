@@ -17,6 +17,7 @@ interface WebsiteInterface
     public function getId(): string;
     public function getName(): string;
     public function getBackendPrefix(): string;
+    public function isActive(): bool;
     public function getLocales(): iterable;
     public function getLocale(): LocaleInterface;
 

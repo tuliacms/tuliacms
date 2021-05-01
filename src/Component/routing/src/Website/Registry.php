@@ -4,15 +4,17 @@ declare(strict_types=1);
 
 namespace Tulia\Component\Routing\Website;
 
+use Tulia\Component\Routing\Exception\WebsiteNotFoundException;
+
 /**
  * @author Adam Banaszkiewicz
  */
 class Registry implements RegistryInterface
 {
     /**
-     * @var array
+     * @var WebsiteInterface[]
      */
-    protected $websites = [];
+    protected array $websites = [];
 
     /**
      * {@inheritdoc}
@@ -20,6 +22,20 @@ class Registry implements RegistryInterface
     public function add(WebsiteInterface $website): void
     {
         $this->websites[] = $website;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function find(string $id): WebsiteInterface
+    {
+        foreach ($this->websites as $website) {
+            if ($website->getId() === $id) {
+                return $website;
+            }
+        }
+
+        throw new WebsiteNotFoundException(sprintf('Website with ID %s not exists in registry.', $id));
     }
 
     /**
