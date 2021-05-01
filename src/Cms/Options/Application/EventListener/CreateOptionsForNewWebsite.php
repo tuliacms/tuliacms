@@ -24,6 +24,6 @@ final class CreateOptionsForNewWebsite
 
     public function handle(WebsiteCreated $event): void
     {
-        $this->optionsCreator->createForWebsite($event->getWebsiteId()->getId());
+        $this->optionsCreator->createForWebsite($event->getWebsiteId());
     }
 }

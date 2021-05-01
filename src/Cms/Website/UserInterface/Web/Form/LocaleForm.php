@@ -6,15 +6,15 @@ namespace Tulia\Cms\Website\UserInterface\Web\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\YesNoType;
-use Tulia\Cms\Website\Application\Model\Locale;
+use Tulia\Cms\Website\Domain\WriteModel\Model\Locale;
 use Tulia\Cms\Website\UserInterface\Web\Form\FormType\LocaleChoiceType;
 use Tulia\Component\Routing\Enum\SslModeEnum;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * @author Adam Banaszkiewicz

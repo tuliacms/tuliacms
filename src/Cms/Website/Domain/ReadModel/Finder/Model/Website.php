@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Website\Domain\ReadModel\Finder\Model;
 
-use Tulia\Cms\Website\Domain\ReadModel\Finder\Exception\LocaleNotExistsException;
-
 /**
  * @author Adam Banaszkiewicz
  */
@@ -14,18 +12,20 @@ class Website
     protected string $id;
     protected string $name;
     protected string $backendPrefix;
+    protected bool $active = true;
 
     /**
      * @var Locale[]
      */
     protected array $locales = [];
 
-    public function __construct(string $id, array $locales, string $backendPrefix, string $name)
+    public function __construct(string $id, array $locales, string $backendPrefix, string $name, bool $active = true)
     {
         $this->id = $id;
         $this->locales = $locales;
         $this->backendPrefix = $backendPrefix;
         $this->name = $name;
+        $this->active = $active;
     }
 
     public static function buildFromArray(array $data = []): self
@@ -34,7 +34,8 @@ class Website
             $data['id'],
             $data['locales'] ?? [],
             $data['backend_prefix'] ?? '/administrator',
-            $data['name'] ?? ''
+            $data['name'] ?? '',
+            $data['active'] ?? true
         );
     }
 
@@ -56,6 +57,11 @@ class Website
     public function getBackendPrefix(): string
     {
         return $this->backendPrefix;
+    }
+
+    public function isActive(): bool
+    {
+        return $this->active;
     }
 
     /**

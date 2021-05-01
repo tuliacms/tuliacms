@@ -25,6 +25,13 @@
                     <div class="col mb-4">
                         <div class="card">
                             <div class="card-body">
+                                {% if not website.active %}
+                                    <span
+                                        data-toggle="tooltip"
+                                        title="{{ 'websiteInactiveHint'|trans({}, 'websites') }}"
+                                        class="badge badge-secondary"
+                                    >{{ 'websiteInactive'|trans({}, 'websites') }}</span>
+                                {% endif %}
                                 <a href="{{ path('backend.website.edit', { id: website.id }) }}">
                                     <h4 class="card-title">{{ website.name }}</h4>
                                 </a>

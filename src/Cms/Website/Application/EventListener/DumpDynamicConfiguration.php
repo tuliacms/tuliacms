@@ -5,11 +5,10 @@ declare(strict_types=1);
 namespace Tulia\Cms\Website\Application\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Tulia\Cms\Website\Application\Event\WebsiteCreatedEvent;
-use Tulia\Cms\Website\Application\Event\WebsiteDeletedEvent;
-use Tulia\Cms\Website\Application\Event\WebsiteEvent;
-use Tulia\Cms\Website\Application\Event\WebsiteUpdatedEvent;
 use Tulia\Cms\Website\Application\Service\DynamicConfigurationDumper;
+use Tulia\Cms\Website\Domain\WriteModel\Event\WebsiteCreated;
+use Tulia\Cms\Website\Domain\WriteModel\Event\WebsiteDeleted;
+use Tulia\Cms\Website\Domain\WriteModel\Event\WebsiteUpdated;
 
 /**
  * @author Adam Banaszkiewicz
@@ -26,9 +25,9 @@ class DumpDynamicConfiguration implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            WebsiteUpdatedEvent::class => ['handle', -100],
-            WebsiteCreatedEvent::class => ['handle', -100],
-            WebsiteDeletedEvent::class => ['handle', -100],
+            WebsiteUpdated::class => ['handle', -100],
+            WebsiteCreated::class => ['handle', -100],
+            WebsiteDeleted::class => ['handle', -100],
         ];
     }
 

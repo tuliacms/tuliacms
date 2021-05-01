@@ -8,14 +8,11 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
-use Tulia\Cms\Website\Application\Command\WebsiteStorage;
-use Tulia\Cms\Website\Application\Exception\TranslatableWebsiteException;
-use Tulia\Cms\Website\Application\Model\Website as ApplicationWebsite;
 use Tulia\Cms\Website\Domain\ReadModel\Finder\Enum\ScopeEnum;
-use Tulia\Cms\Website\Domain\ReadModel\Finder\Factory\WebsiteFactoryInterface;
 use Tulia\Cms\Website\Domain\ReadModel\Finder\Finder;
-use Tulia\Cms\Website\Domain\ReadModel\Finder\Model\Website as QueryModelWebsite;
-use Tulia\Cms\Website\UserInterface\Web\Form\WebsiteFormManagerFactory;
+use Tulia\Cms\Website\Domain\WriteModel\Repository;
+use Tulia\Cms\Website\UserInterface\Web\Form\WebsiteForm;
+use Tulia\Cms\Website\UserInterface\Web\Service\WebsiteRequestExtractor;
 use Tulia\Component\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Component\Templating\ViewInterface;
 
@@ -25,10 +22,14 @@ use Tulia\Component\Templating\ViewInterface;
 class Website extends AbstractController
 {
     private Finder $finder;
+    private Repository $repository;
+    private WebsiteRequestExtractor $requestExtractor;
 
-    public function __construct(Finder $finder)
+    public function __construct(Finder $finder, Repository $repository, WebsiteRequestExtractor $requestExtractor)
     {
         $this->finder = $finder;
+        $this->repository = $repository;
+        $this->requestExtractor = $requestExtractor;
     }
 
     public function index(): RedirectResponse
@@ -50,23 +51,19 @@ class Website extends AbstractController
 
     /**
      * @param Request $request
-     * @param WebsiteFactoryInterface $websiteFactory
-     * @param WebsiteFormManagerFactory $formFactory
      * @return RedirectResponse|ViewInterface
      * @CsrfToken(id="website_form")
      */
-    public function create(
-        Request $request,
-        WebsiteFactoryInterface $websiteFactory,
-        WebsiteFormManagerFactory $formFactory
-    ) {
-        $website = $websiteFactory->createNewFromRequest($request);
-        $manager = $formFactory->create($website);
-        $form = $manager->createForm();
+    public function create(Request $request)
+    {
+        $website = $this->repository->createNew(
+            $this->requestExtractor->extractFromRequest($request)
+        );
+        $form = $this->createForm(WebsiteForm::class, $website);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $manager->save($form);
+            $this->repository->save($form->getData());
 
             $this->setFlash('success', $this->trans('websiteSaved', [], 'websites'));
             return $this->redirectToRoute('backend.website');
@@ -85,23 +82,18 @@ class Website extends AbstractController
     /**
      * @param string $id
      * @param Request $request
-     * @param WebsiteFormManagerFactory $formFactory
      * @return RedirectResponse|ViewInterface
      * @throws NotFoundHttpException
      * @CsrfToken(id="website_form")
      */
-    public function edit(
-        string $id,
-        Request $request,
-        WebsiteFormManagerFactory $formFactory
-    ) {
-        $website = $this->getWebsiteById($id);
-        $manager = $formFactory->create($website);
-        $form = $manager->createForm();
+    public function edit(string $id, Request $request)
+    {
+        $website = $this->repository->find($id);
+        $form = $this->createForm(WebsiteForm::class, $website);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $manager->update($form);
+            $this->repository->update($form->getData());
 
             $this->setFlash('success', $this->trans('websiteSaved', [], 'websites'));
             return $this->redirectToRoute('backend.website');
@@ -119,39 +111,20 @@ class Website extends AbstractController
 
     /**
      * @param Request $request
-     * @param WebsiteStorage $storage
      * @return RedirectResponse
-     * @throws NotFoundHttpException
      * @CsrfToken(id="website.delete")
      */
-    public function delete(Request $request, WebsiteStorage $storage): RedirectResponse
+    public function delete(Request $request): RedirectResponse
     {
-        $website = $this->getWebsiteById($request->request->get('id'));
+        $website = $this->repository->find($request->request->get('id'));
 
         try {
-            $storage->delete(ApplicationWebsite::fromQueryModel($website));
+            $this->repository->delete($website->getId()->getId());
             $this->setFlash('success', $this->trans('selectedWebsitesWereDeleted', [], 'websites'));
         } catch (TranslatableWebsiteException $e) {
             $this->setFlash('warning', $this->transObject($e));
         }
 
         return $this->redirectToRoute('backend.website');
-    }
-
-    /**
-     * @param string $id
-     * @return QueryModelWebsite
-     * @throws NotFoundHttpException
-     */
-    private function getWebsiteById(string $id): QueryModelWebsite
-    {
-        /** @var QueryModelWebsite $website */
-        $website = $this->finder->findOne(['id' => $id, 'active' => null], ScopeEnum::BACKEND_SINGLE);
-
-        if (! $website) {
-            throw $this->createNotFoundException($this->trans('websiteNotFound', [], 'websites'));
-        }
-
-        return $website;
     }
 }

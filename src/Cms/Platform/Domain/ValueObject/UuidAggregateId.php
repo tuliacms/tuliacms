@@ -9,14 +9,8 @@ namespace Tulia\Cms\Platform\Domain\ValueObject;
  */
 abstract class UuidAggregateId
 {
-    /**
-     * @var string
-     */
-    protected $id;
+    protected string $id;
 
-    /**
-     * @param string $id
-     */
     public function __construct(string $id)
     {
         if (preg_match('/[0-9a-f]{12}4[0-9a-f]{3}[89ab][0-9a-f]{15}/i', $id) === false) {
@@ -26,19 +20,16 @@ abstract class UuidAggregateId
         $this->id = $id;
     }
 
-    /**
-     * @return string
-     */
+    public function __toString(): string
+    {
+        return $this->id;
+    }
+
     public function getId(): string
     {
         return $this->id;
     }
 
-    /**
-     * @param UuidId $compare
-     *
-     * @return bool
-     */
     public function equals(self $compare): bool
     {
         return $this->id === $compare->id;

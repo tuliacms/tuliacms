@@ -5,15 +5,15 @@ declare(strict_types=1);
 namespace Tulia\Cms\Website\UserInterface\Web\Form;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type;
-use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use Tulia\Cms\Website\Application\Model\Locale;
-use Tulia\Cms\Website\Application\Model\LocaleCollection;
+use Tulia\Cms\Website\Domain\WriteModel\Model\Locale;
+use Tulia\Cms\Website\UserInterface\Web\Form\Transformer\WebsiteIdModelTransformer;
 
 /**
  * @author Adam Banaszkiewicz
@@ -38,6 +38,16 @@ class WebsiteForm extends AbstractType
                     new Assert\NotBlank(),
                 ],
             ])
+            ->add('active', Type\ChoiceType::class, [
+                'required' => true,
+                'choices' => [
+                    'Yes' => 1,
+                    'No' => 0,
+                ],
+                'constraints' => [
+                    new Assert\Range(['min' => 0, 'max' => 1]),
+                ],
+            ])
             ->add('locales', CollectionType::class, [
                 'entry_type' => LocaleForm::class,
                 'entry_options' => ['label' => false],
@@ -59,6 +69,8 @@ class WebsiteForm extends AbstractType
                 ->add('save', FormType\SubmitType::class)
             ;
         }
+
+        $builder->get('id')->addModelTransformer(new WebsiteIdModelTransformer());
     }
 
     /**
@@ -71,7 +83,7 @@ class WebsiteForm extends AbstractType
         ]);
     }
 
-    public function validateDefaultLocale(LocaleCollection $locales, ExecutionContextInterface $context): void
+    public function validateDefaultLocale(array $locales, ExecutionContextInterface $context): void
     {
         $countDefaults = 0;
 
@@ -93,7 +105,7 @@ class WebsiteForm extends AbstractType
         }
     }
 
-    public function validateDoubledLocale(LocaleCollection $locales, ExecutionContextInterface $context): void
+    public function validateDoubledLocale(array $locales, ExecutionContextInterface $context): void
     {
         $codes = [];
 

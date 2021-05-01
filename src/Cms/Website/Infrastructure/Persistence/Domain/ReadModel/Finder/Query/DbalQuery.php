@@ -80,7 +80,7 @@ class DbalQuery extends AbstractDbalQuery
 
         try {
             foreach ($result as $row) {
-                $collection->append(new Website($row['id'], [], $row['backend_prefix'], $row['name']));
+                $collection->append(new Website($row['id'], [], $row['backend_prefix'], $row['name'], (bool) $row['active']));
             }
         } catch (Exception $e) {
             throw new QueryException('Exception during create colection of found nodes: ' . $e->getMessage(), 0, $e);

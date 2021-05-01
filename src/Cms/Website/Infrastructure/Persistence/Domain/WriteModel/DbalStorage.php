@@ -52,6 +52,7 @@ class DbalStorage implements WebsiteStorageInterface
             $websiteRow['id']   = $website['id'];
             $websiteRow['name'] = $website['name'];
             $websiteRow['backend_prefix'] = $website['backend_prefix'];
+            $websiteRow['active'] = $website['active'] ? '1' : '0';
 
             $this->connection->insert('#__website', $websiteRow);
 
@@ -60,6 +61,7 @@ class DbalStorage implements WebsiteStorageInterface
                     'website_id'    => $website['id'],
                     'code'          => $locale['code'],
                     'domain'        => $locale['domain'],
+                    'domain_development' => $locale['domain_development'],
                     'path_prefix'   => $locale['path_prefix'],
                     'ssl_mode'      => $locale['ssl_mode'],
                     'locale_prefix' => $locale['locale_prefix'],
@@ -79,6 +81,7 @@ class DbalStorage implements WebsiteStorageInterface
             $websiteRow['id']   = $website['id'];
             $websiteRow['name'] = $website['name'];
             $websiteRow['backend_prefix'] = $website['backend_prefix'];
+            $websiteRow['active'] = $website['active'] ? '1' : '0';
 
             $currentLocales = $this->getLocales($website['id']);
 
@@ -99,6 +102,7 @@ class DbalStorage implements WebsiteStorageInterface
                             'website_id'    => $website['id'],
                             'code'          => $locale['code'],
                             'domain'        => $locale['domain'],
+                            'domain_development' => $locale['domain_development'],
                             'path_prefix'   => $locale['path_prefix'],
                             'ssl_mode'      => $locale['ssl_mode'],
                             'locale_prefix' => $locale['locale_prefix'],
@@ -113,6 +117,7 @@ class DbalStorage implements WebsiteStorageInterface
                     'website_id'    => $website['id'],
                     'code'          => $locale['code'],
                     'domain'        => $locale['domain'],
+                    'domain_development' => $locale['domain_development'],
                     'path_prefix'   => $locale['path_prefix'],
                     'ssl_mode'      => $locale['ssl_mode'],
                     'locale_prefix' => $locale['locale_prefix'],
@@ -190,6 +195,7 @@ class DbalStorage implements WebsiteStorageInterface
     private function areSame(array $newItem, array $currentItem): bool
     {
         return $newItem['domain'] === $currentItem['domain']
+            && $newItem['domain_development'] === $currentItem['domain_development']
             && $newItem['locale_prefix'] === $currentItem['locale_prefix']
             && $newItem['path_prefix'] === $currentItem['path_prefix']
             && $newItem['ssl_mode'] === $currentItem['ssl_mode']
