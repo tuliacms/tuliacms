@@ -32,7 +32,7 @@ class BackendResolver implements EventSubscriberInterface
         $request = $event->getRequest();
 
         $parameters = [];
-        $parameters['_content_path'] = $request->attributes->get('_content_path');
+        $parameters['_content_path'] = $request->attributes->get('_content_path', '/');
         $parameters['_backend_prefix'] = $this->currentWebsite->getBackendPrefix();
         $parameters = $this->resolveBackend($parameters);
 
