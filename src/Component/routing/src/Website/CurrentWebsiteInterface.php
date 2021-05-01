@@ -14,6 +14,7 @@ interface CurrentWebsiteInterface
 {
     public function set(WebsiteInterface $website): void;
     public function get(): WebsiteInterface;
+    public function has(): bool;
     public function getId(): string;
     public function getName(): string;
     public function getPathPrefix(): ?string;
@@ -26,6 +27,7 @@ interface CurrentWebsiteInterface
     public function getLocale(): LocaleInterface;
     public function getAddress(): string;
     public function getBackendAddress(): string;
+    public function isActive(): bool;
 
     /**
      * @param string $code

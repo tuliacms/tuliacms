@@ -12,7 +12,7 @@ use Tulia\Component\Routing\Website\Locale\LocaleInterface;
  */
 class CurrentWebsite implements CurrentWebsiteInterface
 {
-    protected WebsiteInterface $currentWebsite;
+    protected ?WebsiteInterface $currentWebsite = null;
 
     /**
      * {@inheritdoc}
@@ -28,6 +28,14 @@ class CurrentWebsite implements CurrentWebsiteInterface
     public function get(): WebsiteInterface
     {
         return $this->currentWebsite;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function has(): bool
+    {
+        return $this->currentWebsite !== null;
     }
 
     /**
@@ -124,6 +132,14 @@ class CurrentWebsite implements CurrentWebsiteInterface
     public function getBackendAddress(): string
     {
         return $this->currentWebsite->getBackendAddress();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isActive(): bool
+    {
+        return $this->currentWebsite->isActive();
     }
 
     /**

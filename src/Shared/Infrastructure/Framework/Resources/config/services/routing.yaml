@@ -20,8 +20,6 @@ services:
 
     Tulia\Component\Routing\Website\RegistryInterface:
         factory: Tulia\Component\Routing\Website\WebsiteRegistryFactory::factory
-        bind:
-            $source: '%framework.routing.website.list%'
 
     Tulia\Component\Routing\EventListener\RequestMatcher:
         bind:

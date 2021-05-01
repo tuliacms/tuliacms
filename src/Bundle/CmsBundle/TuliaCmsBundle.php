@@ -48,7 +48,7 @@ class TuliaCmsBundle extends FrameworkBundle
 
         $container->addCompilerPass(new TemplatingPass());
         $container->addCompilerPass(new CommandBusPass());
-        $container->addCompilerPass(new RoutingPass(__DIR__ . '/../../../config/dynamic/websites.php'));
+        $container->addCompilerPass(new RoutingPass());
         $container->addCompilerPass(new ThemePass());
         $container->addCompilerPass(new SecurityPass());
         $container->addCompilerPass(new DashboardPass());
