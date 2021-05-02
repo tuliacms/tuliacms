@@ -42,8 +42,8 @@ services:
     Tulia\Cms\Taxonomy\Infrastructure\Cms\Menu\IdentityProvider:
         tags: [ menu.identity_provider ]
 
-    Tulia\Cms\Taxonomy\Infrastructure\Cms\Menu\TypeRegistrator:
-        tags: [ menu.builder.type_registrator ]
+#    Tulia\Cms\Taxonomy\Infrastructure\Cms\Menu\TypeRegistrator:
+#        tags: [ menu.builder.type_registrator ]
 
     Tulia\Cms\Taxonomy\Infrastructure\Cms\Breadcrumbs\CrumbsResolver:
         tags: [ breadcrumbs.resolver ]

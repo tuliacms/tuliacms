@@ -26,9 +26,6 @@ services:
     Tulia\Cms\ContactForms\Infrastructure\Cms\BackendMenu\MenuBuilder:
         tags: [ backend_menu.builder ]
 
-    Tulia\Cms\ContactForms\Infrastructure\Cms\Widget\Predefined\ContactFormWidget:
-        tags: [ widget ]
-
     Tulia\Cms\ContactForms\Application\Builder\Form:
         tags: [ form.type ]
 

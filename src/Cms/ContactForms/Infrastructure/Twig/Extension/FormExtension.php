@@ -52,7 +52,7 @@ class FormExtension extends AbstractExtension
                     return null;
                 }
 
-                return $env->render('render_form', [
+                return $env->render('@cms/forms/contact-form.tpl', [
                     'template' => $model->getFieldsView(),
                     'template_name' => sprintf('contact_form_field_template_%s', $formId),
                     'form' => $this->buildForm(

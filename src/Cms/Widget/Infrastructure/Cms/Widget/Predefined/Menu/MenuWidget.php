@@ -5,25 +5,18 @@ declare(strict_types=1);
 namespace Tulia\Cms\Widget\Infrastructure\Cms\Widget\Predefined\Menu;
 
 use Tulia\Cms\Menu\Infrastructure\Builder\BuilderInterface;
-use Tulia\Cms\Menu\Application\Query\Finder\Enum\ScopeEnum;
-use Tulia\Cms\Menu\Application\Query\Finder\Item\FinderFactoryInterface;
 use Tulia\Component\Templating\ViewInterface;
 use Tulia\Component\Widget\AbstractWidget;
 use Tulia\Component\Widget\Configuration\ConfigurationInterface;
 
 /**
  * @author Adam Banaszkiewicz
+ * @todo Move widget to Menu module.
  */
 class MenuWidget extends AbstractWidget
 {
-    /**
-     * @var BuilderInterface
-     */
-    protected $builder;
+    protected BuilderInterface $builder;
 
-    /**
-     * @param BuilderInterface $builder
-     */
     public function __construct(BuilderInterface $builder)
     {
         $this->builder = $builder;

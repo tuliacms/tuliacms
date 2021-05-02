@@ -23,3 +23,5 @@ services:
     Tulia\Component\Templating\Config:
         arguments:
             - { namespace_overwrite: '%framework.templating.namespace_overwrite%' }
+
+    Twig\Extension\StringLoaderExtension: ~

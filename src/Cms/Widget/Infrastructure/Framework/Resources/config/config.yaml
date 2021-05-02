@@ -3,6 +3,9 @@ framework:
         paths:
             - { name: backend/widget, path: '%kernel.project_dir%/src/Cms/Widget/Infrastructure/Framework/Resources/views/backend' }
             - { name: widget-base, path: '%kernel.project_dir%/src/Cms/Widget/Infrastructure/Framework/Resources/views/widget-base' }
+            - { name: widget/internal/menu, path: '%kernel.project_dir%/src/Cms/Widget/Infrastructure/Cms/Widget/Predefined/Menu' }
+            - { name: widget/internal/text, path: '%kernel.project_dir%/src/Cms/Widget/Infrastructure/Cms/Widget/Predefined/Text' }
+            - { name: widget/internal/features, path: '%kernel.project_dir%/src/Cms/Widget/Infrastructure/Cms/Widget/Predefined/Features' }
     translator:
         paths:
             - '%kernel.project_dir%/src/Cms/Widget/Infrastructure/Framework/Resources/translations'

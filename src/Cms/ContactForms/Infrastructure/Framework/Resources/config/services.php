@@ -297,7 +297,7 @@ $builder->mergeParameter('templating.paths', [
     'backend/forms' => dirname(__DIR__) . '/views/backend',
 ]);*/
 
-$builder->mergeParameter('twig.loader.array.templates', [
+/*$builder->mergeParameter('twig.loader.array.templates', [
     'render_form' => "
         <div style=\"position:relative;\" class=\"contact-form-anchor\">
             <div id=\"anchor_{{ form.vars.id }}\" style=\"display:block;position:absolute;left:0;top:-100px\"></div>
@@ -323,4 +323,4 @@ $builder->mergeParameter('twig.loader.array.templates', [
         {{ form_errors(form) }}
         {{ form_end(form) }}
     ",
-]);
+]);*/

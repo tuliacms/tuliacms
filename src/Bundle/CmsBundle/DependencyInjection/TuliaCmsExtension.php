@@ -54,6 +54,9 @@ class TuliaCmsExtension extends FrameworkExtension
             ->addTag('theme.customizer.control');
         $container->registerForAutoconfiguration(\Tulia\Component\Theme\Customizer\Builder\Plugin\PluginInterface::class)
             ->addTag('theme.customizer.builder.plugin');
+        // Widgets
+        $container->registerForAutoconfiguration(\Tulia\Component\Widget\WidgetInterface::class)
+            ->addTag('widget');
     }
 
     private function prepareTemplatingPaths(array $paths): array

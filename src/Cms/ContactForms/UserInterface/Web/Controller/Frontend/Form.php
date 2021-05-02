@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Tulia\Cms\ContactForms\UserInterface\Web\Controller\Frontend;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\ContactForms\Application\Builder\BuilderInterface;
 use Tulia\Cms\ContactForms\Application\Sender\FormDataExtractorInterface;
 use Tulia\Cms\ContactForms\Application\Sender\SenderInterface;
 use Tulia\Cms\ContactForms\Query\Enum\ScopeEnum;
 use Tulia\Cms\ContactForms\Query\FinderFactoryInterface;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Tulia\Component\Security\Http\Csrf\Annotation\IgnoreCsrfToken;
 
 /**
@@ -31,9 +31,7 @@ class Form extends AbstractController
     /**
      * @param Request $request
      * @param string $id
-     *
      * @return RedirectResponse
-     *
      * @IgnoreCsrfToken
      */
     public function submit(Request $request, SenderInterface $sender, FormDataExtractorInterface $dataExtractor, string $id): RedirectResponse
@@ -68,7 +66,7 @@ class Form extends AbstractController
             $this->setFlash('cms.form.last_data', json_encode($form->getData()));
         }
 
-        return $this->redirectToUrl($request->headers->get('referer') . '#anchor_contact_form_' . $id);
+        return $this->redirect($request->headers->get('referer') . '#anchor_contact_form_' . $id);
     }
 
     private function getErrorMessages($form) {
@@ -83,7 +81,7 @@ class Form extends AbstractController
         }
 
         foreach ($form->all() as $child) {
-            if (!$child->isValid()) {
+            if (! $child->isValid()) {
                 $errors[$child->getName()] = $this->getErrorMessages($child);
             }
         }
