@@ -15,7 +15,7 @@ class ResolverAggregate implements ResolverAggregateInterface
     /**
      * @var ResolverInterface[]
      */
-    protected iterable $resolvers;
+    protected $resolvers;
 
     public function __construct(iterable $resolvers)
     {

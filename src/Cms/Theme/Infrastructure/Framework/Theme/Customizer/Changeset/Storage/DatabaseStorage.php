@@ -4,55 +4,29 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Theme\Infrastructure\Framework\Theme\Customizer\Changeset\Storage;
 
-use Symfony\Component\HttpFoundation\RequestStack;
+use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 use Tulia\Component\Theme\Customizer\Changeset\ChangesetInterface;
 use Tulia\Component\Theme\Customizer\Changeset\Factory\ChangesetFactoryInterface;
 use Tulia\Component\Theme\Customizer\Changeset\Storage\StorageInterface;
 use Tulia\Component\Theme\Enum\ChangesetTypeEnum;
 use Tulia\Component\Theme\Exception\ChangesetNotFoundException;
-use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class DatabaseStorage implements StorageInterface
 {
-    /**
-     * @var ConnectionInterface
-     */
-    protected $connection;
+    protected ConnectionInterface $connection;
+    protected ChangesetFactoryInterface $changesetFactory;
+    protected CurrentWebsiteInterface $currentWebsite;
 
-    /**
-     * @var RequestStack
-     */
-    protected $requestStack;
-
-    /**
-     * @var ChangesetFactoryInterface
-     */
-    protected $changesetFactory;
-
-    /**
-     * @var CurrentWebsiteInterface
-     */
-    protected $currentWebsite;
-
-    /**
-     * @param ConnectionInterface $connection
-     * @param RequestStack $requestStack
-     * @param ChangesetFactoryInterface $changesetFactory
-     * @param CurrentWebsiteInterface $currentWebsite
-     */
     public function __construct(
         ConnectionInterface $connection,
-        RequestStack $requestStack,
         ChangesetFactoryInterface $changesetFactory,
         CurrentWebsiteInterface $currentWebsite
     ) {
-        $this->connection     = $connection;
-        $this->requestStack   = $requestStack;
+        $this->connection = $connection;
         $this->changesetFactory = $changesetFactory;
         $this->currentWebsite = $currentWebsite;
     }

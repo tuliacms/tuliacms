@@ -17,12 +17,18 @@ backend.theme.customize.reset:
 backend.theme.customize.copy_changeset_from_parent:
     path: /administrator/theme/customize/copy-changeset-from-parent/{theme}
     controller: Tulia\Cms\Theme\UserInterface\Web\Controller\Backend\Customizer::copyChangesetFromParent
+    requirements:
+        theme: '([a-zA-Z0-9]+\/[a-zA-Z0-9]+)'
 backend.theme.customize.save:
     path: /administrator/theme/customize/save/{theme}/{changeset}
     controller: Tulia\Cms\Theme\UserInterface\Web\Controller\Backend\Customizer::save
-    methods: POST
+    methods: POST|GET
+    requirements:
+        theme: '([a-zA-Z0-9]+\/[a-zA-Z0-9]+)'
 backend.theme.customize:
-    path: /administrator/theme/customize/{theme}/{?changeset}
+    path: /administrator/theme/customize/{theme}/{changeset}
     controller: Tulia\Cms\Theme\UserInterface\Web\Controller\Backend\Customizer::customize
+    requirements:
+        theme: '([a-zA-Z0-9]+\/[a-zA-Z0-9]+)'
     defaults:
         changeset: null

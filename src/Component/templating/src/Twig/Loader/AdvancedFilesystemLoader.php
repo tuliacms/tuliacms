@@ -21,7 +21,7 @@ class AdvancedFilesystemLoader implements LoaderInterface
     private string $rootPath;
     private FilterInterface $filter;
 
-    public function __construct(FilterInterface $filter, $paths = [], string $rootPath = null)
+    public function __construct(FilterInterface $filter, array $paths = [], string $rootPath = null)
     {
         $this->rootPath = ($rootPath ?? getcwd()) . \DIRECTORY_SEPARATOR;
         if (false !== $realPath = realpath($this->rootPath)) {
@@ -58,8 +58,9 @@ class AdvancedFilesystemLoader implements LoaderInterface
         // invalidate the cache
         $this->cache = $this->errorCache = [];
 
-        $checkPath = $this->isAbsolutePath($path) ? $path : $this->rootPath.$path;
-        if (!is_dir($checkPath)) {
+        $checkPath = $this->isAbsolutePath($path) ? $path : $this->rootPath . $path;
+
+        if (! is_dir($checkPath)) {
             throw new LoaderError(sprintf('The "%s" directory does not exist ("%s").', $path, $checkPath));
         }
 
@@ -80,7 +81,9 @@ class AdvancedFilesystemLoader implements LoaderInterface
         if (null === $path = $this->findTemplate($name)) {
             return '';
         }
+
         $len = \strlen($this->rootPath);
+
         if (0 === strncmp($this->rootPath, $path, $len)) {
             return substr($path, $len);
         }
@@ -88,10 +91,7 @@ class AdvancedFilesystemLoader implements LoaderInterface
         return $path;
     }
 
-    /**
-     * @return bool
-     */
-    public function exists(string $name)
+    public function exists(string $name): bool
     {
         $name = $this->normalizeName($name);
 
@@ -121,7 +121,7 @@ class AdvancedFilesystemLoader implements LoaderInterface
         }
 
         if (isset($this->errorCache[$name])) {
-            if (!$throw) {
+            if (! $throw) {
                 return null;
             }
 
@@ -147,7 +147,7 @@ class AdvancedFilesystemLoader implements LoaderInterface
         }
 
         if ($lastException) {
-            if (!$throw) {
+            if (! $throw) {
                 return null;
             }
 
@@ -159,10 +159,10 @@ class AdvancedFilesystemLoader implements LoaderInterface
 
     private function getViewPathname(string $name, string $prefix, string $shortname, bool $throw): ?string
     {
-        if (!isset($this->paths[$prefix])) {
+        if (! isset($this->paths[$prefix])) {
             $this->errorCache[$name] = sprintf('There are no registered paths for prefix "%s".', $prefix);
 
-            if (!$throw) {
+            if (! $throw) {
                 return null;
             }
 
@@ -172,22 +172,22 @@ class AdvancedFilesystemLoader implements LoaderInterface
         if (isset($this->paths[$prefix])) {
             $path = $this->paths[$prefix];
 
-            if (!$this->isAbsolutePath($path)) {
-                $path = $this->rootPath.$path;
+            if (! $this->isAbsolutePath($path)) {
+                $path = $this->rootPath . $path;
             }
 
-            if (is_file($path.$shortname)) {
-                if (false !== $realpath = realpath($path.$shortname)) {
+            if (is_file($path . $shortname)) {
+                if (false !== $realpath = realpath($path . $shortname)) {
                     return $this->cache[$name] = $realpath;
                 }
 
-                return $this->cache[$name] = $path.$shortname;
+                return $this->cache[$name] = $path . $shortname;
             }
         }
 
         $this->errorCache[$name] = sprintf('Unable to find template "%s" (looked into: %s).', $name, $this->paths[$prefix]);
 
-        if (!$throw) {
+        if (! $throw) {
             return null;
         }
 
@@ -220,7 +220,7 @@ class AdvancedFilesystemLoader implements LoaderInterface
             }
         }
 
-        throw new LoaderError(sprintf('Malformed prefixed template name "%s" (expecting "@prefix/template_name").', $name));
+        throw new LoaderError(sprintf('Cannot find registered prefix for view "%s".', $name));
     }
 
     private function validateName(string $name): void
@@ -253,6 +253,6 @@ class AdvancedFilesystemLoader implements LoaderInterface
                 && strspn($file, '/\\', 2, 1)
             )
             || null !== parse_url($file, PHP_URL_SCHEME)
-            ;
+        ;
     }
 }

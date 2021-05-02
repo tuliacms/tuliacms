@@ -4,19 +4,18 @@ declare(strict_types=1);
 
 namespace Tulia\Component\Theme\Plugin;
 
+use Tulia\Component\Theme\Customizer\Builder\Plugin\PluginInterface;
+
 /**
  * @author Adam Banaszkiewicz
  */
 abstract class Registry implements RegistryInterface
 {
     /**
-     * @var array
+     * @var PluginInterface[]
      */
     protected $plugins = [];
 
-    /**
-     * @param iterable $plugins
-     */
     public function __construct(iterable $plugins)
     {
         $this->plugins = $plugins;

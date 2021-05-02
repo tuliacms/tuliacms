@@ -10,7 +10,7 @@ use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Theme\Infrastructure\Framework\Theme\Customizer\Changeset\Changeset;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 use Tulia\Component\Templating\ViewInterface;
-use Tulia\Component\Theme\Customizer\Builder\ThemeBuilderFactoryInterface;
+use Tulia\Component\Theme\Customizer\Builder\BuilderInterface;
 use Tulia\Component\Theme\Customizer\Changeset\Storage\StorageInterface;
 use Tulia\Component\Theme\Customizer\CustomizerInterface;
 use Tulia\Component\Theme\Enum\ChangesetTypeEnum;
@@ -24,49 +24,20 @@ use Tulia\Component\Security\Http\Csrf\Annotation\CsrfToken;
  */
 class Customizer extends AbstractController
 {
-    /**
-     * @var ManagerInterface
-     */
-    protected $manager;
+    protected ManagerInterface $manager;
+    protected CustomizerInterface $customizer;
+    protected StorageInterface $storage;
 
-    /**
-     * @var CustomizerInterface
-     */
-    protected $customizer;
-
-    /**
-     * @var StorageInterface
-     */
-    protected $storage;
-
-    /**
-     * @var ThemeBuilderFactoryInterface
-     */
-    protected $themeBuilderFactory;
-
-    /**
-     * @param ManagerInterface $manager
-     * @param CustomizerInterface $customizer
-     * @param StorageInterface $storage
-     * @param ThemeBuilderFactoryInterface $themeBuilderFactory
-     */
     public function __construct(
         ManagerInterface $manager,
         CustomizerInterface $customizer,
-        StorageInterface $storage,
-        ThemeBuilderFactoryInterface $themeBuilderFactory
+        StorageInterface $storage
     ) {
         $this->manager = $manager;
         $this->customizer = $customizer;
         $this->storage = $storage;
-        $this->themeBuilderFactory = $themeBuilderFactory;
     }
 
-    /**
-     * @param Request $request
-     *
-     * @return RedirectResponse
-     */
     public function customizeRedirect(Request $request): RedirectResponse
     {
         $theme = $this->manager->getTheme();
@@ -94,17 +65,15 @@ class Customizer extends AbstractController
 
     /**
      * @param Request $request
-     * @param ThemeBuilderFactoryInterface $themeBuilderFactory
+     * @param BuilderInterface $themeBuilderFactory
      * @param string $theme
      * @param string|null $changeset
-     *
      * @return RedirectResponse|ViewInterface
-     *
      * @throws ChangesetNotFoundException
      */
     public function customize(
         Request $request,
-        ThemeBuilderFactoryInterface $themeBuilderFactory,
+        BuilderInterface $builder,
         CurrentWebsiteInterface $currentWebsite,
         string $theme,
         string $changeset = null
@@ -120,8 +89,6 @@ class Customizer extends AbstractController
         }
 
         $themeObject = $storage->get($theme);
-
-        $builder = $themeBuilderFactory->build($themeObject);
 
         $changesetItem = $this->storage->has($changeset)
             ? $this->storage->get($changeset)
@@ -211,7 +178,7 @@ class Customizer extends AbstractController
         $this->customizer->configureFieldsTypes($changeset);
 
         $changeset->mergeArray($data);
-        $changeset->setAuthorId($this->getUser()->getId());
+        //$changeset->setAuthorId($this->getUser()->getId());
 
         if ($request->request->get('mode') === 'temporary') {
             $this->storage->save($changeset);

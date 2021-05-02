@@ -71,33 +71,33 @@ $builder->setDefinition(ChangesetStorageInterface::class, DatabaseStorage::class
     ],
 ]);*/
 
-$builder->setDefinition(AppearenceMenuBuilder::class, AppearenceMenuBuilder::class, [
+/*$builder->setDefinition(AppearenceMenuBuilder::class, AppearenceMenuBuilder::class, [
     'arguments' => [
         service(BuilderHelperInterface::class),
     ],
     'tags' => [ tag('backend_menu.builder') ],
-]);
+]);*/
 
-$builder->setDefinition(ThemeExtension::class, ThemeExtension::class, [
+/*$builder->setDefinition(ThemeExtension::class, ThemeExtension::class, [
     'arguments' => [
         service(HookerInterface::class),
     ],
     'tags' => [ tag('twig.extension') ],
-]);
+]);*/
 
-$builder->setDefinition(ThemeConfigurationProvider::class, ThemeConfigurationProvider::class, [
+/*$builder->setDefinition(ThemeConfigurationProvider::class, ThemeConfigurationProvider::class, [
     'arguments' => [
         service(ManagerInterface::class),
     ],
     'tags' => [ tag('filemanager.image_size.provider') ],
-]);
+]);*/
 
-$builder->setDefinition(LinksProvider::class, LinksProvider::class, [
+/*$builder->setDefinition(LinksProvider::class, LinksProvider::class, [
     'arguments' => [
         service(HelperInterface::class),
     ],
     'tags' => [ tag('frontend_toolbar.links.provider') ],
-]);
+]);*/
 
 $builder->setDefinition(ThemeActivator::class, ThemeActivator::class, [
     'arguments' => [
@@ -109,7 +109,7 @@ $builder->setDefinition(ThemeActivator::class, ThemeActivator::class, [
 ]);
 
 
-$builder->setParameter('theme.changeset.base_class', Changeset::class);
+/*$builder->setParameter('theme.changeset.base_class', Changeset::class);*/
 
 /*$builder->mergeParameter('translation.directory_list', [
     dirname(__DIR__) . '/translations',

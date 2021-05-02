@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace Tulia\Component\Theme\Customizer;
 
-use IteratorAggregate;
 use Tulia\Component\Theme\Customizer\Builder\Controls\ControlInterface;
 use Tulia\Component\Theme\Customizer\Builder\Section\Section;
 use Tulia\Component\Theme\Customizer\Builder\Section\SectionInterface;
 use Tulia\Component\Theme\Customizer\Changeset\ChangesetInterface;
 use Tulia\Component\Theme\Customizer\Changeset\Factory\ChangesetFactoryInterface;
-use Tulia\Component\Theme\Customizer\Builder\ThemeBuilderFactoryInterface;
 use Tulia\Component\Theme\Customizer\Changeset\Transformer\ChangesetFieldsDefinitionControlsTransformer;
 use Tulia\Component\Theme\Customizer\Provider\ProviderInterface;
 use Tulia\Component\Theme\ThemeInterface;
@@ -21,7 +19,6 @@ use Tulia\Component\Theme\ThemeInterface;
 class Customizer implements CustomizerInterface
 {
     protected ChangesetFactoryInterface $changesetFactory;
-    protected ThemeBuilderFactoryInterface $builderFactory;
     protected iterable $providers;
     protected array $sections = [];
     protected array $controls = [];
@@ -29,11 +26,9 @@ class Customizer implements CustomizerInterface
 
     public function __construct(
         ChangesetFactoryInterface $changesetFactory,
-        ThemeBuilderFactoryInterface $builderFactory,
         iterable $providers
     ) {
         $this->changesetFactory = $changesetFactory;
-        $this->builderFactory = $builderFactory;
         $this->providers = $providers;
     }
 

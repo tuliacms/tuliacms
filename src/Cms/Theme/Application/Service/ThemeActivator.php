@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace Tulia\Cms\Theme\Application\Service;
 
 use Psr\EventDispatcher\EventDispatcherInterface;
-use Tulia\Cms\Theme\Domain\Event\ThemeActivated;
 use Tulia\Cms\Theme\Application\Exception\ThemeNotFoundException;
+use Tulia\Cms\Theme\Domain\Event\ThemeActivated;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 use Tulia\Component\Theme\Activator\ActivatorInterface;
+use Tulia\Component\Theme\Exception\MissingThemeException;
 use Tulia\Component\Theme\ManagerInterface;
 
 /**
@@ -35,7 +36,7 @@ class ThemeActivator
 
     /**
      * @param string $name
-     * @throws ThemeNotFoundException
+     * @throws ThemeNotFoundException|MissingThemeException
      */
     public function activateTheme(string $name): void
     {

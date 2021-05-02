@@ -72,7 +72,7 @@ class CustomizerResolver implements ResolverInterface
          * prevents do the same operation (building with defaults)
          * in every request when new/fresh theme installed.
          */
-        if (!$changeset) {
+        if (! $changeset) {
             $changeset = $this->customizer->buildDefaultChangeset($theme);
             $changeset->setType(ChangesetTypeEnum::ACTIVE);
             $this->storage->save($changeset);

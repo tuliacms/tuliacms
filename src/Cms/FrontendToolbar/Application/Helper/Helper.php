@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\FrontendToolbar\Application\Helper;
 
-use Symfony\Contracts\Translation\TranslatorInterface;
-use Tulia\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Component\Templating\EngineInterface;
 use Tulia\Component\Templating\ViewInterface;
 
@@ -15,42 +14,24 @@ use Tulia\Component\Templating\ViewInterface;
  */
 class Helper implements HelperInterface
 {
-    /**
-     * @var TranslatorInterface
-     */
-    protected $translator;
+    protected TranslatorInterface $translator;
+    protected RouterInterface $router;
+    protected EngineInterface $engine;
 
-    /**
-     * @var RouterInterface
-     */
-    protected $router;
-
-    /**
-     * @var EngineInterface
-     */
-    protected $engine;
-
-    /**
-     * @param TranslatorInterface $translator
-     * @param RouterInterface $router
-     * @param EngineInterface $engine
-     */
     public function __construct(
         TranslatorInterface $translator,
         RouterInterface $router,
         EngineInterface $engine
     ) {
         $this->translator = $translator;
-        $this->router     = $router;
-        $this->engine     = $engine;
+        $this->router = $router;
+        $this->engine = $engine;
     }
 
     /**
      * {@inheritdoc}
-     *
-     * @throws RouteNotFoundException
      */
-    public function generateUrl(string $route, array $parameters = [], int $referenceType = RouterInterface::TYPE_PATH): string
+    public function generateUrl(string $route, array $parameters = [], int $referenceType = RouterInterface::ABSOLUTE_PATH): string
     {
         return $this->router->generate($route, $parameters, $referenceType);
     }

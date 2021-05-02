@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Tulia\Component\Theme\Resolver;
 
+use Tulia\Component\Theme\Configuration\Configuration;
 use Tulia\Component\Theme\Configuration\ConfigurationInterface;
 use Tulia\Component\Theme\Configuration\ConfiguratorInterface;
 use Tulia\Component\Theme\Customizer\DetectorInterface;
-use Tulia\Component\Theme\ThemeInterface;
 use Tulia\Component\Theme\ManagerInterface;
-use Tulia\Component\Theme\Configuration\Configuration;
+use Tulia\Component\Theme\ThemeInterface;
 
 /**
  * @author Adam Banaszkiewicz

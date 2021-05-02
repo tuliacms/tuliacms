@@ -8,8 +8,6 @@ use Symfony\Bundle\FrameworkBundle\DependencyInjection\FrameworkExtension;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
-use Tulia\Cms\Shared\Domain\ReadModel\Finder\AbstractFinder;
-use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Plugin\PluginInterface;
 use Tulia\Component\Templating\ViewFilter\FilterInterface;
 
 /**
@@ -39,14 +37,23 @@ class TuliaCmsExtension extends FrameworkExtension
         $container->setParameter('framework.twig.loader.array.templates', $this->prepareTwigArrayLoaderTemplates($config['twig']['loader']['array']['templates'] ?? []));
         $container->setParameter('framework.templating.paths', $this->prepareTemplatingPaths($config['templating']['paths'] ?? []));
         $container->setParameter('framework.templating.namespace_overwrite', $config['templating']['namespace_overwrite'] ?? []);
-        $container->setParameter('framework.theme.customizer.builder.base_class', $config['theme']['customizer']['builder']['base_class']);
 
         $this->registerViewFilters($container);
 
-        $container->registerForAutoconfiguration(AbstractFinder::class)
+        // Finders
+        $container->registerForAutoconfiguration(\Tulia\Cms\Shared\Domain\ReadModel\Finder\AbstractFinder::class)
             ->addTag('finder');
-        $container->registerForAutoconfiguration(PluginInterface::class)
+        $container->registerForAutoconfiguration(\Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Plugin\PluginInterface::class)
             ->addTag('finder.plugin');
+        // Themes
+        $container->registerForAutoconfiguration(\Tulia\Component\Theme\Resolver\ResolverInterface::class)
+            ->addTag('theme.resolver');
+        $container->registerForAutoconfiguration(\Tulia\Component\Theme\Customizer\Provider\ProviderInterface::class)
+            ->addTag('theme.customizer.provider');
+        $container->registerForAutoconfiguration(\Tulia\Component\Theme\Customizer\Builder\Controls\ControlInterface::class)
+            ->addTag('theme.customizer.control');
+        $container->registerForAutoconfiguration(\Tulia\Component\Theme\Customizer\Builder\Plugin\PluginInterface::class)
+            ->addTag('theme.customizer.builder.plugin');
     }
 
     private function prepareTemplatingPaths(array $paths): array

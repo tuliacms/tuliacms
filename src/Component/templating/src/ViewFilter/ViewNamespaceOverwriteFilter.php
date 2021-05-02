@@ -43,15 +43,15 @@ class ViewNamespaceOverwriteFilter implements FilterInterface
 
     private function loop(): bool
     {
-        foreach ($this->views as $key => $view) {
-            foreach ($this->workingMap as $from => $to) {
-                if (strpos((string) $view, (string) $from) === 0) {
-                    $overwritten = str_replace($from, $to, $view);
+        foreach ($this->views as $view) {
+            foreach ($this->workingMap as $key => $map) {
+                if (strpos($view, $map['from']) === 0) {
+                    $overwritten = str_replace($map['from'], $map['to'], $view);
 
                     $this->views[] = $overwritten;
 
                     // Unset used to prevent infinite loop.
-                    unset($this->workingMap[$from]);
+                    unset($this->workingMap[$key]);
 
                     return true;
                 }
