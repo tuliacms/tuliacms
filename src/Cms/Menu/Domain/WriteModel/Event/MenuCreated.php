@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Menu\Domain\Menu\Event;
+namespace Tulia\Cms\Menu\Domain\WriteModel\Event;
 
-use Tulia\Cms\Menu\Domain\Menu\Model\ValueObject\AggregateId;
+use Tulia\Cms\Menu\Domain\WriteModel\Model\ValueObject\MenuId;
 
 /**
  * @author Adam Banaszkiewicz
@@ -17,10 +17,10 @@ class MenuCreated extends DomainEvent
     private $locale;
 
     /**
-     * @param AggregateId $menuId
+     * @param MenuId $menuId
      * @param string $locale
      */
-    public function __construct(AggregateId $menuId, string $locale)
+    public function __construct(MenuId $menuId, string $locale)
     {
         parent::__construct($menuId);
 

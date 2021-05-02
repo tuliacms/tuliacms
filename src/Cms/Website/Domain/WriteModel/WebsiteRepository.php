@@ -18,7 +18,7 @@ use Tulia\Cms\Website\Ports\Infrastructure\Persistence\Domain\WriteModel\Website
 /**
  * @author Adam Banaszkiewicz
  */
-class Repository
+class WebsiteRepository
 {
     private WebsiteStorageInterface $storage;
     private UuidGeneratorInterface $uuidGenerator;

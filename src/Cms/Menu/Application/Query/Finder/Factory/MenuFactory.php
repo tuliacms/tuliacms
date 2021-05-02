@@ -4,44 +4,28 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Menu\Application\Query\Finder\Factory;
 
+use Tulia\Cms\Menu\Domain\WriteModel\Model\Item;
+use Tulia\Cms\Menu\Domain\WriteModel\Model\Menu;
 use Tulia\Cms\Menu\Infrastructure\Cms\Metadata\Item\LoaderInterface;
-use Tulia\Cms\Menu\Application\Query\Finder\Model\Item;
-use Tulia\Cms\Menu\Application\Query\Finder\Model\Menu;
-use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
+use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class MenuFactory implements MenuFactoryInterface
+class MenuFactory
 {
-    /**
-     * @var UuidGeneratorInterface
-     */
-    protected $uuidGenerator;
+    protected UuidGeneratorInterface $uuidGenerator;
+    protected LoaderInterface $loader;
+    protected CurrentWebsiteInterface $currentWebsite;
 
-    /**
-     * @var LoaderInterface
-     */
-    protected $loader;
-
-    /**
-     * @var CurrentWebsiteInterface
-     */
-    protected $currentWebsite;
-
-    /**
-     * @param UuidGeneratorInterface $uuidGenerator
-     * @param LoaderInterface $loader
-     * @param CurrentWebsiteInterface $currentWebsite
-     */
     public function __construct(
         UuidGeneratorInterface $uuidGenerator,
         LoaderInterface $loader,
         CurrentWebsiteInterface $currentWebsite
     ) {
-        $this->uuidGenerator  = $uuidGenerator;
-        $this->loader         = $loader;
+        $this->uuidGenerator = $uuidGenerator;
+        $this->loader = $loader;
         $this->currentWebsite = $currentWebsite;
     }
 

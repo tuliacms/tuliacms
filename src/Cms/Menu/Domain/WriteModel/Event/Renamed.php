@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Menu\Domain\Menu\Event;
+namespace Tulia\Cms\Menu\Domain\WriteModel\Event;
 
-use Tulia\Cms\Menu\Domain\Menu\Model\ValueObject\AggregateId;
+use Tulia\Cms\Menu\Domain\WriteModel\Model\ValueObject\MenuId;
 
 /**
  * @author Adam Banaszkiewicz
@@ -17,10 +17,10 @@ class Renamed extends DomainEvent
     private $name;
 
     /**
-     * @param AggregateId $itemId
+     * @param MenuId $itemId
      * @param null|string $name
      */
-    public function __construct(AggregateId $itemId, ?string $name)
+    public function __construct(MenuId $itemId, ?string $name)
     {
         parent::__construct($itemId);
 

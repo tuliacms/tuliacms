@@ -11,11 +11,11 @@ use Tulia\Cms\Menu\Application\Event\MenuPreDeleteEvent;
 use Tulia\Cms\Menu\Application\Event\MenuPreUpdateEvent;
 use Tulia\Cms\Menu\Application\Event\MenuUpdatedEvent;
 use Tulia\Cms\Menu\Application\Model\Menu as ApplicationMenu;
-use Tulia\Cms\Menu\Domain\Menu\Model\Aggregate\Menu as Aggregate;
-use Tulia\Cms\Menu\Domain\Menu\Event\MenuDeleted;
-use Tulia\Cms\Menu\Domain\Menu\Exception\MenuNotFoundException;
-use Tulia\Cms\Menu\Domain\Menu\Model\RepositoryInterface;
-use Tulia\Cms\Menu\Domain\Menu\Model\ValueObject\AggregateId;
+use Tulia\Cms\Menu\Domain\WriteModel\Model\Aggregate\Menu as Aggregate;
+use Tulia\Cms\Menu\Domain\WriteModel\Event\MenuDeleted;
+use Tulia\Cms\Menu\Domain\WriteModel\Exception\MenuNotFoundException;
+use Tulia\Cms\Menu\Domain\WriteModel\Model\MenuRepositoryInterface;
+use Tulia\Cms\Menu\Domain\WriteModel\Model\ValueObject\MenuId;
 use Tulia\Cms\Platform\Infrastructure\Bus\Event\EventBusInterface;
 
 /**
@@ -24,7 +24,7 @@ use Tulia\Cms\Platform\Infrastructure\Bus\Event\EventBusInterface;
 class MenuStorage
 {
     /**
-     * @var RepositoryInterface
+     * @var MenuRepositoryInterface
      */
     private $repository;
 
@@ -34,10 +34,10 @@ class MenuStorage
     private $eventDispatcher;
 
     /**
-     * @param RepositoryInterface $repository
+     * @param MenuRepositoryInterface $repository
      * @param EventBusInterface $eventDispatcher
      */
-    public function __construct(RepositoryInterface $repository, EventBusInterface $eventDispatcher)
+    public function __construct(MenuRepositoryInterface $repository, EventBusInterface $eventDispatcher)
     {
         $this->repository      = $repository;
         $this->eventDispatcher = $eventDispatcher;
@@ -48,14 +48,14 @@ class MenuStorage
         $aggregateExists = false;
 
         try {
-            $aggregate = $this->repository->find(new AggregateId($menu->getId()));
+            $aggregate = $this->repository->find(new MenuId($menu->getId()));
 
             // We can assign $aggregateExists only after call find() in repository,
             // to handle exception when node not exists, and perform proper action when node not exists.
             $aggregateExists = true;
         } catch (MenuNotFoundException $exception) {
             $aggregate = new Aggregate(
-                new AggregateId($menu->getId()),
+                new MenuId($menu->getId()),
                 $menu->getWebsiteId()
             );
         }
@@ -91,7 +91,7 @@ class MenuStorage
     public function delete(ApplicationMenu $menu): void
     {
         try {
-            $aggregate = $this->repository->find(new AggregateId($menu->getId()));
+            $aggregate = $this->repository->find(new MenuId($menu->getId()));
         } catch (MenuNotFoundException $exception) {
             return;
         }

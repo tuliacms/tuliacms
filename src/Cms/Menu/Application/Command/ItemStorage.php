@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace Tulia\Cms\Menu\Application\Command;
 
 use Tulia\Cms\Menu\Application\Model\Item as ApplicationItem;
-use Tulia\Cms\Menu\Domain\Menu\Exception\ItemNotFoundException;
-use Tulia\Cms\Menu\Domain\Menu\Exception\MenuNotFoundException;
-use Tulia\Cms\Menu\Domain\Menu\Exception\ParentItemReccurencyException;
-use Tulia\Cms\Menu\Domain\Menu\Model\Aggregate\Menu;
-use Tulia\Cms\Menu\Domain\Menu\Model\Aggregate\Item;
-use Tulia\Cms\Menu\Domain\Menu\Model\RepositoryInterface;
-use Tulia\Cms\Menu\Domain\Menu\Model\ValueObject\AggregateId;
-use Tulia\Cms\Menu\Domain\Menu\Model\ValueObject\ItemId;
+use Tulia\Cms\Menu\Domain\WriteModel\Menu\Exception\ItemNotFoundException;
+use Tulia\Cms\Menu\Domain\WriteModel\Menu\Exception\MenuNotFoundException;
+use Tulia\Cms\Menu\Domain\WriteModel\Menu\Exception\ParentItemReccurencyException;
+use Tulia\Cms\Menu\Domain\WriteModel\Menu\Model\Aggregate\Menu;
+use Tulia\Cms\Menu\Domain\WriteModel\Menu\Model\Aggregate\Item;
+use Tulia\Cms\Menu\Domain\WriteModel\Menu\Model\MenuRepositoryInterface;
+use Tulia\Cms\Menu\Domain\WriteModel\Menu\Model\ValueObject\MenuId;
+use Tulia\Cms\Menu\Domain\WriteModel\Menu\Model\ValueObject\ItemId;
 use Tulia\Cms\Platform\Infrastructure\Bus\Event\EventBusInterface;
 
 /**
@@ -21,7 +21,7 @@ use Tulia\Cms\Platform\Infrastructure\Bus\Event\EventBusInterface;
 class ItemStorage
 {
     /**
-     * @var RepositoryInterface
+     * @var MenuRepositoryInterface
      */
     private $repository;
 
@@ -31,14 +31,14 @@ class ItemStorage
     private $eventDispatcher;
 
     /**
-     * @param RepositoryInterface $repository
+     * @param MenuRepositoryInterface $repository
      * @param EventBusInterface $eventDispatcher
      */
-    public function __construct(RepositoryInterface $repository, EventBusInterface $eventDispatcher)
+    /*public function __construct(MenuRepositoryInterface $repository, EventBusInterface $eventDispatcher)
     {
         $this->repository      = $repository;
         $this->eventDispatcher = $eventDispatcher;
-    }
+    }*/
 
     /**
      * @param ApplicationItem $item
@@ -49,7 +49,7 @@ class ItemStorage
      */
     public function save(ApplicationItem $item): void
     {
-        $menu = $this->repository->find(new AggregateId($item->getMenuId()));
+        $menu = $this->repository->find(new MenuId($item->getMenuId()));
 
         try {
             $entity = $menu->getItem(new ItemId($item->getId()));
@@ -66,7 +66,7 @@ class ItemStorage
 
     public function delete(ApplicationItem $item): void
     {
-        $menu = $this->repository->find(new AggregateId($item->getMenuId()));
+        $menu = $this->repository->find(new MenuId($item->getMenuId()));
         $entity = $menu->getItem(new ItemId($item->getId()));
         $menu->removeItem($entity);
 

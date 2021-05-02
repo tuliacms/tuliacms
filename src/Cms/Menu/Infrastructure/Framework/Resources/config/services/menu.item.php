@@ -8,7 +8,7 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Cms\Menu\Application\Command\ItemStorage;
 use Tulia\Cms\Menu\Application\Command\MenuStorage;
-use Tulia\Cms\Menu\Domain\Menu\Model\RepositoryInterface;
+use Tulia\Cms\Menu\Domain\WriteModel\Model\MenuRepositoryInterface;
 use Tulia\Cms\Menu\Infrastructure\Cms\Metadata\Item\Loader;
 use Tulia\Cms\Menu\Infrastructure\Cms\Metadata\Item\LoaderInterface;
 use Tulia\Cms\Menu\Infrastructure\Cms\SearchAnything\SearchProvider;
@@ -61,7 +61,7 @@ $builder->setDefinition(MenuItemFormManagerFactory::class, MenuItemFormManagerFa
 
 $builder->setDefinition(ItemStorage::class, ItemStorage::class, [
     'arguments' => [
-        service(RepositoryInterface::class),
+        service(MenuRepositoryInterface::class),
         service(EventBusInterface::class),
     ],
 ]);

@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Menu\Domain\Menu\Model\ValueObject;
+namespace Tulia\Cms\Menu\Domain\WriteModel\Model\ValueObject;
 
 use Tulia\Cms\Platform\Domain\ValueObject\UuidAggregateId;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class AggregateId extends UuidAggregateId
+class MenuId extends UuidAggregateId
 {
 }

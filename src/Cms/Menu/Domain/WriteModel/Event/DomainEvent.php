@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Menu\Domain\Menu\Event;
+namespace Tulia\Cms\Menu\Domain\WriteModel\Event;
 
-use Tulia\Cms\Menu\Domain\Menu\Model\ValueObject\AggregateId;
+use Tulia\Cms\Menu\Domain\WriteModel\Model\ValueObject\MenuId;
 use Tulia\Cms\Platform\Domain\Event\DomainEvent as PlatformDomainEvent;
 
 /**
@@ -13,22 +13,22 @@ use Tulia\Cms\Platform\Domain\Event\DomainEvent as PlatformDomainEvent;
 abstract class DomainEvent extends PlatformDomainEvent
 {
     /**
-     * @var AggregateId
+     * @var MenuId
      */
     private $menuId;
 
     /**
-     * @param AggregateId $menuId
+     * @param MenuId $menuId
      */
-    public function __construct(AggregateId $menuId)
+    public function __construct(MenuId $menuId)
     {
         $this->menuId = $menuId;
     }
 
     /**
-     * @return AggregateId
+     * @return MenuId
      */
-    public function getMenuId(): AggregateId
+    public function getMenuId(): MenuId
     {
         return $this->menuId;
     }

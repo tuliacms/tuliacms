@@ -4,12 +4,12 @@
 
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Cms\Menu\Application\Command\MenuStorage;
-use Tulia\Cms\Menu\Domain\Menu\Model\RepositoryInterface;
+use Tulia\Cms\Menu\Domain\WriteModel\Model\MenuRepositoryInterface;
 use Tulia\Cms\Menu\Infrastructure\Builder\BuilderInterface;
 use Tulia\Cms\Menu\Infrastructure\Cms\Metadata\Item\LoaderInterface;
 use Tulia\Cms\Menu\Infrastructure\Framework\Twig\Extension\MenuExtension;
 use Tulia\Cms\Menu\Infrastructure\Persistence\Domain\Menu\DataTransformer;
-use Tulia\Cms\Menu\Infrastructure\Persistence\Domain\Menu\DbalRepository;
+use Tulia\Cms\Menu\Infrastructure\Persistence\Domain\Menu\DbalMenuRepository;
 use Tulia\Cms\Menu\Infrastructure\Persistence\Query\Menu\DatatableFinder;
 use Tulia\Cms\Menu\Infrastructure\Persistence\Query\Menu\DbalQuery;
 use Tulia\Cms\Menu\Infrastructure\Persistence\Domain\Item\DbalRepository as ItemDbalRepository;
@@ -39,7 +39,7 @@ use Tulia\Cms\Menu\UserInterface\Web\BackendMenu\MenuMenuBuilder;
     ],
 ]);*/
 
-$builder->setDefinition(RepositoryInterface::class, DbalRepository::class, [
+$builder->setDefinition(MenuRepositoryInterface::class, DbalMenuRepository::class, [
     'arguments' => [
         service(ConnectionInterface::class),
         service(DataTransformer::class),
@@ -63,7 +63,7 @@ $builder->setDefinition(MenuFactoryInterface::class, MenuFactory::class, [
 
 $builder->setDefinition(MenuStorage::class, MenuStorage::class, [
     'arguments' => [
-        service(RepositoryInterface::class),
+        service(MenuRepositoryInterface::class),
         service(EventBusInterface::class),
     ],
 ]);

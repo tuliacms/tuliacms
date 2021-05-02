@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Menu\Infrastructure\Persistence\Domain\Item;
 
-use Tulia\Cms\Menu\Domain\Menu\Model\Aggregate\Item;
-use Tulia\Cms\Menu\Domain\Menu\Model\ValueObject\AggregateId;
-use Tulia\Cms\Menu\Domain\Menu\Model\ValueObject\ItemId;
+use Tulia\Cms\Menu\Domain\WriteModel\Model\Item;
+use Tulia\Cms\Menu\Domain\WriteModel\Model\ValueObject\MenuId;
+use Tulia\Cms\Menu\Domain\WriteModel\Model\ValueObject\ItemId;
 use Tulia\Cms\Menu\Infrastructure\Cms\Metadata\Item\Enum\MetadataEnum;
 use Tulia\Cms\Metadata\Metadata;
 use Tulia\Cms\Metadata\Syncer\SyncerInterface;
@@ -42,7 +42,7 @@ class DbalRepository
     /**
      * {@inheritdoc}
      */
-    public function findItems(AggregateId $id): array
+    public function findItems(MenuId $id): array
     {
         $source = $this->connection->fetchAll('
             SELECT
@@ -64,7 +64,7 @@ class DbalRepository
             $items[$item['id']] = $this->hydrator->hydrate(
                 [
                     'id'       => new ItemId($item['id']),
-                    'menuId'   => $item['menu_id'] ? new AggregateId($item['menu_id']) : null,
+                    'menuId'   => $item['menu_id'] ? new MenuId($item['menu_id']) : null,
                     'position' => (int) $item['position'],
                     'parentId' => $item['parent_id'] ? new ItemId($item['parent_id']) : null,
                     'level'    => (int) $item['level'],
