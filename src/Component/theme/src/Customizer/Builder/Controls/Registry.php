@@ -4,22 +4,17 @@ declare(strict_types=1);
 
 namespace Tulia\Component\Theme\Customizer\Builder\Controls;
 
-use Tulia\Component\DependencyInjection\LazyServiceIterator;
-
 /**
  * @author Adam Banaszkiewicz
  */
 class Registry implements RegistryInterface
 {
     /**
-     * @var LazyServiceIterator|ControlInterface[]
+     * @var ControlInterface[]
      */
     protected $controls;
 
-    /**
-     * @param LazyServiceIterator $controls
-     */
-    public function __construct(LazyServiceIterator $controls)
+    public function __construct(iterable $controls)
     {
         $this->controls = $controls;
     }

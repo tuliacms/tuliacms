@@ -12,29 +12,7 @@ use Tulia\Component\Templating\ViewInterface;
  */
 interface HelperInterface
 {
-    /**
-     * @param string $route
-     * @param array  $parameters
-     * @param int    $referenceType
-     *
-     * @return string
-     */
-    public function generateUrl(string $route, array $parameters = [], int $referenceType = RouterInterface::TYPE_PATH): string;
-
-    /**
-     * @param       $id
-     * @param array $parameters
-     * @param null  $domain
-     * @param null  $locale
-     *
-     * @return string
-     */
+    public function generateUrl(string $route, array $parameters = [], int $referenceType = RouterInterface::ABSOLUTE_PATH): string;
     public function trans($id, array $parameters = [], $domain = null, $locale = null): string;
-
-    /**
-     * @param ViewInterface $view
-     *
-     * @return string
-     */
     public function render(ViewInterface $view): string;
 }

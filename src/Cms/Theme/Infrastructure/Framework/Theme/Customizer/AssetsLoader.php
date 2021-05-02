@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Tulia\Cms\Theme\Infrastructure\Framework\Theme\Customizer;
 
 use Requtize\Assetter\AssetterInterface;
-use Requtize\Assetter\Exception\MissingAssetException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Tulia\Component\Theme\Customizer\DetectorInterface;
@@ -30,7 +29,7 @@ class AssetsLoader implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            RequestEvent::class => 'handle',
+            RequestEvent::class => ['handle', 500],
         ];
     }
 

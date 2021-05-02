@@ -45,7 +45,7 @@ class Activator implements ActivatorInterface
         }
 
         if (is_file($this->configFilename) && is_writable($this->configFilename) === false) {
-            throw new \RuntimeException('Themes dynamic configuration file is not writabe. Cannot change active theme.');
+            throw new \RuntimeException('Themes dynamic configuration file is not writable. Cannot change active theme.');
         }
 
         file_put_contents(

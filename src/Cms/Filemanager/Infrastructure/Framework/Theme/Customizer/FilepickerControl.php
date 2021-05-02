@@ -31,7 +31,7 @@ class FilepickerControl extends AbstractControl
      */
     public function build(array $params): string
     {
-        return $this->engine->render(new View('@filemanager/customizer/filepicker.tpl', $params));
+        return $this->engine->render(new View('@backend/filemanager/customizer/filepicker.tpl', $params));
     }
 
     /**

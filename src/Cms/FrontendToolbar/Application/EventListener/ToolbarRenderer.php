@@ -6,6 +6,7 @@ namespace Tulia\Cms\FrontendToolbar\Application\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Tulia\Cms\FrontendToolbar\Application\Builder\Builder;
 
@@ -16,11 +17,16 @@ class ToolbarRenderer implements EventSubscriberInterface
 {
     private Builder $builder;
     private AuthorizationCheckerInterface $authorizationChecker;
+    private TokenStorageInterface $tokenStorage;
 
-    public function __construct(Builder $builder, AuthorizationCheckerInterface $authorizationChecker)
-    {
+    public function __construct(
+        Builder $builder,
+        AuthorizationCheckerInterface $authorizationChecker,
+        TokenStorageInterface $tokenStorage
+    ) {
         $this->builder = $builder;
         $this->authorizationChecker = $authorizationChecker;
+        $this->tokenStorage = $tokenStorage;
     }
 
     public static function getSubscribedEvents(): array
@@ -42,7 +48,7 @@ class ToolbarRenderer implements EventSubscriberInterface
             return;
         }
 
-        if ($this->authorizationChecker->isGranted('ROLE_ADMIN') === false) {
+        if ($this->tokenStorage->getToken() !== null && $this->authorizationChecker->isGranted('ROLE_ADMIN') === false) {
             return;
         }
 
