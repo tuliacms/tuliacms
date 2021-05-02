@@ -36,7 +36,9 @@ class Form extends AbstractController
      */
     public function submit(Request $request, SenderInterface $sender, FormDataExtractorInterface $dataExtractor, string $id): RedirectResponse
     {
-        $this->validateCsrfToken('contact_form_' . $id, $request->request->get('contact_form_' . $id)['_token'] ?? '');
+        if ($this->isCsrfTokenValid('contact_form_' . $id, $request->request->get('contact_form_' . $id)['_token'] ?? '') === false) {
+            throw $this->createAccessDeniedException('CSRF token is not valid.');
+        }
 
         $model = $this->finderFactory->find($id, ScopeEnum::SINGLE);
 

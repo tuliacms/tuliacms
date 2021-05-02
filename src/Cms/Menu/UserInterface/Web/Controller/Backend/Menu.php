@@ -6,19 +6,19 @@ namespace Tulia\Cms\Menu\UserInterface\Web\Controller\Backend;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Tulia\Cms\Menu\Application\Command\MenuStorage;
 use Tulia\Cms\Menu\Application\Model\Menu as ApplicationModelMenu;
-use Tulia\Cms\Menu\Infrastructure\Persistence\Query\Menu\DatatableFinder;
 use Tulia\Cms\Menu\Application\Query\Finder\Enum\ScopeEnum;
 use Tulia\Cms\Menu\Application\Query\Finder\Exception\QueryException;
 use Tulia\Cms\Menu\Application\Query\Finder\Factory\MenuFactoryInterface;
 use Tulia\Cms\Menu\Application\Query\Finder\FinderFactoryInterface;
+use Tulia\Cms\Menu\Infrastructure\Persistence\Query\Menu\DatatableFinder;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Component\Datatable\DatatableFactory;
-use Tulia\Component\Templating\ViewInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Tulia\Component\Security\Http\Csrf\Annotation\CsrfToken;
+use Tulia\Component\Templating\ViewInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -31,16 +31,9 @@ class Menu extends AbstractController
     public function __construct(FinderFactoryInterface $finderFactory, MenuStorage $menuStorage)
     {
         $this->finderFactory = $finderFactory;
-        $this->menuStorage   = $menuStorage;
+        $this->menuStorage = $menuStorage;
     }
 
-    /**
-     * @param Request $request
-     * @param DatatableFactory $factory
-     * @param DatatableFinder $finder
-     *
-     * @return ViewInterface
-     */
     public function list(Request $request, DatatableFactory $factory, DatatableFinder $finder): ViewInterface
     {
         return $this->view('@backend/menu/menu/list.tpl', [
@@ -48,13 +41,6 @@ class Menu extends AbstractController
         ]);
     }
 
-    /**
-     * @param Request $request
-     * @param DatatableFactory $factory
-     * @param DatatableFinder $finder
-     *
-     * @return JsonResponse
-     */
     public function datatable(Request $request, DatatableFactory $factory, DatatableFinder $finder): JsonResponse
     {
         return $factory->create($finder, $request)->generateResponse();
@@ -63,9 +49,7 @@ class Menu extends AbstractController
     /**
      * @param Request $request
      * @param MenuFactoryInterface $menuFactory
-     *
      * @return RedirectResponse
-     *
      * @CsrfToken(id="menu.create")
      */
     public function create(Request $request, MenuFactoryInterface $menuFactory): RedirectResponse
@@ -81,12 +65,9 @@ class Menu extends AbstractController
 
     /**
      * @param Request $request
-     *
      * @return RedirectResponse
-     *
      * @throws QueryException
      * @throws NotFoundHttpException
-     *
      * @CsrfToken(id="menu.edit")
      */
     public function edit(Request $request): RedirectResponse
@@ -108,11 +89,8 @@ class Menu extends AbstractController
 
     /**
      * @param Request $request
-     *
      * @return RedirectResponse
-     *
      * @throws QueryException
-     *
      * @CsrfToken(id="menu.delete")
      */
     public function delete(Request $request): RedirectResponse

@@ -129,17 +129,12 @@ class Customizer extends AbstractController
      * @param Request $request
      * @param $theme
      * @param $changeset
-     *
      * @return JsonResponse|RedirectResponse
-     *
      * @throws ChangesetNotFoundException
-     *
      * @CsrfToken(id="theme.customizer.save")
      */
     public function save(Request $request, $theme, $changeset)
     {
-        $this->validateCsrfToken('theme.customizer.save');
-
         $storage = $this->manager->getStorage();
 
         if ($storage->has($theme) === false) {
@@ -222,13 +217,11 @@ class Customizer extends AbstractController
 
     /**
      * @param string $theme
-     *
      * @return RedirectResponse
+     * @CsrfToken(id="theme.customizer.copy_changeset_from_parent")
      */
     public function copyChangesetFromParent(string $theme): RedirectResponse
     {
-        $this->validateCsrfToken('theme.customizer.copy_changeset_from_parent');
-
         $theme = $this->manager->getStorage()->get($theme);
 
         if (! $theme) {
@@ -263,13 +256,11 @@ class Customizer extends AbstractController
 
     /**
      * @param string $theme
-     *
      * @return RedirectResponse
+     * @CsrfToken(id="theme.customizer.reset")
      */
     public function reset(string $theme): RedirectResponse
     {
-        $this->validateCsrfToken('theme.customizer.reset');
-
         $theme = $this->manager->getStorage()->get($theme);
 
         if (! $theme) {
