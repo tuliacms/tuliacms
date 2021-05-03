@@ -17,22 +17,9 @@ use Doctrine\DBAL\Query\QueryBuilder;
  */
 class DatatableFinder extends AbstractDatatableFinder
 {
-    /**
-     * @var RouterInterface
-     */
-    private $router;
+    private RouterInterface $router;
+    private TranslatorInterface $translator;
 
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
-    /**
-     * @param ConnectionInterface $connection
-     * @param CurrentWebsiteInterface $currentWebsite
-     * @param RouterInterface $router
-     * @param TranslatorInterface $translator
-     */
     public function __construct(
         ConnectionInterface $connection,
         CurrentWebsiteInterface $currentWebsite,
@@ -128,7 +115,7 @@ class DatatableFinder extends AbstractDatatableFinder
         return [
             'main' => '<a href="#" data-toggle="modal" data-target="#modal-menu-edit" data-element-name="' . $row['name.raw'] . '" data-element-id="' . $row['id'] . '" class="btn btn-secondary btn-icon-only"><i class="btn-icon fas fa-pen"></i></a>',
             '<a href="' . $itemsLink . '" class="dropdown-item-with-icon" title="' . $itemsList . '"><i class="dropdown-icon fas fa-bars"></i> ' . $itemsList . '</a>',
-            '<a href="" class="dropdown-item-with-icon dropdown-item-danger" title="' . $delete . '"><i class="dropdown-icon fas fa-times"></i> ' . $delete . '</a>',
+            '<a href="#" data-toggle="modal" data-target="#modal-menu-delete" data-element-id="' . $row['id'] . '" class="dropdown-item-with-icon dropdown-item-danger" title="' . $delete . '"><i class="dropdown-icon fas fa-times"></i> ' . $delete . '</a>',
         ];
     }
 }

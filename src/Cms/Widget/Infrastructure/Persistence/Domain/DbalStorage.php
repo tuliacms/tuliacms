@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Widget\Infrastructure\Persistence\Domain;
 
-use Tulia\Cms\Platform\Infrastructure\Persistence\Domain\AbstractLocalizablePersister;
+use Tulia\Cms\Platform\Infrastructure\Persistence\Domain\AbstractLocalizableStorage;
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class DbalPersister extends AbstractLocalizablePersister
+class DbalStorage extends AbstractLocalizableStorage
 {
     protected ConnectionInterface $connection;
 

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Component\Security\Http\Twig;
+namespace Tulia\Component\Security\Twig;
 
 use Tulia\Component\Security\Http\ContentSecurityPolicy\ContentSecurityPolicyInterface;
 use Twig\TwigFunction;

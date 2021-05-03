@@ -8,11 +8,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Tulia\Cms\Menu\Application\Query\Finder\Enum\ScopeEnum;
-use Tulia\Cms\Menu\Application\Query\Finder\Exception\QueryException;
 use Tulia\Cms\Menu\Application\Query\Finder\FinderFactoryInterface;
 use Tulia\Cms\Menu\Domain\WriteModel\Exception\MenuNotFoundException;
-use Tulia\Cms\Menu\Domain\WriteModel\Model\ValueObject\MenuId;
 use Tulia\Cms\Menu\Infrastructure\Persistence\Query\Menu\DatatableFinder;
 use Tulia\Cms\Menu\Ports\Infrastructure\Persistence\WriteModel\MenuRepositoryInterface;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
@@ -25,14 +22,10 @@ use Tulia\Component\Templating\ViewInterface;
  */
 class Menu extends AbstractController
 {
-    protected FinderFactoryInterface $finderFactory;
     protected MenuRepositoryInterface $repository;
 
-    public function __construct(
-        FinderFactoryInterface $finderFactory,
-        MenuRepositoryInterface $repository
-    ) {
-        $this->finderFactory = $finderFactory;
+    public function __construct(MenuRepositoryInterface $repository)
+    {
         $this->repository = $repository;
     }
 
@@ -90,19 +83,12 @@ class Menu extends AbstractController
     /**
      * @param Request $request
      * @return RedirectResponse
-     * @throws QueryException
      * @CsrfToken(id="menu.delete")
      */
     public function delete(Request $request): RedirectResponse
     {
-        $finder = $this->finderFactory->getInstance(ScopeEnum::BACKEND_SINGLE);
-
         foreach ($request->request->get('ids', []) as $id) {
-            $menu = $finder->find($id);
-
-            if ($menu) {
-                $this->menuStorage->delete(ApplicationModelMenu::fromQueryModel($menu));
-            }
+            $this->repository->delete($id);
         }
 
         $this->setFlash('success', $this->trans('selectedMenusWereDeleted', [], 'menu'));

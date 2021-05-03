@@ -96,7 +96,7 @@ class Menu
 
     public function removeItem(Item $item): void
     {
-        $position = array_search($item, $this->items);
+        $position = array_search($item, $this->items, true);
 
         if ($position !== false) {
             $this->items[$position]->unassignFromMenu();
@@ -105,6 +105,11 @@ class Menu
 
             $this->recordItemChange('remove', $item->getId()->getId());
         }
+    }
+
+    public function hasItem(Item $item): bool
+    {
+        return isset($this->items[$item->getId()->getId()]);
     }
 
     /**
@@ -128,12 +133,26 @@ class Menu
 
     private function recordItemChange(string $type, string $id): void
     {
+        // Prevents multiple do the same change with the same item.
         foreach ($this->itemsChanges as $key => $change) {
             if ($change['type'] === $type && $change['id'] === $id) {
-                /**
-                 * Prevents multiple do the same change with the same item.
-                 */
                 unset($this->itemsChanges[$key]);
+            }
+        }
+
+        if ($type === 'update') {
+            // If item has beed added or removed already, we don't add any 'update' changes.
+            foreach ($this->itemsChanges as $change) {
+                if ($change['id'] === $id && \in_array($change['type'], ['add', 'remove'])) {
+                    return;
+                }
+            }
+        } elseif ($type === 'add' || $type === 'remove') {
+            // If item has beed added or removed, we remove all the 'update' changes.
+            foreach ($this->itemsChanges as $key => $change) {
+                if ($change['id'] === $id && $change['type'] === 'update') {
+                    unset($this->itemsChanges[$key]);
+                }
             }
         }
 

@@ -15,7 +15,7 @@ use Tulia\Cms\Widget\Infrastructure\Cms\Widget\Predefined\Features\FeaturesWidge
 use Tulia\Cms\Widget\Infrastructure\Persistence\Domain\DbalRepository;
 use Tulia\Cms\Widget\Infrastructure\Persistence\Query\DatatableFinder;
 use Tulia\Cms\Widget\Infrastructure\Persistence\Query\DbalQuery;
-use Tulia\Cms\Widget\Infrastructure\Persistence\Domain\DbalPersister;
+use Tulia\Cms\Widget\Infrastructure\Persistence\Domain\DbalStorage;
 use Tulia\Cms\Widget\Infrastructure\Cms\Widget\Predefined\Menu\MenuForm;
 use Tulia\Cms\Widget\Infrastructure\Cms\Widget\Predefined\Menu\MenuWidget;
 use Tulia\Cms\Widget\Infrastructure\Cms\Widget\Predefined\Text\TextWidget;
@@ -70,7 +70,7 @@ $builder->setDefinition('widget.templating.filesystem.loader', ArrayLoader::clas
     'tags' => [ tag('twig.loader') ],
 ]);
 
-$builder->setDefinition(DbalPersister::class, DbalPersister::class, [
+$builder->setDefinition(DbalStorage::class, DbalStorage::class, [
     'arguments' => [
         service(ConnectionInterface::class),
     ],
@@ -79,7 +79,7 @@ $builder->setDefinition(DbalPersister::class, DbalPersister::class, [
 $builder->setDefinition(RepositoryInterface::class, DbalRepository::class, [
     'arguments' => [
         service(ConnectionInterface::class),
-        service(DbalPersister::class),
+        service(DbalStorage::class),
         service(HydratorInterface::class),
         service(CurrentWebsiteInterface::class),
     ],

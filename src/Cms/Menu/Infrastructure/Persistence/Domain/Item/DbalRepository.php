@@ -20,14 +20,14 @@ use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 class DbalRepository
 {
     protected ConnectionInterface $connection;
-    protected DbalPersister $persister;
+    protected DbalStorage $persister;
     protected CurrentWebsiteInterface $currentWebsite;
     protected HydratorInterface $hydrator;
     protected SyncerInterface $metadata;
 
     public function __construct(
         ConnectionInterface $connection,
-        DbalPersister $persister,
+        DbalStorage $persister,
         CurrentWebsiteInterface $currentWebsite,
         HydratorInterface $hydrator,
         SyncerInterface $metadata

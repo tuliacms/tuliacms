@@ -1,7 +1,6 @@
 {{ form_start(form) }}
 {{ form_errors(form) }}
 {{ form_row(form.id) }}
-{{ form_row(form.menuId) }}
 
 <div class="row">
     <div class="col">

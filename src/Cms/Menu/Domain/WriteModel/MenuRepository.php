@@ -14,6 +14,7 @@ use Tulia\Cms\Menu\Domain\WriteModel\Model\Item;
 use Tulia\Cms\Menu\Domain\WriteModel\Model\Menu;
 use Tulia\Cms\Menu\Ports\Infrastructure\Persistence\WriteModel\MenuRepositoryInterface;
 use Tulia\Cms\Menu\Ports\Infrastructure\Persistence\WriteModel\MenuStorageInterface;
+use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -23,15 +24,18 @@ class MenuRepository implements MenuRepositoryInterface
     private MenuStorageInterface $storage;
     private MenuFactory $menuFactory;
     private EventDispatcherInterface $eventDispatcher;
+    private CurrentWebsiteInterface $currentWebsite;
 
     public function __construct(
         MenuStorageInterface $storage,
         MenuFactory $menuFactory,
-        EventDispatcherInterface $eventDispatcher
+        EventDispatcherInterface $eventDispatcher,
+        CurrentWebsiteInterface $currentWebsite
     ) {
         $this->storage = $storage;
         $this->menuFactory = $menuFactory;
         $this->eventDispatcher = $eventDispatcher;
+        $this->currentWebsite = $currentWebsite;
     }
 
     public function createNewMenu(array $data = []): Menu
@@ -49,46 +53,53 @@ class MenuRepository implements MenuRepositoryInterface
      */
     public function find(string $id): Menu
     {
-        $data = $this->storage->find($id);
+        $data = $this->storage->find(
+            $id,
+            $this->currentWebsite->getLocale()->getCode(),
+            $this->currentWebsite->getDefaultLocale()->getCode()
+        );
 
         if ($data === null) {
             throw new MenuNotFoundException(sprintf('Menu %s not found.', $id));
         }
-        //$menu['items'] = $this->itemDbalRepository->findItems($id);
 
-        return Menu::buildFromArray($data);
+        $menu = Menu::buildFromArray($data);
+
+        foreach ($data['items'] as $item) {
+            $menu->addItem(Item::buildFromArray($item));
+        }
+
+        // Reset items changes after create new Entity with data from storage.
+        $menu->getItemsChanges();
+
+        return $menu;
     }
 
     public function save(Menu $menu): void
     {
-        $this->storage->insert($this->extract($menu));
+        $this->storage->beginTransaction();
+
+        try {
+            $this->storage->insert($this->extract($menu), $this->currentWebsite->getDefaultLocale()->getCode());
+            $this->storage->commit();
+        } catch (\Exception $e) {
+            $this->storage->rollback();
+        }
+
         $this->eventDispatcher->dispatch(new MenuCreated($menu->getId()->getId()));
-        /*$this->connection->transactional(function () use ($menu) {
-            if ($this->recordExists($menu->getId()->getId())) {
-                $this->update($menu);
-            } else {
-                $this->insert($menu);
-            }
-
-            foreach ($menu->getItemsChanges() as $change) {
-                $id = $change['id'];
-
-                if ($change['type'] === 'update') {
-                    $this->itemDbalRepository->save($menu->getItem(new ItemId($id)));
-                }
-                if ($change['type'] === 'add') {
-                    $this->itemDbalRepository->save($menu->getItem(new ItemId($id)));
-                }
-                if ($change['type'] === 'remove') {
-                    $this->itemDbalRepository->delete(new ItemId($id));
-                }
-            }
-        });*/
     }
 
     public function update(Menu $menu): void
     {
-        $this->storage->update($this->extract($menu));
+        $this->storage->beginTransaction();
+
+        try {
+            $this->storage->update($this->extract($menu), $this->currentWebsite->getDefaultLocale()->getCode());
+            $this->storage->commit();
+        } catch (\Exception $e) {
+            $this->storage->rollback();
+        }
+
         $this->eventDispatcher->dispatch(new MenuUpdated($menu->getId()->getId()));
     }
 
@@ -106,12 +117,30 @@ class MenuRepository implements MenuRepositoryInterface
         $data['website_id'] = $menu->getWebsiteId();
         $data['items'] = [];
 
+        $itemsChanges = $menu->getItemsChanges();
+
         foreach ($menu->getItems() as $item) {
-            $data['items'][] = [
-                'id' => $item->getId()->getId(),
+            $id = $item->getId()->getId();
+
+            $changeType = null;
+
+            foreach ($itemsChanges as $change) {
+                if ($change['id'] === $id) {
+                    $changeType = $change['type'];
+                }
+            }
+
+            // If nothing change, skip this item
+            if ($changeType === null) {
+                continue;
+            }
+
+            $data['items'][$id] = [
+                '_change_type' => $changeType,
+                'id' => $id,
                 'menu' => $item->getMenu() ? $item->getMenu()->getId()->getId() : null,
                 'position' => $item->getPosition(),
-                'parent' => $item->getParent() ? $item->getParent()->getId()->getId() : null,
+                'parent' => $item->getParentId() ?: null,
                 'level' => $item->getLevel(),
                 'type' => $item->getType(),
                 'identity' => $item->getIdentity(),

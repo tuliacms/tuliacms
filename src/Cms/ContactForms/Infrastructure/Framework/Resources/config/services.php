@@ -30,7 +30,7 @@ use Tulia\Cms\ContactForms\Infrastructure\Cms\SearchAnything\SearchProvider;
 use Tulia\Cms\ContactForms\Infrastructure\Cms\Widget\Predefined\ContactFormForm;
 use Tulia\Cms\ContactForms\Infrastructure\Cms\Widget\Predefined\ContactFormWidget;
 use Tulia\Cms\ContactForms\Infrastructure\Persistence\Domain\DbalFieldsTemplate;
-use Tulia\Cms\ContactForms\Infrastructure\Persistence\Domain\DbalFormPersister;
+use Tulia\Cms\ContactForms\Infrastructure\Persistence\Domain\DbalFormStorage;
 use Tulia\Cms\ContactForms\Infrastructure\Persistence\Domain\DbalFieldPersister;
 use Tulia\Cms\ContactForms\Infrastructure\Persistence\Domain\DbalRepository;
 use Tulia\Cms\ContactForms\Infrastructure\Persistence\Query\DatatableFinder;
@@ -150,14 +150,14 @@ $builder->setDefinition(FormStorage::class, FormStorage::class, [
 $builder->setDefinition(RepositoryInterface::class, DbalRepository::class, [
     'arguments' => [
         service(ConnectionInterface::class),
-        service(DbalFormPersister::class),
+        service(DbalFormStorage::class),
         service(DbalFieldPersister::class),
         service(HydratorInterface::class),
         service(CurrentWebsiteInterface::class),
     ],
 ]);
 
-$builder->setDefinition(DbalFormPersister::class, DbalFormPersister::class, [
+$builder->setDefinition(DbalFormStorage::class, DbalFormStorage::class, [
     'arguments' => [
         service(ConnectionInterface::class),
     ],

@@ -18,13 +18,13 @@ use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 class DbalRepository implements RepositoryInterface
 {
     protected ConnectionInterface $connection;
-    protected DbalPersister $persister;
+    protected DbalStorage $persister;
     protected HydratorInterface $hydrator;
     private CurrentWebsiteInterface $currentWebsite;
 
     public function __construct(
         ConnectionInterface $connection,
-        DbalPersister $persister,
+        DbalStorage $persister,
         HydratorInterface $hydrator,
         CurrentWebsiteInterface $currentWebsite
     ) {

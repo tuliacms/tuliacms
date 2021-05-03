@@ -6,12 +6,14 @@ namespace Tulia\Cms\Menu\UserInterface\Web\Controller\Backend;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Tulia\Cms\Menu\Application\Command\ItemStorage;
-use Tulia\Cms\Menu\Application\Model\Item as ApplicationItem;
+use Tulia\Cms\Menu\Domain\WriteModel\Exception\ItemNotFoundException;
+use Tulia\Cms\Menu\Domain\WriteModel\Exception\MenuNotFoundException;
+use Tulia\Cms\Menu\Domain\WriteModel\Model\ValueObject\ItemId;
 use Tulia\Cms\Menu\Infrastructure\Builder\Type\RegistryInterface;
 use Tulia\Cms\Menu\Infrastructure\Persistence\Query\Item\DatatableFinder;
-use Tulia\Cms\Menu\Application\Query\Finder\Factory\MenuFactoryInterface;
 use Tulia\Cms\Menu\Application\Query\Finder\FinderFactoryInterface;
+use Tulia\Cms\Menu\Ports\Infrastructure\Persistence\WriteModel\MenuRepositoryInterface;
+use Tulia\Cms\Menu\UserInterface\Web\Form\MenuItemForm;
 use Tulia\Cms\Menu\UserInterface\Web\Form\MenuItemFormManagerFactory;
 use Tulia\Cms\Menu\Application\Query\Finder\Enum\ScopeEnum;
 use Tulia\Cms\Menu\Application\Query\Finder\Model\Item;
@@ -22,6 +24,7 @@ use Tulia\Cms\Menu\Application\Query\Finder\Exception\QueryException;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Component\Datatable\DatatableFactory;
 use Tulia\Component\DependencyInjection\Exception\MissingServiceException;
+use Tulia\Component\FormBuilder\Manager\ManagerFactoryInterface;
 use Tulia\Component\Templating\ViewInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -32,25 +35,20 @@ use Tulia\Component\Security\Http\Csrf\Annotation\CsrfToken;
  */
 class MenuItem extends AbstractController
 {
-    protected FinderFactoryInterface $menuFinderFactory;
-    protected ItemStorage $itemStorage;
-    protected RegistryInterface $menuTypeRegistry;
+    protected MenuRepositoryInterface $repository;
+    protected ManagerFactoryInterface $formManager;
+    private RegistryInterface $menuTypeRegistry;
 
     public function __construct(
-        FinderFactoryInterface $menuFinderFactory,
-        ItemStorage $itemStorage,
+        MenuRepositoryInterface $repository,
+        ManagerFactoryInterface $formManager,
         RegistryInterface $menuTypeRegistry
     ) {
-        $this->menuFinderFactory = $menuFinderFactory;
-        $this->itemStorage       = $itemStorage;
-        $this->menuTypeRegistry  = $menuTypeRegistry;
+        $this->repository = $repository;
+        $this->formManager = $formManager;
+        $this->menuTypeRegistry = $menuTypeRegistry;
     }
 
-    /**
-     * @param string $menuId
-     *
-     * @return RedirectResponse
-     */
     public function index(string $menuId): RedirectResponse
     {
         return $this->redirectToRoute('backend.menu.item.list', [
@@ -58,85 +56,66 @@ class MenuItem extends AbstractController
         ]);
     }
 
-    /**
-     * @param Request $request
-     * @param DatatableFactory $factory
-     * @param DatatableFinder $finder
-     * @param string $menuId
-     *
-     * @return ViewInterface
-     *
-     * @throws NotFoundHttpException
-     * @throws QueryException
-     */
-    public function list(Request $request, DatatableFactory $factory, DatatableFinder $finder, string $menuId): ViewInterface
+    public function list(Request $request, DatatableFactory $factory, DatatableFinder $finder, string $menuId)
     {
-        $menu = $this->findMenu($menuId);
-        $finder->setMenuId($menu->getId());
+        try {
+            $menu = $this->repository->find($menuId);
+        } catch (MenuNotFoundException $e) {
+            $this->setFlash('danger', $this->trans('menuNotFound', [], 'menu'));
+            return $this->redirectToRoute('backend.menu');
+        }
+
+        $finder->setMenuId($menuId);
 
         return $this->view('@backend/menu/item/list.tpl', [
-            'menu'      => $menu,
+            'menu' => $menu,
             'datatable' => $factory->create($finder, $request),
         ]);
     }
 
-    /**
-     * @param Request $request
-     * @param DatatableFactory $factory
-     * @param DatatableFinder $finder
-     * @param string $menuId
-     *
-     * @return JsonResponse
-     *
-     * @throws NotFoundHttpException
-     * @throws QueryException
-     */
     public function datatable(Request $request, DatatableFactory $factory, DatatableFinder $finder, string $menuId): JsonResponse
     {
-        $menu = $this->findMenu($menuId);
-        $finder->setMenuId($menu->getId());
-
+        $finder->setMenuId($menuId);
         return $factory->create($finder, $request)->generateResponse();
     }
 
     /**
      * @param Request $request
      * @param string $menuId
-     * @param MenuFactoryInterface $itemFactory
-     * @param MenuItemFormManagerFactory $managerFactory
-     *
      * @return RedirectResponse|ViewInterface
-     *
-     * @throws NotFoundHttpException
-     * @throws QueryException
-     *
      * @CsrfToken(id="menu_item_form")
      */
-    public function create(
-        Request $request,
-        string $menuId,
-        MenuFactoryInterface $itemFactory,
-        MenuItemFormManagerFactory $managerFactory
-    ) {
-        $model = $itemFactory->createNewItem([
-            'menu_id'   => $menuId,
+    public function create(Request $request, string $menuId)
+    {
+        try {
+            $menu = $this->repository->find($menuId);
+        } catch (MenuNotFoundException $e) {
+            $this->setFlash('danger', $this->trans('menuNotFound', [], 'menu'));
+            return $this->redirectToRoute('backend.menu');
+        }
+
+        $item = $this->repository->createNewItem([
             'parent_id' => $request->query->get('parentId'),
         ]);
 
-        $manager = $managerFactory->create($model);
-        $form = $manager->createCreateForm();
+        $manager = $this->formManager->getInstanceFor($item, \Tulia\Cms\Menu\UserInterface\Web\Form\ScopeEnum::BACKEND_EDIT);
+        $form = $manager->createForm(MenuItemForm::class, $item, [
+            'persist_mode' => 'create',
+            'menu_id' => $menuId,
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $manager->save($form);
+            $menu->addItem($form->getData());
+            $this->repository->update($menu);
 
             $this->setFlash('success', $this->trans('itemSaved', [], 'menu'));
-            return $this->redirectToRoute('backend.menu.item', [ 'menuId' => $model->getMenuId() ]);
+            return $this->redirectToRoute('backend.menu.item', [ 'menuId' => $menu->getId() ]);
         }
 
         return $this->view('@backend/menu/item/create.tpl', [
-            'menu'  => $this->findMenu($menuId),
-            'model' => $model,
+            'menu'  => $menu,
+            'model' => $item,
             'form'  => $form->createView(),
             'types' => $this->collectMenuTypes(),
         ]);
@@ -146,38 +125,39 @@ class MenuItem extends AbstractController
      * @param Request $request
      * @param string $menuId
      * @param string $id
-     * @param MenuItemFormManagerFactory $managerFactory
-     *
      * @return RedirectResponse|ViewInterface
-     *
-     * @throws NotFoundHttpException
-     * @throws QueryException
-     *
      * @CsrfToken(id="menu_item_form")
      */
-    public function edit(
-        Request $request,
-        string $menuId,
-        string $id,
-        MenuItemFormManagerFactory $managerFactory
-    ) {
-        $menu  = $this->findMenu($menuId);
-        $model = $this->getMenuItem($menu, $id);
+    public function edit(Request $request, string $menuId, string $id)
+    {
+        try {
+            $menu = $this->repository->find($menuId);
+        } catch (MenuNotFoundException $e) {
+            $this->setFlash('danger', $this->trans('menuNotFound', [], 'menu'));
+            return $this->redirectToRoute('backend.menu');
+        }
 
-        $manager = $managerFactory->create($model);
-        $form = $manager->createEditForm();
+        try {
+            $item = $menu->getItem(new ItemId($id));
+        } catch (ItemNotFoundException $e) {
+            $this->setFlash('danger', $this->trans('menuItemNotFound', [], 'menu'));
+            return $this->redirectToRoute('backend.menu.item', ['menuId' => $menuId]);
+        }
+
+        $manager = $this->formManager->getInstanceFor($item, \Tulia\Cms\Menu\UserInterface\Web\Form\ScopeEnum::BACKEND_EDIT);
+        $form = $manager->createForm(MenuItemForm::class, $item, ['persist_mode' => 'update']);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $manager->save($form);
+            $this->repository->update($menu);
 
             $this->setFlash('success', $this->trans('itemSaved', [], 'menu'));
-            return $this->redirectToRoute('backend.menu.item', [ 'menuId' => $model->getMenuId() ]);
+            return $this->redirectToRoute('backend.menu.item', [ 'menuId' => $menu->getId() ]);
         }
 
         return $this->view('@backend/menu/item/edit.tpl', [
             'menu'  => $menu,
-            'model' => $model,
+            'model' => $item,
             'form'  => $form->createView(),
             'types' => $this->collectMenuTypes(),
         ]);
@@ -208,69 +188,6 @@ class MenuItem extends AbstractController
 
         $this->setFlash('success', $this->trans('selectedItemsWereDeleted', [], 'menu'));
         return $this->redirectToRoute('backend.menu.item.list', [ 'menuId' => $menuId ]);
-    }
-
-    /**
-     * @param string|null $id
-     *
-     * @return Menu
-     *
-     * @throws QueryException
-     * @throws NotFoundHttpException
-     */
-    private function findMenu(?string $id): Menu
-    {
-        $menu = $this->menuFinderFactory->getInstance(ScopeEnum::BACKEND_SINGLE)->find($id, ['visibility' => null]);
-
-        if (!$menu) {
-            throw $this->createNotFoundException('Menu not found');
-        }
-
-        return $menu;
-    }
-
-    /**
-     * @param Menu $menu
-     * @param string $itemId
-     *
-     * @return Item
-     */
-    private function getMenuItem(Menu $menu, string $itemId): Item
-    {
-        foreach ($menu->getItems() as $item) {
-            if ($item->getId() === $itemId) {
-                return $item;
-            }
-        }
-
-        throw $this->createNotFoundException('Menu not found');
-    }
-
-    /**
-     * @param string $id
-     *
-     * @return Item
-     *
-     * @throws MultipleFetchException
-     * @throws NotFoundHttpException
-     * @throws QueryException
-     * @throws QueryNotFetchedException
-     */
-    private function findItem(string $id): Item
-    {
-        $finder = $this->itemFinderFactory->getInstance(ScopeEnum::BACKEND_SINGLE);
-        $finder->setCriteria([
-            'id'       => $id,
-            'per_page' => 1,
-        ]);
-        $finder->fetchRaw();
-        $item = $finder->getResult()->first();
-
-        if (!$item) {
-            throw $this->createNotFoundException('Menu item not found.');
-        }
-
-        return $item;
     }
 
     private function collectMenuTypes(): array

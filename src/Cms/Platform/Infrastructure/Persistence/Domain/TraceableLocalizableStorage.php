@@ -7,7 +7,7 @@ namespace Tulia\Cms\Platform\Infrastructure\Persistence\Domain;
 /**
  * @author Adam Banaszkiewicz
  */
-class TraceableLocalizablePersister extends AbstractLocalizablePersister
+class TraceableLocalizableStorage extends AbstractLocalizableStorage
 {
     /**
      * @var TraceInterface

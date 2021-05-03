@@ -9,5 +9,5 @@ namespace Tulia\Cms\Menu\UserInterface\Web\Form;
  */
 class ScopeEnum
 {
-    public const BASKEND_EDIT = 'backend.edit';
+    public const BACKEND_EDIT = 'backend.edit';
 }

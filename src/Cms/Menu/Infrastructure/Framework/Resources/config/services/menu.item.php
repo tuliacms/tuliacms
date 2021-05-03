@@ -13,7 +13,7 @@ use Tulia\Cms\Menu\Infrastructure\Cms\Metadata\Item\Loader;
 use Tulia\Cms\Menu\Infrastructure\Cms\Metadata\Item\LoaderInterface;
 use Tulia\Cms\Menu\Infrastructure\Cms\SearchAnything\SearchProvider;
 use Tulia\Cms\Menu\Infrastructure\Framework\Form\FormType\MenuItemChoiceType;
-use Tulia\Cms\Menu\Infrastructure\Persistence\Domain\Item\DbalPersister;
+use Tulia\Cms\Menu\Infrastructure\Persistence\Domain\Item\DbalStorage;
 use Tulia\Cms\Menu\Infrastructure\Persistence\Domain\Item\DbalRepository;
 use Tulia\Cms\Menu\Infrastructure\Persistence\Query\Item\DatatableFinder;
 use Tulia\Cms\Menu\Application\Query\Finder\FinderFactoryInterface;
@@ -29,7 +29,7 @@ use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 use Tulia\Cms\Menu\Infrastructure\Builder\Type\RegistryInterface as TypeRegistry;
 use Tulia\Cms\Menu\UserInterface\Web\Form\MenuItemForm;
 
-$builder->setDefinition(DbalPersister::class, DbalPersister::class, [
+$builder->setDefinition(DbalStorage::class, DbalStorage::class, [
     'arguments' => [
         service(ConnectionInterface::class),
     ],
@@ -38,7 +38,7 @@ $builder->setDefinition(DbalPersister::class, DbalPersister::class, [
 $builder->setDefinition(DbalRepository::class, DbalRepository::class, [
     'arguments' => [
         service(ConnectionInterface::class),
-        service(DbalPersister::class),
+        service(DbalStorage::class),
         service(CurrentWebsiteInterface::class),
         service(HydratorInterface::class),
         service(SyncerInterface::class),

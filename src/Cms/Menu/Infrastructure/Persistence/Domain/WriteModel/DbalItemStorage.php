@@ -2,21 +2,54 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Menu\Infrastructure\Persistence\Domain\Item;
+namespace Tulia\Cms\Menu\Infrastructure\Persistence\Domain\WriteModel;
 
-use Tulia\Cms\Platform\Infrastructure\Persistence\Domain\AbstractLocalizablePersister;
+use Tulia\Cms\Menu\Ports\Infrastructure\Persistence\WriteModel\ItemStorageInterface;
+use Tulia\Cms\Platform\Infrastructure\Persistence\Domain\AbstractLocalizableStorage;
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class DbalPersister extends AbstractLocalizablePersister
+class DbalItemStorage extends AbstractLocalizableStorage implements ItemStorageInterface
 {
-    protected ConnectionInterface $connection;
+    private ConnectionInterface $connection;
 
     public function __construct(ConnectionInterface $connection)
     {
         $this->connection = $connection;
+    }
+
+    public function findAll(string $menuId, string $defaultLocale, string $locale): array
+    {
+        if ($defaultLocale !== $locale) {
+            $translationColumn = 'IF(ISNULL(tl.name), 0, 1) AS translated';
+        } else {
+            $translationColumn = '1 AS translated';
+        }
+
+        return $this->connection->fetchAll("
+            SELECT
+                tm.*,
+                COALESCE(tl.locale, :defaultLocale) AS locale,
+                COALESCE(tl.name, tm.name) AS name,
+                COALESCE(tl.visibility, tm.visibility) AS visibility,
+                {$translationColumn}
+            FROM #__menu_item AS tm
+            LEFT JOIN #__menu_item_lang AS tl
+                ON tm.id = tl.menu_item_id AND tl.locale = :locale
+            WHERE tm.menu_id = :menu_id
+            ORDER BY tm.position ASC, tm.level ASC", [
+            'menu_id' => $menuId,
+            'locale'  => $locale,
+            'defaultLocale'  => $defaultLocale,
+        ]);
+    }
+
+    public function delete(string $id): void
+    {
+        $this->connection->delete('#__menu_item', ['id' => $id]);
+        $this->connection->delete('#__menu_item_lang', ['id' => $id]);
     }
 
     protected function updateMainRow(array $data, bool $foreignLocale): void
@@ -34,7 +67,7 @@ class DbalPersister extends AbstractLocalizablePersister
 
         if ($foreignLocale === false) {
             $mainTable['name']       = $data['name'];
-            $mainTable['visibility'] = $data['visibility'];
+            $mainTable['visibility'] = $data['visibility'] ? '1' : '0';
         }
 
         $this->connection->update('#__menu_item', $mainTable, ['id' => $data['id']]);
@@ -53,7 +86,7 @@ class DbalPersister extends AbstractLocalizablePersister
         $mainTable['hash']       = $data['hash'];
         $mainTable['target']     = $data['target'];
         $mainTable['name']       = $data['name'];
-        $mainTable['visibility'] = $data['visibility'];
+        $mainTable['visibility'] = $data['visibility'] ? '1' : '0';
 
         $this->connection->insert('#__menu_item', $mainTable);
     }
@@ -64,7 +97,7 @@ class DbalPersister extends AbstractLocalizablePersister
         $langTable['menu_item_id'] = $data['id'];
         $langTable['locale']       = $data['locale'];
         $langTable['name']         = $data['name'];
-        $langTable['visibility']   = $data['visibility'];
+        $langTable['visibility']   = $data['visibility'] ? '1' : '0';
 
         $this->connection->insert('#__menu_item_lang', $langTable);
     }
@@ -73,19 +106,12 @@ class DbalPersister extends AbstractLocalizablePersister
     {
         $langTable = [];
         $langTable['name']       = $data['name'];
-        $langTable['visibility'] = $data['visibility'];
+        $langTable['visibility'] = $data['visibility'] ? '1' : '0';
 
         $this->connection->update('#__menu_item_lang', $langTable, [
             'menu_item_id' => $data['id'],
             'locale'       => $data['locale'],
         ]);
-    }
-
-    protected function rootExists(string $id): bool
-    {
-        $result = $this->connection->fetchAllAssociative('SELECT id FROM #__menu_item WHERE id = :id LIMIT 1', ['id' => $id]);
-
-        return isset($result[0]['id']) && $result[0]['id'] === $id;
     }
 
     protected function langExists(string $id, string $locale): bool
@@ -96,11 +122,5 @@ class DbalPersister extends AbstractLocalizablePersister
         );
 
         return isset($result[0]['menu_item_id']) && $result[0]['menu_item_id'] === $id;
-    }
-
-    public function delete(string $menuItemId): void
-    {
-        $this->connection->delete('#__menu_item', ['id' => $menuItemId]);
-        $this->connection->delete('#__menu_item_lang', ['menu_item_id' => $menuItemId]);
     }
 }

@@ -18,25 +18,10 @@ use Doctrine\DBAL\Query\QueryBuilder;
  */
 class DatatableFinder extends AbstractDatatableFinder
 {
-    /**
-     * @var RouterInterface
-     */
-    private $router;
-
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
-    /**
-     * @var null|string
-     */
-    private $menuId;
-
-    /**
-     * @var CsrfTokenManagerInterface
-     */
-    private $csrfTokenManager;
+    private RouterInterface $router;
+    private TranslatorInterface $translator;
+    private ?string $menuId = null;
+    private CsrfTokenManagerInterface $csrfTokenManager;
 
     public function __construct(
         ConnectionInterface $connection,
