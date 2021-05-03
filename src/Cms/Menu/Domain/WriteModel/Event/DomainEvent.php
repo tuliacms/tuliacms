@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Menu\Domain\WriteModel\Event;
 
-use Tulia\Cms\Menu\Domain\WriteModel\Model\ValueObject\MenuId;
 use Tulia\Cms\Platform\Domain\Event\DomainEvent as PlatformDomainEvent;
 
 /**

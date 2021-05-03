@@ -183,6 +183,10 @@ class DatabaseStorage implements StorageInterface
     {
         $count = count($names);
 
+        if ($count === 0) {
+            return [];
+        }
+
         $sql = "SELECT * FROM #__{$type}_metadata AS tm
         INNER JOIN #__{$type}_metadata_lang AS tl
             ON tm.id = tl.metadata_id

@@ -6,6 +6,9 @@ namespace Tulia\Cms\Menu\Domain\WriteModel;
 
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Tulia\Cms\Menu\Application\Query\Finder\Factory\MenuFactory;
+use Tulia\Cms\Menu\Domain\WriteModel\Event\ItemAdded;
+use Tulia\Cms\Menu\Domain\WriteModel\Event\ItemRemoved;
+use Tulia\Cms\Menu\Domain\WriteModel\Event\ItemUpdated;
 use Tulia\Cms\Menu\Domain\WriteModel\Event\MenuCreated;
 use Tulia\Cms\Menu\Domain\WriteModel\Event\MenuDeleted;
 use Tulia\Cms\Menu\Domain\WriteModel\Event\MenuUpdated;
@@ -77,30 +80,34 @@ class MenuRepository implements MenuRepositoryInterface
 
     public function save(Menu $menu): void
     {
+        $data = $this->extract($menu);
         $this->storage->beginTransaction();
 
         try {
-            $this->storage->insert($this->extract($menu), $this->currentWebsite->getDefaultLocale()->getCode());
+            $this->storage->insert($data, $this->currentWebsite->getDefaultLocale()->getCode());
             $this->storage->commit();
         } catch (\Exception $e) {
             $this->storage->rollback();
         }
 
-        $this->eventDispatcher->dispatch(new MenuCreated($menu->getId()->getId()));
+        $this->eventDispatcher->dispatch(new MenuCreated($menu->getId()));
+        $this->dispatchItemsEvents($data);
     }
 
     public function update(Menu $menu): void
     {
+        $data = $this->extract($menu);
         $this->storage->beginTransaction();
 
         try {
-            $this->storage->update($this->extract($menu), $this->currentWebsite->getDefaultLocale()->getCode());
+            $this->storage->update($data, $this->currentWebsite->getDefaultLocale()->getCode());
             $this->storage->commit();
         } catch (\Exception $e) {
             $this->storage->rollback();
         }
 
-        $this->eventDispatcher->dispatch(new MenuUpdated($menu->getId()->getId()));
+        $this->eventDispatcher->dispatch(new MenuUpdated($menu->getId()));
+        $this->dispatchItemsEvents($data);
     }
 
     public function delete(string $id): void
@@ -109,10 +116,23 @@ class MenuRepository implements MenuRepositoryInterface
         $this->eventDispatcher->dispatch(new MenuDeleted($id));
     }
 
+    private function dispatchItemsEvents(array $data): void
+    {
+        foreach ($data['items'] as $item) {
+            if ($item['_change_type'] === 'add') {
+                $this->eventDispatcher->dispatch(new ItemAdded($data['id'], $item['id']));
+            } elseif ($item['_change_type'] === 'remove') {
+                $this->eventDispatcher->dispatch(new ItemRemoved($data['id'], $item['id']));
+            } else {
+                $this->eventDispatcher->dispatch(new ItemUpdated($data['id'], $item['id']));
+            }
+        }
+    }
+
     private function extract(Menu $menu): array
     {
         $data = [];
-        $data['id'] = $menu->getId()->getId();
+        $data['id'] = $menu->getId();
         $data['name'] = $menu->getName();
         $data['website_id'] = $menu->getWebsiteId();
         $data['items'] = [];
@@ -120,7 +140,7 @@ class MenuRepository implements MenuRepositoryInterface
         $itemsChanges = $menu->getItemsChanges();
 
         foreach ($menu->getItems() as $item) {
-            $id = $item->getId()->getId();
+            $id = $item->getId();
 
             $changeType = null;
 
@@ -138,7 +158,7 @@ class MenuRepository implements MenuRepositoryInterface
             $data['items'][$id] = [
                 '_change_type' => $changeType,
                 'id' => $id,
-                'menu' => $item->getMenu() ? $item->getMenu()->getId()->getId() : null,
+                'menu' => $item->getMenu() ? $item->getMenu()->getId() : null,
                 'position' => $item->getPosition(),
                 'parent' => $item->getParentId() ?: null,
                 'level' => $item->getLevel(),

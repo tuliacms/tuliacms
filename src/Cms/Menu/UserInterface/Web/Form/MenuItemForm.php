@@ -95,8 +95,6 @@ class MenuItemForm extends AbstractType
                 'mapped' => false,
             ]);
 
-        $builder->get('id')->addModelTransformer(new ItemIdModelTransformer());
-
         if ($options['persist_mode'] === 'create') {
             $builder->add('parentId', MenuItemChoiceType::class, [
                 'label' => 'parentItem',

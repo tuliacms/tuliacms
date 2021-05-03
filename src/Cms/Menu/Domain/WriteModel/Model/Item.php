@@ -5,14 +5,13 @@ declare(strict_types=1);
 namespace Tulia\Cms\Menu\Domain\WriteModel\Model;
 
 use Tulia\Cms\Menu\Domain\WriteModel\Exception\ParentItemReccurencyException;
-use Tulia\Cms\Menu\Domain\WriteModel\Model\ValueObject\ItemId;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class Item
 {
-    protected ItemId $id;
+    protected string $id;
     protected ?Menu $menu = null;
     protected ?string $parentId = null;
     protected int $position;
@@ -27,7 +26,7 @@ class Item
     protected bool $visibility;
     protected array $metadata = [];
 
-    public function __construct(ItemId $id, string $locale)
+    public function __construct(string $id, string $locale)
     {
         $this->id = $id;
         $this->locale = $locale;
@@ -35,7 +34,7 @@ class Item
 
     public static function buildFromArray(array $data): self
     {
-        $item = new self(new ItemId($data['id']), $data['locale']);
+        $item = new self($data['id'], $data['locale']);
         $item->name = $data['name'] ?? null;
         $item->parentId = $data['parent_id'] ?? null;
         $item->position = (int) ($data['position'] ?? 0);
@@ -52,12 +51,12 @@ class Item
         return $item;
     }
 
-    public function getId(): ItemId
+    public function getId(): string
     {
         return $this->id;
     }
 
-    public function setId(ItemId $id): void
+    public function setId(string $id): void
     {
         $this->id = $id;
     }

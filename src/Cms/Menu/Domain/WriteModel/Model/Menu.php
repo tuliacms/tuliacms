@@ -5,15 +5,13 @@ declare(strict_types=1);
 namespace Tulia\Cms\Menu\Domain\WriteModel\Model;
 
 use Tulia\Cms\Menu\Domain\WriteModel\Exception\ItemNotFoundException;
-use Tulia\Cms\Menu\Domain\WriteModel\Model\ValueObject\MenuId;
-use Tulia\Cms\Menu\Domain\WriteModel\Model\ValueObject\ItemId;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class Menu
 {
-    protected MenuId $id;
+    protected string $id;
     protected string $websiteId;
     protected ?string $name = null;
     protected array $itemsChanges = [];
@@ -23,7 +21,7 @@ class Menu
      */
     protected array $items = [];
 
-    public function __construct(MenuId $id, string $websiteId)
+    public function __construct(string $id, string $websiteId)
     {
         $this->id = $id;
         $this->websiteId = $websiteId;
@@ -31,13 +29,13 @@ class Menu
 
     public static function buildFromArray(array $data): self
     {
-        $menu = new self(new MenuId($data['id']), $data['website_id']);
+        $menu = new self($data['id'], $data['website_id']);
         $menu->name = $data['name'] ?? null;
 
         return $menu;
     }
 
-    public function getId(): MenuId
+    public function getId(): string
     {
         return $this->id;
     }
@@ -84,14 +82,14 @@ class Menu
 
     public function addItem(Item $item): void
     {
-        if (isset($this->items[$item->getId()->getId()])) {
+        if (isset($this->items[$item->getId()])) {
             return;
         }
 
-        $this->items[$item->getId()->getId()] = $item;
+        $this->items[$item->getId()] = $item;
         $item->assignToMenu($this);
 
-        $this->recordItemChange('add', $item->getId()->getId());
+        $this->recordItemChange('add', $item->getId());
     }
 
     public function removeItem(Item $item): void
@@ -103,32 +101,32 @@ class Menu
 
             unset($this->items[$position]);
 
-            $this->recordItemChange('remove', $item->getId()->getId());
+            $this->recordItemChange('remove', $item->getId());
         }
     }
 
     public function hasItem(Item $item): bool
     {
-        return isset($this->items[$item->getId()->getId()]);
+        return isset($this->items[$item->getId()]);
     }
 
     /**
-     * @param ItemId $id
+     * @param string $id
      * @return Item
      * @throws ItemNotFoundException
      */
-    public function getItem(ItemId $id): Item
+    public function getItem(string $id): Item
     {
-        if (isset($this->items[$id->getId()]) === false) {
-            throw new ItemNotFoundException(sprintf('Item with ID %s not found.', $id->getId()));
+        if (isset($this->items[$id]) === false) {
+            throw new ItemNotFoundException(sprintf('Item with ID %s not found.', $id));
         }
 
-        return $this->items[$id->getId()];
+        return $this->items[$id];
     }
 
     public function recordItemChanged(Item $item): void
     {
-        $this->recordItemChange('update', $item->getId()->getId());
+        $this->recordItemChange('update', $item->getId());
     }
 
     private function recordItemChange(string $type, string $id): void

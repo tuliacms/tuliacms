@@ -6,29 +6,19 @@ namespace Tulia\Cms\Menu\UserInterface\Web\Controller\Backend;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\Menu\Domain\WriteModel\Exception\ItemNotFoundException;
 use Tulia\Cms\Menu\Domain\WriteModel\Exception\MenuNotFoundException;
-use Tulia\Cms\Menu\Domain\WriteModel\Model\ValueObject\ItemId;
 use Tulia\Cms\Menu\Infrastructure\Builder\Type\RegistryInterface;
 use Tulia\Cms\Menu\Infrastructure\Persistence\Query\Item\DatatableFinder;
-use Tulia\Cms\Menu\Application\Query\Finder\FinderFactoryInterface;
 use Tulia\Cms\Menu\Ports\Infrastructure\Persistence\WriteModel\MenuRepositoryInterface;
 use Tulia\Cms\Menu\UserInterface\Web\Form\MenuItemForm;
-use Tulia\Cms\Menu\UserInterface\Web\Form\MenuItemFormManagerFactory;
-use Tulia\Cms\Menu\Application\Query\Finder\Enum\ScopeEnum;
-use Tulia\Cms\Menu\Application\Query\Finder\Model\Item;
-use Tulia\Cms\Menu\Application\Query\Finder\Model\Menu;
-use Tulia\Cms\Menu\Application\Query\Finder\Exception\QueryNotFetchedException;
-use Tulia\Cms\Menu\Application\Query\Finder\Exception\MultipleFetchException;
-use Tulia\Cms\Menu\Application\Query\Finder\Exception\QueryException;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Component\Datatable\DatatableFactory;
 use Tulia\Component\DependencyInjection\Exception\MissingServiceException;
 use Tulia\Component\FormBuilder\Manager\ManagerFactoryInterface;
-use Tulia\Component\Templating\ViewInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Tulia\Component\Security\Http\Csrf\Annotation\CsrfToken;
+use Tulia\Component\Templating\ViewInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -138,7 +128,7 @@ class MenuItem extends AbstractController
         }
 
         try {
-            $item = $menu->getItem(new ItemId($id));
+            $item = $menu->getItem($id);
         } catch (ItemNotFoundException $e) {
             $this->setFlash('danger', $this->trans('menuItemNotFound', [], 'menu'));
             return $this->redirectToRoute('backend.menu.item', ['menuId' => $menuId]);
@@ -166,22 +156,24 @@ class MenuItem extends AbstractController
     /**
      * @param Request $request
      * @param string $menuId
-     *
      * @return RedirectResponse
-     *
-     * @throws QueryException
-     *
      * @CsrfToken(id="menu.item.delete")
      */
     public function delete(Request $request, string $menuId): RedirectResponse
     {
-        $menu = $this->findMenu($menuId);
+        try {
+            $menu = $this->repository->find($menuId);
+        } catch (MenuNotFoundException $e) {
+            $this->setFlash('danger', $this->trans('menuNotFound', [], 'menu'));
+            return $this->redirectToRoute('backend.menu');
+        }
 
         foreach ($request->request->get('ids', []) as $id) {
             try {
-                $model = $this->getMenuItem($menu, $id);
-                $this->itemStorage->delete(ApplicationItem::fromQueryModel($model));
-            } catch (NotFoundHttpException $e) {
+                $menu->removeItem($menu->getItem($id));
+                $this->repository->save($menu);
+            } catch (ItemNotFoundException $e) {
+                // Do nothing when Item not exists.
                 continue;
             }
         }
