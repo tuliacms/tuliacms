@@ -23,4 +23,4 @@ backend.form.edit:
 form.submit:
     path: /form/submit/{id}
     controller: Tulia\Cms\ContactForms\UserInterface\Web\Controller\Frontend\Form::submit
-    methods: GET|POST
+    methods: POST

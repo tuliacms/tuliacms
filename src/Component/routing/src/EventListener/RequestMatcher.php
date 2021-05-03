@@ -7,11 +7,7 @@ namespace Tulia\Component\Routing\EventListener;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\EventListener\RouterListener;
-use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Component\Routing\Exception\MethodNotAllowedException;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\RouterInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -51,7 +47,7 @@ class RequestMatcher implements EventSubscriberInterface
         }
 
         $pathinfo = urldecode($request->attributes->get('_content_path'));
-        $fakeRequest = $this->createRequest($pathinfo, $request->attributes->all());
+        $fakeRequest = $this->createRequest($pathinfo, $request);
         $fakeEvent = new RequestEvent($event->getKernel(), $fakeRequest, $event->getRequestType());
 
         $this->symfonyListener->onKernelRequest($fakeEvent);
@@ -59,24 +55,31 @@ class RequestMatcher implements EventSubscriberInterface
         $request->attributes->replace($fakeRequest->attributes->all());
     }
 
-    private function createRequest(string $pathinfo, array $attributes): Request
+    private function createRequest(string $pathinfo, Request $originalRequest): Request
     {
-        $context = $this->router->getContext();
         $uri = $pathinfo;
         $serverData = [];
 
-        $host = $context->getHost() ?: 'localhost';
+        $host = $originalRequest->getHost() ?: 'localhost';
 
-        if ('https' === $context->getScheme() && 443 !== $context->getHttpsPort()) {
-            $host .= ':' . $context->getHttpsPort();
-        } elseif ('http' === $context->getScheme() && 80 !== $context->getHttpPort()) {
-            $host .= ':' . $context->getHttpPort();
+        if ('https' === $originalRequest->getScheme() && 443 !== $originalRequest->getPort()) {
+            $host .= ':' . $originalRequest->getPort();
+        } elseif ('http' === $originalRequest->getScheme() && 80 !== $originalRequest->getPort()) {
+            $host .= ':' . $originalRequest->getPort();
         }
 
-        $uri = $context->getScheme() . '://' . $host . $uri . '?' . $context->getQueryString();
+        $uri = $originalRequest->getScheme() . '://' . $host . $uri . '?' . $originalRequest->getQueryString();
 
-        $request = Request::create($uri, $context->getMethod(), $context->getParameters(), [], [], $serverData);
-        $request->attributes->add($attributes);
+        if ($originalRequest->getMethod() === 'GET') {
+            $parameters = $originalRequest->query->all();
+        } else {
+            $parameters = $originalRequest->request->all();
+        }
+
+        $request = Request::create($uri, $originalRequest->getMethod(), $parameters, [], [], $serverData);
+        $request->attributes->add($originalRequest->attributes->all());
+        $request->setDefaultLocale($originalRequest->getDefaultLocale());
+        $request->setLocale($originalRequest->getLocale());
 
         return $request;
     }
