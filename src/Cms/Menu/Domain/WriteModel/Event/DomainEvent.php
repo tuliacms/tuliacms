@@ -12,23 +12,14 @@ use Tulia\Cms\Platform\Domain\Event\DomainEvent as PlatformDomainEvent;
  */
 abstract class DomainEvent extends PlatformDomainEvent
 {
-    /**
-     * @var MenuId
-     */
-    private $menuId;
+    private string $menuId;
 
-    /**
-     * @param MenuId $menuId
-     */
-    public function __construct(MenuId $menuId)
+    public function __construct(string $menuId)
     {
         $this->menuId = $menuId;
     }
 
-    /**
-     * @return MenuId
-     */
-    public function getMenuId(): MenuId
+    public function getMenuId(): string
     {
         return $this->menuId;
     }

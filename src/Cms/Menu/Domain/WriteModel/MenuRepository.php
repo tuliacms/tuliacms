@@ -6,17 +6,19 @@ namespace Tulia\Cms\Menu\Domain\WriteModel;
 
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Tulia\Cms\Menu\Application\Query\Finder\Factory\MenuFactory;
+use Tulia\Cms\Menu\Domain\WriteModel\Event\MenuCreated;
+use Tulia\Cms\Menu\Domain\WriteModel\Event\MenuDeleted;
+use Tulia\Cms\Menu\Domain\WriteModel\Event\MenuUpdated;
 use Tulia\Cms\Menu\Domain\WriteModel\Exception\MenuNotFoundException;
 use Tulia\Cms\Menu\Domain\WriteModel\Model\Item;
 use Tulia\Cms\Menu\Domain\WriteModel\Model\Menu;
-use Tulia\Cms\Menu\Domain\WriteModel\Model\ValueObject\MenuId;
-use Tulia\Cms\Menu\Domain\WriteModel\Model\ValueObject\ItemId;
+use Tulia\Cms\Menu\Ports\Infrastructure\Persistence\WriteModel\MenuRepositoryInterface;
 use Tulia\Cms\Menu\Ports\Infrastructure\Persistence\WriteModel\MenuStorageInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class MenuRepository
+class MenuRepository implements MenuRepositoryInterface
 {
     private MenuStorageInterface $storage;
     private MenuFactory $menuFactory;
@@ -42,31 +44,25 @@ class MenuRepository
         return $this->menuFactory->createNewItem($data);
     }
 
-    public function find(MenuId $id): Menu
+    /**
+     * @throws MenuNotFoundException
+     */
+    public function find(string $id): Menu
     {
-        $menu = $this->connection->fetchAll('
-            SELECT *
-            FROM #__menu AS tm
-            WHERE tm.id = :id
-            LIMIT 1', [
-            'id' => $id->getId(),
-        ]);
+        $data = $this->storage->find($id);
 
-        if (empty($menu)) {
-            throw new MenuNotFoundException();
+        if ($data === null) {
+            throw new MenuNotFoundException(sprintf('Menu %s not found.', $id));
         }
+        //$menu['items'] = $this->itemDbalRepository->findItems($id);
 
-        $menu = reset($menu);
-        $menu['items'] = $this->itemDbalRepository->findItems($id);
-
-        return $this->transformer->arrayToAggregate($menu);
+        return Menu::buildFromArray($data);
     }
 
     public function save(Menu $menu): void
     {
         $this->storage->insert($this->extract($menu));
-
-        //$this->eventDispatcher->dispatch(new WebsiteCreated($website->getId()->getId()));
+        $this->eventDispatcher->dispatch(new MenuCreated($menu->getId()->getId()));
         /*$this->connection->transactional(function () use ($menu) {
             if ($this->recordExists($menu->getId()->getId())) {
                 $this->update($menu);
@@ -90,31 +86,16 @@ class MenuRepository
         });*/
     }
 
-    private function insert(Menu $menu): void
+    public function update(Menu $menu): void
     {
-        $this->connection->insert(
-            '#__menu',
-            $this->transformer->aggregateToInsert($menu)
-        );
+        $this->storage->update($this->extract($menu));
+        $this->eventDispatcher->dispatch(new MenuUpdated($menu->getId()->getId()));
     }
 
-    private function update(Menu $menu): void
+    public function delete(string $id): void
     {
-        $this->connection->update(
-            '#__menu',
-            $this->transformer->aggregateToUpdate($menu),
-            ['id' => $menu->getId()->getId()]
-        );
-    }
-
-    /**
-     * @param Menu $menu
-     */
-    public function delete(Menu $menu): void
-    {
-        $this->connection->transactional(function () use ($menu) {
-            $this->connection->delete('#__menu', ['id' => $menu->getId()->getId()]);
-        });
+        $this->storage->delete($id);
+        $this->eventDispatcher->dispatch(new MenuDeleted($id));
     }
 
     private function extract(Menu $menu): array

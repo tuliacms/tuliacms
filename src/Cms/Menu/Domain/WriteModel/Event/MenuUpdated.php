@@ -7,6 +7,6 @@ namespace Tulia\Cms\Menu\Domain\WriteModel\Event;
 /**
  * @author Adam Banaszkiewicz
  */
-class MenuCreated extends DomainEvent
+class MenuUpdated extends DomainEvent
 {
 }

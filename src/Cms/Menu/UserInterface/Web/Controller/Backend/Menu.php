@@ -8,12 +8,13 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Tulia\Cms\Menu\Application\Model\Menu as ApplicationModelMenu;
 use Tulia\Cms\Menu\Application\Query\Finder\Enum\ScopeEnum;
 use Tulia\Cms\Menu\Application\Query\Finder\Exception\QueryException;
 use Tulia\Cms\Menu\Application\Query\Finder\FinderFactoryInterface;
-use Tulia\Cms\Menu\Domain\WriteModel\MenuRepository;
+use Tulia\Cms\Menu\Domain\WriteModel\Exception\MenuNotFoundException;
+use Tulia\Cms\Menu\Domain\WriteModel\Model\ValueObject\MenuId;
 use Tulia\Cms\Menu\Infrastructure\Persistence\Query\Menu\DatatableFinder;
+use Tulia\Cms\Menu\Ports\Infrastructure\Persistence\WriteModel\MenuRepositoryInterface;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Component\Datatable\DatatableFactory;
 use Tulia\Component\Security\Http\Csrf\Annotation\CsrfToken;
@@ -25,11 +26,11 @@ use Tulia\Component\Templating\ViewInterface;
 class Menu extends AbstractController
 {
     protected FinderFactoryInterface $finderFactory;
-    protected MenuRepository $repository;
+    protected MenuRepositoryInterface $repository;
 
     public function __construct(
         FinderFactoryInterface $finderFactory,
-        MenuRepository $repository
+        MenuRepositoryInterface $repository
     ) {
         $this->finderFactory = $finderFactory;
         $this->repository = $repository;
@@ -67,22 +68,20 @@ class Menu extends AbstractController
     /**
      * @param Request $request
      * @return RedirectResponse
-     * @throws QueryException
      * @throws NotFoundHttpException
      * @CsrfToken(id="menu.edit")
      */
     public function edit(Request $request): RedirectResponse
     {
-        $menu = $this->finderFactory->getInstance(ScopeEnum::BACKEND_SINGLE)
-            ->find($request->request->get('id'));
-
-        if (!$menu) {
-            throw $this->createNotFoundException('Menu not found.');
+        try {
+            $menu = $this->repository->find($request->request->get('id'));
+        } catch (MenuNotFoundException $e) {
+            throw $this->createNotFoundException('Menu not found.', $e);
         }
 
         $menu->setName($request->request->get('name'));
 
-        $this->menuStorage->save(ApplicationModelMenu::fromQueryModel($menu));
+        $this->repository->update($menu);
 
         $this->setFlash('success', $this->trans('menuUpdated', [], 'menu'));
         return $this->redirectToRoute('backend.menu');
