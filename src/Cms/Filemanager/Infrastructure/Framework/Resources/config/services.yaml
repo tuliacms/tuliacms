@@ -10,6 +10,8 @@ services:
         resource: '../../../../*'
         exclude:
             - '../../../../Infrastructure/Framework/Resources/*'
+            - '../../../../**/Model/*'
+            - '../../../../**/Exception/*'
 
     Tulia\Cms\Filemanager\Application\Cropper:
         bind:

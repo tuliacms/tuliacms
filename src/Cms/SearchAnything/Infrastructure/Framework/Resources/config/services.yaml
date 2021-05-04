@@ -7,6 +7,8 @@ services:
         resource: '../../../../*'
         exclude:
             - '../../../../Infrastructure/Framework/Resources/*'
+            - '../../../../**/Model/*'
+            - '../../../../**/Exception/*'
 
     Tulia\Cms\SearchAnything\Factory\EngineFactoryInterface:
         class: Tulia\Cms\SearchAnything\Factory\EngineFactory

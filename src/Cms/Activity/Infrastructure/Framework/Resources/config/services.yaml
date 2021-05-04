@@ -7,6 +7,8 @@ services:
         resource: '../../../../*'
         exclude:
             - '../../../../Infrastructure/Framework/Resources/*'
+            - '../../../../**/Model/*'
+            - '../../../../**/Exception/*'
 
     Tulia\Cms\Activity\Infrastructure\Cms\Dashboard\Widget\ActivityWidget:
         tags: [ dashboard.widget ]

@@ -7,6 +7,8 @@ services:
         resource: '../../../../*'
         exclude:
             - '../../../../Infrastructure/Framework/Resources/*'
+            - '../../../../**/Model/*'
+            - '../../../../**/Exception/*'
 
     Tulia\Cms\EditLinks\Infrastructure\Cms\FrontendToolbar\LinksProvider:
         tags: [ frontend_toolbar.links.provider ]
