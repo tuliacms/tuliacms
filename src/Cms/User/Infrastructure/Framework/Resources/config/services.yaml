@@ -51,3 +51,7 @@ services:
             $scopes:
                 - !php/const Tulia\Cms\User\UserInterface\Web\Form\ScopeEnum::BACKEND_MY_ACCOUNT
         tags: [ form_extension ]
+
+    Tulia\Cms\User\Infrastructure\Framework\Translator\UserLocaleResolver:
+        bind:
+            $translator: '@translator.default'

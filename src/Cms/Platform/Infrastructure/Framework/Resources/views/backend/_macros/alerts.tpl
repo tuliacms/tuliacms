@@ -8,7 +8,7 @@
 #}
 {% macro translation_missing_info(translated) %}
     {% if not translated %}
-        <div class="alert alert-info alert-dismissible fade show mb-0">
+        <div class="alert alert-info alert-dismissible fade show">
             {{ 'missingTranslationInThisLocaleSaveToSaveInThisLocale'|trans }}
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
