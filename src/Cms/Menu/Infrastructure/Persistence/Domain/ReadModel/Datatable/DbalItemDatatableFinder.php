@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Menu\Infrastructure\Persistence\Query\Item;
+namespace Tulia\Cms\Menu\Infrastructure\Persistence\Domain\ReadModel\Datatable;
 
 use PDO;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
@@ -16,7 +16,7 @@ use Doctrine\DBAL\Query\QueryBuilder;
 /**
  * @author Adam Banaszkiewicz
  */
-class DatatableFinder extends AbstractDatatableFinder
+class DbalItemDatatableFinder extends AbstractDatatableFinder
 {
     private RouterInterface $router;
     private TranslatorInterface $translator;

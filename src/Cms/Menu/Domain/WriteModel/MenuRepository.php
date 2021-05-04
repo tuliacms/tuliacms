@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Tulia\Cms\Menu\Domain\WriteModel;
 
 use Psr\EventDispatcher\EventDispatcherInterface;
-use Tulia\Cms\Menu\Application\Query\Finder\Factory\MenuFactory;
 use Tulia\Cms\Menu\Domain\WriteModel\Event\ItemAdded;
 use Tulia\Cms\Menu\Domain\WriteModel\Event\ItemRemoved;
 use Tulia\Cms\Menu\Domain\WriteModel\Event\ItemUpdated;

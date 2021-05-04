@@ -7,47 +7,32 @@ namespace Tulia\Cms\Menu\Infrastructure\Builder\Hierarchy;
 use Tulia\Cms\Menu\Infrastructure\Builder\Hierarchy\Item as BuilderItem;
 use Tulia\Cms\Menu\Infrastructure\Builder\Identity\Identity;
 use Tulia\Cms\Menu\Infrastructure\Builder\Identity\RegistryInterface;
-use Tulia\Cms\Menu\Application\Query\Finder\Enum\ScopeEnum;
-use Tulia\Cms\Menu\Application\Query\Finder\Exception\MultipleFetchException;
-use Tulia\Cms\Menu\Application\Query\Finder\Exception\QueryException;
-use Tulia\Cms\Menu\Application\Query\Finder\Exception\QueryNotFetchedException;
-use Tulia\Cms\Menu\Application\Query\Finder\Model\Item;
-use Tulia\Cms\Menu\Application\Query\Finder\Model\ItemCollection;
-use Tulia\Cms\Menu\Application\Query\Finder\FinderFactoryInterface;
+use Tulia\Cms\Menu\Domain\ReadModel\Finder\Enum\ScopeEnum;
+use Tulia\Cms\Menu\Domain\ReadModel\Finder\Model\Item;
+use Tulia\Cms\Menu\Ports\Infrastructure\Persistence\ReadModel\MenuFinderInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class HierarchyBuilder implements HierarchyBuilderInterface
 {
-    /**
-     * @var FinderFactoryInterface
-     */
-    protected $finderFactory;
+    protected MenuFinderInterface $menuFinder;
+    protected RegistryInterface $registry;
 
-    /**
-     * @var RegistryInterface
-     */
-    protected $registry;
-
-    /**
-     * @param FinderFactoryInterface $finderFactory
-     * @param RegistryInterface $registry
-     */
-    public function __construct(FinderFactoryInterface $finderFactory, RegistryInterface $registry)
+    public function __construct(MenuFinderInterface $menuFinder, RegistryInterface $registry)
     {
-        $this->finderFactory = $finderFactory;
-        $this->registry      = $registry;
+        $this->menuFinder = $menuFinder;
+        $this->registry = $registry;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function build(string $id, ItemCollection $collection = null): HierarchyInterface
+    public function build(string $id, array $collection = []): HierarchyInterface
     {
         $hierarchy = new Hierarchy($id);
 
-        $items = $collection ?? $this->getItems($id);
+        $items = $collection === [] ? $this->getItems($id) : $collection;
 
         foreach ($items as $item) {
             if ($item->getLevel() === 0) {
@@ -58,33 +43,14 @@ class HierarchyBuilder implements HierarchyBuilderInterface
         return $hierarchy;
     }
 
-    /**
-     * @param string $id
-     *
-     * @return ItemCollection
-     *
-     * @throws MultipleFetchException
-     * @throws QueryException
-     * @throws QueryNotFetchedException
-     */
-    private function getItems(string $id): ItemCollection
+    private function getItems(string $id): array
     {
-        $menu = $this->finderFactory->getInstance(ScopeEnum::BUILD_MENU)->find($id);
+        $menu = $this->menuFinder->findOne(['id' => $id], ScopeEnum::BUILD_MENU);
 
-        if ($menu) {
-            return $menu->getItems();
-        }
-
-        return new ItemCollection();
+        return $menu ? $menu->getItems() : [];
     }
 
-    /**
-     * @param Item $sourceItem
-     * @param ItemCollection $collection
-     *
-     * @return BuilderItem
-     */
-    private function buildFor(Item $sourceItem, ItemCollection $collection): BuilderItem
+    private function buildFor(Item $sourceItem, array $collection): BuilderItem
     {
         $identity = $this->registry->provide($sourceItem->getType(), $sourceItem->getIdentity());
 

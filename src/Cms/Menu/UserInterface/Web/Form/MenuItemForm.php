@@ -13,7 +13,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Cms\Menu\Infrastructure\Builder\Type\RegistryInterface;
 use Tulia\Cms\Menu\Infrastructure\Builder\Type\TypeInterface;
 use Tulia\Cms\Menu\Infrastructure\Framework\Form\FormType\MenuItemChoiceType;
-use Tulia\Cms\Menu\UserInterface\Web\Form\Transformer\ItemIdModelTransformer;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType;
 use Tulia\Component\FormBuilder\Manager\ManagerInterface;
 

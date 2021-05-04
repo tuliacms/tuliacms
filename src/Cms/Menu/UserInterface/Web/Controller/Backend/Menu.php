@@ -8,9 +8,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Tulia\Cms\Menu\Application\Query\Finder\FinderFactoryInterface;
 use Tulia\Cms\Menu\Domain\WriteModel\Exception\MenuNotFoundException;
-use Tulia\Cms\Menu\Infrastructure\Persistence\Query\Menu\DatatableFinder;
+use Tulia\Cms\Menu\Infrastructure\Persistence\Domain\ReadModel\Datatable\DbalMenuDatatableFinder;
 use Tulia\Cms\Menu\Ports\Infrastructure\Persistence\WriteModel\MenuRepositoryInterface;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Component\Datatable\DatatableFactory;
@@ -29,14 +28,14 @@ class Menu extends AbstractController
         $this->repository = $repository;
     }
 
-    public function list(Request $request, DatatableFactory $factory, DatatableFinder $finder): ViewInterface
+    public function list(Request $request, DatatableFactory $factory, DbalMenuDatatableFinder $finder): ViewInterface
     {
         return $this->view('@backend/menu/menu/list.tpl', [
             'datatable' => $factory->create($finder, $request),
         ]);
     }
 
-    public function datatable(Request $request, DatatableFactory $factory, DatatableFinder $finder): JsonResponse
+    public function datatable(Request $request, DatatableFactory $factory, DbalMenuDatatableFinder $finder): JsonResponse
     {
         return $factory->create($finder, $request)->generateResponse();
     }

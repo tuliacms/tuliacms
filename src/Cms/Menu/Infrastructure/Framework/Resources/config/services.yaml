@@ -13,10 +13,6 @@ services:
     Tulia\Cms\Menu\Infrastructure\Framework\Twig\Extension\MenuExtension:
         tags: [ twig.extension ]
 
-    Tulia\Cms\Menu\Application\Query\Finder\FinderFactory:
-        bind:
-            $queryClass: Tulia\Cms\Menu\Infrastructure\Persistence\Query\Menu\DbalQuery
-
     Tulia\Cms\Menu\UserInterface\Web\BackendMenu\MenuMenuBuilder:
         tags: [ backend_menu.builder ]
 

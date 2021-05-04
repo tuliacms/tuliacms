@@ -2,38 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Menu\Application\Query\Finder\Model;
+namespace Tulia\Cms\Menu\Domain\ReadModel\Finder\Model;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class Menu
 {
-    /**
-     * @var string
-     */
-    protected $id;
+    protected string $id;
+    protected string $name;
+    protected string $websiteId;
+    protected array $items = [];
 
-    /**
-     * @var string
-     */
-    protected $name;
-
-    /**
-     * @var string
-     */
-    protected $websiteId;
-
-    /**
-     * @var ItemCollection
-     */
-    protected $items;
-
-    /**
-     * @param array $data
-     *
-     * @return Menu
-     */
     public static function buildFromArray(array $data): Menu
     {
         if (isset($data['id']) === false) {
@@ -46,102 +26,57 @@ class Menu
         $menu->setWebsiteId($data['website_id'] ?? null);
 
         foreach ($data['items'] ?? [] as $item) {
-            $menu->addItem(Item::buildFromArray($item));
+            $menu->items[] = Item::buildFromArray($item);
         }
 
         return $menu;
     }
 
-    public function __construct()
-    {
-        $this->items = new ItemCollection();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function hasId(): bool
     {
         return (bool) $this->id;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getId(): string
     {
         return $this->id;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setId(string $id): void
     {
         $this->id = $id;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName(): ?string
     {
         return $this->name;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setName(string $name): void
     {
         $this->name = $name;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getWebsiteId(): ?string
     {
         return $this->websiteId;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setWebsiteId(?string $websiteId): void
     {
         $this->websiteId = $websiteId;
     }
 
     /**
-     * @return ItemCollection|Item[]
+     * @return Item[]
      */
-    public function getItems(): ItemCollection
+    public function getItems(): array
     {
         return $this->items;
     }
 
-    /**
-     * @param ItemCollection $items
-     */
-    public function setItems(ItemCollection $items): void
+    public function setItems(array $items): void
     {
         $this->items = $items;
-    }
-
-    /**
-     * @param Item $item
-     */
-    public function addItem(Item $item): void
-    {
-        $this->items->append($item);
-    }
-
-    /**
-     * @param Item $item
-     */
-    public function removeItem(Item $item): void
-    {
-        $this->items->remove($item);
     }
 }

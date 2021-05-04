@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Menu\Infrastructure\Cms\SearchAnything;
 
-use Tulia\Cms\Menu\Application\Query\Finder\Enum\ScopeEnum;
-use Tulia\Cms\Menu\Application\Query\Finder\FinderFactoryInterface;
+use Tulia\Cms\Menu\Domain\ReadModel\Finder\Enum\ScopeEnum;
+use Tulia\Cms\Menu\Ports\Infrastructure\Persistence\ReadModel\MenuFinderInterface;
 use Tulia\Cms\SearchAnything\Provider\AbstractProvider;
 use Tulia\Cms\SearchAnything\Results\Hit;
 use Tulia\Cms\SearchAnything\Results\Results;
@@ -17,30 +17,28 @@ use Symfony\Component\Routing\RouterInterface;
  */
 class SearchProvider extends AbstractProvider
 {
-    protected FinderFactoryInterface $finderFactory;
+    protected MenuFinderInterface $menuFinder;
     protected RouterInterface $router;
 
     public function __construct(
-        FinderFactoryInterface $finderFactory,
+        MenuFinderInterface $menuFinder,
         RouterInterface $router
     ) {
-        $this->finderFactory = $finderFactory;
+        $this->menuFinder = $menuFinder;
         $this->router = $router;
     }
 
     public function search(string $query, int $limit = 5, int $page = 1): ResultsInterface
     {
-        $finder = $this->finderFactory->getInstance(ScopeEnum::INTERNAL);
-        $finder->setCriteria([
+        $menus = $this->menuFinder->find([
             'search'   => $query,
             'per_page' => $limit,
             'page'     => $page,
-        ]);
-        $finder->fetchRaw();
+        ], ScopeEnum::INTERNAL);
 
         $results = new Results();
 
-        foreach ($finder->getResult() as $menu) {
+        foreach ($menus as $menu) {
             $hit = new Hit($menu->getName(), $this->router->generate('backend.menu.item.list', [
                 'menuId' => $menu->getId(),
             ]));

@@ -9,36 +9,23 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Tulia\Cms\Menu\Application\Query\Finder\Exception\MultipleFetchException;
-use Tulia\Cms\Menu\Application\Query\Finder\Exception\QueryException;
-use Tulia\Cms\Menu\Application\Query\Finder\Exception\QueryNotFetchedException;
-use Tulia\Cms\Menu\Application\Query\Finder\Enum\ScopeEnum;
-use Tulia\Cms\Menu\Application\Query\Finder\FinderFactoryInterface;
+use Tulia\Cms\Menu\Domain\ReadModel\Finder\Enum\ScopeEnum;
+use Tulia\Cms\Menu\Ports\Infrastructure\Persistence\ReadModel\MenuFinderInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class MenuItemChoiceType extends ChoiceType
 {
-    /**
-     * @var FinderFactoryInterface
-     */
-    protected $finderFactory;
+    protected MenuFinderInterface $menuFinder;
+    protected TranslatorInterface $translator;
 
-    /**
-     * @var TranslatorInterface
-     */
-    protected $translator;
-
-    /**
-     * @param FinderFactoryInterface $finderFactory
-     */
-    public function __construct(FinderFactoryInterface $finderFactory, TranslatorInterface $translator)
+    public function __construct(MenuFinderInterface $menuFinder, TranslatorInterface $translator)
     {
         parent::__construct();
 
-        $this->finderFactory = $finderFactory;
-        $this->translator    = $translator;
+        $this->menuFinder = $menuFinder;
+        $this->translator = $translator;
     }
 
     /**
@@ -102,24 +89,15 @@ class MenuItemChoiceType extends ChoiceType
         $resolver->setAllowedTypes('empty_option_translation_domain', [ 'null', 'bool', 'string' ]);
     }
 
-    /**
-     * @param string $menuId
-     *
-     * @return array
-     *
-     * @throws MultipleFetchException
-     * @throws QueryException
-     * @throws QueryNotFetchedException
-     */
     protected function collectChoices(string $menuId): array
     {
-        $source = $this->finderFactory->getInstance(ScopeEnum::INTERNAL)->find($menuId, ['visibility' => null]);
+        $source = $this->menuFinder->findOne(['id' => $menuId], ScopeEnum::INTERNAL);
 
         if (! $source) {
             return [];
         }
 
-        $items = $this->sort($source->getItems()->all());
+        $items = $this->sort($source->getItems());
 
         $choices = [];
 

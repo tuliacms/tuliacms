@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Menu\Infrastructure\Persistence\Query\Menu;
+namespace Tulia\Cms\Menu\Infrastructure\Persistence\Domain\ReadModel\Datatable;
 
 use PDO;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -15,7 +15,7 @@ use Doctrine\DBAL\Query\QueryBuilder;
 /**
  * @author Adam Banaszkiewicz
  */
-class DatatableFinder extends AbstractDatatableFinder
+class DbalMenuDatatableFinder extends AbstractDatatableFinder
 {
     private RouterInterface $router;
     private TranslatorInterface $translator;

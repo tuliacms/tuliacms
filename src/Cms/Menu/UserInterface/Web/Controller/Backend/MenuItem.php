@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\Menu\Domain\WriteModel\Exception\ItemNotFoundException;
 use Tulia\Cms\Menu\Domain\WriteModel\Exception\MenuNotFoundException;
 use Tulia\Cms\Menu\Infrastructure\Builder\Type\RegistryInterface;
-use Tulia\Cms\Menu\Infrastructure\Persistence\Query\Item\DatatableFinder;
+use Tulia\Cms\Menu\Infrastructure\Persistence\Domain\ReadModel\Datatable\DbalItemDatatableFinder;
 use Tulia\Cms\Menu\Ports\Infrastructure\Persistence\WriteModel\MenuRepositoryInterface;
 use Tulia\Cms\Menu\UserInterface\Web\Form\MenuItemForm;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
@@ -46,7 +46,7 @@ class MenuItem extends AbstractController
         ]);
     }
 
-    public function list(Request $request, DatatableFactory $factory, DatatableFinder $finder, string $menuId)
+    public function list(Request $request, DatatableFactory $factory, DbalItemDatatableFinder $finder, string $menuId)
     {
         try {
             $menu = $this->repository->find($menuId);
@@ -63,7 +63,7 @@ class MenuItem extends AbstractController
         ]);
     }
 
-    public function datatable(Request $request, DatatableFactory $factory, DatatableFinder $finder, string $menuId): JsonResponse
+    public function datatable(Request $request, DatatableFactory $factory, DbalItemDatatableFinder $finder, string $menuId): JsonResponse
     {
         $finder->setMenuId($menuId);
         return $factory->create($finder, $request)->generateResponse();
