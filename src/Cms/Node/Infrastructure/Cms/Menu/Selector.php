@@ -17,26 +17,10 @@ use Tulia\Component\Templating\View;
  */
 class Selector implements SelectorInterface
 {
-    /**
-     * @var NodeRegistryInterface
-     */
-    protected $nodeTypeRegistry;
+    protected NodeRegistryInterface $nodeTypeRegistry;
+    protected EngineInterface $engine;
+    protected FormFactoryInterface $formFactory;
 
-    /**
-     * @var EngineInterface
-     */
-    protected $engine;
-
-    /**
-     * @var FormFactoryInterface
-     */
-    protected $formFactory;
-
-    /**
-     * @param NodeRegistryInterface $nodeTypeRegistry
-     * @param EngineInterface $engine
-     * @param FormFactoryInterface $formFactory
-     */
     public function __construct(
         NodeRegistryInterface $nodeTypeRegistry,
         EngineInterface $engine,

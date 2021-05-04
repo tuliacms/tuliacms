@@ -9,14 +9,11 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Tulia\Cms\BackendMenu\Application\BuilderInterface;
 use Tulia\Cms\BackendMenu\Application\Helper\BuilderHelperInterface;
 use Tulia\Cms\BackendMenu\Application\Registry\ItemRegistryInterface;
-use Tulia\Cms\Menu\Application\Event\MenuCreatedEvent;
-use Tulia\Cms\Menu\Application\Event\MenuDeletedEvent;
-use Tulia\Cms\Menu\Application\Event\MenuUpdatedEvent;
 use Tulia\Cms\Menu\Application\Query\Finder\Enum\ScopeEnum;
-use Tulia\Cms\Menu\Application\Query\Finder\Exception\MultipleFetchException;
-use Tulia\Cms\Menu\Application\Query\Finder\Exception\QueryException;
-use Tulia\Cms\Menu\Application\Query\Finder\Exception\QueryNotFetchedException;
 use Tulia\Cms\Menu\Application\Query\Finder\FinderFactoryInterface;
+use Tulia\Cms\Menu\Domain\WriteModel\Event\MenuCreated;
+use Tulia\Cms\Menu\Domain\WriteModel\Event\MenuDeleted;
+use Tulia\Cms\Menu\Domain\WriteModel\Event\MenuUpdated;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 
 /**
@@ -46,9 +43,9 @@ class MenuMenuBuilder implements BuilderInterface, EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            MenuCreatedEvent::class => 'clearCache',
-            MenuUpdatedEvent::class => 'clearCache',
-            MenuDeletedEvent::class => 'clearCache',
+            MenuCreated::class => 'clearCache',
+            MenuUpdated::class => 'clearCache',
+            MenuDeleted::class => 'clearCache',
         ];
     }
 
@@ -64,13 +61,6 @@ class MenuMenuBuilder implements BuilderInterface, EventSubscriberInterface
         }
     }
 
-    /**
-     * @param ItemRegistryInterface $registry
-     *
-     * @throws MultipleFetchException
-     * @throws QueryException
-     * @throws QueryNotFetchedException
-     */
     public function build(ItemRegistryInterface $registry): void
     {
         $root = 'menu';
@@ -99,13 +89,6 @@ class MenuMenuBuilder implements BuilderInterface, EventSubscriberInterface
         }
     }
 
-    /**
-     * @return array
-     *
-     * @throws MultipleFetchException
-     * @throws QueryException
-     * @throws QueryNotFetchedException
-     */
     private function getMenus(): array
     {
         $request = $this->requestStack->getMasterRequest();

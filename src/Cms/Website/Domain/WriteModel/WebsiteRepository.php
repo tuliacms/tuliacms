@@ -13,12 +13,13 @@ use Tulia\Cms\Website\Domain\WriteModel\Exception\WebsiteNotFoundException;
 use Tulia\Cms\Website\Domain\WriteModel\Model\Locale;
 use Tulia\Cms\Website\Domain\WriteModel\Model\Website;
 use Tulia\Cms\Website\Domain\WriteModel\ValueObject\WebsiteId;
+use Tulia\Cms\Website\Ports\Infrastructure\Persistence\Domain\WriteModel\WebsiteRepositoryInterface;
 use Tulia\Cms\Website\Ports\Infrastructure\Persistence\Domain\WriteModel\WebsiteStorageInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class WebsiteRepository
+class WebsiteRepository implements WebsiteRepositoryInterface
 {
     private WebsiteStorageInterface $storage;
     private UuidGeneratorInterface $uuidGenerator;
