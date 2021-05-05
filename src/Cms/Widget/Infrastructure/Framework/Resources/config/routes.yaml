@@ -23,5 +23,5 @@ backend.widget.edit:
 backend.widget.delete:
     path: /administrator/widget/delete
     controller: Tulia\Cms\Widget\UserInterface\Web\Controller\Backend\Widget::delete
-    methods: GET|POST
+    methods: POST
 

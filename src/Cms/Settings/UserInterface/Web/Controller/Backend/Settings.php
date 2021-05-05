@@ -35,17 +35,14 @@ class Settings extends AbstractController
     /**
      * @param Request $request
      * @param FormFactoryInterface $formFactory
-     * @param string $group
-     *
+     * @param Options $options
+     * @param string|null $group
      * @return RedirectResponse|ViewInterface
-     *
-     * @throws NotFoundHttpException
-     *
      * @CsrfToken(id="settings_form")
      */
     public function show(Request $request, FormFactoryInterface $formFactory, Options $options, ?string $group = null)
     {
-        if (!$group) {
+        if (! $group) {
             return $this->redirectToRoute('backend.settings', ['group' => 'cms']);
         }
 
@@ -82,23 +79,11 @@ class Settings extends AbstractController
 
     /**
      * @param Request $request
-     *
      * @return JsonResponse
-     *
-     * @IgnoreCsrfToken
+     * @CsrfToken(id="cms-settings-test-mail")
      */
     public function sendTestEmail(Request $request, MailerInterface $mailer): JsonResponse
     {
-        try {
-            $this->validateCsrfToken('cms-settings-test-mail', $request->request->get('_token'));
-        } catch (RequestCsrfTokenException $e) {
-            return $this->responseJson([
-                'message' => 'Invalid CSRF token.',
-                'status'  => 'error',
-                'log'     => '',
-            ]);
-        }
-
         if (filter_var($request->request->get('recipient'), FILTER_VALIDATE_EMAIL) === false) {
             return $this->responseJson([
                 'message' => $this->trans('pleaseTypeValidEmailAddress', [], 'settings'),

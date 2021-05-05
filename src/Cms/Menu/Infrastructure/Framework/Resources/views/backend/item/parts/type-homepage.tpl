@@ -1,5 +1,5 @@
 {% set type   = 'simple:homepage' %}
-{% set active = model.type == type %}
+{% set active = item.type == type %}
 
 <div class="menu-item-type{{ active ? '' : ' d-none' }}" data-type="{{ type }}">
     <div class="form-group">

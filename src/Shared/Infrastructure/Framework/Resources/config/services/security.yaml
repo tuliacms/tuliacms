@@ -8,5 +8,5 @@ services:
         exclude:
             - '../../../../../../Component/security/src/Core/User/User.php'
 
-    Tulia\Component\Security\Http\Twig\CspExtension:
+    Tulia\Component\Security\Twig\CspExtension:
         tags: [ twig.extension ]

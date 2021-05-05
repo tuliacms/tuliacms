@@ -9,14 +9,8 @@ namespace Tulia\Cms\Metadata;
  */
 class Metadata implements MetadataInterface
 {
-    /**
-     * @var array
-     */
-    protected $metadata = [];
+    protected array $metadata = [];
 
-    /**
-     * @param array $metadata
-     */
     public function __construct(array $metadata = [])
     {
         $this->metadata = $metadata;

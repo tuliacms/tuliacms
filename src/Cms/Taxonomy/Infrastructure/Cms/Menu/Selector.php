@@ -6,7 +6,7 @@ namespace Tulia\Cms\Taxonomy\Infrastructure\Cms\Menu;
 
 use Symfony\Component\Form\FormFactoryInterface;
 use Tulia\Cms\Menu\Application\Selector\SelectorInterface;
-use Tulia\Cms\Menu\Infrastructure\Builder\Type\TypeInterface;
+use Tulia\Cms\Menu\Domain\Builder\Type\TypeInterface;
 use Tulia\Cms\Taxonomy\Application\taxonomyType\RegistryInterface;
 use Tulia\Cms\Taxonomy\UserInterface\Web\Form\MenuItemSelectorForm;
 use Tulia\Component\Templating\EngineInterface;
@@ -17,26 +17,10 @@ use Tulia\Component\Templating\View;
  */
 class Selector implements SelectorInterface
 {
-    /**
-     * @var RegistryInterface
-     */
-    protected $typeRegistry;
+    protected RegistryInterface $typeRegistry;
+    protected EngineInterface $engine;
+    protected FormFactoryInterface $formFactory;
 
-    /**
-     * @var EngineInterface
-     */
-    protected $engine;
-
-    /**
-     * @var FormFactoryInterface
-     */
-    protected $formFactory;
-
-    /**
-     * @param RegistryInterface $typeRegistry
-     * @param EngineInterface $engine
-     * @param FormFactoryInterface $formFactory
-     */
     public function __construct(
         RegistryInterface $typeRegistry,
         EngineInterface $engine,

@@ -10,8 +10,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Tulia\Cms\Menu\Infrastructure\Builder\Type\RegistryInterface;
-use Tulia\Cms\Menu\Infrastructure\Builder\Type\TypeInterface;
+use Tulia\Cms\Menu\Domain\Builder\Type\RegistryInterface;
+use Tulia\Cms\Menu\Domain\Builder\Type\TypeInterface;
 use Tulia\Cms\Menu\Infrastructure\Framework\Form\FormType\MenuItemChoiceType;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType;
 use Tulia\Component\FormBuilder\Manager\ManagerInterface;
@@ -21,20 +21,9 @@ use Tulia\Component\FormBuilder\Manager\ManagerInterface;
  */
 class MenuItemForm extends AbstractType
 {
-    /**
-     * @var RegistryInterface
-     */
-    protected $registry;
+    protected RegistryInterface $registry;
+    protected TranslatorInterface $translator;
 
-    /**
-     * @var TranslatorInterface
-     */
-    protected $translator;
-
-    /**
-     * @param RegistryInterface $registry
-     * @param TranslatorInterface $translator
-     */
     public function __construct(
         RegistryInterface $registry,
         TranslatorInterface $translator
@@ -78,12 +67,6 @@ class MenuItemForm extends AbstractType
             ->add('visibility', FormType\YesNoType::class, [
                 'label' => 'visibility',
             ])
-            ->add('menuId', Type\HiddenType::class, [
-                'constraints' => [
-                    new Assert\NotBlank(),
-                    new Assert\Uuid(),
-                ],
-            ])
             ->add('type', Type\ChoiceType::class, [
                 'label' => 'itemType',
                 'constraints' => [
@@ -114,7 +97,7 @@ class MenuItemForm extends AbstractType
         if ($options['persist_mode'] === 'create') {
             $builder->add('parentId', MenuItemChoiceType::class, [
                 'label' => 'parentItem',
-                'menu_id' => $options['data']->getMenuId(),
+                'menu_id' => $options['menu_id'],
                 'empty_option' => true,
                 'empty_option_label' => 'rootItemSpecial',
                 'empty_option_translation_domain' => 'menu',
@@ -130,18 +113,13 @@ class MenuItemForm extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefault('persist_mode', 'create');
         $resolver->setDefault('form_extension_manager', null);
+        $resolver->setDefault('menu_id', null);
     }
 
-    /**
-     * @param string $id
-     * @param string $domain
-     *
-     * @return string
-     */
     private function trans(string $id, string $domain = 'menu'): string
     {
         return $this->translator->trans($id, [], $domain);

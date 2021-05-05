@@ -9,3 +9,5 @@ services:
         resource: '../../../../*'
         exclude:
             - '../../../../Infrastructure/Framework/Resources/*'
+            - '../../../../**/Model/*'
+            - '../../../../**/Exception/*'

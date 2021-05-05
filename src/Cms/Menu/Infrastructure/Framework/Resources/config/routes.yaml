@@ -10,7 +10,7 @@ backend.menu.datatable:
 backend.menu.create:
     path: /administrator/menu/create
     controller: Tulia\Cms\Menu\UserInterface\Web\Controller\Backend\Menu::create
-    methods: GET|POST
+    methods: POST
 
 backend.menu.edit:
     path: /administrator/menu/edit

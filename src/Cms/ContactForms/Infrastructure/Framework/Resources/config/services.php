@@ -30,7 +30,7 @@ use Tulia\Cms\ContactForms\Infrastructure\Cms\SearchAnything\SearchProvider;
 use Tulia\Cms\ContactForms\Infrastructure\Cms\Widget\Predefined\ContactFormForm;
 use Tulia\Cms\ContactForms\Infrastructure\Cms\Widget\Predefined\ContactFormWidget;
 use Tulia\Cms\ContactForms\Infrastructure\Persistence\Domain\DbalFieldsTemplate;
-use Tulia\Cms\ContactForms\Infrastructure\Persistence\Domain\DbalFormPersister;
+use Tulia\Cms\ContactForms\Infrastructure\Persistence\Domain\DbalFormStorage;
 use Tulia\Cms\ContactForms\Infrastructure\Persistence\Domain\DbalFieldPersister;
 use Tulia\Cms\ContactForms\Infrastructure\Persistence\Domain\DbalRepository;
 use Tulia\Cms\ContactForms\Infrastructure\Persistence\Query\DatatableFinder;
@@ -150,14 +150,14 @@ $builder->setDefinition(FormStorage::class, FormStorage::class, [
 $builder->setDefinition(RepositoryInterface::class, DbalRepository::class, [
     'arguments' => [
         service(ConnectionInterface::class),
-        service(DbalFormPersister::class),
+        service(DbalFormStorage::class),
         service(DbalFieldPersister::class),
         service(HydratorInterface::class),
         service(CurrentWebsiteInterface::class),
     ],
 ]);
 
-$builder->setDefinition(DbalFormPersister::class, DbalFormPersister::class, [
+$builder->setDefinition(DbalFormStorage::class, DbalFormStorage::class, [
     'arguments' => [
         service(ConnectionInterface::class),
     ],
@@ -297,7 +297,7 @@ $builder->mergeParameter('templating.paths', [
     'backend/forms' => dirname(__DIR__) . '/views/backend',
 ]);*/
 
-$builder->mergeParameter('twig.loader.array.templates', [
+/*$builder->mergeParameter('twig.loader.array.templates', [
     'render_form' => "
         <div style=\"position:relative;\" class=\"contact-form-anchor\">
             <div id=\"anchor_{{ form.vars.id }}\" style=\"display:block;position:absolute;left:0;top:-100px\"></div>
@@ -323,4 +323,4 @@ $builder->mergeParameter('twig.loader.array.templates', [
         {{ form_errors(form) }}
         {{ form_end(form) }}
     ",
-]);
+]);*/

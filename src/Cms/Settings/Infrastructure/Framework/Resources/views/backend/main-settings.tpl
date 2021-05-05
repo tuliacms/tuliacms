@@ -113,18 +113,13 @@
 <script nonce="{{ csp_nonce() }}">
     $(function () {
         $('#settings_cms_form_mail_transport').change(function () {
-            if($(this).val() == 'smtp')
-            {
+            if ($(this).val() == 'smtp') {
                 $('.settings-mail-group-smtp').removeClass('d-none');
                 $('.settings-mail-group-sendmail').addClass('d-none');
-            }
-            else if($(this).val() == 'sendmail')
-            {
+            } else if($(this).val() == 'sendmail') {
                 $('.settings-mail-group-smtp').addClass('d-none');
                 $('.settings-mail-group-sendmail').removeClass('d-none');
-            }
-            else
-            {
+            } else {
                 $('.settings-mail-group-smtp').addClass('d-none');
                 $('.settings-mail-group-sendmail').addClass('d-none');
             }

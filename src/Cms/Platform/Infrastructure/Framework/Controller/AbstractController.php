@@ -4,17 +4,16 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Platform\Infrastructure\Framework\Controller;
 
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as SymfonyController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Tulia\Component\CommandBus\CommandBusInterface;
 use Tulia\Cms\Platform\Shared\Document\DocumentInterface;
 use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
+use Tulia\Component\CommandBus\CommandBusInterface;
 use Tulia\Component\Templating\View;
 use Tulia\Component\Templating\ViewInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as SymfonyController;
-use Tulia\Component\Security\Http\Csrf\Exception\RequestCsrfTokenException;
 
 /**
  * @author Adam Banaszkiewicz
@@ -109,19 +108,5 @@ abstract class AbstractController extends SymfonyController
     public function getCommandBus(): CommandBusInterface
     {
         return $this->container->get(CommandBusInterface::class);
-    }
-
-    /**
-     * @param string $id
-     * @param null|string $value
-     * @throws RequestCsrfTokenException
-     */
-    public function validateCsrfToken(string $id, ?string $value = null): void
-    {
-        $value = $value ?? $this->container->get(RequestStack::class)->getMasterRequest()->get('_token');
-
-        if ($this->isCsrfTokenValid($id, $value) === false) {
-            throw new RequestCsrfTokenException('Token '.$id.' not found in Request.');
-        }
     }
 }

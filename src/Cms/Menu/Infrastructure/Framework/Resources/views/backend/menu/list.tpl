@@ -127,30 +127,42 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="modal-menu-delete" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form action="{{ path('backend.menu.delete') }}" method="POST">
+                    <input type="hidden" name="_token" value="{{ csrf_token('menu.delete') }}" />
+                    <div class="modal-header">
+                        <h5 class="modal-title">{{ 'deleteMenu'|trans({}, 'menu') }}</h5>
+                        <button type="button" class="close" data-dismiss="modal">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" class="form-control menu-item-ids" name="ids[]" />
+                        <p>{{ 'areYouSureYouWantToDeleteMenu'|trans({}, 'menu') }}</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'close'|trans }}</button>
+                        <button type="submit" class="btn btn-danger">{{ 'delete'|trans }}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     <script nonce="{{ csp_nonce() }}">
         $(function () {
-            new Tulia.ElementsActions({
-                actions: {
-                    delete: {
-                        headline: '{{ 'deleteSelectedMenus'|trans({}, 'menu') }}',
-                        question: '{{ 'areYouSureYouWantToDeleteFollowingMenus'|trans({}, 'menu') }}',
-                        action: '{{ path('backend.menu.delete', { _token: csrf_token('menu.delete') }) }}',
-                    },
-                }
-            });
-
             $('#modal-menu-add').on('shown.bs.modal', function () {
                 $(this).find('input[name=name]').trigger('focus');
             });
-
             $('#modal-menu-edit').on('show.bs.modal', function (e) {
-                let id = $(e.relatedTarget).attr('data-element-id');
-                let name = $(e.relatedTarget).attr('data-element-name');
-
-                $(this).find('input[name=id]').val(id);
-                $(this).find('input[name=name]').val(name);
-            }).on('shown.bs.modal', function (e) {
+                $(this).find('input[name=id]').val($(e.relatedTarget).attr('data-element-id'));
+                $(this).find('input[name=name]').val($(e.relatedTarget).attr('data-element-name'));
+            }).on('shown.bs.modal', function () {
                 $(this).find('input[name=name]').trigger('focus');
+            });
+            $('#modal-menu-delete').on('show.bs.modal', function (e) {
+                $(this).find('.menu-item-ids').val($(e.relatedTarget).attr('data-element-id'));
             });
         });
     </script>

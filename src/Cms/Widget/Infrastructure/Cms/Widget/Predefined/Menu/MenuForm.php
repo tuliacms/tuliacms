@@ -8,22 +8,19 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type;
 use Symfony\Component\Validator\Constraints as Assert;
-use Tulia\Cms\Menu\Application\Query\Finder\Enum\ScopeEnum;
-use Tulia\Cms\Menu\Application\Query\Finder\FinderFactoryInterface;
+use Tulia\Cms\Menu\Domain\ReadModel\Finder\Enum\ScopeEnum;
+use Tulia\Cms\Menu\Ports\Infrastructure\Persistence\ReadModel\MenuFinderInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class MenuForm extends AbstractType
 {
-    protected $finderFactory;
+    protected MenuFinderInterface $menuFinder;
 
-    /**
-     * @param FinderFactoryInterface $finderFactory
-     */
-    public function __construct(FinderFactoryInterface $finderFactory)
+    public function __construct(MenuFinderInterface $menuFinder)
     {
-        $this->finderFactory = $finderFactory;
+        $this->menuFinder = $menuFinder;
     }
 
     /**
@@ -31,12 +28,10 @@ class MenuForm extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $finder = $this->finderFactory->getInstance(ScopeEnum::INTERNAL);
-        $finder->fetchRaw();
-
+        $source = $this->menuFinder->find([], ScopeEnum::INTERNAL);
         $menus = [];
 
-        foreach ($finder->getResult() as $item) {
+        foreach ($source as $item) {
             $menus[$item->getName()] = $item->getId();
         }
 

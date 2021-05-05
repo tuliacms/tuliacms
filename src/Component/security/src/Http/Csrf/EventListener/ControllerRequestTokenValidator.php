@@ -45,7 +45,7 @@ class ControllerRequestTokenValidator implements EventSubscriberInterface
 
         $reader = AnnotationsReader::createFromRequest($request);
 
-        if (!$reader instanceof AnnotationsReader) {
+        if (! $reader instanceof AnnotationsReader) {
             $this->logger->notice(
                 'Cannot create AnnotationsReader from Request. Probably controller is not a string definition. Skipping CSRF security.'
             );

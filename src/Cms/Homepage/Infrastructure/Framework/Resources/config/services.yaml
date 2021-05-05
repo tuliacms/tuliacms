@@ -7,6 +7,8 @@ services:
         resource: '../../../../*'
         exclude:
             - '../../../../Infrastructure/Framework/Resources/*'
+            - '../../../../**/Model/*'
+            - '../../../../**/Exception/*'
 
     Tulia\Cms\Homepage\UserInterface\Web\Controller\:
         resource: '../../../../UserInterface/Web/Controller'

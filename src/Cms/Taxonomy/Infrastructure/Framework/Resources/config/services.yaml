@@ -7,6 +7,8 @@ services:
         resource: '../../../../*'
         exclude:
             - '../../../../Infrastructure/Framework/Resources/*'
+            - '../../../../**/Model/*'
+            - '../../../../**/Exception/*'
 
     Tulia\Cms\Taxonomy\Application\TaxonomyType\RegistryInterface:
         class: Tulia\Cms\Taxonomy\Application\TaxonomyType\Registry
@@ -42,8 +44,8 @@ services:
     Tulia\Cms\Taxonomy\Infrastructure\Cms\Menu\IdentityProvider:
         tags: [ menu.identity_provider ]
 
-    Tulia\Cms\Taxonomy\Infrastructure\Cms\Menu\TypeRegistrator:
-        tags: [ menu.builder.type_registrator ]
+#    Tulia\Cms\Taxonomy\Infrastructure\Cms\Menu\TypeRegistrator:
+#        tags: [ menu.builder.type_registrator ]
 
     Tulia\Cms\Taxonomy\Infrastructure\Cms\Breadcrumbs\CrumbsResolver:
         tags: [ breadcrumbs.resolver ]

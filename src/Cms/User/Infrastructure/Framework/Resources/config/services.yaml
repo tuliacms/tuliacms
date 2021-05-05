@@ -7,6 +7,8 @@ services:
         resource: '../../../../*'
         exclude:
             - '../../../../Infrastructure/Framework/Resources/*'
+            - '../../../../**/Model/*'
+            - '../../../../**/Exception/*'
 
     Tulia\Cms\User\Infrastructure\Framework\Validator\PasswordValidatorInterface:
         class: Tulia\Cms\User\Infrastructure\Framework\Validator\PasswordValidator
@@ -51,3 +53,7 @@ services:
             $scopes:
                 - !php/const Tulia\Cms\User\UserInterface\Web\Form\ScopeEnum::BACKEND_MY_ACCOUNT
         tags: [ form_extension ]
+
+    Tulia\Cms\User\Infrastructure\Framework\Translator\UserLocaleResolver:
+        bind:
+            $translator: '@translator.default'

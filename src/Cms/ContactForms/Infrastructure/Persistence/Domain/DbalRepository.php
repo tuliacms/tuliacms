@@ -28,7 +28,7 @@ class DbalRepository implements RepositoryInterface
     protected $connection;
 
     /**
-     * @var DbalFormPersister
+     * @var DbalFormStorage
      */
     protected $formPersister;
 
@@ -49,14 +49,14 @@ class DbalRepository implements RepositoryInterface
 
     /**
      * @param ConnectionInterface $connection
-     * @param DbalFormPersister $formPersister
+     * @param DbalFormStorage $formPersister
      * @param DbalFieldPersister $fieldPersister
      * @param HydratorInterface $hydrator
      * @param CurrentWebsiteInterface $currentWebsite
      */
     public function __construct(
         ConnectionInterface $connection,
-        DbalFormPersister $formPersister,
+        DbalFormStorage $formPersister,
         DbalFieldPersister $fieldPersister,
         HydratorInterface $hydrator,
         CurrentWebsiteInterface $currentWebsite

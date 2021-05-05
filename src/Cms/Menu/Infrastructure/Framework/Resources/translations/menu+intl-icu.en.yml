@@ -1,12 +1,13 @@
 deleteMenu: Delete menu
 deleteSelectedMenus: Delete selected menus
-areYouSureYouWantToDeleteFollowingMenus: Are You sure You want to delete following Menus?
+areYouSureYouWantToDeleteMenu: Are You sure You want to delete this Menu and all its items?
 addMenu: Add menu
 menuName: Menu name
 pleaseProvideMenuName: Please provide menu name.
 editMenu: Edit menu
 menuUpdated: Menu updated.
-selectedMenusWereDeleted: Selected menus were deleted.
+selectedMenusWereDeleted: Selected Menus and its Items were deleted.
+menuNotFound: Sorry, this menu does not exists.
 menuItems: Menu items
 deleteSelectedItems: Delete selected items
 areYouSureYouWantToDeleteFollowingItems: Are You sure You want to delete following Items?
@@ -31,3 +32,5 @@ itemSaved: Item saved.
 selectedItemsWereDeleted: Selected items were deleted.
 addChildItem: Add child item
 changeHierarchy: Change hierarchy
+menuCreated: Menu created successfully.
+menuItemNotFound: Sorry, this menu item does not exists.

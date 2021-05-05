@@ -11,25 +11,10 @@ use Tulia\Cms\Metadata\Syncer\SyncerInterface;
  */
 class LazyMetadata extends Metadata
 {
-    /**
-     * @var bool
-     */
-    private $loaded = false;
-
-    /**
-     * @var SyncerInterface
-     */
-    private $syncer;
-
-    /**
-     * @var string
-     */
-    private $type;
-
-    /**
-     * @var string
-     */
-    private $id;
+    private bool $loaded = false;
+    private SyncerInterface $syncer;
+    private string $type;
+    private string $id;
 
     public static function create(SyncerInterface $syncer, string $type, string $id): self
     {

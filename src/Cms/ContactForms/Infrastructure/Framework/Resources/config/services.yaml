@@ -12,6 +12,8 @@ services:
         resource: '../../../../*'
         exclude:
             - '../../../../Infrastructure/Framework/Resources/*'
+            - '../../../../**/Model/*'
+            - '../../../../**/Exception/*'
 
     Tulia\Cms\ContactForms\Application\FieldType\Parser\RegistryInterface:
         class: Tulia\Cms\ContactForms\Application\FieldType\Parser\Registry
@@ -25,9 +27,6 @@ services:
 
     Tulia\Cms\ContactForms\Infrastructure\Cms\BackendMenu\MenuBuilder:
         tags: [ backend_menu.builder ]
-
-    Tulia\Cms\ContactForms\Infrastructure\Cms\Widget\Predefined\ContactFormWidget:
-        tags: [ widget ]
 
     Tulia\Cms\ContactForms\Application\Builder\Form:
         tags: [ form.type ]

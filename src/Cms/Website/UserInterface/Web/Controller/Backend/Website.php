@@ -10,7 +10,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Website\Domain\ReadModel\Finder\Enum\ScopeEnum;
 use Tulia\Cms\Website\Domain\ReadModel\Finder\Finder;
-use Tulia\Cms\Website\Domain\WriteModel\Repository;
+use Tulia\Cms\Website\Ports\Infrastructure\Persistence\Domain\WriteModel\WebsiteRepositoryInterface;
 use Tulia\Cms\Website\UserInterface\Web\Form\WebsiteForm;
 use Tulia\Cms\Website\UserInterface\Web\Service\WebsiteRequestExtractor;
 use Tulia\Component\Security\Http\Csrf\Annotation\CsrfToken;
@@ -22,10 +22,10 @@ use Tulia\Component\Templating\ViewInterface;
 class Website extends AbstractController
 {
     private Finder $finder;
-    private Repository $repository;
+    private WebsiteRepositoryInterface $repository;
     private WebsiteRequestExtractor $requestExtractor;
 
-    public function __construct(Finder $finder, Repository $repository, WebsiteRequestExtractor $requestExtractor)
+    public function __construct(Finder $finder, WebsiteRepositoryInterface $repository, WebsiteRequestExtractor $requestExtractor)
     {
         $this->finder = $finder;
         $this->repository = $repository;

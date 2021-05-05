@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Infrastructure\Cms\Menu;
 
-use Tulia\Cms\Menu\Infrastructure\Builder\Identity\Identity;
-use Tulia\Cms\Menu\Infrastructure\Builder\Identity\IdentityInterface;
-use Tulia\Cms\Menu\Infrastructure\Builder\Identity\IdentityProviderInterface;
+use Tulia\Cms\Menu\Domain\Builder\Identity\Identity;
+use Tulia\Cms\Menu\Domain\Builder\Identity\IdentityInterface;
+use Tulia\Cms\Menu\Domain\Builder\Identity\IdentityProviderInterface;
 use Symfony\Component\Routing\RouterInterface;
 
 /**

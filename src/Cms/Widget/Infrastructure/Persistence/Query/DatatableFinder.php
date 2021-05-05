@@ -198,7 +198,7 @@ class DatatableFinder extends AbstractDatatableFinder
         foreach ($this->widgetRegistry->all() as $widget) {
             $info = $widget->getInfo();
 
-            $widgetsNames[$widget->getId()] = $this->translator->trans($info['name'], [], $info['translation_domain']);
+            $widgetsNames[$widget->getId()] = $this->translator->trans($info['name'], [], $info['translation_domain'] ?? null);
         }
 
         return $widgetsNames;
