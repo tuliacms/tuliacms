@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Menu\Infrastructure\Builder\Type;
+namespace Tulia\Cms\Menu\Domain\Builder\Type;
 
 /**
  * @author Adam Banaszkiewicz

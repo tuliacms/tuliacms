@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Menu\Infrastructure\Builder\Hierarchy;
+namespace Tulia\Cms\Menu\Domain\Builder\Hierarchy;
 
-use Tulia\Cms\Menu\Infrastructure\Builder\Hierarchy\Item as BuilderItem;
-use Tulia\Cms\Menu\Infrastructure\Builder\Identity\Identity;
-use Tulia\Cms\Menu\Infrastructure\Builder\Identity\RegistryInterface;
+use Tulia\Cms\Menu\Domain\Builder\Hierarchy\Item as BuilderItem;
+use Tulia\Cms\Menu\Domain\Builder\Identity\Identity;
+use Tulia\Cms\Menu\Domain\Builder\Identity\RegistryInterface;
 use Tulia\Cms\Menu\Domain\ReadModel\Finder\Enum\ScopeEnum;
 use Tulia\Cms\Menu\Domain\ReadModel\Finder\Model\Item;
 use Tulia\Cms\Menu\Ports\Infrastructure\Persistence\ReadModel\MenuFinderInterface;

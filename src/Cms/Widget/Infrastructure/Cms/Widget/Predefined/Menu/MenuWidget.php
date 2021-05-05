@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Widget\Infrastructure\Cms\Widget\Predefined\Menu;
 
-use Tulia\Cms\Menu\Infrastructure\Builder\BuilderInterface;
+use Tulia\Cms\Menu\Domain\Builder\BuilderInterface;
 use Tulia\Component\Templating\ViewInterface;
 use Tulia\Component\Widget\AbstractWidget;
 use Tulia\Component\Widget\Configuration\ConfigurationInterface;

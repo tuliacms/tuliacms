@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Infrastructure\Cms\Menu;
 
-use Tulia\Cms\Menu\Infrastructure\Builder\Type\RegistratorInterface;
-use Tulia\Cms\Menu\Infrastructure\Builder\Type\RegistryInterface;
+use Tulia\Cms\Menu\Domain\Builder\Type\RegistratorInterface;
+use Tulia\Cms\Menu\Domain\Builder\Type\RegistryInterface;
 use Tulia\Cms\Node\Infrastructure\NodeType\NodeTypeInterface;
 use Tulia\Cms\Node\Infrastructure\NodeType\RegistryInterface as NodeRegistryInterface;
 

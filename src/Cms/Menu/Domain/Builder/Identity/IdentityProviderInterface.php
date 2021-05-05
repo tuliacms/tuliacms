@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Menu\Infrastructure\Builder\Identity;
+namespace Tulia\Cms\Menu\Domain\Builder\Identity;
 
 /**
  * @author Adam Banaszkiewicz

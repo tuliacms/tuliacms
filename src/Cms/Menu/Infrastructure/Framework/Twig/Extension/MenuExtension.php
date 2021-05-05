@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Menu\Infrastructure\Framework\Twig\Extension;
 
-use Tulia\Cms\Menu\Infrastructure\Builder\BuilderInterface;
+use Tulia\Cms\Menu\Domain\Builder\BuilderInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 

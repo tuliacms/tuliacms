@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Menu\Infrastructure\Builder\Hierarchy;
+namespace Tulia\Cms\Menu\Domain\Builder\Hierarchy;
 
 /**
  * @author Adam Banaszkiewicz

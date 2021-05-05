@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Menu\Infrastructure\Builder\Identity\Providers;
+namespace Tulia\Cms\Menu\Domain\Builder\Identity\Providers;
 
-use Tulia\Cms\Menu\Infrastructure\Builder\Identity\Identity;
-use Tulia\Cms\Menu\Infrastructure\Builder\Identity\IdentityInterface;
-use Tulia\Cms\Menu\Infrastructure\Builder\Identity\IdentityProviderInterface;
+use Tulia\Cms\Menu\Domain\Builder\Identity\Identity;
+use Tulia\Cms\Menu\Domain\Builder\Identity\IdentityInterface;
+use Tulia\Cms\Menu\Domain\Builder\Identity\IdentityProviderInterface;
 use Symfony\Component\Routing\RouterInterface;
 
 /**

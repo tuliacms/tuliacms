@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Menu\Infrastructure\Builder\Hierarchy;
+namespace Tulia\Cms\Menu\Domain\Builder\Hierarchy;
 
-use Tulia\Cms\Menu\Infrastructure\Builder\Identity\IdentityInterface;
+use Tulia\Cms\Menu\Domain\Builder\Identity\IdentityInterface;
 
 /**
  * @author Adam Banaszkiewicz

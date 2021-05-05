@@ -5,7 +5,7 @@
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Tulia\Cms\Menu\Infrastructure\Builder\BuilderInterface;
+use Tulia\Cms\Menu\Domain\Builder\BuilderInterface;
 use Tulia\Cms\Menu\Application\Query\Finder\FinderFactoryInterface as MenuFinderFactory;
 use Tulia\Cms\Platform\Infrastructure\Bus\Event\EventBusInterface;
 use Tulia\Cms\Platform\Infrastructure\DataManipulation\Hydrator\HydratorInterface;
