@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Tulia\Cms\Menu\Domain\WriteModel\Model;
 
 use Tulia\Cms\Menu\Domain\WriteModel\Exception\ParentItemReccurencyException;
+use Tulia\Cms\Metadata\Metadata;
+use Tulia\Cms\Metadata\MetadataInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -24,12 +26,13 @@ class Item
     protected bool $translated = false;
     protected ?string $name = null;
     protected bool $visibility;
-    protected array $metadata = [];
+    protected MetadataInterface $metadata;
 
     public function __construct(string $id, string $locale)
     {
         $this->id = $id;
         $this->locale = $locale;
+        $this->metadata = new Metadata();
     }
 
     public static function buildFromArray(array $data): self
@@ -47,6 +50,7 @@ class Item
         $item->translated = (bool) ($data['translated'] ?? false);
         $item->name = $data['name'] ?? null;
         $item->visibility = (bool) ($data['visibility'] ?? 1);
+        $item->metadata = new Metadata($data['metadata'] ?? []);
 
         return $item;
     }
@@ -181,15 +185,21 @@ class Item
         $this->visibility = $visibility;
     }
 
-    public function getMetadata(): array
+    public function getMetadata(): MetadataInterface
     {
         return $this->metadata;
     }
 
-    public function setMetadata(array $metadata): void
+    public function setMetadata(MetadataInterface $metadata): void
     {
         $this->recordItemChanged();
         $this->metadata = $metadata;
+    }
+
+    public function addMetadata(string $key, $value): void
+    {
+        $this->recordItemChanged();
+        $this->metadata->set($key, $value);
     }
 
     public function unassignFromMenu(): void

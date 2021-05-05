@@ -2,6 +2,8 @@
 {{ form_errors(form) }}
 {{ form_row(form.id) }}
 
+{{ dump(item.metadata) }}
+
 <div class="row">
     <div class="col">
         <div class="card">
@@ -28,8 +30,8 @@
                 {% include relative(_self, 'type-homepage.tpl') %}
                 {% include relative(_self, 'type-url.tpl') %}
                 {% for type in types %}
-                    <div class="menu-item-type{{ model.type == type.type.type ? '' : ' d-none' }}" data-type="{{ type.type.type }}">
-                        {{ type.selector.render(type.type, model.identity)|raw }}
+                    <div class="menu-item-type{{ item.type == type.type.type ? '' : ' d-none' }}" data-type="{{ type.type.type }}">
+                        {{ type.selector.render(type.type, item.identity)|raw }}
                     </div>
                 {% endfor %}
             </div>

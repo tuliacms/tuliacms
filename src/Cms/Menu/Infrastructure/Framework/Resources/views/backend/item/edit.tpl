@@ -22,7 +22,7 @@
             <h1 class="pane-title">{{ block('title') }}</h1>
         </div>
         <div class="pane-body">
-            {{ alerts.translation_missing_info(model.translated) }}
+            {{ alerts.translation_missing_info(item.translated) }}
             {% set persistMode = 'edit' %}
             {% include relative(_self, 'parts/form-body.tpl') %}
         </div>

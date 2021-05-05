@@ -6,67 +6,47 @@ namespace Tulia\Cms\Metadata;
 
 /**
  * @property MetadataInterface metadata
- *
  * @author Adam Banaszkiewicz
  */
 trait MetadataTrait
 {
-    /**
-     * @var MetadataInterface
-     */
-    protected $metadata;
+    protected MetadataInterface $metadata;
 
-    /**
-     * @param MetadataInterface $metadata
-     */
     public function setMetadata(MetadataInterface $metadata): void
     {
         $this->metadata = $metadata;
     }
 
-    /**
-     * @return MetadataInterface
-     */
     public function getMetadata(): MetadataInterface
     {
         $this->ensureMetadataSet();
-
         return $this->metadata;
     }
 
     /**
      * @param string $name
-     * @param null   $default
-     *
+     * @param null $default
      * @return mixed
      */
     public function getMeta(string $name, $default = null)
     {
         $this->ensureMetadataSet();
-
         return $this->metadata->get($name, $default);
     }
 
     /**
      * @param string $name
-     * @param        $value
+     * @param mixed $value
      */
     public function setMeta(string $name, $value): void
     {
         $this->ensureMetadataSet();
-
         $this->metadata->set($name, $value);
     }
 
-    /**
-     * @param string $name
-     *
-     * @return bool
-     */
     public function hasMeta(string $name): bool
     {
         $this->ensureMetadataSet();
-
         return $this->metadata->has($name);
     }
 

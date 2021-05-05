@@ -13,6 +13,7 @@ use Tulia\Cms\Menu\Domain\Builder\Type\RegistryInterface;
 use Tulia\Cms\Menu\Infrastructure\Persistence\Domain\ReadModel\Datatable\DbalItemDatatableFinder;
 use Tulia\Cms\Menu\Ports\Infrastructure\Persistence\WriteModel\MenuRepositoryInterface;
 use Tulia\Cms\Menu\UserInterface\Web\Form\MenuItemForm;
+use Tulia\Cms\Menu\UserInterface\Web\Form\ScopeEnum;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Component\Datatable\DatatableFactory;
 use Tulia\Component\DependencyInjection\Exception\MissingServiceException;
@@ -88,7 +89,7 @@ class MenuItem extends AbstractController
             'parent_id' => $request->query->get('parentId'),
         ]);
 
-        $manager = $this->formManager->getInstanceFor($item, \Tulia\Cms\Menu\UserInterface\Web\Form\ScopeEnum::BACKEND_EDIT);
+        $manager = $this->formManager->getInstanceFor($item, ScopeEnum::BACKEND_EDIT);
         $form = $manager->createForm(MenuItemForm::class, $item, [
             'persist_mode' => 'create',
             'menu_id' => $menuId,
@@ -105,7 +106,7 @@ class MenuItem extends AbstractController
 
         return $this->view('@backend/menu/item/create.tpl', [
             'menu'  => $menu,
-            'model' => $item,
+            'item'  => $item,
             'form'  => $form->createView(),
             'types' => $this->collectMenuTypes(),
         ]);
@@ -134,7 +135,7 @@ class MenuItem extends AbstractController
             return $this->redirectToRoute('backend.menu.item', ['menuId' => $menuId]);
         }
 
-        $manager = $this->formManager->getInstanceFor($item, \Tulia\Cms\Menu\UserInterface\Web\Form\ScopeEnum::BACKEND_EDIT);
+        $manager = $this->formManager->getInstanceFor($item, ScopeEnum::BACKEND_EDIT);
         $form = $manager->createForm(MenuItemForm::class, $item, ['persist_mode' => 'update']);
         $form->handleRequest($request);
 
@@ -147,7 +148,7 @@ class MenuItem extends AbstractController
 
         return $this->view('@backend/menu/item/edit.tpl', [
             'menu'  => $menu,
-            'model' => $item,
+            'item'  => $item,
             'form'  => $form->createView(),
             'types' => $this->collectMenuTypes(),
         ]);
