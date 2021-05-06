@@ -12,10 +12,10 @@ use Tulia\Cms\Options\Infrastructure\Persistence\WriteModel\OptionsRepository\Op
  */
 class OptionsCreator
 {
-    private RegisteredOptionsCollector $collector;
+    private RegisteredOptionsRegistry $collector;
     private OptionsRepositoryInterface $repository;
 
-    public function __construct(RegisteredOptionsCollector $collector, OptionsRepositoryInterface $repository)
+    public function __construct(RegisteredOptionsRegistry $collector, OptionsRepositoryInterface $repository)
     {
         $this->collector = $collector;
         $this->repository = $repository;

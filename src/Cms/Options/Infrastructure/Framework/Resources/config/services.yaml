@@ -14,6 +14,6 @@ services:
         tags:
             - { name: console.command, command: 'options:register' }
 
-    Tulia\Cms\Options\Application\Service\RegisteredOptionsCollector:
+    Tulia\Cms\Options\Application\Service\RegisteredOptionsRegistry:
         bind:
-            $providers: []
+            $definitions: '%cms.options.definitions%'

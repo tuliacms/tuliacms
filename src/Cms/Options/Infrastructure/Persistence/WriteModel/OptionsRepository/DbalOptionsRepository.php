@@ -85,7 +85,7 @@ class DbalOptionsRepository implements OptionsRepositoryInterface
             return;
         }
 
-        $query = 'INSERT INTO #__option (`website_id`, `name`, `value`, `multilingual`, `autoload`) VALUES ';
+        $query = 'INSERT IGNORE INTO #__option (`website_id`, `name`, `value`, `multilingual`, `autoload`) VALUES ';
         $values = [];
         $binds = [];
         $types = [];
