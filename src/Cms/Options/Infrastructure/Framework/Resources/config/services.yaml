@@ -9,3 +9,11 @@ services:
             - '../../../../Infrastructure/Framework/Resources/*'
             - '../../../../**/Model/*'
             - '../../../../**/Exception/*'
+
+    Tulia\Cms\Options\UserInterface\Console\Command\OptionsRegister:
+        tags:
+            - { name: console.command, command: 'options:register' }
+
+    Tulia\Cms\Options\Application\Service\RegisteredOptionsCollector:
+        bind:
+            $providers: []

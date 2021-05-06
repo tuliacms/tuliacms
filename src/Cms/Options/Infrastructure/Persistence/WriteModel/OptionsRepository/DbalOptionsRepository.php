@@ -81,6 +81,10 @@ class DbalOptionsRepository implements OptionsRepositoryInterface
      */
     public function bulkCreate(array $options): void
     {
+        if ($options === []) {
+            return;
+        }
+
         $query = 'INSERT INTO #__option (`website_id`, `name`, `value`, `multilingual`, `autoload`) VALUES ';
         $values = [];
         $binds = [];

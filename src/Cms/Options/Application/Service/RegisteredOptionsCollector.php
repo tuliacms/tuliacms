@@ -9,10 +9,7 @@ namespace Tulia\Cms\Options\Application\Service;
  */
 class RegisteredOptionsCollector
 {
-    /**
-     * @var string[]
-     */
-    private $providers;
+    private array $providers;
 
     public function __construct(array $providers)
     {

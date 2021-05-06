@@ -23,15 +23,18 @@ class DbalQuery extends AbstractDbalQuery
     {
         return [
             /**
-             * Search for node with given ID.
+             * Search for website with given ID.
              * If provided, Query searches only for ONE record (LIMIT 1).
-             *
              * @param null|string
              */
             'id' => null,
             /**
-             * Search for nodes that are not with provided IDs list.
-             *
+             * Search for websites that are in provided IDs list.
+             * @param null|string|array
+             */
+            'id__in' => null,
+            /**
+             * Search for websites that are not with provided IDs list.
              * @param null|string|array
              */
             'id__not_in' => null,
@@ -123,6 +126,18 @@ class DbalQuery extends AbstractDbalQuery
             $this->queryBuilder
                 ->andWhere('tm.id NOT IN (:tm_id__not_in)')
                 ->setParameter('tm_id__not_in', $ids, Connection::PARAM_STR_ARRAY);
+        }
+
+        if ($criteria['id__in']) {
+            if (\is_array($criteria['id__in']) === false) {
+                $ids = [ $criteria['id__in'] ];
+            } else {
+                $ids = $criteria['id__in'];
+            }
+
+            $this->queryBuilder
+                ->andWhere('tm.id IN (:tm_id__in)')
+                ->setParameter('tm_id__in', $ids, Connection::PARAM_STR_ARRAY);
         }
     }
 
