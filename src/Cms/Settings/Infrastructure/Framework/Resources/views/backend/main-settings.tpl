@@ -137,7 +137,7 @@
                 method: 'POST',
                 url: '{{ path('backend.settings.send_test_email') }}',
                 data: {
-                    _token:    '{{ csrf_token('cms-settings-test-mail') }}',
+                    _token:    '{{ csrf_token('cms_settings_test_mail') }}',
                     recipient: $('#test-text-message-rerecipient').val()
                 },
                 success: function (result) {
