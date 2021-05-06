@@ -6,12 +6,12 @@ namespace Tulia\Cms\Options\Application\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Tulia\Cms\Options\Application\Service\WebsitesOptionsRegistrator;
-use Tulia\Cms\Website\Domain\WriteModel\Event\WebsiteCreated;
+use Tulia\Cms\Website\Domain\WriteModel\Event\WebsiteDeleted;
 
 /**
  * @author Adam Banaszkiewicz
  */
-final class CreateOptionsForNewWebsite implements EventSubscriberInterface
+final class RemoveOptionsForRemovedWebsite implements EventSubscriberInterface
 {
     private WebsitesOptionsRegistrator $websitesOptionsRegistrator;
 
@@ -23,12 +23,12 @@ final class CreateOptionsForNewWebsite implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            WebsiteCreated::class => ['handle', 0],
+            WebsiteDeleted::class => ['handle', 0],
         ];
     }
 
-    public function handle(WebsiteCreated $event): void
+    public function handle(WebsiteDeleted $event): void
     {
-        $this->websitesOptionsRegistrator->registerMissingOptionsForWebsite($event->getWebsiteId());
+        $this->websitesOptionsRegistrator->removeOptionsForWebsite($event->getWebsiteId());
     }
 }

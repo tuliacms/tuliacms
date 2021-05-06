@@ -12,7 +12,6 @@ use Tulia\Cms\Website\Domain\WriteModel\Event\WebsiteUpdated;
 use Tulia\Cms\Website\Domain\WriteModel\Exception\WebsiteNotFoundException;
 use Tulia\Cms\Website\Domain\WriteModel\Model\Locale;
 use Tulia\Cms\Website\Domain\WriteModel\Model\Website;
-use Tulia\Cms\Website\Domain\WriteModel\ValueObject\WebsiteId;
 use Tulia\Cms\Website\Ports\Infrastructure\Persistence\Domain\WriteModel\WebsiteRepositoryInterface;
 use Tulia\Cms\Website\Ports\Infrastructure\Persistence\Domain\WriteModel\WebsiteStorageInterface;
 
@@ -64,7 +63,6 @@ class WebsiteRepository implements WebsiteRepositoryInterface
     public function save(Website $website): void
     {
         $this->storage->insert($this->extract($website));
-
         $this->eventDispatcher->dispatch(new WebsiteCreated($website->getId()->getId()));
     }
 
@@ -74,7 +72,6 @@ class WebsiteRepository implements WebsiteRepositoryInterface
     public function update(Website $website): void
     {
         $this->storage->update($this->extract($website));
-
         $this->eventDispatcher->dispatch(new WebsiteUpdated($website->getId()->getId()));
     }
 
@@ -84,7 +81,6 @@ class WebsiteRepository implements WebsiteRepositoryInterface
     public function delete(string $id): void
     {
         $this->storage->delete($id);
-
         $this->eventDispatcher->dispatch(new WebsiteDeleted($id));
     }
 

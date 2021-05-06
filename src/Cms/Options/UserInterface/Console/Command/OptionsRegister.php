@@ -8,7 +8,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Tulia\Cms\Options\Application\Service\OptionsCreator;
+use Tulia\Cms\Options\Application\Service\WebsitesOptionsRegistrator;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
 use Tulia\Cms\Website\Domain\ReadModel\Finder\Enum\ScopeEnum;
 use Tulia\Cms\Website\Ports\Infrastructure\Persistence\Domain\ReadModel\WebsiteFinderInterface;
@@ -19,13 +19,13 @@ use Tulia\Cms\Website\Ports\Infrastructure\Persistence\Domain\ReadModel\WebsiteF
 class OptionsRegister extends Command
 {
     private WebsiteFinderInterface $websiteFinder;
-    private OptionsCreator $optionsCreator;
+    private WebsitesOptionsRegistrator $optionsRegistrator;
 
-    public function __construct(WebsiteFinderInterface $websiteFinder, OptionsCreator $optionsCreator)
+    public function __construct(WebsiteFinderInterface $websiteFinder, WebsitesOptionsRegistrator $optionsRegistrator)
     {
         parent::__construct();
         $this->websiteFinder = $websiteFinder;
-        $this->optionsCreator = $optionsCreator;
+        $this->optionsRegistrator = $optionsRegistrator;
     }
 
     protected function configure(): void
@@ -48,7 +48,7 @@ class OptionsRegister extends Command
 
         foreach ($websites as $website) {
             $output->writeln(sprintf('Registering options for website %s...', $website->getId()));
-            $this->optionsCreator->createForWebsite($website->getId());
+            $this->optionsRegistrator->registerMissingOptionsForWebsite($website->getId());
         }
 
         $output->writeln('<info>Missing options successfully registered.</info>');

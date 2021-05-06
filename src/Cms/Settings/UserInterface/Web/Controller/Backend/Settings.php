@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Tulia\Cms\Options\Application\Service\Options;
+use Tulia\Cms\Options\Domain\ReadModel\Options;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Platform\Infrastructure\Mail\MailerInterface;
 use Tulia\Cms\Settings\RegistryInterface;

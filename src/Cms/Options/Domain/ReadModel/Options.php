@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Options\Application\Service;
+namespace Tulia\Cms\Options\Domain\ReadModel;
 
-use Tulia\Cms\Options\Infrastructure\Persistence\ReadModel\Options\OptionsFinderInterface;
-use Tulia\Cms\Options\Infrastructure\Persistence\WriteModel\OptionsRepository\OptionsRepositoryInterface;
+use Tulia\Cms\Options\Ports\Infrastructure\Persistence\Domain\ReadModel\OptionsFinderInterface;
+use Tulia\Cms\Options\Ports\Infrastructure\Persistence\Domain\WriteModel\OptionsRepositoryInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 
 /**
@@ -19,8 +19,11 @@ class Options
     private array $cache = [];
     private array $autoloaded = [];
 
-    public function __construct(OptionsFinderInterface $finder, OptionsRepositoryInterface $repository, CurrentWebsiteInterface $currentWebsite)
-    {
+    public function __construct(
+        OptionsFinderInterface $finder,
+        OptionsRepositoryInterface $repository,
+        CurrentWebsiteInterface $currentWebsite
+    ) {
         $this->finder = $finder;
         $this->repository = $repository;
         $this->currentWebsite = $currentWebsite;
@@ -49,28 +52,6 @@ class Options
             $locale,
             $websiteId
         ) ?? $default;
-    }
-
-    /**
-     * @param string $name
-     * @param mixed $value
-     * @param string|null $locale
-     * @param string|null $websiteId
-     */
-    public function set(string $name, $value, ?string $locale = null, ?string $websiteId = null): void
-    {
-        $locale = $this->resolveLocale($locale);
-        $websiteId = $this->resolveWebsite($websiteId);
-
-        $this->repository->updateValue(
-            $name,
-            $value,
-            $locale,
-            $websiteId,
-            $this->currentWebsite->getDefaultLocale()->getCode()
-        );
-
-        $this->cache[$websiteId][$locale][$name] = $value;
     }
 
     public function preload(array $names, ?string $locale = null, ?string $websiteId = null): void

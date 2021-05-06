@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Theme\Infrastructure\Framework\Theme\Activator;
 
-use Tulia\Cms\Options\Application\Service\Options;
+use Tulia\Cms\Options\Ports\Infrastructure\Persistence\Domain\WriteModel\OptionsRepositoryInterface;
 use Tulia\Component\Theme\Exception\MissingThemeException;
 use Tulia\Component\Theme\Storage\StorageInterface;
 use Tulia\Component\Theme\Activator\ActivatorInterface;
@@ -15,13 +15,16 @@ use Tulia\Component\Theme\Activator\ActivatorInterface;
 class Activator implements ActivatorInterface
 {
     private StorageInterface $storage;
-    private Options $options;
+    private OptionsRepositoryInterface $repository;
     private string $configFilename;
 
-    public function __construct(StorageInterface $storage, Options $options, string $configFilename)
-    {
+    public function __construct(
+        StorageInterface $storage,
+        OptionsRepositoryInterface $repository,
+        string $configFilename
+    ) {
         $this->storage = $storage;
-        $this->options = $options;
+        $this->repository = $repository;
         $this->configFilename = $configFilename;
     }
 
@@ -53,6 +56,8 @@ class Activator implements ActivatorInterface
             sprintf('<?php return %s;', var_export($themesDynamicConfiguration, true))
         );
 
-        $this->options->set('theme', $name);
+        $option = $this->repository->find('theme');
+        $option->setValue($name);
+        $this->repository->update($option);
     }
 }

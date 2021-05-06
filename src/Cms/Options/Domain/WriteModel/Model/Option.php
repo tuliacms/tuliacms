@@ -9,11 +9,18 @@ namespace Tulia\Cms\Options\Domain\WriteModel\Model;
  */
 class Option
 {
+    private ?string $id = null;
+
     private string $websiteId;
+
     private string $name;
+
     private ?string $locale;
+
     private $value;
+
     private bool $multilingual;
+
     private bool $autoload;
 
     public function __construct(
@@ -30,6 +37,16 @@ class Option
         $this->locale = $locale;
         $this->multilingual = $multilingual;
         $this->autoload = $autoload;
+    }
+
+    public function getId(): ?string
+    {
+        return $this->id;
+    }
+
+    public function setId(?string $id): void
+    {
+        $this->id = $id;
     }
 
     public function getWebsiteId(): string

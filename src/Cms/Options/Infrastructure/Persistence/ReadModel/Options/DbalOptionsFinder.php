@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Options\Infrastructure\Persistence\ReadModel\Options;
 
+use Tulia\Cms\Options\Ports\Infrastructure\Persistence\Domain\ReadModel\OptionsFinderInterface;
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 
 /**
@@ -23,7 +24,7 @@ class DbalOptionsFinder implements OptionsFinderInterface
         $result = $this->connection->fetchColumn('SELECT COALESCE(tl.`value`, tm.`value`) AS `value`
             FROM #__option tm
             LEFT JOIN #__option_lang tl
-                ON tm.name = tl.name AND tl.locale = :locale
+                ON tm.id = tl.option_id AND tl.locale = :locale
             WHERE tm.`name` = :name AND tm.website_id = :websiteId
             LIMIT 1', [
             'name'      => $name,
@@ -43,7 +44,7 @@ class DbalOptionsFinder implements OptionsFinderInterface
         $result = $this->connection->fetchAllAssociative('SELECT tm.name, COALESCE(tl.`value`, tm.`value`) AS `value`
             FROM #__option tm
             LEFT JOIN #__option_lang tl
-                ON tm.name = tl.name AND tl.locale = :locale
+                ON tm.id = tl.option_id AND tl.locale = :locale
             WHERE tm.`name` IN (:name) AND tm.website_id = :websiteId
             LIMIT 1', [
             'name'      => $names,
@@ -63,7 +64,7 @@ class DbalOptionsFinder implements OptionsFinderInterface
         $result = $this->connection->fetchAllAssociative('SELECT tm.name, COALESCE(tl.`value`, tm.`value`) AS `value`
             FROM #__option tm
             LEFT JOIN #__option_lang tl
-                ON tm.name = tl.name AND tl.locale = :locale
+                ON tm.id = tl.option_id AND tl.locale = :locale
             WHERE tm.autoload = 1 AND tm.website_id = :websiteId', [
             'locale'    => $locale,
             'websiteId' => $website,

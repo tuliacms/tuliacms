@@ -6,7 +6,7 @@ namespace Tulia\Cms\Settings;
 
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
-use Tulia\Cms\Options\Application\Service\Options;
+use Tulia\Cms\Options\Domain\ReadModel\Options;
 
 /**
  * @author Adam Banaszkiewicz
@@ -88,7 +88,8 @@ abstract class AbstractGroup implements GroupInterface
      */
     public function setOption(string $name, $value): void
     {
-        $this->options->set($name, $value);
+        throw new \Exception('Use Repository to save the options');
+        //$this->options->set($name, $value);
     }
 
     /**

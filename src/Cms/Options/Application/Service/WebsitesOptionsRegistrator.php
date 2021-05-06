@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Tulia\Cms\Options\Application\Service;
 
 use Tulia\Cms\Options\Domain\WriteModel\Model\Option;
-use Tulia\Cms\Options\Infrastructure\Persistence\WriteModel\OptionsRepository\OptionsRepositoryInterface;
+use Tulia\Cms\Options\Ports\Infrastructure\Persistence\Domain\WriteModel\OptionsRepositoryInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class OptionsCreator
+class WebsitesOptionsRegistrator
 {
     private RegisteredOptionsRegistry $collector;
     private OptionsRepositoryInterface $repository;
@@ -21,26 +21,13 @@ class OptionsCreator
         $this->repository = $repository;
     }
 
-    public function create(Option $option): void
-    {
-        $this->repository->create($option);
-    }
-
-    /**
-     * @param Option[] $options
-     */
-    public function bulkCreate(array $options): void
-    {
-        $this->repository->bulkCreate($options);
-    }
-
     /**
      * Creates all registered options for given website ID.
      * Website must exists to create options for this website.
      *
      * @param string $websiteId
      */
-    public function createForWebsite(string $websiteId): void
+    public function registerMissingOptionsForWebsite(string $websiteId): void
     {
         $source = $this->collector->collectRegisteredOptions();
         $options = [];
@@ -56,6 +43,12 @@ class OptionsCreator
             );
         }
 
-        $this->bulkCreate($options);
+        $this->repository->saveBulk($options);
+    }
+
+    public function removeOptionsForWebsite(string $websiteId): void
+    {
+        $options = $this->repository->findAllForWebsite($websiteId);
+        $this->repository->deleteBulk($options);
     }
 }

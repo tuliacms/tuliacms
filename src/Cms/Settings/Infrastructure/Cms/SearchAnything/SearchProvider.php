@@ -6,7 +6,7 @@ namespace Tulia\Cms\Settings\Infrastructure\Cms\SearchAnything;
 
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Tulia\Cms\Options\Application\Service\Options;
+use Tulia\Cms\Options\Domain\ReadModel\Options;
 use Tulia\Cms\SearchAnything\Provider\AbstractProvider;
 use Tulia\Cms\SearchAnything\Results\Hit;
 use Tulia\Cms\SearchAnything\Results\Results;
