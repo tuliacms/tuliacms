@@ -6,7 +6,7 @@ namespace Tulia\Cms\Settings\Infrastructure\Cms\SearchAnything;
 
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Tulia\Cms\Options\Application\Service\Options;
+use Tulia\Cms\Options\Ports\Infrastructure\Persistence\Domain\WriteModel\OptionsRepositoryInterface;
 use Tulia\Cms\SearchAnything\Provider\AbstractProvider;
 use Tulia\Cms\SearchAnything\Results\Hit;
 use Tulia\Cms\SearchAnything\Results\Results;
@@ -19,42 +19,20 @@ use Symfony\Component\Routing\RouterInterface;
  */
 class SearchProvider extends AbstractProvider
 {
-    /**
-     * @var RegistryInterface
-     */
-    protected $settings;
+    protected RegistryInterface $settings;
 
-    /**
-     * @var FormFactoryInterface
-     */
-    protected $formFactory;
+    protected FormFactoryInterface $formFactory;
 
-    /**
-     * @var Options
-     */
-    protected $options;
+    protected OptionsRepositoryInterface $options;
 
-    /**
-     * @var TranslatorInterface
-     */
-    protected $translator;
+    protected TranslatorInterface $translator;
 
-    /**
-     * @var RouterInterface
-     */
-    protected $router;
+    protected RouterInterface $router;
 
-    /**
-     * @param RegistryInterface $settings
-     * @param FormFactoryInterface $formFactory
-     * @param Options $options
-     * @param TranslatorInterface $translator
-     * @param RouterInterface $router
-     */
     public function __construct(
         RegistryInterface $settings,
         FormFactoryInterface $formFactory,
-        Options $options,
+        OptionsRepositoryInterface $options,
         TranslatorInterface $translator,
         RouterInterface $router
     ) {

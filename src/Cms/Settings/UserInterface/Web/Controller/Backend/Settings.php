@@ -10,14 +10,11 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Tulia\Cms\Options\Application\Service\Options;
+use Tulia\Cms\Options\Ports\Infrastructure\Persistence\Domain\WriteModel\OptionsRepositoryInterface;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Platform\Infrastructure\Mail\MailerInterface;
 use Tulia\Cms\Settings\RegistryInterface;
 use Tulia\Component\Security\Http\Csrf\Annotation\CsrfToken;
-use Tulia\Component\Security\Http\Csrf\Annotation\IgnoreCsrfToken;
-use Tulia\Component\Security\Http\Csrf\Exception\RequestCsrfTokenException;
 use Tulia\Component\Templating\ViewInterface;
 
 /**
@@ -26,21 +23,26 @@ use Tulia\Component\Templating\ViewInterface;
 class Settings extends AbstractController
 {
     protected RegistryInterface $settings;
+    protected OptionsRepositoryInterface $optionsRepository;
+    private FormFactoryInterface $formFactory;
 
-    public function __construct(RegistryInterface $settings)
-    {
+    public function __construct(
+        RegistryInterface $settings,
+        OptionsRepositoryInterface $optionsRepository,
+        FormFactoryInterface $formFactory
+    ) {
         $this->settings = $settings;
+        $this->optionsRepository = $optionsRepository;
+        $this->formFactory = $formFactory;
     }
 
     /**
      * @param Request $request
-     * @param FormFactoryInterface $formFactory
-     * @param Options $options
      * @param string|null $group
      * @return RedirectResponse|ViewInterface
      * @CsrfToken(id="settings_form")
      */
-    public function show(Request $request, FormFactoryInterface $formFactory, Options $options, ?string $group = null)
+    public function show(Request $request, ?string $group = null)
     {
         if (! $group) {
             return $this->redirectToRoute('backend.settings', ['group' => 'cms']);
@@ -51,8 +53,8 @@ class Settings extends AbstractController
         }
 
         $groupObj = $this->settings->getGroup($group);
-        $groupObj->setFormFactory($formFactory);
-        $groupObj->setOptions($options);
+        $groupObj->setFormFactory($this->formFactory);
+        $groupObj->setOptions($this->optionsRepository);
         $form = $groupObj->buildForm();
         $form->handleRequest($request);
 
@@ -80,7 +82,7 @@ class Settings extends AbstractController
     /**
      * @param Request $request
      * @return JsonResponse
-     * @CsrfToken(id="cms-settings-test-mail")
+     * @CsrfToken(id="cms_settings_test_mail")
      */
     public function sendTestEmail(Request $request, MailerInterface $mailer): JsonResponse
     {

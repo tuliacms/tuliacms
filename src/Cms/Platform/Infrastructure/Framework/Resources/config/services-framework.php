@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Tulia\Cms\Options\Application\Service\Options;
+use Tulia\Cms\Options\Domain\ReadModel\Options;
 use Tulia\Cms\Platform\Infrastructure\Framework\EventListener\ExceptionListener\RequestCsrfTokenExceptionListener;
 use Tulia\Cms\Platform\Infrastructure\Framework\Routing\EventListener\RouteCollector;
 use Tulia\Cms\Platform\Infrastructure\Framework\Routing\FrontendRouteSuffixResolver;

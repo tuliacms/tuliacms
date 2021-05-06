@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Bundle\CmsBundle\DependencyInjection\CompilerPass;
+namespace Tulia\Bundle\FrameworkBundle\DependencyInjection\CompilerPass;
 
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;

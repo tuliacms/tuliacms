@@ -10,11 +10,11 @@ use Tulia\Cms\Metadata\Storage\StorageInterface as MetadataStorageInterface;
 use Tulia\Cms\Metadata\Syncer\DatabaseStorageSyncer;
 use Tulia\Cms\Metadata\Syncer\SyncerInterface;
 use Tulia\Cms\Options\Application\EventListener\CreateOptionsForNewWebsite;
-use Tulia\Cms\Options\Application\Service\Options;
-use Tulia\Cms\Options\Application\Service\OptionsCreator;
+use Tulia\Cms\Options\Domain\ReadModel\Options;
+use Tulia\Cms\Options\Application\Service\WebsitesOptionsRegistrator;
 use Tulia\Cms\Options\Application\Service\RegisteredOptionsCollector;
 use Tulia\Cms\Options\Infrastructure\Persistence\ReadModel\Options\DbalOptionsFinder;
-use Tulia\Cms\Options\Infrastructure\Persistence\ReadModel\Options\OptionsFinderInterface;
+use Tulia\Cms\Options\Ports\Infrastructure\Persistence\Domain\ReadModel\OptionsFinderInterface;
 use Tulia\Cms\Options\Infrastructure\Persistence\WriteModel\OptionsRepository\DbalOptionsRepository;
 use Tulia\Cms\Options\Infrastructure\Persistence\WriteModel\OptionsRepository\OptionsRepositoryInterface;
 use Tulia\Cms\Options\Infrastructure\Framework\Twig\Extension\OptionsExtension;
@@ -229,7 +229,7 @@ $builder->setDefinition(Options::class, Options::class, [
     ],
 ]);
 
-$builder->setDefinition(OptionsCreator::class, OptionsCreator::class, [
+$builder->setDefinition(WebsitesOptionsRegistrator::class, WebsitesOptionsRegistrator::class, [
     'arguments' => [
         service(RegisteredOptionsCollector::class),
         service(OptionsRepositoryInterface::class),
@@ -244,7 +244,7 @@ $builder->setDefinition(RegisteredOptionsCollector::class, RegisteredOptionsColl
 
 $builder->setDefinition(CreateOptionsForNewWebsite::class, CreateOptionsForNewWebsite::class, [
     'arguments' => [
-        service(OptionsCreator::class),
+        service(WebsitesOptionsRegistrator::class),
     ],
     'tags' => [ tag_event_listener(WebsiteCreated::class) ],
 ]);

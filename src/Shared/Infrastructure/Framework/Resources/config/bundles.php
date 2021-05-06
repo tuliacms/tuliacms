@@ -1,6 +1,7 @@
 <?php
 
 return [
+    Tulia\Bundle\FrameworkBundle\TuliaFrameworkBundle::class => ['all' => true],
     Tulia\Bundle\CmsBundle\TuliaCmsBundle::class => ['all' => true],
     Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle::class => ['all' => true],
     Doctrine\Bundle\DoctrineBundle\DoctrineBundle::class => ['all' => true],

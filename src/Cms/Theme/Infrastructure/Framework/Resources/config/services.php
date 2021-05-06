@@ -5,7 +5,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Tulia\Cms\BackendMenu\Application\Helper\BuilderHelperInterface;
 use Tulia\Cms\FrontendToolbar\Application\Helper\HelperInterface;
-use Tulia\Cms\Options\Application\Service\Options;
+use Tulia\Cms\Options\Domain\ReadModel\Options;
 use Tulia\Cms\Theme\Application\Service\ThemeActivator;
 use Tulia\Cms\Theme\Infrastructure\Cms\FrontendToolbar\LinksProvider;
 use Tulia\Cms\Theme\Infrastructure\Filemanager\ImageSize\ThemeConfigurationProvider;

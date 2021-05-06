@@ -5,3 +5,34 @@ framework:
     templating:
         paths:
             - { name: backend/settings, path: '%kernel.project_dir%/src/Cms/Settings/Infrastructure/Framework/Resources/views/backend' }
+
+cms:
+    options:
+        definitions:
+            website_name:
+                multilingual: true
+                autoload: true
+            website_favicon:
+            administrator_email:
+            maintenance_mode:
+                autoload: true
+            maintenance_message:
+                value: 'Page is under maintenance mode. Please come back later.'
+                multilingual: true
+            date_format:
+                autoload: true
+            theme:
+                autoload: true
+            wysiwyg_editor:
+                autoload: true
+            mail.transport:
+            mail.from_email:
+            mail.from_name:
+            mail.host:
+            mail.port:
+            mail.username:
+            mail.password:
+            mail.encryption:
+            mail.sendmailpath:
+            url_suffix:
+                autoload: true

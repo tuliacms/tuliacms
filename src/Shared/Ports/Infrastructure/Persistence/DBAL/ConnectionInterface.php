@@ -36,6 +36,7 @@ interface ConnectionInterface
      * @return mixed
      */
     public function executeUpdate($query, array $params = [], array $types = []);
+
     public function query();
 
     /**

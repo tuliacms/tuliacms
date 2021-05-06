@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\WysiwygEditor\Core\Application;
 
-use Tulia\Cms\Options\Application\Service\Options;
+use Tulia\Cms\Options\Domain\ReadModel\Options;
 
 /**
  * @author Adam Banaszkiewicz

@@ -6,166 +6,46 @@ namespace Tulia\Bundle\CmsBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
-use Tulia\Component\Theme\Customizer\Builder\BuilderInterface;
-use Tulia\Component\Theme\Customizer\Changeset\Changeset;
-use Symfony\Bundle\FrameworkBundle\DependencyInjection\Configuration as SymfonyConfiguration;
+use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class Configuration extends SymfonyConfiguration
+class Configuration implements ConfigurationInterface
 {
     public function getConfigTreeBuilder(): TreeBuilder
     {
-        $treeBuilder = parent::getConfigTreeBuilder();
+        $treeBuilder = new TreeBuilder('cms');
         $root = $treeBuilder->getRootNode();
 
-        $this->registerAssetsConfiguration($root);
-        $this->registerAssetterConfiguration($root);
-        $this->registerTwigConfiguration($root);
-        $this->registerTemplatingConfiguration($root);
-        $this->registerThemeConfiguration($root);
+        $this->registerOptionsConfiguration($root);
 
         return $treeBuilder;
     }
 
-    private function registerTwigConfiguration(NodeDefinition $root): void
+    private function registerOptionsConfiguration(NodeDefinition $root): void
     {
         $root
             ->children()
-                ->arrayNode('twig')
+                ->arrayNode('options')
                     ->children()
-                        ->arrayNode('loader')
-                            ->children()
-                                ->arrayNode('array')
-                                    ->children()
-                                        ->arrayNode('templates')
-                                            ->useAttributeAsKey('name')
-                                            ->arrayPrototype()
-                                                ->addDefaultsIfNotSet()
-                                                ->children()
-                                                    ->scalarNode('template')->isRequired()->end()
-                                                ->end()
-                                            ->end()
-                                        ->end()
-                                    ->end()
-                                ->end()
-                                ->arrayNode('filesystem')
-                                    ->children()
-                                        ->arrayNode('paths')
-                                            ->useAttributeAsKey('name')
-                                            ->arrayPrototype()
-                                                ->addDefaultsIfNotSet()
-                                                ->children()
-                                                    ->scalarNode('path')->isRequired()->end()
-                                                ->end()
-                                            ->end()
-                                        ->end()
-                                    ->end()
-                                ->end()
-                            ->end()
-                        ->end()
-                        ->arrayNode('layout')
-                            ->children()
-                                ->arrayNode('themes')
-                                    ->scalarPrototype()
-                                ->end()
-                            ->end()
-                        ->end()
-                    ->end()
-                ->end()
-            ->end()
-        ;
-    }
-
-    private function registerTemplatingConfiguration(NodeDefinition $root): void
-    {
-        $root
-            ->children()
-                ->arrayNode('templating')
-                    ->children()
-                        ->arrayNode('paths')
-                            ->arrayPrototype()
-                                ->addDefaultsIfNotSet()
-                                ->children()
-                                    ->scalarNode('name')->isRequired()->end()
-                                    ->scalarNode('path')->isRequired()->end()
-                                ->end()
-                            ->end()
-                        ->end()
-                        ->arrayNode('namespace_overwrite')
-                            ->arrayPrototype()
-                                ->addDefaultsIfNotSet()
-                                ->children()
-                                    ->scalarNode('from')->isRequired()->end()
-                                    ->scalarNode('to')->isRequired()->end()
-                                ->end()
-                            ->end()
-                        ->end()
-                    ->end()
-                ->end()
-            ->end()
-        ;
-    }
-
-    private function registerAssetsConfiguration(NodeDefinition $root): void
-    {
-        $root
-            ->children()
-                ->arrayNode('public_paths')
-                    ->useAttributeAsKey('name')
-                    ->scalarPrototype()->defaultValue([])->end()
-                ->end()
-            ->end()
-        ;
-    }
-
-    private function registerAssetterConfiguration(NodeDefinition $root): void
-    {
-        $root
-            ->children()
-                ->arrayNode('assetter')
-                    ->fixXmlConfig('asset')
-                    ->children()
-                        ->arrayNode('assets')
+                        ->arrayNode('definitions')
                             ->useAttributeAsKey('name')
                             ->arrayPrototype()
                                 ->addDefaultsIfNotSet()
                                 ->children()
-                                    ->arrayNode('scripts')
-                                        ->scalarPrototype()->defaultValue([])->end()
-                                    ->end()
-                                    ->arrayNode('styles')
-                                        ->scalarPrototype()->defaultValue([])->end()
-                                    ->end()
-                                    ->arrayNode('require')
-                                        ->scalarPrototype()->defaultValue([])->end()
-                                    ->end()
-                                    ->scalarNode('group')->defaultValue('body')->end()
-                                    ->scalarNode('priority')->defaultValue('100')->end()
-                                    ->arrayNode('included')
-                                        ->scalarPrototype()->defaultValue([])->end()
+                                    ->variableNode('value')->defaultNull()->end()
+                                    ->booleanNode('multilingual')->defaultFalse()->end()
+                                    ->booleanNode('autoload')->defaultFalse()->end()
+                                    ->scalarNode('type')
+                                        ->defaultValue('scalar')
+                                            ->validate()
+                                                ->ifNotInArray(['scalar', 'boolean', 'number', 'array'])
+                                                ->thenInvalid('Invalid option type %s. Allowed: scalar, array.')
+                                            ->end()
+                                        ->end()
                                     ->end()
                                 ->end()
-                            ->end()
-                        ->end()
-                    ->end()
-                ->end()
-            ->end()
-        ;
-    }
-
-    private function registerThemeConfiguration(NodeDefinition $root): void
-    {
-        $root
-            ->children()
-                ->arrayNode('theme')
-                    ->addDefaultsIfNotSet()
-                    ->children()
-                        ->arrayNode('changeset')
-                            ->addDefaultsIfNotSet()
-                            ->children()
-                                ->scalarNode('base_class')->defaultValue(Changeset::class)->end()
                             ->end()
                         ->end()
                     ->end()
