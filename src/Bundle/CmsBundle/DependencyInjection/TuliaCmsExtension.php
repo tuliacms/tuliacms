@@ -4,93 +4,47 @@ declare(strict_types=1);
 
 namespace Tulia\Bundle\CmsBundle\DependencyInjection;
 
-use Symfony\Bundle\FrameworkBundle\DependencyInjection\FrameworkExtension;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Reference;
-use Tulia\Component\Templating\ViewFilter\FilterInterface;
+use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class TuliaCmsExtension extends FrameworkExtension
+class TuliaCmsExtension extends Extension
 {
     public function getAlias(): string
     {
-        return 'framework';
+        return 'cms';
     }
 
     public function getConfiguration(array $config, ContainerBuilder $container): ?ConfigurationInterface
     {
-        return new Configuration($container->getParameter('kernel.debug'));
+        return new Configuration();
     }
 
     public function load(array $configs, ContainerBuilder $container): void
     {
-        parent::load($configs, $container);
-
         $configuration = $this->getConfiguration($configs, $container);
         $config = $this->processConfiguration($configuration, $configs);
 
-        $container->setParameter('framework.assetter.assets', $config['assetter']['assets'] ?? []);
-        $container->setParameter('framework.assets.public_paths', $config['public_paths'] ?? []);
-        $container->setParameter('framework.twig.loader.array.templates', $this->prepareTwigArrayLoaderTemplates($config['twig']['loader']['array']['templates'] ?? []));
-        $container->setParameter('framework.templating.paths', $this->prepareTemplatingPaths($config['templating']['paths'] ?? []));
-        $container->setParameter('framework.templating.namespace_overwrite', $config['templating']['namespace_overwrite'] ?? []);
-
-        $this->registerViewFilters($container);
-
-        // Finders
-        $container->registerForAutoconfiguration(\Tulia\Cms\Shared\Domain\ReadModel\Finder\AbstractFinder::class)
-            ->addTag('finder');
-        $container->registerForAutoconfiguration(\Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Plugin\PluginInterface::class)
-            ->addTag('finder.plugin');
-        // Themes
-        $container->registerForAutoconfiguration(\Tulia\Component\Theme\Resolver\ResolverInterface::class)
-            ->addTag('theme.resolver');
-        $container->registerForAutoconfiguration(\Tulia\Component\Theme\Customizer\Provider\ProviderInterface::class)
-            ->addTag('theme.customizer.provider');
-        $container->registerForAutoconfiguration(\Tulia\Component\Theme\Customizer\Builder\Controls\ControlInterface::class)
-            ->addTag('theme.customizer.control');
-        $container->registerForAutoconfiguration(\Tulia\Component\Theme\Customizer\Builder\Plugin\PluginInterface::class)
-            ->addTag('theme.customizer.builder.plugin');
-        // Widgets
-        $container->registerForAutoconfiguration(\Tulia\Component\Widget\WidgetInterface::class)
-            ->addTag('widget');
+        $container->setParameter('cms.options.definitions', $this->validateOptionsValues($config['options']['definitions'] ?? []));
     }
 
-    private function prepareTemplatingPaths(array $paths): array
+    protected function validateOptionsValues(array $definitions): array
     {
-        $prepared = [];
-
-        foreach ($paths as $path) {
-            $prepared["@{$path['name']}"] = $path['path'];
+        foreach ($definitions as $name => $definition) {
+            if ($definition['type'] === 'array' && \is_array($definition['value']) === false) {
+                throw new \InvalidArgumentException(sprintf('Default value of %s option must be an array.', $name));
+            }
+            if ($definition['type'] === 'boolean' && \is_bool($definition['value']) === false) {
+                throw new \InvalidArgumentException(sprintf('Default value of %s option must be a boolean.', $name));
+            }
+            if ($definition['type'] === 'number' && \is_numeric($definition['value']) === false) {
+                throw new \InvalidArgumentException(sprintf('Default value of %s option must be numeric.', $name));
+            }
         }
 
-        return $prepared;
-    }
-
-    private function prepareTwigArrayLoaderTemplates(array $source): array
-    {
-        $output = [];
-
-        foreach ($source as $name => $data) {
-            $output[$name] = $data['template'];
-        }
-
-        return $output;
-    }
-
-    private function registerViewFilters(ContainerBuilder $container): void
-    {
-        if (! $container->has(FilterInterface::class)) {
-            return;
-        }
-
-        $chain = $container->findDefinition(FilterInterface::class);
-
-        foreach ($container->findTaggedServiceIds('templating.view_filter') as $id => $tags) {
-            $chain->addMethodCall('addFilter', [new Reference($id)]);
-        }
+        return $definitions;
     }
 }
