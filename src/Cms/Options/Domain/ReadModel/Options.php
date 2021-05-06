@@ -47,19 +47,20 @@ class Options
             return $this->cache[$websiteId][$locale][$name];
         }
 
-        return $this->cache[$websiteId][$locale][$name] = $this->finder->findByName(
-            $name,
-            $locale,
-            $websiteId
-        ) ?? $default;
+        $value = $this->finder->findByName($name, $locale, $websiteId) ?? $default;
+
+        return $this->cache[$websiteId][$locale][$name] = $value;
     }
 
     public function preload(array $names, ?string $locale = null, ?string $websiteId = null): void
     {
+        $locale = $this->resolveLocale($locale);
+        $websiteId = $this->resolveWebsite($websiteId);
+
         $values = $this->finder->findBulkByName(
             $names,
-            $this->resolveLocale($locale),
-            $this->resolveWebsite($websiteId)
+            $locale,
+            $websiteId
         );
 
         foreach ($values as $name => $value) {
