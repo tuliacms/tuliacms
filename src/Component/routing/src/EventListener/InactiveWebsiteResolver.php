@@ -35,11 +35,11 @@ class InactiveWebsiteResolver implements EventSubscriberInterface
 
     public function handle(RequestEvent $event): void
     {
-        if ($this->authorizationChecker === null) {
+        if ($this->currentWebsite->isActive()) {
             return;
         }
 
-        if ($this->currentWebsite->isActive() === false && $this->authorizationChecker->isGranted('ROLE_ADMIN') === false) {
+        if ($this->authorizationChecker === null || $this->authorizationChecker->isGranted('ROLE_ADMIN') === false) {
             throw new AccessDeniedHttpException(sprintf('Access denied, this website not exists.'));
         }
     }
