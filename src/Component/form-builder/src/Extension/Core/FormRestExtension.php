@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Component\FormBuilder\Extension;
+namespace Tulia\Component\FormBuilder\Extension\Core;
 
 use Symfony\Component\Form\FormTypeInterface;
-use Tulia\Component\FormBuilder\AbstractExtension;
+use Tulia\Component\FormBuilder\Extension\AbstractExtension;
 use Tulia\Component\FormBuilder\Section\FormRestSection;
 
 /**
@@ -13,26 +13,12 @@ use Tulia\Component\FormBuilder\Section\FormRestSection;
  */
 class FormRestExtension extends AbstractExtension
 {
-    /**
-     * @var string
-     */
-    protected $id;
+    protected string $id;
 
-    /**
-     * @var string
-     */
-    protected $label;
+    protected string $label;
 
-    /**
-     * @var string
-     */
-    protected $translationDomain;
+    protected string $translationDomain;
 
-    /**
-     * @param string|null $id
-     * @param string|null $label
-     * @param string|null $translationDomain
-     */
     public function __construct(string $id = null, string $label = null, string $translationDomain = null)
     {
         $this->id = $id ?? 'form-rest';

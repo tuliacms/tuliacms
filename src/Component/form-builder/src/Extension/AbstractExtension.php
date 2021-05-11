@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Component\FormBuilder;
+namespace Tulia\Component\FormBuilder\Extension;
 
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
@@ -17,14 +17,6 @@ abstract class AbstractExtension implements ExtensionInterface
      * {@inheritdoc}
      */
     abstract public function supports(FormTypeInterface $formType, array $options, $data = null): bool;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function configureForm(FormPrototypeInterface $form): void
-    {
-
-    }
 
     /**
      * {@inheritdoc}

@@ -24,7 +24,6 @@ use Tulia\Cms\User\Query\Model\User as QueryModelUser;
 use Tulia\Cms\User\UserInterface\Web\Form\UserForm\UserForm;
 use Tulia\Component\CommandBus\Exception\MissingHandlerException;
 use Tulia\Component\Datatable\DatatableFactory;
-use Tulia\Component\FormBuilder\Manager\ManagerFactoryInterface;
 use Tulia\Component\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Component\Templating\ViewInterface;
 
@@ -34,16 +33,13 @@ use Tulia\Component\Templating\ViewInterface;
 class User extends AbstractController
 {
     protected FinderFactoryInterface $finderFactory;
-    protected ManagerFactoryInterface $managerFactory;
     protected UserStorage $storage;
 
     public function __construct(
         FinderFactoryInterface $finderFactory,
-        ManagerFactoryInterface $managerFactory,
         UserStorage $storage
     ) {
         $this->finderFactory = $finderFactory;
-        $this->managerFactory = $managerFactory;
         $this->storage = $storage;
     }
 

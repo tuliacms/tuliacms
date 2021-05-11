@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Component\FormBuilder\Form;
 
-use Tulia\Component\FormBuilder\ExtensionInterface;
+use Tulia\Component\FormBuilder\Extension\ExtensionInterface;
 
 /**
  * @author Adam Banaszkiewicz

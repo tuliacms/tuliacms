@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Component\FormBuilder;
+namespace Tulia\Component\FormBuilder\Extension;
 
 use Symfony\Component\Form\FormTypeInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
-interface RegistryInterface
+interface ExtensionRegistryInterface
 {
     public function all(): iterable;
 

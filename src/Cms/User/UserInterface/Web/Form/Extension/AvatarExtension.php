@@ -12,7 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Tulia\Cms\User\Application\Service\Avatar\UploaderInterface;
 use Tulia\Cms\User\UserInterface\Web\Form\MyAccount\MyAccountForm;
 use Tulia\Cms\User\UserInterface\Web\Form\UserForm\UserForm;
-use Tulia\Component\FormBuilder\AbstractExtension;
+use Tulia\Component\FormBuilder\Extension\AbstractExtension;
 use Tulia\Component\FormBuilder\Section\Section;
 
 /**

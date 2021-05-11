@@ -29,9 +29,12 @@ class FormExtension extends AbstractExtension
     {
         return [
             new TwigFunction('form_skeleton_render', function (Environment $environment, $context, FormView $form, ?string $group = null, array $options = []) {
-                $templateString = $this->builder->build($form, $group, $options);
-                $template = $environment->createTemplate($templateString);
-                return $environment->render($template, $context);
+                return $environment->render(
+                    $environment->createTemplate(
+                        $this->builder->build($form, $group, $options)
+                    ),
+                    $context
+                );
             }, [
                 'is_safe' => [ 'html' ],
                 'needs_context' => true,

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Component\FormBuilder;
+namespace Tulia\Component\FormBuilder\Extension;
 
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
@@ -21,14 +21,6 @@ interface ExtensionInterface
      * @param array $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void;
-
-    /**
-     * Called when the form is in creating. Allows to overwrite or add/remove any part of the form.
-     * $form->getData() here, store empty source data, or data from storage (like database).
-     *
-     * @param FormPrototypeInterface $form
-     */
-    public function configureForm(FormPrototypeInterface $form): void;
 
     /**
      * Called when form is already submitted and validated. Allows to process form data, like save

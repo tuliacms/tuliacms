@@ -2,12 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Component\FormBuilder\Manager;
+namespace Tulia\Component\FormBuilder\Form;
 
 use Symfony\Component\Form\FormFactoryInterface;
-use Tulia\Component\FormBuilder\ExtensionInterface;
-use Tulia\Component\FormBuilder\RegistryInterface;
-use Tulia\Component\FormBuilder\Form\FormSkeletonTypeInterface;
+use Tulia\Component\FormBuilder\Extension\ExtensionInterface;
+use Tulia\Component\FormBuilder\Extension\ExtensionRegistryInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -15,12 +14,10 @@ use Tulia\Component\FormBuilder\Form\FormSkeletonTypeInterface;
 class Manager implements ManagerInterface
 {
     protected FormFactoryInterface $formFactory;
-    private RegistryInterface $registry;
+    protected ExtensionRegistryInterface $registry;
 
-    public function __construct(
-        FormFactoryInterface $formFactory,
-        RegistryInterface $registry
-    ) {
+    public function __construct(FormFactoryInterface $formFactory, ExtensionRegistryInterface $registry)
+    {
         $this->formFactory = $formFactory;
         $this->registry = $registry;
     }

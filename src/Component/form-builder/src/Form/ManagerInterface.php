@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Component\FormBuilder\Manager;
-
-use Tulia\Component\FormBuilder\Form\FormSkeletonTypeInterface;
+namespace Tulia\Component\FormBuilder\Form;
 
 /**
  * @author Adam Banaszkiewicz

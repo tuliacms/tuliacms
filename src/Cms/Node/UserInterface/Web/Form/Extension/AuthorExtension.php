@@ -10,7 +10,7 @@ use Tulia\Cms\Node\UserInterface\Web\Form\NodeForm;
 use Tulia\Cms\User\Query\Model\User;
 use Tulia\Cms\User\Infrastructure\Framework\Form\FormType\UserTypeaheadType;
 use Tulia\Cms\User\Application\Service\AuthenticatedUserProviderInterface;
-use Tulia\Component\FormBuilder\AbstractExtension;
+use Tulia\Component\FormBuilder\Extension\AbstractExtension;
 use Tulia\Component\FormBuilder\Section\FormRowSection;
 
 /**

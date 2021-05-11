@@ -8,8 +8,8 @@ services:
         exclude:
             - '../../../../../Component/form-builder/src/src/**/*Exception.php'
 
-    Tulia\Component\FormBuilder\RegistryInterface:
-        class: Tulia\Component\FormBuilder\Registry
+    Tulia\Component\FormBuilder\Extension\ExtensionRegistryInterface:
+        class: Tulia\Component\FormBuilder\Extension\ExtensionRegistry
         bind:
             $extensions: !tagged_iterator form_extension
             $extensionsAggregate: !tagged_iterator form_extension_aggregate
@@ -19,7 +19,7 @@ services:
         bind:
             $builders: !tagged_iterator form_extension.group_builder
 
-    Tulia\Component\FormBuilder\Extension\FormRestExtension:
+    Tulia\Component\FormBuilder\Extension\Core\FormRestExtension:
         tags: [ form_extension ]
 
     Tulia\Component\FormBuilder\Form\SymfonyForm\FormFactory:

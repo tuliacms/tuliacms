@@ -22,7 +22,6 @@ use Tulia\Cms\Widget\Query\FinderFactoryInterface;
 use Tulia\Cms\Widget\Query\Model\Widget as QueryModelWidget;
 use Tulia\Cms\Widget\UserInterface\Web\Form\WidgetForm;
 use Tulia\Component\Datatable\DatatableFactory;
-use Tulia\Component\FormBuilder\Manager\ManagerFactoryInterface;
 use Tulia\Component\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Component\Templating\ViewInterface;
 use Tulia\Component\Widget\Exception\WidgetNotFoundException;
@@ -36,18 +35,15 @@ class Widget extends AbstractController
     protected FinderFactoryInterface $finderFactory;
     protected WidgetRegistryInterface $widgetRegistry;
     protected WidgetStorage $widgetStorage;
-    protected ManagerFactoryInterface $managerFactory;
 
     public function __construct(
         FinderFactoryInterface $finderFactory,
         WidgetRegistryInterface $widgetRegistry,
-        WidgetStorage $widgetStorage,
-        ManagerFactoryInterface $managerFactory
+        WidgetStorage $widgetStorage
     ) {
         $this->finderFactory  = $finderFactory;
         $this->widgetRegistry = $widgetRegistry;
         $this->widgetStorage  = $widgetStorage;
-        $this->managerFactory = $managerFactory;
     }
 
     /**

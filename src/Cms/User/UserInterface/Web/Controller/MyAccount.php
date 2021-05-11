@@ -18,7 +18,6 @@ use Tulia\Cms\User\Query\FinderFactoryInterface;
 use Tulia\Cms\User\Query\Model\User;
 use Tulia\Cms\User\UserInterface\Web\Form\MyAccount\MyAccountForm;
 use Tulia\Cms\User\UserInterface\Web\Form\PasswordForm;
-use Tulia\Component\FormBuilder\Manager\ManagerFactoryInterface;
 use Tulia\Component\Templating\ViewInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Tulia\Component\Security\Http\Csrf\Annotation\CsrfToken;
@@ -30,18 +29,15 @@ class MyAccount extends AbstractController
 {
     protected AuthenticatedUserProviderInterface $authenticatedUserProvider;
     protected FinderFactoryInterface $finderFactory;
-    protected ManagerFactoryInterface $managerFactory;
     private UserStorage $userStorage;
 
     public function __construct(
         AuthenticatedUserProviderInterface $authenticatedUserProvider,
         FinderFactoryInterface $finderFactory,
-        ManagerFactoryInterface $managerFactory,
         UserStorage $userStorage
     ) {
         $this->authenticatedUserProvider = $authenticatedUserProvider;
         $this->finderFactory  = $finderFactory;
-        $this->managerFactory = $managerFactory;
         $this->userStorage = $userStorage;
     }
 

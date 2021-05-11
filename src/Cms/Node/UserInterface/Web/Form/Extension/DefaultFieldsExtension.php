@@ -8,7 +8,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Tulia\Cms\Node\UserInterface\Web\Form\NodeForm;
-use Tulia\Component\FormBuilder\AbstractExtension;
+use Tulia\Component\FormBuilder\Extension\AbstractExtension;
 use Tulia\Component\FormBuilder\Section\Section;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType;
 

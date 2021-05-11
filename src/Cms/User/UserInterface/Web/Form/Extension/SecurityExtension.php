@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Tulia\Cms\User\Infrastructure\Framework\Validator\Constraints\Password;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType;
 use Tulia\Cms\User\UserInterface\Web\Form\UserForm\UserForm;
-use Tulia\Component\FormBuilder\AbstractExtension;
+use Tulia\Component\FormBuilder\Extension\AbstractExtension;
 use Tulia\Component\FormBuilder\Section\Section;
 
 /**

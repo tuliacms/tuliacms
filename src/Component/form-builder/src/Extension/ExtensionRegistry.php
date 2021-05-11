@@ -2,17 +2,19 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Component\FormBuilder;
+namespace Tulia\Component\FormBuilder\Extension;
 
 use Symfony\Component\Form\FormTypeInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class Registry implements RegistryInterface
+class ExtensionRegistry implements ExtensionRegistryInterface
 {
     protected iterable $extensions = [];
+
     protected iterable $extensionsAggregate = [];
+
     protected bool $aggregatesUnpacked = false;
 
     public function __construct(iterable $extensions = [], iterable $extensionsAggregate = [])

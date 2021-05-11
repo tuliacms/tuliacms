@@ -7,7 +7,7 @@ namespace Tulia\Component\FormBuilder\Form\SymfonyForm;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormRegistryInterface;
 use Tulia\Component\FormBuilder\Form\FormSkeletonTypeInterface;
-use Tulia\Component\FormBuilder\RegistryInterface;
+use Tulia\Component\FormBuilder\Extension\ExtensionRegistryInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -16,16 +16,16 @@ class FormFactory implements FormFactoryInterface
 {
     private FormFactoryInterface $symfonyFormFactory;
     private FormRegistryInterface $typeRegistry;
-    private RegistryInterface $formSkeletonBuildersRegistry;
+    private ExtensionRegistryInterface $extensionRegistry;
 
     public function __construct(
         FormFactoryInterface $symfonyFormFactory,
         FormRegistryInterface $typeRegistry,
-        RegistryInterface $formSkeletonBuildersRegistry
+        ExtensionRegistryInterface $extensionRegistry
     ) {
         $this->symfonyFormFactory = $symfonyFormFactory;
         $this->typeRegistry = $typeRegistry;
-        $this->formSkeletonBuildersRegistry = $formSkeletonBuildersRegistry;
+        $this->extensionRegistry = $extensionRegistry;
     }
 
     public function create(
@@ -70,7 +70,7 @@ class FormFactory implements FormFactoryInterface
         $builder = $this->symfonyFormFactory->createNamedBuilder($name, $type, $data, $options);
 
         if ($formType instanceof FormSkeletonTypeInterface) {
-            $extensions = $this->formSkeletonBuildersRegistry->getSupportive(
+            $extensions = $this->extensionRegistry->getSupportive(
                 $formType,
                 $options,
                 $data

@@ -7,7 +7,7 @@ namespace Tulia\Component\FormBuilder\Builder;
 use Symfony\Component\Form\FormView;
 use Tulia\Component\FormBuilder\Form\AbstractFormSkeletonType;
 use Tulia\Component\FormBuilder\Form\FormSkeletonTypeInterface;
-use Tulia\Component\FormBuilder\Manager\ManagerInterface;
+use Tulia\Component\FormBuilder\Form\ManagerInterface;
 
 /**
  * @author Adam Banaszkiewicz

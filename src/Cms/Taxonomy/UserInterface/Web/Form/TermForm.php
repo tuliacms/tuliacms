@@ -12,7 +12,6 @@ use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType;
 use Tulia\Cms\Taxonomy\Application\TaxonomyType\RegistryInterface;
 use Tulia\Cms\Taxonomy\Application\TaxonomyType\TaxonomyTypeInterface;
 use Tulia\Component\FormBuilder\Form\AbstractFormSkeletonType;
-use Tulia\Component\FormBuilder\Manager\ManagerInterface;
 
 /**
  * @author Adam Banaszkiewicz
