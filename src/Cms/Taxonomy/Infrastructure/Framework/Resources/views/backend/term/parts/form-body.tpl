@@ -6,7 +6,7 @@
 
 <div class="page-form" id="node-form">
     <div class="page-form-sidebar">
-        {{ form_skeleton_render(manager, 'sidebar', {
+        {{ form_skeleton_render(form, 'sidebar', {
             active_first: ['status', '_FIRST_']
         }) }}
     </div>
@@ -29,7 +29,7 @@
                 </div>
             </div>
         </div>
-        {{ form_skeleton_render(manager, 'default', {
+        {{ form_skeleton_render(form, 'default', {
             active_first: ['content', '_FIRST_']
         }) }}
     </div>

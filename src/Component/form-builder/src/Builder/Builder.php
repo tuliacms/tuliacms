@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Tulia\Component\FormBuilder\Builder;
 
 use Symfony\Component\Form\FormView;
+use Tulia\Component\FormBuilder\Form\AbstractFormSkeletonType;
+use Tulia\Component\FormBuilder\Form\FormSkeletonTypeInterface;
 use Tulia\Component\FormBuilder\Manager\ManagerInterface;
 
 /**
@@ -27,6 +29,14 @@ class Builder implements BuilderInterface
      */
     public function build(FormView $form, ?string $group = null, array $options = []): string
     {
+        if (! $form->vars['form_type_instance'] instanceof FormSkeletonTypeInterface) {
+            throw new \InvalidArgumentException(sprintf(
+                'FormTypeInterface must implements %s or extends %s.',
+                FormSkeletonTypeInterface::class,
+                AbstractFormSkeletonType::class
+            ));
+        }
+
         $options = array_merge([
             /**
              * List of active sections to show.

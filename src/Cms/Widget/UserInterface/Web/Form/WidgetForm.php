@@ -4,28 +4,21 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Widget\UserInterface\Web\Form;
 
-use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Tulia\Component\FormBuilder\Manager\ManagerInterface;
+use Tulia\Component\FormBuilder\Form\AbstractFormSkeletonType;
 use Tulia\Component\Theme\ManagerInterface as ThemeManager;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class WidgetForm extends AbstractType
+class WidgetForm extends AbstractFormSkeletonType
 {
-    /**
-     * @var ThemeManager
-     */
-    protected $themeManager;
+    protected ThemeManager $themeManager;
 
-    /**
-     * @param ThemeManager $themeManager
-     */
     public function __construct(ThemeManager $themeManager)
     {
         $this->themeManager = $themeManager;
@@ -77,10 +70,6 @@ class WidgetForm extends AbstractType
                 'route' => 'backend.widget',
             ])
             ->add('widget_configuration', $options['widget_form'], $options['widget_configuration']);
-
-        if ($options['form_extension_manager'] instanceof ManagerInterface) {
-            $options['form_extension_manager']->buildForm($builder, $options);
-        }
     }
 
     /**
@@ -89,9 +78,8 @@ class WidgetForm extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'widget_form'            => null,
-            'widget_configuration'   => [],
-            'form_extension_manager' => null,
+            'widget_form' => null,
+            'widget_configuration' => [],
         ]);
     }
 }

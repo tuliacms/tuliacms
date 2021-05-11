@@ -19,13 +19,6 @@ use Tulia\Component\FormBuilder\Section\Section;
  */
 class SecurityExtension extends AbstractExtension
 {
-    protected array $scopes = [];
-
-    public function __construct(array $scopes)
-    {
-        $this->scopes = $scopes;
-    }
-
     /**
      * {@inheritdoc}
      */

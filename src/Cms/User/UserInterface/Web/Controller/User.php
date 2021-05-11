@@ -7,9 +7,12 @@ namespace Tulia\Cms\User\UserInterface\Web\Controller;
 use Symfony\Component\Form\Exception\LogicException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\User\Application\Command\UserStorage;
 use Tulia\Cms\User\Application\Exception\TranslatableUserException;
+use Tulia\Cms\User\Application\Model\User as ApplicationUser;
 use Tulia\Cms\User\Infrastructure\Persistence\Query\DatatableFinder;
 use Tulia\Cms\User\Query\Enum\ScopeEnum;
 use Tulia\Cms\User\Query\Exception\MultipleFetchException;
@@ -18,15 +21,12 @@ use Tulia\Cms\User\Query\Exception\QueryNotFetchedException;
 use Tulia\Cms\User\Query\Factory\UserFactoryInterface;
 use Tulia\Cms\User\Query\FinderFactoryInterface;
 use Tulia\Cms\User\Query\Model\User as QueryModelUser;
-use Tulia\Cms\User\UserInterface\Web\Form\UserForm\UserFormManager;
-use Tulia\Cms\User\UserInterface\Web\Form\UserForm\UserFormManagerFactory;
+use Tulia\Cms\User\UserInterface\Web\Form\UserForm\UserForm;
 use Tulia\Component\CommandBus\Exception\MissingHandlerException;
 use Tulia\Component\Datatable\DatatableFactory;
 use Tulia\Component\FormBuilder\Manager\ManagerFactoryInterface;
-use Tulia\Component\Templating\ViewInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Tulia\Component\Security\Http\Csrf\Annotation\CsrfToken;
+use Tulia\Component\Templating\ViewInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -67,71 +67,54 @@ class User extends AbstractController
     /**
      * @param Request $request
      * @param UserFactoryInterface $userFactory
-     * @param UserFormManagerFactory $formFactory
      * @return RedirectResponse|ViewInterface
      * @throws LogicException
      * @CsrfToken(id="user_form")
      */
     public function create(
         Request $request,
-        UserFactoryInterface $userFactory,
-        UserFormManagerFactory $formFactory
+        UserFactoryInterface $userFactory
     ) {
         $user = $userFactory->createNew();
-        $manager = $formFactory->create($user);
+        $model = ApplicationUser::fromQueryModel($user);
 
-        $form = $manager->createForm();
+        $form = $this->createForm(UserForm::class, $model, [ 'password_required' => true ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $manager->save($form);
+            $this->storage->save($form->getData());
 
             $this->setFlash('success', $this->trans('userSaved', [], 'users'));
             return $this->redirectToRoute('backend.user.edit', [ 'id' => $user->getId() ]);
         }
 
         return $this->view('@backend/user/user/create.tpl', [
-            'manager' => $manager->getManager(),
             'user' => $user,
             'form' => $form->createView(),
         ]);
     }
 
     /**
-     * @param Request $request
-     * @param UserFormManagerFactory $formFactory
-     * @param string $id
-     * @return RedirectResponse|ViewInterface
-     * @throws MissingHandlerException
-     * @throws MultipleFetchException
-     * @throws NotFoundHttpException
-     * @throws QueryException
-     * @throws QueryNotFetchedException
-     * @throws LogicException
      * @CsrfToken(id="user_form")
      */
-    public function edit(
-        Request $request,
-        UserFormManagerFactory $formFactory,
-        string $id
-    ) {
+    public function edit(Request $request, string $id)
+    {
         $user = $this->getUserById($id);
-        $manager = $formFactory->create($user);
+        $model = ApplicationUser::fromQueryModel($user);
 
-        $form = $manager->createForm(UserFormManager::MODE_UPDATE);
+        $form = $this->createForm(UserForm::class, $model, [ 'password_required' => false ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $manager->save($form);
+            $this->storage->save($form->getData());
 
             $this->setFlash('success', $this->trans('userSaved', [], 'users'));
             return $this->redirectToRoute('backend.user.edit', [ 'id' => $user->getId() ]);
         }
 
         return $this->view('@backend/user/user/edit.tpl', [
-            'manager'  => $manager->getManager(),
-            'user'     => $user,
-            'form'     => $form->createView(),
+            'user' => $user,
+            'form' => $form->createView(),
         ]);
     }
 

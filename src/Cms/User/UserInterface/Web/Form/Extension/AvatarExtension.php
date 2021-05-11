@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type;
 use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Tulia\Cms\User\Application\Service\Avatar\UploaderInterface;
+use Tulia\Cms\User\UserInterface\Web\Form\MyAccount\MyAccountForm;
 use Tulia\Cms\User\UserInterface\Web\Form\UserForm\UserForm;
 use Tulia\Component\FormBuilder\AbstractExtension;
 use Tulia\Component\FormBuilder\Section\Section;
@@ -19,13 +20,11 @@ use Tulia\Component\FormBuilder\Section\Section;
  */
 class AvatarExtension extends AbstractExtension
 {
-    protected array $scopes = [];
     protected UploaderInterface $uploader;
 
-    public function __construct(UploaderInterface $uploader, array $scopes)
+    public function __construct(UploaderInterface $uploader)
     {
         $this->uploader = $uploader;
-        $this->scopes  = $scopes;
     }
 
     /**
@@ -87,6 +86,6 @@ class AvatarExtension extends AbstractExtension
      */
     public function supports(FormTypeInterface $formType, array $options, $data = null): bool
     {
-        return $formType instanceof UserForm;
+        return $formType instanceof UserForm || $formType instanceof MyAccountForm;
     }
 }

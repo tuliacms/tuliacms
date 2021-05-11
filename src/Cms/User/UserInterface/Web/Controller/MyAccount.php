@@ -16,7 +16,7 @@ use Tulia\Cms\User\Query\Exception\QueryException;
 use Tulia\Cms\User\Query\Exception\QueryNotFetchedException;
 use Tulia\Cms\User\Query\FinderFactoryInterface;
 use Tulia\Cms\User\Query\Model\User;
-use Tulia\Cms\User\UserInterface\Web\Form\MyAccount\MyAccountFormManagerFactory;
+use Tulia\Cms\User\UserInterface\Web\Form\MyAccount\MyAccountForm;
 use Tulia\Cms\User\UserInterface\Web\Form\PasswordForm;
 use Tulia\Component\FormBuilder\Manager\ManagerFactoryInterface;
 use Tulia\Component\Templating\ViewInterface;
@@ -31,15 +31,18 @@ class MyAccount extends AbstractController
     protected AuthenticatedUserProviderInterface $authenticatedUserProvider;
     protected FinderFactoryInterface $finderFactory;
     protected ManagerFactoryInterface $managerFactory;
+    private UserStorage $userStorage;
 
     public function __construct(
         AuthenticatedUserProviderInterface $authenticatedUserProvider,
         FinderFactoryInterface $finderFactory,
-        ManagerFactoryInterface $managerFactory
+        ManagerFactoryInterface $managerFactory,
+        UserStorage $userStorage
     ) {
         $this->authenticatedUserProvider = $authenticatedUserProvider;
         $this->finderFactory  = $finderFactory;
         $this->managerFactory = $managerFactory;
+        $this->userStorage = $userStorage;
     }
 
     public function me(): ViewInterface
@@ -61,23 +64,22 @@ class MyAccount extends AbstractController
      *
      * @CsrfToken(id="my_account_form")
      */
-    public function edit(Request $request, MyAccountFormManagerFactory $formFactory)
+    public function edit(Request $request)
     {
         $user = $this->getUserInstance();
-        $manager = $formFactory->create($user);
+        $model = ApplicationUser::fromQueryModel($user);
 
-        $form = $manager->createForm();
+        $form = $this->createForm(MyAccountForm::class, $model);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $manager->save($form);
+            $this->userStorage->save($form->getData());
 
             $this->setFlash('success', $this->trans('userSaved', [], 'users'));
             return $this->redirectToRoute('backend.me.edit');
         }
 
         return $this->view('@backend/user/me/edit.tpl', [
-            'manager' => $manager->getManager(),
             'user'    => $this->authenticatedUserProvider->getUser(),
             'form'    => $form->createView(),
         ]);
@@ -93,7 +95,7 @@ class MyAccount extends AbstractController
     /**
      * @CsrfToken(id="password_form")
      */
-    public function password(Request $request, UserStorage $userStorage)
+    public function password(Request $request)
     {
         $user = $this->getUserInstance();
         $form = $this->createForm(PasswordForm::class);
@@ -103,7 +105,7 @@ class MyAccount extends AbstractController
             $model = ApplicationUser::fromQueryModel($user);
             $model->setPassword($form->getData()['password']);
 
-            $userStorage->save($model);
+            $this->userStorage->save($model);
 
             $this->setFlash('success', $this->trans('userSaved', [], 'users'));
             return $this->redirectToRoute('backend.me.password');

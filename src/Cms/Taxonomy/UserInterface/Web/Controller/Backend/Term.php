@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Taxonomy\Application\Command\TermStorage;
 use Tulia\Cms\Taxonomy\Application\Exception\TranslatableTermException;
-use Tulia\Cms\Taxonomy\Application\Model\Term as ApplicationNode;
+use Tulia\Cms\Taxonomy\Application\Model\Term as ApplicationTerm;
 use Tulia\Cms\Taxonomy\Application\TaxonomyType\RegistryInterface;
 use Tulia\Cms\Taxonomy\Application\TaxonomyType\TaxonomyTypeInterface;
 use Tulia\Cms\Taxonomy\Query\CriteriaBuilder\RequestCriteriaBuilder;
@@ -19,7 +19,7 @@ use Tulia\Cms\Taxonomy\Query\Exception\QueryNotFetchedException;
 use Tulia\Cms\Taxonomy\Query\Factory\TermFactoryInterface;
 use Tulia\Cms\Taxonomy\Query\FinderFactoryInterface;
 use Tulia\Cms\Taxonomy\Query\Model\Term as QueryTerm;
-use Tulia\Cms\Taxonomy\UserInterface\Web\Form\TermFormManagerFactory;
+use Tulia\Cms\Taxonomy\UserInterface\Web\Form\TermForm;
 use Tulia\Component\Templating\ViewInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -31,7 +31,9 @@ use Tulia\Component\Security\Http\Csrf\Annotation\CsrfToken;
 class Term extends AbstractController
 {
     protected RegistryInterface $taxonomyRegistry;
+
     protected FinderFactoryInterface $finderFactory;
+
     protected TermStorage $termStorage;
 
     public function __construct(
@@ -78,37 +80,34 @@ class Term extends AbstractController
     /**
      * @param Request $request
      * @param string $taxonomy_type
-     * @param TermFormManagerFactory $formFactory
      * @param TermFactoryInterface $termFactory
      *
      * @return RedirectResponse|ViewInterface
      *
      * @CsrfToken(id="term_form")
      */
-    public function create(
-        Request $request,
-        string $taxonomy_type,
-        TermFormManagerFactory $formFactory,
-        TermFactoryInterface $termFactory
-    ) {
+    public function create(Request $request, string $taxonomy_type, TermFactoryInterface $termFactory)
+    {
         $term = $termFactory->createNew([
             'type' => $taxonomy_type,
             'visibility' => true,
         ]);
-        $manager = $formFactory->create($taxonomy_type, $term);
-        $form = $manager->createForm();
+        $model = ApplicationTerm::fromQueryModel($term);
+
+        $form = $this->createForm(TermForm::class, $model, ['taxonomy_type' => $model->getType()]);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $manager->save($form);
+        $taxonomyType = $this->findTaxonomyType($model->getType());
 
-            $this->setFlash('success', $this->trans('termSaved', [], $manager->getTaxonomyType()->getTranslationDomain()));
-            return $this->redirectToRoute('backend.term.edit', [ 'id' => $term->getId(), 'taxonomy_type' => $manager->getTaxonomyType()->getType() ]);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->termStorage->save($model);
+
+            $this->setFlash('success', $this->trans('termSaved', [], $taxonomyType->getTranslationDomain()));
+            return $this->redirectToRoute('backend.term.edit', [ 'id' => $term->getId(), 'taxonomy_type' => $taxonomyType->getType() ]);
         }
 
         return $this->view('@backend/taxonomy/term/create.tpl', [
-            'manager' => $manager->getManager(),
-            'taxonomyType' => $manager->getTaxonomyType(),
+            'taxonomyType' => $taxonomyType,
             'term' => $term,
             'form' => $form->createView(),
         ]);
@@ -116,7 +115,6 @@ class Term extends AbstractController
 
     /**
      * @param Request $request
-     * @param TermFormManagerFactory $factory
      * @param string $taxonomy_type
      * @param string $id
      *
@@ -129,27 +127,26 @@ class Term extends AbstractController
      *
      * @CsrfToken(id="term_form")
      */
-    public function edit(
-        Request $request,
-        TermFormManagerFactory $factory,
-        string $taxonomy_type,
-        string $id
-    ) {
+    public function edit(Request $request, string $taxonomy_type, string $id)
+    {
         $term = $this->getTermById($id);
-        $manager = $factory->create($taxonomy_type, $term);
-        $form = $manager->createForm();
+        $model = ApplicationTerm::fromQueryModel($term);
+
+        $form = $this->createForm(TermForm::class, $model, ['taxonomy_type' => $model->getType()]);
+        $form->handleRequest($request);
+
+        $taxonomyType = $this->findTaxonomyType($taxonomy_type);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $manager->save($form);
+            $this->termStorage->save($model);
 
-            $this->setFlash('success', $this->trans('termSaved', [], $manager->getTaxonomyType()->getTranslationDomain()));
-            return $this->redirectToRoute('backend.term.edit', [ 'id' => $term->getId(), 'taxonomy_type' => $manager->getTaxonomyType()->getType() ]);
+            $this->setFlash('success', $this->trans('termSaved', [], $taxonomyType->getTranslationDomain()));
+            return $this->redirectToRoute('backend.term.edit', [ 'id' => $term->getId(), 'taxonomy_type' => $taxonomyType->getType() ]);
         }
 
         return $this->view('@backend/taxonomy/term/edit.tpl', [
-            'manager' => $manager->getManager(),
-            'taxonomyType' => $manager->getTaxonomyType(),
+            'taxonomyType' => $taxonomyType,
             'term' => $term,
             'form' => $form->createView(),
         ]);
@@ -180,7 +177,7 @@ class Term extends AbstractController
             }
 
             try {
-                $this->termStorage->delete(ApplicationNode::fromQueryModel($term));
+                $this->termStorage->delete(ApplicationTerm::fromQueryModel($term));
                 $removedNodes++;
             } catch (TranslatableTermException $e) {
                 $this->setFlash('warning', $this->transObject($e));

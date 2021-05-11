@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace Tulia\Cms\User\UserInterface\Web\Form\Extension;
 
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Form\Extension\Core\Type;
 use Symfony\Component\Form\FormTypeInterface;
-use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Tulia\Cms\User\UserInterface\Web\Form\MyAccount\MyAccountForm;
 use Tulia\Cms\User\UserInterface\Web\Form\UserForm\UserForm;
 use Tulia\Component\FormBuilder\AbstractExtension;
 use Tulia\Component\FormBuilder\Section\FormRowSection;
@@ -17,36 +18,18 @@ use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 /**
  * @author Adam Banaszkiewicz
  */
-abstract class AbstractBasicsExtension extends AbstractExtension
+class BasicsExtension extends AbstractExtension
 {
-    /**
-     * @var array
-     */
-    protected $scopes = [];
+    protected TranslatorInterface $translator;
 
-    /**
-     * @var TranslatorInterface
-     */
-    protected $translator;
+    protected CurrentWebsiteInterface $currentWebsite;
 
-    /**
-     * @var CurrentWebsiteInterface
-     */
-    protected $currentWebsite;
-
-    /**
-     * @param TranslatorInterface $translator
-     * @param CurrentWebsiteInterface $currentWebsite
-     * @param array $scopes
-     */
     public function __construct(
         TranslatorInterface $translator,
-        CurrentWebsiteInterface $currentWebsite,
-        array $scopes
+        CurrentWebsiteInterface $currentWebsite
     ) {
-        $this->translator     = $translator;
+        $this->translator = $translator;
         $this->currentWebsite = $currentWebsite;
-        $this->scopes         = $scopes;
     }
 
     /**
@@ -94,6 +77,6 @@ abstract class AbstractBasicsExtension extends AbstractExtension
      */
     public function supports(FormTypeInterface $formType, array $options, $data = null): bool
     {
-        return $formType instanceof UserForm;
+        return $formType instanceof UserForm || $formType instanceof MyAccountForm;
     }
 }

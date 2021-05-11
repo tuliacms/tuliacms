@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Widget\UserInterface\Web\Form\Extension;
 
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormTypeInterface;
+use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType;
 use Tulia\Cms\Widget\UserInterface\Web\Form\WidgetForm;
 use Tulia\Component\FormBuilder\AbstractExtension;
 use Tulia\Component\FormBuilder\Section\FormRowSection;
 use Tulia\Component\FormBuilder\Section\Section;
-use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType;
 use Tulia\Component\Theme\ManagerInterface;
 
 /**
@@ -19,14 +19,8 @@ use Tulia\Component\Theme\ManagerInterface;
  */
 class DefaultFieldsExtension extends AbstractExtension
 {
-    /**
-     * @var ManagerInterface
-     */
-    protected $themeManager;
+    protected ManagerInterface $themeManager;
 
-    /**
-     * @param ManagerInterface $themeManager
-     */
     public function __construct(ManagerInterface $themeManager)
     {
         $this->themeManager = $themeManager;

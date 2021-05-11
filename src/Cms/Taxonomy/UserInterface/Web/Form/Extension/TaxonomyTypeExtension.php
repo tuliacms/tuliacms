@@ -21,14 +21,8 @@ use Tulia\Component\FormBuilder\Section\Section;
  */
 class TaxonomyTypeExtension extends AbstractExtension
 {
-    /**
-     * @var TaxonomyTypeInterface
-     */
-    protected $taxonomyType;
+    protected TaxonomyTypeInterface $taxonomyType;
 
-    /**
-     * @param TaxonomyTypeInterface $taxonomyType
-     */
     public function __construct(TaxonomyTypeInterface $taxonomyType)
     {
         $this->taxonomyType = $taxonomyType;
@@ -92,6 +86,6 @@ class TaxonomyTypeExtension extends AbstractExtension
      */
     public function supports(FormTypeInterface $formType, array $options, $data = null): bool
     {
-        return $formType instanceof TermForm/* && $object->getType() === $this->taxonomyType->getType()*/;
+        return $formType instanceof TermForm && $options['taxonomy_type'] === $this->taxonomyType->getType();
     }
 }

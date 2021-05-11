@@ -18,7 +18,7 @@
     {{ form_row(form.id) }}
     {% set save = form_row(form.save) %}
 
-    {{ form_skeleton_render(manager, 'default', {
+    {{ form_skeleton_render(form, 'default', {
         active_first: ['_FIRST_'],
     }) }}
     <div class="my-5"></div>
