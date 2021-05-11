@@ -37,7 +37,7 @@ class ManagerFactory implements ManagerFactoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getInstanceFor(object $object, string $scope): ManagerInterface
+    public function getInstanceFor(object $object): ManagerInterface
     {
         return new Manager(
             $this->formFactory,

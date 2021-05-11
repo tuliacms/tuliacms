@@ -9,7 +9,6 @@ use Symfony\Component\Form\FormInterface;
 use Tulia\Cms\User\Application\Command\UserStorage;
 use Tulia\Cms\User\Application\Model\User as ApplicationUser;
 use Tulia\Cms\User\Query\Model\User as QueryUser;
-use Tulia\Cms\User\UserInterface\Web\Form\ScopeEnum;
 use Tulia\Component\FormBuilder\Manager\ManagerFactoryInterface;
 use Tulia\Component\FormBuilder\Manager\ManagerInterface;
 
@@ -98,6 +97,6 @@ class UserFormManager
             return $this->manager;
         }
 
-        return $this->manager = $this->managerFactory->getInstanceFor($this->user, ScopeEnum::BACKEND_USER);
+        return $this->manager = $this->managerFactory->getInstanceFor($this->user);
     }
 }

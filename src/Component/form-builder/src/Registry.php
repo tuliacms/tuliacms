@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Tulia\Component\FormBuilder;
 
+use Symfony\Component\Form\FormTypeInterface;
+
 /**
  * @author Adam Banaszkiewicz
  */
@@ -33,7 +35,7 @@ class Registry implements RegistryInterface
         $this->extensions[] = $extension;
     }
 
-    public function getSupportive(object $object, string $scope): iterable
+    public function getSupportive(FormTypeInterface $formType, array $options, $data = null): iterable
     {
         $this->unpackAggregates();
 
@@ -41,7 +43,7 @@ class Registry implements RegistryInterface
 
         /** @var ExtensionInterface $extension */
         foreach ($this->extensions as $extension) {
-            if ($extension->supports($object, $scope)) {
+            if ($extension->supports($formType, $options, $data)) {
                 $supportive[] = $extension;
             }
         }
@@ -58,7 +60,7 @@ class Registry implements RegistryInterface
 
 
         /** @var ExtensionAggregateInterface $aggregate */
-        foreach ($this->extensionsAggregate as $key => $aggregate) {
+        foreach ($this->extensionsAggregate as $aggregate) {
             /** @var ExtensionInterface $extension */
             foreach ($aggregate->aggregate() as $extension) {
                 $this->add($extension);

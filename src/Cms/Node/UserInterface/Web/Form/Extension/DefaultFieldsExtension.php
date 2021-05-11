@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Tulia\Cms\Node\UserInterface\Web\Form\Extension;
 
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\Validator\Constraints as Assert;
-use Tulia\Cms\Node\UserInterface\Web\Form\ScopeEnum;
+use Tulia\Cms\Node\UserInterface\Web\Form\NodeForm;
 use Tulia\Component\FormBuilder\AbstractExtension;
 use Tulia\Component\FormBuilder\Section\Section;
-use Tulia\Cms\Node\Application\Model\Node;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType;
 
 /**
@@ -53,8 +53,8 @@ class DefaultFieldsExtension extends AbstractExtension
     /**
      * {@inheritdoc}
      */
-    public function supports(object $object, string $scope): bool
+    public function supports(FormTypeInterface $formType, array $options, $data = null): bool
     {
-        return $object instanceof Node && $scope === ScopeEnum::BACKEND_EDIT;
+        return $formType instanceof NodeForm;
     }
 }

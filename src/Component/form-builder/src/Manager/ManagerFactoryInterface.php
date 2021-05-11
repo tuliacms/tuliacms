@@ -15,5 +15,5 @@ interface ManagerFactoryInterface
      *
      * @return ManagerInterface
      */
-    public function getInstanceFor(object $object, string $scope): ManagerInterface;
+    public function getInstanceFor(object $object): ManagerInterface;
 }

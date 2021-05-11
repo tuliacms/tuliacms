@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Tulia\Cms\Taxonomy\UserInterface\Web\Form\Extension;
 
 use Symfony\Component\Form\FormBuilderInterface;
-use Tulia\Cms\Node\UserInterface\Web\Form\ScopeEnum;
+use Symfony\Component\Form\FormTypeInterface;
+use Tulia\Cms\Taxonomy\UserInterface\Web\Form\TermForm;
 use Tulia\Component\FormBuilder\AbstractExtension;
 use Tulia\Component\FormBuilder\Section\FormRowSection;
-use Tulia\Cms\Taxonomy\Application\Model\Term;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType;
 
 /**
@@ -41,8 +41,8 @@ class DefaultFieldsExtension extends AbstractExtension
     /**
      * {@inheritdoc}
      */
-    public function supports(object $object, string $scope): bool
+    public function supports(FormTypeInterface $formType, array $options, $data = null): bool
     {
-        return $object instanceof Term && $scope === ScopeEnum::BACKEND_EDIT;
+        return $formType instanceof TermForm;
     }
 }

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tulia\Component\FormBuilder\Twig\Extension;
 
+use Symfony\Component\Form\FormView;
 use Tulia\Component\FormBuilder\Builder\BuilderInterface;
-use Tulia\Component\FormBuilder\Manager\ManagerInterface;
 use Twig\Environment;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
@@ -15,14 +15,8 @@ use Twig\TwigFunction;
  */
 class FormExtension extends AbstractExtension
 {
-    /**
-     * @var BuilderInterface
-     */
-    protected $builder;
+    protected BuilderInterface $builder;
 
-    /**
-     * @param BuilderInterface $builder
-     */
     public function __construct(BuilderInterface $builder)
     {
         $this->builder = $builder;
@@ -34,8 +28,9 @@ class FormExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('form_extension_render', function (Environment $environment, $context, ManagerInterface $manager, ?string $group = null, array $options = []) {
-                $template = $environment->createTemplate($this->builder->build($manager, $group, $options));
+            new TwigFunction('form_skeleton_render', function (Environment $environment, $context, FormView $form, ?string $group = null, array $options = []) {
+                $templateString = $this->builder->build($form, $group, $options);
+                $template = $environment->createTemplate($templateString);
                 return $environment->render($template, $context);
             }, [
                 'is_safe' => [ 'html' ],

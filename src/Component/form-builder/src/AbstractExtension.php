@@ -6,6 +6,7 @@ namespace Tulia\Component\FormBuilder;
 
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormTypeInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -15,7 +16,7 @@ abstract class AbstractExtension implements ExtensionInterface
     /**
      * {@inheritdoc}
      */
-    abstract public function supports(object $object, string $scope): bool;
+    abstract public function supports(FormTypeInterface $formType, array $options, $data = null): bool;
 
     /**
      * {@inheritdoc}

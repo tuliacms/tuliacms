@@ -16,24 +16,13 @@ use Tulia\Component\Templating\ViewInterface;
  */
 class Node extends AbstractController
 {
-    /**
-     * @var FinderFactoryInterface
-     */
-    protected $termFinderFactory;
+    protected FinderFactoryInterface $termFinderFactory;
 
-    /**
-     * @param FinderFactoryInterface $termFinderFactory
-     */
     public function __construct(FinderFactoryInterface $termFinderFactory)
     {
         $this->termFinderFactory = $termFinderFactory;
     }
 
-    /**
-     * @param QueryModelNode $node
-     *
-     * @return ViewInterface
-     */
     public function show(QueryModelNode $node): ViewInterface
     {
         $this->getDocument()->setTitle($node->getTitle());

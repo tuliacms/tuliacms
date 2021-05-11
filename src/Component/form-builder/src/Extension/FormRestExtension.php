@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Component\FormBuilder\Extension;
 
+use Symfony\Component\Form\FormTypeInterface;
 use Tulia\Component\FormBuilder\AbstractExtension;
 use Tulia\Component\FormBuilder\Section\FormRestSection;
 
@@ -55,7 +56,7 @@ class FormRestExtension extends AbstractExtension
     /**
      * {@inheritdoc}
      */
-    public function supports(object $object, string $scope): bool
+    public function supports(FormTypeInterface $formType, array $options, $data = null): bool
     {
         return true;
     }

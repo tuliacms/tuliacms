@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Component\FormBuilder\Builder;
 
+use Symfony\Component\Form\FormView;
 use Tulia\Component\FormBuilder\Manager\ManagerInterface;
 
 /**
@@ -11,17 +12,20 @@ use Tulia\Component\FormBuilder\Manager\ManagerInterface;
  */
 class Builder implements BuilderInterface
 {
-    protected iterable $builders;
+    private ManagerInterface $manager;
 
-    public function __construct(iterable $builders)
+    private iterable $builders;
+
+    public function __construct(ManagerInterface $manager, iterable $builders)
     {
         $this->builders = $builders;
+        $this->manager = $manager;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function build(ManagerInterface $manager, ?string $group = null, array $options = []): string
+    public function build(FormView $form, ?string $group = null, array $options = []): string
     {
         $options = array_merge([
             /**
@@ -38,7 +42,7 @@ class Builder implements BuilderInterface
              * Sections list to build. Default is a list from Manager,
              * but it can be overwritted in $options argument.
              */
-            'sections' => $manager->getSections($group),
+            'sections' => $this->manager->getSections($form->vars['form_type_instance'], $group),
         ], $options);
 
         /** @var GroupBuilderInterface $builder */

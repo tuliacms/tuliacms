@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\UserInterface\Web\Form;
 
-use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -12,21 +11,15 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Tulia\Cms\Node\Infrastructure\NodeType\NodeTypeInterface;
 use Tulia\Cms\Node\Infrastructure\NodeType\RegistryInterface as NodeTypeRegistry;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType;
-use Tulia\Component\FormBuilder\Manager\ManagerInterface;
+use Tulia\Component\FormBuilder\Form\AbstractFormSkeletonType;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class NodeForm extends AbstractType
+class NodeForm extends AbstractFormSkeletonType
 {
-    /**
-     * @var NodeTypeRegistry
-     */
-    protected $nodesRegistry;
+    protected NodeTypeRegistry $nodesRegistry;
 
-    /**
-     * @param NodeTypeRegistry $nodesRegistry
-     */
     public function __construct(NodeTypeRegistry $nodesRegistry)
     {
         $this->nodesRegistry = $nodesRegistry;
@@ -67,10 +60,6 @@ class NodeForm extends AbstractType
         if ($nodeType->isRoutable()) {
             $builder->add('slug', Type\TextType::class);
         }
-
-        if ($options['form_extension_manager'] instanceof ManagerInterface) {
-            $options['form_extension_manager']->buildForm($builder, $options);
-        }
     }
 
     /**
@@ -78,10 +67,6 @@ class NodeForm extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults([
-            'form_extension_manager' => null,
-        ]);
-
         $resolver->setRequired('node_type');
     }
 }

@@ -22,6 +22,11 @@ services:
     Tulia\Component\FormBuilder\Extension\FormRestExtension:
         tags: [ form_extension ]
 
+    Tulia\Component\FormBuilder\Form\SymfonyForm\FormFactory:
+        decorates: form.factory
+        bind:
+            $symfonyFormFactory: '@.inner'
+
     #Tulia\Component\FormBuilder\Builder\BootstrapAccordionGroupBuilder:
     #    tags: [ form_extension.group_builder ]
 

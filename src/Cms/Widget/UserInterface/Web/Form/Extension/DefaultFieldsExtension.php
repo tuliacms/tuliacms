@@ -6,8 +6,8 @@ namespace Tulia\Cms\Widget\UserInterface\Web\Form\Extension;
 
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type;
-use Tulia\Cms\Widget\Application\Model\Widget;
-use Tulia\Cms\Widget\UserInterface\Web\Form\ScopeEnum;
+use Symfony\Component\Form\FormTypeInterface;
+use Tulia\Cms\Widget\UserInterface\Web\Form\WidgetForm;
 use Tulia\Component\FormBuilder\AbstractExtension;
 use Tulia\Component\FormBuilder\Section\FormRowSection;
 use Tulia\Component\FormBuilder\Section\Section;
@@ -103,8 +103,8 @@ class DefaultFieldsExtension extends AbstractExtension
     /**
      * {@inheritdoc}
      */
-    public function supports(object $object, string $scope): bool
+    public function supports(FormTypeInterface $formType, array $options, $data = null): bool
     {
-        return $object instanceof Widget && $scope === ScopeEnum::BACKEND_EDIT;
+        return $formType instanceof WidgetForm;
     }
 }

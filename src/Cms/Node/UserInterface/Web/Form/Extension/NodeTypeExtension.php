@@ -4,34 +4,28 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\UserInterface\Web\Form\Extension;
 
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
-use Tulia\Cms\Node\Application\Model\Node;
-use Tulia\Cms\Node\Infrastructure\NodeType\NodeTypeInterface;
 use Tulia\Cms\Node\Infrastructure\Framework\Form\FormType\NodeTypeaheadType;
-use Tulia\Cms\Node\UserInterface\Web\Form\ScopeEnum;
+use Tulia\Cms\Node\Infrastructure\NodeType\NodeTypeInterface;
+use Tulia\Cms\Node\UserInterface\Web\Form\NodeForm;
+use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType;
 use Tulia\Cms\Taxonomy\Infrastructure\Framework\Form\FormType\TaxonomyTypeaheadType;
 use Tulia\Cms\WysiwygEditor\Core\Infrastructure\Framework\Form\FormType\WysiwygEditorType;
 use Tulia\Component\FormBuilder\AbstractExtension;
 use Tulia\Component\FormBuilder\Section\FormRowSection;
 use Tulia\Component\FormBuilder\Section\Section;
-use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class NodeTypeExtension extends AbstractExtension
 {
-    /**
-     * @var NodeTypeInterface
-     */
-    protected $nodeType;
+    protected NodeTypeInterface $nodeType;
 
-    /**
-     * @param NodeTypeInterface $nodeType
-     */
     public function __construct(NodeTypeInterface $nodeType)
     {
         $this->nodeType = $nodeType;
@@ -167,8 +161,8 @@ class NodeTypeExtension extends AbstractExtension
     /**
      * {@inheritdoc}
      */
-    public function supports(object $object, string $scope): bool
+    public function supports(FormTypeInterface $formType, array $options, $data = null): bool
     {
-        return $object instanceof Node && $object->getType() === $this->nodeType->getType() && $scope === ScopeEnum::BACKEND_EDIT;
+        return $formType instanceof NodeForm && $options['node_type'] === $this->nodeType->getType();
     }
 }

@@ -7,9 +7,10 @@ namespace Tulia\Cms\User\UserInterface\Web\Form\Extension;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\Extension\Core\Type;
+use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\Validator\Constraints as Assert;
-use Tulia\Cms\User\Application\Model\User;
 use Tulia\Cms\User\Application\Service\Avatar\UploaderInterface;
+use Tulia\Cms\User\UserInterface\Web\Form\UserForm\UserForm;
 use Tulia\Component\FormBuilder\AbstractExtension;
 use Tulia\Component\FormBuilder\Section\Section;
 
@@ -84,8 +85,8 @@ class AvatarExtension extends AbstractExtension
     /**
      * {@inheritdoc}
      */
-    public function supports(object $object, string $scope): bool
+    public function supports(FormTypeInterface $formType, array $options, $data = null): bool
     {
-        return $object instanceof User && in_array($scope, $this->scopes);
+        return $formType instanceof UserForm;
     }
 }
