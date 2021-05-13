@@ -5,14 +5,13 @@ declare(strict_types=1);
 namespace Tulia\Cms\Node\UserInterface\Web\Form\Extension;
 
 use Symfony\Component\Form\FormBuilderInterface;
-use Tulia\Cms\Node\Application\Model\Node;
-use Tulia\Cms\Node\Query\Factory\NodeFactoryInterface;
-use Tulia\Cms\Node\UserInterface\Web\Form\ScopeEnum;
+use Symfony\Component\Form\FormTypeInterface;
+use Tulia\Cms\Node\UserInterface\Web\Form\NodeForm;
 use Tulia\Cms\User\Query\Model\User;
 use Tulia\Cms\User\Infrastructure\Framework\Form\FormType\UserTypeaheadType;
 use Tulia\Cms\User\Application\Service\AuthenticatedUserProviderInterface;
-use Tulia\Component\FormBuilder\AbstractExtension;
-use Tulia\Component\FormBuilder\Section\FormRowSection;
+use Tulia\Component\FormSkeleton\Extension\AbstractExtension;
+use Tulia\Component\FormSkeleton\Section\SectionsBuilderInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -50,22 +49,21 @@ class AuthorExtension extends AbstractExtension
     /**
      * {@inheritdoc}
      */
-    public function getSections(): array
+    public function getSections(SectionsBuilderInterface $builder): void
     {
-        $sections = [];
-
-        $sections[] = $section = new FormRowSection('author', 'author', 'author');
-        $section->setPriority(500);
-        $section->setGroup('sidebar');
-
-        return $sections;
+        $builder
+            ->add('author', [
+                'priority' => 500,
+                'group' => 'sidebar',
+            ])
+        ;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function supports(object $object, string $scope): bool
+    public function supports(FormTypeInterface $formType, array $options, $data = null): bool
     {
-        return $object instanceof Node && $scope === ScopeEnum::BACKEND_EDIT;
+        return $formType instanceof NodeForm;
     }
 }

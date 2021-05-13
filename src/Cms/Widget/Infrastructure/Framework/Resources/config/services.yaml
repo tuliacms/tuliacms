@@ -11,3 +11,6 @@ services:
             - '../../../../Infrastructure/Framework/Resources/*'
             - '../../../../**/Model/*'
             - '../../../../**/Exception/*'
+
+    Tulia\Cms\Widget\UserInterface\Web\Form\Extension\DefaultFieldsExtension:
+        tags: [ form_extension ]

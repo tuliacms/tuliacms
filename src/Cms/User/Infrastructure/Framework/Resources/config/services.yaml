@@ -30,28 +30,12 @@ services:
             $publicDir: '%kernel.public_dir%'
 
     Tulia\Cms\User\UserInterface\Web\Form\Extension\SecurityExtension:
-        bind:
-            $scopes:
-                - !php/const Tulia\Cms\User\UserInterface\Web\Form\ScopeEnum::BACKEND_USER
         tags: [ form_extension ]
 
     Tulia\Cms\User\UserInterface\Web\Form\Extension\AvatarExtension:
-        bind:
-            $scopes:
-                - !php/const Tulia\Cms\User\UserInterface\Web\Form\ScopeEnum::BACKEND_MY_ACCOUNT
-                - !php/const Tulia\Cms\User\UserInterface\Web\Form\ScopeEnum::BACKEND_USER
         tags: [ form_extension ]
 
-    Tulia\Cms\User\UserInterface\Web\Form\UserForm\Extension\BasicsExtension:
-        bind:
-            $scopes:
-                - !php/const Tulia\Cms\User\UserInterface\Web\Form\ScopeEnum::BACKEND_USER
-        tags: [ form_extension ]
-
-    Tulia\Cms\User\UserInterface\Web\Form\MyAccount\Extension\BasicsExtension:
-        bind:
-            $scopes:
-                - !php/const Tulia\Cms\User\UserInterface\Web\Form\ScopeEnum::BACKEND_MY_ACCOUNT
+    Tulia\Cms\User\UserInterface\Web\Form\Extension\BasicsExtension:
         tags: [ form_extension ]
 
     Tulia\Cms\User\Infrastructure\Framework\Translator\UserLocaleResolver:

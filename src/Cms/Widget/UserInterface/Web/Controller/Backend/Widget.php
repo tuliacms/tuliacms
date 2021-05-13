@@ -7,12 +7,12 @@ namespace Tulia\Cms\Widget\UserInterface\Web\Controller\Backend;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Widget\Application\Command\WidgetStorage;
 use Tulia\Cms\Widget\Application\Exception\TranslatableWidgetException;
 use Tulia\Cms\Widget\Application\Model\Widget as ApplicationWidget;
 use Tulia\Cms\Widget\Infrastructure\Persistence\Query\DatatableFinder;
-use Tulia\Cms\Widget\Query\CriteriaBuilder\RequestCriteriaBuilder;
 use Tulia\Cms\Widget\Query\Enum\ScopeEnum;
 use Tulia\Cms\Widget\Query\Exception\MultipleFetchException;
 use Tulia\Cms\Widget\Query\Exception\QueryException;
@@ -20,14 +20,12 @@ use Tulia\Cms\Widget\Query\Exception\QueryNotFetchedException;
 use Tulia\Cms\Widget\Query\Factory\WidgetFactoryInterface;
 use Tulia\Cms\Widget\Query\FinderFactoryInterface;
 use Tulia\Cms\Widget\Query\Model\Widget as QueryModelWidget;
-use Tulia\Cms\Widget\UserInterface\Web\Form\WidgetFormManagerFactory;
+use Tulia\Cms\Widget\UserInterface\Web\Form\WidgetForm;
 use Tulia\Component\Datatable\DatatableFactory;
+use Tulia\Component\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Component\Templating\ViewInterface;
-use Tulia\Component\Theme\ManagerInterface;
 use Tulia\Component\Widget\Exception\WidgetNotFoundException;
 use Tulia\Component\Widget\Registry\WidgetRegistryInterface;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Tulia\Component\Security\Http\Csrf\Annotation\CsrfToken;
 
 /**
  * @author Adam Banaszkiewicz
@@ -74,7 +72,6 @@ class Widget extends AbstractController
      * @param Request $request
      * @param string $id
      * @param WidgetFactoryInterface $widgetFactory
-     * @param WidgetFormManagerFactory $managerFactory
      *
      * @return RedirectResponse|ViewInterface
      *
@@ -83,12 +80,8 @@ class Widget extends AbstractController
      *
      * @CsrfToken(id="widget_form")
      */
-    public function create(
-        Request $request,
-        string $id,
-        WidgetFactoryInterface $widgetFactory,
-        WidgetFormManagerFactory $managerFactory
-    ) {
+    public function create(Request $request, string $id, WidgetFactoryInterface $widgetFactory)
+    {
         if ($this->widgetRegistry->has($id) === false) {
             throw $this->createNotFoundException($this->trans('widgetNotFound', [], 'widgets'));
         }
@@ -99,21 +92,42 @@ class Widget extends AbstractController
         ]);
 
         $widgetInstance = $this->widgetRegistry->get($id);
-        $manager = $managerFactory->create($widgetInstance, $widgetModel);
-        $form = $manager->createForm();
+
+        $model = ApplicationWidget::fromQueryModel($widgetModel);
+
+        $widgetConfiguration = $model->getWidgetConfiguration();
+        $configs = $widgetConfiguration->all();
+        $widgetInstance->configure($widgetConfiguration);
+        $widgetConfiguration->merge($configs);
+
+        $model->setWidgetConfiguration($widgetConfiguration);
+
+        $form = $this->createForm(WidgetForm::class, $model, [
+            'widget_form' => $widgetInstance->getForm($widgetConfiguration),
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $manager->save($form);
+            $data = $form->getData();
+            $widgetInstance->saveAction($form, $data->getWidgetConfiguration());
+            $this->widgetStorage->save($data);
 
             $this->setFlash('success', $this->trans('widgetSaved', [], 'widgets'));
             return $this->redirectToRoute('backend.widget');
         }
 
+        $widgetView = $widgetInstance->getView($widgetConfiguration);
+
+        if ($widgetView) {
+            $widgetView->addData([
+                'config' => $widgetConfiguration,
+                'form'   => $form,
+            ]);
+        }
+
         return $this->view('@backend/widget/create.tpl', [
-            'widgetView' => $manager->getWidgetView(),
+            'widgetView' => $widgetView,
             'widget'     => $widgetInstance,
-            'manager'    => $manager->getManager(),
             'form'       => $form->createView(),
         ]);
     }
@@ -121,7 +135,6 @@ class Widget extends AbstractController
     /**
      * @param Request $request
      * @param string $id
-     * @param WidgetFormManagerFactory $managerFactory
      *
      * @return RedirectResponse|ViewInterface
      *
@@ -132,8 +145,7 @@ class Widget extends AbstractController
      */
     public function edit(
         Request $request,
-        string $id,
-        WidgetFormManagerFactory $managerFactory
+        string $id
     ) {
         $widgetModel = $this->getWidgetById($id);
 
@@ -142,22 +154,43 @@ class Widget extends AbstractController
         }
 
         $widgetInstance = $this->widgetRegistry->get($widgetModel->getWidgetId());
-        $manager = $managerFactory->create($widgetInstance, $widgetModel);
-        $form = $manager->createForm();
+
+        $model = ApplicationWidget::fromQueryModel($widgetModel);
+
+        $widgetConfiguration = $model->getWidgetConfiguration();
+        $configs = $widgetConfiguration->all();
+        $widgetInstance->configure($widgetConfiguration);
+        $widgetConfiguration->merge($configs);
+
+        $model->setWidgetConfiguration($widgetConfiguration);
+
+        $form = $this->createForm(WidgetForm::class, $model, [
+            'widget_form' => $widgetInstance->getForm($widgetConfiguration),
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $manager->save($form);
+            $data = $form->getData();
+            $widgetInstance->saveAction($form, $data->getWidgetConfiguration());
+            $this->widgetStorage->save($data);
 
             $this->setFlash('success', $this->trans('widgetSaved', [], 'widgets'));
             return $this->redirectToRoute('backend.widget');
         }
 
+        $widgetView = $widgetInstance->getView($widgetConfiguration);
+
+        if ($widgetView) {
+            $widgetView->addData([
+                'config' => $widgetConfiguration,
+                'form'   => $form,
+            ]);
+        }
+
         return $this->view('@backend/widget/edit.tpl', [
-            'widgetView' => $manager->getWidgetView(),
+            'widgetView' => $widgetView,
             'widget'     => $widgetInstance,
             'model'      => $widgetModel,
-            'manager'    => $manager->getManager(),
             'form'       => $form->createView(),
         ]);
     }

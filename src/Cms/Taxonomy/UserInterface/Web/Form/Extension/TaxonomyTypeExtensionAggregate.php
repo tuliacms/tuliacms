@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Taxonomy\UserInterface\Web\Form\Extension;
 
-use Tulia\Component\FormBuilder\ExtensionAggregateInterface;
+use Tulia\Component\FormSkeleton\Extension\ExtensionAggregateInterface;
 use Tulia\Cms\Taxonomy\Application\TaxonomyType\RegistryInterface;
 
 /**
@@ -12,14 +12,8 @@ use Tulia\Cms\Taxonomy\Application\TaxonomyType\RegistryInterface;
  */
 class TaxonomyTypeExtensionAggregate implements ExtensionAggregateInterface
 {
-    /**
-     * @var RegistryInterface
-     */
-    protected $registry;
+    protected RegistryInterface $registry;
 
-    /**
-     * @param RegistryInterface $registry
-     */
     public function __construct(RegistryInterface $registry)
     {
         $this->registry = $registry;

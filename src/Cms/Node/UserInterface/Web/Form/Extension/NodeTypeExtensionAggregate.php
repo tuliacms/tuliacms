@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\UserInterface\Web\Form\Extension;
 
-use Tulia\Component\FormBuilder\ExtensionAggregateInterface;
+use Tulia\Component\FormSkeleton\Extension\ExtensionAggregateInterface;
 use Tulia\Cms\Node\Infrastructure\NodeType\RegistryInterface;
 
 /**
@@ -12,14 +12,8 @@ use Tulia\Cms\Node\Infrastructure\NodeType\RegistryInterface;
  */
 class NodeTypeExtensionAggregate implements ExtensionAggregateInterface
 {
-    /**
-     * @var RegistryInterface
-     */
-    protected $registry;
+    protected RegistryInterface $registry;
 
-    /**
-     * @param RegistryInterface $registry
-     */
     public function __construct(RegistryInterface $registry)
     {
         $this->registry = $registry;

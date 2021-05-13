@@ -5,30 +5,23 @@ declare(strict_types=1);
 namespace Tulia\Cms\Taxonomy\UserInterface\Web\Form\Extension;
 
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType;
-use Tulia\Cms\Taxonomy\Application\Model\Term;
 use Tulia\Cms\Taxonomy\Application\TaxonomyType\TaxonomyTypeInterface;
 use Tulia\Cms\Taxonomy\Infrastructure\Framework\Form\FormType\TaxonomyTypeaheadType;
-use Tulia\Cms\Taxonomy\UserInterface\Web\Form\ScopeEnum;
-use Tulia\Component\FormBuilder\AbstractExtension;
-use Tulia\Component\FormBuilder\Section\FormRowSection;
-use Tulia\Component\FormBuilder\Section\Section;
+use Tulia\Cms\Taxonomy\UserInterface\Web\Form\TermForm;
+use Tulia\Component\FormSkeleton\Extension\AbstractExtension;
+use Tulia\Component\FormSkeleton\Section\SectionsBuilderInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class TaxonomyTypeExtension extends AbstractExtension
 {
-    /**
-     * @var TaxonomyTypeInterface
-     */
-    protected $taxonomyType;
+    protected TaxonomyTypeInterface $taxonomyType;
 
-    /**
-     * @param TaxonomyTypeInterface $taxonomyType
-     */
     public function __construct(TaxonomyTypeInterface $taxonomyType)
     {
         $this->taxonomyType = $taxonomyType;
@@ -67,31 +60,35 @@ class TaxonomyTypeExtension extends AbstractExtension
     /**
      * {@inheritdoc}
      */
-    public function getSections(): array
+    public function getSections(SectionsBuilderInterface $builder): void
     {
-        $sections = [];
-
         if ($this->taxonomyType->supports('thumbnail')) {
-            $sections[] = $section = new Section('lead-image', 'leadImage', '@backend/taxonomy/term/parts/lead-image.tpl');
-            $section->setPriority(800);
-            $section->setGroup('sidebar');
-            $section->setFields(['thumbnail']);
+            $builder
+                ->add('lead-image', [
+                    'label' => 'leadImage',
+                    'view' => '@backend/taxonomy/term/parts/lead-image.tpl',
+                    'priority' => 800,
+                    'group' => 'sidebar',
+                    'fields' => ['thumbnail'],
+                ]);
         }
 
         if ($this->taxonomyType->supports('hierarchy')) {
-            $sections[] = $section = new FormRowSection('parent', 'parentTerm', 'parent', $this->taxonomyType->getTranslationDomain());
-            $section->setPriority(900);
-            $section->setGroup('sidebar');
+            $builder
+                ->add('parent', [
+                    'label' => 'parentTerm',
+                    'translation_domain' => $this->taxonomyType->getTranslationDomain(),
+                    'priority' => 900,
+                    'group' => 'sidebar',
+                ]);
         }
-
-        return $sections;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function supports(object $object, string $scope): bool
+    public function supports(FormTypeInterface $formType, array $options, $data = null): bool
     {
-        return $object instanceof Term && $object->getType() === $this->taxonomyType->getType() && $scope === ScopeEnum::BACKEND_EDIT;
+        return $formType instanceof TermForm && $options['taxonomy_type'] === $this->taxonomyType->getType();
     }
 }

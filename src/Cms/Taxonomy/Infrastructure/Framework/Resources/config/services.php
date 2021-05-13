@@ -53,7 +53,7 @@ use Tulia\Cms\Taxonomy\UserInterface\Web\Form\Extension\TaxonomyTypeExtensionAgg
 use Tulia\Cms\Taxonomy\UserInterface\Web\Form\TermForm;
 use Tulia\Cms\Taxonomy\UserInterface\Web\Form\TermFormManagerFactory;
 use Tulia\Component\DependencyInjection\ContainerBuilderInterface;
-use Tulia\Component\FormBuilder\Manager\ManagerFactoryInterface;
+use Tulia\Component\FormSkeleton\Form\ManagerFactoryInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Slug\SluggerInterface;

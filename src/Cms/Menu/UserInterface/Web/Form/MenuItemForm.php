@@ -4,24 +4,24 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Menu\UserInterface\Web\Form;
 
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Form\AbstractType;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Cms\Menu\Domain\Builder\Type\RegistryInterface;
 use Tulia\Cms\Menu\Domain\Builder\Type\TypeInterface;
 use Tulia\Cms\Menu\Infrastructure\Framework\Form\FormType\MenuItemChoiceType;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType;
-use Tulia\Component\FormBuilder\Manager\ManagerInterface;
+use Tulia\Component\FormSkeleton\Form\AbstractFormSkeletonType;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class MenuItemForm extends AbstractType
+class MenuItemForm extends AbstractFormSkeletonType
 {
     protected RegistryInterface $registry;
+
     protected TranslatorInterface $translator;
 
     public function __construct(
@@ -104,10 +104,6 @@ class MenuItemForm extends AbstractType
                 'translation_domain' => 'menu',
             ]);
         }
-
-        if ($options['form_extension_manager'] instanceof ManagerInterface) {
-            $options['form_extension_manager']->buildForm($builder, $options);
-        }
     }
 
     /**
@@ -116,7 +112,6 @@ class MenuItemForm extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefault('persist_mode', 'create');
-        $resolver->setDefault('form_extension_manager', null);
         $resolver->setDefault('menu_id', null);
     }
 

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Taxonomy\UserInterface\Web\Form;
 
-use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -12,21 +11,15 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType;
 use Tulia\Cms\Taxonomy\Application\TaxonomyType\RegistryInterface;
 use Tulia\Cms\Taxonomy\Application\TaxonomyType\TaxonomyTypeInterface;
-use Tulia\Component\FormBuilder\Manager\ManagerInterface;
+use Tulia\Component\FormSkeleton\Form\AbstractFormSkeletonType;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class TermForm extends AbstractType
+class TermForm extends AbstractFormSkeletonType
 {
-    /**
-     * @var RegistryInterface
-     */
-    protected $taxonomyRegistry;
+    protected RegistryInterface $taxonomyRegistry;
 
-    /**
-     * @param RegistryInterface $taxonomyRegistry
-     */
     public function __construct(RegistryInterface $taxonomyRegistry)
     {
         $this->taxonomyRegistry = $taxonomyRegistry;
@@ -70,10 +63,6 @@ class TermForm extends AbstractType
         if ($taxonomyType->isRoutable()) {
             $builder->add('slug', Type\TextType::class);
         }
-
-        if ($options['form_extension_manager'] instanceof ManagerInterface) {
-            $options['form_extension_manager']->buildForm($builder, $options);
-        }
     }
 
     /**
@@ -82,7 +71,6 @@ class TermForm extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'form_extension_manager' => null,
             'taxonomy_type' => 'category',
         ]);
 

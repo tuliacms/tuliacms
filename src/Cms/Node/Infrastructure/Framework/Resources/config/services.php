@@ -64,7 +64,7 @@ use Tulia\Cms\Taxonomy\Application\TaxonomyType\RegistryInterface as TaxonomyReg
 use Tulia\Cms\Taxonomy\Query\FinderFactoryInterface as TermFinderFactoryInterface;
 use Tulia\Cms\User\Application\Service\AuthenticatedUserProviderInterface;
 use Tulia\Component\DependencyInjection\ContainerBuilderInterface;
-use Tulia\Component\FormBuilder\Manager\ManagerFactoryInterface;
+use Tulia\Component\FormSkeleton\Form\ManagerFactoryInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 use Tulia\Component\Shortcode\ProcessorInterface;

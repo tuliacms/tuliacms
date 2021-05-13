@@ -8,7 +8,7 @@ imports:
     - { resource: 'services/security.yaml' }
     - { resource: 'services/widget.yaml' }
     - { resource: 'services/datatable.yaml' }
-    - { resource: 'services/form-builder.yaml' }
+    - { resource: 'services/form-skeleton.yaml' }
     - { resource: 'services/image.yaml' }
     - { resource: 'services/shortcode.yaml' }
     - { resource: 'services/finder.yaml' }

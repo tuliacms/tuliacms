@@ -4,34 +4,26 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\User\UserInterface\Web\Form\UserForm;
 
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type;
-use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType;
 use Tulia\Cms\User\Infrastructure\Framework\Validator\Constraints\EmailUnique;
 use Tulia\Cms\User\Infrastructure\Framework\Validator\Constraints\Username;
 use Tulia\Cms\User\Infrastructure\Framework\Validator\Constraints\UsernameUnique;
-use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType;
-use Tulia\Component\FormBuilder\Manager\ManagerInterface;
+use Tulia\Component\FormSkeleton\Form\AbstractFormSkeletonType;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class UserForm extends AbstractType
+class UserForm extends AbstractFormSkeletonType
 {
-    /**
-     * @var TranslatorInterface
-     */
-    protected $translator;
+    protected TranslatorInterface $translator;
 
-    /**
-     * @param TranslatorInterface $translator
-     */
-    public function __construct(
-        TranslatorInterface $translator
-    ) {
+    public function __construct(TranslatorInterface $translator)
+    {
         $this->translator = $translator;
     }
 
@@ -66,10 +58,6 @@ class UserForm extends AbstractType
             ])
             ->add('save', FormType\SubmitType::class)
         ;
-
-        if ($options['form_extension_manager'] instanceof ManagerInterface) {
-            $options['form_extension_manager']->buildForm($builder, $options);
-        }
     }
 
     /**
@@ -78,8 +66,7 @@ class UserForm extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'form_extension_manager' => null,
-            'password_required'      => true,
+            'password_required' => true,
         ]);
     }
 }

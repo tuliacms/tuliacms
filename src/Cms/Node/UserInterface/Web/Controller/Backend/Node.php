@@ -19,10 +19,10 @@ use Tulia\Cms\Node\Query\Exception\MultipleFetchException;
 use Tulia\Cms\Node\Query\Exception\QueryException;
 use Tulia\Cms\Node\Query\Exception\QueryNotFetchedException;
 use Tulia\Cms\Node\Query\Enum\ScopeEnum;
+use Tulia\Cms\Node\UserInterface\Web\Form\NodeForm;
 use Tulia\Cms\Taxonomy\Application\TaxonomyType\RegistryInterface as TaxonomyRegistry;
 use Tulia\Cms\Taxonomy\Query\FinderFactoryInterface as TaxonomyFinderFactory;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
-use Tulia\Cms\Node\UserInterface\Web\Form\NodeFormManagerFactory;
 use Tulia\Component\Templating\ViewInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -33,34 +33,20 @@ use Tulia\Component\Security\Http\Csrf\Annotation\CsrfToken;
  */
 class Node extends AbstractController
 {
-    /**
-     * @var RegistryInterface
-     */
-    protected $nodeRegistry;
+    private FinderFactoryInterface $finderFactory;
 
-    /**
-     * @var FinderFactoryInterface
-     */
-    protected $finderFactory;
+    private NodeStorage $nodeStorage;
 
-    /**
-     * @var NodeStorage
-     */
-    protected $nodeStorage;
+    private RegistryInterface $typeRegistry;
 
-    /**
-     * @param RegistryInterface $nodeRegistry
-     * @param FinderFactoryInterface $finderFactory
-     * @param NodeStorage $nodeStorage
-     */
     public function __construct(
-        RegistryInterface $nodeRegistry,
         FinderFactoryInterface $finderFactory,
-        NodeStorage $nodeStorage
+        NodeStorage $nodeStorage,
+        RegistryInterface $typeRegistry
     ) {
-        $this->nodeRegistry  = $nodeRegistry;
         $this->finderFactory = $finderFactory;
-        $this->nodeStorage   = $nodeStorage;
+        $this->nodeStorage = $nodeStorage;
+        $this->typeRegistry = $typeRegistry;
     }
 
     public function index(string $node_type): RedirectResponse
@@ -73,7 +59,6 @@ class Node extends AbstractController
      * @param TaxonomyRegistry $registry
      * @param TaxonomyFinderFactory $taxonomyFinder
      * @param string $node_type
-     * @param string|null $list
      *
      * @return RedirectResponse|ViewInterface
      *
@@ -108,36 +93,33 @@ class Node extends AbstractController
     /**
      * @param Request $request
      * @param string $node_type
-     * @param NodeFormManagerFactory $formFactory
      * @param NodeFactoryInterface $nodeFactory
      *
      * @return RedirectResponse|ViewInterface
      *
      * @CsrfToken(id="node_form")
      */
-    public function create(
-        Request $request,
-        string $node_type,
-        NodeFormManagerFactory $formFactory,
-        NodeFactoryInterface $nodeFactory
-    ) {
+    public function create(Request $request, string $node_type, NodeFactoryInterface $nodeFactory)
+    {
         $node = $nodeFactory->createNew([
             'type' => $node_type,
         ]);
-        $manager = $formFactory->create($node_type, $node);
-        $form = $manager->createForm();
+        $model = ApplicationNode::fromQueryModel($node);
+
+        $form = $this->createForm(NodeForm::class, $model, ['node_type' => $node_type]);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $manager->save($form);
+        $nodeType = $this->typeRegistry->getType($node_type);
 
-            $this->setFlash('success', $this->trans('nodeSaved', [], $manager->getNodeType()->getTranslationDomain()));
-            return $this->redirectToRoute('backend.node.edit', [ 'id' => $node->getId(), 'node_type' => $manager->getNodeType()->getType() ]);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->nodeStorage->save($form->getData());
+
+            $this->setFlash('success', $this->trans('nodeSaved', [], $nodeType->getTranslationDomain()));
+            return $this->redirectToRoute('backend.node.edit', [ 'id' => $node->getId(), 'node_type' => $nodeType->getType() ]);
         }
 
         return $this->view('@backend/node/create.tpl', [
-            'manager'  => $manager->getManager(),
-            'nodeType' => $manager->getNodeType(),
+            'nodeType' => $nodeType,
             'node'     => $node,
             'form'     => $form->createView(),
         ]);
@@ -145,7 +127,6 @@ class Node extends AbstractController
 
     /**
      * @param Request $request
-     * @param NodeFormManagerFactory $factory
      * @param string $node_type
      * @param string $id
      *
@@ -158,27 +139,25 @@ class Node extends AbstractController
      *
      * @CsrfToken(id="node_form")
      */
-    public function edit(
-        Request $request,
-        NodeFormManagerFactory $factory,
-        string $node_type,
-        string $id
-    ) {
+    public function edit(Request $request, string $node_type, string $id)
+    {
         $node = $this->getNodeById($id);
-        $manager = $factory->create($node_type, $node);
-        $form = $manager->createForm();
+        $model = ApplicationNode::fromQueryModel($node);
+
+        $form = $this->createForm(NodeForm::class, $model, ['node_type' => $node_type]);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $manager->save($form);
+        $nodeType = $this->typeRegistry->getType($node_type);
 
-            $this->setFlash('success', $this->trans('nodeSaved', [], $manager->getNodeType()->getTranslationDomain()));
-            return $this->redirectToRoute('backend.node.edit', [ 'id' => $node->getId(), 'node_type' => $manager->getNodeType()->getType() ]);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->nodeStorage->save($form->getData());
+
+            $this->setFlash('success', $this->trans('nodeSaved', [], $nodeType->getTranslationDomain()));
+            return $this->redirectToRoute('backend.node.edit', [ 'id' => $node->getId(), 'node_type' => $nodeType->getType() ]);
         }
 
         return $this->view('@backend/node/edit.tpl', [
-            'manager'  => $manager->getManager(),
-            'nodeType' => $manager->getNodeType(),
+            'nodeType' => $nodeType,
             'node'     => $node,
             'form'     => $form->createView(),
         ]);
@@ -274,7 +253,7 @@ class Node extends AbstractController
      */
     protected function findNodeType(string $type): NodeTypeInterface
     {
-        $nodeType = $this->nodeRegistry->getType($type);
+        $nodeType = $this->typeRegistry->getType($type);
 
         if (! $nodeType) {
             throw $this->createNotFoundException('Node type not found.');

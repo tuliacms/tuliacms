@@ -15,7 +15,7 @@
                 {{ 'widgetType'|trans({}, 'widgets') }}
             </span>
         </div>
-        {{ form_extension_render(manager, 'sidebar', {
+        {{ form_skeleton_render(form, 'sidebar', {
             active: ['status', 'look']
         }) }}
     </div>
@@ -32,7 +32,7 @@
                 </div>
             </div>
         </div>
-        {{ form_extension_render(manager, 'default', {
+        {{ form_skeleton_render(form, 'default', {
             active: ['widget']
         }) }}
     </div>

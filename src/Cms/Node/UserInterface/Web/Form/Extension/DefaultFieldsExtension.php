@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Tulia\Cms\Node\UserInterface\Web\Form\Extension;
 
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\Validator\Constraints as Assert;
-use Tulia\Cms\Node\UserInterface\Web\Form\ScopeEnum;
-use Tulia\Component\FormBuilder\AbstractExtension;
-use Tulia\Component\FormBuilder\Section\Section;
-use Tulia\Cms\Node\Application\Model\Node;
+use Tulia\Cms\Node\UserInterface\Web\Form\NodeForm;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType;
+use Tulia\Component\FormSkeleton\Extension\AbstractExtension;
+use Tulia\Component\FormSkeleton\Section\SectionsBuilderInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -38,23 +38,22 @@ class DefaultFieldsExtension extends AbstractExtension
     /**
      * {@inheritdoc}
      */
-    public function getSections(): array
+    public function getSections(SectionsBuilderInterface $builder): void
     {
-        $sections = [];
-
-        $sections[] = $section = new Section('status', 'statusAndAvailability', '@backend/node/parts/status.tpl');
-        $section->setPriority(1000);
-        $section->setGroup('sidebar');
-        $section->setFields(['status', 'publishedAt', 'publishedTo']);
-
-        return $sections;
+        $builder->add('status', [
+            'label' => 'statusAndAvailability',
+            'view' => '@backend/node/parts/status.tpl',
+            'priority' => 1000,
+            'group' => 'sidebar',
+            'fields' => ['status', 'publishedAt', 'publishedTo'],
+        ]);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function supports(object $object, string $scope): bool
+    public function supports(FormTypeInterface $formType, array $options, $data = null): bool
     {
-        return $object instanceof Node && $scope === ScopeEnum::BACKEND_EDIT;
+        return $formType instanceof NodeForm;
     }
 }

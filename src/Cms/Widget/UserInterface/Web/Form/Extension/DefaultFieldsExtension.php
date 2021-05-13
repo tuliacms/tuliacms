@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Widget\UserInterface\Web\Form\Extension;
 
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type;
-use Tulia\Cms\Widget\Application\Model\Widget;
-use Tulia\Cms\Widget\UserInterface\Web\Form\ScopeEnum;
-use Tulia\Component\FormBuilder\AbstractExtension;
-use Tulia\Component\FormBuilder\Section\FormRowSection;
-use Tulia\Component\FormBuilder\Section\Section;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormTypeInterface;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType;
+use Tulia\Cms\Widget\UserInterface\Web\Form\WidgetForm;
+use Tulia\Component\FormSkeleton\Extension\AbstractExtension;
+use Tulia\Component\FormSkeleton\Section\SectionsBuilderInterface;
 use Tulia\Component\Theme\ManagerInterface;
 
 /**
@@ -19,14 +18,8 @@ use Tulia\Component\Theme\ManagerInterface;
  */
 class DefaultFieldsExtension extends AbstractExtension
 {
-    /**
-     * @var ManagerInterface
-     */
-    protected $themeManager;
+    protected ManagerInterface $themeManager;
 
-    /**
-     * @param ManagerInterface $themeManager
-     */
     public function __construct(ManagerInterface $themeManager)
     {
         $this->themeManager = $themeManager;
@@ -74,37 +67,42 @@ class DefaultFieldsExtension extends AbstractExtension
     /**
      * {@inheritdoc}
      */
-    public function getSections(): array
+    public function getSections(SectionsBuilderInterface $builder): void
     {
-        $sections = [];
-
-        $sections[] = $section = new FormRowSection('status', 'status', 'visibility', 'widgets');
-        $section->setPriority(1000);
-        $section->setGroup('sidebar');
-        $section->setFields(['visibility']);
-
-        $sections[] = $section = new Section('look', 'look', '@backend/widget/parts/look.tpl', 'widgets');
-        $section->setPriority(800);
-        $section->setGroup('sidebar');
-        $section->setFields(['html_class', 'html_id', 'title', 'styles']);
-
-        $sections[] = $section = new Section('widget', 'widgetOptions', '{% if widgetView %}
+        $builder
+            ->add('status', [
+                'translation_domain' => 'widgets',
+                'group' => 'sidebar',
+                'priority' => 1000,
+                'fields' => ['visibility'],
+            ])
+            ->add('look', [
+                'view' => '@backend/widget/parts/look.tpl',
+                'translation_domain' => 'widgets',
+                'priority' => 800,
+                'group' => 'sidebar',
+                'fields' => ['html_class', 'html_id', 'title', 'styles'],
+            ])
+            ->add('widget', [
+                'label' => 'widgetOptions',
+                'template' => '{% if widgetView %}
             {% include widgetView.views|first with widgetView.data|merge({form: form.widget_configuration}) %}
-        {% endif %}', 'widgets');
-        $section->setPriority(1000);
-        $section->setFields('{% set fields = [] %}
+        {% endif %}',
+                'translation_domain' => 'widgets',
+                'priority' => 1000,
+                'fields' => ['{% set fields = [] %}
             {% for key, item in form.widget_configuration %}
                 {% set fields = fields|merge([key]) %}
-            {% endfor %}');
-
-        return $sections;
+            {% endfor %}']
+            ])
+        ;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function supports(object $object, string $scope): bool
+    public function supports(FormTypeInterface $formType, array $options, $data = null): bool
     {
-        return $object instanceof Widget && $scope === ScopeEnum::BACKEND_EDIT;
+        return $formType instanceof WidgetForm;
     }
 }

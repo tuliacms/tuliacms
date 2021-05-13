@@ -4,34 +4,27 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\UserInterface\Web\Form\Extension;
 
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
-use Tulia\Cms\Node\Application\Model\Node;
-use Tulia\Cms\Node\Infrastructure\NodeType\NodeTypeInterface;
 use Tulia\Cms\Node\Infrastructure\Framework\Form\FormType\NodeTypeaheadType;
-use Tulia\Cms\Node\UserInterface\Web\Form\ScopeEnum;
+use Tulia\Cms\Node\Infrastructure\NodeType\NodeTypeInterface;
+use Tulia\Cms\Node\UserInterface\Web\Form\NodeForm;
+use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType;
 use Tulia\Cms\Taxonomy\Infrastructure\Framework\Form\FormType\TaxonomyTypeaheadType;
 use Tulia\Cms\WysiwygEditor\Core\Infrastructure\Framework\Form\FormType\WysiwygEditorType;
-use Tulia\Component\FormBuilder\AbstractExtension;
-use Tulia\Component\FormBuilder\Section\FormRowSection;
-use Tulia\Component\FormBuilder\Section\Section;
-use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType;
+use Tulia\Component\FormSkeleton\Extension\AbstractExtension;
+use Tulia\Component\FormSkeleton\Section\SectionsBuilderInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class NodeTypeExtension extends AbstractExtension
 {
-    /**
-     * @var NodeTypeInterface
-     */
-    protected $nodeType;
+    protected NodeTypeInterface $nodeType;
 
-    /**
-     * @param NodeTypeInterface $nodeType
-     */
     public function __construct(NodeTypeInterface $nodeType)
     {
         $this->nodeType = $nodeType;
@@ -101,43 +94,56 @@ class NodeTypeExtension extends AbstractExtension
     /**
      * {@inheritdoc}
      */
-    public function getSections(): array
+    public function getSections(SectionsBuilderInterface $builder): void
     {
-        $sections = [];
-
         if ($this->nodeType->supports('introduction')) {
-            $sections[] = $section = new Section('introduction', 'introduction', '<div class="container-fluid">
+            $builder->add('introduction', [
+                'template' => '<div class="container-fluid">
     <div class="row">
         <div class="col">
             {{ form_row(form.introduction) }}
         </div>
     </div>
-</div>');
-            $section->setPriority(1000);
+</div>',
+                'priority' => 1000,
+            ]);
         }
 
         if ($this->nodeType->supports('content')) {
-            $sections[] = $section = new FormRowSection('content', 'content');
-            $section->setPriority(900);
+            $builder->add('content', [
+                'priority' => 900,
+            ]);
         }
 
         if ($this->nodeType->supports('thumbnail')) {
-            $sections[] = $section = new Section('lead-image', 'leadImage', '@backend/node/parts/lead-image.tpl');
-            $section->setPriority(800);
-            $section->setGroup('sidebar');
-            $section->setFields(['thumbnail']);
+            $builder
+                ->add('thumbnail', [
+                    'label' => 'leadImage',
+                    'view' => '@backend/node/parts/lead-image.tpl',
+                    'priority' => 800,
+                    'group' => 'sidebar',
+                ])
+            ;
         }
 
         if ($this->nodeType->supports('hierarchy')) {
-            $sections[] = $section = new FormRowSection('parent', 'parentNode', 'parent', $this->nodeType->getTranslationDomain());
-            $section->setPriority(900);
-            $section->setGroup('sidebar');
+            $builder
+                ->add('parent', [
+                    'label' => 'parentNode',
+                    'translation_domain' => $this->nodeType->getTranslationDomain(),
+                    'priority' => 900,
+                    'group' => 'sidebar',
+                ])
+            ;
         }
 
         if ($this->nodeType->getRoutableTaxonomy()) {
-            $sections[] = $section = new FormRowSection('category', 'category', 'category');
-            $section->setPriority(900);
-            $section->setGroup('sidebar');
+            $builder
+                ->add('category', [
+                    'priority' => 900,
+                    'group' => 'sidebar',
+                ])
+            ;
         }
 
         /*foreach ($this->nodeType->getTaxonomies() as $taxonomy) {
@@ -160,15 +166,13 @@ class NodeTypeExtension extends AbstractExtension
             $section->setPriority(900);
             $section->setGroup('sidebar');
         }*/
-
-        return $sections;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function supports(object $object, string $scope): bool
+    public function supports(FormTypeInterface $formType, array $options, $data = null): bool
     {
-        return $object instanceof Node && $object->getType() === $this->nodeType->getType() && $scope === ScopeEnum::BACKEND_EDIT;
+        return $formType instanceof NodeForm && $options['node_type'] === $this->nodeType->getType();
     }
 }

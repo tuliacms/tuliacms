@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Tulia\Cms\Taxonomy\UserInterface\Web\Form\Extension;
 
 use Symfony\Component\Form\FormBuilderInterface;
-use Tulia\Cms\Node\UserInterface\Web\Form\ScopeEnum;
-use Tulia\Component\FormBuilder\AbstractExtension;
-use Tulia\Component\FormBuilder\Section\FormRowSection;
-use Tulia\Cms\Taxonomy\Application\Model\Term;
+use Symfony\Component\Form\FormTypeInterface;
+use Tulia\Cms\Taxonomy\UserInterface\Web\Form\TermForm;
+use Tulia\Component\FormSkeleton\Extension\AbstractExtension;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType;
+use Tulia\Component\FormSkeleton\Section\SectionsBuilderInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -27,22 +27,19 @@ class DefaultFieldsExtension extends AbstractExtension
     /**
      * {@inheritdoc}
      */
-    public function getSections(): array
+    public function getSections(SectionsBuilderInterface $builder): void
     {
-        $sections = [];
-
-        $sections[] = $section = new FormRowSection('visibility', 'visibility', 'visibility');
-        $section->setPriority(1000);
-        $section->setGroup('sidebar');
-
-        return $sections;
+        $builder->add('visibility', [
+            'priority' => 1000,
+            'group' => 'sidebar',
+        ]);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function supports(object $object, string $scope): bool
+    public function supports(FormTypeInterface $formType, array $options, $data = null): bool
     {
-        return $object instanceof Term && $scope === ScopeEnum::BACKEND_EDIT;
+        return $formType instanceof TermForm;
     }
 }

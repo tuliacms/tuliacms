@@ -6,25 +6,19 @@ namespace Tulia\Cms\User\UserInterface\Web\Form\Extension;
 
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type;
+use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\Validator\Constraints as Assert;
-use Tulia\Cms\User\Application\Model\User;
 use Tulia\Cms\User\Infrastructure\Framework\Validator\Constraints\Password;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType;
-use Tulia\Component\FormBuilder\AbstractExtension;
-use Tulia\Component\FormBuilder\Section\Section;
+use Tulia\Cms\User\UserInterface\Web\Form\UserForm\UserForm;
+use Tulia\Component\FormSkeleton\Extension\AbstractExtension;
+use Tulia\Component\FormSkeleton\Section\SectionsBuilderInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class SecurityExtension extends AbstractExtension
 {
-    protected array $scopes = [];
-
-    public function __construct(array $scopes)
-    {
-        $this->scopes = $scopes;
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -77,22 +71,21 @@ class SecurityExtension extends AbstractExtension
     /**
      * {@inheritdoc}
      */
-    public function getSections(): array
+    public function getSections(SectionsBuilderInterface $builder): void
     {
-        $sections = [];
-
-        $sections[] = $section = new Section('security', 'security', '@backend/user/user/parts/security.tpl');
-        $section->setPriority(1000);
-        $section->setFields(['password', 'enabled', 'roles']);
-
-        return $sections;
+        $builder
+            ->add('security', [
+                'view' => '@backend/user/user/parts/security.tpl',
+                'priority' => 1000,
+                'fields' => ['password', 'enabled', 'roles'],
+            ]);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function supports(object $object, string $scope): bool
+    public function supports(FormTypeInterface $formType, array $options, $data = null): bool
     {
-        return $object instanceof User && in_array($scope, $this->scopes);
+        return $formType instanceof UserForm;
     }
 }
