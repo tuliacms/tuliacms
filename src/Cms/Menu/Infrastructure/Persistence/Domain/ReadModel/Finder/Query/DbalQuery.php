@@ -7,8 +7,11 @@ namespace Tulia\Cms\Menu\Infrastructure\Persistence\Domain\ReadModel\Finder\Quer
 use Exception;
 use PDO;
 use Tulia\Cms\Menu\Domain\ReadModel\Finder\Model\Menu;
+use Tulia\Cms\Menu\Infrastructure\Cms\Metadata\Item\Enum\MetadataEnum;
+use Tulia\Cms\Metadata\Domain\ReadModel\MetadataFinder;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Exception\QueryException;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
+use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Query\AbstractDbalQuery;
 
 /**
@@ -16,6 +19,14 @@ use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Query\Ab
  */
 class DbalQuery extends AbstractDbalQuery
 {
+    private MetadataFinder $metadataFinder;
+
+    public function __construct(QueryBuilder $queryBuilder, MetadataFinder $metadataFinder)
+    {
+        parent::__construct($queryBuilder);
+        $this->metadataFinder = $metadataFinder;
+    }
+
     public function getBaseQueryArray(): array
     {
         return [
@@ -79,10 +90,12 @@ class DbalQuery extends AbstractDbalQuery
             return $collection;
         }
 
+        $items = [];
+        $metadata = [];
+
         if ($criteria['fetch_items']) {
             $items = $this->fetchMenuItems($criteria);
-        } else {
-            $items = [];
+            $metadata = $this->metadataFinder->findAll(MetadataEnum::MENUITEM_GROUP, array_column($items, 'id'));
         }
 
         try {
@@ -91,6 +104,7 @@ class DbalQuery extends AbstractDbalQuery
 
                 foreach ($items as $item) {
                     if ($item['menu_id'] === $row['id']) {
+                        $item['metadata'] = $metadata[$item['id']] ?? [];
                         $row['items'][] = $item;
                     }
                 }
@@ -98,7 +112,7 @@ class DbalQuery extends AbstractDbalQuery
                 $collection->append(Menu::buildFromArray($row));
             }
         } catch (Exception $e) {
-            throw new QueryException('Exception during create colection of found menus: '.$e->getMessage(), 0, $e);
+            throw new QueryException('Exception during create colection of found menus: ' . $e->getMessage(), 0, $e);
         }
 
         return $collection;

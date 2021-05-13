@@ -14,13 +14,17 @@ use Tulia\Cms\Menu\Domain\WriteModel\Model\Menu;
 interface MenuRepositoryInterface
 {
     public function createNewMenu(array $data = []): Menu;
+
     public function createNewItem(array $data = []): Item;
 
     /**
      * @throws MenuNotFoundException
      */
     public function find(string $id): Menu;
+
     public function save(Menu $menu): void;
+
     public function update(Menu $menu): void;
+
     public function delete(string $id): void;
 }

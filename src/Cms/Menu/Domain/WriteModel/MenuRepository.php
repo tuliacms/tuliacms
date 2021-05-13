@@ -168,7 +168,7 @@ class MenuRepository implements MenuRepositoryInterface
                 'locale' => $item->getLocale(),
                 'name' => $item->getName(),
                 'visibility' => $item->getVisibility(),
-                'metadata' => $item->getMetadata(),
+                'metadata' => $item->getMetadata()->all(),
             ];
         }
 
