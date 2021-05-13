@@ -83,8 +83,7 @@ class DefaultFieldsExtension extends AbstractExtension
                 'group' => 'sidebar',
                 'fields' => ['html_class', 'html_id', 'title', 'styles'],
             ])
-            // @todo Finish this feld
-            /*->add('widget'', [
+            ->add('widget', [
                 'label' => 'widgetOptions',
                 'template' => '{% if widgetView %}
             {% include widgetView.views|first with widgetView.data|merge({form: form.widget_configuration}) %}
@@ -95,7 +94,7 @@ class DefaultFieldsExtension extends AbstractExtension
             {% for key, item in form.widget_configuration %}
                 {% set fields = fields|merge([key]) %}
             {% endfor %}']
-            ])*/
+            ])
         ;
     }
 
