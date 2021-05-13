@@ -12,7 +12,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Cms\User\UserInterface\Web\Form\MyAccount\MyAccountForm;
 use Tulia\Cms\User\UserInterface\Web\Form\UserForm\UserForm;
 use Tulia\Component\FormBuilder\Extension\AbstractExtension;
-use Tulia\Component\FormBuilder\Section\FormRowSection;
+use Tulia\Component\FormBuilder\Section\SectionsBuilderInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 
 /**
@@ -62,14 +62,12 @@ class BasicsExtension extends AbstractExtension
     /**
      * {@inheritdoc}
      */
-    public function getSections(): array
+    public function getSections(SectionsBuilderInterface $builder): void
     {
-        $sections = [];
-
-        $sections[] = $section = new FormRowSection('basics', 'basics', ['name', 'locale']);
-        $section->setPriority(1000);
-
-        return $sections;
+        $builder
+            ->rowSection('basics', 'basics', ['name', 'locale'])
+            ->setPriority(1000)
+        ;
     }
 
     /**

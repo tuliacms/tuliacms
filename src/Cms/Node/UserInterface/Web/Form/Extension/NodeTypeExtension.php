@@ -16,8 +16,8 @@ use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType;
 use Tulia\Cms\Taxonomy\Infrastructure\Framework\Form\FormType\TaxonomyTypeaheadType;
 use Tulia\Cms\WysiwygEditor\Core\Infrastructure\Framework\Form\FormType\WysiwygEditorType;
 use Tulia\Component\FormBuilder\Extension\AbstractExtension;
-use Tulia\Component\FormBuilder\Section\FormRowSection;
 use Tulia\Component\FormBuilder\Section\Section;
+use Tulia\Component\FormBuilder\Section\SectionsBuilderInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -95,43 +95,50 @@ class NodeTypeExtension extends AbstractExtension
     /**
      * {@inheritdoc}
      */
-    public function getSections(): array
+    public function getSections(SectionsBuilderInterface $builder): void
     {
-        $sections = [];
-
         if ($this->nodeType->supports('introduction')) {
-            $sections[] = $section = new Section('introduction', 'introduction', '<div class="container-fluid">
+            $builder
+                ->add( new Section('introduction', 'introduction', '<div class="container-fluid">
     <div class="row">
         <div class="col">
             {{ form_row(form.introduction) }}
         </div>
     </div>
-</div>');
-            $section->setPriority(1000);
+</div>'))
+                ->setPriority(1000);
         }
 
         if ($this->nodeType->supports('content')) {
-            $sections[] = $section = new FormRowSection('content', 'content');
-            $section->setPriority(900);
+            $builder
+                ->rowSection('content', 'content')
+                ->setPriority(900);
         }
 
         if ($this->nodeType->supports('thumbnail')) {
-            $sections[] = $section = new Section('lead-image', 'leadImage', '@backend/node/parts/lead-image.tpl');
-            $section->setPriority(800);
-            $section->setGroup('sidebar');
-            $section->setFields(['thumbnail']);
+            $builder
+                ->add(new Section('lead-image', 'leadImage', '@backend/node/parts/lead-image.tpl'))
+                ->setPriority(800)
+                ->setGroup('sidebar')
+                ->setFields(['thumbnail'])
+            ;
         }
 
         if ($this->nodeType->supports('hierarchy')) {
-            $sections[] = $section = new FormRowSection('parent', 'parentNode', 'parent', $this->nodeType->getTranslationDomain());
-            $section->setPriority(900);
-            $section->setGroup('sidebar');
+            $builder
+                ->rowSection('parent', 'parentNode', 'parent')
+                ->setTranslationDomain($this->nodeType->getTranslationDomain())
+                ->setPriority(900)
+                ->setGroup('sidebar')
+            ;
         }
 
         if ($this->nodeType->getRoutableTaxonomy()) {
-            $sections[] = $section = new FormRowSection('category', 'category', 'category');
-            $section->setPriority(900);
-            $section->setGroup('sidebar');
+            $builder
+                ->rowSection('category', 'category', 'category')
+                ->setPriority(900)
+                ->setGroup('sidebar')
+            ;
         }
 
         /*foreach ($this->nodeType->getTaxonomies() as $taxonomy) {
@@ -154,8 +161,6 @@ class NodeTypeExtension extends AbstractExtension
             $section->setPriority(900);
             $section->setGroup('sidebar');
         }*/
-
-        return $sections;
     }
 
     /**

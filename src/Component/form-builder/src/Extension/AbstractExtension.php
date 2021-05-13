@@ -7,6 +7,7 @@ namespace Tulia\Component\FormBuilder\Extension;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormTypeInterface;
+use Tulia\Component\FormBuilder\Section\SectionsBuilderInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -23,7 +24,6 @@ abstract class AbstractExtension implements ExtensionInterface
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-
     }
 
     /**
@@ -31,14 +31,12 @@ abstract class AbstractExtension implements ExtensionInterface
      */
     public function handle(FormInterface $form, object $data): void
     {
-
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getSections(): array
+    public function getSections(SectionsBuilderInterface $builder): void
     {
-        return [];
     }
 }

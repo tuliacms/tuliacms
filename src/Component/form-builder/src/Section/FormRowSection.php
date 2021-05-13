@@ -15,13 +15,9 @@ class FormRowSection extends AbstractSection
      * @param string|array|null $field
      * @param string|null $translationDomain
      */
-    public function __construct(
-        string $id,
-        string $label = null,
-        $field = null,
-        string $translationDomain = null
-    ) {
-        if (!$field) {
+    public function __construct(string $id, string $label = null, $field = null, string $translationDomain = null)
+    {
+        if (! $field) {
             $field = $id;
         }
 

@@ -13,8 +13,8 @@ use Tulia\Cms\Taxonomy\Application\TaxonomyType\TaxonomyTypeInterface;
 use Tulia\Cms\Taxonomy\Infrastructure\Framework\Form\FormType\TaxonomyTypeaheadType;
 use Tulia\Cms\Taxonomy\UserInterface\Web\Form\TermForm;
 use Tulia\Component\FormBuilder\Extension\AbstractExtension;
-use Tulia\Component\FormBuilder\Section\FormRowSection;
 use Tulia\Component\FormBuilder\Section\Section;
+use Tulia\Component\FormBuilder\Section\SectionsBuilderInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -61,24 +61,27 @@ class TaxonomyTypeExtension extends AbstractExtension
     /**
      * {@inheritdoc}
      */
-    public function getSections(): array
+    public function getSections(SectionsBuilderInterface $builder): void
     {
         $sections = [];
 
         if ($this->taxonomyType->supports('thumbnail')) {
-            $sections[] = $section = new Section('lead-image', 'leadImage', '@backend/taxonomy/term/parts/lead-image.tpl');
-            $section->setPriority(800);
-            $section->setGroup('sidebar');
-            $section->setFields(['thumbnail']);
+            $builder
+                ->add(new Section('lead-image', 'leadImage', '@backend/taxonomy/term/parts/lead-image.tpl'))
+                ->setPriority(800)
+                ->setGroup('sidebar')
+                ->setFields(['thumbnail'])
+            ;
         }
 
         if ($this->taxonomyType->supports('hierarchy')) {
-            $sections[] = $section = new FormRowSection('parent', 'parentTerm', 'parent', $this->taxonomyType->getTranslationDomain());
-            $section->setPriority(900);
-            $section->setGroup('sidebar');
+            $builder
+                ->rowSection('parent', 'parentTerm', 'parent')
+                ->setTranslationDomain($this->taxonomyType->getTranslationDomain())
+                ->setPriority(900)
+                ->setGroup('sidebar')
+            ;
         }
-
-        return $sections;
     }
 
     /**

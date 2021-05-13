@@ -7,6 +7,7 @@ namespace Tulia\Component\FormBuilder\Extension\Core;
 use Symfony\Component\Form\FormTypeInterface;
 use Tulia\Component\FormBuilder\Extension\AbstractExtension;
 use Tulia\Component\FormBuilder\Section\FormRestSection;
+use Tulia\Component\FormBuilder\Section\SectionsBuilderInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -29,14 +30,10 @@ class FormRestExtension extends AbstractExtension
     /**
      * {@inheritdoc}
      */
-    public function getSections(): array
+    public function getSections(SectionsBuilderInterface $builder): void
     {
-        $sections = [];
-
-        $sections[] = $section = new FormRestSection($this->id, $this->label, $this->translationDomain);
-        $section->setPriority(-1000);
-
-        return $sections;
+        $builder->add(new FormRestSection($this->id, $this->label, $this->translationDomain))
+            ->setPriority(-1000);
     }
 
     /**

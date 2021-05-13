@@ -9,35 +9,17 @@ namespace Tulia\Component\FormBuilder\Section;
  */
 abstract class AbstractSection implements SectionInterface
 {
-    /**
-     * @var null|string
-     */
-    protected $id;
+    protected string $id;
 
-    /**
-     * @var null|string
-     */
-    protected $label;
+    protected ?string $label = null;
 
-    /**
-     * @var null|string
-     */
-    protected $translationDomain;
+    protected ?string $translationDomain = null;
 
-    /**
-     * @var null|string
-     */
-    protected $view;
+    protected ?string $view = null;
 
-    /**
-     * @var int
-     */
-    protected $priority = 0;
+    protected int $priority = 0;
 
-    /**
-     * @var string
-     */
-    protected $group = 'default';
+    protected string $group = 'default';
 
     /**
      * @var string|array
@@ -47,7 +29,7 @@ abstract class AbstractSection implements SectionInterface
     /**
      * {@inheritdoc}
      */
-    public function getId(): ?string
+    public function getId(): string
     {
         return $this->id;
     }
@@ -55,9 +37,11 @@ abstract class AbstractSection implements SectionInterface
     /**
      * {@inheritdoc}
      */
-    public function setId(?string $id): void
+    public function setId(string $id): SectionInterface
     {
         $this->id = $id;
+
+        return $this;
     }
 
     /**
@@ -71,9 +55,11 @@ abstract class AbstractSection implements SectionInterface
     /**
      * {@inheritdoc}
      */
-    public function setLabel(?string $label): void
+    public function setLabel(?string $label): SectionInterface
     {
         $this->label = $label;
+
+        return $this;
     }
 
     /**
@@ -87,9 +73,11 @@ abstract class AbstractSection implements SectionInterface
     /**
      * {@inheritdoc}
      */
-    public function setTranslationDomain(?string $translationDomain): void
+    public function setTranslationDomain(?string $translationDomain): SectionInterface
     {
         $this->translationDomain = $translationDomain;
+
+        return $this;
     }
 
     /**
@@ -103,9 +91,11 @@ abstract class AbstractSection implements SectionInterface
     /**
      * {@inheritdoc}
      */
-    public function setView(?string $view): void
+    public function setView(?string $view): SectionInterface
     {
         $this->view = $view;
+
+        return $this;
     }
 
     /**
@@ -119,9 +109,11 @@ abstract class AbstractSection implements SectionInterface
     /**
      * {@inheritdoc}
      */
-    public function setPriority(int $priority): void
+    public function setPriority(int $priority): SectionInterface
     {
         $this->priority = $priority;
+
+        return $this;
     }
 
     /**
@@ -135,9 +127,11 @@ abstract class AbstractSection implements SectionInterface
     /**
      * {@inheritdoc}
      */
-    public function setGroup(string $group): void
+    public function setGroup(string $group): SectionInterface
     {
         $this->group = $group;
+
+        return $this;
     }
 
     /**
@@ -151,9 +145,11 @@ abstract class AbstractSection implements SectionInterface
     /**
      * {@inheritdoc}
      */
-    public function setFields($fields): void
+    public function setFields($fields): SectionInterface
     {
         $this->fields = $fields;
+
+        return $this;
     }
 
     /**

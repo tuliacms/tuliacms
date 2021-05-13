@@ -8,6 +8,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormTypeInterface;
 use Tulia\Component\FormBuilder\Section\SectionInterface;
+use Tulia\Component\FormBuilder\Section\SectionsBuilderInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -34,10 +35,8 @@ interface ExtensionInterface
 
     /**
      * Returns sections of the form. Each section has title and content (rendered in Twig).
-     *
-     * @return array|SectionInterface[]
      */
-    public function getSections(): array;
+    public function getSections(SectionsBuilderInterface $builder): void;
 
     /**
      * Check if this extension supports this object

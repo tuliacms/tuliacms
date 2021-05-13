@@ -10,8 +10,8 @@ use Symfony\Component\Form\FormTypeInterface;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType;
 use Tulia\Cms\Widget\UserInterface\Web\Form\WidgetForm;
 use Tulia\Component\FormBuilder\Extension\AbstractExtension;
-use Tulia\Component\FormBuilder\Section\FormRowSection;
 use Tulia\Component\FormBuilder\Section\Section;
+use Tulia\Component\FormBuilder\Section\SectionsBuilderInterface;
 use Tulia\Component\Theme\ManagerInterface;
 
 /**
@@ -68,30 +68,35 @@ class DefaultFieldsExtension extends AbstractExtension
     /**
      * {@inheritdoc}
      */
-    public function getSections(): array
+    public function getSections(SectionsBuilderInterface $builder): void
     {
-        $sections = [];
+        $builder
+            ->rowSection('status', 'status', 'visibility')
+            ->setTranslationDomain('widgets')
+            ->setPriority(1000)
+            ->setGroup('sidebar')
+            ->setFields(['visibility'])
+        ;
 
-        $sections[] = $section = new FormRowSection('status', 'status', 'visibility', 'widgets');
-        $section->setPriority(1000);
-        $section->setGroup('sidebar');
-        $section->setFields(['visibility']);
+        $builder
+            ->add(new Section('look', 'look', '@backend/widget/parts/look.tpl'))
+            ->setTranslationDomain('widgets')
+            ->setPriority(800)
+            ->setGroup('sidebar')
+            ->setFields(['html_class', 'html_id', 'title', 'styles'])
+        ;
 
-        $sections[] = $section = new Section('look', 'look', '@backend/widget/parts/look.tpl', 'widgets');
-        $section->setPriority(800);
-        $section->setGroup('sidebar');
-        $section->setFields(['html_class', 'html_id', 'title', 'styles']);
-
-        $sections[] = $section = new Section('widget', 'widgetOptions', '{% if widgetView %}
+        $builder
+            ->add(new Section('widget', 'widgetOptions', '{% if widgetView %}
             {% include widgetView.views|first with widgetView.data|merge({form: form.widget_configuration}) %}
-        {% endif %}', 'widgets');
-        $section->setPriority(1000);
-        $section->setFields('{% set fields = [] %}
+        {% endif %}'))
+            ->setTranslationDomain('widgets')
+            ->setPriority(1000)
+            ->setFields('{% set fields = [] %}
             {% for key, item in form.widget_configuration %}
                 {% set fields = fields|merge([key]) %}
-            {% endfor %}');
-
-        return $sections;
+            {% endfor %}')
+        ;
     }
 
     /**

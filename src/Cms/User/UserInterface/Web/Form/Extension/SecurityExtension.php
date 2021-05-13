@@ -13,6 +13,7 @@ use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType;
 use Tulia\Cms\User\UserInterface\Web\Form\UserForm\UserForm;
 use Tulia\Component\FormBuilder\Extension\AbstractExtension;
 use Tulia\Component\FormBuilder\Section\Section;
+use Tulia\Component\FormBuilder\Section\SectionsBuilderInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -71,15 +72,13 @@ class SecurityExtension extends AbstractExtension
     /**
      * {@inheritdoc}
      */
-    public function getSections(): array
+    public function getSections(SectionsBuilderInterface $builder): void
     {
-        $sections = [];
-
-        $sections[] = $section = new Section('security', 'security', '@backend/user/user/parts/security.tpl');
-        $section->setPriority(1000);
-        $section->setFields(['password', 'enabled', 'roles']);
-
-        return $sections;
+        $builder
+            ->add(new Section('security', 'security', '@backend/user/user/parts/security.tpl'))
+            ->setPriority(1000)
+            ->setFields(['password', 'enabled', 'roles'])
+        ;
     }
 
     /**

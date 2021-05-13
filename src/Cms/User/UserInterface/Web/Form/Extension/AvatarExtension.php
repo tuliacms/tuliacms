@@ -14,6 +14,7 @@ use Tulia\Cms\User\UserInterface\Web\Form\MyAccount\MyAccountForm;
 use Tulia\Cms\User\UserInterface\Web\Form\UserForm\UserForm;
 use Tulia\Component\FormBuilder\Extension\AbstractExtension;
 use Tulia\Component\FormBuilder\Section\Section;
+use Tulia\Component\FormBuilder\Section\SectionsBuilderInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -58,15 +59,12 @@ class AvatarExtension extends AbstractExtension
     /**
      * {@inheritdoc}
      */
-    public function getSections(): array
+    public function getSections(SectionsBuilderInterface $builder): void
     {
-        $sections = [];
-
-        $sections[] = $section = new Section('avatar', 'avatar', '@backend/user/user/parts/avatar.tpl');
-        $section->setPriority(100);
-        $section->setFields(['avatar']);
-
-        return $sections;
+        $builder->add(new Section('avatar', 'avatar', '@backend/user/user/parts/avatar.tpl'))
+            ->setPriority(100)
+            ->setFields(['avatar'])
+        ;
     }
 
     /**

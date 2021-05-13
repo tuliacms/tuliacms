@@ -11,7 +11,7 @@ use Tulia\Cms\User\Query\Model\User;
 use Tulia\Cms\User\Infrastructure\Framework\Form\FormType\UserTypeaheadType;
 use Tulia\Cms\User\Application\Service\AuthenticatedUserProviderInterface;
 use Tulia\Component\FormBuilder\Extension\AbstractExtension;
-use Tulia\Component\FormBuilder\Section\FormRowSection;
+use Tulia\Component\FormBuilder\Section\SectionsBuilderInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -49,15 +49,12 @@ class AuthorExtension extends AbstractExtension
     /**
      * {@inheritdoc}
      */
-    public function getSections(): array
+    public function getSections(SectionsBuilderInterface $builder): void
     {
-        $sections = [];
-
-        $sections[] = $section = new FormRowSection('author', 'author', 'author');
-        $section->setPriority(500);
-        $section->setGroup('sidebar');
-
-        return $sections;
+        $builder->rowSection('author', 'author', 'author')
+            ->setPriority(500)
+            ->setGroup('sidebar')
+        ;
     }
 
     /**
