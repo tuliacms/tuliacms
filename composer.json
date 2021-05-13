@@ -77,7 +77,7 @@
             "Tulia\\Component\\CommandBus\\": "src/Component/command-bus/src",
             "Tulia\\Component\\Datatable\\": "src/Component/datatable/src",
             "Tulia\\Component\\DependencyInjection\\": "src/Component/dependency-injection/src",
-            "Tulia\\Component\\FormBuilder\\": "src/Component/form-builder/src",
+            "Tulia\\Component\\FormSkeleton\\": "src/Component/form-skeleton/src",
             "Tulia\\Component\\Hooking\\": "src/Component/hooking/src",
             "Tulia\\Component\\Image\\": "src/Component/image/src",
             "Tulia\\Component\\Routing\\": "src/Component/routing/src",

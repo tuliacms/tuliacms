@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\UserInterface\Web\Form\Extension;
 
-use Tulia\Component\FormBuilder\Extension\ExtensionAggregateInterface;
+use Tulia\Component\FormSkeleton\Extension\ExtensionAggregateInterface;
 use Tulia\Cms\Node\Infrastructure\NodeType\RegistryInterface;
 
 /**

@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Tulia\Cms\Node\Infrastructure\NodeType\NodeTypeInterface;
 use Tulia\Cms\Node\Infrastructure\NodeType\RegistryInterface as NodeTypeRegistry;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType;
-use Tulia\Component\FormBuilder\Form\AbstractFormSkeletonType;
+use Tulia\Component\FormSkeleton\Form\AbstractFormSkeletonType;
 
 /**
  * @author Adam Banaszkiewicz

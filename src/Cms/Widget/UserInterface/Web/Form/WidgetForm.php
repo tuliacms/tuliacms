@@ -8,7 +8,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Tulia\Component\FormBuilder\Form\AbstractFormSkeletonType;
+use Tulia\Component\FormSkeleton\Form\AbstractFormSkeletonType;
 use Tulia\Component\Theme\ManagerInterface as ThemeManager;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType;
 

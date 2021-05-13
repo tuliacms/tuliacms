@@ -7,9 +7,9 @@ namespace Tulia\Cms\Taxonomy\UserInterface\Web\Form\Extension;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormTypeInterface;
 use Tulia\Cms\Taxonomy\UserInterface\Web\Form\TermForm;
-use Tulia\Component\FormBuilder\Extension\AbstractExtension;
+use Tulia\Component\FormSkeleton\Extension\AbstractExtension;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType;
-use Tulia\Component\FormBuilder\Section\SectionsBuilderInterface;
+use Tulia\Component\FormSkeleton\Section\SectionsBuilderInterface;
 
 /**
  * @author Adam Banaszkiewicz

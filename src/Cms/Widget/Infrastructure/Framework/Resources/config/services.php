@@ -32,7 +32,7 @@ use Tulia\Cms\Widget\UI\Web\Form\Extension\DefaultFieldsExtension;
 use Tulia\Cms\Widget\UI\Web\Form\WidgetForm;
 use Tulia\Cms\Widget\UI\Web\Form\WidgetFormManagerFactory;
 use Tulia\Component\DependencyInjection\ContainerBuilderInterface;
-use Tulia\Component\FormBuilder\Form\ManagerFactoryInterface;
+use Tulia\Component\FormSkeleton\Form\ManagerFactoryInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Uuid\UuidGeneratorInterface;

@@ -13,7 +13,7 @@ use Tulia\Cms\Menu\Domain\Builder\Type\RegistryInterface;
 use Tulia\Cms\Menu\Domain\Builder\Type\TypeInterface;
 use Tulia\Cms\Menu\Infrastructure\Framework\Form\FormType\MenuItemChoiceType;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType;
-use Tulia\Component\FormBuilder\Form\AbstractFormSkeletonType;
+use Tulia\Component\FormSkeleton\Form\AbstractFormSkeletonType;
 
 /**
  * @author Adam Banaszkiewicz

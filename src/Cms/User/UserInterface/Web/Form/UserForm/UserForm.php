@@ -13,7 +13,7 @@ use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType;
 use Tulia\Cms\User\Infrastructure\Framework\Validator\Constraints\EmailUnique;
 use Tulia\Cms\User\Infrastructure\Framework\Validator\Constraints\Username;
 use Tulia\Cms\User\Infrastructure\Framework\Validator\Constraints\UsernameUnique;
-use Tulia\Component\FormBuilder\Form\AbstractFormSkeletonType;
+use Tulia\Component\FormSkeleton\Form\AbstractFormSkeletonType;
 
 /**
  * @author Adam Banaszkiewicz

@@ -6,7 +6,7 @@ namespace Tulia\Cms\User\UserInterface\Web\Form\MyAccount;
 
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type;
-use Tulia\Component\FormBuilder\Form\AbstractFormSkeletonType;
+use Tulia\Component\FormSkeleton\Form\AbstractFormSkeletonType;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType;
 
 /**
