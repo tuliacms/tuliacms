@@ -10,7 +10,6 @@ use Symfony\Component\Form\FormTypeInterface;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType;
 use Tulia\Cms\Widget\UserInterface\Web\Form\WidgetForm;
 use Tulia\Component\FormBuilder\Extension\AbstractExtension;
-use Tulia\Component\FormBuilder\Section\Section;
 use Tulia\Component\FormBuilder\Section\SectionsBuilderInterface;
 use Tulia\Component\Theme\ManagerInterface;
 
@@ -71,31 +70,32 @@ class DefaultFieldsExtension extends AbstractExtension
     public function getSections(SectionsBuilderInterface $builder): void
     {
         $builder
-            ->rowSection('status', 'status', 'visibility')
-            ->setTranslationDomain('widgets')
-            ->setPriority(1000)
-            ->setGroup('sidebar')
-            ->setFields(['visibility'])
-        ;
-
-        $builder
-            ->add(new Section('look', 'look', '@backend/widget/parts/look.tpl'))
-            ->setTranslationDomain('widgets')
-            ->setPriority(800)
-            ->setGroup('sidebar')
-            ->setFields(['html_class', 'html_id', 'title', 'styles'])
-        ;
-
-        $builder
-            ->add(new Section('widget', 'widgetOptions', '{% if widgetView %}
+            ->add('status', [
+                'translation_domain' => 'widgets',
+                'group' => 'sidebar',
+                'priority' => 1000,
+                'fields' => ['visibility'],
+            ])
+            ->add('look', [
+                'view' => '@backend/widget/parts/look.tpl',
+                'translation_domain' => 'widgets',
+                'priority' => 800,
+                'group' => 'sidebar',
+                'fields' => ['html_class', 'html_id', 'title', 'styles'],
+            ])
+            // @todo Finish this feld
+            /*->add('widget'', [
+                'label' => 'widgetOptions',
+                'template' => '{% if widgetView %}
             {% include widgetView.views|first with widgetView.data|merge({form: form.widget_configuration}) %}
-        {% endif %}'))
-            ->setTranslationDomain('widgets')
-            ->setPriority(1000)
-            ->setFields('{% set fields = [] %}
+        {% endif %}',
+                'translation_domain' => 'widgets',
+                'priority' => 1000,
+                'fields' => ['{% set fields = [] %}
             {% for key, item in form.widget_configuration %}
                 {% set fields = fields|merge([key]) %}
-            {% endfor %}')
+            {% endfor %}']
+            ])*/
         ;
     }
 

@@ -9,15 +9,9 @@ namespace Tulia\Component\FormBuilder\Builder;
  */
 abstract class AbstractGroupBuilder implements GroupBuilderInterface
 {
-    /**
-     * @var array
-     */
-    protected $options = [];
+    protected array $options = [];
 
-    /**
-     * @var array
-     */
-    protected $activeSections;
+    protected array $activeSections = [];
 
     /**
      * {@inheritdoc}
@@ -48,7 +42,7 @@ abstract class AbstractGroupBuilder implements GroupBuilderInterface
 
         foreach ($this->getOption('active_first', []) as $default) {
             foreach ($this->getOption('sections', []) as $section) {
-                if ($section->getId() === $default) {
+                if ($section['id'] === $default) {
                     $active[] = $default;
                     break(2);
                 }

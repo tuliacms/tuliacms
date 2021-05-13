@@ -11,19 +11,18 @@ class SectionsBuilder implements SectionsBuilderInterface
 {
     protected $sections = [];
 
-    public function add(SectionInterface $section): SectionInterface
+    public function add(string $id, array $data): SectionsBuilderInterface
     {
-        return $this->sections[$section->getId()] = $section;
-    }
+        $this->sections[$id] = array_merge([
+            'id' => $id,
+            'priority' => 0,
+            'translation_domain' => 'messages',
+            'label' => $id,
+            'group' => 'default',
+            'fields' => [$id],
+        ], $data);
 
-    public function section(string $type): SectionInterface
-    {
-        // TODO: Implement section() method.
-    }
-
-    public function rowSection(string $id, string $label = null, $field = null): SectionInterface
-    {
-        return $this->add(new FormRowSection($id, $label ?? $id, $field ?? $id));
+        return $this;
     }
 
     public function all(?string $group = null): array
@@ -33,13 +32,13 @@ class SectionsBuilder implements SectionsBuilderInterface
         foreach ($this->sections as $section) {
             if ($group === null) {
                 $sections[] = $section;
-            } elseif ($section->getGroup() === $group) {
+            } elseif ($section['group'] === $group) {
                 $sections[] = $section;
             }
         }
 
         usort($sections, function ($a, $b) {
-            return $b->getPriority() - $a->getPriority();
+            return $b['priority'] - $a['priority'];
         });
 
         return $sections;

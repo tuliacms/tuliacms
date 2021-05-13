@@ -51,9 +51,11 @@ class AuthorExtension extends AbstractExtension
      */
     public function getSections(SectionsBuilderInterface $builder): void
     {
-        $builder->rowSection('author', 'author', 'author')
-            ->setPriority(500)
-            ->setGroup('sidebar')
+        $builder
+            ->add('author', [
+                'priority' => 500,
+                'group' => 'sidebar',
+            ])
         ;
     }
 

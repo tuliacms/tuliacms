@@ -13,7 +13,6 @@ use Tulia\Cms\User\Application\Service\Avatar\UploaderInterface;
 use Tulia\Cms\User\UserInterface\Web\Form\MyAccount\MyAccountForm;
 use Tulia\Cms\User\UserInterface\Web\Form\UserForm\UserForm;
 use Tulia\Component\FormBuilder\Extension\AbstractExtension;
-use Tulia\Component\FormBuilder\Section\Section;
 use Tulia\Component\FormBuilder\Section\SectionsBuilderInterface;
 
 /**
@@ -61,10 +60,12 @@ class AvatarExtension extends AbstractExtension
      */
     public function getSections(SectionsBuilderInterface $builder): void
     {
-        $builder->add(new Section('avatar', 'avatar', '@backend/user/user/parts/avatar.tpl'))
-            ->setPriority(100)
-            ->setFields(['avatar'])
-        ;
+        $builder
+            ->add('avatar', [
+                'view' => '@backend/user/user/parts/avatar.tpl',
+                'priority' => 100,
+                'group' => 'sidebar',
+            ]);
     }
 
     /**

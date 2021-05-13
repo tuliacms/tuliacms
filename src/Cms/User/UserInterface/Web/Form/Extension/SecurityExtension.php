@@ -12,7 +12,6 @@ use Tulia\Cms\User\Infrastructure\Framework\Validator\Constraints\Password;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType;
 use Tulia\Cms\User\UserInterface\Web\Form\UserForm\UserForm;
 use Tulia\Component\FormBuilder\Extension\AbstractExtension;
-use Tulia\Component\FormBuilder\Section\Section;
 use Tulia\Component\FormBuilder\Section\SectionsBuilderInterface;
 
 /**
@@ -75,10 +74,11 @@ class SecurityExtension extends AbstractExtension
     public function getSections(SectionsBuilderInterface $builder): void
     {
         $builder
-            ->add(new Section('security', 'security', '@backend/user/user/parts/security.tpl'))
-            ->setPriority(1000)
-            ->setFields(['password', 'enabled', 'roles'])
-        ;
+            ->add('security', [
+                'view' => '@backend/user/user/parts/security.tpl',
+                'priority' => 1000,
+                'fields' => ['password', 'enabled', 'roles'],
+            ]);
     }
 
     /**

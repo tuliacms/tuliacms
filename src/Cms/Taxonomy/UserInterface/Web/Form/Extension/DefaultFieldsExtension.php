@@ -29,10 +29,10 @@ class DefaultFieldsExtension extends AbstractExtension
      */
     public function getSections(SectionsBuilderInterface $builder): void
     {
-        $builder->rowSection('visibility', 'visibility', 'visibility')
-            ->setPriority(1000)
-            ->setGroup('sidebar')
-        ;
+        $builder->add('visibility', [
+            'priority' => 1000,
+            'group' => 'sidebar',
+        ]);
     }
 
     /**

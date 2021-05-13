@@ -7,7 +7,6 @@ namespace Tulia\Component\FormBuilder\Extension;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormTypeInterface;
-use Tulia\Component\FormBuilder\Section\SectionInterface;
 use Tulia\Component\FormBuilder\Section\SectionsBuilderInterface;
 
 /**
@@ -41,7 +40,9 @@ interface ExtensionInterface
     /**
      * Check if this extension supports this object
      *
-     * @param object $object
+     * @param FormTypeInterface $formType
+     * @param array $options
+     * @param mixed $data
      * @return bool
      */
     public function supports(FormTypeInterface $formType, array $options, $data = null): bool;

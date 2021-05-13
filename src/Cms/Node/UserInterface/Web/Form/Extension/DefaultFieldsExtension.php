@@ -10,7 +10,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Tulia\Cms\Node\UserInterface\Web\Form\NodeForm;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType;
 use Tulia\Component\FormBuilder\Extension\AbstractExtension;
-use Tulia\Component\FormBuilder\Section\Section;
 use Tulia\Component\FormBuilder\Section\SectionsBuilderInterface;
 
 /**
@@ -41,11 +40,13 @@ class DefaultFieldsExtension extends AbstractExtension
      */
     public function getSections(SectionsBuilderInterface $builder): void
     {
-        $builder->add(new Section('status', 'statusAndAvailability', '@backend/node/parts/status.tpl'))
-            ->setPriority(1000)
-            ->setGroup('sidebar')
-            ->setFields(['status', 'publishedAt', 'publishedTo'])
-        ;
+        $builder->add('status', [
+            'label' => 'statusAndAvailability',
+            'view' => '@backend/node/parts/status.tpl',
+            'priority' => 1000,
+            'group' => 'sidebar',
+            'fields' => ['status', 'publishedAt', 'publishedTo'],
+        ]);
     }
 
     /**

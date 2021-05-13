@@ -15,6 +15,7 @@ use Tulia\Component\FormBuilder\Section\SectionsBuilder;
 class Manager implements ManagerInterface
 {
     protected FormFactoryInterface $formFactory;
+
     protected ExtensionRegistryInterface $registry;
 
     public function __construct(FormFactoryInterface $formFactory, ExtensionRegistryInterface $registry)

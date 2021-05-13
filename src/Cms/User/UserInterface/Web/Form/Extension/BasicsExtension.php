@@ -65,9 +65,10 @@ class BasicsExtension extends AbstractExtension
     public function getSections(SectionsBuilderInterface $builder): void
     {
         $builder
-            ->rowSection('basics', 'basics', ['name', 'locale'])
-            ->setPriority(1000)
-        ;
+            ->add('basics', [
+                'priority' => 1000,
+                'fields' => ['name', 'locale'],
+            ]);
     }
 
     /**

@@ -4,27 +4,16 @@ declare(strict_types=1);
 
 namespace Tulia\Component\FormBuilder\Builder;
 
-use Tulia\Component\FormBuilder\Section\SectionInterface;
-
 /**
  * @author Adam Banaszkiewicz
  */
 class BootstrapAccordionGroupBuilder extends AbstractGroupBuilder
 {
-    /**
-     * @var string
-     */
-    protected $group;
+    protected string $group;
 
-    /**
-     * @var string
-     */
-    protected $template;
+    protected string $template;
 
-    /**
-     * @var string
-     */
-    protected static $templateDefault = <<<EOF
+    protected static string $templateDefault = <<<EOF
 <div class="accordion-section">
     <div class="accordion-section-button{sectionActiveTab}" data-toggle="collapse" data-target="#form-collapse-{sectionId}">
         {{ '{sectionLabel}'|trans({}, '{sectionTranslationDomain}') }}
@@ -38,13 +27,9 @@ class BootstrapAccordionGroupBuilder extends AbstractGroupBuilder
 EOF
     ;
 
-    /**
-     * @param string $group
-     * @param string|null $template
-     */
     public function __construct(string $group = 'sidebar', string $template = null)
     {
-        $this->group    = $group;
+        $this->group = $group;
         $this->template = empty($template) ? static::$templateDefault : $template;
     }
 
@@ -55,7 +40,6 @@ EOF
     {
         $result = '';
 
-        /** @var SectionInterface $section */
         foreach ($sections as $section) {
             $replacements = $this->getReplacements($section);
 
@@ -77,16 +61,26 @@ EOF
         return $this->group === $group;
     }
 
-    public function getReplacements(SectionInterface $section): array
+    public function getReplacements(array $section): array
     {
+        if (isset($section['view'])) {
+            $sectionView = "{% include '{$section['view']}' %}";
+        } elseif (isset($section['template'])) {
+            $sectionView = $section['template'];
+        } else {
+            $sectionView = implode('', array_map(function ($item) {
+                return '{{ form_row(form.' . $item . ') }}';
+            }, $section['fields']));
+        }
+
         return [
-            '{sectionId}' => $section->getId(),
-            '{sectionLabel}' => $section->getLabel(),
-            '{sectionTranslationDomain}' => $section->getTranslationDomain() ?? 'messages',
-            '{sectionFields}' => $section->getFieldsStatement(),
-            '{sectionView}' => $section->getViewStatement(),
-            '{sectionActiveTab}' => $this->isSectionActive($section->getId()) ? '' : ' collapsed',
-            '{sectionActiveContent}' => $this->isSectionActive($section->getId()) ? ' show' : '',
+            '{sectionId}' => $section['id'],
+            '{sectionLabel}' => $section['label'],
+            '{sectionTranslationDomain}' => $section['translation_domain'],
+            '{sectionFields}' => "{% set fields = ['" . implode("', '", $section['fields']) . "'] %}",
+            '{sectionView}' => $sectionView,
+            '{sectionActiveTab}' => $this->isSectionActive($section['id']) ? '' : ' collapsed',
+            '{sectionActiveContent}' => $this->isSectionActive($section['id']) ? ' show' : '',
         ];
     }
 

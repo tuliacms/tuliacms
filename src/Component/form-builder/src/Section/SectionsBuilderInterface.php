@@ -9,14 +9,7 @@ namespace Tulia\Component\FormBuilder\Section;
  */
 interface SectionsBuilderInterface
 {
-    public function add(SectionInterface $section): SectionInterface;
+    public function add(string $id, array $data): SectionsBuilderInterface;
 
-    public function section(string $type): SectionInterface;
-
-    public function rowSection(string $id, string $label = null, $field = null): SectionInterface;
-
-    /**
-     * @return SectionInterface[]
-     */
     public function all(?string $group = null): array;
 }
