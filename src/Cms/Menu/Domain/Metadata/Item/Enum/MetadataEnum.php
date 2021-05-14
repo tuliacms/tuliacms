@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Menu\Infrastructure\Cms\Metadata\Item\Enum;
+namespace Tulia\Cms\Menu\Domain\Metadata\Item\Enum;
 
 /**
  * @author Adam Banaszkiewicz

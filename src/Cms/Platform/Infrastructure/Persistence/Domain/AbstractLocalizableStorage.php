@@ -48,7 +48,7 @@ abstract class AbstractLocalizableStorage
             throw new InvalidArgumentException('Missing "locale" key in saved data.');
         }
 
-        $langRowExists = $this->langExists($data['id'], $data['locale']);
+        $langRowExists = $this->langExists($data);
         $foreignLocale = $defaultLocale !== $data['locale'];
 
         $this->updateMainRow($data, $foreignLocale);
@@ -62,9 +62,9 @@ abstract class AbstractLocalizableStorage
         }
     }
 
-    abstract protected function updateMainRow(array $data, bool $foreignLocale): void;
     abstract protected function insertMainRow(array $data): void;
+    abstract protected function updateMainRow(array $data, bool $foreignLocale): void;
     abstract protected function insertLangRow(array $data): void;
     abstract protected function updateLangRow(array $data): void;
-    abstract protected function langExists(string $id, string $locale): bool;
+    abstract protected function langExists(array $data): bool;
 }

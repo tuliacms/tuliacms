@@ -58,6 +58,7 @@ class LazyMetadata extends Metadata
 
     private function load(): void
     {
+        return;
         if ($this->loaded) {
             return;
         }

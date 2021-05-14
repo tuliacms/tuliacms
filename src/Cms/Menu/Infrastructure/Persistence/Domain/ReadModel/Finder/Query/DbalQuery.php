@@ -7,7 +7,7 @@ namespace Tulia\Cms\Menu\Infrastructure\Persistence\Domain\ReadModel\Finder\Quer
 use Exception;
 use PDO;
 use Tulia\Cms\Menu\Domain\ReadModel\Finder\Model\Menu;
-use Tulia\Cms\Menu\Infrastructure\Cms\Metadata\Item\Enum\MetadataEnum;
+use Tulia\Cms\Menu\Domain\Metadata\Item\Enum\MetadataEnum;
 use Tulia\Cms\Metadata\Domain\ReadModel\MetadataFinder;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Exception\QueryException;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;

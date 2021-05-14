@@ -123,14 +123,14 @@ class DbalOptionsStorage extends AbstractLocalizableStorage implements OptionsSt
         ]);
     }
 
-    protected function langExists(string $id, string $locale): bool
+    protected function langExists(array $data): bool
     {
         $result = $this->connection->fetchAllAssociative(
             'SELECT option_id FROM #__option_lang WHERE option_id = :id AND locale = :locale LIMIT 1',
-            ['id' => $id, 'locale' => $locale]
+            ['id' => $data['id'], 'locale' => $data['locale']]
         );
 
-        return isset($result[0]['option_id']) && $result[0]['option_id'] === $id;
+        return isset($result[0]['option_id']) && $result[0]['option_id'] === $data['id'];
     }
 
     private function isMultilingualOption(string $name, string $website): bool

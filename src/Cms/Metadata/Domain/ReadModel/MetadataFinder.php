@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Metadata\Domain\ReadModel;
 
+use Tulia\Cms\Metadata\Domain\Registry\DatatypeResolver;
 use Tulia\Cms\Metadata\Ports\Infrastructure\Persistence\ReadModel\MetadataFinderInterface;
 use Tulia\Cms\Metadata\Registrator\RegistryInterface;
 
@@ -27,17 +28,17 @@ class MetadataFinder
         $metadata = $this->finder->findAll($type, $ownerIdList);
         $result = [];
 
+        $datatypeResolver = new DatatypeResolver();
+
         foreach ($ownerIdList as $ownerId) {
             foreach ($fields->all() as $field => $details) {
                 if (isset($metadata[$ownerId][$field])) {
-                    $value = $this->filterMetadataValueType(
+                    $result[$ownerId][$field] = $datatypeResolver->resolve(
                         $metadata[$ownerId][$field],
                         $details['datatype'],
                         $field,
                         $ownerId
                     );
-
-                    $result[$ownerId][$field] = $value;
                 } else {
                     $result[$ownerId][$field] = $details['default'];
                 }
@@ -45,20 +46,5 @@ class MetadataFinder
         }
 
         return $result;
-    }
-
-    private function filterMetadataValueType($value, string $expectedType, string $name, string $ownerId)
-    {
-        if ($expectedType === 'string') {
-            return (string) $value;
-        } elseif ($expectedType === 'integer') {
-            return (int) $value;
-        } elseif ($expectedType === 'float') {
-            return (float) $value;
-        } elseif ($expectedType === 'array') {
-            return \is_array($value) ? $value : json_decode($value, true);
-        }
-
-        throw new \InvalidArgumentException(sprintf('Value of %s ownered by %s has nod recognized datatype.', $name, $ownerId));
     }
 }

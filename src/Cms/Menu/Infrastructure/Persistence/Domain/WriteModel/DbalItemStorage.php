@@ -4,10 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Menu\Infrastructure\Persistence\Domain\WriteModel;
 
-use Tulia\Cms\Menu\Infrastructure\Cms\Metadata\Item\Enum\MetadataEnum;
 use Tulia\Cms\Menu\Ports\Infrastructure\Persistence\WriteModel\ItemStorageInterface;
-use Tulia\Cms\Metadata\Metadata;
-use Tulia\Cms\Metadata\Syncer\SyncerInterface;
 use Tulia\Cms\Platform\Infrastructure\Persistence\Domain\AbstractLocalizableStorage;
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 
@@ -17,12 +14,10 @@ use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 class DbalItemStorage extends AbstractLocalizableStorage implements ItemStorageInterface
 {
     private ConnectionInterface $connection;
-    private SyncerInterface $metadata;
 
-    public function __construct(ConnectionInterface $connection, SyncerInterface $metadata)
+    public function __construct(ConnectionInterface $connection)
     {
         $this->connection = $connection;
-        $this->metadata = $metadata;
     }
 
     public function findAll(string $menuId, string $defaultLocale, string $locale): array
@@ -33,7 +28,7 @@ class DbalItemStorage extends AbstractLocalizableStorage implements ItemStorageI
             $translationColumn = '1 AS translated';
         }
 
-        $items = $this->connection->fetchAll("
+        return $this->connection->fetchAll("
             SELECT
                 tm.*,
                 COALESCE(tl.locale, :defaultLocale) AS locale,
@@ -49,20 +44,12 @@ class DbalItemStorage extends AbstractLocalizableStorage implements ItemStorageI
             'locale'  => $locale,
             'defaultLocale' => $defaultLocale,
         ]);
-
-        foreach ($items as $key => $item) {
-            $items[$key]['metadata'] = $this->metadata->all(MetadataEnum::MENUITEM_GROUP, $item['id']);
-        }
-
-        return $items;
     }
 
     public function delete(string $id): void
     {
         $this->connection->delete('#__menu_item', ['id' => $id]);
         $this->connection->delete('#__menu_item_lang', ['id' => $id]);
-
-        $this->metadata->delete(MetadataEnum::MENUITEM_GROUP, $id);
     }
 
     protected function updateMainRow(array $data, bool $foreignLocale): void
@@ -84,8 +71,6 @@ class DbalItemStorage extends AbstractLocalizableStorage implements ItemStorageI
         }
 
         $this->connection->update('#__menu_item', $mainTable, ['id' => $data['id']]);
-
-        $this->metadata->push(new Metadata($data['metadata']), MetadataEnum::MENUITEM_GROUP, $data['id']);
     }
 
     protected function insertMainRow(array $data): void
@@ -104,8 +89,6 @@ class DbalItemStorage extends AbstractLocalizableStorage implements ItemStorageI
         $mainTable['visibility'] = $data['visibility'] ? '1' : '0';
 
         $this->connection->insert('#__menu_item', $mainTable);
-
-        $this->metadata->push(new Metadata($data['metadata']), MetadataEnum::MENUITEM_GROUP, $data['id']);
     }
 
     protected function insertLangRow(array $data): void
@@ -117,8 +100,6 @@ class DbalItemStorage extends AbstractLocalizableStorage implements ItemStorageI
         $langTable['visibility']   = $data['visibility'] ? '1' : '0';
 
         $this->connection->insert('#__menu_item_lang', $langTable);
-
-        $this->metadata->push(new Metadata($data['metadata']), MetadataEnum::MENUITEM_GROUP, $data['id']);
     }
 
     protected function updateLangRow(array $data): void
@@ -131,17 +112,15 @@ class DbalItemStorage extends AbstractLocalizableStorage implements ItemStorageI
             'menu_item_id' => $data['id'],
             'locale'       => $data['locale'],
         ]);
-
-        $this->metadata->push(new Metadata($data['metadata']), MetadataEnum::MENUITEM_GROUP, $data['id']);
     }
 
-    protected function langExists(string $id, string $locale): bool
+    protected function langExists(array $data): bool
     {
         $result = $this->connection->fetchAllAssociative(
             'SELECT menu_item_id FROM #__menu_item_lang WHERE menu_item_id = :id AND locale = :locale LIMIT 1',
-            ['id' => $id, 'locale' => $locale]
+            ['id' => $data['id'], 'locale' => $data['locale']]
         );
 
-        return isset($result[0]['menu_item_id']) && $result[0]['menu_item_id'] === $id;
+        return isset($result[0]['menu_item_id']) && $result[0]['menu_item_id'] === $data['id'];
     }
 }
