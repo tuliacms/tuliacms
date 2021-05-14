@@ -74,7 +74,7 @@ class DbalMetadataStorage extends AbstractLocalizableStorage implements Metadata
 
     protected function updateMainRow(array $data, bool $foreignLocale): void
     {
-        if ($foreignLocale) {
+        if ($foreignLocale && $data['multilingual'] === true) {
             return;
         }
 
@@ -88,6 +88,10 @@ class DbalMetadataStorage extends AbstractLocalizableStorage implements Metadata
 
     protected function insertLangRow(array $data): void
     {
+        if ($data['multilingual'] === false) {
+            return;
+        }
+
         $this->connection->insert("#__{$data['type']}_metadata_lang", [
             'metadata_id' => $data['id'],
             'value' => $data['value'],
@@ -97,6 +101,10 @@ class DbalMetadataStorage extends AbstractLocalizableStorage implements Metadata
 
     protected function updateLangRow(array $data): void
     {
+        if ($data['multilingual'] === false) {
+            return;
+        }
+
         $this->connection->update("#__{$data['type']}_metadata_lang", [
             'value' => $data['value'],
         ], [
@@ -107,6 +115,10 @@ class DbalMetadataStorage extends AbstractLocalizableStorage implements Metadata
 
     protected function langExists(array $data): bool
     {
+        if ($data['multilingual'] === false) {
+            return false;
+        }
+
         $sql = "SELECT
             tl.metadata_id
         FROM #__{$data['type']}_metadata AS tm

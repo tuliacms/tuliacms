@@ -60,17 +60,29 @@ class MetadataRepository
 
     public function persist(string $type, string $ownerId, array $metadata): void
     {
+        $datatypeResolver = new DatatypeResolver();
         $locale = $this->currentWebsite->getLocale()->getCode();
+        $fields = $this->registry->getContentFields($type);
 
         foreach ($metadata as $name => $value) {
-            $metadata[$name] = [
-                'id' => $this->uuidGenerator->generate(),
-                'value' => $value,
-                'owner_id' => $ownerId,
-                'name' => $name,
-                'locale' => $locale,
-                'type' => $type,
-            ];
+            foreach ($fields->all() as $field => $details) {
+                if ($field === $name) {
+                    $metadata[$name] = [
+                        'id' => $this->uuidGenerator->generate(),
+                        'value' => $datatypeResolver->reverseResolve(
+                            $value,
+                            $details['datatype'],
+                            $field,
+                            $ownerId
+                        ),
+                        'owner_id' => $ownerId,
+                        'name' => $name,
+                        'locale' => $locale,
+                        'type' => $type,
+                        'multilingual' => $details['multilingual'],
+                    ];
+                }
+            }
         }
 
         $this->storage->persist(
