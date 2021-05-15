@@ -24,23 +24,13 @@ use Tulia\Cms\Platform\Infrastructure\Bus\Event\EventBusInterface;
  */
 class NodeStorage
 {
-    /**
-     * @var RepositoryInterface
-     */
-    private $repository;
+    private RepositoryInterface $repository;
 
-    /**
-     * @var EventBusInterface
-     */
-    private $eventDispatcher;
+    private EventBusInterface $eventDispatcher;
 
-    /**
-     * @param RepositoryInterface $repository
-     * @param EventBusInterface $eventDispatcher
-     */
     public function __construct(RepositoryInterface $repository, EventBusInterface $eventDispatcher)
     {
-        $this->repository      = $repository;
+        $this->repository = $repository;
         $this->eventDispatcher = $eventDispatcher;
     }
 
@@ -113,7 +103,7 @@ class NodeStorage
 
     private function updateAggregate(ApplicationNode $node, Aggregate $aggregate): void
     {
-        foreach ($node->getMetadata() as $key => $val) {
+        foreach ($node->getAllMetadata() as $key => $val) {
             $aggregate->changeMetadataValue($key, $val);
         }
 

@@ -6,7 +6,7 @@ namespace Tulia\Cms\Node\Infrastructure\Cms\Metadata;
 
 use Tulia\Cms\Metadata\Registrator\RegistratorInterface;
 use Tulia\Cms\Metadata\Registrator\RegistryInterface;
-use Tulia\Cms\Node\Infrastructure\Cms\Metadata\Enum\MetadataEnum;
+use Tulia\Cms\Node\Infrastructure\Cms\Metadata\NodeMetadataEnum;
 
 /**
  * Registers default CMS node (page) metadatas in system.
@@ -27,7 +27,7 @@ class DefaultMetadataRegistrator implements RegistratorInterface
          * after parsing Shortcodes and other elements.
          */
         $fields->add([
-            'name' => MetadataEnum::CONTENT,
+            'name' => NodeMetadataEnum::CONTENT,
             'multilingual' => true,
         ]);
 
@@ -35,7 +35,7 @@ class DefaultMetadataRegistrator implements RegistratorInterface
          * Node's thumbnail filepath.
          */
         $fields->add([
-            'name' => MetadataEnum::THUMBNAIL,
+            'name' => NodeMetadataEnum::THUMBNAIL,
             'multilingual' => false,
         ]);
 
@@ -43,7 +43,7 @@ class DefaultMetadataRegistrator implements RegistratorInterface
          * Node's main category ID.
          */
         $fields->add([
-            'name' => MetadataEnum::CATEGORY_ID,
+            'name' => NodeMetadataEnum::CATEGORY_ID,
             'multilingual' => false,
         ]);
 
@@ -51,7 +51,7 @@ class DefaultMetadataRegistrator implements RegistratorInterface
          * Node's tags' ID.
          */
         $fields->add([
-            'name' => MetadataEnum::TAGS_IDS,
+            'name' => NodeMetadataEnum::TAGS_IDS,
             'datatype' => 'array',
             'multilingual' => false,
         ]);

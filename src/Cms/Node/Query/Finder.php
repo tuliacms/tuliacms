@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Node\Query;
 
 use Psr\EventDispatcher\EventDispatcherInterface;
+use Tulia\Cms\Metadata\Domain\ReadModel\MetadataFinder;
 use Tulia\Cms\Node\Infrastructure\NodeType\RegistryInterface;
 use Tulia\Cms\Node\Query\Exception\MultipleFetchException;
 use Tulia\Cms\Node\Query\Exception\QueryNotFetchedException;
@@ -64,6 +65,8 @@ class Finder implements FinderInterface
      */
     protected $eventDispatcher;
 
+    protected MetadataFinder $metadataFinder;
+
     /**
      * @param ConnectionInterface $connection
      * @param RegistryInterface $registry
@@ -73,6 +76,7 @@ class Finder implements FinderInterface
     public function __construct(
         ConnectionInterface $connection,
         RegistryInterface $registry,
+        MetadataFinder $metadataFinder,
         string $queryClass,
         array $params
     ) {
@@ -86,6 +90,7 @@ class Finder implements FinderInterface
         ], $params);
 
         $this->fetchData['result'] = new Collection();
+        $this->metadataFinder = $metadataFinder;
     }
 
     /**
@@ -184,7 +189,7 @@ class Finder implements FinderInterface
     {
         $classname = $this->queryClass;
 
-        return new $classname($this->connection->createQueryBuilder());
+        return new $classname($this->connection->createQueryBuilder(), $this->metadataFinder);
     }
 
     protected function afterQuery(): void
