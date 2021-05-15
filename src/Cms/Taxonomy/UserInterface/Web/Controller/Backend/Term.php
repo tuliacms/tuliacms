@@ -136,7 +136,6 @@ class Term extends AbstractController
         $form->handleRequest($request);
 
         $taxonomyType = $this->findTaxonomyType($taxonomy_type);
-        $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->termStorage->save($model);

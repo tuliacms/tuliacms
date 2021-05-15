@@ -6,6 +6,7 @@ namespace Tulia\Cms\Taxonomy\Infrastructure\Persistence\Query;
 
 use PDO;
 use Exception;
+use Tulia\Cms\Metadata\Domain\ReadModel\MetadataFinder;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Connection;
 use Tulia\Cms\Taxonomy\Query\Exception\QueryException;
 use Tulia\Cms\Taxonomy\Query\AbstractQuery;
@@ -17,10 +18,12 @@ use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder
 class DbalQuery extends AbstractQuery
 {
     protected QueryBuilder $queryBuilder;
+    protected MetadataFinder $metadataFinder;
 
-    public function __construct(QueryBuilder $queryBuilder)
+    public function __construct(QueryBuilder $queryBuilder, MetadataFinder $metadataFinder)
     {
         $this->queryBuilder = $queryBuilder;
+        $this->metadataFinder = $metadataFinder;
     }
 
     /**

@@ -6,7 +6,7 @@ namespace Tulia\Cms\Taxonomy\Infrastructure\Cms\Metadata;
 
 use Tulia\Cms\Metadata\Registrator\RegistratorInterface;
 use Tulia\Cms\Metadata\Registrator\RegistryInterface;
-use Tulia\Cms\Taxonomy\Infrastructure\Cms\Metadata\Enum\MetadataEnum;
+use Tulia\Cms\Taxonomy\Infrastructure\Cms\Metadata\TermMetadataEnum;
 
 /**
  * @author Adam Banaszkiewicz
@@ -21,7 +21,7 @@ class DefaultMetadataRegistrator implements RegistratorInterface
         $fields = $registry->getContentFields('term');
 
         $fields->add([
-            'name' => MetadataEnum::THUMBNAIL,
+            'name' => TermMetadataEnum::THUMBNAIL,
             'multilingual' => false,
         ]);
     }
