@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Taxonomy\Query;
 
 use Psr\EventDispatcher\EventDispatcherInterface;
+use Tulia\Cms\Metadata\Domain\ReadModel\MetadataFinder;
 use Tulia\Cms\Taxonomy\Infrastructure\Persistence\Query\DbalQuery;
 use Tulia\Cms\Taxonomy\Query\Model\Collection;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
@@ -31,25 +32,22 @@ class FinderFactory implements FinderFactoryInterface
     protected $currentWebsite;
 
     /**
-     * @var string
+     * @var
      */
     protected $queryClass;
+    private MetadataFinder $metadataFinder;
 
-    /**
-     * @param ConnectionInterface $connection
-     * @param EventDispatcherInterface $eventDispatcher
-     * @param CurrentWebsiteInterface $currentWebsite
-     * @param string $queryClass
-     */
     public function __construct(
         ConnectionInterface $connection,
         EventDispatcherInterface $eventDispatcher,
         CurrentWebsiteInterface $currentWebsite,
+        MetadataFinder $metadataFinder,
         string $queryClass = DbalQuery::class
     ) {
         $this->connection      = $connection;
         $this->eventDispatcher = $eventDispatcher;
         $this->currentWebsite  = $currentWebsite;
+        $this->metadataFinder = $metadataFinder;
         $this->queryClass      = $queryClass;
     }
 
@@ -58,7 +56,7 @@ class FinderFactory implements FinderFactoryInterface
      */
     public function getInstance(string $scope, array $params = []): FinderInterface
     {
-        $finder = new Finder($this->connection, $this->queryClass, array_merge([
+        $finder = new Finder($this->connection, $this->metadataFinder, $this->queryClass, array_merge([
             'website' => $this->currentWebsite->getId(),
             'locale'  => $this->currentWebsite->getLocale()->getCode(),
             'scope'   => $scope,

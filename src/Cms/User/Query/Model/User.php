@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\User\Query\Model;
 
-use Tulia\Cms\Metadata\MagickMetadataTrait;
-use Tulia\Cms\Metadata\Metadata;
-use Tulia\Cms\Metadata\MetadataTrait;
+use Tulia\Cms\Metadata\Domain\ReadModel\MagickMetadataTrait;
 
 /**
  * @author Adam Banaszkiewicz
@@ -14,62 +12,28 @@ use Tulia\Cms\Metadata\MetadataTrait;
 class User
 {
     use MagickMetadataTrait;
-    use MetadataTrait;
 
-    /**
-     * @var string
-     */
-    protected $id;
+    protected string $id;
 
-    /**
-     * @var string
-     */
-    protected $username;
+    protected string $username;
 
-    /**
-     * @var string
-     */
-    protected $password;
+    protected string $password;
 
-    /**
-     * @var string
-     */
-    protected $email;
+    protected string $email;
 
-    /**
-     * @var string
-     */
-    protected $locale = 'en_US';
+    protected string $locale = 'en_US';
 
-    /**
-     * @var bool
-     */
-    protected $enabled = true;
+    protected bool $enabled = true;
 
-    /**
-     * @var bool
-     */
-    protected $accountExpired = false;
+    protected bool $accountExpired = false;
 
-    /**
-     * @var bool
-     */
-    protected $credentialsExpired = false;
+    protected bool $credentialsExpired = false;
 
-    /**
-     * @var bool
-     */
-    protected $accountLocked = false;
+    protected bool $accountLocked = false;
 
-    /**
-     * @var array
-     */
-    protected $roles = [];
+    protected array $roles = [];
 
-    /**
-     * @var array
-     */
-    protected static $fields = [
+    protected static array $fields = [
         'id'                  => 'id',
         'username'            => 'username',
         'password'            => 'password',
@@ -113,8 +77,7 @@ class User
         $user->setAccountExpired((bool) ($data['account_expired'] ?? false));
         $user->setCredentialsExpired((bool) ($data['credentials_expired'] ?? false));
         $user->setAccountLocked((bool) ($data['account_locked'] ?? false));
-
-        $user->setMetadata(new Metadata($data['metadata'] ?? []));
+        $user->replaceMetadata($data['metadata'] ?? []);
 
         return $user;
     }
@@ -129,10 +92,6 @@ class User
         ], $params);
 
         $result = [];
-
-        /* foreach($this->getMetadata()->all() as $key => $val) {
-            $result[$key] = $val;
-        }*/
 
         foreach (static::$fields as $key => $property) {
             $result[$key] = $this->{$property};

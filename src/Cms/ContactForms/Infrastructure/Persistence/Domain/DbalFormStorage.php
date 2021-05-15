@@ -94,14 +94,14 @@ class DbalFormStorage extends AbstractLocalizableStorage
         return isset($result[0]['id']) && $result[0]['id'] === $id;
     }
 
-    protected function langExists(string $id, string $locale): bool
+    protected function langExists(array $data): bool
     {
         $result = $this->connection->fetchAllAssociative(
             'SELECT form_id FROM #__form_lang WHERE form_id = :id AND locale = :locale LIMIT 1',
-            ['id' => $id, 'locale' => $locale]
+            ['id' => $data['id'], 'locale' => $data['locale']]
         );
 
-        return isset($result[0]['form_id']) && $result[0]['form_id'] === $id;
+        return isset($result[0]['form_id']) && $result[0]['form_id'] === $data['id'];
     }
 
     public function delete(string $formId): void

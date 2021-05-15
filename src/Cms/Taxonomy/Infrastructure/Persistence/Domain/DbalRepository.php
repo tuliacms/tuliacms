@@ -4,57 +4,38 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Taxonomy\Infrastructure\Persistence\Domain;
 
+use Tulia\Cms\Metadata\Domain\WriteModel\MetadataRepository;
 use Tulia\Cms\Taxonomy\Domain\Exception\TermNotFoundException;
 use Tulia\Cms\Taxonomy\Domain\ValueObject\AggregateId;
 use Tulia\Cms\Taxonomy\Domain\Aggregate\Term;
 use Tulia\Cms\Taxonomy\Domain\RepositoryInterface;
-use Tulia\Cms\Metadata\Metadata;
-use Tulia\Cms\Metadata\Syncer\SyncerInterface;
-use Tulia\Cms\Platform\Domain\ValueObject\ImmutableDateTime;
 use Tulia\Cms\Platform\Infrastructure\DataManipulation\Hydrator\HydratorInterface;
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
+use Tulia\Cms\Taxonomy\Infrastructure\Cms\Metadata\TermMetadataEnum;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class DbalRepository implements RepositoryInterface
 {
-    /**
-     * @var ConnectionInterface
-     */
-    protected $connection;
+    protected ConnectionInterface $connection;
 
-    /**
-     * @var DbalPersister
-     */
-    protected $persister;
+    protected DbalPersister $persister;
 
-    /**
-     * @var HydratorInterface
-     */
-    protected $hydrator;
+    protected HydratorInterface $hydrator;
 
-    /**
-     * @var SyncerInterface
-     */
-    protected $metadata;
+    protected MetadataRepository $metadataRepository;
 
-    /**
-     * @param ConnectionInterface $connection
-     * @param DbalPersister $persister
-     * @param HydratorInterface $hydrator
-     * @param SyncerInterface $metadata
-     */
     public function __construct(
         ConnectionInterface $connection,
         DbalPersister $persister,
         HydratorInterface $hydrator,
-        SyncerInterface $metadata
+        MetadataRepository $metadataRepository
     ) {
         $this->connection = $connection;
         $this->persister  = $persister;
         $this->hydrator   = $hydrator;
-        $this->metadata   = $metadata;
+        $this->metadataRepository = $metadataRepository;
     }
 
     /**
@@ -90,7 +71,7 @@ class DbalRepository implements RepositoryInterface
             'parentId'   => $term['parent_id'] ?? '',
             'locale'     => $term['locale'],
             'visibility' => (bool) $term['visibility'],
-            'metadata'   => $this->metadata->all('term', $id->getId()),
+            'metadata'   => $this->metadataRepository->findAll(TermMetadataEnum::TYPE, $id->getId()),
         ], Term::class);
 
         return $aggregate;
@@ -110,11 +91,7 @@ class DbalRepository implements RepositoryInterface
                 $this->persister->insert($data);
             }
 
-            $this->metadata->push(
-                new Metadata($data['metadata']),
-                'term',
-                $data['id']
-            );
+            $this->metadataRepository->persist(TermMetadataEnum::TYPE, $data['id'], $data['metadata']);
         });
     }
 
@@ -127,19 +104,10 @@ class DbalRepository implements RepositoryInterface
 
         $this->connection->transactional(function () use ($data) {
             $this->persister->delete($data);
-
-            $this->metadata->delete(
-                'term',
-                $data['id']
-            );
+            $this->metadataRepository->delete(TermMetadataEnum::TYPE, $data['id']);
         });
     }
 
-    /**
-     * @param string $id
-     *
-     * @return bool
-     */
     private function recordExists(string $id): bool
     {
         $result = $this->connection->fetchAll('SELECT id FROM #__term WHERE id = :id LIMIT 1', ['id' => $id]);

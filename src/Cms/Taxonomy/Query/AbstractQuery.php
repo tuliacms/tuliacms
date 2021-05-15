@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Tulia\Cms\Taxonomy\Query;
 
 use Exception;
+use Tulia\Cms\Metadata\Domain\ReadModel\MetadataFinder;
+use Tulia\Cms\Taxonomy\Infrastructure\Cms\Metadata\TermMetadataEnum;
 use Tulia\Cms\Taxonomy\Query\Model\Collection;
 use Tulia\Cms\Taxonomy\Query\Model\Term;
 use Tulia\Cms\Taxonomy\Query\Exception\QueryException;
@@ -14,6 +16,8 @@ use Tulia\Cms\Taxonomy\Query\Exception\QueryException;
  */
 abstract class AbstractQuery implements QueryInterface
 {
+    protected MetadataFinder $metadataFinder;
+
     /**
      * @param array $result
      *
@@ -190,8 +194,12 @@ abstract class AbstractQuery implements QueryInterface
             return $collection;
         }
 
+        $metadata = $this->metadataFinder->findAllAggregated(TermMetadataEnum::TYPE, array_column($result, 'id'));
+
         try {
             foreach ($result as $row) {
+                $row['metadata'] = $metadata[$row['id']] ?? [];
+
                 $collection->append(Term::buildFromArray($row));
             }
         } catch (Exception $e) {

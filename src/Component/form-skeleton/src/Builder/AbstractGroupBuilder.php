@@ -52,7 +52,7 @@ abstract class AbstractGroupBuilder implements GroupBuilderInterface
         $sections = $this->getOption('sections', []);
 
         if ($active === [] && isset($sections[0]) && \in_array('_FIRST_', $this->getOption('active_first', []), true)) {
-            $active[] = $sections[0]->getId();
+            $active[] = $sections[0]['id'];
         }
 
         $this->activeSections = array_merge($active, $this->getOption('active', []));

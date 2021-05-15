@@ -14,5 +14,5 @@ interface TraceInterface
     public function insertLangRow(array $data): void;
     public function updateLangRow(array $data): void;
     public function rootExists(string $id): bool;
-    public function langExists(string $id, string $locale): bool;
+    public function langExists(array $data): bool;
 }

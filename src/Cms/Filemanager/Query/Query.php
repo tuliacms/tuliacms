@@ -10,7 +10,7 @@ use Tulia\Cms\Filemanager\Collection;
 use Tulia\Cms\Filemanager\CollectionInterface;
 use Tulia\Cms\Filemanager\File;
 use Tulia\Cms\Filemanager\Exception\QueryException;
-use Tulia\Framework\Database\Connection;
+use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
 
 /**
@@ -237,7 +237,7 @@ class Query
             if (\is_array($query['type'])) {
                 $this->queryBuilder
                     ->andWhere('tm.type IN (:tm_type)')
-                    ->setParameter('tm_type', $query['type'], Connection::PARAM_STR_ARRAY);
+                    ->setParameter('tm_type', $query['type'], ConnectionInterface::PARAM_ARRAY_STR);
             } else {
                 $this->queryBuilder
                     ->andWhere('tm.type = :tm_type')
@@ -255,7 +255,7 @@ class Query
             if (\is_array($query['directory'])) {
                 $this->queryBuilder
                     ->andWhere('tm.directory IN (:tm_directory)')
-                    ->setParameter('tm_directory', $query['directory'], Connection::PARAM_STR_ARRAY);
+                    ->setParameter('tm_directory', $query['directory'], ConnectionInterface::PARAM_ARRAY_STR);
             } else {
                 $this->queryBuilder
                     ->andWhere('tm.directory = :tm_directory')
@@ -285,7 +285,7 @@ class Query
 
             $this->queryBuilder
                 ->andWhere('tm.id NOT IN (:tm_id__not_in)')
-                ->setParameter('tm_id__not_in', $ids, Connection::PARAM_STR_ARRAY);
+                ->setParameter('tm_id__not_in', $ids, ConnectionInterface::PARAM_ARRAY_STR);
         }
 
         if ($query['id__in']) {
@@ -297,7 +297,7 @@ class Query
 
             $this->queryBuilder
                 ->andWhere('tm.id IN (:tm_id__in)')
-                ->setParameter('tm_id__in', $ids, Connection::PARAM_STR_ARRAY);
+                ->setParameter('tm_id__in', $ids, ConnectionInterface::PARAM_ARRAY_STR);
         }
     }
 

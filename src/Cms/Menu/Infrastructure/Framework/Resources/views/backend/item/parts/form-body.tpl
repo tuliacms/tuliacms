@@ -2,8 +2,6 @@
 {{ form_errors(form) }}
 {{ form_row(form.id) }}
 
-{{ dump(item.metadata) }}
-
 <div class="row">
     <div class="col">
         <div class="card">

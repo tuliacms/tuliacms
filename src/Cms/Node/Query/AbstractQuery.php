@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Tulia\Cms\Node\Query;
 
 use Exception;
+use Tulia\Cms\Metadata\Domain\ReadModel\MetadataFinder;
 use Tulia\Cms\Node\Domain\Enum\TermTypeEnum;
+use Tulia\Cms\Node\Infrastructure\Cms\Metadata\NodeMetadataEnum;
 use Tulia\Cms\Node\Query\Model\Collection;
 use Tulia\Cms\Node\Query\Model\Node;
 use Tulia\Cms\Node\Query\Exception\QueryException;
@@ -15,6 +17,8 @@ use Tulia\Cms\Node\Query\Exception\QueryException;
  */
 abstract class AbstractQuery implements QueryInterface
 {
+    protected MetadataFinder $metadataFinder;
+
     /**
      * @param array $result
      *
@@ -242,12 +246,15 @@ abstract class AbstractQuery implements QueryInterface
         }
 
         $terms = $this->fetchTerms(array_column($result, 'id'));
+        $metadata = $this->metadataFinder->findAllAggregated(NodeMetadataEnum::TYPE, array_column($result, 'id'));
 
         try {
             foreach ($result as $row) {
                 if (isset($terms[$row['id']][TermTypeEnum::MAIN][0])) {
                     $row['category'] = $terms[$row['id']][TermTypeEnum::MAIN][0];
                 }
+
+                $row['metadata'] = $metadata[$row['id']] ?? [];
 
                 $collection->append(Node::buildFromArray($row));
             }

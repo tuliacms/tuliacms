@@ -75,21 +75,6 @@ class Collection implements CollectionInterface
     /**
      * {@inheritdoc}
      */
-    public function toArray(): array
-    {
-        $array = [];
-
-        /** @var FileInterface $element */
-        foreach ($this->elements as $element) {
-            $array[] = $element->toArray();
-        }
-
-        return $array;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getIterator()
     {
         return new \ArrayIterator($this->elements);

@@ -90,6 +90,7 @@ class MenuItemForm extends AbstractFormSkeletonType
                 'translation_domain' => 'menu',
                 'choice_translation_domain' => 'menu',
             ])
+            ->add('menu_metadata', Type\TextType::class)
             ->add('save', FormType\SubmitType::class, [
                 'mapped' => false,
             ]);

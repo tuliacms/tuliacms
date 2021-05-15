@@ -6,6 +6,7 @@ namespace Tulia\Cms\User\Query;
 
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Tulia\Cms\Metadata\Domain\ReadModel\MetadataFinder;
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 use Tulia\Cms\User\Query\Model\Collection;
 use Tulia\Cms\User\Query\Model\User;
@@ -29,10 +30,12 @@ class Finder implements FinderInterface
     ];
     protected ?Query $query = null;
     protected EventDispatcherInterface $eventDispatcher;
+    protected MetadataFinder $metadataFinder;
 
-    public function __construct(ConnectionInterface $connection, array $params)
+    public function __construct(ConnectionInterface $connection, MetadataFinder $metadataFinder, array $params)
     {
         $this->connection = $connection;
+        $this->metadataFinder = $metadataFinder;
         $this->params = array_merge([
             'scope' => 'default',
         ], $params);
@@ -106,7 +109,7 @@ class Finder implements FinderInterface
             throw new MultipleFetchException('Cannot fetch again. Query already done and You can get results from finder. For new query please use fresh finder.');
         }
 
-        $this->query = new Query($this->connection->createQueryBuilder());
+        $this->query = new Query($this->connection->createQueryBuilder(), $this->metadataFinder);
 
         $this->criteria['count_found_rows'] = true;
 
@@ -176,7 +179,7 @@ class Finder implements FinderInterface
     {
         $perPage = $this->criteria['per_page'] ?? 15;
 
-        return new Paginator($request, $this->getTotalCount(), null, $perPage);;
+        return new Paginator($request, $this->getTotalCount(), null, $perPage);
     }
 
     /**

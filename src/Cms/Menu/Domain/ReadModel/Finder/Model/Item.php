@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Menu\Domain\ReadModel\Finder\Model;
 
 use InvalidArgumentException;
-use Tulia\Cms\Metadata\MagickMetadataTrait;
-use Tulia\Cms\Metadata\Metadata;
-use Tulia\Cms\Metadata\MetadataTrait;
+use Tulia\Cms\Metadata\Domain\ReadModel\MagickMetadataTrait;
 
 /**
  * @author Adam Banaszkiewicz
@@ -15,7 +13,6 @@ use Tulia\Cms\Metadata\MetadataTrait;
 class Item
 {
     use MagickMetadataTrait;
-    use MetadataTrait;
 
     protected $id;
     protected $menuId;
@@ -52,7 +49,7 @@ class Item
         $item->setVisibility((int) ($data['visibility'] ?? 1));
         $item->setTranslated((bool) ($data['translated'] ?? true));
 
-        $item->setMetadata(new Metadata($data['metadata'] ?? []));
+        $item->metadata = $data['metadata'] ?? [];
 
         return $item;
     }

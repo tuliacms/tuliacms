@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Infrastructure\Persistence\Domain;
 
+use Tulia\Cms\Metadata\Domain\WriteModel\MetadataRepository;
 use Tulia\Cms\Node\Domain\Enum\TermTypeEnum;
 use Tulia\Cms\Node\Domain\Exception\NodeNotFoundException;
 use Tulia\Cms\Node\Domain\ValueObject\AggregateId;
 use Tulia\Cms\Node\Domain\Aggregate\Node;
 use Tulia\Cms\Node\Domain\RepositoryInterface;
-use Tulia\Cms\Metadata\Metadata;
-use Tulia\Cms\Metadata\Syncer\SyncerInterface;
+use Tulia\Cms\Node\Infrastructure\Cms\Metadata\NodeMetadataEnum;
 use Tulia\Cms\Platform\Domain\ValueObject\ImmutableDateTime;
 use Tulia\Cms\Platform\Infrastructure\DataManipulation\Hydrator\HydratorInterface;
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
@@ -20,42 +20,24 @@ use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
  */
 class DbalRepository implements RepositoryInterface
 {
-    /**
-     * @var ConnectionInterface
-     */
-    protected $connection;
+    protected ConnectionInterface $connection;
 
-    /**
-     * @var DbalPersister
-     */
-    protected $persister;
+    protected DbalPersister $persister;
 
-    /**
-     * @var HydratorInterface
-     */
-    protected $hydrator;
+    protected HydratorInterface $hydrator;
 
-    /**
-     * @var SyncerInterface
-     */
-    protected $metadata;
+    private MetadataRepository $metadataRepository;
 
-    /**
-     * @param ConnectionInterface $connection
-     * @param DbalPersister $persister
-     * @param HydratorInterface $hydrator
-     * @param SyncerInterface $metadata
-     */
     public function __construct(
         ConnectionInterface $connection,
         DbalPersister $persister,
         HydratorInterface $hydrator,
-        SyncerInterface $metadata
+        MetadataRepository $metadataRepository
     ) {
         $this->connection = $connection;
-        $this->persister  = $persister;
-        $this->hydrator   = $hydrator;
-        $this->metadata   = $metadata;
+        $this->persister = $persister;
+        $this->hydrator = $hydrator;
+        $this->metadataRepository = $metadataRepository;
     }
 
     /**
@@ -112,7 +94,7 @@ class DbalRepository implements RepositoryInterface
             'level'        => (int) $node['level'],
             'parentId'     => $node['parent_id'] ?? '',
             'locale'       => $node['locale'],
-            'metadata'     => $this->metadata->all('node', $id->getId()),
+            'metadata'     => $this->metadataRepository->findAll(NodeMetadataEnum::TYPE, $id->getId()),
         ], Node::class);
 
         return $aggregate;
@@ -132,11 +114,7 @@ class DbalRepository implements RepositoryInterface
                 $this->persister->insert($data);
             }
 
-            $this->metadata->push(
-                new Metadata($data['metadata']),
-                'node',
-                $data['id']
-            );
+            $this->metadataRepository->persist(NodeMetadataEnum::TYPE, $data['id'], $data['metadata']);
         });
     }
 
@@ -149,11 +127,7 @@ class DbalRepository implements RepositoryInterface
 
         $this->connection->transactional(function () use ($data) {
             $this->persister->delete($data);
-
-            $this->metadata->delete(
-                'node',
-                $data['id']
-            );
+            $this->metadataRepository->delete(NodeMetadataEnum::TYPE, $data['id']);
         });
     }
 

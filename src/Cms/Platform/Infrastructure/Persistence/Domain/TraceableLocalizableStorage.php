@@ -44,8 +44,8 @@ class TraceableLocalizableStorage extends AbstractLocalizableStorage
         return $this->trace->rootExists($id);
     }
 
-    protected function langExists(string $id, string $locale): bool
+    protected function langExists(array $data): bool
     {
-        return $this->trace->langExists($id, $locale);
+        return $this->trace->langExists($data);
     }
 }

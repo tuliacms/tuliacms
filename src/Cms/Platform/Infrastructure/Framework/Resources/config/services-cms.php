@@ -3,8 +3,8 @@
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Tulia\Cms\Metadata\Registrator\Registry as MetadataRegistry;
-use Tulia\Cms\Metadata\Registrator\RegistryInterface as MetadataRegistryInterface;
+use Tulia\Cms\Metadata\Domain\Registry\ContentFieldsRegistry as MetadataRegistry;
+use Tulia\Cms\Metadata\Domain\Registry\ContentFieldsRegistryInterface as MetadataRegistryInterface;
 use Tulia\Cms\Metadata\Storage\DatabaseStorage as MetadataDatabaseStorage;
 use Tulia\Cms\Metadata\Storage\StorageInterface as MetadataStorageInterface;
 use Tulia\Cms\Metadata\Syncer\DatabaseStorageSyncer;

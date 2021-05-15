@@ -3,13 +3,21 @@ services:
         autowire: true
         autoconfigure: true
 
-    Tulia\Cms\Metadata\Registrator\RegistryInterface:
-        class: Tulia\Cms\Metadata\Registrator\Registry
+    Tulia\Cms\Metadata\:
+        resource: '../../../../../../Metadata/*'
+        exclude:
+            - '../../../../../../Metadata/**/Resources/**'
+            - '../../../../../../Metadata/**/Model/**'
+            - '../../../../../../Metadata/**/*Exception.php'
+            - '../../../../../../Metadata/**/*Trait.php'
+
+    Tulia\Cms\Metadata\Domain\Registry\ContentFieldsRegistryInterface:
+        class: Tulia\Cms\Metadata\Domain\Registry\ContentFieldsRegistry
         bind:
             $registrators: !tagged_iterator metadata.registrator
-
-    Tulia\Cms\Metadata\Syncer\SyncerInterface:
-        class: Tulia\Cms\Metadata\Syncer\DatabaseStorageSyncer
-
-    Tulia\Cms\Metadata\Storage\StorageInterface:
-        class: Tulia\Cms\Metadata\Storage\DatabaseStorage
+#
+    #Tulia\Cms\Metadata\Syncer\SyncerInterface:
+    #    class: Tulia\Cms\Metadata\Syncer\DatabaseStorageSyncer
+#
+    #Tulia\Cms\Metadata\Storage\StorageInterface:
+    #    class: Tulia\Cms\Metadata\Storage\DatabaseStorage

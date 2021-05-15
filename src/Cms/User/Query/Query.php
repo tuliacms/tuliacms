@@ -6,8 +6,10 @@ namespace Tulia\Cms\User\Query;
 
 use Exception;
 use PDO;
+use Tulia\Cms\Metadata\Domain\ReadModel\MetadataFinder;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Connection;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
+use Tulia\Cms\User\Infrastructure\Cms\Metadata\UserMetadataEnum;
 use Tulia\Cms\User\Query\Model\Collection;
 use Tulia\Cms\User\Query\Model\User;
 use Tulia\Cms\User\Query\Exception\QueryException;
@@ -18,10 +20,12 @@ use Tulia\Cms\User\Query\Exception\QueryException;
 class Query
 {
     protected QueryBuilder $queryBuilder;
+    protected MetadataFinder $metadataFinder;
 
-    public function __construct(QueryBuilder $queryBuilder)
+    public function __construct(QueryBuilder $queryBuilder, MetadataFinder $metadataFinder)
     {
         $this->queryBuilder = $queryBuilder;
+        $this->metadataFinder = $metadataFinder;
     }
 
     /**
@@ -185,7 +189,11 @@ class Query
             return $collection;
         }
 
+        $metadata = $this->metadataFinder->findAllAggregated(UserMetadataEnum::TYPE, array_column($result, 'id'));
+
         foreach ($result as $row) {
+            $row['metadata'] = $metadata[$row['id']] ?? [];
+
             $collection->append(User::buildFromArray($row));
         }
 

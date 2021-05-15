@@ -6,7 +6,6 @@ namespace Tulia\Cms\Menu\Domain\WriteModel;
 
 use Tulia\Cms\Menu\Domain\WriteModel\Model\Item;
 use Tulia\Cms\Menu\Domain\WriteModel\Model\Menu;
-use Tulia\Cms\Menu\Infrastructure\Cms\Metadata\Item\LoaderInterface;
 use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 
@@ -16,16 +15,13 @@ use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 class MenuFactory
 {
     protected UuidGeneratorInterface $uuidGenerator;
-    protected LoaderInterface $loader;
     protected CurrentWebsiteInterface $currentWebsite;
 
     public function __construct(
         UuidGeneratorInterface $uuidGenerator,
-        LoaderInterface $loader,
         CurrentWebsiteInterface $currentWebsite
     ) {
         $this->uuidGenerator = $uuidGenerator;
-        $this->loader = $loader;
         $this->currentWebsite = $currentWebsite;
     }
 
@@ -50,8 +46,6 @@ class MenuFactory
             'locale'     => $this->currentWebsite->getLocale()->getCode(),
             'website_id' => $this->currentWebsite->getId(),
         ]));
-
-        $this->loader->load($item);
 
         return $item;
     }
