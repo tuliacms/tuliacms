@@ -11,8 +11,8 @@ services:
             - '../../../../../../Metadata/**/*Exception.php'
             - '../../../../../../Metadata/**/*Trait.php'
 
-    Tulia\Cms\Metadata\Registrator\RegistryInterface:
-        class: Tulia\Cms\Metadata\Registrator\Registry
+    Tulia\Cms\Metadata\Domain\Registry\ContentFieldsRegistryInterface:
+        class: Tulia\Cms\Metadata\Domain\Registry\ContentFieldsRegistry
         bind:
             $registrators: !tagged_iterator metadata.registrator
 #

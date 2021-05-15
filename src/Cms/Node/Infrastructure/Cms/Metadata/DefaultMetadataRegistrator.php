@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Infrastructure\Cms\Metadata;
 
-use Tulia\Cms\Metadata\Registrator\RegistratorInterface;
-use Tulia\Cms\Metadata\Registrator\RegistryInterface;
+use Tulia\Cms\Metadata\Domain\Registry\RegistratorInterface;
+use Tulia\Cms\Metadata\Domain\Registry\ContentFieldsRegistryInterface;
 use Tulia\Cms\Node\Infrastructure\Cms\Metadata\NodeMetadataEnum;
 
 /**
@@ -18,7 +18,7 @@ class DefaultMetadataRegistrator implements RegistratorInterface
     /**
      * {@inheritdoc}
      */
-    public function register(RegistryInterface $registry): void
+    public function register(ContentFieldsRegistryInterface $registry): void
     {
         $fields = $registry->getContentFields('node');
 

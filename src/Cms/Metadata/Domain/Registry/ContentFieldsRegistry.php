@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Metadata\Registrator;
+namespace Tulia\Cms\Metadata\Domain\Registry;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class Registry implements RegistryInterface
+class ContentFieldsRegistry implements ContentFieldsRegistryInterface
 {
     protected array $contentTypesFields = [];
 
@@ -29,7 +29,7 @@ class Registry implements RegistryInterface
     /**
      * {@inheritdoc}
      */
-    public function addContentFields(string $contentType, ContentFieldsInterface $fields): RegistryInterface
+    public function addContentFields(string $contentType, ContentFieldsInterface $fields): ContentFieldsRegistryInterface
     {
         $this->contentTypesFields[$contentType] = $fields;
 

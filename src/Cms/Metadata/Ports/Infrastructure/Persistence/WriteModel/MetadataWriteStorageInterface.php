@@ -7,7 +7,7 @@ namespace Tulia\Cms\Metadata\Ports\Infrastructure\Persistence\WriteModel;
 /**
  * @author Adam Banaszkiewicz
  */
-interface MetadataStorageInterface
+interface MetadataWriteStorageInterface
 {
     public function find(string $type, array $ownerIdList, string $locale): array;
 

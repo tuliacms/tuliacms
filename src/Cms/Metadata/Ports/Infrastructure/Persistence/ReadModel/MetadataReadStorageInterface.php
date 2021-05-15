@@ -7,7 +7,7 @@ namespace Tulia\Cms\Metadata\Ports\Infrastructure\Persistence\ReadModel;
 /**
  * @author Adam Banaszkiewicz
  */
-interface MetadataFinderInterface
+interface MetadataReadStorageInterface
 {
     public function findAll(string $type, array $ownerId): array;
 }

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Tulia\Cms\Metadata\Domain\WriteModel;
 
 use Tulia\Cms\Metadata\Domain\Registry\DatatypeResolver;
-use Tulia\Cms\Metadata\Ports\Infrastructure\Persistence\WriteModel\MetadataStorageInterface;
-use Tulia\Cms\Metadata\Registrator\RegistryInterface;
+use Tulia\Cms\Metadata\Ports\Infrastructure\Persistence\WriteModel\MetadataWriteStorageInterface;
+use Tulia\Cms\Metadata\Domain\Registry\ContentFieldsRegistryInterface;
 use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 
@@ -15,14 +15,17 @@ use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
  */
 class MetadataRepository
 {
-    private MetadataStorageInterface $storage;
-    private RegistryInterface $registry;
+    private MetadataWriteStorageInterface $storage;
+
+    private ContentFieldsRegistryInterface $registry;
+
     private CurrentWebsiteInterface $currentWebsite;
+
     private UuidGeneratorInterface $uuidGenerator;
 
     public function __construct(
-        MetadataStorageInterface $storage,
-        RegistryInterface $registry,
+        MetadataWriteStorageInterface $storage,
+        ContentFieldsRegistryInterface $registry,
         CurrentWebsiteInterface $currentWebsite,
         UuidGeneratorInterface $uuidGenerator
     ) {

@@ -5,18 +5,19 @@ declare(strict_types=1);
 namespace Tulia\Cms\Metadata\Domain\ReadModel;
 
 use Tulia\Cms\Metadata\Domain\Registry\DatatypeResolver;
-use Tulia\Cms\Metadata\Ports\Infrastructure\Persistence\ReadModel\MetadataFinderInterface;
-use Tulia\Cms\Metadata\Registrator\RegistryInterface;
+use Tulia\Cms\Metadata\Ports\Infrastructure\Persistence\ReadModel\MetadataReadStorageInterface;
+use Tulia\Cms\Metadata\Domain\Registry\ContentFieldsRegistryInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class MetadataFinder
 {
-    private RegistryInterface $registry;
-    private MetadataFinderInterface $finder;
+    private ContentFieldsRegistryInterface $registry;
 
-    public function __construct(RegistryInterface $registry, MetadataFinderInterface $finder)
+    private MetadataReadStorageInterface $finder;
+
+    public function __construct(ContentFieldsRegistryInterface $registry, MetadataReadStorageInterface $finder)
     {
         $this->registry = $registry;
         $this->finder = $finder;

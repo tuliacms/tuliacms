@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Metadata\Infrastructure\Persistence\ReadModel;
 
-use Tulia\Cms\Metadata\Ports\Infrastructure\Persistence\ReadModel\MetadataFinderInterface;
+use Tulia\Cms\Metadata\Ports\Infrastructure\Persistence\ReadModel\MetadataReadStorageInterface;
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class DbalMetadataStorage implements MetadataFinderInterface
+class DbalMetadataReadStorage implements MetadataReadStorageInterface
 {
     protected ConnectionInterface $connection;
 

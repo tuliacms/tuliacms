@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Metadata\Infrastructure\Persistence\WriteModel;
 
-use Tulia\Cms\Metadata\Ports\Infrastructure\Persistence\WriteModel\MetadataStorageInterface;
+use Tulia\Cms\Metadata\Ports\Infrastructure\Persistence\WriteModel\MetadataWriteStorageInterface;
 use Tulia\Cms\Platform\Infrastructure\Persistence\Domain\AbstractLocalizableStorage;
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class DbalMetadataStorage extends AbstractLocalizableStorage implements MetadataStorageInterface
+class DbalMetadataWriteStorage extends AbstractLocalizableStorage implements MetadataWriteStorageInterface
 {
     private ConnectionInterface $connection;
 
