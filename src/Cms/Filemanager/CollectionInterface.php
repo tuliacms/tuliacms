@@ -33,9 +33,4 @@ interface CollectionInterface extends \ArrayAccess, \IteratorAggregate
      * @return FileInterface|null
      */
     public function first(): ?FileInterface;
-
-    /**
-     * @return array
-     */
-    public function toArray(): array;
 }

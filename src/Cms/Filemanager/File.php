@@ -7,10 +7,7 @@ namespace Tulia\Cms\Filemanager;
 use DateTime;
 use Exception;
 use InvalidArgumentException;
-use Tulia\Cms\Metadata\MagickMetadataTrait;
-use Tulia\Cms\Metadata\Metadata;
-use Tulia\Cms\Metadata\MetadataInterface;
-use Tulia\Cms\Metadata\MetadataTrait;
+use Tulia\Cms\Metadata\Domain\ReadModel\MagickMetadataTrait;
 
 /**
  * @author Adam Banaszkiewicz
@@ -18,7 +15,6 @@ use Tulia\Cms\Metadata\MetadataTrait;
 class File implements FileInterface
 {
     use MagickMetadataTrait;
-    use MetadataTrait;
 
     protected $id;
     protected $directory;
@@ -31,24 +27,9 @@ class File implements FileInterface
     protected $createdAt;
     protected $updatedAt;
 
-    protected static $fields = [
-        'id'         => 'id',
-        'directory'  => 'directory',
-        'filename'   => 'filename',
-        'extension'  => 'extension',
-        'type'       => 'type',
-        'mimetype'   => 'mimetype',
-        'size'       => 'size',
-        'path'       => 'path',
-        'created_at' => 'createdAt',
-        'updated_at' => 'updatedAt',
-    ];
-
     /**
      * @param array $data
-     *
      * @return FileInterface
-     *
      * @throws Exception
      */
     public static function buildFromArray(array $data): FileInterface
@@ -72,8 +53,7 @@ class File implements FileInterface
         $file->setPath($data['path'] ?? '');
         $file->setCreatedAt($data['created_at']);
         $file->setUpdatedAt($data['updated_at']);
-
-        $file->setMetadata(new Metadata($data['metadata'] ?? []));
+        $file->replaceMetadata($data['metadata'] ?? []);
 
         return $file;
     }
@@ -92,32 +72,6 @@ class File implements FileInterface
         }
 
         return $data;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function toArray(array $params = []): array
-    {
-        $params = array_merge([
-            'skip' => [],
-        ], $params);
-
-        $result = [];
-
-        /*foreach ($this->getMetadata()->all() as $key => $val) {
-            $result[$key] = $val;
-        }*/
-
-        foreach (static::$fields as $key => $property) {
-            $result[$key] = $this->{$property};
-        }
-
-        foreach ($params['skip'] as $skip) {
-            unset($result[$skip]);
-        }
-
-        return $result;
     }
 
     /**
