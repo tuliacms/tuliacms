@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\User\Application\Model;
 
+use Tulia\Cms\Metadata\Domain\WriteModel\MagickMetadataTrait;
 use Tulia\Cms\User\Query\Model\User as QueryModelUser;
 
 /**
@@ -11,60 +12,27 @@ use Tulia\Cms\User\Query\Model\User as QueryModelUser;
  */
 class User
 {
-    /**
-     * @var string
-     */
-    protected $id;
+    use MagickMetadataTrait;
 
-    /**
-     * @var string
-     */
-    protected $username;
+    protected ?string $id = null;
 
-    /**
-     * @var string
-     */
-    protected $password;
+    protected ?string $username = null;
 
-    /**
-     * @var string
-     */
-    protected $email;
+    protected ?string $password = null;
 
-    /**
-     * @var string
-     */
-    protected $locale = 'en_US';
+    protected ?string $email = null;
 
-    /**
-     * @var bool
-     */
-    protected $enabled = true;
+    protected string $locale = 'en_US';
 
-    /**
-     * @var bool
-     */
-    protected $accountExpired = false;
+    protected bool $enabled = true;
 
-    /**
-     * @var bool
-     */
-    protected $credentialsExpired = false;
+    protected bool $accountExpired = false;
 
-    /**
-     * @var bool
-     */
-    protected $accountLocked = false;
+    protected bool $credentialsExpired = false;
 
-    /**
-     * @var array
-     */
-    protected $roles = [];
+    protected bool $accountLocked = false;
 
-    /**
-     * @var array
-     */
-    protected $metadata = [];
+    protected array $roles = [];
 
     public static function fromQueryModel(QueryModelUser $user): self
     {
@@ -78,36 +46,9 @@ class User
         $self->setAccountExpired($user->getAccountExpired());
         $self->setCredentialsExpired($user->getCredentialsExpired());
         $self->setAccountLocked($user->getAccountLocked());
-        $self->setMetadata($user->getMetadata()->all());
+        $self->replaceMetadata($user->getAllMetadata());
 
         return $self;
-    }
-
-    /**
-     * @param $name
-     *
-     * @return mixed|null
-     */
-    public function __get($name)
-    {
-        return $this->metadata[$name] ?? null;
-    }
-
-    /**
-     * @param $name
-     * @param $value
-     */
-    public function __set($name, $value): void
-    {
-        $this->metadata[$name] = $value;
-    }
-
-    /**
-     * @param $name
-     */
-    public function __isset($name): bool
-    {
-        return true;
     }
 
     /**
@@ -284,21 +225,5 @@ class User
     public function setRoles(array $roles): void
     {
         $this->roles = $roles;
-    }
-
-    /**
-     * @return array
-     */
-    public function getMetadata(): array
-    {
-        return $this->metadata;
-    }
-
-    /**
-     * @param array $metadata
-     */
-    public function setMetadata(array $metadata): void
-    {
-        $this->metadata = $metadata;
     }
 }

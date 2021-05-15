@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\User\Infrastructure\Persistence\Domain;
 
-use Tulia\Cms\Metadata\Metadata;
-use Tulia\Cms\Metadata\Syncer\SyncerInterface;
+use Tulia\Cms\Metadata\Domain\WriteModel\MetadataRepository;
 use Tulia\Cms\Platform\Infrastructure\DataManipulation\Hydrator\HydratorInterface;
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 use Tulia\Cms\User\Domain\Aggregate\User;
 use Tulia\Cms\User\Domain\Exception\UserNotFoundException;
 use Tulia\Cms\User\Domain\RepositoryInterface;
 use Tulia\Cms\User\Domain\ValueObject\AggregateId;
+use Tulia\Cms\User\Infrastructure\Cms\Metadata\UserMetadataEnum;
 
 /**
  * @author Adam Banaszkiewicz
@@ -21,18 +21,18 @@ class DbalRepository implements RepositoryInterface
     protected ConnectionInterface $connection;
     protected DbalPersister $persister;
     protected HydratorInterface $hydrator;
-    protected SyncerInterface $metadata;
+    protected MetadataRepository $metadataRepository;
 
     public function __construct(
         ConnectionInterface $connection,
         DbalPersister $persister,
         HydratorInterface $hydrator,
-        SyncerInterface $metadata
+        MetadataRepository $metadataRepository
     ) {
         $this->connection = $connection;
         $this->persister = $persister;
         $this->hydrator = $hydrator;
-        $this->metadata = $metadata;
+        $this->metadataRepository = $metadataRepository;
     }
 
     /**
@@ -66,7 +66,7 @@ class DbalRepository implements RepositoryInterface
             'credentialsExpired' => $user['credentials_expired'] === '1',
             'accountLocked' => $user['account_locked'] === '1',
             'roles'    => json_decode($user['roles'], true),
-            'metadata' => $this->metadata->all('user', $id->getId()),
+            'metadata' => $this->metadataRepository->findAll(UserMetadataEnum::TYPE, $id->getId()),
         ], User::class);
 
         return $aggregate;
@@ -83,11 +83,7 @@ class DbalRepository implements RepositoryInterface
                 $this->persister->insert($data);
             }
 
-            $this->metadata->push(
-                new Metadata($data['metadata']),
-                'user',
-                $data['id']
-            );
+            $this->metadataRepository->persist(UserMetadataEnum::TYPE, $data['id'], $data['metadata']);
         });
     }
 
@@ -97,11 +93,7 @@ class DbalRepository implements RepositoryInterface
 
         $this->connection->transactional(function () use ($data) {
             $this->persister->delete($data);
-
-            $this->metadata->delete(
-                'user',
-                $data['id']
-            );
+            $this->metadataRepository->delete(UserMetadataEnum::TYPE, $data['id']);
         });
     }
 

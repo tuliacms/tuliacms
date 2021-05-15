@@ -7,8 +7,10 @@ namespace Tulia\Cms\User\Infrastructure\Cms\Metadata;
 /**
  * @author Adam Banaszkiewicz
  */
-class MetadataEnum
+class UserMetadataEnum
 {
-    public const NAME   = 'name';
+    public const TYPE = 'user';
+
+    public const NAME = 'name';
     public const AVATAR = 'avatar';
 }

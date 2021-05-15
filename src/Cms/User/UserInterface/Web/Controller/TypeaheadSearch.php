@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\User\UserInterface\Web\Controller;
 
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\TypeaheadFormTypeSearch;
-use Tulia\Cms\User\Infrastructure\Cms\Metadata\MetadataEnum;
+use Tulia\Cms\User\Infrastructure\Cms\Metadata\UserMetadataEnum;
 use Tulia\Cms\User\Query\Enum\ScopeEnum;
 use Tulia\Cms\User\Query\FinderFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -42,8 +42,8 @@ class TypeaheadSearch extends TypeaheadFormTypeSearch
         {
             $username = $row->getUsername();
 
-            if ($row->getMeta(MetadataEnum::NAME)) {
-                $username = $row->getMeta(MetadataEnum::NAME) . " ({$username})";
+            if ($row->getMeta(UserMetadataEnum::NAME)) {
+                $username = $row->getMeta(UserMetadataEnum::NAME) . " ({$username})";
             }
 
             $result[] = ['username' => $username];

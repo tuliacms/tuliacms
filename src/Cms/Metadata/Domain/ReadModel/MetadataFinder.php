@@ -22,7 +22,7 @@ class MetadataFinder
         $this->finder = $finder;
     }
 
-    public function findAll(string $type, array $ownerIdList): array
+    public function findAllAggregated(string $type, array $ownerIdList): array
     {
         $fields = $this->registry->getContentFields($type);
         $metadata = $this->finder->findAll($type, $ownerIdList);
@@ -46,5 +46,10 @@ class MetadataFinder
         }
 
         return $result;
+    }
+
+    public function findAll(string $type, string $ownerId): array
+    {
+        return $this->findAllAggregated($type, [$ownerId])[$ownerId] ?? [];
     }
 }

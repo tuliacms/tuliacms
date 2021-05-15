@@ -6,7 +6,7 @@ namespace Tulia\Cms\User\Application\Service\Avatar;
 
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Tulia\Cms\User\Infrastructure\Cms\Metadata\MetadataEnum;
+use Tulia\Cms\User\Infrastructure\Cms\Metadata\UserMetadataEnum;
 use Tulia\Cms\User\Query\Model\User;
 
 /**
@@ -24,7 +24,7 @@ class Uploader implements UploaderInterface
     /**
      * {@inheritdoc}
      */
-    public function uploadForUser(User $user, FormInterface $form, string $field = MetadataEnum::AVATAR): string
+    public function uploadForUser(User $user, FormInterface $form, string $field = UserMetadataEnum::AVATAR): string
     {
         /** @var UploadedFile $avatarFile */
         $avatarFile = $form[$field]->getData();
@@ -34,9 +34,9 @@ class Uploader implements UploaderInterface
         }
 
         $newAvatar = $this->upload($avatarFile);
-        $oldAvatar = $user->getMeta(MetadataEnum::AVATAR);
+        $oldAvatar = $user->getMeta(UserMetadataEnum::AVATAR);
 
-        $user->setMeta(MetadataEnum::AVATAR, $newAvatar);
+        $user->setMeta(UserMetadataEnum::AVATAR, $newAvatar);
 
         if ($oldAvatar) {
             $this->removeUploaded($oldAvatar);
@@ -70,13 +70,13 @@ class Uploader implements UploaderInterface
      */
     public function removeUploadedForUser(User $user): void
     {
-        if (! $user->getMeta(MetadataEnum::AVATAR)) {
+        if (! $user->getMeta(UserMetadataEnum::AVATAR)) {
             return;
         }
 
-        $this->removeUploaded($user->getMeta(MetadataEnum::AVATAR));
+        $this->removeUploaded($user->getMeta(UserMetadataEnum::AVATAR));
 
-        $user->setMeta(MetadataEnum::AVATAR, null);
+        $user->setMeta(UserMetadataEnum::AVATAR, null);
     }
 
     /**

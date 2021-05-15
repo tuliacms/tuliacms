@@ -34,6 +34,15 @@ trait MagickMetadataTrait
         }
     }
 
+    public function __call(string $name , array $arguments)
+    {
+        if (method_exists($this, $name)) {
+            return $this->{$name}(...$arguments);
+        }
+
+        return $this->meta($name);
+    }
+
     public function __isset(string $name): bool
     {
         return method_exists($this, $name) || isset($this->metadata[$name]);

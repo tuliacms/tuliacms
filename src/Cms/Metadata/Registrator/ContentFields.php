@@ -1,10 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tulia\Cms\Metadata\Registrator;
 
+/**
+ * @author Adam Banaszkiewicz
+ */
 class ContentFields implements ContentFieldsInterface
 {
-    protected $fields = [];
+    protected array $fields = [];
 
     public function add(array $field): ContentFieldsInterface
     {
@@ -13,12 +18,11 @@ class ContentFields implements ContentFieldsInterface
             // Default value
             'default' => null,
             'multilingual' => true,
-            // One of available: text, array, datetime
-            'datatype' => 'text',
+            // One of available: string, array, datetime
+            'datatype' => 'string',
         ], $field);
 
-        switch($field['datatype'])
-        {
+        switch ($field['datatype']) {
             case 'array':
                 $field['default'] = is_array($field['default']) ? $field['default'] : [];
         }

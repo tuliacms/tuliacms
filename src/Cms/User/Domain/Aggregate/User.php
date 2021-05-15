@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\User\Domain\Aggregate;
 
+use Tulia\Cms\Metadata\Domain\WriteModel\MagickMetadataTrait;
 use Tulia\Cms\Platform\Domain\Aggregate\AggregateRoot;
 use Tulia\Cms\User\Domain\ValueObject\AggregateId;
 use Tulia\Cms\User\Domain\Exception;
@@ -14,64 +15,28 @@ use Tulia\Cms\User\Domain\Event;
  */
 class User extends AggregateRoot
 {
-    /**
-     * @var AggregateId
-     */
-    private $id;
+    use MagickMetadataTrait;
 
-    /**
-     * @var string
-     */
-    protected $username;
+    private AggregateId $id;
 
-    /**
-     * @var string
-     */
-    protected $password;
+    protected string $username;
 
-    /**
-     * @var string
-     */
-    protected $email;
+    protected string $password;
 
-    /**
-     * @var string
-     */
-    protected $locale = 'en_US';
+    protected string $email;
 
-    /**
-     * @var bool
-     */
-    protected $enabled = true;
+    protected string $locale = 'en_US';
 
-    /**
-     * @var bool
-     */
-    protected $accountExpired = false;
+    protected bool $enabled = true;
 
-    /**
-     * @var bool
-     */
-    protected $credentialsExpired = false;
+    protected bool $accountExpired = false;
 
-    /**
-     * @var bool
-     */
-    protected $accountLocked = false;
+    protected bool $credentialsExpired = false;
 
-    /**
-     * @var array
-     */
-    protected $roles = [];
+    protected bool $accountLocked = false;
 
-    /**
-     * @var array
-     */
-    private $metadata = [];
+    protected array $roles = [];
 
-    /**
-     * @param AggregateId $id
-     */
     public function __construct(AggregateId $id)
     {
         $this->id = $id;
@@ -79,9 +44,6 @@ class User extends AggregateRoot
         $this->recordThat(new Event\UserCreated($id));
     }
 
-    /**
-     * @return AggregateId
-     */
     public function getId(): AggregateId
     {
         return $this->id;

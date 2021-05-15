@@ -32,7 +32,7 @@ class MetadataRepository
         $this->uuidGenerator = $uuidGenerator;
     }
 
-    public function findAll(string $type, array $ownerIdList): array
+    public function findAllAggregated(string $type, array $ownerIdList): array
     {
         $metadata = $this->storage->find($type, $ownerIdList, $this->currentWebsite->getLocale()->getCode());
         $fields = $this->registry->getContentFields($type);
@@ -58,6 +58,11 @@ class MetadataRepository
         return $result;
     }
 
+    public function findAll(string $type, string $ownerId): array
+    {
+        return $this->findAllAggregated($type, [$ownerId])[$ownerId] ?? [];
+    }
+
     public function persist(string $type, string $ownerId, array $metadata): void
     {
         $datatypeResolver = new DatatypeResolver();
@@ -67,14 +72,16 @@ class MetadataRepository
         foreach ($metadata as $name => $value) {
             foreach ($fields->all() as $field => $details) {
                 if ($field === $name) {
+                    $resolvedValue = $datatypeResolver->reverseResolve(
+                        $value,
+                        $details['datatype'],
+                        $field,
+                        $ownerId
+                    );
+
                     $metadata[$name] = [
                         'id' => $this->uuidGenerator->generate(),
-                        'value' => $datatypeResolver->reverseResolve(
-                            $value,
-                            $details['datatype'],
-                            $field,
-                            $ownerId
-                        ),
+                        'value' => $resolvedValue,
                         'owner_id' => $ownerId,
                         'name' => $name,
                         'locale' => $locale,
@@ -89,5 +96,10 @@ class MetadataRepository
             $metadata,
             $this->currentWebsite->getDefaultLocale()->getCode()
         );
+    }
+
+    public function delete(string $type, string $ownerId): void
+    {
+        throw new \RuntimeException('Please implements this method.');
     }
 }

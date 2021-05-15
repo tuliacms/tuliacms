@@ -15,20 +15,12 @@ interface RepositoryInterface
 {
     /**
      * @param AggregateId $id
-     *
      * @return User
-     *
      * @throws UserNotFoundException
      */
     public function find(AggregateId $id): User;
 
-    /**
-     * @param User $user
-     */
     public function save(User $user): void;
 
-    /**
-     * @param User $user
-     */
     public function delete(User $user): void;
 }

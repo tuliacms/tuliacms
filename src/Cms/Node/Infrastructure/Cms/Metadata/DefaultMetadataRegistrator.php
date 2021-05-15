@@ -55,12 +55,5 @@ class DefaultMetadataRegistrator implements RegistratorInterface
             'datatype' => 'array',
             'multilingual' => false,
         ]);
-
-        $fields = $registry->getContentFields('menu_item');
-        $fields->add([
-            'name' => 'menu_metadata',
-            'datatype' => 'string',
-            'multilingual' => false,
-        ]);
     }
 }

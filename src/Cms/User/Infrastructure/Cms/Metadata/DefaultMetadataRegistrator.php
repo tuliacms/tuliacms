@@ -17,14 +17,15 @@ class DefaultMetadataRegistrator implements RegistratorInterface
      */
     public function register(RegistryInterface $registry): void
     {
-        $fields = $registry->getContentFields('user');
+        $fields = $registry->getContentFields(UserMetadataEnum::TYPE);
 
         $fields->add([
-            'name' => MetadataEnum::NAME,
+            'name' => UserMetadataEnum::NAME,
             'multilingual' => false,
         ]);
+
         $fields->add([
-            'name' => MetadataEnum::AVATAR,
+            'name' => UserMetadataEnum::AVATAR,
             'multilingual' => false,
         ]);
     }

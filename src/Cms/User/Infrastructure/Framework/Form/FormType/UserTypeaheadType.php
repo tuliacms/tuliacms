@@ -7,7 +7,7 @@ namespace Tulia\Cms\User\Infrastructure\Framework\Form\FormType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\TypeaheadType;
-use Tulia\Cms\User\Infrastructure\Cms\Metadata\MetadataEnum;
+use Tulia\Cms\User\Infrastructure\Cms\Metadata\UserMetadataEnum;
 use Tulia\Cms\User\Query\FinderFactoryInterface;
 use Tulia\Cms\User\Query\Enum\ScopeEnum;
 
@@ -46,8 +46,8 @@ class UserTypeaheadType extends AbstractType
 
                 $username = $user->getUsername();
 
-                if ($user->getMeta(MetadataEnum::NAME)) {
-                    $username = $user->getMeta(MetadataEnum::NAME) . " ({$username})";
+                if ($user->getMeta(UserMetadataEnum::NAME)) {
+                    $username = $user->getMeta(UserMetadataEnum::NAME) . " ({$username})";
                 }
 
                 return ['username' => $username];

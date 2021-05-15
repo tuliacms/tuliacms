@@ -107,7 +107,7 @@ class UserStorage
 
     private function updateAggregate(ApplicationUser $user, Aggregate $aggregate): void
     {
-        foreach ($user->getMetadata() as $key => $val) {
+        foreach ($user->getAllMetadata() as $key => $val) {
             $aggregate->changeMetadataValue($key, $val);
         }
 
