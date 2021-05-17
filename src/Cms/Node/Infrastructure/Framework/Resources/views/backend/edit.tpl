@@ -26,7 +26,6 @@
             <h1 class="pane-title">{{ block('title') }}</h1>
         </div>
         <div class="pane-body p-0">
-            {{ alerts.foreign_locale_creation_info() }}
             {{ alerts.translation_missing_info(node.translated) }}
             {% include relative(_self, 'parts/form-body.tpl') %}
         </div>

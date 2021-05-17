@@ -9,11 +9,17 @@ namespace Tulia\Cms\Node\Ports\Infrastructure\Persistence\Domain\WriteModel;
  */
 interface NodeWriteStorageInterface
 {
-    public function find(string $id, string $locale): array;
+    public function find(string $id, string $locale, string $defaultLocale): array;
 
-    public function create(array $node): void;
+    public function insert(array $node, string $defaultLocale): void;
 
-    public function update(array $node): void;
+    public function update(array $node, string $defaultLocale): void;
 
     public function delete(array $node): void;
+
+    public function beginTransaction(): void;
+
+    public function commit(): void;
+
+    public function rollback(): void;
 }

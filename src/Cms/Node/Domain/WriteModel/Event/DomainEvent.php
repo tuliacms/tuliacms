@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Domain\WriteModel\Event;
 
-use Tulia\Cms\Node\Domain\WriteModel\ValueObject\AggregateId;
 use Tulia\Cms\Platform\Domain\Event\DomainEvent as PlatformDomainEvent;
 
 /**
@@ -12,24 +11,31 @@ use Tulia\Cms\Platform\Domain\Event\DomainEvent as PlatformDomainEvent;
  */
 abstract class DomainEvent extends PlatformDomainEvent
 {
-    /**
-     * @var AggregateId
-     */
-    private $nodeId;
+    private string $nodeId;
 
-    /**
-     * @param AggregateId $nodeId
-     */
-    public function __construct(AggregateId $nodeId)
+    private string $websiteId;
+
+    private string $locale;
+
+    public function __construct(string $nodeId, string $websiteId, string $locale)
     {
         $this->nodeId = $nodeId;
+        $this->websiteId = $websiteId;
+        $this->locale = $locale;
     }
 
-    /**
-     * @return AggregateId
-     */
-    public function getNodeId(): AggregateId
+    public function getNodeId(): string
     {
         return $this->nodeId;
+    }
+
+    public function getWebsiteId(): string
+    {
+        return $this->websiteId;
+    }
+
+    public function getLocale(): string
+    {
+        return $this->locale;
     }
 }

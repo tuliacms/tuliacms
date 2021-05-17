@@ -113,13 +113,20 @@ class DbalQuery extends AbstractQuery
         } elseif ($query['count']) {
             $this->queryBuilder->select('COUNT(' . $query['count'] . ') AS count');
         } else {
-            $this->queryBuilder->select('tm.*, tl.*');
+            $this->queryBuilder->select('
+                tm.*,
+                COALESCE(tl.title, tm.title) AS title,
+                COALESCE(tl.slug, tm.slug) AS slug,
+                COALESCE(tl.introduction, tm.introduction) AS introduction,
+                COALESCE(tl.content, tm.content) AS content,
+                COALESCE(tl.content_compiled, tm.content_compiled) AS content_compiled,
+                COALESCE(tl.locale, "en_US") AS locale
+            ');
         }
 
         $this->queryBuilder
             ->from('#__node', 'tm')
-            ->innerJoin('tm', '#__node_lang', 'tl', 'tm.id = tl.node_id')
-            ->andWhere('tl.locale = :tl_locale')
+            ->leftJoin('tm', '#__node_lang', 'tl', 'tm.id = tl.node_id AND tl.locale = :tl_locale')
             ->setParameter('tl_locale', $query['locale'], PDO::PARAM_STR);
     }
 

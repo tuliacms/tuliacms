@@ -6,7 +6,7 @@ namespace Tulia\Cms\Node\Domain\WriteModel\Model;
 
 use Tulia\Cms\Metadata\Domain\WriteModel\MagickMetadataTrait;
 use Tulia\Cms\Node\Domain\WriteModel\Event;
-use Tulia\Cms\Node\Domain\WriteModel\ValueObject\AggregateId;
+use Tulia\Cms\Node\Domain\WriteModel\ValueObject\NodeId;
 use Tulia\Cms\Platform\Domain\Aggregate\AggregateRoot;
 use Tulia\Cms\Platform\Domain\ValueObject\ImmutableDateTime;
 
@@ -17,7 +17,7 @@ class Node extends AggregateRoot
 {
     use MagickMetadataTrait;
 
-    protected AggregateId $id;
+    protected NodeId $id;
 
     protected string $type;
 
@@ -49,32 +49,63 @@ class Node extends AggregateRoot
 
     protected ?string $introduction = null;
 
-    /**
-     * @var null|string|object
-     */
-    protected $content;
+    protected ?string $content = null;
 
-    protected ?string $contentSource = null;
+    protected ?string $contentCompiled = null;
 
     protected bool $translated = true;
 
-    public function __construct(AggregateId $id, string $type, string $websiteId, string $locale)
+    private function __construct(string $id, string $type, string $websiteId, string $locale)
     {
-        $this->id   = $id;
+        $this->id = new NodeId($id);
         $this->type = $type;
         $this->websiteId = $websiteId;
         $this->locale = $locale;
-        $this->createdAt = new \DateTimeImmutable();
-
-        $this->recordThat(new Event\NodeCreated($id, $type, $websiteId, $locale));
+        $this->createdAt = new ImmutableDateTime();
     }
 
-    public function getId(): AggregateId
+    public static function createNew(string $id, string $type, string $websiteId, string $locale): self
+    {
+        $self = new self($id, $type, $websiteId, $locale);
+        $self->recordThat(new Event\NodeCreated($id, $websiteId, $locale, $type));
+
+        return $self;
+    }
+
+    public static function buildFromArray(array $data): self
+    {
+        $self = new self(
+            $data['id'],
+            $data['type'],
+            $data['website_id'],
+            $data['locale']
+        );
+        $self->status = $data['status'] ?? 'published';
+        $self->createdAt = $data['created_at'] ?? new ImmutableDateTime();
+        $self->updatedAt = $data['updated_at'] ?? null;
+        $self->publishedAt = $data['published_at'] ?? new ImmutableDateTime();
+        $self->publishedTo = $data['published_to'] ?? null;
+        $self->authorId = $data['authorId'] ?? null;
+        $self->parentId = $data['parentId'] ?? null;
+        $self->level = (int) ($data['level'] ?? 0);
+        $self->category = $data['category'] ?? null;
+        $self->title = $data['title'] ?? null;
+        $self->slug = $data['slug'] ?? null;
+        $self->introduction = $data['introduction'] ?? null;
+        $self->content = $data['content'] ?? null;
+        $self->contentCompiled = $data['content_compiled'] ?? null;
+        $self->translated = (bool) ($data['translated'] ?? true);
+        $self->replaceMetadata($data['metadata'] ?? []);
+
+        return $self;
+    }
+
+    public function getId(): NodeId
     {
         return $this->id;
     }
 
-    public function setId(AggregateId $id): void
+    public function setId(NodeId $id): void
     {
         $this->id = $id;
     }
@@ -129,12 +160,12 @@ class Node extends AggregateRoot
         $this->publishedTo = $publishedTo;
     }
 
-    public function getCreatedAt()
+    public function getCreatedAt(): ImmutableDateTime
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt($createdAt): void
+    public function setCreatedAt(ImmutableDateTime $createdAt): void
     {
         $this->createdAt = $createdAt;
     }
@@ -229,24 +260,24 @@ class Node extends AggregateRoot
         $this->introduction = $introduction;
     }
 
-    public function getContent()
+    public function getContent(): ?string
     {
         return $this->content;
     }
 
-    public function setContent($content): void
+    public function setContent(?string $content): void
     {
         $this->content = $content;
     }
 
-    public function getContentSource(): ?string
+    public function getContentCompiled(): ?string
     {
-        return $this->contentSource;
+        return $this->contentCompiled;
     }
 
-    public function setContentSource(?string $contentSource): void
+    public function setContentCompiled(?string $contentCompiled): void
     {
-        $this->contentSource = $contentSource;
+        $this->contentCompiled = $contentCompiled;
     }
 
     public function isTranslated(): bool

@@ -4,64 +4,29 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Domain\WriteModel\Event;
 
-use Tulia\Cms\Node\Domain\WriteModel\ValueObject\AggregateId;
+use Tulia\Cms\Node\Domain\WriteModel\Model\Node;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class NodeCreated extends DomainEvent
 {
-    /**
-     * @var string
-     */
-    private $type;
+    private string $type;
 
-    /**
-     * @var string
-     */
-    private $websiteId;
-
-    /**
-     * @var string
-     */
-    private $locale;
-
-    /**
-     * @param AggregateId $nodeId
-     * @param string $type
-     * @param string $websiteId
-     * @param string $locale
-     */
-    public function __construct(AggregateId $nodeId, string $type, string $websiteId, string $locale)
+    public function __construct(string $nodeId, string $websiteId, string $locale, string $type)
     {
-        parent::__construct($nodeId);
+        parent::__construct($nodeId, $websiteId, $locale);
 
         $this->type = $type;
-        $this->websiteId = $websiteId;
-        $this->locale = $locale;
     }
 
-    /**
-     * @return string
-     */
+    public static function fromNode(Node $node): self
+    {
+        return new self($node->getId()->getId(), $node->getWebsiteId(), $node->getLocale(), $node->getType());
+    }
+
     public function getType(): string
     {
         return $this->type;
-    }
-
-    /**
-     * @return string
-     */
-    public function getWebsiteId(): string
-    {
-        return $this->websiteId;
-    }
-
-    /**
-     * @return string
-     */
-    public function getLocale(): string
-    {
-        return $this->locale;
     }
 }

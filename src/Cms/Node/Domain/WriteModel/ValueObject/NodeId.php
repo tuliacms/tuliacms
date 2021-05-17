@@ -9,6 +9,6 @@ use Tulia\Cms\Platform\Domain\ValueObject\UuidAggregateId;
 /**
  * @author Adam Banaszkiewicz
  */
-class AggregateId extends UuidAggregateId
+class NodeId extends UuidAggregateId
 {
 }

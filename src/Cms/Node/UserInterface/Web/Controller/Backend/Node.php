@@ -6,14 +6,12 @@ namespace Tulia\Cms\Node\UserInterface\Web\Controller\Backend;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Tulia\Cms\Node\Application\Model\Node as ApplicationNode;
 use Tulia\Cms\Node\Domain\WriteModel\Exception\NodeNotFoundException;
 use Tulia\Cms\Node\Domain\WriteModel\NodeRepository;
 use Tulia\Cms\Node\Infrastructure\NodeType\NodeTypeInterface;
 use Tulia\Cms\Node\Infrastructure\NodeType\RegistryInterface;
 use Tulia\Cms\Node\Query\CriteriaBuilder\RequestCriteriaBuilder;
 use Tulia\Cms\Node\Query\Enum\ScopeEnum;
-use Tulia\Cms\Node\Query\Factory\NodeFactoryInterface;
 use Tulia\Cms\Node\Query\FinderFactoryInterface;
 use Tulia\Cms\Node\Query\Model\Collection;
 use Tulia\Cms\Node\UserInterface\Web\Form\NodeForm;
@@ -82,24 +80,20 @@ class Node extends AbstractController
     /**
      * @param Request $request
      * @param string $node_type
-     * @param NodeFactoryInterface $nodeFactory
      * @return RedirectResponse|ViewInterface
      * @CsrfToken(id="node_form")
      */
-    public function create(Request $request, string $node_type, NodeFactoryInterface $nodeFactory)
+    public function create(Request $request, string $node_type)
     {
-        $node = $nodeFactory->createNew([
-            'type' => $node_type,
-        ]);
-        $model = ApplicationNode::fromQueryModel($node);
+        $node = $this->repository->createNew(['type' => $node_type]);
 
-        $form = $this->createForm(NodeForm::class, $model, ['node_type' => $node_type]);
+        $form = $this->createForm(NodeForm::class, $node, ['node_type' => $node_type]);
         $form->handleRequest($request);
 
         $nodeType = $this->typeRegistry->getType($node_type);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->repository->create($form->getData());
+            $this->repository->insert($form->getData());
 
             $this->setFlash('success', $this->trans('nodeSaved', [], $nodeType->getTranslationDomain()));
             return $this->redirectToRoute('backend.node.edit', [ 'id' => $node->getId(), 'node_type' => $nodeType->getType() ]);
