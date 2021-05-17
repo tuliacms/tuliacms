@@ -24,7 +24,7 @@ use Tulia\Cms\Node\Application\EventListener\EditLinks;
 use Tulia\Cms\Node\Application\EventListener\MetadataLoader;
 use Tulia\Cms\Node\Application\EventListener\NodeChildrenPreDeleteValidator;
 use Tulia\Cms\Node\Application\EventListener\SlugGenerator;
-use Tulia\Cms\Node\Domain\RepositoryInterface;
+use Tulia\Cms\Node\Domain\WriteModel\RepositoryInterface;
 use Tulia\Cms\Node\Infrastructure\Cms\Breadcrumbs\CrumbsResolver;
 use Tulia\Cms\Node\Infrastructure\Cms\Filemanager\ImageSize\DefaultSizesProvider;
 use Tulia\Cms\Node\Infrastructure\Cms\Menu\IdentityProvider;

@@ -20,7 +20,10 @@ interface WebsiteRepositoryInterface
      * @throws WebsiteNotFoundException
      */
     public function find(string $id): Website;
-    public function save(Website $website): void;
+
+    public function create(Website $website): void;
+
     public function update(Website $website): void;
+
     public function delete(string $id): void;
 }

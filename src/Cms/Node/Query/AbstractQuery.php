@@ -6,7 +6,7 @@ namespace Tulia\Cms\Node\Query;
 
 use Exception;
 use Tulia\Cms\Metadata\Domain\ReadModel\MetadataFinder;
-use Tulia\Cms\Node\Domain\Enum\TermTypeEnum;
+use Tulia\Cms\Node\Domain\WriteModel\Enum\TermTypeEnum;
 use Tulia\Cms\Node\Infrastructure\Cms\Metadata\NodeMetadataEnum;
 use Tulia\Cms\Node\Query\Model\Collection;
 use Tulia\Cms\Node\Query\Model\Node;

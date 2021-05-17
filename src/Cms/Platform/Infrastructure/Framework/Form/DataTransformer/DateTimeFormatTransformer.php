@@ -7,6 +7,7 @@ namespace Tulia\Cms\Platform\Infrastructure\Framework\Form\DataTransformer;
 use DateTime;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
+use Tulia\Cms\Platform\Domain\ValueObject\ImmutableDateTime;
 
 /**
  * @author Adam Banaszkiewicz
@@ -26,7 +27,7 @@ class DateTimeFormatTransformer implements DataTransformerInterface
             return null;
         }
 
-        if ($date instanceof DateTime) {
+        if ($date instanceof DateTime || $date instanceof ImmutableDateTime) {
             return $date->format($this->format);
         }
 

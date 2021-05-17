@@ -63,7 +63,7 @@ class Website extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->repository->save($form->getData());
+            $this->repository->create($form->getData());
 
             $this->setFlash('success', $this->trans('websiteSaved', [], 'websites'));
             return $this->redirectToRoute('backend.website');

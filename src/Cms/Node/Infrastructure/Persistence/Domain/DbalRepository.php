@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Tulia\Cms\Node\Infrastructure\Persistence\Domain;
 
 use Tulia\Cms\Metadata\Domain\WriteModel\MetadataRepository;
-use Tulia\Cms\Node\Domain\Enum\TermTypeEnum;
-use Tulia\Cms\Node\Domain\Exception\NodeNotFoundException;
-use Tulia\Cms\Node\Domain\ValueObject\AggregateId;
-use Tulia\Cms\Node\Domain\Aggregate\Node;
-use Tulia\Cms\Node\Domain\RepositoryInterface;
+use Tulia\Cms\Node\Domain\WriteModel\Enum\TermTypeEnum;
+use Tulia\Cms\Node\Domain\WriteModel\Exception\NodeNotFoundException;
+use Tulia\Cms\Node\Domain\WriteModel\ValueObject\AggregateId;
+use Tulia\Cms\Node\Domain\WriteModel\Aggregate\Node;
+use Tulia\Cms\Node\Domain\WriteModel\RepositoryInterface;
 use Tulia\Cms\Node\Infrastructure\Cms\Metadata\NodeMetadataEnum;
 use Tulia\Cms\Platform\Domain\ValueObject\ImmutableDateTime;
 use Tulia\Cms\Platform\Infrastructure\DataManipulation\Hydrator\HydratorInterface;

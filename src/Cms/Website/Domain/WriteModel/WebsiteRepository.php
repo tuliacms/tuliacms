@@ -60,7 +60,7 @@ class WebsiteRepository implements WebsiteRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function save(Website $website): void
+    public function create(Website $website): void
     {
         $this->storage->insert($this->extract($website));
         $this->eventDispatcher->dispatch(new WebsiteCreated($website->getId()->getId()));

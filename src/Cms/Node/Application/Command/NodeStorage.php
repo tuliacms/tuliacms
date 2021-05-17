@@ -11,11 +11,11 @@ use Tulia\Cms\Node\Application\Event\NodePreDeleteEvent;
 use Tulia\Cms\Node\Application\Event\NodePreUpdateEvent;
 use Tulia\Cms\Node\Application\Event\NodeUpdatedEvent;
 use Tulia\Cms\Node\Application\Model\Node as ApplicationNode;
-use Tulia\Cms\Node\Domain\Event\NodeDeleted;
-use Tulia\Cms\Node\Domain\Exception\NodeNotFoundException;
-use Tulia\Cms\Node\Domain\RepositoryInterface;
-use Tulia\Cms\Node\Domain\Aggregate\Node as Aggregate;
-use Tulia\Cms\Node\Domain\ValueObject\AggregateId;
+use Tulia\Cms\Node\Domain\WriteModel\Event\NodeDeleted;
+use Tulia\Cms\Node\Domain\WriteModel\Exception\NodeNotFoundException;
+use Tulia\Cms\Node\Domain\WriteModel\RepositoryInterface;
+use Tulia\Cms\Node\Domain\WriteModel\Aggregate\Node as Aggregate;
+use Tulia\Cms\Node\Domain\WriteModel\ValueObject\AggregateId;
 use Tulia\Cms\Platform\Domain\ValueObject\ImmutableDateTime;
 use Tulia\Cms\Platform\Infrastructure\Bus\Event\EventBusInterface;
 
