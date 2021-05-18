@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\UserInterface\Web\Controller\Frontend;
 
-use Tulia\Cms\Node\Query\Model\Node as QueryModelNode;
+use Tulia\Cms\Node\Domain\ReadModel\Finder\Model\Node AS Model;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Taxonomy\Query\Enum\ScopeEnum;
 use Tulia\Cms\Taxonomy\Query\FinderFactoryInterface;
@@ -23,7 +23,7 @@ class Node extends AbstractController
         $this->termFinderFactory = $termFinderFactory;
     }
 
-    public function show(QueryModelNode $node): ViewInterface
+    public function show(Model $node): ViewInterface
     {
         $this->getDocument()->setTitle($node->getTitle());
 
@@ -35,7 +35,7 @@ class Node extends AbstractController
         ]);
     }
 
-    private function findCategory(QueryModelNode $node): ?Term
+    private function findCategory(Model $node): ?Term
     {
         if ($node->getCategory()) {
             return $this->termFinderFactory
@@ -46,7 +46,7 @@ class Node extends AbstractController
         return null;
     }
 
-    private function createViews(QueryModelNode $node, ?Term $category): array
+    private function createViews(Model $node, ?Term $category): array
     {
         $views = [];
         $views[] = '@cms/node/node_id:' . $node->getId() . '.tpl';

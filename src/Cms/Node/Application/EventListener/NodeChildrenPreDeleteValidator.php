@@ -6,11 +6,9 @@ namespace Tulia\Cms\Node\Application\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Tulia\Cms\Node\Application\Event\NodePreDeleteEvent;
-use Tulia\Cms\Node\Query\Exception\MultipleFetchException;
-use Tulia\Cms\Node\Query\Exception\QueryException;
+use Tulia\Cms\Node\Ports\Infrastructure\Persistence\Domain\ReadModel\NodeFinderInterface;
 use Tulia\Cms\Node\Application\Exception\TranslatableNodeException;
-use Tulia\Cms\Node\Query\FinderFactoryInterface;
-use Tulia\Cms\Node\Query\Enum\ScopeEnum;
+use Tulia\Cms\Node\Domain\ReadModel\Finder\Enum\ScopeEnum;
 
 /**
  * This class is responsible to detect if deleting node has children.
@@ -21,11 +19,11 @@ use Tulia\Cms\Node\Query\Enum\ScopeEnum;
  */
 class NodeChildrenPreDeleteValidator implements EventSubscriberInterface
 {
-    protected FinderFactoryInterface $finderFactory;
+    protected NodeFinderInterface $nodeFinder;
 
-    public function __construct(FinderFactoryInterface $finderFactory)
+    public function __construct(NodeFinderInterface $nodeFinder)
     {
-        $this->finderFactory = $finderFactory;
+        $this->nodeFinder = $nodeFinder;
     }
 
     public static function getSubscribedEvents(): array
@@ -35,23 +33,14 @@ class NodeChildrenPreDeleteValidator implements EventSubscriberInterface
         ];
     }
 
-    /**
-     * @param NodePreDeleteEvent $event
-     *
-     * @throws MultipleFetchException
-     * @throws QueryException
-     * @throws TranslatableNodeException
-     */
     public function handle(NodePreDeleteEvent $event): void
     {
-        $finder = $this->finderFactory->getInstance(ScopeEnum::INTERNAL);
-        $finder->setCriteria([
+        $nodes = $this->nodeFinder->find([
             'children_of' => $event->getNode()->getId(),
             'per_page'    => 1,
-        ]);
-        $finder->fetchRaw();
+        ], ScopeEnum::INTERNAL);
 
-        if ($finder->getTotalCount()) {
+        if ($nodes->count()) {
             $e = new TranslatableNodeException('cannotDeleteDueToContainingChildren');
             $e->setParameters(['name' => $event->getNode()->getTitle()]);
             $e->setDomain('validators');

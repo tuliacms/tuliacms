@@ -6,8 +6,8 @@ namespace Tulia\Cms\Node\Application\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Tulia\Cms\Node\Domain\ReadModel\Finder\Model\Node;
 use Tulia\Cms\Node\Infrastructure\NodeType\RegistryInterface;
-use Tulia\Cms\Node\Query\Model\Node;
 use Tulia\Cms\EditLinks\Application\Event\CollectEditLinksEvent;
 use Symfony\Component\Routing\RouterInterface;
 

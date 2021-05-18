@@ -7,10 +7,10 @@ namespace Tulia\Cms\Node\Infrastructure\Cms\Breadcrumbs;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
 use Tulia\Cms\Breadcrumbs\Application\Crumbs\ResolverInterface;
+use Tulia\Cms\Node\Domain\ReadModel\Finder\Model\Node;
 use Tulia\Cms\Node\Infrastructure\NodeType\RegistryInterface as NodeTypeRegistry;
-use Tulia\Cms\Node\Query\Enum\ScopeEnum;
-use Tulia\Cms\Node\Query\FinderFactoryInterface as NodeFinderFactoryInterface;
-use Tulia\Cms\Node\Query\Model\Node;
+use Tulia\Cms\Node\Domain\ReadModel\Finder\Enum\ScopeEnum;
+use Tulia\Cms\Node\Ports\Infrastructure\Persistence\Domain\ReadModel\NodeFinderInterface;
 use Tulia\Cms\Platform\Shared\Breadcrumbs\BreadcrumbsInterface;
 use Tulia\Cms\Taxonomy\Query\FinderFactoryInterface as TermFinderFactoryInterface;
 
@@ -21,18 +21,18 @@ class CrumbsResolver implements ResolverInterface
 {
     protected RouterInterface $router;
     protected NodeTypeRegistry $nodeTypeRegistry;
-    protected NodeFinderFactoryInterface $nodeFinderFactory;
+    protected NodeFinderInterface $nodeFinder;
     protected TermFinderFactoryInterface $termFinderFactory;
 
     public function __construct(
         RouterInterface $router,
         NodeTypeRegistry $nodeTypeRegistry,
-        NodeFinderFactoryInterface $nodeFinderFactory,
+        NodeFinderInterface $nodeFinder,
         TermFinderFactoryInterface $termFinderFactory
     ) {
         $this->router = $router;
         $this->nodeTypeRegistry = $nodeTypeRegistry;
-        $this->nodeFinderFactory = $nodeFinderFactory;
+        $this->nodeFinder = $nodeFinder;
         $this->termFinderFactory = $termFinderFactory;
     }
 
@@ -50,7 +50,6 @@ class CrumbsResolver implements ResolverInterface
     public function fillBreadcrumbs(object $node, BreadcrumbsInterface $breadcrumbs): ?object
     {
         /** @var Node $node */
-
         $breadcrumbs->unshift($this->router->generate('node_' . $node->getId()), $node->getTitle());
 
         if ($this->nodeTypeRegistry->isTypeRegistered($node->getType())) {
@@ -77,7 +76,7 @@ class CrumbsResolver implements ResolverInterface
         $nodes = [];
 
         while ($parentId) {
-            $parent = $this->nodeFinderFactory->getInstance(ScopeEnum::BREADCRUMBS)->find($parentId);
+            $parent = $this->nodeFinder->findOne(['id' => $parentId], ScopeEnum::BREADCRUMBS);
 
             if ($parent) {
                 $nodes[]  = $parent;

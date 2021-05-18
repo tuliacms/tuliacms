@@ -45,7 +45,7 @@ use Tulia\Cms\Node\Infrastructure\NodeType\Storage\DatabaseStorage;
 use Tulia\Cms\Node\Infrastructure\Persistence\Domain\DbalRepository;
 use Tulia\Cms\Node\Infrastructure\Persistence\Domain\DbalPersister;
 use Tulia\Cms\Node\Infrastructure\Persistence\Query\DbalQuery;
-use Tulia\Cms\Node\Query\Enum\ScopeEnum;
+use Tulia\Cms\Node\Domain\ReadModel\Finder\Enum\ScopeEnum;
 use Tulia\Cms\Node\Query\Event\QueryFilterEvent;
 use Tulia\Cms\Node\Query\Factory\NodeFactory;
 use Tulia\Cms\Node\Query\Factory\NodeFactoryInterface;

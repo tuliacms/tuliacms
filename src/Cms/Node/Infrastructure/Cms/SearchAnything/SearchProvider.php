@@ -4,95 +4,65 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Infrastructure\Cms\SearchAnything;
 
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Cms\Filemanager\Application\ImageUrlResolver;
-use Tulia\Cms\Filemanager\Enum\TypeEnum;
-use Tulia\Cms\Node\Infrastructure\NodeType\Enum\ParametersEnum;
-use Tulia\Cms\Node\Query\Enum\ScopeEnum as NodeScopeEnum;
-use Tulia\Cms\Node\Infrastructure\NodeType\RegistryInterface;
-use Tulia\Cms\Node\Query\FinderFactoryInterface as NodeFinderFactory;
-use Tulia\Cms\Filemanager\Query\FinderFactoryInterface as FilemanagerFinderFactory;
 use Tulia\Cms\Filemanager\Enum\ScopeEnum as FilesScopeEnum;
-use Tulia\Cms\Node\Query\Model\Collection;
+use Tulia\Cms\Filemanager\Enum\TypeEnum;
+use Tulia\Cms\Filemanager\Query\FinderFactoryInterface as FilemanagerFinderFactory;
+use Tulia\Cms\Node\Domain\ReadModel\Finder\Enum\ScopeEnum as NodeScopeEnum;
+use Tulia\Cms\Node\Infrastructure\NodeType\Enum\ParametersEnum;
+use Tulia\Cms\Node\Infrastructure\NodeType\RegistryInterface;
+use Tulia\Cms\Node\Ports\Infrastructure\Persistence\Domain\ReadModel\NodeFinderInterface;
 use Tulia\Cms\SearchAnything\Provider\AbstractProvider;
 use Tulia\Cms\SearchAnything\Results\Hit;
 use Tulia\Cms\SearchAnything\Results\Results;
 use Tulia\Cms\SearchAnything\Results\ResultsInterface;
-use Symfony\Component\Routing\RouterInterface;
+use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class SearchProvider extends AbstractProvider
 {
-    /**
-     * @var NodeFinderFactory
-     */
-    protected $nodeFinderFactory;
+    protected NodeFinderInterface $nodeFinder;
 
-    /**
-     * @var FilemanagerFinderFactory
-     */
-    protected $filesFinderFactory;
+    protected FilemanagerFinderFactory $filesFinderFactory;
 
-    /**
-     * @var RouterInterface
-     */
-    protected $router;
+    protected RouterInterface $router;
 
-    /**
-     * @var TranslatorInterface
-     */
-    protected $translator;
+    protected TranslatorInterface $translator;
 
-    /**
-     * @var RegistryInterface
-     */
-    protected $typesRegistry;
+    protected RegistryInterface $typesRegistry;
 
-    /**
-     * @var ImageUrlResolver
-     */
-    protected $imageUrlResolver;
+    protected ImageUrlResolver $imageUrlResolver;
 
-    /**
-     * @param NodeFinderFactory $nodeFinderFactory
-     * @param FilemanagerFinderFactory $filesFinderFactory
-     * @param RouterInterface $router
-     * @param TranslatorInterface $translator
-     * @param RegistryInterface $typesRegistry
-     * @param ImageUrlResolver $imageUrlResolver
-     */
     public function __construct(
-        NodeFinderFactory $nodeFinderFactory,
+        NodeFinderInterface $nodeFinder,
         FilemanagerFinderFactory $filesFinderFactory,
         RouterInterface $router,
         TranslatorInterface $translator,
         RegistryInterface $typesRegistry,
         ImageUrlResolver $imageUrlResolver
     ) {
-        $this->nodeFinderFactory  = $nodeFinderFactory;
+        $this->nodeFinder  = $nodeFinder;
         $this->filesFinderFactory = $filesFinderFactory;
-        $this->router             = $router;
-        $this->translator         = $translator;
-        $this->typesRegistry      = $typesRegistry;
-        $this->imageUrlResolver   = $imageUrlResolver;
+        $this->router = $router;
+        $this->translator = $translator;
+        $this->typesRegistry = $typesRegistry;
+        $this->imageUrlResolver = $imageUrlResolver;
     }
 
     public function search(string $query, int $limit = 5, int $page = 1): ResultsInterface
     {
-        $finder = $this->nodeFinderFactory->getInstance(NodeScopeEnum::SEARCH);
-        $finder->setCriteria([
-            'search'   => $query,
-            'per_page' => $limit,
-            'page'     => $page,
-            'count_found_rows' => true,
-        ]);
-        $finder->fetchRaw();
-
         $results = new Results();
 
-        $nodes = $finder->getResult();
+        $nodes = $this->nodeFinder->find([
+            'search' => $query,
+            'per_page' => $limit,
+            'page' => $page,
+            'count_found_rows' => true,
+        ], NodeScopeEnum::SEARCH);
 
         foreach ($nodes as $node) {
             $hit = new Hit($node->getTitle(), $this->router->generate('backend.node.edit', ['node_type' => $node->getType(), 'id' => $node->getId() ]));

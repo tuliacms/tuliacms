@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Node\Query\CriteriaBuilder;
+namespace Tulia\Cms\Node\userInterface\Web\CriteriaBuilder;
 
 use Symfony\Component\HttpFoundation\Request;
 

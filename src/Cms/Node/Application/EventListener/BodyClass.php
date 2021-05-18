@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace Tulia\Cms\Node\Application\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Tulia\Cms\Node\Query\Model\Node;
 use Tulia\Cms\BodyClass\Application\Event\CollectBodyClassEvent;
+use Tulia\Cms\Node\Domain\ReadModel\Finder\Model\Node;
 
 /**
  * @author Adam Banaszkiewicz

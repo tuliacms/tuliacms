@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\UserInterface\Web\Controller\Backend;
 
-use Tulia\Cms\Node\Query\Enum\ScopeEnum;
-use Tulia\Cms\Node\Query\FinderFactoryInterface;
+use Tulia\Cms\Node\Domain\ReadModel\Finder\Enum\ScopeEnum;
+use Tulia\Cms\Node\Ports\Infrastructure\Persistence\Domain\ReadModel\NodeFinderInterface;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\TypeaheadFormTypeSearch;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -14,29 +14,30 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class TypeaheadSearch extends TypeaheadFormTypeSearch
 {
-    /**
-     * @var FinderFactoryInterface
-     */
-    private $finderFactory;
+    private NodeFinderInterface $nodeFinder;
 
-    /**
-     * @param FinderFactoryInterface $finderFactory
-     */
-    public function __construct(FinderFactoryInterface $finderFactory)
+    public function __construct(NodeFinderInterface $nodeFinder)
     {
-        $this->finderFactory = $finderFactory;
+        $this->nodeFinder = $nodeFinder;
     }
 
     protected function findCollection(Request $request): array
     {
-        $finder = $this->finderFactory->getInstance(ScopeEnum::INTERNAL);
-        $finder->setCriteria([
-            'search'    => $request->query->get('q'),
+        $nodes = $this->nodeFinder->find([
+            'search' => $request->query->get('q'),
             'node_type' => $request->query->get('node_type'),
-            'per_page'  => 10,
-        ]);
-        $finder->fetchRaw();
+            'per_page' => 10,
+        ], ScopeEnum::INTERNAL);
 
-        return $finder->getResult()->toArray();
+        $result = [];
+
+        foreach ($nodes as $node) {
+            $result[] = [
+                'id' => $node->getId(),
+                'title' => $node->getTitle(),
+            ];
+        }
+
+        return $result;
     }
 }

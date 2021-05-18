@@ -8,12 +8,9 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Tulia\Cms\Node\Application\Event\NodeEvent;
 use Tulia\Cms\Node\Application\Event\NodePreCreateEvent;
 use Tulia\Cms\Node\Application\Event\NodePreUpdateEvent;
-use Tulia\Cms\Node\Query\Exception\MultipleFetchException;
-use Tulia\Cms\Node\Query\Exception\QueryException;
-use Tulia\Cms\Node\Query\Exception\QueryNotFetchedException;
-use Tulia\Cms\Node\Query\FinderFactoryInterface;
-use Tulia\Cms\Node\Query\Enum\ScopeEnum;
-use Tulia\Cms\Node\Query\Model\Node;
+use Tulia\Cms\Node\Domain\ReadModel\Finder\Model\Node;
+use Tulia\Cms\Node\Ports\Infrastructure\Persistence\Domain\ReadModel\NodeFinderInterface;
+use Tulia\Cms\Node\Domain\ReadModel\Finder\Enum\ScopeEnum;
 use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Slug\SluggerInterface;
 
 /**
@@ -22,12 +19,13 @@ use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Slug\SluggerInterface;
 class SlugGenerator implements EventSubscriberInterface
 {
     protected SluggerInterface $slugger;
-    protected FinderFactoryInterface $finderFactory;
 
-    public function __construct(SluggerInterface $slugger, FinderFactoryInterface $finderFactory)
+    protected NodeFinderInterface $nodeFinder;
+
+    public function __construct(SluggerInterface $slugger, NodeFinderInterface $nodeFinder)
     {
-        $this->slugger       = $slugger;
-        $this->finderFactory = $finderFactory;
+        $this->slugger = $slugger;
+        $this->nodeFinder = $nodeFinder;
     }
 
     public static function getSubscribedEvents(): array
@@ -38,12 +36,6 @@ class SlugGenerator implements EventSubscriberInterface
         ];
     }
 
-    /**
-     * @param NodeEvent $event
-     *
-     * @throws MultipleFetchException
-     * @throws QueryException
-     */
     public function handle(NodeEvent $event): void
     {
         /** @var Node $node */
@@ -66,16 +58,6 @@ class SlugGenerator implements EventSubscriberInterface
         $node->setSlug($slug);
     }
 
-    /**
-     * @param string $slug
-     * @param string|null $nodeId
-     *
-     * @return string
-     *
-     * @throws MultipleFetchException
-     * @throws QueryException
-     * @throws QueryNotFetchedException
-     */
     private function findUniqueSlug(string $slug, ?string $nodeId): string
     {
         $securityLoop  = 0;
@@ -90,17 +72,14 @@ class SlugGenerator implements EventSubscriberInterface
 
             $securityLoop++;
 
-            $finder = $this->finderFactory->getInstance(ScopeEnum::INTERNAL);
-            $finder->setCriteria([
+            $node = $this->nodeFinder->findOne([
                 'slug'       => $slugProposed,
                 'id__not_in' => [$nodeId],
                 'node_type'  => null,
                 'order_by'   => null,
                 'order_dir'  => null,
                 'per_page'   => 1,
-            ]);
-            $finder->fetchRaw();
-            $node = $finder->getResult()->first();
+            ], ScopeEnum::INTERNAL);
 
             if ($node === null) {
                 return $slugProposed;

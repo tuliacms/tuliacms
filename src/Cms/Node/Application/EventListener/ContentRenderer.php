@@ -5,20 +5,22 @@ declare(strict_types=1);
 namespace Tulia\Cms\Node\Application\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Tulia\Cms\Node\Query\Event\QueryFilterEvent;
-use Tulia\Cms\Node\Query\Model\Node;
+use Tulia\Cms\Node\Domain\ReadModel\Finder\Model\Node;
+use Tulia\Cms\Shared\Domain\ReadModel\Finder\Event\QueryFilterEvent;
 use Tulia\Component\Templating\EngineInterface;
 
 /**
  * Listener is responsible for rendering node content at frontend pages.
- *
  * @author Adam Banaszkiewicz
  */
 class ContentRenderer implements EventSubscriberInterface
 {
-    protected EngineInterface $engine;
-    protected string $environment;
-    protected array $scopes;
+    private EngineInterface $engine;
+
+    private string $environment;
+
+    private array $scopes;
+
     private static array $cache = [];
 
     public function __construct(EngineInterface $engine, string $environment, array $scopes = [])
@@ -41,16 +43,11 @@ class ContentRenderer implements EventSubscriberInterface
             return;
         }
 
-        $nodes = $event->getCollection();
-
-        foreach ($nodes as $node) {
+        foreach ($event->getCollection() as $node) {
             $this->render($node);
         }
     }
 
-    /**
-     * @param Node $node
-     */
     private function render(Node $node): void
     {
         $content = $node->getContent();
@@ -68,11 +65,6 @@ class ContentRenderer implements EventSubscriberInterface
         }
     }
 
-    /**
-     * @param Node $node
-     *
-     * @return object
-     */
     private function createStringableObject(Node $node): object
     {
         $object = new class {
@@ -82,9 +74,6 @@ class ContentRenderer implements EventSubscriberInterface
             public $environment;
             public $rendered;
 
-            /**
-             * @return string
-             */
             public function __toString(): string
             {
                 if ($this->rendered) {
@@ -103,7 +92,7 @@ class ContentRenderer implements EventSubscriberInterface
                     } else {
                         $e = $exception->getPrevious();
 
-                        if (!$e instanceof \Throwable) {
+                        if (! $e instanceof \Throwable) {
                             $e = $exception;
                         }
 

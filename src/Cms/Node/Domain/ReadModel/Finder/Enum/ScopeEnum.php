@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Node\Query\Enum;
+namespace Tulia\Cms\Node\Domain\ReadModel\Finder\Enum;
 
 /**
  * @author Adam Banaszkiewicz

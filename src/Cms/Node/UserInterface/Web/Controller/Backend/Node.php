@@ -10,12 +10,13 @@ use Tulia\Cms\Node\Domain\WriteModel\Exception\NodeNotFoundException;
 use Tulia\Cms\Node\Domain\WriteModel\NodeRepository;
 use Tulia\Cms\Node\Infrastructure\NodeType\NodeTypeInterface;
 use Tulia\Cms\Node\Infrastructure\NodeType\RegistryInterface;
-use Tulia\Cms\Node\Query\CriteriaBuilder\RequestCriteriaBuilder;
-use Tulia\Cms\Node\Query\Enum\ScopeEnum;
-use Tulia\Cms\Node\Query\FinderFactoryInterface;
-use Tulia\Cms\Node\Query\Model\Collection;
+use Tulia\Cms\Node\Ports\Infrastructure\Persistence\Domain\ReadModel\NodeFinderInterface;
+use Tulia\Cms\Node\userInterface\Web\CriteriaBuilder\RequestCriteriaBuilder;
+use Tulia\Cms\Node\Domain\ReadModel\Finder\Enum\ScopeEnum;
 use Tulia\Cms\Node\UserInterface\Web\Form\NodeForm;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
+use Tulia\Cms\Platform\Shared\Pagination\Paginator;
+use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
 use Tulia\Cms\Taxonomy\Application\TaxonomyType\RegistryInterface as TaxonomyRegistry;
 use Tulia\Cms\Taxonomy\Query\FinderFactoryInterface as TaxonomyFinderFactory;
 use Tulia\Component\Security\Http\Csrf\Annotation\CsrfToken;
@@ -26,20 +27,20 @@ use Tulia\Component\Templating\ViewInterface;
  */
 class Node extends AbstractController
 {
-    private FinderFactoryInterface $finderFactory;
-
     private RegistryInterface $typeRegistry;
 
     private NodeRepository $repository;
 
+    private NodeFinderInterface $nodeFinder;
+
     public function __construct(
-        FinderFactoryInterface $finderFactory,
         RegistryInterface $typeRegistry,
-        NodeRepository $repository
+        NodeRepository $repository,
+        NodeFinderInterface $nodeFinder
     ) {
-        $this->finderFactory = $finderFactory;
         $this->typeRegistry = $typeRegistry;
         $this->repository = $repository;
+        $this->nodeFinder = $nodeFinder;
     }
 
     public function index(string $node_type): RedirectResponse
@@ -61,18 +62,16 @@ class Node extends AbstractController
         string $node_type
     ) {
         $criteria = (new RequestCriteriaBuilder($request))->build([ 'node_type' => $node_type ]);
-        $finder = $this->finderFactory->getInstance(ScopeEnum::BACKEND_LISTING);
-        $finder->setCriteria($criteria);
-        $finder->fetchRaw();
+        $nodes = $this->nodeFinder->find($criteria, ScopeEnum::BACKEND_LISTING);
 
         $nodeTypeObject = $this->findNodeType($node_type);
-        $nodes = $this->fetchNodesCategories($taxonomyFinder, $finder->getResult());
+        $nodes = $this->fetchNodesCategories($taxonomyFinder, $nodes);
 
         return $this->view('@backend/node/list.tpl', [
             'nodes'      => $nodes,
             'nodeType'   => $nodeTypeObject,
             'criteria'   => $criteria,
-            'paginator'  => $finder->getPaginator($request),
+            'paginator'  => new Paginator($request, $nodes->totalRows(), $request->query->getInt('page', 1), $criteria['per_page']),
             'taxonomies' => $this->collectTaxonomies($registry, $nodeTypeObject),
         ]);
     }
