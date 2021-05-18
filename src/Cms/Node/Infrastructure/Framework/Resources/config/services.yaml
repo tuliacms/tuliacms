@@ -18,34 +18,34 @@ services:
             - '../../../../**/Model/*'
             - '../../../../**/Exception/*'
 
-    Tulia\Cms\Node\Infrastructure\NodeType\RegistryInterface:
-        class: Tulia\Cms\Node\Infrastructure\NodeType\Registry
+    Tulia\Cms\Node\Domain\NodeType\RegistryInterface:
+        class: Tulia\Cms\Node\Domain\NodeType\Registry
         bind:
             $registrators: !tagged_iterator node.type.registrator
             $storages: !tagged_iterator node.type.storage
 
-    Tulia\Cms\Node\Infrastructure\NodeType\Storage\DatabaseStorage:
+    Tulia\Cms\Node\Domain\NodeType\Storage\DatabaseStorage:
         tags: [ node.type.storage ]
 
     Tulia\Cms\Node\Infrastructure\Framework\Routing\Router:
         tags: [ routing_chain.router ]
 
-    Tulia\Cms\Node\Infrastructure\NodeType\DefaultTypesRegistrator:
+    Tulia\Cms\Node\Domain\NodeType\DefaultTypesRegistrator:
         tags: [ node.type.registrator ]
 
-    Tulia\Cms\Node\Domain\WriteModel\Metadata\DefaultMetadataRegistrator:
+    Tulia\Cms\Node\Domain\Metadata\DefaultMetadataRegistrator:
         tags: [ metadata.registrator ]
 
-    Tulia\Cms\Node\Infrastructure\Cms\Menu\IdentityProvider:
+    Tulia\Cms\Node\Domain\Menu\IdentityProvider:
         tags: [ menu.identity_provider ]
 
-#    Tulia\Cms\Node\Infrastructure\Cms\Menu\TypeRegistrator:
+#    Tulia\Cms\Node\Domain\Menu\TypeRegistrator:
 #        tags: [ menu.builder.type_registrator ]
 
-    Tulia\Cms\Node\Infrastructure\Cms\Settings\SettingsFactory:
+    Tulia\Cms\Node\UserInterface\Web\Settings\SettingsFactory:
         tags: [ settings.group_factory ]
 
-    Tulia\Cms\Node\Infrastructure\Cms\SearchAnything\SearchProvider:
+    Tulia\Cms\Node\Domain\SearchAnything\SearchProvider:
         tags:
             - { name: search.provider, priority: 1000 }
 
@@ -66,8 +66,8 @@ services:
     Tulia\Cms\Node\UserInterface\Web\BackendMenu\NodeMenuBuilder:
         tags: [ backend_menu.builder ]
 
-    Tulia\Cms\Node\Infrastructure\Cms\Breadcrumbs\CrumbsResolver:
+    Tulia\Cms\Node\UserInterface\Web\Breadcrumbs\CrumbsResolver:
         tags: [ breadcrumbs.resolver ]
 
-    Tulia\Cms\Node\Infrastructure\Cms\Filemanager\ImageSize\DefaultSizesProvider:
+    Tulia\Cms\Node\Domain\Filemanager\ImageSize\DefaultSizesProvider:
         tags: [ filemanager.image_size.provider ]

@@ -10,7 +10,7 @@ use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Tulia\Cms\Node\Infrastructure\Framework\Form\FormType\NodeTypeaheadType;
-use Tulia\Cms\Node\Infrastructure\NodeType\NodeTypeInterface;
+use Tulia\Cms\Node\Domain\NodeType\NodeTypeInterface;
 use Tulia\Cms\Node\UserInterface\Web\Form\NodeForm;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType;
 use Tulia\Cms\Taxonomy\Infrastructure\Framework\Form\FormType\TaxonomyTypeaheadType;
