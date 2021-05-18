@@ -111,7 +111,7 @@ class ContentRenderer implements EventSubscriberInterface
             }
         };
 
-        $object->node   = $node;
+        $object->node = $node;
         $object->source = $node->getContent();
         $object->engine = $this->engine;
         $object->environment = $this->environment;

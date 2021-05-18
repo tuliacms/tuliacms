@@ -253,8 +253,7 @@ class DbalQuery extends AbstractDbalQuery
                 COALESCE(tl.title, tm.title) AS title,
                 COALESCE(tl.slug, tm.slug) AS slug,
                 COALESCE(tl.introduction, tm.introduction) AS introduction,
-                COALESCE(tl.content, tm.content) AS content,
-                COALESCE(tl.content_compiled, tm.content_compiled) AS content_compiled,
+                COALESCE(tl.content_compiled, tm.content_compiled) AS content,
                 COALESCE(tl.locale, "en_US") AS locale
             ');
         }

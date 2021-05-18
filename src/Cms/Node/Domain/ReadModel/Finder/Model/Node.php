@@ -32,7 +32,6 @@ class Node
     protected $slug;
     protected $introduction;
     protected $content;
-    protected $contentSource;
     protected $visibility;
 
     public static function buildFromArray(array $data): self
@@ -73,7 +72,6 @@ class Node
         $node->setSlug($data['slug'] ?? '');
         $node->setIntroduction($data['introduction'] ?? '');
         $node->setContent($data['content'] ?? '');
-        $node->setContentSource($data['content_source'] ?? '');
         $node->replaceMetadata($data['metadata'] ?? []);
 
         return $node;
@@ -265,15 +263,5 @@ class Node
     public function setContent($content): void
     {
         $this->content = $content;
-    }
-
-    public function getContentSource(): ?string
-    {
-        return $this->contentSource;
-    }
-
-    public function setContentSource(?string $contentSource): void
-    {
-        $this->contentSource = $contentSource;
     }
 }

@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Application\EventListener;
 
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Tulia\Cms\Node\Application\Event\NodePreDeleteEvent;
-use Tulia\Cms\Node\Ports\Infrastructure\Persistence\Domain\ReadModel\NodeFinderInterface;
 use Tulia\Cms\Node\Application\Exception\TranslatableNodeException;
 use Tulia\Cms\Node\Domain\ReadModel\Finder\Enum\ScopeEnum;
+use Tulia\Cms\Node\Domain\WriteModel\ActionsChain\ActionInterface;
+use Tulia\Cms\Node\Domain\WriteModel\Model\Node;
+use Tulia\Cms\Node\Ports\Infrastructure\Persistence\Domain\ReadModel\NodeFinderInterface;
 
 /**
  * This class is responsible to detect if deleting node has children.
@@ -17,7 +17,7 @@ use Tulia\Cms\Node\Domain\ReadModel\Finder\Enum\ScopeEnum;
  *
  * @author Adam Banaszkiewicz
  */
-class NodeChildrenPreDeleteValidator implements EventSubscriberInterface
+class NodeChildrenPreDeleteValidator implements ActionInterface
 {
     protected NodeFinderInterface $nodeFinder;
 
@@ -26,23 +26,23 @@ class NodeChildrenPreDeleteValidator implements EventSubscriberInterface
         $this->nodeFinder = $nodeFinder;
     }
 
-    public static function getSubscribedEvents(): array
+    public static function supports(): array
     {
         return [
-            NodePreDeleteEvent::class => ['handle', 1000],
+            'delete' => 100,
         ];
     }
 
-    public function handle(NodePreDeleteEvent $event): void
+    public function execute(Node $node): void
     {
         $nodes = $this->nodeFinder->find([
-            'children_of' => $event->getNode()->getId(),
-            'per_page'    => 1,
+            'children_of' => $node->getId(),
+            'per_page' => 1,
         ], ScopeEnum::INTERNAL);
 
         if ($nodes->count()) {
             $e = new TranslatableNodeException('cannotDeleteDueToContainingChildren');
-            $e->setParameters(['name' => $event->getNode()->getTitle()]);
+            $e->setParameters(['name' => $node->getTitle()]);
             $e->setDomain('validators');
 
             throw $e;

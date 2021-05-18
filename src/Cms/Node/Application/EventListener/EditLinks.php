@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Tulia\Cms\Node\Application\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Tulia\Cms\EditLinks\Application\Event\CollectEditLinksEvent;
 use Tulia\Cms\Node\Domain\ReadModel\Finder\Model\Node;
 use Tulia\Cms\Node\Infrastructure\NodeType\RegistryInterface;
-use Tulia\Cms\EditLinks\Application\Event\CollectEditLinksEvent;
-use Symfony\Component\Routing\RouterInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -39,7 +39,7 @@ class EditLinks implements EventSubscriberInterface
         /** @var Node $node */
         $node = $event->getObject();
 
-        if (!$node instanceof Node) {
+        if (! $node instanceof Node) {
             return;
         }
 

@@ -2,21 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Node\Application\EventListener;
+namespace Tulia\Cms\Node\Domain\WriteModel\ActionsChain\Core;
 
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Tulia\Cms\Node\Application\Event\NodeEvent;
-use Tulia\Cms\Node\Application\Event\NodePreCreateEvent;
-use Tulia\Cms\Node\Application\Event\NodePreUpdateEvent;
-use Tulia\Cms\Node\Domain\ReadModel\Finder\Model\Node;
-use Tulia\Cms\Node\Ports\Infrastructure\Persistence\Domain\ReadModel\NodeFinderInterface;
 use Tulia\Cms\Node\Domain\ReadModel\Finder\Enum\ScopeEnum;
+use Tulia\Cms\Node\Domain\WriteModel\ActionsChain\ActionInterface;
+use Tulia\Cms\Node\Domain\WriteModel\Model\Node;
+use Tulia\Cms\Node\Ports\Infrastructure\Persistence\Domain\ReadModel\NodeFinderInterface;
 use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Slug\SluggerInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class SlugGenerator implements EventSubscriberInterface
+class SlugGenerator implements ActionInterface
 {
     protected SluggerInterface $slugger;
 
@@ -28,21 +25,17 @@ class SlugGenerator implements EventSubscriberInterface
         $this->nodeFinder = $nodeFinder;
     }
 
-    public static function getSubscribedEvents(): array
+    public static function supports(): array
     {
         return [
-            NodePreCreateEvent::class => ['handle', 1000],
-            NodePreUpdateEvent::class => ['handle', 1000],
+            'insert' => 100,
+            'update' => 100,
         ];
     }
 
-    public function handle(NodeEvent $event): void
+    public function execute(Node $node): void
     {
-        /** @var Node $node */
-        $node  = $event->getNode();
-        /** @var string $slug */
         $slug  = $node->getSlug();
-        /** @var string $title */
         $title = $node->getTitle();
 
         if (! $slug && ! $title) {
@@ -53,7 +46,7 @@ class SlugGenerator implements EventSubscriberInterface
         // Fallback to Node's title, if no slug provided.
         $input = $slug ?: $title;
 
-        $slug = $this->findUniqueSlug($input, $node->getId());
+        $slug = $this->findUniqueSlug($input, $node->getId()->getId());
 
         $node->setSlug($slug);
     }

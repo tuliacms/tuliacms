@@ -11,7 +11,7 @@ use Tulia\Cms\Node\Domain\WriteModel\NodeRepository;
 use Tulia\Cms\Node\Infrastructure\NodeType\NodeTypeInterface;
 use Tulia\Cms\Node\Infrastructure\NodeType\RegistryInterface;
 use Tulia\Cms\Node\Ports\Infrastructure\Persistence\Domain\ReadModel\NodeFinderInterface;
-use Tulia\Cms\Node\userInterface\Web\CriteriaBuilder\RequestCriteriaBuilder;
+use Tulia\Cms\Node\UserInterface\Web\CriteriaBuilder\RequestCriteriaBuilder;
 use Tulia\Cms\Node\Domain\ReadModel\Finder\Enum\ScopeEnum;
 use Tulia\Cms\Node\UserInterface\Web\Form\NodeForm;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;

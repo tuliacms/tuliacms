@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Node\Domain\WriteModel;
 
 use Tulia\Cms\Metadata\Domain\WriteModel\MetadataRepository;
+use Tulia\Cms\Node\Domain\WriteModel\ActionsChain\ActionsChainInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Event\NodeDeleted;
 use Tulia\Cms\Node\Domain\WriteModel\Event\NodeUpdated;
 use Tulia\Cms\Node\Domain\WriteModel\Exception\NodeNotFoundException;
@@ -31,18 +32,22 @@ class NodeRepository
 
     private EventBusInterface $eventBus;
 
+    private ActionsChainInterface $actionsChain;
+
     public function __construct(
         NodeWriteStorageInterface $storage,
         CurrentWebsiteInterface $currentWebsite,
         MetadataRepository $metadataRepository,
         UuidGeneratorInterface $uuidGenerator,
-        EventBusInterface $eventBus
+        EventBusInterface $eventBus,
+        ActionsChainInterface $actionsChain
     ) {
         $this->storage = $storage;
         $this->currentWebsite = $currentWebsite;
         $this->metadataRepository = $metadataRepository;
         $this->uuidGenerator = $uuidGenerator;
         $this->eventBus = $eventBus;
+        $this->actionsChain = $actionsChain;
     }
 
     public function createNew(array $data): Node
@@ -71,7 +76,7 @@ class NodeRepository
             throw new NodeNotFoundException();
         }
 
-        return Node::buildFromArray([
+        $node = Node::buildFromArray([
             'id'            => $node['id'],
             'type'          => $node['type'] ?? '',
             'website_id'    => $node['website_id'],
@@ -93,10 +98,16 @@ class NodeRepository
             'metadata'      => $this->metadataRepository->findAll(NodeMetadataEnum::TYPE, $id),
             'translated'    => $node['translated'] ?? true,
         ]);
+
+        $this->actionsChain->execute('find', $node);
+
+        return $node;
     }
 
     public function insert(Node $node): void
     {
+        $this->actionsChain->execute('insert', $node);
+
         $this->storage->beginTransaction();
 
         try {
@@ -117,6 +128,8 @@ class NodeRepository
 
     public function update(Node $node): void
     {
+        $this->actionsChain->execute('update', $node);
+
         $this->storage->beginTransaction();
 
         try {
@@ -137,6 +150,8 @@ class NodeRepository
 
     public function delete(Node $node): void
     {
+        $this->actionsChain->execute('delete', $node);
+
         $this->storage->beginTransaction();
 
         try {
