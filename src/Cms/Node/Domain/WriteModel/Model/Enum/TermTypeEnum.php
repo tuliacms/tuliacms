@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Node\Domain\WriteModel\Enum;
+namespace Tulia\Cms\Node\Domain\WriteModel\Model\Enum;
 
 /**
  * @author Adam Banaszkiewicz

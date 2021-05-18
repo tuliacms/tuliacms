@@ -2,15 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Node\Infrastructure\Cms\Metadata;
+namespace Tulia\Cms\Node\Domain\WriteModel\Metadata;
 
 use Tulia\Cms\Metadata\Domain\Registry\RegistratorInterface;
 use Tulia\Cms\Metadata\Domain\Registry\ContentFieldsRegistryInterface;
-use Tulia\Cms\Node\Infrastructure\Cms\Metadata\NodeMetadataEnum;
+use Tulia\Cms\Node\Domain\WriteModel\Model\Enum\NodeMetadataEnum;
 
 /**
  * Registers default CMS node (page) metadatas in system.
- *
  * @author Adam Banaszkiewicz
  */
 class DefaultMetadataRegistrator implements RegistratorInterface
@@ -20,7 +19,7 @@ class DefaultMetadataRegistrator implements RegistratorInterface
      */
     public function register(ContentFieldsRegistryInterface $registry): void
     {
-        $fields = $registry->getContentFields('node');
+        $fields = $registry->getContentFields(NodeMetadataEnum::TYPE);
 
         /**
          * Stores content of node with parsed data. Stands like a cache for Node's content,

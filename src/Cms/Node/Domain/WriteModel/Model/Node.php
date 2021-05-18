@@ -6,7 +6,7 @@ namespace Tulia\Cms\Node\Domain\WriteModel\Model;
 
 use Tulia\Cms\Metadata\Domain\WriteModel\MagickMetadataTrait;
 use Tulia\Cms\Node\Domain\WriteModel\Event;
-use Tulia\Cms\Node\Domain\WriteModel\ValueObject\NodeId;
+use Tulia\Cms\Node\Domain\WriteModel\Model\ValueObject\NodeId;
 use Tulia\Cms\Platform\Domain\Aggregate\AggregateRoot;
 use Tulia\Cms\Platform\Domain\ValueObject\ImmutableDateTime;
 

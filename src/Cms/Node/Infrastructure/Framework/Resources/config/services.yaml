@@ -33,7 +33,7 @@ services:
     Tulia\Cms\Node\Infrastructure\NodeType\DefaultTypesRegistrator:
         tags: [ node.type.registrator ]
 
-    Tulia\Cms\Node\Infrastructure\Cms\Metadata\DefaultMetadataRegistrator:
+    Tulia\Cms\Node\Domain\WriteModel\Metadata\DefaultMetadataRegistrator:
         tags: [ metadata.registrator ]
 
     Tulia\Cms\Node\Infrastructure\Cms\Menu\IdentityProvider:

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Infrastructure\Persistence\Domain\WriteModel;
 
-use Tulia\Cms\Node\Domain\WriteModel\Enum\TermTypeEnum;
+use Tulia\Cms\Node\Domain\WriteModel\Model\Enum\TermTypeEnum;
 use Tulia\Cms\Node\Ports\Infrastructure\Persistence\Domain\WriteModel\NodeWriteStorageInterface;
 use Tulia\Cms\Platform\Domain\ValueObject\ImmutableDateTime;
 use Tulia\Cms\Platform\Infrastructure\Persistence\Domain\AbstractLocalizableStorage;

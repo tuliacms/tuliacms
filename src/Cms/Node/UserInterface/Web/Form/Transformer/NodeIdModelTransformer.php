@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Node\UserInterface\Web\Form\Transformer;
 
 use Symfony\Component\Form\DataTransformerInterface;
-use Tulia\Cms\Node\Domain\WriteModel\ValueObject\NodeId;
+use Tulia\Cms\Node\Domain\WriteModel\Model\ValueObject\NodeId;
 
 /**
  * @author Adam Banaszkiewicz

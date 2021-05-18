@@ -10,7 +10,7 @@ use Tulia\Cms\Node\Domain\WriteModel\Event\NodeDeleted;
 use Tulia\Cms\Node\Domain\WriteModel\Event\NodeUpdated;
 use Tulia\Cms\Node\Domain\WriteModel\Exception\NodeNotFoundException;
 use Tulia\Cms\Node\Domain\WriteModel\Model\Node;
-use Tulia\Cms\Node\Infrastructure\Cms\Metadata\NodeMetadataEnum;
+use Tulia\Cms\Node\Domain\WriteModel\Model\Enum\NodeMetadataEnum;
 use Tulia\Cms\Node\Ports\Infrastructure\Persistence\Domain\WriteModel\NodeWriteStorageInterface;
 use Tulia\Cms\Platform\Domain\ValueObject\ImmutableDateTime;
 use Tulia\Cms\Platform\Infrastructure\Bus\Event\EventBusInterface;
