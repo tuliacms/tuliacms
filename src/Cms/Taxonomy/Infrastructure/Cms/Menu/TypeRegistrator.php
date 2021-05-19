@@ -6,8 +6,8 @@ namespace Tulia\Cms\Taxonomy\Infrastructure\Cms\Menu;
 
 use Tulia\Cms\Menu\Domain\Builder\Type\RegistratorInterface;
 use Tulia\Cms\Menu\Domain\Builder\Type\RegistryInterface;
-use Tulia\Cms\Taxonomy\Application\TaxonomyType\TaxonomyTypeInterface;
-use Tulia\Cms\Taxonomy\Application\TaxonomyType\RegistryInterface as TaxonomyRegistryInterface;
+use Tulia\Cms\Taxonomy\Application\Domain\TaxonomyType\TaxonomyTypeInterface;
+use Tulia\Cms\Taxonomy\Application\Domain\TaxonomyType\RegistryInterface as TaxonomyRegistryInterface;
 
 /**
  * @author Adam Banaszkiewicz

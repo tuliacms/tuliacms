@@ -7,8 +7,8 @@ namespace Tulia\Cms\Taxonomy\Infrastructure\Cms\Menu;
 use Symfony\Component\Form\FormFactoryInterface;
 use Tulia\Cms\Menu\Application\Selector\SelectorInterface;
 use Tulia\Cms\Menu\Domain\Builder\Type\TypeInterface;
-use Tulia\Cms\Taxonomy\Application\taxonomyType\RegistryInterface;
-use Tulia\Cms\Taxonomy\UserInterface\Web\Form\MenuItemSelectorForm;
+use Tulia\Cms\Taxonomy\Application\Domain\TaxonomyType\RegistryInterface;
+use Tulia\Cms\Taxonomy\UserInterface\Web\Backend\Form\MenuItemSelectorForm;
 use Tulia\Component\Templating\EngineInterface;
 use Tulia\Component\Templating\View;
 

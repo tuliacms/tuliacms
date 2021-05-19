@@ -22,11 +22,12 @@ use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Slug\SluggerInterface;
 class SlugGenerator implements EventSubscriberInterface
 {
     protected SluggerInterface $slugger;
+
     protected FinderFactoryInterface $finderFactory;
 
     public function __construct(SluggerInterface $slugger, FinderFactoryInterface $finderFactory)
     {
-        $this->slugger       = $slugger;
+        $this->slugger = $slugger;
         $this->finderFactory = $finderFactory;
     }
 

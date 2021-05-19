@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Taxonomy\UserInterface\Web\Form\Extension;
+namespace Tulia\Cms\Taxonomy\UserInterface\Web\Backend\Form\Extension;
 
 use Tulia\Component\FormSkeleton\Extension\ExtensionAggregateInterface;
-use Tulia\Cms\Taxonomy\Application\TaxonomyType\RegistryInterface;
+use Tulia\Cms\Taxonomy\Application\Domain\TaxonomyType\RegistryInterface;
 
 /**
  * @author Adam Banaszkiewicz

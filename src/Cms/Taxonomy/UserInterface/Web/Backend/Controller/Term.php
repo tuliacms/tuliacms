@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Taxonomy\UserInterface\Web\Controller\Backend;
+namespace Tulia\Cms\Taxonomy\UserInterface\Web\Backend\Controller;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Taxonomy\Application\Command\TermStorage;
 use Tulia\Cms\Taxonomy\Application\Exception\TranslatableTermException;
 use Tulia\Cms\Taxonomy\Application\Model\Term as ApplicationTerm;
-use Tulia\Cms\Taxonomy\Application\TaxonomyType\RegistryInterface;
-use Tulia\Cms\Taxonomy\Application\TaxonomyType\TaxonomyTypeInterface;
+use Tulia\Cms\Taxonomy\Application\Domain\TaxonomyType\RegistryInterface;
+use Tulia\Cms\Taxonomy\Application\Domain\TaxonomyType\TaxonomyTypeInterface;
 use Tulia\Cms\Taxonomy\Query\CriteriaBuilder\RequestCriteriaBuilder;
 use Tulia\Cms\Taxonomy\Query\Enum\ScopeEnum;
 use Tulia\Cms\Taxonomy\Query\Exception\MultipleFetchException;
@@ -19,7 +19,7 @@ use Tulia\Cms\Taxonomy\Query\Exception\QueryNotFetchedException;
 use Tulia\Cms\Taxonomy\Query\Factory\TermFactoryInterface;
 use Tulia\Cms\Taxonomy\Query\FinderFactoryInterface;
 use Tulia\Cms\Taxonomy\Query\Model\Term as QueryTerm;
-use Tulia\Cms\Taxonomy\UserInterface\Web\Form\TermForm;
+use Tulia\Cms\Taxonomy\UserInterface\Web\Backend\Form\TermForm;
 use Tulia\Component\Templating\ViewInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;

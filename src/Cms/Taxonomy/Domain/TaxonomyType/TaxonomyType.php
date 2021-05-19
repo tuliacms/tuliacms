@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Taxonomy\Application\TaxonomyType;
+namespace Tulia\Cms\Taxonomy\Application\Domain\TaxonomyType;
 
 use Tulia\Cms\Taxonomy\Infrastructure\Framework\Routing\Strategy\SimpleStrategy;
 

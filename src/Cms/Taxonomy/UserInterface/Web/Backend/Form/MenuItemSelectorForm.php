@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Taxonomy\UserInterface\Web\Form;
+namespace Tulia\Cms\Taxonomy\UserInterface\Web\Backend\Form;
 
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\AbstractType;

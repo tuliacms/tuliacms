@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Taxonomy\Application\TaxonomyType\Storage;
+namespace Tulia\Cms\Taxonomy\Application\Domain\TaxonomyType\Storage;
 
-use Tulia\Cms\Taxonomy\Application\TaxonomyType\TaxonomyType;
-use Tulia\Cms\Taxonomy\Application\TaxonomyType\TaxonomyTypeInterface;
+use Tulia\Cms\Taxonomy\Application\Domain\TaxonomyType\TaxonomyType;
+use Tulia\Cms\Taxonomy\Application\Domain\TaxonomyType\TaxonomyTypeInterface;
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 
 /**

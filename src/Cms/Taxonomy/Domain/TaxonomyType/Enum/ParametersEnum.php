@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Taxonomy\Application\TaxonomyType\Enum;
+namespace Tulia\Cms\Taxonomy\Application\Domain\TaxonomyType\Enum;
 
 /**
  * @author Adam Banaszkiewicz

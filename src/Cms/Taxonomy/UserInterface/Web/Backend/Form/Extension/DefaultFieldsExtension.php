@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Taxonomy\UserInterface\Web\Form\Extension;
+namespace Tulia\Cms\Taxonomy\UserInterface\Web\Backend\Form\Extension;
 
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormTypeInterface;
-use Tulia\Cms\Taxonomy\UserInterface\Web\Form\TermForm;
+use Tulia\Cms\Taxonomy\UserInterface\Web\Backend\Form\TermForm;
 use Tulia\Component\FormSkeleton\Extension\AbstractExtension;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType;
 use Tulia\Component\FormSkeleton\Section\SectionsBuilderInterface;

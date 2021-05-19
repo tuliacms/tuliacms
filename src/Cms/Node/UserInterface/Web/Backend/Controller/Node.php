@@ -17,7 +17,7 @@ use Tulia\Cms\Node\UserInterface\Web\Backend\Form\NodeForm;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Platform\Shared\Pagination\Paginator;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
-use Tulia\Cms\Taxonomy\Application\TaxonomyType\RegistryInterface as TaxonomyRegistry;
+use Tulia\Cms\Taxonomy\Application\Domain\TaxonomyType\RegistryInterface as TaxonomyRegistry;
 use Tulia\Cms\Taxonomy\Query\FinderFactoryInterface as TaxonomyFinderFactory;
 use Tulia\Component\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Component\Templating\ViewInterface;

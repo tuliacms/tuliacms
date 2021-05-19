@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Taxonomy\UserInterface\Web\Form;
+namespace Tulia\Cms\Taxonomy\UserInterface\Web\Backend\Form;
 
 use Symfony\Component\Form\Extension\Core\Type;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType;
-use Tulia\Cms\Taxonomy\Application\TaxonomyType\RegistryInterface;
-use Tulia\Cms\Taxonomy\Application\TaxonomyType\TaxonomyTypeInterface;
+use Tulia\Cms\Taxonomy\Application\Domain\TaxonomyType\RegistryInterface;
+use Tulia\Cms\Taxonomy\Application\Domain\TaxonomyType\TaxonomyTypeInterface;
 use Tulia\Component\FormSkeleton\Form\AbstractFormSkeletonType;
 
 /**

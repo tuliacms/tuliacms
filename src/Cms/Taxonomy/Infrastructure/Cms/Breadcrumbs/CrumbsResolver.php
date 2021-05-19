@@ -6,7 +6,7 @@ namespace Tulia\Cms\Taxonomy\Infrastructure\Cms\Breadcrumbs;
 
 use Symfony\Component\Routing\RouterInterface;
 use Tulia\Cms\Breadcrumbs\Application\Crumbs\ResolverInterface;
-use Tulia\Cms\Taxonomy\Application\TaxonomyType\RegistryInterface;
+use Tulia\Cms\Taxonomy\Application\Domain\TaxonomyType\RegistryInterface;
 use Tulia\Cms\Taxonomy\Query\Enum\ScopeEnum;
 use Tulia\Cms\Taxonomy\Query\Model\Term;
 use Tulia\Cms\Taxonomy\Query\FinderFactoryInterface;

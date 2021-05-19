@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Taxonomy\UserInterface\Web\Controller\Frontend;
+namespace Tulia\Cms\Taxonomy\UserInterface\Web\Frontend\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\Node\Domain\ReadModel\Finder\Enum\ScopeEnum;

@@ -2,22 +2,24 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Taxonomy\Application\EventListener;
+namespace Tulia\Cms\Taxonomy\UserInterface\Web\Frontend\EditLinks;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Cms\EditLinks\Application\Event\CollectEditLinksEvent;
-use Tulia\Cms\Taxonomy\Application\TaxonomyType\RegistryInterface;
+use Tulia\Cms\Taxonomy\Application\Domain\TaxonomyType\RegistryInterface;
 use Tulia\Cms\Taxonomy\Query\Model\Term;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class EditLinks implements EventSubscriberInterface
+class EditLinksRegistrator implements EventSubscriberInterface
 {
     protected TranslatorInterface $translator;
+
     protected RouterInterface $router;
+
     protected RegistryInterface $registry;
 
     public function __construct(TranslatorInterface $translator, RouterInterface $router, RegistryInterface $registry)

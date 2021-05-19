@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Taxonomy\Application\TaxonomyType\Storage;
+namespace Tulia\Cms\Taxonomy\Application\Domain\TaxonomyType\Storage;
 
 /**
  * @author Adam Banaszkiewicz
