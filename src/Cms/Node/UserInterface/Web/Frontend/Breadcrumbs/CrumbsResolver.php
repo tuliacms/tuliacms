@@ -7,12 +7,13 @@ namespace Tulia\Cms\Node\UserInterface\Web\Frontend\Breadcrumbs;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
 use Tulia\Cms\Breadcrumbs\Application\Crumbs\ResolverInterface;
-use Tulia\Cms\Node\Domain\ReadModel\Finder\Model\Node;
 use Tulia\Cms\Node\Domain\NodeType\RegistryInterface as NodeTypeRegistry;
-use Tulia\Cms\Node\Domain\ReadModel\Finder\Enum\ScopeEnum;
+use Tulia\Cms\Node\Domain\ReadModel\Finder\Enum\NodeFinderScopeEnum;
+use Tulia\Cms\Node\Domain\ReadModel\Finder\Model\Node;
 use Tulia\Cms\Node\Ports\Infrastructure\Persistence\Domain\ReadModel\NodeFinderInterface;
 use Tulia\Cms\Platform\Shared\Breadcrumbs\BreadcrumbsInterface;
-use Tulia\Cms\Taxonomy\Query\FinderFactoryInterface as TermFinderFactoryInterface;
+use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\Enum\TermFinderScopeEnum;
+use Tulia\Cms\Taxonomy\Ports\Infrastructure\Persistence\Domain\ReadModel\TermFinderInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -25,18 +26,18 @@ class CrumbsResolver implements ResolverInterface
 
     protected NodeFinderInterface $nodeFinder;
 
-    protected TermFinderFactoryInterface $termFinderFactory;
+    protected TermFinderInterface $termFinder;
 
     public function __construct(
         RouterInterface $router,
         NodeTypeRegistry $nodeTypeRegistry,
         NodeFinderInterface $nodeFinder,
-        TermFinderFactoryInterface $termFinderFactory
+        TermFinderInterface $termFinder
     ) {
         $this->router = $router;
         $this->nodeTypeRegistry = $nodeTypeRegistry;
         $this->nodeFinder = $nodeFinder;
-        $this->termFinderFactory = $termFinderFactory;
+        $this->termFinder = $termFinder;
     }
 
     public function findRootCrumb(Request $request): ?object
@@ -61,7 +62,7 @@ class CrumbsResolver implements ResolverInterface
             if ($type->supports('hierarchy') && $node->getParentId()) {
                 $this->resolveHierarchyCrumbs($node, $breadcrumbs);
             } elseif ($type->getRoutableTaxonomy() && $node->getCategory()) {
-                return $this->termFinderFactory->getInstance(\Tulia\Cms\Taxonomy\Query\Enum\ScopeEnum::BREADCRUMBS)->find($node->getCategory());
+                return $this->termFinder->findOne(['id' => $node->getCategory()], TermFinderScopeEnum::BREADCRUMBS);
             }
         }
 
@@ -79,7 +80,7 @@ class CrumbsResolver implements ResolverInterface
         $nodes = [];
 
         while ($parentId) {
-            $parent = $this->nodeFinder->findOne(['id' => $parentId], ScopeEnum::BREADCRUMBS);
+            $parent = $this->nodeFinder->findOne(['id' => $parentId], NodeFinderScopeEnum::BREADCRUMBS);
 
             if ($parent) {
                 $nodes[]  = $parent;

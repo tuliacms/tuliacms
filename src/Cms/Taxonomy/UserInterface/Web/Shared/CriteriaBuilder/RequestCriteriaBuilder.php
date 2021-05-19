@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Taxonomy\Query\CriteriaBuilder;
+namespace Tulia\Cms\Taxonomy\UserInterface\Web\Shared\CriteriaBuilder;
 
 use Symfony\Component\HttpFoundation\Request;
 
@@ -11,24 +11,13 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class RequestCriteriaBuilder
 {
-    /**
-     * @var Request
-     */
-    protected $request;
+    protected Request $request;
 
-    /**
-     * @param Request $request
-     */
     public function __construct(Request $request)
     {
         $this->request = $request;
     }
 
-    /**
-     * @param array $defaults
-     *
-     * @return array
-     */
     public function build(array $defaults = []): array
     {
         $defaults = array_merge([

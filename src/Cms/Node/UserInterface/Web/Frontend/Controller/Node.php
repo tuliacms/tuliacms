@@ -6,9 +6,9 @@ namespace Tulia\Cms\Node\UserInterface\Web\Frontend\Controller;
 
 use Tulia\Cms\Node\Domain\ReadModel\Finder\Model\Node AS Model;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
-use Tulia\Cms\Taxonomy\Query\Enum\ScopeEnum;
-use Tulia\Cms\Taxonomy\Query\FinderFactoryInterface;
-use Tulia\Cms\Taxonomy\Query\Model\Term;
+use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\Enum\TermFinderScopeEnum;
+use Tulia\Cms\Taxonomy\Ports\Infrastructure\Persistence\Domain\ReadModel\TermFinderInterface;
+use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\Model\Term;
 use Tulia\Component\Templating\ViewInterface;
 
 /**
@@ -16,11 +16,11 @@ use Tulia\Component\Templating\ViewInterface;
  */
 class Node extends AbstractController
 {
-    protected FinderFactoryInterface $termFinderFactory;
+    protected TermFinderInterface $termFinder;
 
-    public function __construct(FinderFactoryInterface $termFinderFactory)
+    public function __construct(TermFinderInterface $termFinder)
     {
-        $this->termFinderFactory = $termFinderFactory;
+        $this->termFinder = $termFinder;
     }
 
     public function show(Model $node): ViewInterface
@@ -38,9 +38,7 @@ class Node extends AbstractController
     private function findCategory(Model $node): ?Term
     {
         if ($node->getCategory()) {
-            return $this->termFinderFactory
-                ->getInstance(ScopeEnum::SINGLE)
-                ->find($node->getCategory());
+            return $this->termFinder->findOne(['id' => $node->getCategory()], TermFinderScopeEnum::SINGLE);
         }
 
         return null;

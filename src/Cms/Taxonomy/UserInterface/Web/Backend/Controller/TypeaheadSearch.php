@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Tulia\Cms\Taxonomy\UserInterface\Web\Backend\Controller;
 
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\TypeaheadFormTypeSearch;
-use Tulia\Cms\Taxonomy\Query\Enum\ScopeEnum;
-use Tulia\Cms\Taxonomy\Query\FinderFactoryInterface;
+use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\Enum\TermFinderScopeEnum;
+use Tulia\Cms\Taxonomy\Ports\Infrastructure\Persistence\Domain\ReadModel\TermFinderInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -14,29 +14,30 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class TypeaheadSearch extends TypeaheadFormTypeSearch
 {
-    /**
-     * @var FinderFactoryInterface
-     */
-    private $finderFactory;
+    private TermFinderInterface $termFinder;
 
-    /**
-     * @param FinderFactoryInterface $finderFactory
-     */
-    public function __construct(FinderFactoryInterface $finderFactory)
+    public function __construct(TermFinderInterface $termFinder)
     {
-        $this->finderFactory = $finderFactory;
+        $this->termFinder = $termFinder;
     }
 
     protected function findCollection(Request $request): array
     {
-        $finder = $this->finderFactory->getInstance(ScopeEnum::INTERNAL);
-        $finder->setCriteria([
+        $terms = $this->termFinder->find([
             'search'        => $request->query->get('q'),
             'taxonomy_type' => $request->query->get('taxonomy_type'),
             'per_page'      => 10,
-        ]);
-        $finder->fetchRaw();
+        ], TermFinderScopeEnum::INTERNAL);
 
-        return $finder->getResult()->toArray();
+        $result = [];
+
+        foreach ($terms as $node) {
+            $result[] = [
+                'id' => $node->getId(),
+                'title' => $node->getTitle(),
+            ];
+        }
+
+        return $result;
     }
 }

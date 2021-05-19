@@ -14,35 +14,35 @@ use Tulia\Cms\Platform\Infrastructure\Framework\Routing\FrontendRouteSuffixResol
 use Tulia\Cms\Taxonomy\Domain\TaxonomyType\RegistryInterface;
 use Tulia\Cms\Taxonomy\Domain\TaxonomyType\TaxonomyTypeInterface;
 use Tulia\Cms\Taxonomy\Infrastructure\Persistence\TermPath\StorageInterface;
-use Tulia\Cms\Taxonomy\Query\Enum\ScopeEnum;
-use Tulia\Cms\Taxonomy\Query\FinderFactoryInterface;
-use Tulia\Cms\Taxonomy\Query\Model\Term;
+use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\Enum\TermFinderScopeEnum;
+use Tulia\Cms\Taxonomy\Ports\Infrastructure\Persistence\Domain\ReadModel\TermFinderInterface;
+use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\Model\Term;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class Router implements RouterInterface, RequestMatcherInterface
 {
-    protected StorageInterface $storage;
+    private StorageInterface $storage;
 
-    protected FinderFactoryInterface $finderFactory;
+    private RegistryInterface $registry;
 
-    protected RegistryInterface $registry;
+    private FrontendRouteSuffixResolver $frontendRouteSuffixResolver;
 
-    protected FrontendRouteSuffixResolver $frontendRouteSuffixResolver;
+    private TermFinderInterface $termFinder;
 
-    protected ?RequestContext $context = null;
+    private ?RequestContext $context = null;
 
     public function __construct(
         StorageInterface $storage,
-        FinderFactoryInterface $finderFactory,
         RegistryInterface $registry,
-        FrontendRouteSuffixResolver $frontendRouteSuffixResolver
+        FrontendRouteSuffixResolver $frontendRouteSuffixResolver,
+        TermFinderInterface $termFinder
     ) {
         $this->storage = $storage;
-        $this->finderFactory = $finderFactory;
         $this->registry = $registry;
         $this->frontendRouteSuffixResolver = $frontendRouteSuffixResolver;
+        $this->termFinder = $termFinder;
     }
 
     public function setContext(RequestContext $context): void
@@ -123,28 +123,15 @@ class Router implements RouterInterface, RequestMatcherInterface
         return $termType && $termType->isRoutable();
     }
 
-    /**
-     * @param string $id
-     *
-     * @return Term|null
-     */
     private function getTerm(string $id): ?Term
     {
-        try {
-            $finder = $this->finderFactory->getInstance(ScopeEnum::ROUTING_MATCHER);
-            $finder->setCriteria([
-                'id'            => $id,
-                'per_page'      => 1,
-                'order_by'      => null,
-                'order_dir'     => null,
-                'visibility'    => 1,
-                'taxonomy_type' => null,
-            ]);
-            $finder->fetchRaw();
-
-            return $finder->getResult()->first();
-        } catch (\Exception $e) {
-            return null;
-        }
+        return $this->termFinder->findOne([
+            'id'            => $id,
+            'per_page'      => 1,
+            'order_by'      => null,
+            'order_dir'     => null,
+            'visibility'    => 1,
+            'taxonomy_type' => null,
+        ], TermFinderScopeEnum::ROUTING_MATCHER);
     }
 }

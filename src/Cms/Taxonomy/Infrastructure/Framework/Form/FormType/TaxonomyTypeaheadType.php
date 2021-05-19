@@ -8,8 +8,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Tulia\Cms\Taxonomy\Query\FinderFactoryInterface;
-use Tulia\Cms\Taxonomy\Query\Enum\ScopeEnum;
+use Tulia\Cms\Taxonomy\Ports\Infrastructure\Persistence\Domain\ReadModel\TermFinderInterface;
+use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\Enum\TermFinderScopeEnum;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\TypeaheadType;
 use Symfony\Component\Routing\RouterInterface;
 
@@ -18,23 +18,13 @@ use Symfony\Component\Routing\RouterInterface;
  */
 class TaxonomyTypeaheadType extends AbstractType
 {
-    /**
-     * @var FinderFactoryInterface
-     */
-    protected $finderFactory;
+    protected TermFinderInterface $termFinder;
 
-    /**
-     * @var RouterInterface
-     */
-    protected $router;
+    protected RouterInterface $router;
 
-    /**
-     * @param FinderFactoryInterface $finderFactory
-     * @param RouterInterface $router
-     */
-    public function __construct(FinderFactoryInterface $finderFactory, RouterInterface $router)
+    public function __construct(TermFinderInterface $termFinder, RouterInterface $router)
     {
-        $this->finderFactory = $finderFactory;
+        $this->termFinder = $termFinder;
         $this->router = $router;
     }
 
@@ -47,7 +37,7 @@ class TaxonomyTypeaheadType extends AbstractType
             'search_route'  => 'backend.term.search.typeahead',
             'display_prop'  => 'name',
             'data_provider_single' => function (array $criteria): ?array {
-                $term = $this->finderFactory->getInstance(ScopeEnum::INTERNAL)->find($criteria['value']);
+                $term = $this->termFinder->findOne(['id' => $criteria['value']], TermFinderScopeEnum::INTERNAL);
 
                 return $term ? ['name' => $term->getName()] : null;
             },

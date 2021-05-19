@@ -12,7 +12,7 @@ use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\RouterInterface;
 use Tulia\Cms\Node\Domain\ReadModel\Finder\Model\Node;
 use Tulia\Cms\Node\Domain\NodeType\RegistryInterface;
-use Tulia\Cms\Node\Domain\ReadModel\Finder\Enum\ScopeEnum;
+use Tulia\Cms\Node\Domain\ReadModel\Finder\Enum\NodeFinderScopeEnum;
 use Tulia\Cms\Node\Ports\Infrastructure\Persistence\Domain\ReadModel\NodeFinderInterface;
 use Tulia\Cms\Platform\Infrastructure\Framework\Routing\FrontendRouteSuffixResolver;
 
@@ -126,7 +126,7 @@ class Router implements RouterInterface, RequestMatcherInterface
             'per_page'  => 1,
             'order_by'  => null,
             'order_dir' => null,
-        ], ScopeEnum::ROUTING_MATCHER);
+        ], NodeFinderScopeEnum::ROUTING_MATCHER);
     }
 
     private function getNodeForGenerate($identity, string $locale): ?Node
@@ -142,6 +142,6 @@ class Router implements RouterInterface, RequestMatcherInterface
         return $this->nodeFinder->findOne([
             'locale' => $locale,
             'id' => $identity,
-        ], ScopeEnum::ROUTING_GENERATOR);
+        ], NodeFinderScopeEnum::ROUTING_GENERATOR);
     }
 }

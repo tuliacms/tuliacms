@@ -5,23 +5,24 @@ declare(strict_types=1);
 namespace Tulia\Cms\Taxonomy\Domain\WriteModel\ActionsChain\Core;
 
 use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Slug\SluggerInterface;
+use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\Enum\TermFinderScopeEnum;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\ActionsChain\TermActionInterface;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Term;
-use Tulia\Cms\Taxonomy\Query\FinderFactoryInterface;
+use Tulia\Cms\Taxonomy\Ports\Infrastructure\Persistence\Domain\ReadModel\TermFinderInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class SlugGenerator implements TermActionInterface
 {
-    protected SluggerInterface $slugger;
+    private SluggerInterface $slugger;
 
-    protected FinderFactoryInterface $finderFactory;
+    private TermFinderInterface $termFinder;
 
-    public function __construct(SluggerInterface $slugger, FinderFactoryInterface $finderFactory)
+    public function __construct(SluggerInterface $slugger, TermFinderInterface $termFinder)
     {
         $this->slugger = $slugger;
-        $this->finderFactory = $finderFactory;
+        $this->termFinder = $termFinder;
     }
 
     public static function supports(): array
@@ -64,17 +65,14 @@ class SlugGenerator implements TermActionInterface
 
             $securityLoop++;
 
-            $finder = $this->finderFactory->getInstance(\Tulia\Cms\Taxonomy\Query\Enum\ScopeEnum::INTERNAL);
-            $finder->setCriteria([
+            $term = $this->termFinder->findOne([
                 'slug'       => $slugProposed,
                 'id__not_in' => [$termId],
                 'ntaxonomy_type' => null,
                 'order_by'   => null,
                 'order_dir'  => null,
                 'per_page'   => 1,
-            ]);
-            $finder->fetchRaw();
-            $term = $finder->getResult()->first();
+            ], TermFinderScopeEnum::INTERNAL);
 
             if ($term === null) {
                 return $slugProposed;

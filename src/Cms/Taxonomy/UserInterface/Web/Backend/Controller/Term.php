@@ -5,25 +5,20 @@ declare(strict_types=1);
 namespace Tulia\Cms\Taxonomy\UserInterface\Web\Backend\Controller;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
-use Tulia\Cms\Taxonomy\Application\Exception\TranslatableTermException;
+use Tulia\Cms\Platform\Shared\Pagination\Paginator;
+use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\Enum\TermFinderScopeEnum;
 use Tulia\Cms\Taxonomy\Domain\TaxonomyType\RegistryInterface;
 use Tulia\Cms\Taxonomy\Domain\TaxonomyType\TaxonomyTypeInterface;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Exception\TermNotFoundException;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\TermRepository;
-use Tulia\Cms\Taxonomy\Query\CriteriaBuilder\RequestCriteriaBuilder;
-use Tulia\Cms\Taxonomy\Query\Enum\ScopeEnum;
-use Tulia\Cms\Taxonomy\Query\Exception\MultipleFetchException;
-use Tulia\Cms\Taxonomy\Query\Exception\QueryException;
-use Tulia\Cms\Taxonomy\Query\Exception\QueryNotFetchedException;
-use Tulia\Cms\Taxonomy\Query\Factory\TermFactoryInterface;
-use Tulia\Cms\Taxonomy\Query\FinderFactoryInterface;
-use Tulia\Cms\Taxonomy\Query\Model\Term as QueryTerm;
+use Tulia\Cms\Taxonomy\Ports\Infrastructure\Persistence\Domain\ReadModel\TermFinderInterface;
 use Tulia\Cms\Taxonomy\UserInterface\Web\Backend\Form\TermForm;
-use Tulia\Component\Templating\ViewInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Tulia\Cms\Taxonomy\UserInterface\Web\Shared\CriteriaBuilder\RequestCriteriaBuilder;
 use Tulia\Component\Security\Http\Csrf\Annotation\CsrfToken;
+use Tulia\Component\Templating\ViewInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -32,17 +27,17 @@ class Term extends AbstractController
 {
     private RegistryInterface $taxonomyRegistry;
 
-    private FinderFactoryInterface $finderFactory;
+    private TermFinderInterface $termFinder;
 
     private TermRepository $repository;
 
     public function __construct(
         RegistryInterface $taxonomyRegistry,
-        FinderFactoryInterface $finderFactory,
+        TermFinderInterface $termFinder,
         TermRepository $repository
     ) {
         $this->taxonomyRegistry = $taxonomyRegistry;
-        $this->finderFactory = $finderFactory;
+        $this->termFinder = $termFinder;
         $this->repository = $repository;
     }
 
@@ -54,36 +49,26 @@ class Term extends AbstractController
     /**
      * @param Request $request
      * @param string $taxonomy_type
-     *
      * @return RedirectResponse|ViewInterface
-     *
-     * @throws MultipleFetchException
      * @throws NotFoundHttpException
-     * @throws QueryException
-     * @throws QueryNotFetchedException
      */
     public function list(Request $request, string $taxonomy_type)
     {
         $criteria = (new RequestCriteriaBuilder($request))->build([ 'taxonomy_type' => $taxonomy_type ]);
-        $finder = $this->finderFactory->getInstance(ScopeEnum::BACKEND_LISTING);
-        $finder->setCriteria($criteria);
-        $finder->fetchRaw();
+        $terms = $this->termFinder->find($criteria, TermFinderScopeEnum::BACKEND_LISTING);
 
         return $this->view('@backend/taxonomy/term/list.tpl', [
-            'terms'        => $finder->getResult(),
+            'terms'        => $terms,
             'taxonomyType' => $this->findTaxonomyType($criteria['taxonomy_type']),
             'criteria'     => $criteria,
-            'paginator'    => $finder->getPaginator($request),
+            'paginator'    => new Paginator($request, $terms->totalRows(), $request->query->getInt('page', 1), $criteria['per_page']),
         ]);
     }
 
     /**
      * @param Request $request
      * @param string $taxonomy_type
-     * @param TermFactoryInterface $termFactory
-     *
      * @return RedirectResponse|ViewInterface
-     *
      * @CsrfToken(id="term_form")
      */
     public function create(Request $request, string $taxonomy_type)
@@ -116,14 +101,8 @@ class Term extends AbstractController
      * @param Request $request
      * @param string $taxonomy_type
      * @param string $id
-     *
      * @return RedirectResponse|ViewInterface
-     *
-     * @throws MultipleFetchException
      * @throws NotFoundHttpException
-     * @throws QueryException
-     * @throws QueryNotFetchedException
-     *
      * @CsrfToken(id="term_form")
      */
     public function edit(Request $request, string $taxonomy_type, string $id)
@@ -156,14 +135,8 @@ class Term extends AbstractController
 
     /**
      * @param Request $request
-     *
      * @return RedirectResponse
-     *
-     * @throws MultipleFetchException
      * @throws NotFoundHttpException
-     * @throws QueryException
-     * @throws QueryNotFetchedException
-     *
      * @CsrfToken(id="node.delete")
      */
     public function delete(Request $request): RedirectResponse
@@ -195,9 +168,7 @@ class Term extends AbstractController
 
     /**
      * @param string $type
-     *
      * @return TaxonomyTypeInterface
-     *
      * @throws NotFoundHttpException
      */
     protected function findTaxonomyType(string $type): TaxonomyTypeInterface
@@ -209,30 +180,5 @@ class Term extends AbstractController
         }
 
         return $taxonomyType;
-    }
-
-    /**
-     * @param string $id
-     *
-     * @return QueryTerm
-     *
-     * @throws MultipleFetchException
-     * @throws NotFoundHttpException
-     * @throws QueryException
-     * @throws QueryNotFetchedException
-     */
-    private function getTermById(string $id): QueryTerm
-    {
-        $finder = $this->finderFactory->getInstance(ScopeEnum::BACKEND_SINGLE);
-        $finder->setCriteria(['id' => $id]);
-        $finder->fetchRaw();
-
-        $term = $finder->getResult()->first();
-
-        if (! $term) {
-            throw $this->createNotFoundException($this->trans('termNotFound'));
-        }
-
-        return $term;
     }
 }

@@ -6,7 +6,7 @@ namespace Tulia\Cms\Node\Infrastructure\Framework\Form\FormType;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Tulia\Cms\Node\Domain\ReadModel\Finder\Enum\ScopeEnum;
+use Tulia\Cms\Node\Domain\ReadModel\Finder\Enum\NodeFinderScopeEnum;
 use Tulia\Cms\Node\Ports\Infrastructure\Persistence\Domain\ReadModel\NodeFinderInterface;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\TypeaheadType;
 
@@ -31,7 +31,7 @@ class NodeTypeaheadType extends AbstractType
             'search_route'  => 'backend.node.search.typeahead',
             'display_prop'  => 'title',
             'data_provider_single' => function (array $criteria): ?array {
-                $node = $this->nodeFinder->findOne(['id' => $criteria['value']], ScopeEnum::INTERNAL);
+                $node = $this->nodeFinder->findOne(['id' => $criteria['value']], NodeFinderScopeEnum::INTERNAL);
 
                 return $node ? ['title' => $node->getTitle()] : null;
             },

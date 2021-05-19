@@ -9,7 +9,7 @@ use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Cms\EditLinks\Application\Event\CollectEditLinksEvent;
 use Tulia\Cms\Taxonomy\Domain\TaxonomyType\RegistryInterface;
-use Tulia\Cms\Taxonomy\Query\Model\Term;
+use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\Model\Term;
 
 /**
  * @author Adam Banaszkiewicz

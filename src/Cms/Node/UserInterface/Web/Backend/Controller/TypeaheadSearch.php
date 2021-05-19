@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\UserInterface\Web\Backend\Controller;
 
-use Tulia\Cms\Node\Domain\ReadModel\Finder\Enum\ScopeEnum;
+use Tulia\Cms\Node\Domain\ReadModel\Finder\Enum\NodeFinderScopeEnum;
 use Tulia\Cms\Node\Ports\Infrastructure\Persistence\Domain\ReadModel\NodeFinderInterface;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\TypeaheadFormTypeSearch;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,7 +27,7 @@ class TypeaheadSearch extends TypeaheadFormTypeSearch
             'search' => $request->query->get('q'),
             'node_type' => $request->query->get('node_type'),
             'per_page' => 10,
-        ], ScopeEnum::INTERNAL);
+        ], NodeFinderScopeEnum::INTERNAL);
 
         $result = [];
 

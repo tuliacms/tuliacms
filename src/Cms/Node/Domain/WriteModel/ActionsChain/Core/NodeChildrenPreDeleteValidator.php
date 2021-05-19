@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Node\Domain\WriteModel\ActionsChain\Core;
 
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Tulia\Cms\Node\Domain\ReadModel\Finder\Enum\ScopeEnum;
+use Tulia\Cms\Node\Domain\ReadModel\Finder\Enum\NodeFinderScopeEnum;
 use Tulia\Cms\Node\Domain\WriteModel\ActionsChain\NodeActionInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Exception\NodeCannotBeRemovedException;
 use Tulia\Cms\Node\Domain\WriteModel\Model\Node;
@@ -45,7 +45,7 @@ class NodeChildrenPreDeleteValidator implements NodeActionInterface
         $nodes = $this->nodeFinder->find([
             'children_of' => $node->getId(),
             'per_page' => 1,
-        ], ScopeEnum::INTERNAL);
+        ], NodeFinderScopeEnum::INTERNAL);
 
         if ($nodes->count()) {
             throw new NodeCannotBeRemovedException($this->translator->trans('cannotDeleteDueToContainingChildren', ['name' => $node->getTitle()], 'validators'));

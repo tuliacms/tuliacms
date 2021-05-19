@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Taxonomy\UserInterface\Web\Frontend\BodyClass;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Tulia\Cms\Taxonomy\Query\Model\Term;
+use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\Model\Term;
 use Tulia\Cms\BodyClass\Application\Event\CollectBodyClassEvent;
 
 /**

@@ -7,9 +7,9 @@ namespace Tulia\Cms\Taxonomy\Infrastructure\Cms\Breadcrumbs;
 use Symfony\Component\Routing\RouterInterface;
 use Tulia\Cms\Breadcrumbs\Application\Crumbs\ResolverInterface;
 use Tulia\Cms\Taxonomy\Domain\TaxonomyType\RegistryInterface;
-use Tulia\Cms\Taxonomy\Query\Enum\ScopeEnum;
-use Tulia\Cms\Taxonomy\Query\Model\Term;
-use Tulia\Cms\Taxonomy\Query\FinderFactoryInterface;
+use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\Enum\TermFinderScopeEnum;
+use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\Model\Term;
+use Tulia\Cms\Taxonomy\Ports\Infrastructure\Persistence\Domain\ReadModel\TermFinderInterface;
 use Tulia\Cms\Platform\Shared\Breadcrumbs\BreadcrumbsInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -19,17 +19,19 @@ use Symfony\Component\HttpFoundation\Request;
 class CrumbsResolver implements ResolverInterface
 {
     protected RouterInterface $router;
+
     protected RegistryInterface $typeRegistry;
-    protected FinderFactoryInterface $finderFactory;
+
+    protected TermFinderInterface $termFinder;
 
     public function __construct(
         RouterInterface $router,
         RegistryInterface $typeRegistry,
-        FinderFactoryInterface $finderFactory
+        TermFinderInterface $termFinder
     ) {
         $this->router = $router;
         $this->typeRegistry = $typeRegistry;
-        $this->finderFactory = $finderFactory;
+        $this->termFinder = $termFinder;
     }
 
     public function findRootCrumb(Request $request): ?object
@@ -71,7 +73,7 @@ class CrumbsResolver implements ResolverInterface
         $terms = [];
 
         while ($parentId) {
-            $parent = $this->finderFactory->getInstance(ScopeEnum::BREADCRUMBS)->find($parentId);
+            $parent = $this->termFinder->findOne(['id' => $parentId], TermFinderScopeEnum::BREADCRUMBS);
 
             if ($parent) {
                 $terms[] = $parent;

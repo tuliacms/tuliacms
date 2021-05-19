@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\Node\Domain\NodeType\NodeTypeInterface;
 use Tulia\Cms\Node\Domain\NodeType\RegistryInterface;
-use Tulia\Cms\Node\Domain\ReadModel\Finder\Enum\ScopeEnum;
+use Tulia\Cms\Node\Domain\ReadModel\Finder\Enum\NodeFinderScopeEnum;
 use Tulia\Cms\Node\Domain\WriteModel\Exception\NodeNotFoundException;
 use Tulia\Cms\Node\Domain\WriteModel\NodeRepository;
 use Tulia\Cms\Node\Ports\Infrastructure\Persistence\Domain\ReadModel\NodeFinderInterface;
@@ -17,8 +17,9 @@ use Tulia\Cms\Node\UserInterface\Web\Backend\Form\NodeForm;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Platform\Shared\Pagination\Paginator;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
+use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\Enum\TermFinderScopeEnum;
 use Tulia\Cms\Taxonomy\Domain\TaxonomyType\RegistryInterface as TaxonomyRegistry;
-use Tulia\Cms\Taxonomy\Query\FinderFactoryInterface as TaxonomyFinderFactory;
+use Tulia\Cms\Taxonomy\Ports\Infrastructure\Persistence\Domain\ReadModel\TermFinderInterface;
 use Tulia\Component\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Component\Templating\ViewInterface;
 
@@ -35,20 +36,20 @@ class Node extends AbstractController
 
     private TaxonomyRegistry $registry;
 
-    private TaxonomyFinderFactory $taxonomyFinder;
+    private TermFinderInterface $termFinder;
 
     public function __construct(
         RegistryInterface $typeRegistry,
         NodeRepository $repository,
         NodeFinderInterface $nodeFinder,
         TaxonomyRegistry $registry,
-        TaxonomyFinderFactory $taxonomyFinder
+        TermFinderInterface $termFinder
     ) {
         $this->typeRegistry = $typeRegistry;
         $this->repository = $repository;
         $this->nodeFinder = $nodeFinder;
         $this->registry = $registry;
-        $this->taxonomyFinder = $taxonomyFinder;
+        $this->termFinder = $termFinder;
     }
 
     public function index(string $node_type): RedirectResponse
@@ -59,7 +60,7 @@ class Node extends AbstractController
     public function list(Request $request, string $node_type): ViewInterface
     {
         $criteria = (new RequestCriteriaBuilder($request))->build([ 'node_type' => $node_type ]);
-        $nodes = $this->nodeFinder->find($criteria, ScopeEnum::BACKEND_LISTING);
+        $nodes = $this->nodeFinder->find($criteria, NodeFinderScopeEnum::BACKEND_LISTING);
 
         $nodeTypeObject = $this->findNodeType($node_type);
         $nodes = $this->fetchNodesCategories($nodes);
@@ -231,12 +232,9 @@ class Node extends AbstractController
         $idList = array_filter($idList);
         $idList = array_unique($idList);
 
-        $finder = $this->taxonomyFinder->getInstance(\Tulia\Cms\Taxonomy\Query\Enum\ScopeEnum::INTERNAL);
-        $finder->setCriteria([
+        $terms = $this->termFinder->find([
             'id__in' => $idList,
-        ]);
-        $finder->fetchRaw();
-        $terms = $finder->getResult();
+        ], TermFinderScopeEnum::INTERNAL);
 
         foreach ($nodes as $node) {
             if (empty($node->getCategory())) {
