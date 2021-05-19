@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Node\Application\EventListener;
+namespace Tulia\Cms\Node\UserInterface\Web\EditLinks;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Routing\RouterInterface;
@@ -14,10 +14,12 @@ use Tulia\Cms\Node\Domain\NodeType\RegistryInterface;
 /**
  * @author Adam Banaszkiewicz
  */
-class EditLinks implements EventSubscriberInterface
+class EditLinksRegistrator implements EventSubscriberInterface
 {
     protected TranslatorInterface $translator;
+
     protected RouterInterface $router;
+
     protected RegistryInterface $registry;
 
     public function __construct(TranslatorInterface $translator, RouterInterface $router, RegistryInterface $registry)

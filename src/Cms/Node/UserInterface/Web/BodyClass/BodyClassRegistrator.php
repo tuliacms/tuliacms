@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Node\Application\EventListener;
+namespace Tulia\Cms\Node\UserInterface\Web\BodyClass;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Tulia\Cms\BodyClass\Application\Event\CollectBodyClassEvent;
@@ -11,7 +11,7 @@ use Tulia\Cms\Node\Domain\ReadModel\Finder\Model\Node;
 /**
  * @author Adam Banaszkiewicz
  */
-class BodyClass implements EventSubscriberInterface
+class BodyClassRegistrator implements EventSubscriberInterface
 {
     public static function getSubscribedEvents(): array
     {
@@ -30,7 +30,7 @@ class BodyClass implements EventSubscriberInterface
 
         $event->add('node-page');
         $event->add('node-type-' . $node->getType());
-        $event->add('node-' . $node->getSlug());
+        $event->add('node-slug-' . $node->getSlug());
         $event->add('node-' . $node->getId());
     }
 }

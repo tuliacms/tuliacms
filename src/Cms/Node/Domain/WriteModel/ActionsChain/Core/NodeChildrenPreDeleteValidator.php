@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Application\EventListener;
 
-use Tulia\Cms\Node\Application\Exception\TranslatableNodeException;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Cms\Node\Domain\ReadModel\Finder\Enum\ScopeEnum;
 use Tulia\Cms\Node\Domain\WriteModel\ActionsChain\ActionInterface;
+use Tulia\Cms\Node\Domain\WriteModel\Exception\NodeCannotBeRemovedException;
 use Tulia\Cms\Node\Domain\WriteModel\Model\Node;
 use Tulia\Cms\Node\Ports\Infrastructure\Persistence\Domain\ReadModel\NodeFinderInterface;
 
@@ -19,11 +20,14 @@ use Tulia\Cms\Node\Ports\Infrastructure\Persistence\Domain\ReadModel\NodeFinderI
  */
 class NodeChildrenPreDeleteValidator implements ActionInterface
 {
-    protected NodeFinderInterface $nodeFinder;
+    private NodeFinderInterface $nodeFinder;
 
-    public function __construct(NodeFinderInterface $nodeFinder)
+    private TranslatorInterface $translator;
+
+    public function __construct(NodeFinderInterface $nodeFinder, TranslatorInterface $translator)
     {
         $this->nodeFinder = $nodeFinder;
+        $this->translator = $translator;
     }
 
     public static function supports(): array
@@ -33,6 +37,9 @@ class NodeChildrenPreDeleteValidator implements ActionInterface
         ];
     }
 
+    /**
+     * @throws NodeCannotBeRemovedException
+     */
     public function execute(Node $node): void
     {
         $nodes = $this->nodeFinder->find([
@@ -41,11 +48,7 @@ class NodeChildrenPreDeleteValidator implements ActionInterface
         ], ScopeEnum::INTERNAL);
 
         if ($nodes->count()) {
-            $e = new TranslatableNodeException('cannotDeleteDueToContainingChildren');
-            $e->setParameters(['name' => $node->getTitle()]);
-            $e->setDomain('validators');
-
-            throw $e;
+            throw new NodeCannotBeRemovedException($this->translator->trans('cannotDeleteDueToContainingChildren', ['name' => $node->getTitle()], 'validators'));
         }
     }
 }
