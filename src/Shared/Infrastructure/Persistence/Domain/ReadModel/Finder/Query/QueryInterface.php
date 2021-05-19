@@ -13,9 +13,14 @@ use Tulia\Cms\Shared\Domain\ReadModel\Finder\Plugin\PluginRegistry;
 interface QueryInterface
 {
     public function getSupportedStorage(): string;
+
     public function getBaseQueryArray(): array;
+
     public function query(array $criteria): Collection;
+
     public function countFoundRows(): int;
+
     public function setPluginsRegistry(PluginRegistry $pluginRegistry): void;
+
     public function callPlugins(array $criteria): void;
 }

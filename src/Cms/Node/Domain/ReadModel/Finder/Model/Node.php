@@ -7,6 +7,8 @@ namespace Tulia\Cms\Node\Domain\ReadModel\Finder\Model;
 use DateTime;
 use InvalidArgumentException;
 use Tulia\Cms\Metadata\Domain\ReadModel\MagickMetadataTrait;
+use Tulia\Cms\Node\Domain\ReadModel\NodeContent\NodeContentInterface;
+use Tulia\Cms\Node\Infrastructure\Domain\ReadModel\NodeContent\VoidNodeContent;
 
 /**
  * @author Adam Banaszkiewicz
@@ -31,8 +33,13 @@ class Node
     protected $title;
     protected $slug;
     protected $introduction;
-    protected $content;
+    protected NodeContentInterface $content;
     protected $visibility;
+
+    public function __construct()
+    {
+        $this->content = new VoidNodeContent();
+    }
 
     public static function buildFromArray(array $data): self
     {
@@ -255,13 +262,20 @@ class Node
         $this->introduction = $introduction;
     }
 
-    public function getContent()
+    public function getContent(): NodeContentInterface
     {
         return $this->content;
     }
 
+    /**
+     * @param null|string|NodeContentInterface $content
+     */
     public function setContent($content): void
     {
-        $this->content = $content;
+        if ($content instanceof NodeContentInterface) {
+            $this->content = $content;
+        } else {
+            $this->content->setSource($content);
+        }
     }
 }

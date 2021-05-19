@@ -6,13 +6,13 @@ namespace Tulia\Cms\Node\UserInterface\Web\Controller\Backend;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Tulia\Cms\Node\Domain\WriteModel\Exception\NodeNotFoundException;
-use Tulia\Cms\Node\Domain\WriteModel\NodeRepository;
 use Tulia\Cms\Node\Domain\NodeType\NodeTypeInterface;
 use Tulia\Cms\Node\Domain\NodeType\RegistryInterface;
+use Tulia\Cms\Node\Domain\ReadModel\Finder\Enum\ScopeEnum;
+use Tulia\Cms\Node\Domain\WriteModel\Exception\NodeNotFoundException;
+use Tulia\Cms\Node\Domain\WriteModel\NodeRepository;
 use Tulia\Cms\Node\Ports\Infrastructure\Persistence\Domain\ReadModel\NodeFinderInterface;
 use Tulia\Cms\Node\UserInterface\Web\CriteriaBuilder\RequestCriteriaBuilder;
-use Tulia\Cms\Node\Domain\ReadModel\Finder\Enum\ScopeEnum;
 use Tulia\Cms\Node\UserInterface\Web\Form\NodeForm;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Platform\Shared\Pagination\Paginator;
@@ -33,14 +33,22 @@ class Node extends AbstractController
 
     private NodeFinderInterface $nodeFinder;
 
+    private TaxonomyRegistry $registry;
+
+    private TaxonomyFinderFactory $taxonomyFinder;
+
     public function __construct(
         RegistryInterface $typeRegistry,
         NodeRepository $repository,
-        NodeFinderInterface $nodeFinder
+        NodeFinderInterface $nodeFinder,
+        TaxonomyRegistry $registry,
+        TaxonomyFinderFactory $taxonomyFinder
     ) {
         $this->typeRegistry = $typeRegistry;
         $this->repository = $repository;
         $this->nodeFinder = $nodeFinder;
+        $this->registry = $registry;
+        $this->taxonomyFinder = $taxonomyFinder;
     }
 
     public function index(string $node_type): RedirectResponse
@@ -48,31 +56,20 @@ class Node extends AbstractController
         return $this->redirectToRoute('backend.node.list', ['node_type' => $node_type]);
     }
 
-    /**
-     * @param Request $request
-     * @param TaxonomyRegistry $registry
-     * @param TaxonomyFinderFactory $taxonomyFinder
-     * @param string $node_type
-     * @return RedirectResponse|ViewInterface
-     */
-    public function list(
-        Request $request,
-        TaxonomyRegistry $registry,
-        TaxonomyFinderFactory $taxonomyFinder,
-        string $node_type
-    ) {
+    public function list(Request $request, string $node_type): ViewInterface
+    {
         $criteria = (new RequestCriteriaBuilder($request))->build([ 'node_type' => $node_type ]);
         $nodes = $this->nodeFinder->find($criteria, ScopeEnum::BACKEND_LISTING);
 
         $nodeTypeObject = $this->findNodeType($node_type);
-        $nodes = $this->fetchNodesCategories($taxonomyFinder, $nodes);
+        $nodes = $this->fetchNodesCategories($nodes);
 
         return $this->view('@backend/node/list.tpl', [
             'nodes'      => $nodes,
             'nodeType'   => $nodeTypeObject,
             'criteria'   => $criteria,
             'paginator'  => new Paginator($request, $nodes->totalRows(), $request->query->getInt('page', 1), $criteria['per_page']),
-            'taxonomies' => $this->collectTaxonomies($registry, $nodeTypeObject),
+            'taxonomies' => $this->collectTaxonomies($nodeTypeObject),
         ]);
     }
 
@@ -215,18 +212,18 @@ class Node extends AbstractController
         return $nodeType;
     }
 
-    private function collectTaxonomies(TaxonomyRegistry $registry, NodeTypeInterface $nodeType): array
+    private function collectTaxonomies(NodeTypeInterface $nodeType): array
     {
         $result = [];
 
         foreach ($nodeType->getTaxonomies() as $tax) {
-            $result[] = $registry->getType($tax['taxonomy']);
+            $result[] = $this->registry->getType($tax['taxonomy']);
         }
 
         return $result;
     }
 
-    private function fetchNodesCategories(TaxonomyFinderFactory $taxonomyFinder, Collection $nodes): Collection
+    private function fetchNodesCategories(Collection $nodes): Collection
     {
         $idList = array_map(function ($node) {
             return $node->getCategory();
@@ -234,7 +231,7 @@ class Node extends AbstractController
         $idList = array_filter($idList);
         $idList = array_unique($idList);
 
-        $finder = $taxonomyFinder->getInstance(\Tulia\Cms\Taxonomy\Query\Enum\ScopeEnum::INTERNAL);
+        $finder = $this->taxonomyFinder->getInstance(\Tulia\Cms\Taxonomy\Query\Enum\ScopeEnum::INTERNAL);
         $finder->setCriteria([
             'id__in' => $idList,
         ]);

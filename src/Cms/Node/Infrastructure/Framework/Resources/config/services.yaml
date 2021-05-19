@@ -49,10 +49,14 @@ services:
         tags:
             - { name: search.provider, priority: 1000 }
 
-    Tulia\Cms\Node\Application\EventListener\ContentRenderer:
+    Tulia\Cms\Node\Application\EventListener\RegisterContentRenderer:
+        bind:
+            $scopes: '%cms.node.finder.content_renderer.scopes%'
+
+    Tulia\Cms\Node\Domain\ReadModel\NodeContent\NodeContentFactoryInterface:
+        class: Tulia\Cms\Node\Infrastructure\Domain\ReadModel\NodeContent\TwigRenderingNodeContentFactory
         bind:
             $environment: '%kernel.environment%'
-            $scopes: '%cms.node.finder.content_renderer.scopes%'
 
     Tulia\Cms\Node\UserInterface\Web\Form\Extension\AuthorExtension:
         tags: [ form_extension ]
