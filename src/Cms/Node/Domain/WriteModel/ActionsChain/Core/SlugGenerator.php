@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Node\Domain\WriteModel\ActionsChain\Core;
 
 use Tulia\Cms\Node\Domain\ReadModel\Finder\Enum\ScopeEnum;
-use Tulia\Cms\Node\Domain\WriteModel\ActionsChain\ActionInterface;
+use Tulia\Cms\Node\Domain\WriteModel\ActionsChain\NodeActionInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Model\Node;
 use Tulia\Cms\Node\Ports\Infrastructure\Persistence\Domain\ReadModel\NodeFinderInterface;
 use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Slug\SluggerInterface;
@@ -13,7 +13,7 @@ use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Slug\SluggerInterface;
 /**
  * @author Adam Banaszkiewicz
  */
-class SlugGenerator implements ActionInterface
+class SlugGenerator implements NodeActionInterface
 {
     protected SluggerInterface $slugger;
 

@@ -2,24 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Taxonomy\Application\EventListener;
+namespace Tulia\Cms\Taxonomy\Domain\WriteModel\ActionsChain\Core;
 
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Tulia\Cms\Taxonomy\Application\Event\TermEvent;
-use Tulia\Cms\Taxonomy\Application\Event\TermPreCreateEvent;
-use Tulia\Cms\Taxonomy\Application\Event\TermPreUpdateEvent;
-use Tulia\Cms\Taxonomy\Query\Exception\MultipleFetchException;
-use Tulia\Cms\Taxonomy\Query\Exception\QueryException;
-use Tulia\Cms\Taxonomy\Query\Exception\QueryNotFetchedException;
-use Tulia\Cms\Taxonomy\Query\FinderFactoryInterface;
-use Tulia\Cms\Taxonomy\Query\Enum\ScopeEnum;
-use Tulia\Cms\Taxonomy\Query\Model\Term;
 use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Slug\SluggerInterface;
+use Tulia\Cms\Taxonomy\Domain\WriteModel\ActionsChain\TermActionInterface;
+use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Term;
+use Tulia\Cms\Taxonomy\Query\FinderFactoryInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class SlugGenerator implements EventSubscriberInterface
+class SlugGenerator implements TermActionInterface
 {
     protected SluggerInterface $slugger;
 
@@ -31,27 +24,17 @@ class SlugGenerator implements EventSubscriberInterface
         $this->finderFactory = $finderFactory;
     }
 
-    public static function getSubscribedEvents(): array
+    public static function supports(): array
     {
         return [
-            TermPreCreateEvent::class => ['handle', 1000],
-            TermPreUpdateEvent::class => ['handle', 1000],
+            'insert' => 100,
+            'update' => 100,
         ];
     }
 
-    /**
-     * @param TermEvent $event
-     *
-     * @throws MultipleFetchException
-     * @throws QueryException
-     */
-    public function handle(TermEvent $event): void
+    public function execute(Term $term): void
     {
-        /** @var Term $term */
-        $term  = $event->getTerm();
-        /** @var string $slug */
         $slug  = $term->getSlug();
-        /** @var string $name */
         $name = $term->getName();
 
         if (! $slug && ! $name) {
@@ -62,21 +45,11 @@ class SlugGenerator implements EventSubscriberInterface
         // Fallback to Term's name, if no slug provided.
         $input = $slug ?: $name;
 
-        $slug = $this->findUniqueSlug($input, $term->getId());
+        $slug = $this->findUniqueSlug($input, $term->getId()->getId());
 
         $term->setSlug($slug);
     }
 
-    /**
-     * @param string $slug
-     * @param string|null $termId
-     *
-     * @return string
-     *
-     * @throws MultipleFetchException
-     * @throws QueryException
-     * @throws QueryNotFetchedException
-     */
     private function findUniqueSlug(string $slug, ?string $termId): string
     {
         $securityLoop  = 0;
@@ -91,7 +64,7 @@ class SlugGenerator implements EventSubscriberInterface
 
             $securityLoop++;
 
-            $finder = $this->finderFactory->getInstance(ScopeEnum::INTERNAL);
+            $finder = $this->finderFactory->getInstance(\Tulia\Cms\Taxonomy\Query\Enum\ScopeEnum::INTERNAL);
             $finder->setCriteria([
                 'slug'       => $slugProposed,
                 'id__not_in' => [$termId],

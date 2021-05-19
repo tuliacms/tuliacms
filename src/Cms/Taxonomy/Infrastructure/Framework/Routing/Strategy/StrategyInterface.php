@@ -10,5 +10,6 @@ namespace Tulia\Cms\Taxonomy\Infrastructure\Framework\Routing\Strategy;
 interface StrategyInterface
 {
     public function generate(string $id, string $locale): string;
+
     public function getName(): string;
 }

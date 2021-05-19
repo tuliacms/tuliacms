@@ -9,9 +9,9 @@ use Tulia\Cms\Node\Domain\WriteModel\Model\Node;
 /**
  * @author Adam Banaszkiewicz
  */
-interface ActionsChainInterface
+interface NodeActionsChainInterface
 {
     public function execute(string $name, Node $node): void;
 
-    public function addAction(ActionInterface $action, string $name, int $priority): void;
+    public function addAction(NodeActionInterface $action, string $name, int $priority): void;
 }

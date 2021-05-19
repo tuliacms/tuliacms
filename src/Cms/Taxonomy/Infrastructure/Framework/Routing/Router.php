@@ -24,9 +24,13 @@ use Tulia\Cms\Taxonomy\Query\Model\Term;
 class Router implements RouterInterface, RequestMatcherInterface
 {
     protected StorageInterface $storage;
+
     protected FinderFactoryInterface $finderFactory;
+
     protected RegistryInterface $registry;
+
     protected FrontendRouteSuffixResolver $frontendRouteSuffixResolver;
+
     protected ?RequestContext $context = null;
 
     public function __construct(
@@ -35,9 +39,9 @@ class Router implements RouterInterface, RequestMatcherInterface
         RegistryInterface $registry,
         FrontendRouteSuffixResolver $frontendRouteSuffixResolver
     ) {
-        $this->storage       = $storage;
+        $this->storage = $storage;
         $this->finderFactory = $finderFactory;
-        $this->registry      = $registry;
+        $this->registry = $registry;
         $this->frontendRouteSuffixResolver = $frontendRouteSuffixResolver;
     }
 
@@ -67,7 +71,7 @@ class Router implements RouterInterface, RequestMatcherInterface
         }
 
         // @todo Fix routing locales
-        $locale = 'pl_PL';//$context->getContentLocale();
+        $locale = 'en_US';//$context->getContentLocale();
 
         $path = $this->storage->find(substr($name, 5), $locale)['path'] ?? null;
 
@@ -85,7 +89,7 @@ class Router implements RouterInterface, RequestMatcherInterface
     public function match(string $pathinfo): array
     {
         // @todo Fix routing locales
-        $locale = 'pl_PL';//$context->getContentLocale()
+        $locale = 'en_US';//$context->getContentLocale()
         $pathinfo = $this->frontendRouteSuffixResolver->removeSuffix($pathinfo);
         $termId = $this->storage->findByPath($pathinfo, $locale);
 

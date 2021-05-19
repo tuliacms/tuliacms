@@ -13,14 +13,8 @@ class SimpleStrategy implements StrategyInterface
 {
     public const NAME = 'simple';
 
-    /**
-     * @var TermStorageInterface
-     */
-    private $storage;
+    private TermStorageInterface $storage;
 
-    /**
-     * @param TermStorageInterface $storage
-     */
     public function __construct(TermStorageInterface $storage)
     {
         $this->storage = $storage;

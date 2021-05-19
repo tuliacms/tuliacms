@@ -8,6 +8,7 @@ use Tulia\Cms\Metadata\Domain\WriteModel\MetadataRepository;
 use Tulia\Cms\Platform\Infrastructure\Bus\Event\EventBusInterface;
 use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
 use Tulia\Cms\Taxonomy\Domain\Metadata\TermMetadataEnum;
+use Tulia\Cms\Taxonomy\Domain\WriteModel\ActionsChain\TermActionsChainInterface;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Event\TermDeleted;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Event\TermUpdated;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Exception\TermNotFoundException;
@@ -30,18 +31,22 @@ class TermRepository
 
     private EventBusInterface $eventBus;
 
+    private TermActionsChainInterface $actionsChain;
+
     public function __construct(
         TermWriteStorageInterface $storage,
         CurrentWebsiteInterface $currentWebsite,
         MetadataRepository $metadataRepository,
         UuidGeneratorInterface $uuidGenerator,
-        EventBusInterface $eventBus
+        EventBusInterface $eventBus,
+        TermActionsChainInterface $actionsChain
     ) {
         $this->storage = $storage;
         $this->currentWebsite = $currentWebsite;
         $this->metadataRepository = $metadataRepository;
         $this->uuidGenerator = $uuidGenerator;
         $this->eventBus = $eventBus;
+        $this->actionsChain = $actionsChain;
     }
 
     public function createNew(array $data): Term
@@ -79,11 +84,15 @@ class TermRepository
             'translated' => $term['translated'] ?? true,
         ]);
 
+        $this->actionsChain->execute('find', $term);
+
         return $term;
     }
 
     public function insert(Term $term): void
     {
+        $this->actionsChain->execute('insert', $term);
+
         $this->storage->beginTransaction();
 
         try {
@@ -104,6 +113,8 @@ class TermRepository
 
     public function update(Term $term): void
     {
+        $this->actionsChain->execute('update', $term);
+
         $this->storage->beginTransaction();
 
         try {
@@ -124,6 +135,8 @@ class TermRepository
 
     public function delete(Term $term): void
     {
+        $this->actionsChain->execute('delete', $term);
+
         $this->storage->beginTransaction();
 
         try {

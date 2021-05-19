@@ -7,12 +7,12 @@ namespace Tulia\Bundle\CmsBundle\DependencyInjection\CompilerPass;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
-use Tulia\Cms\Node\Domain\WriteModel\ActionsChain\NodeActionsChainInterface;
+use Tulia\Cms\Taxonomy\Domain\WriteModel\ActionsChain\TermActionsChainInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class NodePass implements CompilerPassInterface
+class TaxonomyPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container): void
     {
@@ -21,8 +21,8 @@ class NodePass implements CompilerPassInterface
 
     private function registerActionsChain(ContainerBuilder $container): void
     {
-        $chain = $container->findDefinition(NodeActionsChainInterface::class);
-        $taggedServices = $container->findTaggedServiceIds('node.action_chain');
+        $chain = $container->findDefinition(TermActionsChainInterface::class);
+        $taggedServices = $container->findTaggedServiceIds('term.action_chain');
 
         foreach ($taggedServices as $id => $tags) {
             foreach ($id::supports() as $name => $priority) {

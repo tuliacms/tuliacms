@@ -4,27 +4,15 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Taxonomy\Infrastructure\Persistence\Routing\Strategy;
 
-use PDO;
-use Exception;
-use Tulia\Cms\Taxonomy\Query\Exception\QueryException;
-use Tulia\Cms\Taxonomy\Query\AbstractQuery;
-use Tulia\Framework\Database\Connection;
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
-use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class DbalTermStorage implements TermStorageInterface
 {
-    /**
-     * @var ConnectionInterface
-     */
-    private $connection;
+    private ConnectionInterface $connection;
 
-    /**
-     * @param ConnectionInterface $connection
-     */
     public function __construct(ConnectionInterface $connection)
     {
         $this->connection = $connection;
@@ -36,14 +24,18 @@ class DbalTermStorage implements TermStorageInterface
     public function find(string $termId, string $locale): ?array
     {
         $result = $this->connection->fetchAll('
-            SELECT slug, locale, visibility, level, parent_id
+            SELECT
+                COALESCE(tl.slug, tm.slug) AS slug,
+                COALESCE(tl.visibility, tm.visibility) AS visibility,
+                COALESCE(tl.locale, :locale) AS locale
             FROM #__term AS tm
-            INNER JOIN #__term_lang AS tl
-                ON tm.id = tl.term_id
-            WHERE term_id = :term_id AND locale = :locale
+            LEFT JOIN #__term_lang AS tl
+                ON tm.id = tl.term_id AND tl.locale = :locale
+            WHERE tm.id = :id
+            LIMIT 1
         ', [
-            'term_id' => $termId,
-            'locale'  => $locale,
+            'id' => $termId,
+            'locale' => $locale,
         ]);
 
         return $result[0] ?? null;

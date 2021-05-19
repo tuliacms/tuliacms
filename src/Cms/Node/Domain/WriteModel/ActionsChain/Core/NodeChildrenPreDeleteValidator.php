@@ -6,7 +6,7 @@ namespace Tulia\Cms\Node\Domain\WriteModel\ActionsChain\Core;
 
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Cms\Node\Domain\ReadModel\Finder\Enum\ScopeEnum;
-use Tulia\Cms\Node\Domain\WriteModel\ActionsChain\ActionInterface;
+use Tulia\Cms\Node\Domain\WriteModel\ActionsChain\NodeActionInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Exception\NodeCannotBeRemovedException;
 use Tulia\Cms\Node\Domain\WriteModel\Model\Node;
 use Tulia\Cms\Node\Ports\Infrastructure\Persistence\Domain\ReadModel\NodeFinderInterface;
@@ -18,7 +18,7 @@ use Tulia\Cms\Node\Ports\Infrastructure\Persistence\Domain\ReadModel\NodeFinderI
  *
  * @author Adam Banaszkiewicz
  */
-class NodeChildrenPreDeleteValidator implements ActionInterface
+class NodeChildrenPreDeleteValidator implements NodeActionInterface
 {
     private NodeFinderInterface $nodeFinder;
 

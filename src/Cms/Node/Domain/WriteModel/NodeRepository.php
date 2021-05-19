@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Node\Domain\WriteModel;
 
 use Tulia\Cms\Metadata\Domain\WriteModel\MetadataRepository;
-use Tulia\Cms\Node\Domain\WriteModel\ActionsChain\ActionsChainInterface;
+use Tulia\Cms\Node\Domain\WriteModel\ActionsChain\NodeActionsChainInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Event\NodeDeleted;
 use Tulia\Cms\Node\Domain\WriteModel\Event\NodeUpdated;
 use Tulia\Cms\Node\Domain\WriteModel\Exception\NodeNotFoundException;
@@ -32,7 +32,7 @@ class NodeRepository
 
     private EventBusInterface $eventBus;
 
-    private ActionsChainInterface $actionsChain;
+    private NodeActionsChainInterface $actionsChain;
 
     public function __construct(
         NodeWriteStorageInterface $storage,
@@ -40,7 +40,7 @@ class NodeRepository
         MetadataRepository $metadataRepository,
         UuidGeneratorInterface $uuidGenerator,
         EventBusInterface $eventBus,
-        ActionsChainInterface $actionsChain
+        NodeActionsChainInterface $actionsChain
     ) {
         $this->storage = $storage;
         $this->currentWebsite = $currentWebsite;

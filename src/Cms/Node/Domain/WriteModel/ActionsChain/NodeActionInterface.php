@@ -9,7 +9,7 @@ use Tulia\Cms\Node\Domain\WriteModel\Model\Node;
 /**
  * @author Adam Banaszkiewicz
  */
-interface ActionInterface
+interface NodeActionInterface
 {
     public static function supports(): array;
 

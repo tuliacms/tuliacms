@@ -9,11 +9,11 @@ use Tulia\Cms\Node\Domain\WriteModel\Model\Node;
 /**
  * @author Adam Banaszkiewicz
  */
-class ActionsChain implements ActionsChainInterface
+class NodeActionsChain implements NodeActionsChainInterface
 {
     protected array $actions = [];
 
-    public function addAction(ActionInterface $action, string $name, int $priority): void
+    public function addAction(NodeActionInterface $action, string $name, int $priority): void
     {
         $this->actions[$name][$priority][] = $action;
     }
