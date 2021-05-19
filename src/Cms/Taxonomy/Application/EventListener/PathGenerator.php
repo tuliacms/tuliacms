@@ -8,7 +8,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Tulia\Cms\Taxonomy\Application\Event\TermCreatedEvent;
 use Tulia\Cms\Taxonomy\Application\Event\TermEvent;
 use Tulia\Cms\Taxonomy\Application\Event\TermUpdatedEvent;
-use Tulia\Cms\Taxonomy\Application\Domain\TaxonomyType\RegistryInterface;
+use Tulia\Cms\Taxonomy\Domain\TaxonomyType\RegistryInterface;
 use Tulia\Cms\Taxonomy\Infrastructure\Framework\Routing\Strategy\StrategyRegistry;
 use Tulia\Cms\Taxonomy\Infrastructure\Persistence\TermPath\StorageInterface;
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;

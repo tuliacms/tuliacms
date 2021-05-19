@@ -6,7 +6,7 @@ namespace Tulia\Cms\Taxonomy\Query;
 
 use Exception;
 use Tulia\Cms\Metadata\Domain\ReadModel\MetadataFinder;
-use Tulia\Cms\Taxonomy\Infrastructure\Cms\Metadata\TermMetadataEnum;
+use Tulia\Cms\Taxonomy\Domain\Metadata\TermMetadataEnum;
 use Tulia\Cms\Taxonomy\Query\Model\Collection;
 use Tulia\Cms\Taxonomy\Query\Model\Term;
 use Tulia\Cms\Taxonomy\Query\Exception\QueryException;

@@ -10,13 +10,13 @@ services:
             - '../../../../**/Model/*'
             - '../../../../**/Exception/*'
 
-    Tulia\Cms\Taxonomy\Application\Domain\TaxonomyType\RegistryInterface:
-        class: Tulia\Cms\Taxonomy\Application\Domain\TaxonomyType\Registry
+    Tulia\Cms\Taxonomy\Domain\TaxonomyType\RegistryInterface:
+        class: Tulia\Cms\Taxonomy\Domain\TaxonomyType\Registry
         bind:
             $registrators: !tagged_iterator taxonomy.type.registrator
             $storages: !tagged_iterator taxonomy.type.storage
 
-    Tulia\Cms\Taxonomy\Application\Domain\TaxonomyType\DefaultTypesRegistrator:
+    Tulia\Cms\Taxonomy\Domain\TaxonomyType\DefaultTypesRegistrator:
         tags: [ taxonomy.type.registrator ]
 
     Tulia\Cms\Taxonomy\UserInterface\Web\Backend\Form\Extension\DefaultFieldsExtension:
@@ -25,7 +25,7 @@ services:
     Tulia\Cms\Taxonomy\UserInterface\Web\Backend\Form\Extension\TaxonomyTypeExtensionAggregate:
         tags: [ form_extension_aggregate ]
 
-    Tulia\Cms\Taxonomy\Infrastructure\Cms\Metadata\DefaultMetadataRegistrator:
+    Tulia\Cms\Taxonomy\Domain\Metadata\DefaultMetadataRegistrator:
         tags: [ metadata.registrator ]
 
     Tulia\Cms\Taxonomy\Infrastructure\Framework\Routing\Router:

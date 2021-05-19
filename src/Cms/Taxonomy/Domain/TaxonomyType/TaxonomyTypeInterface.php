@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Taxonomy\Application\Domain\TaxonomyType;
+namespace Tulia\Cms\Taxonomy\Domain\TaxonomyType;
 
 use Tulia\Cms\Taxonomy\UserInterface\Web\Frontend\Controller\Term;
 

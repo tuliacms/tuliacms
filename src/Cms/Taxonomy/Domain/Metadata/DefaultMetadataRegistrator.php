@@ -2,11 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Taxonomy\Infrastructure\Cms\Metadata;
+namespace Tulia\Cms\Taxonomy\Domain\Metadata;
 
 use Tulia\Cms\Metadata\Domain\Registry\RegistratorInterface;
 use Tulia\Cms\Metadata\Domain\Registry\ContentFieldsRegistryInterface;
-use Tulia\Cms\Taxonomy\Infrastructure\Cms\Metadata\TermMetadataEnum;
 
 /**
  * @author Adam Banaszkiewicz
@@ -18,7 +17,7 @@ class DefaultMetadataRegistrator implements RegistratorInterface
      */
     public function register(ContentFieldsRegistryInterface $registry): void
     {
-        $fields = $registry->getContentFields('term');
+        $fields = $registry->getContentFields(TermMetadataEnum::TYPE);
 
         $fields->add([
             'name' => TermMetadataEnum::THUMBNAIL,

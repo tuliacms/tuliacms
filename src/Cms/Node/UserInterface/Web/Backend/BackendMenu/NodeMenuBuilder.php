@@ -10,7 +10,7 @@ use Tulia\Cms\BackendMenu\Application\Registry\ItemRegistryInterface;
 use Tulia\Cms\Node\Domain\NodeType\Enum\ParametersEnum;
 use Tulia\Cms\Node\Domain\NodeType\NodeTypeInterface;
 use Tulia\Cms\Node\Domain\NodeType\RegistryInterface as NodeRegistry;
-use Tulia\Cms\Taxonomy\Application\Domain\TaxonomyType\RegistryInterface as TaxonomyRegistry;
+use Tulia\Cms\Taxonomy\Domain\TaxonomyType\RegistryInterface as TaxonomyRegistry;
 
 /**
  * @author Adam Banaszkiewicz

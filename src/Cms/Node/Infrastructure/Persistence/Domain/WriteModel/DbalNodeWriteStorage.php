@@ -93,6 +93,31 @@ class DbalNodeWriteStorage extends AbstractLocalizableStorage implements NodeWri
         $this->connection->rollback();
     }
 
+    protected function insertMainRow(array $data): void
+    {
+        $mainTable = [];
+        $mainTable['id'] = $data['id'];
+        $mainTable['type'] = $data['type'];
+        $mainTable['website_id'] = $data['website_id'];
+        $mainTable['published_at'] = $this->formatDatetime($data['published_at']);
+        $mainTable['published_to'] = $this->formatDatetime($data['published_to']);
+        $mainTable['created_at'] = $this->formatDatetime($data['created_at']);
+        $mainTable['updated_at'] = $this->formatDatetime($data['updated_at']);
+        $mainTable['status'] = $data['status'];
+        $mainTable['author_id'] = $data['author_id'];
+        $mainTable['slug'] = $data['slug'];
+        $mainTable['title'] = $data['title'];
+        $mainTable['content'] = $data['content'];
+        $mainTable['content_compiled'] = $data['content_compiled'];
+        $mainTable['introduction'] = $data['introduction'];
+        $mainTable['level'] = $this->calculateLevel($data['parent_id']);
+        $mainTable['parent_id'] = $data['parent_id'];
+
+        $this->connection->insert('#__node', $mainTable);
+
+        $this->insertCategories($data['id'], $data['category'] ? [$data['category']] : [], TermTypeEnum::MAIN);
+    }
+
     protected function updateMainRow(array $data, bool $foreignLocale): void
     {
         $mainTable = [];
@@ -117,31 +142,6 @@ class DbalNodeWriteStorage extends AbstractLocalizableStorage implements NodeWri
         }
 
         $this->connection->update('#__node', $mainTable, ['id' => $data['id']]);
-
-        $this->insertCategories($data['id'], $data['category'] ? [$data['category']] : [], TermTypeEnum::MAIN);
-    }
-
-    protected function insertMainRow(array $data): void
-    {
-        $mainTable = [];
-        $mainTable['id'] = $data['id'];
-        $mainTable['type'] = $data['type'];
-        $mainTable['website_id'] = $data['website_id'];
-        $mainTable['published_at'] = $this->formatDatetime($data['published_at']);
-        $mainTable['published_to'] = $this->formatDatetime($data['published_to']);
-        $mainTable['created_at'] = $this->formatDatetime($data['created_at']);
-        $mainTable['updated_at'] = $this->formatDatetime($data['updated_at']);
-        $mainTable['status'] = $data['status'];
-        $mainTable['author_id'] = $data['author_id'];
-        $mainTable['slug'] = $data['slug'];
-        $mainTable['title'] = $data['title'];
-        $mainTable['content'] = $data['content'];
-        $mainTable['content_compiled'] = $data['content_compiled'];
-        $mainTable['introduction'] = $data['introduction'];
-        $mainTable['level'] = $this->calculateLevel($data['parent_id']);
-        $mainTable['parent_id'] = $data['parent_id'];
-
-        $this->connection->insert('#__node', $mainTable);
 
         $this->insertCategories($data['id'], $data['category'] ? [$data['category']] : [], TermTypeEnum::MAIN);
     }

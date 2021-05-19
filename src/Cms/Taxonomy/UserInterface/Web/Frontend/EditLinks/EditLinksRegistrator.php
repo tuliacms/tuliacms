@@ -8,7 +8,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Cms\EditLinks\Application\Event\CollectEditLinksEvent;
-use Tulia\Cms\Taxonomy\Application\Domain\TaxonomyType\RegistryInterface;
+use Tulia\Cms\Taxonomy\Domain\TaxonomyType\RegistryInterface;
 use Tulia\Cms\Taxonomy\Query\Model\Term;
 
 /**

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Taxonomy\Infrastructure\Cms\Metadata;
+namespace Tulia\Cms\Taxonomy\Domain\Metadata;
 
 /**
  * @author Adam Banaszkiewicz

@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Taxonomy\Domain\ValueObject;
+namespace Tulia\Cms\Taxonomy\Domain\WriteModel\Model\ValueObject;
 
 use Tulia\Cms\Platform\Domain\ValueObject\UuidAggregateId;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class AggregateId extends UuidAggregateId
+class TermId extends UuidAggregateId
 {
 }

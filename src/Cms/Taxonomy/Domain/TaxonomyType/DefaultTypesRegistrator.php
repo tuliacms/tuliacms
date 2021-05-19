@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Taxonomy\Application\Domain\TaxonomyType;
+namespace Tulia\Cms\Taxonomy\Domain\TaxonomyType;
 
 /**
  * Registers default CMS taxonomies (categories and tags) in system.
