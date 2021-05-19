@@ -8,6 +8,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Tulia\Cms\Node\UserInterface\Web\Form\NodeForm;
+use Tulia\Cms\Node\UserInterface\Web\Form\Transformer\ImmutableDateTimeModelTransformer;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType;
 use Tulia\Component\FormSkeleton\Extension\AbstractExtension;
 use Tulia\Component\FormSkeleton\Section\SectionsBuilderInterface;
@@ -33,6 +34,9 @@ class DefaultFieldsExtension extends AbstractExtension
                 'label' => 'publicationEndsAt',
             ])
         ;
+
+        $builder->get('publishedAt')->addModelTransformer(new ImmutableDateTimeModelTransformer());
+        $builder->get('publishedTo')->addModelTransformer(new ImmutableDateTimeModelTransformer());
     }
 
     /**

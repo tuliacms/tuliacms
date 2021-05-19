@@ -10,42 +10,35 @@ use DateTimeImmutable;
 /**
  * @author Adam Banaszkiewicz
  */
-final class ImmutableDateTime
+final class ImmutableDateTime extends DateTimeImmutable
 {
-    /**
-     * @var DateTimeImmutable
-     */
-    private $datetime;
+    private DateTimeImmutable $datetime;
 
     /**
-     * @param string $time
-     * @param null $timezone
-     *
-     * @throws \Exception
+     * {@inheritdoc}
      */
     public function __construct($time = 'now', $timezone = null)
     {
+        parent::__construct($time, $timezone);
+
         $this->datetime = new DateTimeImmutable($time, $timezone);
     }
 
     /**
      * @param DateTime $dateTime
-     *
-     * @return static
-     *
+     * @return ImmutableDateTime
      * @throws \Exception
      */
-    public static function createFromMutable(DateTime $dateTime): self
+    public static function createFromMutable($object)
     {
         $self =  new self();
-        $self->datetime = DateTimeImmutable::createFromMutable($dateTime);
+        $self->datetime = DateTimeImmutable::createFromMutable($object);
 
         return $self;
     }
 
     /**
      * @param ImmutableDateTime $dateTime
-     *
      * @return bool
      */
     public function sameAs(self $dateTime): bool
@@ -57,7 +50,11 @@ final class ImmutableDateTime
             && $that->getTimezone()->getName() === $new->getTimezone()->getName();
     }
 
-    public function format(string $format): string
+    /**
+     * @param string $format
+     * @return string
+     */
+    public function format($format)
     {
         return $this->datetime->format($format);
     }

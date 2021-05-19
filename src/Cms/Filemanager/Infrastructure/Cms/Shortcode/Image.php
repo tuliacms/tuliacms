@@ -6,7 +6,7 @@ namespace Tulia\Cms\Filemanager\Infrastructure\Cms\Shortcode;
 
 use Tulia\Component\Shortcode\Compiler\ShortcodeCompilerInterface;
 use Tulia\Component\Shortcode\ShortcodeInterface;
-use Tulia\Cms\Filemanager\HtmlGenerator\Image as Generator;
+use Tulia\Cms\Filemanager\Generator\Html;
 
 /**
  * @author Adam Banaszkiewicz
@@ -42,7 +42,7 @@ class Image implements ShortcodeCompilerInterface
         $attributes = $this->collectAttributes($shortcode);
         $attributes['src'] = "{{ asset('{$src}') }}";
 
-        return (new Generator())->generate($attributes);
+        return (new Html())->generateImageTag($attributes);
     }
 
     private function compileId(ShortcodeInterface $shortcode, string $id): string

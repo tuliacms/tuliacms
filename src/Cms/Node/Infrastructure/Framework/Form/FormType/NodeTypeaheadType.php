@@ -6,10 +6,8 @@ namespace Tulia\Cms\Node\Infrastructure\Framework\Form\FormType;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Tulia\Cms\Node\Query\FinderFactoryInterface;
-use Tulia\Cms\Node\Query\Enum\ScopeEnum;
-use Tulia\Cms\Node\Query\Model\Collection;
-use Tulia\Cms\Node\Query\Model\Node;
+use Tulia\Cms\Node\Domain\ReadModel\Finder\Enum\ScopeEnum;
+use Tulia\Cms\Node\Ports\Infrastructure\Persistence\Domain\ReadModel\NodeFinderInterface;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\TypeaheadType;
 
 /**
@@ -17,17 +15,11 @@ use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\TypeaheadType;
  */
 class NodeTypeaheadType extends AbstractType
 {
-    /**
-     * @var FinderFactoryInterface
-     */
-    protected $finderFactory;
+    protected NodeFinderInterface $nodeFinder;
 
-    /**
-     * @param FinderFactoryInterface $finderFactory
-     */
-    public function __construct(FinderFactoryInterface $finderFactory)
+    public function __construct(NodeFinderInterface $nodeFinder)
     {
-        $this->finderFactory = $finderFactory;
+        $this->nodeFinder = $nodeFinder;
     }
 
     /**
@@ -39,7 +31,7 @@ class NodeTypeaheadType extends AbstractType
             'search_route'  => 'backend.node.search.typeahead',
             'display_prop'  => 'title',
             'data_provider_single' => function (array $criteria): ?array {
-                $node = $this->finderFactory->getInstance(ScopeEnum::INTERNAL)->find($criteria['value']);
+                $node = $this->nodeFinder->findOne(['id' => $criteria['value']], ScopeEnum::INTERNAL);
 
                 return $node ? ['title' => $node->getTitle()] : null;
             },

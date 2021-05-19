@@ -11,22 +11,13 @@ use Tulia\Cms\Platform\Domain\Event\DomainEvent;
  */
 abstract class AggregateRoot
 {
-    /**
-     * @var array
-     */
-    private $domainEvents = [];
+    private array $domainEvents = [];
 
-    /**
-     * @param DomainEvent $event
-     */
     protected function recordThat(DomainEvent $event): void
     {
         $this->domainEvents[] = $event;
     }
 
-    /**
-     * @return array
-     */
     public function collectDomainEvents(): array
     {
         $events = $this->domainEvents;

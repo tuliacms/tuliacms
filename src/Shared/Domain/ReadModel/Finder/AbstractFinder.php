@@ -17,10 +17,13 @@ use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Query\Qu
 abstract class AbstractFinder
 {
     protected EventDispatcherInterface $eventDispatcher;
+
     protected PluginRegistry $pluginRegistry;
+
     protected array $plugins = [];
 
     abstract public function getAlias(): string;
+
     abstract public function createQuery(): QueryInterface;
 
     public function setEventDispatcher(EventDispatcherInterface $eventDispatcher): void

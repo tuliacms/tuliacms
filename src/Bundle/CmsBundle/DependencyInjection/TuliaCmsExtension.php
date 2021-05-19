@@ -29,6 +29,9 @@ class TuliaCmsExtension extends Extension
         $config = $this->processConfiguration($configuration, $configs);
 
         $container->setParameter('cms.options.definitions', $this->validateOptionsValues($config['options']['definitions'] ?? []));
+
+        $container->registerForAutoconfiguration(\Tulia\Cms\Node\Domain\WriteModel\ActionsChain\ActionInterface::class)
+            ->addTag('node.action_chain');
     }
 
     protected function validateOptionsValues(array $definitions): array

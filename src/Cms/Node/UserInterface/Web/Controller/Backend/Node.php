@@ -5,48 +5,50 @@ declare(strict_types=1);
 namespace Tulia\Cms\Node\UserInterface\Web\Controller\Backend;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Tulia\Cms\Node\Application\Command\NodeStorage;
-use Tulia\Cms\Node\Application\Model\Node as ApplicationNode;
-use Tulia\Cms\Node\Application\Exception\TranslatableNodeException;
-use Tulia\Cms\Node\Query\Factory\NodeFactoryInterface;
-use Tulia\Cms\Node\Query\Model\Collection;
-use Tulia\Cms\Node\Query\Model\Node as QueryNode;
-use Tulia\Cms\Node\Query\CriteriaBuilder\RequestCriteriaBuilder;
-use Tulia\Cms\Node\Query\FinderFactoryInterface;
-use Tulia\Cms\Node\Infrastructure\NodeType\NodeTypeInterface;
-use Tulia\Cms\Node\Infrastructure\NodeType\RegistryInterface;
-use Tulia\Cms\Node\Query\Exception\MultipleFetchException;
-use Tulia\Cms\Node\Query\Exception\QueryException;
-use Tulia\Cms\Node\Query\Exception\QueryNotFetchedException;
-use Tulia\Cms\Node\Query\Enum\ScopeEnum;
+use Symfony\Component\HttpFoundation\Request;
+use Tulia\Cms\Node\Domain\NodeType\NodeTypeInterface;
+use Tulia\Cms\Node\Domain\NodeType\RegistryInterface;
+use Tulia\Cms\Node\Domain\ReadModel\Finder\Enum\ScopeEnum;
+use Tulia\Cms\Node\Domain\WriteModel\Exception\NodeNotFoundException;
+use Tulia\Cms\Node\Domain\WriteModel\NodeRepository;
+use Tulia\Cms\Node\Ports\Infrastructure\Persistence\Domain\ReadModel\NodeFinderInterface;
+use Tulia\Cms\Node\UserInterface\Web\CriteriaBuilder\RequestCriteriaBuilder;
 use Tulia\Cms\Node\UserInterface\Web\Form\NodeForm;
+use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
+use Tulia\Cms\Platform\Shared\Pagination\Paginator;
+use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
 use Tulia\Cms\Taxonomy\Application\TaxonomyType\RegistryInterface as TaxonomyRegistry;
 use Tulia\Cms\Taxonomy\Query\FinderFactoryInterface as TaxonomyFinderFactory;
-use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
-use Tulia\Component\Templating\ViewInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Tulia\Component\Security\Http\Csrf\Annotation\CsrfToken;
+use Tulia\Component\Templating\ViewInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class Node extends AbstractController
 {
-    private FinderFactoryInterface $finderFactory;
-
-    private NodeStorage $nodeStorage;
-
     private RegistryInterface $typeRegistry;
 
+    private NodeRepository $repository;
+
+    private NodeFinderInterface $nodeFinder;
+
+    private TaxonomyRegistry $registry;
+
+    private TaxonomyFinderFactory $taxonomyFinder;
+
     public function __construct(
-        FinderFactoryInterface $finderFactory,
-        NodeStorage $nodeStorage,
-        RegistryInterface $typeRegistry
+        RegistryInterface $typeRegistry,
+        NodeRepository $repository,
+        NodeFinderInterface $nodeFinder,
+        TaxonomyRegistry $registry,
+        TaxonomyFinderFactory $taxonomyFinder
     ) {
-        $this->finderFactory = $finderFactory;
-        $this->nodeStorage = $nodeStorage;
         $this->typeRegistry = $typeRegistry;
+        $this->repository = $repository;
+        $this->nodeFinder = $nodeFinder;
+        $this->registry = $registry;
+        $this->taxonomyFinder = $taxonomyFinder;
     }
 
     public function index(string $node_type): RedirectResponse
@@ -54,65 +56,40 @@ class Node extends AbstractController
         return $this->redirectToRoute('backend.node.list', ['node_type' => $node_type]);
     }
 
-    /**
-     * @param Request $request
-     * @param TaxonomyRegistry $registry
-     * @param TaxonomyFinderFactory $taxonomyFinder
-     * @param string $node_type
-     *
-     * @return RedirectResponse|ViewInterface
-     *
-     * @throws MultipleFetchException
-     * @throws NotFoundHttpException
-     * @throws QueryException
-     * @throws QueryNotFetchedException
-     */
-    public function list(
-        Request $request,
-        TaxonomyRegistry $registry,
-        TaxonomyFinderFactory $taxonomyFinder,
-        string $node_type
-    ) {
+    public function list(Request $request, string $node_type): ViewInterface
+    {
         $criteria = (new RequestCriteriaBuilder($request))->build([ 'node_type' => $node_type ]);
-        $finder = $this->finderFactory->getInstance(ScopeEnum::BACKEND_LISTING);
-        $finder->setCriteria($criteria);
-        $finder->fetchRaw();
+        $nodes = $this->nodeFinder->find($criteria, ScopeEnum::BACKEND_LISTING);
 
         $nodeTypeObject = $this->findNodeType($node_type);
-        $nodes = $this->fetchNodesCategories($taxonomyFinder, $finder->getResult());
+        $nodes = $this->fetchNodesCategories($nodes);
 
         return $this->view('@backend/node/list.tpl', [
             'nodes'      => $nodes,
             'nodeType'   => $nodeTypeObject,
             'criteria'   => $criteria,
-            'paginator'  => $finder->getPaginator($request),
-            'taxonomies' => $this->collectTaxonomies($registry, $nodeTypeObject),
+            'paginator'  => new Paginator($request, $nodes->totalRows(), $request->query->getInt('page', 1), $criteria['per_page']),
+            'taxonomies' => $this->collectTaxonomies($nodeTypeObject),
         ]);
     }
 
     /**
      * @param Request $request
      * @param string $node_type
-     * @param NodeFactoryInterface $nodeFactory
-     *
      * @return RedirectResponse|ViewInterface
-     *
      * @CsrfToken(id="node_form")
      */
-    public function create(Request $request, string $node_type, NodeFactoryInterface $nodeFactory)
+    public function create(Request $request, string $node_type)
     {
-        $node = $nodeFactory->createNew([
-            'type' => $node_type,
-        ]);
-        $model = ApplicationNode::fromQueryModel($node);
+        $node = $this->repository->createNew(['type' => $node_type]);
 
-        $form = $this->createForm(NodeForm::class, $model, ['node_type' => $node_type]);
+        $form = $this->createForm(NodeForm::class, $node, ['node_type' => $node_type]);
         $form->handleRequest($request);
 
         $nodeType = $this->typeRegistry->getType($node_type);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->nodeStorage->save($form->getData());
+            $this->repository->insert($form->getData());
 
             $this->setFlash('success', $this->trans('nodeSaved', [], $nodeType->getTranslationDomain()));
             return $this->redirectToRoute('backend.node.edit', [ 'id' => $node->getId(), 'node_type' => $nodeType->getType() ]);
@@ -129,20 +106,17 @@ class Node extends AbstractController
      * @param Request $request
      * @param string $node_type
      * @param string $id
-     *
      * @return RedirectResponse|ViewInterface
-     *
-     * @throws MultipleFetchException
-     * @throws NotFoundHttpException
-     * @throws QueryException
-     * @throws QueryNotFetchedException
-     *
      * @CsrfToken(id="node_form")
      */
     public function edit(Request $request, string $node_type, string $id)
     {
-        $node = $this->getNodeById($id);
-        $model = ApplicationNode::fromQueryModel($node);
+        try {
+            $model = $this->repository->find($id);
+        } catch (NodeNotFoundException $e) {
+            $this->setFlash('warning', $this->trans('nodeNotFound'));
+            return $this->redirectToRoute('backend.node.list');
+        }
 
         $form = $this->createForm(NodeForm::class, $model, ['node_type' => $node_type]);
         $form->handleRequest($request);
@@ -150,49 +124,43 @@ class Node extends AbstractController
         $nodeType = $this->typeRegistry->getType($node_type);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->nodeStorage->save($form->getData());
+            $this->repository->update($form->getData());
 
             $this->setFlash('success', $this->trans('nodeSaved', [], $nodeType->getTranslationDomain()));
-            return $this->redirectToRoute('backend.node.edit', [ 'id' => $node->getId(), 'node_type' => $nodeType->getType() ]);
+            return $this->redirectToRoute('backend.node.edit', [ 'id' => $model->getId(), 'node_type' => $nodeType->getType() ]);
         }
 
         return $this->view('@backend/node/edit.tpl', [
             'nodeType' => $nodeType,
-            'node'     => $node,
+            'node'     => $model,
             'form'     => $form->createView(),
         ]);
     }
 
     /**
      * @param Request $request
-     *
      * @return RedirectResponse
-     *
-     * @throws MultipleFetchException
-     * @throws NotFoundHttpException
-     * @throws QueryException
-     * @throws QueryNotFetchedException
-     *
      * @CsrfToken(id="node.change-status")
      */
     public function changeStatus(Request $request): RedirectResponse
     {
         $nodeType = $this->findNodeType($request->query->get('node_type', 'page'));
+        $status = $request->query->get('status');
 
         foreach ($request->request->get('ids') as $id) {
             try {
-                $node = $this->getNodeById($id);
-            } catch (NotFoundHttpException $e) {
+                $node = $this->repository->find($id);
+            } catch (NodeNotFoundException $e) {
                 continue;
             }
 
-            switch ($request->query->get('status')) {
+            switch ($status) {
                 case 'trashed'  : $node->setStatus('trashed'); break;
                 case 'published': $node->setStatus('published'); break;
                 default         : return $this->redirectToRoute('backend.node', [ 'node_type' => $nodeType->getType() ]);
             }
 
-            $this->nodeStorage->save(ApplicationNode::fromQueryModel($node));
+            $this->repository->update($node);
         }
 
         switch ($request->query->get('status')) {
@@ -207,14 +175,7 @@ class Node extends AbstractController
 
     /**
      * @param Request $request
-     *
      * @return RedirectResponse
-     *
-     * @throws MultipleFetchException
-     * @throws NotFoundHttpException
-     * @throws QueryException
-     * @throws QueryNotFetchedException
-     *
      * @CsrfToken(id="node.delete")
      */
     public function delete(Request $request): RedirectResponse
@@ -224,17 +185,13 @@ class Node extends AbstractController
 
         foreach ($request->request->get('ids') as $id) {
             try {
-                $node = $this->getNodeById($id);
-            } catch (NotFoundHttpException $e) {
+                $node = $this->repository->find($id);
+            } catch (NodeNotFoundException $e) {
                 continue;
             }
 
-            try {
-                $this->nodeStorage->delete(ApplicationNode::fromQueryModel($node));
-                $removedNodes++;
-            } catch (TranslatableNodeException $e) {
-                $this->setFlash('warning', $this->transObject($e));
-            }
+            $this->repository->delete($node);
+            $removedNodes++;
         }
 
         if ($removedNodes) {
@@ -244,13 +201,6 @@ class Node extends AbstractController
         return $this->redirectToRoute('backend.node', [ 'node_type' => $nodeType->getType() ]);
     }
 
-    /**
-     * @param string $type
-     *
-     * @return NodeTypeInterface
-     *
-     * @throws NotFoundHttpException
-     */
     protected function findNodeType(string $type): NodeTypeInterface
     {
         $nodeType = $this->typeRegistry->getType($type);
@@ -262,43 +212,18 @@ class Node extends AbstractController
         return $nodeType;
     }
 
-    /**
-     * @param string $id
-     *
-     * @return QueryNode
-     *
-     * @throws MultipleFetchException
-     * @throws NotFoundHttpException
-     * @throws QueryException
-     * @throws QueryNotFetchedException
-     */
-    private function getNodeById(string $id): QueryNode
-    {
-        $finder = $this->finderFactory->getInstance(ScopeEnum::BACKEND_SINGLE);
-        $finder->setCriteria(['id' => $id]);
-        $finder->fetchRaw();
-
-        $node = $finder->getResult()->first();
-
-        if (! $node) {
-            throw $this->createNotFoundException($this->trans('nodeNotFound'));
-        }
-
-        return $node;
-    }
-
-    private function collectTaxonomies(TaxonomyRegistry $registry, NodeTypeInterface $nodeType): array
+    private function collectTaxonomies(NodeTypeInterface $nodeType): array
     {
         $result = [];
 
         foreach ($nodeType->getTaxonomies() as $tax) {
-            $result[] = $registry->getType($tax['taxonomy']);
+            $result[] = $this->registry->getType($tax['taxonomy']);
         }
 
         return $result;
     }
 
-    private function fetchNodesCategories(TaxonomyFinderFactory $taxonomyFinder, Collection $nodes): Collection
+    private function fetchNodesCategories(Collection $nodes): Collection
     {
         $idList = array_map(function ($node) {
             return $node->getCategory();
@@ -306,7 +231,7 @@ class Node extends AbstractController
         $idList = array_filter($idList);
         $idList = array_unique($idList);
 
-        $finder = $taxonomyFinder->getInstance(\Tulia\Cms\Taxonomy\Query\Enum\ScopeEnum::INTERNAL);
+        $finder = $this->taxonomyFinder->getInstance(\Tulia\Cms\Taxonomy\Query\Enum\ScopeEnum::INTERNAL);
         $finder->setCriteria([
             'id__in' => $idList,
         ]);

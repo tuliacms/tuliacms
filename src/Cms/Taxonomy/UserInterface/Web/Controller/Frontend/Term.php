@@ -4,65 +4,47 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Taxonomy\UserInterface\Web\Controller\Frontend;
 
-use Tulia\Cms\Node\Query\Enum\ScopeEnum;
-use Tulia\Cms\Node\Query\Exception\QueryException;
-use Tulia\Cms\Node\Query\Exception\QueryNotFetchedException;
-use Tulia\Cms\Node\Query\FinderFactoryInterface;
-use Tulia\Cms\Node\Query\FinderInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Tulia\Cms\Node\Domain\ReadModel\Finder\Enum\ScopeEnum;
+use Tulia\Cms\Node\Ports\Infrastructure\Persistence\Domain\ReadModel\NodeFinderInterface;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
+use Tulia\Cms\Platform\Shared\Pagination\Paginator;
 use Tulia\Cms\Taxonomy\Query\Model\Term as QueryModelTerm;
 use Tulia\Component\Templating\ViewInterface;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class Term extends AbstractController
 {
-    protected FinderFactoryInterface $nodeFinderFactory;
+    private NodeFinderInterface $nodeFinder;
 
-    public function __construct(FinderFactoryInterface $nodeFinderFactory)
+    public function __construct(NodeFinderInterface $nodeFinder)
     {
-        $this->nodeFinderFactory = $nodeFinderFactory;
+        $this->nodeFinder = $nodeFinder;
     }
 
-    /**
-     * @param QueryModelTerm $term
-     * @param Request $request
-     *
-     * @return ViewInterface
-     *
-     * @throws QueryException
-     * @throws QueryNotFetchedException
-     */
     public function show(QueryModelTerm $term, Request $request): ViewInterface
     {
+        $perPage = 9;
+        $page = $request->query->getInt('page', 1);
         $this->getDocument()->setTitle($term->getName());
 
-        $finder = $this->createNodeFinder($term, $request->query->getInt('page', 1));
+        $nodes = $this->nodeFinder->find([
+            'node_type' => null,
+            'category'  => $term->getId(),
+            'page'      => $page,
+            'per_page'  => $perPage,
+        ], ScopeEnum::LISTING);
 
         return $this->view([
             '@cms/taxonomy/term_id:' . $term->getId() . '.tpl',
             '@cms/taxonomy/term_type:' . $term->getType() . '.tpl',
             '@cms/taxonomy/term.tpl',
         ], [
-            'term'      => $term,
-            'nodes'     => $finder->getResult(),
-            'paginator' => $finder->getPaginator($request),
+            'term' => $term,
+            'nodes' => $nodes,
+            'paginator' => new Paginator($request, $nodes->totalRows(), $page, $perPage)
         ]);
-    }
-
-    private function createNodeFinder(QueryModelTerm $term, int $page): FinderInterface
-    {
-        $finder = $this->nodeFinderFactory->getInstance(ScopeEnum::LISTING);
-        $finder->setCriteria([
-            'node_type' => null,
-            'category'  => $term->getId(),
-            'page'      => $page,
-            'per_page'  => 9,
-        ]);
-        $finder->fetch();
-
-        return $finder;
     }
 }

@@ -5,40 +5,29 @@ declare(strict_types=1);
 namespace Tulia\Cms\Node\UserInterface\API\Controller;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Tulia\Cms\Node\Infrastructure\NodeType\NodeTypeInterface;
-use Tulia\Cms\Node\Infrastructure\NodeType\RegistryInterface;
-use Tulia\Cms\Node\Query\CriteriaBuilder\RequestCriteriaBuilder;
-use Tulia\Cms\Node\Query\FinderFactoryInterface;
-use Tulia\Cms\Node\Query\Enum\ScopeEnum;
-use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractApiController;
 use Symfony\Component\HttpFoundation\Request;
+use Tulia\Cms\Node\Domain\ReadModel\Finder\Enum\ScopeEnum;
+use Tulia\Cms\Node\Domain\NodeType\NodeTypeInterface;
+use Tulia\Cms\Node\Domain\NodeType\RegistryInterface;
+use Tulia\Cms\Node\Ports\Infrastructure\Persistence\Domain\ReadModel\NodeFinderInterface;
+use Tulia\Cms\Node\UserInterface\Web\CriteriaBuilder\RequestCriteriaBuilder;
+use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractApiController;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class Node extends AbstractApiController
 {
-    /**
-     * @var RegistryInterface
-     */
-    protected $nodeRegistry;
+    private RegistryInterface $nodeRegistry;
 
-    /**
-     * @var FinderFactoryInterface
-     */
-    protected $finderFactory;
+    private NodeFinderInterface $nodeFinder;
 
-    /**
-     * @param RegistryInterface $nodeRegistry
-     * @param FinderFactoryInterface $finderFactory
-     */
     public function __construct(
         RegistryInterface $nodeRegistry,
-        FinderFactoryInterface $finderFactory
-    )
-    {
+        NodeFinderInterface $nodeFinder
+    ) {
         $this->nodeRegistry  = $nodeRegistry;
-        $this->finderFactory = $finderFactory;
+        $this->nodeFinder = $nodeFinder;
     }
 
     public function list(Request $request): JsonResponse
@@ -47,13 +36,11 @@ class Node extends AbstractApiController
 
         $this->findNodeType($criteria['node_type']);
 
-        $finder = $this->finderFactory->getInstance(ScopeEnum::API_LISTING);
-        $finder->setCriteria($criteria);
-        $finder->fetch();
+        $nodes = $this->nodeFinder->find($criteria, ScopeEnum::API_LISTING);
 
         $paginator = $finder->getPaginator($request);
 
-        $data = $finder->getResult();
+        $nodes = $finder->getResult();
 
         foreach ($data as $key => $val) {
             $data[$key]['_links'] = [

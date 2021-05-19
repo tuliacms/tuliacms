@@ -43,7 +43,7 @@ class Options
 
         $this->autoload($websiteId, $locale);
 
-        if (isset($this->cache[$websiteId][$locale][$name])) {
+        if ($this->existsInCache($websiteId, $locale, $name)) {
             return $this->cache[$websiteId][$locale][$name];
         }
 
@@ -94,5 +94,10 @@ class Options
 
         $this->cache[$websiteId][$locale] = $this->finder->autoload($locale, $websiteId);
         $this->autoloaded[$websiteId][$locale] = true;
+    }
+
+    private function existsInCache(string $websiteId, string $locale, string $name): bool
+    {
+        return isset($this->cache[$websiteId][$locale]) && \array_key_exists($name, $this->cache[$websiteId][$locale]);
     }
 }

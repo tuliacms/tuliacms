@@ -10,13 +10,10 @@ use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\RouterInterface;
-use Tulia\Cms\Node\Infrastructure\NodeType\RegistryInterface;
-use Tulia\Cms\Node\Query\Enum\ScopeEnum;
-use Tulia\Cms\Node\Query\Exception\MultipleFetchException;
-use Tulia\Cms\Node\Query\Exception\QueryException;
-use Tulia\Cms\Node\Query\Exception\QueryNotFetchedException;
-use Tulia\Cms\Node\Query\FinderFactoryInterface;
-use Tulia\Cms\Node\Query\Model\Node;
+use Tulia\Cms\Node\Domain\ReadModel\Finder\Model\Node;
+use Tulia\Cms\Node\Domain\NodeType\RegistryInterface;
+use Tulia\Cms\Node\Domain\ReadModel\Finder\Enum\ScopeEnum;
+use Tulia\Cms\Node\Ports\Infrastructure\Persistence\Domain\ReadModel\NodeFinderInterface;
 use Tulia\Cms\Platform\Infrastructure\Framework\Routing\FrontendRouteSuffixResolver;
 
 /**
@@ -24,17 +21,20 @@ use Tulia\Cms\Platform\Infrastructure\Framework\Routing\FrontendRouteSuffixResol
  */
 class Router implements RouterInterface, RequestMatcherInterface
 {
-    protected FinderFactoryInterface $finderFactory;
-    protected RegistryInterface $registry;
-    protected FrontendRouteSuffixResolver $frontendRouteSuffixResolver;
-    protected ?RequestContext $context = null;
+    private NodeFinderInterface $nodeFinder;
+
+    private RegistryInterface $registry;
+
+    private FrontendRouteSuffixResolver $frontendRouteSuffixResolver;
+
+    private ?RequestContext $context = null;
 
     public function __construct(
-        FinderFactoryInterface $finderFactory,
+        NodeFinderInterface $nodeFinder,
         RegistryInterface $registry,
         FrontendRouteSuffixResolver $frontendRouteSuffixResolver
     ) {
-        $this->finderFactory = $finderFactory;
+        $this->nodeFinder = $nodeFinder;
         $this->registry = $registry;
         $this->frontendRouteSuffixResolver = $frontendRouteSuffixResolver;
     }
@@ -119,27 +119,14 @@ class Router implements RouterInterface, RequestMatcherInterface
         ];
     }
 
-    /**
-     * @param $slug
-     *
-     * @return Node|null
-     *
-     * @throws MultipleFetchException
-     * @throws QueryException
-     * @throws QueryNotFetchedException
-     */
-    private function getNode($slug): ?Node
+    private function getNode(?string $slug): ?Node
     {
-        $finder = $this->finderFactory->getInstance(ScopeEnum::ROUTING_MATCHER);
-        $finder->setCriteria([
+        return $this->nodeFinder->findOne([
             'slug'      => $slug,
             'per_page'  => 1,
             'order_by'  => null,
             'order_dir' => null,
-        ]);
-        $finder->fetch();
-
-        return $finder->getResult()->first();
+        ], ScopeEnum::ROUTING_MATCHER);
     }
 
     private function getNodeForGenerate($identity, string $locale): ?Node
@@ -152,13 +139,9 @@ class Router implements RouterInterface, RequestMatcherInterface
             $identity = $identity->getId();
         }
 
-        $finder = $this->finderFactory->getInstance(ScopeEnum::ROUTING_GENERATOR);
-        $finder->setCriteria([
+        return $this->nodeFinder->findOne([
             'locale' => $locale,
-            'id'     => $identity,
-        ]);
-        $finder->fetch();
-
-        return $finder->getResult()->first();
+            'id' => $identity,
+        ], ScopeEnum::ROUTING_GENERATOR);
     }
 }
