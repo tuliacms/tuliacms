@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Node\Application\EventListener;
+namespace Tulia\Cms\Node\Domain\WriteModel\ActionsChain\Core;
 
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Cms\Node\Domain\ReadModel\Finder\Enum\ScopeEnum;

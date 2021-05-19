@@ -6,7 +6,6 @@ namespace Tulia\Cms\Node\Domain\Metadata;
 
 use Tulia\Cms\Metadata\Domain\Registry\RegistratorInterface;
 use Tulia\Cms\Metadata\Domain\Registry\ContentFieldsRegistryInterface;
-use Tulia\Cms\Node\Domain\Metadata\Enum\NodeMetadataEnum;
 
 /**
  * Registers default CMS node (page) metadatas in system.

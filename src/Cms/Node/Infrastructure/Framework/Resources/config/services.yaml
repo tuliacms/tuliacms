@@ -42,7 +42,7 @@ services:
 #    Tulia\Cms\Node\Domain\Menu\TypeRegistrator:
 #        tags: [ menu.builder.type_registrator ]
 
-    Tulia\Cms\Node\UserInterface\Web\Settings\SettingsFactory:
+    Tulia\Cms\Node\UserInterface\Web\Backend\Settings\SettingsFactory:
         tags: [ settings.group_factory ]
 
     Tulia\Cms\Node\Domain\SearchAnything\SearchProvider:
@@ -58,19 +58,19 @@ services:
         bind:
             $environment: '%kernel.environment%'
 
-    Tulia\Cms\Node\UserInterface\Web\Form\Extension\AuthorExtension:
+    Tulia\Cms\Node\UserInterface\Web\Backend\Form\Extension\AuthorExtension:
         tags: [ form_extension ]
 
-    Tulia\Cms\Node\UserInterface\Web\Form\Extension\NodeTypeExtensionAggregate:
+    Tulia\Cms\Node\UserInterface\Web\Backend\Form\Extension\NodeTypeExtensionAggregate:
         tags: [ form_extension_aggregate ]
 
-    Tulia\Cms\Node\UserInterface\Web\Form\Extension\DefaultFieldsExtension:
+    Tulia\Cms\Node\UserInterface\Web\Backend\Form\Extension\DefaultFieldsExtension:
         tags: [ form_extension ]
 
-    Tulia\Cms\Node\UserInterface\Web\BackendMenu\NodeMenuBuilder:
+    Tulia\Cms\Node\UserInterface\Web\Backend\BackendMenu\NodeMenuBuilder:
         tags: [ backend_menu.builder ]
 
-    Tulia\Cms\Node\UserInterface\Web\Breadcrumbs\CrumbsResolver:
+    Tulia\Cms\Node\UserInterface\Web\Frontend\Breadcrumbs\CrumbsResolver:
         tags: [ breadcrumbs.resolver ]
 
     Tulia\Cms\Node\Domain\Filemanager\ImageSize\DefaultSizesProvider:
