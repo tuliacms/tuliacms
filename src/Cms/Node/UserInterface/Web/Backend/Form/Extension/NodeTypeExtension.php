@@ -13,7 +13,7 @@ use Tulia\Cms\Node\Infrastructure\Framework\Form\FormType\NodeTypeaheadType;
 use Tulia\Cms\Node\Domain\NodeType\NodeTypeInterface;
 use Tulia\Cms\Node\UserInterface\Web\Backend\Form\NodeForm;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType;
-use Tulia\Cms\Taxonomy\Infrastructure\Framework\Form\FormType\TaxonomyTypeaheadType;
+use Tulia\Cms\Taxonomy\UserInterface\Web\Shared\Form\FormType\TaxonomyTypeaheadType;
 use Tulia\Cms\WysiwygEditor\Core\Infrastructure\Framework\Form\FormType\WysiwygEditorType;
 use Tulia\Component\FormSkeleton\Extension\AbstractExtension;
 use Tulia\Component\FormSkeleton\Section\SectionsBuilderInterface;

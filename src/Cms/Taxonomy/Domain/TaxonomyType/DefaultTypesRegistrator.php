@@ -19,6 +19,7 @@ class DefaultTypesRegistrator implements RegistratorInterface
         $type = $registry->registerType('category');
         $type->addSupport([ 'thumbnail', 'quick-create', 'hierarchy' ]);
         $type->setTranslationDomain('categories');
+        $type->setRoutingStrategy('full_path');
 
         $type = $registry->registerType('tag');
         $type->addSupport([ 'quick-create' ]);

@@ -30,10 +30,17 @@ class TuliaCmsExtension extends Extension
 
         $container->setParameter('cms.options.definitions', $this->validateOptionsValues($config['options']['definitions'] ?? []));
 
+        // Nodes
         $container->registerForAutoconfiguration(\Tulia\Cms\Node\Domain\WriteModel\ActionsChain\NodeActionInterface::class)
             ->addTag('node.action_chain');
+
+        // Terms
         $container->registerForAutoconfiguration(\Tulia\Cms\Taxonomy\Domain\WriteModel\ActionsChain\TaxonomyActionInterface::class)
             ->addTag('term.action_chain');
+        $container->registerForAutoconfiguration(\Tulia\Cms\Taxonomy\Domain\Routing\Strategy\TaxonomyRoutingStrategyInterface::class)
+            ->addTag('taxonomy.routing.strategy');
+        $container->registerForAutoconfiguration(\Tulia\Cms\Taxonomy\Domain\TaxonomyType\RegistratorInterface::class)
+            ->addTag('taxonomy.type.registrator');
     }
 
     protected function validateOptionsValues(array $definitions): array

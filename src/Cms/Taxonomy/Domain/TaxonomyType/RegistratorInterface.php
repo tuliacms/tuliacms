@@ -9,8 +9,5 @@ namespace Tulia\Cms\Taxonomy\Domain\TaxonomyType;
  */
 interface RegistratorInterface
 {
-    /**
-     * @param RegistryInterface $registry
-     */
     public function register(RegistryInterface $registry): void;
 }

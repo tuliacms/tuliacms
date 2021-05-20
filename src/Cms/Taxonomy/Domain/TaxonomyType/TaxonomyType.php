@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Taxonomy\Domain\TaxonomyType;
 
-use Tulia\Cms\Taxonomy\Infrastructure\Framework\Routing\Strategy\SimpleStrategy;
+use Tulia\Cms\Taxonomy\Domain\Routing\Strategy\Core\SimpleRoutingStrategy;
 
 /**
  * @author Adam Banaszkiewicz
@@ -27,11 +27,11 @@ class TaxonomyType implements TaxonomyTypeInterface
     protected $isRoutable = true;
 
     /**
-     * Name of one of the \Tulia\Cms\Taxonomy\Infrastructure\Framework\Routing\Strategy\StrategyInterface
+     * Name of one of the \Tulia\Cms\Taxonomy\Domain\Routing\Strategy\Core\StrategyInterface
      *
      * @var string
      */
-    protected $routingStrategy = SimpleStrategy::NAME;
+    protected $routingStrategy = SimpleRoutingStrategy::NAME;
     protected $controller = TaxonomyTypeInterface::CONTROLLER;
     protected $translationDomain = 'pages';
     protected $parameters = [];

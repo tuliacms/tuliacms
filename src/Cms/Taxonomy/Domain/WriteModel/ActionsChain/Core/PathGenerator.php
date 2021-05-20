@@ -4,26 +4,33 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Taxonomy\Domain\WriteModel\ActionsChain\Core;
 
+use Tulia\Cms\Taxonomy\Domain\Routing\Strategy\TaxonomyRoutingStrategyRegistry;
 use Tulia\Cms\Taxonomy\Domain\TaxonomyType\RegistryInterface;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\ActionsChain\TaxonomyActionInterface;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Taxonomy;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Term;
-use Tulia\Cms\Taxonomy\Infrastructure\Framework\Routing\Strategy\StrategyInterface;
-use Tulia\Cms\Taxonomy\Infrastructure\Framework\Routing\Strategy\StrategyRegistry;
+use Tulia\Cms\Taxonomy\Domain\Routing\Strategy\TaxonomyRoutingStrategyInterface;
+use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class PathGenerator implements TaxonomyActionInterface
 {
-    private StrategyRegistry $strategyRegistry;
+    private TaxonomyRoutingStrategyRegistry $strategyRegistry;
 
     private RegistryInterface $registry;
 
-    public function __construct(StrategyRegistry $strategyRegistry, RegistryInterface $registry)
-    {
+    private CurrentWebsiteInterface $currentWebsite;
+
+    public function __construct(
+        TaxonomyRoutingStrategyRegistry $strategyRegistry,
+        RegistryInterface $registry,
+        CurrentWebsiteInterface $currentWebsite
+    ) {
         $this->strategyRegistry = $strategyRegistry;
         $this->registry = $registry;
+        $this->currentWebsite = $currentWebsite;
     }
 
     public static function supports(): array
@@ -44,9 +51,13 @@ class PathGenerator implements TaxonomyActionInterface
         }
     }
 
-    private function createPathForTerm(Term $term, StrategyInterface $strategy): void
+    private function createPathForTerm(Term $term, TaxonomyRoutingStrategyInterface $strategy): void
     {
-        $path = $strategy->generate($term->getId()->getId(), $term->getLocale());
+        $path = $strategy->generate(
+            $term->getId()->getId(),
+            $term->getLocale(),
+            $this->currentWebsite->getDefaultLocale()->getCode()
+        );
 
         // Remove path for non visible terms
         if ($term->isVisible() === false) {

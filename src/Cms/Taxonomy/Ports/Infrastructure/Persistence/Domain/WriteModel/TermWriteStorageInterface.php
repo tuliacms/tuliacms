@@ -9,6 +9,8 @@ namespace Tulia\Cms\Taxonomy\Ports\Infrastructure\Persistence\Domain\WriteModel;
  */
 interface TermWriteStorageInterface
 {
+    public function findByType(string $type, string $locale, string $defaultLocale): array;
+
     public function find(string $id, string $locale, string $defaultLocale): array;
 
     public function insert(array $term, string $defaultLocale): void;

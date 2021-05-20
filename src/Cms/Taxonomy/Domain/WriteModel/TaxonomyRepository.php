@@ -133,7 +133,7 @@ class TaxonomyRepository
 
     private function getTerms(string $type): array
     {
-        $terms = $this->storage->find(
+        $terms = $this->storage->findByType(
             $type,
             $this->currentWebsite->getLocale()->getCode(),
             $this->currentWebsite->getDefaultLocale()->getCode()

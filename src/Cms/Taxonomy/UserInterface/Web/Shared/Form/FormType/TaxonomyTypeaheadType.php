@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Taxonomy\Infrastructure\Framework\Form\FormType;
+namespace Tulia\Cms\Taxonomy\UserInterface\Web\Shared\Form\FormType;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Tulia\Cms\Taxonomy\Ports\Infrastructure\Persistence\Domain\ReadModel\TermFinderInterface;
-use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\Enum\TermFinderScopeEnum;
-use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\TypeaheadType;
 use Symfony\Component\Routing\RouterInterface;
+use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\TypeaheadType;
+use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\Enum\TermFinderScopeEnum;
+use Tulia\Cms\Taxonomy\Ports\Infrastructure\Persistence\Domain\ReadModel\TermFinderInterface;
 
 /**
  * @author Adam Banaszkiewicz

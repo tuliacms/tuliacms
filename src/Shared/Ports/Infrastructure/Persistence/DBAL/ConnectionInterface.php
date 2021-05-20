@@ -9,6 +9,7 @@ use Exception;
 use Throwable;
 use Doctrine\DBAL\Cache\QueryCacheProfile;
 use Doctrine\DBAL\Connection;
+use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
 
 /**
  * @author Adam Banaszkiewicz
@@ -111,7 +112,7 @@ interface ConnectionInterface
      */
     public function fetchAllAssociative(string $query, array $params = [], array $types = []): array;
 
-    public function createQueryBuilder();
+    public function createQueryBuilder(): QueryBuilder;
 
     /**
      * @param string $query
