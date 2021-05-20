@@ -26,6 +26,8 @@ class Term extends AggregateRoot
 
     protected string $locale;
 
+    protected int $level = 0;
+
     protected ?string $name = null;
 
     protected ?string $slug = null;
@@ -56,7 +58,8 @@ class Term extends AggregateRoot
             $data['website_id'],
             $data['locale']
         );
-        $self->parentId = $data['parentId'] ?? null;
+        $self->parentId = $data['parent_id'] ?? null;
+        $self->level = (int) ($data['level'] ?? 0);
         $self->name = $data['name'] ?? null;
         $self->slug = $data['slug'] ?? null;
         $self->visibility = (bool) ($data['visibility'] ?? true);
@@ -113,6 +116,16 @@ class Term extends AggregateRoot
     public function setLocale(string $locale): void
     {
         $this->locale = $locale;
+    }
+
+    public function getLevel(): int
+    {
+        return $this->level;
+    }
+
+    public function setLevel(int $level): void
+    {
+        $this->level = $level;
     }
 
     public function getName(): ?string

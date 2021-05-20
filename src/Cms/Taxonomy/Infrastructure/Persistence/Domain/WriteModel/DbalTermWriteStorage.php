@@ -79,8 +79,7 @@ class DbalTermWriteStorage extends AbstractLocalizableStorage implements TermWri
         $mainTable['name'] = $data['name'];
         $mainTable['slug'] = $data['slug'];
         $mainTable['visibility'] = $data['visibility'] ? '1' : '0';
-        // @todo Calculate leved based on parent term
-        //$mainTable['level'] = $data['level'];
+        $mainTable['level'] = $data['level'];
 
         $this->connection->insert('#__term', $mainTable);
     }
@@ -92,8 +91,7 @@ class DbalTermWriteStorage extends AbstractLocalizableStorage implements TermWri
         $mainTable['website_id'] = $data['website_id'];
         $mainTable['type'] = $data['type'];
         $mainTable['parent_id'] = $data['parent_id'];
-        // @todo Calculate leved based on parent term
-        //$mainTable['level'] = $data['level'];
+        $mainTable['level'] = $data['level'];
 
         if ($foreignLocale === false) {
             $mainTable['name'] = $data['name'];

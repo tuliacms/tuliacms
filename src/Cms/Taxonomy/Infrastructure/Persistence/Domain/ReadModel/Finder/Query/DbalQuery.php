@@ -22,7 +22,7 @@ class DbalQuery extends AbstractDbalQuery
 {
     private MetadataFinder $metadataFinder;
 
-    protected array $joinedTables = [];
+    private array $joinedTables = [];
 
     public function __construct(QueryBuilder $queryBuilder, MetadataFinder $metadataFinder)
     {
@@ -98,8 +98,8 @@ class DbalQuery extends AbstractDbalQuery
              * Allows to define custom sort option.
              */
             /*'order' => null,*/
-            'order_by' => 'tl.name',
-            'order_dir' => 'DESC',
+            'order_by' => 'tm.level',
+            'order_dir' => 'ASC',
             /**
              * In case the taxonomy_type supports `hierarchical` and set this value to
              * true, ordering use `level` column to sort terms like tree.
@@ -251,7 +251,7 @@ class DbalQuery extends AbstractDbalQuery
         }
 
         $this->queryBuilder
-            ->andWhere('tl.slug = :tl_slug')
+            ->andWhere('tl.slug = :tl_slug OR tm.slug = :tl_slug')
             ->setParameter('tl_slug', $criteria['slug'], PDO::PARAM_STR)
             ->setMaxResults(1);
     }
@@ -263,7 +263,7 @@ class DbalQuery extends AbstractDbalQuery
         }
 
         $this->queryBuilder
-            ->andWhere('tl.name LIKE :tl_name')
+            ->andWhere('tl.name LIKE :tl_name OR tm.name LIKE :tl_name')
             ->setParameter('tl_name', '%' . $criteria['search'] . '%', PDO::PARAM_STR);
     }
 

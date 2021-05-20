@@ -75,11 +75,12 @@ class TermRepository
             'id'         => $term['id'],
             'type'       => $term['type'] ?? '',
             'locale'     => $term['locale'],
+            'level'      => (int) $term['level'],
             'website_id' => $term['website_id'],
             'parent_id'  => $term['parent_id'],
             'name'       => $term['name'],
             'slug'       => $term['slug'],
-            'visibility' => $term['visibility'] === '1' ? true : false,
+            'visibility' => $term['visibility'] === '1',
             'metadata'   => $this->metadataRepository->findAll(TermMetadataEnum::TYPE, $id),
             'translated' => $term['translated'] ?? true,
         ]);
@@ -91,11 +92,10 @@ class TermRepository
 
     public function insert(Term $term): void
     {
-        $this->actionsChain->execute('insert', $term);
-
         $this->storage->beginTransaction();
 
         try {
+            $this->actionsChain->execute('insert', $term);
             $this->storage->insert($this->extract($term), $this->currentWebsite->getDefaultLocale()->getCode());
             $this->metadataRepository->persist(
                 TermMetadataEnum::TYPE,
@@ -113,11 +113,10 @@ class TermRepository
 
     public function update(Term $term): void
     {
-        $this->actionsChain->execute('update', $term);
-
         $this->storage->beginTransaction();
 
         try {
+            $this->actionsChain->execute('update', $term);
             $this->storage->update($this->extract($term), $this->currentWebsite->getDefaultLocale()->getCode());
             $this->metadataRepository->persist(
                 TermMetadataEnum::TYPE,
@@ -135,11 +134,10 @@ class TermRepository
 
     public function delete(Term $term): void
     {
-        $this->actionsChain->execute('delete', $term);
-
         $this->storage->beginTransaction();
 
         try {
+            $this->actionsChain->execute('delete', $term);
             $this->storage->delete($this->extract($term));
             $this->metadataRepository->delete(TermMetadataEnum::TYPE, $term->getId()->getId());
             $this->storage->commit();
@@ -157,6 +155,7 @@ class TermRepository
             'id'         => $term->getId()->getId(),
             'type'       => $term->getType(),
             'website_id' => $term->getWebsiteId(),
+            'level'      => $term->getLevel(),
             'slug'       => $term->getSlug(),
             'name'       => $term->getName(),
             'visibility' => $term->getVisibility(),
