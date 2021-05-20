@@ -4,21 +4,21 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Taxonomy\Domain\WriteModel\ActionsChain;
 
-use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Term;
+use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Taxonomy;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class TermActionsChain implements TermActionsChainInterface
+class TaxonomyActionsChain implements TaxonomyActionsChainInterface
 {
     protected array $actions = [];
 
-    public function addAction(TermActionInterface $action, string $name, int $priority): void
+    public function addAction(TaxonomyActionInterface $action, string $name, int $priority): void
     {
         $this->actions[$name][$priority][] = $action;
     }
 
-    public function execute(string $name, Term $node): void
+    public function execute(string $name, Taxonomy $taxonomy): void
     {
         if (isset($this->actions[$name]) === false) {
             return;
@@ -28,7 +28,7 @@ class TermActionsChain implements TermActionsChainInterface
 
         foreach ($this->actions[$name] as $actions) {
             foreach ($actions as $action) {
-                $action->execute($node);
+                $action->execute($taxonomy);
             }
         }
     }

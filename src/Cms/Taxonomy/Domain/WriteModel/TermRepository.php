@@ -8,7 +8,7 @@ use Tulia\Cms\Metadata\Domain\WriteModel\MetadataRepository;
 use Tulia\Cms\Platform\Infrastructure\Bus\Event\EventBusInterface;
 use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
 use Tulia\Cms\Taxonomy\Domain\Metadata\TermMetadataEnum;
-use Tulia\Cms\Taxonomy\Domain\WriteModel\ActionsChain\TermActionsChainInterface;
+use Tulia\Cms\Taxonomy\Domain\WriteModel\ActionsChain\TaxonomyActionsChainInterface;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Event\TermDeleted;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Event\TermUpdated;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Exception\TermNotFoundException;
@@ -31,7 +31,7 @@ class TermRepository
 
     private EventBusInterface $eventBus;
 
-    private TermActionsChainInterface $actionsChain;
+    private TaxonomyActionsChainInterface $actionsChain;
 
     public function __construct(
         TermWriteStorageInterface $storage,
@@ -39,7 +39,7 @@ class TermRepository
         MetadataRepository $metadataRepository,
         UuidGeneratorInterface $uuidGenerator,
         EventBusInterface $eventBus,
-        TermActionsChainInterface $actionsChain
+        TaxonomyActionsChainInterface $actionsChain
     ) {
         $this->storage = $storage;
         $this->currentWebsite = $currentWebsite;

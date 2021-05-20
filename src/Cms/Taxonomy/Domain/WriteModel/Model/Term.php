@@ -34,6 +34,10 @@ class Term extends AggregateRoot
 
     protected bool $visibility;
 
+    protected ?Taxonomy $taxonomy = null;
+
+    protected $changeCallback;
+
     private function __construct(string $id, string $type, string $websiteId, string $locale)
     {
         $this->id = new TermId($id);
@@ -76,6 +80,7 @@ class Term extends AggregateRoot
     public function setId(TermId $id): void
     {
         $this->id = $id;
+        $this->recordTermChanged();
     }
 
     public function getType(): string
@@ -86,6 +91,7 @@ class Term extends AggregateRoot
     public function setType(string $type): void
     {
         $this->type = $type;
+        $this->recordTermChanged();
     }
 
     public function getWebsiteId(): string
@@ -96,6 +102,7 @@ class Term extends AggregateRoot
     public function setWebsiteId(string $websiteId): void
     {
         $this->websiteId = $websiteId;
+        $this->recordTermChanged();
     }
 
     public function getParentId(): ?string
@@ -106,6 +113,7 @@ class Term extends AggregateRoot
     public function setParentId(?string $parentId): void
     {
         $this->parentId = $parentId;
+        $this->recordTermChanged();
     }
 
     public function getLocale(): string
@@ -116,6 +124,7 @@ class Term extends AggregateRoot
     public function setLocale(string $locale): void
     {
         $this->locale = $locale;
+        $this->recordTermChanged();
     }
 
     public function getLevel(): int
@@ -126,6 +135,7 @@ class Term extends AggregateRoot
     public function setLevel(int $level): void
     {
         $this->level = $level;
+        $this->recordTermChanged();
     }
 
     public function getName(): ?string
@@ -136,6 +146,7 @@ class Term extends AggregateRoot
     public function setName(?string $name): void
     {
         $this->name = $name;
+        $this->recordTermChanged();
     }
 
     public function getSlug(): ?string
@@ -146,6 +157,7 @@ class Term extends AggregateRoot
     public function setSlug(?string $slug): void
     {
         $this->slug = $slug;
+        $this->recordTermChanged();
     }
 
     public function getVisibility(): bool
@@ -156,5 +168,24 @@ class Term extends AggregateRoot
     public function setVisibility(bool $visibility): void
     {
         $this->visibility = $visibility;
+        $this->recordTermChanged();
+    }
+
+    public function setTaxonomy(?Taxonomy $taxonomy, ?callable $changeCallback): void
+    {
+        $this->taxonomy = $taxonomy;
+        $this->changeCallback = $changeCallback;
+    }
+
+    public function getTaxonomy(): Taxonomy
+    {
+        return $this->taxonomy;
+    }
+
+    private function recordTermChanged()
+    {
+        if ($this->changeCallback) {
+            call_user_func($this->changeCallback, $this);
+        }
     }
 }

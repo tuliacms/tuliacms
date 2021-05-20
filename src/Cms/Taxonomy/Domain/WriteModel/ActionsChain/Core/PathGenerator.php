@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace Tulia\Cms\Taxonomy\Domain\WriteModel\ActionsChain\Core;
 
 use Tulia\Cms\Taxonomy\Domain\TaxonomyType\RegistryInterface;
-use Tulia\Cms\Taxonomy\Domain\WriteModel\ActionsChain\TermActionInterface;
+use Tulia\Cms\Taxonomy\Domain\WriteModel\ActionsChain\TaxonomyActionInterface;
+use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Taxonomy;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Term;
 use Tulia\Cms\Taxonomy\Infrastructure\Framework\Routing\Strategy\StrategyRegistry;
 use Tulia\Cms\Taxonomy\Infrastructure\Persistence\TermPath\StorageInterface;
@@ -15,7 +16,7 @@ use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 /**
  * @author Adam Banaszkiewicz
  */
-class PathGenerator implements TermActionInterface
+class PathGenerator implements TaxonomyActionInterface
 {
     private ConnectionInterface $connection;
 
@@ -44,12 +45,11 @@ class PathGenerator implements TermActionInterface
     public static function supports(): array
     {
         return [
-            'insert' => 100,
-            'update' => 100,
+            'save' => 100,
         ];
     }
 
-    public function execute(Term $term): void
+    public function execute(Taxonomy $taxonomy): void
     {
         $strategy = $this->strategyRegistry->get(
             $this->registry->getType($term->getType())->getRoutingStrategy()

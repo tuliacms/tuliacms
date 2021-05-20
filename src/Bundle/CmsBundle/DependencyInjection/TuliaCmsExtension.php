@@ -32,7 +32,7 @@ class TuliaCmsExtension extends Extension
 
         $container->registerForAutoconfiguration(\Tulia\Cms\Node\Domain\WriteModel\ActionsChain\NodeActionInterface::class)
             ->addTag('node.action_chain');
-        $container->registerForAutoconfiguration(\Tulia\Cms\Taxonomy\Domain\WriteModel\ActionsChain\TermActionInterface::class)
+        $container->registerForAutoconfiguration(\Tulia\Cms\Taxonomy\Domain\WriteModel\ActionsChain\TaxonomyActionInterface::class)
             ->addTag('term.action_chain');
     }
 

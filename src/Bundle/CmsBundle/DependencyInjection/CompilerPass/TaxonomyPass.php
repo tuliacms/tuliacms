@@ -7,7 +7,7 @@ namespace Tulia\Bundle\CmsBundle\DependencyInjection\CompilerPass;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
-use Tulia\Cms\Taxonomy\Domain\WriteModel\ActionsChain\TermActionsChainInterface;
+use Tulia\Cms\Taxonomy\Domain\WriteModel\ActionsChain\TaxonomyActionsChainInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -21,7 +21,7 @@ class TaxonomyPass implements CompilerPassInterface
 
     private function registerActionsChain(ContainerBuilder $container): void
     {
-        $chain = $container->findDefinition(TermActionsChainInterface::class);
+        $chain = $container->findDefinition(TaxonomyActionsChainInterface::class);
         $taggedServices = $container->findTaggedServiceIds('term.action_chain');
 
         foreach ($taggedServices as $id => $tags) {

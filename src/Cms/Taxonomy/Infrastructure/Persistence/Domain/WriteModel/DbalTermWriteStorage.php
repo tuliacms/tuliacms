@@ -20,7 +20,7 @@ class DbalTermWriteStorage extends AbstractLocalizableStorage implements TermWri
         $this->connection = $connection;
     }
 
-    public function find(string $id, string $locale, string $defaultLocale): array
+    public function find(string $type, string $locale, string $defaultLocale): array
     {
         if ($defaultLocale !== $locale) {
             $translationColumn = 'IF(ISNULL(tl.name), 0, 1) AS translated';
@@ -28,7 +28,7 @@ class DbalTermWriteStorage extends AbstractLocalizableStorage implements TermWri
             $translationColumn = '1 AS translated';
         }
 
-        $node = $this->connection->fetchAll("
+        return $this->connection->fetchAll("
             SELECT
                 tm.*,
                 COALESCE(tl.name, tm.name) AS name,
@@ -39,13 +39,10 @@ class DbalTermWriteStorage extends AbstractLocalizableStorage implements TermWri
             FROM #__term AS tm
             LEFT JOIN #__term_lang AS tl
                 ON tm.id = tl.term_id AND tl.locale = :locale
-            WHERE tm.id = :id
-            LIMIT 1", [
-            'id'     => $id,
+            WHERE tm.type = :type", [
+            'type' => $type,
             'locale' => $locale
         ]);
-
-        return $node[0] ?? [];
     }
 
     public function delete(array $term): void

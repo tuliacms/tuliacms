@@ -4,47 +4,31 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Taxonomy\Domain\WriteModel\ActionsChain\Core;
 
-use Tulia\Cms\Taxonomy\Domain\WriteModel\ActionsChain\TermActionInterface;
-use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Term;
-use Tulia\Cms\Taxonomy\Domain\WriteModel\Service\ChildrenTermsLevelRaiser;
-use Tulia\Cms\Taxonomy\Domain\WriteModel\TermRepository;
+use Tulia\Cms\Taxonomy\Domain\WriteModel\ActionsChain\TaxonomyActionInterface;
+use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Taxonomy;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class LevelCalculator implements TermActionInterface
+class LevelCalculator implements TaxonomyActionInterface
 {
-    private TermRepository $repository;
-
-    private ChildrenTermsLevelRaiser $childrenTermsLevelRaiser;
-
-    public function __construct(
-        TermRepository $repository,
-        ChildrenTermsLevelRaiser $childrenTermsLevelRaiser
-    ) {
-        $this->repository = $repository;
-        $this->childrenTermsLevelRaiser = $childrenTermsLevelRaiser;
-    }
-
     public static function supports(): array
     {
         return [
-            'insert' => 100,
-            'update' => 100,
+            'save' => 100,
         ];
     }
 
-    public function execute(Term $term): void
+    public function execute(Taxonomy $taxonomy): void
     {
-        if ($term->getParentId() !== null) {
-            $parent = $this->repository->find($term->getParentId());
+        foreach ($taxonomy->terms() as $term) {
+            if ($term->getParentId() === null) {
+                $term->setLevel(0);
+            } else {
+                $parent = $taxonomy->getTerm($term->getParentId());
 
-            $term->setLevel($parent->getLevel() + 1);
+                $term->setLevel($parent->getLevel() + 1);
+            }
         }
-
-        $this->childrenTermsLevelRaiser->riseLevelForChildren(
-            $term->getId()->getId(),
-            $term->getLevel()
-        );
     }
 }

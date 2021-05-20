@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Taxonomy\Domain\WriteModel\ActionsChain;
 
-use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Term;
+use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Taxonomy;
 
 /**
  * @author Adam Banaszkiewicz
  */
-interface TermActionInterface
+interface TaxonomyActionInterface
 {
     public static function supports(): array;
 
-    public function execute(Term $term): void;
+    public function execute(Taxonomy $taxonomy): void;
 }
