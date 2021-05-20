@@ -42,7 +42,6 @@ class DbalQuery extends AbstractDbalQuery
              */
             'order_by' => 'position',
             'order_dir' => 'ASC',
-            'order_hierarchical' => true,
             /**
              * Search for rows in the website. Given null search in all websites.
              * @param null|string
@@ -160,10 +159,6 @@ class DbalQuery extends AbstractDbalQuery
             $qb
                 ->andWhere('COALESCE(tl.visibility, tm.visibility, 0) = :tl_visibility')
                 ->setParameter('tl_visibility', $criteria['visibility'], PDO::PARAM_INT);
-        }
-
-        if ($criteria['order_hierarchical']) {
-            $qb->addOrderBy('tm.level', 'ASC');
         }
 
         if ($criteria['order_by']) {

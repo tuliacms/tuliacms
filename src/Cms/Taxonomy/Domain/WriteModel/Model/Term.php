@@ -24,6 +24,10 @@ class Term extends AggregateRoot
 
     protected ?string $parentId = null;
 
+    protected int $position = 0;
+
+    protected int $globalOrder = 0;
+
     protected string $locale;
 
     protected int $level = 0;
@@ -66,6 +70,8 @@ class Term extends AggregateRoot
         );
         $self->parentId = $data['parent_id'] ?? null;
         $self->level = (int) ($data['level'] ?? 0);
+        $self->position = (int) ($data['position'] ?? 0);
+        $self->globalOrder = (int) ($data['globalOrder'] ?? 0);
         $self->name = $data['name'] ?? null;
         $self->slug = $data['slug'] ?? null;
         $self->path = $data['path'] ?? null;
@@ -116,6 +122,28 @@ class Term extends AggregateRoot
     public function setParentId(?string $parentId): void
     {
         $this->parentId = $parentId;
+        $this->recordTermChanged();
+    }
+
+    public function getPosition(): int
+    {
+        return $this->position;
+    }
+
+    public function setPosition(int $position): void
+    {
+        $this->position = $position;
+        $this->recordTermChanged();
+    }
+
+    public function getGlobalOrder(): int
+    {
+        return $this->globalOrder;
+    }
+
+    public function setGlobalOrder(int $globalOrder): void
+    {
+        $this->globalOrder = $globalOrder;
         $this->recordTermChanged();
     }
 

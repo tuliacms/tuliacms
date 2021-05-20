@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Taxonomy\Domain\Routing\Strategy\Core;
 
 use Tulia\Cms\Taxonomy\Domain\Routing\Strategy\TaxonomyRoutingStrategyInterface;
+use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Taxonomy;
 use Tulia\Cms\Taxonomy\Ports\Infrastructure\Persistence\Domain\WriteModel\TermWriteStorageInterface;
 
 /**
@@ -21,9 +22,17 @@ class SimpleRoutingStrategy implements TaxonomyRoutingStrategyInterface
         $this->storage = $storage;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    public function generateFromTaxonomy(Taxonomy $taxonomy, string $id): string
+    {
+        $term = $taxonomy->getTerm($id);
+
+        if ($term !== null) {
+            return "/{$term->getSlug()}";
+        }
+
+        return '';
+    }
+
     public function generate(string $id, string $locale, string $defaultLocale): string
     {
         $term = $this->storage->find($id, $locale, $defaultLocale);
@@ -35,9 +44,6 @@ class SimpleRoutingStrategy implements TaxonomyRoutingStrategyInterface
         return '';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName(): string
     {
         return self::NAME;

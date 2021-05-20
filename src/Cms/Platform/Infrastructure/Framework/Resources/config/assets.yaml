@@ -54,7 +54,8 @@ framework:
                 scripts: [ '/assets/core/vuejs/vue.min.js' ]
                 priority: 500
             nestable:
-                scripts: [ '/assets/core/jquery-nestable/jquery.nestable.js' ]
+                scripts: [ '/assets/core/jquery-nestable/jquery.nestable.min.js' ]
+                styles: [ '/assets/core/jquery-nestable/jquery.nestable.min.css' ]
                 priority: 500
             datatables_core:
                 scripts: [ '/assets/core/datatables/datatables.min.js' ]

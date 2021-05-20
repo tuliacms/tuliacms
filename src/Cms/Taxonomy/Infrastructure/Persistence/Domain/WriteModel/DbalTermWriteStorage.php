@@ -29,6 +29,7 @@ class DbalTermWriteStorage extends AbstractLocalizableStorage implements TermWri
     {
         return $this->prepareQueryBuilder($locale, $defaultLocale)
             ->andWhere('tm.type = :type')
+            ->addOrderBy('tm.global_order', 'ASC')
             ->setParameter('type', $type)
             ->execute()
             ->fetchAllAssociative();
@@ -79,6 +80,8 @@ class DbalTermWriteStorage extends AbstractLocalizableStorage implements TermWri
         $mainTable['slug'] = $data['slug'];
         $mainTable['visibility'] = $data['visibility'] ? '1' : '0';
         $mainTable['level'] = $data['level'];
+        $mainTable['position'] = $data['position'];
+        $mainTable['global_order'] = $data['global_order'];
 
         $this->connection->insert('#__term', $mainTable);
 
@@ -93,6 +96,8 @@ class DbalTermWriteStorage extends AbstractLocalizableStorage implements TermWri
         $mainTable['type'] = $data['type'];
         $mainTable['parent_id'] = $data['parent_id'];
         $mainTable['level'] = $data['level'];
+        $mainTable['position'] = $data['position'];
+        $mainTable['global_order'] = $data['global_order'];
 
         if ($foreignLocale === false) {
             $mainTable['name'] = $data['name'];

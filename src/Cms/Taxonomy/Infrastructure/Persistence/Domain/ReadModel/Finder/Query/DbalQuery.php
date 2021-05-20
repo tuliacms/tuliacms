@@ -94,17 +94,9 @@ class DbalQuery extends AbstractDbalQuery
              */
             'page' => null,
             /**
-             * This field has higher priority than order_by and order_dir.
              * Allows to define custom sort option.
              */
-            /*'order' => null,*/
-            'order_by' => 'tm.level',
-            'order_dir' => 'ASC',
-            /**
-             * In case the taxonomy_type supports `hierarchical` and set this value to
-             * true, ordering use `level` column to sort terms like tree.
-             */
-            'order_hierarchical' => false,
+            'order' => 'tm.global_order',
             /**
              * If query have to count rows, please provide the column name
              * which should be counted. If column to count does not matter,
@@ -309,12 +301,8 @@ class DbalQuery extends AbstractDbalQuery
 
     protected function buildOrderBy(array $criteria): void
     {
-        if ($criteria['order_hierarchical']) {
-            $this->queryBuilder->addOrderBy('tm.level', 'ASC');
-        }
-
-        if ($criteria['order_by']) {
-            $this->queryBuilder->addOrderBy($criteria['order_by'], $criteria['order_dir']);
+        if ($criteria['order']) {
+            $this->queryBuilder->add('orderBy', $criteria['order'], true);
         }
     }
 }

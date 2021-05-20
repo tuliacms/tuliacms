@@ -28,9 +28,7 @@ class SlugGenerator implements TaxonomyActionInterface
 
     public static function supports(): array
     {
-        return [
-            'save' => 100,
-        ];
+        return ['save' => 900];
     }
 
     public function execute(Taxonomy $taxonomy): void
