@@ -7,7 +7,7 @@ namespace Tulia\Bundle\CmsBundle\DependencyInjection\CompilerPass;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
-use Tulia\Cms\Node\Domain\WriteModel\ActionsChain\ActionsChainInterface;
+use Tulia\Cms\Node\Domain\WriteModel\ActionsChain\NodeActionsChainInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -21,7 +21,7 @@ class NodePass implements CompilerPassInterface
 
     private function registerActionsChain(ContainerBuilder $container): void
     {
-        $chain = $container->findDefinition(ActionsChainInterface::class);
+        $chain = $container->findDefinition(NodeActionsChainInterface::class);
         $taggedServices = $container->findTaggedServiceIds('node.action_chain');
 
         foreach ($taggedServices as $id => $tags) {

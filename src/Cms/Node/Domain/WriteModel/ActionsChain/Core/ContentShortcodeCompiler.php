@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Domain\WriteModel\ActionsChain\Core;
 
-use Tulia\Cms\Node\Domain\WriteModel\ActionsChain\ActionInterface;
+use Tulia\Cms\Node\Domain\WriteModel\ActionsChain\NodeActionInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Model\Node;
 use Tulia\Component\Shortcode\ProcessorInterface;
 
@@ -15,7 +15,7 @@ use Tulia\Component\Shortcode\ProcessorInterface;
  *
  * @author Adam Banaszkiewicz
  */
-class ContentShortcodeCompiler implements ActionInterface
+class ContentShortcodeCompiler implements NodeActionInterface
 {
     protected ProcessorInterface $processor;
 

@@ -10,42 +10,33 @@ services:
             - '../../../../**/Model/*'
             - '../../../../**/Exception/*'
 
-    Tulia\Cms\Taxonomy\Application\TaxonomyType\RegistryInterface:
-        class: Tulia\Cms\Taxonomy\Application\TaxonomyType\Registry
+    Tulia\Cms\Taxonomy\Domain\TaxonomyType\RegistryInterface:
+        class: Tulia\Cms\Taxonomy\Domain\TaxonomyType\Registry
         bind:
             $registrators: !tagged_iterator taxonomy.type.registrator
             $storages: !tagged_iterator taxonomy.type.storage
 
-    Tulia\Cms\Taxonomy\Application\TaxonomyType\DefaultTypesRegistrator:
-        tags: [ taxonomy.type.registrator ]
-
-    Tulia\Cms\Taxonomy\UserInterface\Web\Form\Extension\DefaultFieldsExtension:
+    Tulia\Cms\Taxonomy\UserInterface\Web\Backend\Form\Extension\DefaultFieldsExtension:
         tags: [ form_extension ]
 
-    Tulia\Cms\Taxonomy\UserInterface\Web\Form\Extension\TaxonomyTypeExtensionAggregate:
+    Tulia\Cms\Taxonomy\UserInterface\Web\Backend\Form\Extension\TaxonomyTypeExtensionAggregate:
         tags: [ form_extension_aggregate ]
 
-    Tulia\Cms\Taxonomy\Infrastructure\Cms\Metadata\DefaultMetadataRegistrator:
+    Tulia\Cms\Taxonomy\Domain\Metadata\DefaultMetadataRegistrator:
         tags: [ metadata.registrator ]
 
     Tulia\Cms\Taxonomy\Infrastructure\Framework\Routing\Router:
         tags: [ routing_chain.router ]
 
-    Tulia\Cms\Taxonomy\Infrastructure\Framework\Routing\Strategy\StrategyRegistry:
+    Tulia\Cms\Taxonomy\Domain\Routing\Strategy\TaxonomyRoutingStrategyRegistry:
         bind:
             $strategies: !tagged_iterator taxonomy.routing.strategy
 
-    Tulia\Cms\Taxonomy\Infrastructure\Framework\Routing\Strategy\SimpleStrategy:
-        tags: [ taxonomy.routing.strategy ]
-
-    Tulia\Cms\Taxonomy\Infrastructure\Framework\Routing\Strategy\FullPathStrategy:
-        tags: [ taxonomy.routing.strategy ]
-
-    Tulia\Cms\Taxonomy\Infrastructure\Cms\Menu\IdentityProvider:
+    Tulia\Cms\Taxonomy\Domain\Menu\IdentityProvider:
         tags: [ menu.identity_provider ]
 
-#    Tulia\Cms\Taxonomy\Infrastructure\Cms\Menu\TypeRegistrator:
+#    Tulia\Cms\Taxonomy\Domain\Menu\TypeRegistrator:
 #        tags: [ menu.builder.type_registrator ]
 
-    Tulia\Cms\Taxonomy\Infrastructure\Cms\Breadcrumbs\CrumbsResolver:
+    Tulia\Cms\Taxonomy\UserInterface\Web\Frontend\Breadcrumbs\CrumbsResolver:
         tags: [ breadcrumbs.resolver ]

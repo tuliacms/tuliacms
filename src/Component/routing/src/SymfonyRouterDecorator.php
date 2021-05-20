@@ -22,9 +22,13 @@ use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 class SymfonyRouterDecorator implements RouterInterface, RequestMatcherInterface, WarmableInterface
 {
     private RouterInterface $symfonyRouter;
+
     private ChainRouterInterface $chainRouter;
+
     private CurrentWebsiteInterface $currentWebsite;
+
     private ?LoggerInterface $logger = null;
+
     private ?WebsitePrefixesResolver $websitePrefixesResolver = null;
 
     public function __construct(
@@ -72,7 +76,7 @@ class SymfonyRouterDecorator implements RouterInterface, RequestMatcherInterface
                 $router->setContext($this->getContext());
                 $path = $router->generate($name, $parameters, $referenceType);
 
-                if ($path !== null && $path !== '') {
+                if ($path !== null) {
                     return $this->getWebsitePrefixesResolver()->appendWebsitePrefixes(
                         $name,
                         $path,

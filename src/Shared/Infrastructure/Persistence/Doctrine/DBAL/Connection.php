@@ -147,7 +147,7 @@ class Connection extends DoctrineConnection implements ConnectionInterface
     /**
      * {@inheritdoc}
      */
-    public function createQueryBuilder()
+    public function createQueryBuilder(): QueryBuilder
     {
         return new QueryBuilder($this);
     }

@@ -1,28 +1,28 @@
 backend.term.search.typeahead:
     path: /administrator/term/search/typeahead
-    controller: Tulia\Cms\Taxonomy\UserInterface\Web\Controller\Backend\TypeaheadSearch::handleSearch
+    controller: Tulia\Cms\Taxonomy\UserInterface\Web\Backend\Controller\TypeaheadSearch::handleSearch
 
 backend.term.create:
     path: /administrator/term/{taxonomy_type}/create
-    controller: Tulia\Cms\Taxonomy\UserInterface\Web\Controller\Backend\Term::create
+    controller: Tulia\Cms\Taxonomy\UserInterface\Web\Backend\Controller\Term::create
     methods: GET|POST
 
 backend.term.edit:
     path: /administrator/term/{taxonomy_type}/edit/{id}
-    controller: Tulia\Cms\Taxonomy\UserInterface\Web\Controller\Backend\Term::edit
+    controller: Tulia\Cms\Taxonomy\UserInterface\Web\Backend\Controller\Term::edit
     methods: GET|POST
 
 backend.term.delete:
     path: /administrator/term/{taxonomy_type}/delete
-    controller: Tulia\Cms\Taxonomy\UserInterface\Web\Controller\Backend\Term::delete
+    controller: Tulia\Cms\Taxonomy\UserInterface\Web\Backend\Controller\Term::delete
     methods: POST
 
 backend.term.list:
     path: /administrator/term/{taxonomy_type}/list
-    controller: Tulia\Cms\Taxonomy\UserInterface\Web\Controller\Backend\Term::list
+    controller: Tulia\Cms\Taxonomy\UserInterface\Web\Backend\Controller\Term::list
 
 backend.term:
     path: /administrator/term/{taxonomy_type}
-    controller: Tulia\Cms\Taxonomy\UserInterface\Web\Controller\Backend\Term::index
+    controller: Tulia\Cms\Taxonomy\UserInterface\Web\Backend\Controller\Term::index
     defaults:
         taxonomy_type: category

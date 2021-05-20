@@ -10,7 +10,7 @@ use Tulia\Cms\Filemanager\Application\ImageUrlResolver;
 use Tulia\Cms\Filemanager\Enum\ScopeEnum as FilesScopeEnum;
 use Tulia\Cms\Filemanager\Enum\TypeEnum;
 use Tulia\Cms\Filemanager\Query\FinderFactoryInterface as FilemanagerFinderFactory;
-use Tulia\Cms\Node\Domain\ReadModel\Finder\Enum\ScopeEnum as NodeScopeEnum;
+use Tulia\Cms\Node\Domain\ReadModel\Finder\Enum\NodeFinderScopeEnum as NodeScopeEnum;
 use Tulia\Cms\Node\Domain\NodeType\Enum\ParametersEnum;
 use Tulia\Cms\Node\Domain\NodeType\RegistryInterface;
 use Tulia\Cms\Node\Ports\Infrastructure\Persistence\Domain\ReadModel\NodeFinderInterface;
