@@ -143,18 +143,20 @@ class TaxonomyRepository
 
         foreach ($terms as $term) {
             $result[] = Term::buildFromArray([
-                'id'         => $term['id'],
-                'type'       => $term['type'] ?? '',
-                'locale'     => $term['locale'],
-                'level'      => (int) $term['level'],
-                'website_id' => $term['website_id'],
-                'parent_id'  => $term['parent_id'],
-                'name'       => $term['name'],
-                'slug'       => $term['slug'],
-                'path'       => $term['path'],
-                'visibility' => $term['visibility'] === '1',
-                'metadata'   => $this->metadataRepository->findAll(TermMetadataEnum::TYPE, $term['id']),
-                'translated' => $term['translated'] ?? true,
+                'id'           => $term['id'],
+                'type'         => $term['type'] ?? '',
+                'locale'       => $term['locale'],
+                'level'        => (int) $term['level'],
+                'position'     => (int) $term['position'],
+                'global_order' => (int) $term['global_order'],
+                'website_id'   => $term['website_id'],
+                'parent_id'    => $term['parent_id'],
+                'name'         => $term['name'],
+                'slug'         => $term['slug'],
+                'path'         => $term['path'],
+                'visibility'   => $term['visibility'] === '1',
+                'metadata'     => $this->metadataRepository->findAll(TermMetadataEnum::TYPE, $term['id']),
+                'translated'   => $term['translated'] ?? true,
             ]);
         }
 
@@ -164,16 +166,18 @@ class TaxonomyRepository
     private function extractTerm(Term $term): array
     {
         return [
-            'id'         => $term->getId()->getId(),
-            'type'       => $term->getType(),
-            'website_id' => $term->getWebsiteId(),
-            'level'      => $term->getLevel(),
-            'slug'       => $term->getSlug(),
-            'path'       => $term->getPath(),
-            'name'       => $term->getName(),
-            'visibility' => $term->isVisible(),
-            'parent_id'  => $term->getParentId(),
-            'locale'     => $term->getLocale(),
+            'id'           => $term->getId()->getId(),
+            'type'         => $term->getType(),
+            'website_id'   => $term->getWebsiteId(),
+            'level'        => $term->getLevel(),
+            'position'     => $term->getPosition(),
+            'global_order' => $term->getGlobalOrder(),
+            'slug'         => $term->getSlug(),
+            'path'         => $term->getPath(),
+            'name'         => $term->getName(),
+            'visibility'   => $term->isVisible(),
+            'parent_id'    => $term->getParentId(),
+            'locale'       => $term->getLocale(),
         ];
     }
 }

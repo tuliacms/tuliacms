@@ -35,9 +35,7 @@ class PathGenerator implements TaxonomyActionInterface
 
     public static function supports(): array
     {
-        return [
-            'save' => 20,
-        ];
+        return ['save' => 100];
     }
 
     public function execute(Taxonomy $taxonomy): void
@@ -47,20 +45,19 @@ class PathGenerator implements TaxonomyActionInterface
         );
 
         foreach ($this->getTerms($taxonomy) as $term) {
-            $this->createPathForTerm($term, $strategy);
+            $this->createPathForTerm($taxonomy, $term, $strategy);
         }
     }
 
-    private function createPathForTerm(Term $term, TaxonomyRoutingStrategyInterface $strategy): void
+    private function createPathForTerm(Taxonomy $taxonomy, Term $term, TaxonomyRoutingStrategyInterface $strategy): void
     {
-        $path = $strategy->generate(
-            $term->getId()->getId(),
-            $term->getLocale(),
-            $this->currentWebsite->getDefaultLocale()->getCode()
+        $path = $strategy->generateFromTaxonomy(
+            $taxonomy,
+            $term->getId()->getId()
         );
 
         // Remove path for non visible terms
-        if ($term->isVisible() === false) {
+        if ($this->isTermVisible($taxonomy, $term) === false) {
             $path = null;
         }
 
@@ -77,5 +74,24 @@ class PathGenerator implements TaxonomyActionInterface
     private function getTerms(Taxonomy $taxonomy): array
     {
         return array_merge(...array_values($taxonomy->collectChangedTerms()));
+    }
+
+    private function isTermVisible(Taxonomy $taxonomy, Term $term): bool
+    {
+        $visible = true;
+
+        do {
+            if ($term->isVisible() === false) {
+                $visible = false;
+            }
+
+            if ($term->getParentId()) {
+                $term = $taxonomy->getTerm($term->getParentId());
+            } else {
+                $term = null;
+            }
+        } while ($term);
+
+        return $visible;
     }
 }

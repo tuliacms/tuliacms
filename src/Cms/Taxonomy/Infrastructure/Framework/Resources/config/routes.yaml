@@ -21,6 +21,19 @@ backend.term.list:
     path: /administrator/term/{taxonomy_type}/list
     controller: Tulia\Cms\Taxonomy\UserInterface\Web\Backend\Controller\Term::list
 
+backend.term.hierarchy:
+    path: /administrator/term/{taxonomy_type}/hierarchy
+    controller: Tulia\Cms\Taxonomy\UserInterface\Web\Backend\Controller\Hierarchy::index
+    defaults:
+        taxonomy_type: category
+
+backend.term.hierarchy.save:
+    path: /administrator/term/{taxonomy_type}/hierarchy/save
+    controller: Tulia\Cms\Taxonomy\UserInterface\Web\Backend\Controller\Hierarchy::save
+    defaults:
+        taxonomy_type: category
+    methods: POST
+
 backend.term:
     path: /administrator/term/{taxonomy_type}
     controller: Tulia\Cms\Taxonomy\UserInterface\Web\Backend\Controller\Term::index

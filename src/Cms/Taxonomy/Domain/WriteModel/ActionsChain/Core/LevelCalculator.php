@@ -14,16 +14,14 @@ class LevelCalculator implements TaxonomyActionInterface
 {
     public static function supports(): array
     {
-        return [
-            'save' => 100,
-        ];
+        return ['save' => 500];
     }
 
     public function execute(Taxonomy $taxonomy): void
     {
         foreach ($taxonomy->terms() as $term) {
             if ($term->getParentId() === null) {
-                $newLevel = 0;
+                $newLevel = 1;
             } else {
                 $parent = $taxonomy->getTerm($term->getParentId());
                 $newLevel = $parent->getLevel() + 1;
