@@ -19,9 +19,6 @@ class DbalTermPathReadStorage implements TermPathReadStorageInterface
         $this->connection = $connection;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function find(string $termId, string $locale): array
     {
         $result = $this->connection->fetchAll('
@@ -35,5 +32,20 @@ class DbalTermPathReadStorage implements TermPathReadStorageInterface
         ]);
 
         return $result[0] ?? [];
+    }
+
+    public function findTermIdByPath(string $path, string $locale): ?string
+    {
+        $result = $this->connection->fetchAll('
+            SELECT term_id
+            FROM #__term_path
+            WHERE path = :path AND locale = :locale
+            LIMIT 1
+        ', [
+            'path' => $path,
+            'locale'  => $locale,
+        ]);
+
+        return $result[0]['term_id'] ?? null;
     }
 }

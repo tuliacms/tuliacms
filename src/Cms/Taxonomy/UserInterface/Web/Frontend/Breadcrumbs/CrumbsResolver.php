@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Taxonomy\Infrastructure\Cms\Breadcrumbs;
+namespace Tulia\Cms\Taxonomy\UserInterface\Web\Frontend\Breadcrumbs;
 
 use Symfony\Component\Routing\RouterInterface;
 use Tulia\Cms\Breadcrumbs\Application\Crumbs\ResolverInterface;

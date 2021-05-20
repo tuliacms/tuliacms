@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Taxonomy\Infrastructure\Cms\Menu;
+namespace Tulia\Cms\Taxonomy\Domain\Menu;
 
 use Tulia\Cms\Menu\Domain\Builder\Identity\Identity;
 use Tulia\Cms\Menu\Domain\Builder\Identity\IdentityInterface;
@@ -14,14 +14,8 @@ use Symfony\Component\Routing\RouterInterface;
  */
 class IdentityProvider implements IdentityProviderInterface
 {
-    /**
-     * @var RouterInterface
-     */
-    protected $router;
+    protected RouterInterface $router;
 
-    /**
-     * @param RouterInterface $router
-     */
     public function __construct(RouterInterface $router)
     {
         $this->router = $router;

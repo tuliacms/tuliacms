@@ -75,7 +75,7 @@ class Router implements RouterInterface, RequestMatcherInterface
 
         $path = $this->storage->find(substr($name, 5), $locale)['path'] ?? null;
 
-        return $path ? $this->frontendRouteSuffixResolver->appendSuffix($path) : $path;
+        return $path ? $this->frontendRouteSuffixResolver->appendSuffix($path) : '';
     }
 
     public function matchRequest(Request $request): array
@@ -91,7 +91,7 @@ class Router implements RouterInterface, RequestMatcherInterface
         // @todo Fix routing locales
         $locale = 'en_US';//$context->getContentLocale()
         $pathinfo = $this->frontendRouteSuffixResolver->removeSuffix($pathinfo);
-        $termId = $this->storage->findByPath($pathinfo, $locale);
+        $termId = $this->storage->findTermIdByPath($pathinfo, $locale);
 
         if ($termId === null) {
             throw new ResourceNotFoundException('Term not exists for given path.');

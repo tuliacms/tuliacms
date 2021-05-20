@@ -10,4 +10,6 @@ namespace Tulia\Cms\Taxonomy\Ports\Infrastructure\Persistence\Domain\ReadModel;
 interface TermPathReadStorageInterface
 {
     public function find(string $termId, string $locale): array;
+
+    public function findTermIdByPath(string $path, string $locale): ?string;
 }

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Taxonomy\Infrastructure\Cms\Menu;
+namespace Tulia\Cms\Taxonomy\UserInterface\Web\Frontend\Menu;
 
 use Symfony\Component\Form\FormFactoryInterface;
 use Tulia\Cms\Menu\Application\Selector\SelectorInterface;
@@ -18,7 +18,9 @@ use Tulia\Component\Templating\View;
 class Selector implements SelectorInterface
 {
     protected RegistryInterface $typeRegistry;
+
     protected EngineInterface $engine;
+
     protected FormFactoryInterface $formFactory;
 
     public function __construct(
