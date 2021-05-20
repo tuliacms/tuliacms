@@ -151,6 +151,7 @@ class TaxonomyRepository
                 'parent_id'  => $term['parent_id'],
                 'name'       => $term['name'],
                 'slug'       => $term['slug'],
+                'path'       => $term['path'],
                 'visibility' => $term['visibility'] === '1',
                 'metadata'   => $this->metadataRepository->findAll(TermMetadataEnum::TYPE, $term['id']),
                 'translated' => $term['translated'] ?? true,
@@ -168,8 +169,9 @@ class TaxonomyRepository
             'website_id' => $term->getWebsiteId(),
             'level'      => $term->getLevel(),
             'slug'       => $term->getSlug(),
+            'path'       => $term->getPath(),
             'name'       => $term->getName(),
-            'visibility' => $term->getVisibility(),
+            'visibility' => $term->isVisible(),
             'parent_id'  => $term->getParentId(),
             'locale'     => $term->getLocale(),
         ];

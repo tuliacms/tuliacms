@@ -13,17 +13,17 @@ use Symfony\Component\Routing\RouterInterface;
 use Tulia\Cms\Platform\Infrastructure\Framework\Routing\FrontendRouteSuffixResolver;
 use Tulia\Cms\Taxonomy\Domain\TaxonomyType\RegistryInterface;
 use Tulia\Cms\Taxonomy\Domain\TaxonomyType\TaxonomyTypeInterface;
-use Tulia\Cms\Taxonomy\Infrastructure\Persistence\TermPath\StorageInterface;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\Enum\TermFinderScopeEnum;
-use Tulia\Cms\Taxonomy\Ports\Infrastructure\Persistence\Domain\ReadModel\TermFinderInterface;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\Model\Term;
+use Tulia\Cms\Taxonomy\Ports\Infrastructure\Persistence\Domain\ReadModel\TermFinderInterface;
+use Tulia\Cms\Taxonomy\Ports\Infrastructure\Persistence\Domain\ReadModel\TermPathReadStorageInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class Router implements RouterInterface, RequestMatcherInterface
 {
-    private StorageInterface $storage;
+    private TermPathReadStorageInterface $storage;
 
     private RegistryInterface $registry;
 
@@ -34,7 +34,7 @@ class Router implements RouterInterface, RequestMatcherInterface
     private ?RequestContext $context = null;
 
     public function __construct(
-        StorageInterface $storage,
+        TermPathReadStorageInterface $storage,
         RegistryInterface $registry,
         FrontendRouteSuffixResolver $frontendRouteSuffixResolver,
         TermFinderInterface $termFinder

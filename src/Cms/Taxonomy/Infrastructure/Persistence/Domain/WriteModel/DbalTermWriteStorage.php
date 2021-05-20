@@ -6,6 +6,7 @@ namespace Tulia\Cms\Taxonomy\Infrastructure\Persistence\Domain\WriteModel;
 
 use Tulia\Cms\Platform\Infrastructure\Persistence\Domain\AbstractLocalizableStorage;
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
+use Tulia\Cms\Taxonomy\Ports\Infrastructure\Persistence\Domain\WriteModel\TermPathWriteStorageInterface;
 use Tulia\Cms\Taxonomy\Ports\Infrastructure\Persistence\Domain\WriteModel\TermWriteStorageInterface;
 
 /**
@@ -15,9 +16,12 @@ class DbalTermWriteStorage extends AbstractLocalizableStorage implements TermWri
 {
     private ConnectionInterface $connection;
 
-    public function __construct(ConnectionInterface $connection)
+    private TermPathWriteStorageInterface $termPathStorage;
+
+    public function __construct(ConnectionInterface $connection, TermPathWriteStorageInterface $termPathStorage)
     {
         $this->connection = $connection;
+        $this->termPathStorage = $termPathStorage;
     }
 
     public function find(string $type, string $locale, string $defaultLocale): array
@@ -31,6 +35,7 @@ class DbalTermWriteStorage extends AbstractLocalizableStorage implements TermWri
         return $this->connection->fetchAll("
             SELECT
                 tm.*,
+                tp.path,
                 COALESCE(tl.name, tm.name) AS name,
                 COALESCE(tl.slug, tm.slug) AS slug,
                 COALESCE(tl.visibility, tm.visibility) AS visibility,
@@ -39,6 +44,8 @@ class DbalTermWriteStorage extends AbstractLocalizableStorage implements TermWri
             FROM #__term AS tm
             LEFT JOIN #__term_lang AS tl
                 ON tm.id = tl.term_id AND tl.locale = :locale
+            LEFT JOIN #__term_path AS tp
+                ON tp.term_id = tm.id AND tl.locale = :locale
             WHERE tm.type = :type", [
             'type' => $type,
             'locale' => $locale
@@ -49,6 +56,7 @@ class DbalTermWriteStorage extends AbstractLocalizableStorage implements TermWri
     {
         $this->connection->delete('#__term', ['id' => $term['id']]);
         $this->connection->delete('#__term_lang', ['term_id' => $term['id']]);
+        $this->connection->delete('#__term_path', ['term_id' => $term['id']]);
     }
 
     public function beginTransaction(): void
@@ -79,6 +87,8 @@ class DbalTermWriteStorage extends AbstractLocalizableStorage implements TermWri
         $mainTable['level'] = $data['level'];
 
         $this->connection->insert('#__term', $mainTable);
+
+        $this->persistPath($data['id'], $data['path'], $data['locale']);
     }
 
     protected function updateMainRow(array $data, bool $foreignLocale): void
@@ -97,6 +107,8 @@ class DbalTermWriteStorage extends AbstractLocalizableStorage implements TermWri
         }
 
         $this->connection->update('#__term', $mainTable, ['id' => $data['id']]);
+
+        $this->persistPath($data['id'], $data['path'], $data['locale']);
     }
 
     protected function insertLangRow(array $data): void
@@ -132,5 +144,14 @@ class DbalTermWriteStorage extends AbstractLocalizableStorage implements TermWri
         );
 
         return isset($result[0]['term_id']) && $result[0]['term_id'] === $data['id'];
+    }
+
+    private function persistPath(string $termId, ?string $path, string $locale): void
+    {
+        if ($path === null) {
+            $this->termPathStorage->remove($termId, $locale);
+        } else {
+            $this->termPathStorage->save($termId, $locale, $path);
+        }
     }
 }

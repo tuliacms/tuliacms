@@ -32,6 +32,8 @@ class Term extends AggregateRoot
 
     protected ?string $slug = null;
 
+    protected ?string $path = null;
+
     protected bool $visibility;
 
     protected ?Taxonomy $taxonomy = null;
@@ -66,6 +68,7 @@ class Term extends AggregateRoot
         $self->level = (int) ($data['level'] ?? 0);
         $self->name = $data['name'] ?? null;
         $self->slug = $data['slug'] ?? null;
+        $self->path = $data['path'] ?? null;
         $self->visibility = (bool) ($data['visibility'] ?? true);
         $self->replaceMetadata($data['metadata'] ?? []);
 
@@ -160,7 +163,18 @@ class Term extends AggregateRoot
         $this->recordTermChanged();
     }
 
-    public function getVisibility(): bool
+    public function getPath(): ?string
+    {
+        return $this->path;
+    }
+
+    public function setPath(?string $path): void
+    {
+        $this->path = $path;
+        $this->recordTermChanged();
+    }
+
+    public function isVisible(): bool
     {
         return $this->visibility;
     }

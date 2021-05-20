@@ -12,7 +12,6 @@ use Tulia\Cms\Platform\Shared\Pagination\Paginator;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\Enum\TermFinderScopeEnum;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Exception\TermNotFoundException;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\TaxonomyRepository;
-use Tulia\Cms\Taxonomy\Domain\WriteModel\TermRepository;
 use Tulia\Cms\Taxonomy\Ports\Infrastructure\Persistence\Domain\ReadModel\TermFinderInterface;
 use Tulia\Cms\Taxonomy\UserInterface\Web\Backend\Form\TermForm;
 use Tulia\Cms\Taxonomy\UserInterface\Web\Shared\CriteriaBuilder\RequestCriteriaBuilder;
@@ -26,18 +25,14 @@ class Term extends AbstractController
 {
     private TermFinderInterface $termFinder;
 
-    private TermRepository $repository;
-
-    private TaxonomyRepository $taxonomyRepository;
+    private TaxonomyRepository $repository;
 
     public function __construct(
         TermFinderInterface $termFinder,
-        TermRepository $repository,
-        TaxonomyRepository $taxonomyRepository
+        TaxonomyRepository $repository
     ) {
         $this->termFinder = $termFinder;
         $this->repository = $repository;
-        $this->taxonomyRepository = $taxonomyRepository;
     }
 
     public function index(string $taxonomy_type): RedirectResponse
@@ -58,7 +53,7 @@ class Term extends AbstractController
 
         return $this->view('@backend/taxonomy/term/list.tpl', [
             'terms'        => $terms,
-            'taxonomyType' => $this->taxonomyRepository->getTaxonomyType($criteria['taxonomy_type']),
+            'taxonomyType' => $this->repository->getTaxonomyType($criteria['taxonomy_type']),
             'criteria'     => $criteria,
             'paginator'    => new Paginator($request, $terms->totalRows(), $request->query->getInt('page', 1), $criteria['per_page']),
         ]);
@@ -72,20 +67,20 @@ class Term extends AbstractController
      */
     public function create(Request $request, string $taxonomy_type)
     {
-        $term = $this->taxonomyRepository->createNewTerm([
+        $term = $this->repository->createNewTerm([
             'type' => $taxonomy_type,
             'visibility' => true,
         ]);
-        $taxonomy = $this->taxonomyRepository->get($taxonomy_type);
+        $taxonomy = $this->repository->get($taxonomy_type);
 
         $form = $this->createForm(TermForm::class, $term, ['taxonomy_type' => $term->getType()]);
         $form->handleRequest($request);
 
-        $taxonomyType = $this->taxonomyRepository->getTaxonomyType($term->getType());
+        $taxonomyType = $this->repository->getTaxonomyType($term->getType());
 
         if ($form->isSubmitted() && $form->isValid()) {
             $taxonomy->addTerm($term);
-            $this->taxonomyRepository->save($taxonomy);
+            $this->repository->save($taxonomy);
 
             $this->setFlash('success', $this->trans('termSaved', [], $taxonomyType->getTranslationDomain()));
             return $this->redirectToRoute('backend.term.edit', [ 'id' => $term->getId(), 'taxonomy_type' => $taxonomyType->getType() ]);
@@ -109,7 +104,7 @@ class Term extends AbstractController
     public function edit(Request $request, string $taxonomy_type, string $id)
     {
         try {
-            $taxonomy = $this->taxonomyRepository->get($taxonomy_type);
+            $taxonomy = $this->repository->get($taxonomy_type);
             $term = $taxonomy->getTerm($id);
         } catch (TermNotFoundException $e) {
             $this->setFlash('warning', $this->trans('termNotFound', [], 'categories'));
@@ -119,10 +114,10 @@ class Term extends AbstractController
         $form = $this->createForm(TermForm::class, $term, ['taxonomy_type' => $term->getType()]);
         $form->handleRequest($request);
 
-        $taxonomyType = $this->taxonomyRepository->getTaxonomyType($taxonomy_type);
+        $taxonomyType = $this->repository->getTaxonomyType($taxonomy_type);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->taxonomyRepository->save($taxonomy);
+            $this->repository->save($taxonomy);
 
             $this->setFlash('success', $this->trans('termSaved', [], $taxonomyType->getTranslationDomain()));
             return $this->redirectToRoute('backend.term.edit', [ 'id' => $term->getId(), 'taxonomy_type' => $taxonomyType->getType() ]);
@@ -142,7 +137,7 @@ class Term extends AbstractController
      */
     public function delete(Request $request): RedirectResponse
     {
-        $taxonomy = $this->taxonomyRepository->get($request->query->get('taxonomy_type', 'category'));
+        $taxonomy = $this->repository->get($request->query->get('taxonomy_type', 'category'));
         $removedNodes = 0;
 
         foreach ($request->request->get('ids') as $id) {
@@ -157,7 +152,7 @@ class Term extends AbstractController
         }
 
         if ($removedNodes) {
-            $this->taxonomyRepository->save($taxonomy);
+            $this->repository->save($taxonomy);
             $this->setFlash('success', $this->trans('selectedNodesWereDeleted', [], $taxonomy->getType()->getTranslationDomain()));
         }
 

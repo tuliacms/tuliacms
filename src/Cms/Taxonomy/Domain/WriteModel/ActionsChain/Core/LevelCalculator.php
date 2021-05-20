@@ -23,11 +23,14 @@ class LevelCalculator implements TaxonomyActionInterface
     {
         foreach ($taxonomy->terms() as $term) {
             if ($term->getParentId() === null) {
-                $term->setLevel(0);
+                $newLevel = 0;
             } else {
                 $parent = $taxonomy->getTerm($term->getParentId());
+                $newLevel = $parent->getLevel() + 1;
+            }
 
-                $term->setLevel($parent->getLevel() + 1);
+            if ($term->getLevel() !== $newLevel) {
+                $term->setLevel($newLevel);
             }
         }
     }

@@ -2,29 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Taxonomy\Infrastructure\Persistence\TermPath;
+namespace Tulia\Cms\Taxonomy\Infrastructure\Persistence\Domain\WriteModel;
 
-use PDO;
-use Exception;
-use Tulia\Cms\Taxonomy\Query\Exception\QueryException;
-use Tulia\Cms\Taxonomy\Query\AbstractQuery;
-use Tulia\Framework\Database\Connection;
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
-use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
+use Tulia\Cms\Taxonomy\Ports\Infrastructure\Persistence\Domain\WriteModel\TermPathWriteStorageInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class DbalStorage implements StorageInterface
+class DbalTermPathWriteStorage implements TermPathWriteStorageInterface
 {
-    /**
-     * @var ConnectionInterface
-     */
-    private $connection;
+    private ConnectionInterface $connection;
 
-    /**
-     * @param ConnectionInterface $connection
-     */
     public function __construct(ConnectionInterface $connection)
     {
         $this->connection = $connection;
@@ -80,23 +69,5 @@ class DbalStorage implements StorageInterface
                 'locale'  => $locale,
             ]);
         }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function findByPath(string $path, string $locale): ?string
-    {
-        $result = $this->connection->fetchAll('
-            SELECT *
-            FROM #__term_path
-            WHERE `path` = :path AND locale = :locale
-            LIMIT 1
-        ', [
-            'path'   => $path,
-            'locale' => $locale,
-        ]);
-
-        return $result[0]['term_id'] ?? null;
     }
 }
