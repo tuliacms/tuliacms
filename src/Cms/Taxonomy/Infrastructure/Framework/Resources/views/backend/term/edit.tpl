@@ -1,8 +1,8 @@
 {% extends 'backend' %}
 
-{#{% if taxonomyType.isRoutable %}
+{% if taxonomyType.isRoutable %}
     {% set previewLink = term_path(term) %}
-{% endif %}#}
+{% endif %}
 
 {% block title %}
     {{ 'editTerm'|trans({}, taxonomyType.translationDomain) }}
