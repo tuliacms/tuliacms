@@ -37,12 +37,6 @@ class DbalQuery extends AbstractDbalQuery
              */
             'id' => null,
             /**
-             * This field has higher priority than order_by and order_dir.
-             * Allows to define custom sort option.
-             */
-            'order_by' => 'position',
-            'order_dir' => 'ASC',
-            /**
              * Search for rows in the website. Given null search in all websites.
              * @param null|string
              */
@@ -102,7 +96,7 @@ class DbalQuery extends AbstractDbalQuery
                 $row['items'] = [];
 
                 foreach ($items as $item) {
-                    if ($item['menu_id'] === $row['id']) {
+                    if ($item['menu_id'] === $row['id'] && ! $item['is_root']) {
                         $item['metadata'] = $metadata[$item['id']] ?? [];
                         $row['items'][] = $item;
                     }
@@ -140,31 +134,77 @@ class DbalQuery extends AbstractDbalQuery
      */
     protected function fetchMenuItems(array $criteria): array
     {
-        $qb = $this->queryBuilder->getConnection()->createQueryBuilder()
-            ->select('
-                tm.*,
-                tl.locale,
-                IF(ISNULL(tl.name), 0, 1) AS translated,
-                COALESCE(tl.name, tm.name) AS name,
-                COALESCE(tl.visibility, tm.visibility) AS visibility
-            ')
-            ->from('#__menu_item', 'tm')
-            ->leftJoin('tm', '#__menu_item_lang', 'tl', 'tm.id = tl.menu_item_id AND tl.locale = :tl_locale')
-            ->andWhere('tm.menu_id = :tm_menu_id')
-            ->setParameter('tm_menu_id', $criteria['id'], PDO::PARAM_STR)
-            ->setParameter('tl_locale', $criteria['locale'], PDO::PARAM_STR)
-        ;
+        $where = ['1 = 1'];
+        $parameters = [
+            'menu_id' => $criteria['id'],
+            'locale'  => $criteria['locale'],
+        ];
 
         if ($criteria['visibility']) {
-            $qb
-                ->andWhere('COALESCE(tl.visibility, tm.visibility, 0) = :tl_visibility')
-                ->setParameter('tl_visibility', $criteria['visibility'], PDO::PARAM_INT);
+            $where[] = 'COALESCE(tl.visibility, tm.visibility, 0) = :tl_visibility';
+            $parameters['tl_visibility'] = $criteria['visibility'];
         }
 
-        if ($criteria['order_by']) {
-            $qb->addOrderBy($criteria['order_by'], $criteria['order_dir']);
-        }
+        $where = implode(' AND ', $where);
 
-        return $qb->execute()->fetchAllAssociative();
+        return $this->queryBuilder->getConnection()->fetchAllAssociative("
+WITH RECURSIVE tree_path (
+    id,
+    menu_id,
+    parent_id,
+    position,
+    level,
+    is_root,
+    type,
+    identity,
+    hash,
+    target,
+    name,
+    visibility,
+    path
+) AS (
+        SELECT
+            id,
+            menu_id,
+            parent_id,
+            position,
+            level,
+            is_root,
+            type,
+            identity,
+            hash,
+            target,
+            name,
+            visibility,
+            CONCAT(name, '/') as path
+        FROM #__menu_item
+        WHERE
+            is_root = 1
+            AND menu_id = :menu_id
+    UNION ALL
+        SELECT
+            tm.id,
+            tm.menu_id,
+            tm.parent_id,
+            tm.position,
+            tm.level,
+            tm.is_root,
+            tm.type,
+            tm.identity,
+            tm.hash,
+            tm.target,
+            COALESCE(tl.name, tm.name) AS name,
+            COALESCE(tl.visibility, tm.visibility) AS visibility,
+            CONCAT(tp.path, tm.name, '/') AS path
+        FROM tree_path AS tp
+        INNER JOIN #__menu_item AS tm
+            ON tp.id = tm.parent_id
+        LEFT JOIN #__menu_item_lang AS tl
+            ON tm.id = tl.menu_item_id AND tl.locale = :locale
+        WHERE
+            {$where}
+)
+SELECT * FROM tree_path
+ORDER BY position, path", $parameters);
     }
 }

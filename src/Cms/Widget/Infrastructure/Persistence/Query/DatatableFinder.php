@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace Tulia\Cms\Widget\Infrastructure\Persistence\Query;
 
 use PDO;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 use Tulia\Component\Datatable\Finder\AbstractDatatableFinder;
-use Symfony\Component\Routing\RouterInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 use Tulia\Component\Theme\ManagerInterface;
 use Tulia\Component\Widget\Registry\WidgetRegistryInterface;
-use Doctrine\DBAL\Query\QueryBuilder;
 
 /**
  * @author Adam Banaszkiewicz

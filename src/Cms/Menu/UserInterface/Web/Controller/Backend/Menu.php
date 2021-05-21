@@ -47,9 +47,8 @@ class Menu extends AbstractController
      */
     public function create(Request $request): RedirectResponse
     {
-        $menu = $this->repository->createNewMenu([
-            'name' => $request->request->get('name')
-        ]);
+        $menu = $this->repository->createNewMenu();
+        $menu->setName($request->request->get('name'));
 
         $this->repository->save($menu);
 
@@ -87,7 +86,8 @@ class Menu extends AbstractController
     public function delete(Request $request): RedirectResponse
     {
         foreach ($request->request->get('ids', []) as $id) {
-            $this->repository->delete($id);
+            $menu = $this->repository->find($id);
+            $this->repository->delete($menu);
         }
 
         $this->setFlash('success', $this->trans('selectedMenusWereDeleted', [], 'menu'));

@@ -9,18 +9,9 @@ namespace Tulia\Cms\Menu\Domain\Builder\Hierarchy;
  */
 interface HierarchyInterface extends \ArrayAccess, \IteratorAggregate
 {
-    /**
-     * @return string
-     */
     public function getId(): string;
 
-    /**
-     * @param Item $item
-     */
     public function append(Item $item): void;
 
-    /**
-     * @return HierarchyInterface
-     */
     public function flatten(): HierarchyInterface;
 }

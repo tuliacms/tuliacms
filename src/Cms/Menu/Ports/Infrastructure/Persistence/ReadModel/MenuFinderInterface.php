@@ -18,5 +18,6 @@ interface MenuFinderInterface
      * @return null|Menu
      */
     public function findOne(array $criteria, string $scope);
+
     public function find(array $criteria, string $scope): Collection;
 }

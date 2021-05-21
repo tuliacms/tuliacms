@@ -4,19 +4,14 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Homepage\UserInterface\Web\Controller\Backend;
 
-use Doctrine\Migrations\DependencyFactory;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Component\Templating\ViewInterface;
-use Symfony\Component\Console\Input\ArrayInput;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class Homepage extends AbstractController
 {
-    /**
-     * @return ViewInterface
-     */
     public function index(/*DependencyFactory $dependencyFactory*/): ViewInterface
     {
         /*$input = new ArrayInput([]);

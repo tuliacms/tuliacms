@@ -35,7 +35,7 @@ class HierarchyBuilder implements HierarchyBuilderInterface
         $items = $collection === [] ? $this->getItems($id) : $collection;
 
         foreach ($items as $item) {
-            if ($item->getLevel() === 0) {
+            if ($item->getLevel() === 1) {
                 $hierarchy->append($this->buildFor($item, $items));
             }
         }

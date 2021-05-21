@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Tulia\Component\Datatable;
 
-use Doctrine\DBAL\Query\QueryBuilder;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
 use Tulia\Component\Datatable\Filter\ComparisonOperatorsEnum;
 use Tulia\Component\Datatable\Filter\Filter;
 use Tulia\Component\Datatable\Filter\FilterCollectionBuilder;
@@ -20,7 +20,9 @@ use Tulia\Component\Datatable\Plugin\PluginInterface;
 class Datatable
 {
     private FinderInterface $finder;
+
     private Request $request;
+
     private TranslatorInterface $translator;
 
     /**
@@ -140,7 +142,7 @@ class Datatable
         $this->applyFilters($qb, $filters);
 
         $result = $this->finder->prepareResult(
-            $qb->execute()->fetchAllAssociative()
+            $this->finder->fetchAllAssociative($qb)
         );
 
         foreach ($this->plugins as $plugin) {

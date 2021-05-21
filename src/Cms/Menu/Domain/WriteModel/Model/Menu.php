@@ -12,8 +12,11 @@ use Tulia\Cms\Menu\Domain\WriteModel\Exception\ItemNotFoundException;
 class Menu
 {
     protected string $id;
+
     protected string $websiteId;
+
     protected ?string $name = null;
+
     protected array $itemsChanges = [];
 
     /**
@@ -21,10 +24,20 @@ class Menu
      */
     protected array $items = [];
 
-    public function __construct(string $id, string $websiteId)
+    private function __construct(string $id, string $websiteId)
     {
         $this->id = $id;
         $this->websiteId = $websiteId;
+    }
+
+    public static function create(string $id, string $websiteId, string $locale): self
+    {
+        $root = Item::createRoot($locale);
+
+        $menu = new self($id, $websiteId);
+        $menu->addItem($root);
+
+        return $menu;
     }
 
     public static function buildFromArray(array $data): self
@@ -78,6 +91,13 @@ class Menu
         $changes = $this->itemsChanges;
         $this->itemsChanges = [];
         return $changes;
+    }
+
+    public function items(): iterable
+    {
+        foreach ($this->items as $item) {
+            yield $item;
+        }
     }
 
     public function addItem(Item $item): void

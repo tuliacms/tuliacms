@@ -13,24 +13,14 @@ use Tulia\Cms\Menu\Domain\Builder\HtmlBuilder\HtmlBuilderInterface;
  */
 class Builder implements BuilderInterface
 {
-    /**
-     * @var HierarchyBuilderInterface
-     */
-    protected $hierarchyBuilder;
+    protected HierarchyBuilderInterface $hierarchyBuilder;
 
-    /**
-     * @var HtmlBuilderInterface
-     */
-    protected $htmlBuilder;
+    protected HtmlBuilderInterface $htmlBuilder;
 
-    /**
-     * @param HierarchyBuilderInterface $hierarchyBuilder
-     * @param HtmlBuilderInterface $htmlBuilder
-     */
     public function __construct(HierarchyBuilderInterface $hierarchyBuilder, HtmlBuilderInterface $htmlBuilder)
     {
         $this->hierarchyBuilder = $hierarchyBuilder;
-        $this->htmlBuilder      = $htmlBuilder;
+        $this->htmlBuilder = $htmlBuilder;
     }
 
     /**

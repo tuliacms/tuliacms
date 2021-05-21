@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace Tulia\Cms\Menu\Infrastructure\Persistence\Domain\ReadModel\Datatable;
 
 use PDO;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Tulia\Component\Datatable\Finder\AbstractDatatableFinder;
-use Symfony\Component\Routing\RouterInterface;
-use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
+use Tulia\Cms\Menu\Domain\WriteModel\Model\Item;
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
-use Doctrine\DBAL\Query\QueryBuilder;
+use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
+use Tulia\Component\Datatable\Finder\AbstractDatatableFinder;
+use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -19,9 +20,12 @@ use Doctrine\DBAL\Query\QueryBuilder;
 class DbalItemDatatableFinder extends AbstractDatatableFinder
 {
     private RouterInterface $router;
+
     private TranslatorInterface $translator;
-    private ?string $menuId = null;
+
     private CsrfTokenManagerInterface $csrfTokenManager;
+
+    private ?string $menuId = null;
 
     public function __construct(
         ConnectionInterface $connection,
@@ -109,6 +113,7 @@ class DbalItemDatatableFinder extends AbstractDatatableFinder
             ->addSelect('tm.menu_id, tm.level, tm.parent_id')
             ->leftJoin('tm', '#__menu_item_lang', 'tl', 'tm.id = tl.menu_item_id AND tl.locale = :locale')
             ->where('tm.menu_id = :menu_id')
+            ->andWhere('tm.is_root = 0')
             ->setParameter('menu_id', $this->menuId, PDO::PARAM_STR)
             ->setParameter('locale', $this->currentWebsite->getLocale()->getCode(), PDO::PARAM_STR)
             ->addOrderBy('tm.level', 'ASC')
@@ -139,11 +144,11 @@ class DbalItemDatatableFinder extends AbstractDatatableFinder
             $row['level'] = (int) $row['level'];
 
             $row['name'] = sprintf(
-                '<a href="%2$s" title="%1$s" class="link-title">%4$s %3$s %1$s</a>',
+                '<a href="%2$s" title="%1$s" class="link-title"><span class="boxur-depth boxur-depth-%4$s">%3$s %1$s</span></a>',
                 $row['name'],
                 $this->router->generate('backend.menu.item.edit', ['menuId' => $row['menu_id'], 'id' => $row['id']]),
                 $badges,
-                str_repeat('-- &nbsp;', $row['level'])
+                $row['level'] - 1
             );
         }
 
@@ -179,7 +184,7 @@ class DbalItemDatatableFinder extends AbstractDatatableFinder
         ];
     }
 
-    private function sort(array $items, int $level = 0, string $parent = null): array
+    private function sort(array $items, int $level = 1, string $parent = Item::ROOT_ID): array
     {
         $result = [];
 

@@ -26,5 +26,5 @@ interface MenuRepositoryInterface
 
     public function update(Menu $menu): void;
 
-    public function delete(string $id): void;
+    public function delete(Menu $menu): void;
 }

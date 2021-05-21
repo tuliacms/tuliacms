@@ -15,6 +15,7 @@ use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 class DbalMenuStorage implements MenuStorageInterface
 {
     private ConnectionInterface $connection;
+
     private ItemStorageInterface $itemStorage;
 
     public function __construct(ConnectionInterface $connection, ItemStorageInterface $itemStorage)

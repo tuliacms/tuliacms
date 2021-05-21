@@ -19,7 +19,7 @@ class Item
     /**
      * @var int
      */
-    protected $level = 0;
+    protected $level = 1;
 
     /*
      * @var string
@@ -127,7 +127,7 @@ class Item
      */
     public function isRoot(): bool
     {
-        return $this->level === 0;
+        return $this->level === 1;
     }
 
     /**

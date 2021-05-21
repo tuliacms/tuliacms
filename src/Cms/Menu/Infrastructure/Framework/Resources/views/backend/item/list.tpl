@@ -15,8 +15,8 @@
     <div class="pane pane-lead">
         <div class="pane-header">
             <div class="pane-buttons">
-                <a href="{{ path('backend.menu.item.create', { menuId: menu.id }) }}" class="btn btn-success btn-icon-left"><i class="btn-icon fas fa-plus"></i> {{ 'add'|trans }}</a>
-                <a href="{{ path('backend.menu.hierarchy', { menuId: menu.id }) }}" class="btn btn-secondary btn-icon-left"><i class="btn-icon fa fa-sitemap"></i> {{ 'changeHierarchy'|trans({}, 'menu') }}</a>
+                <a href="{{ path('backend.menu.hierarchy', { menuId: menu.id }) }}" class="btn btn-secondary btn-icon-only" title="{{ 'changeHierarchy'|trans({}, 'menu') }}" data-toggle="tooltip"><i class="btn-icon fa fa-sitemap"></i></a>
+                <a href="{{ path('backend.menu.item.create', { menuId: menu.id }) }}" class="btn btn-success btn-icon-left"><i class="btn-icon fas fa-plus"></i> {{ 'create'|trans }}</a>
             </div>
             <i class="pane-header-icon fas fa-palette"></i>
             <h1 class="pane-title">{{ block('title') }}</h1>

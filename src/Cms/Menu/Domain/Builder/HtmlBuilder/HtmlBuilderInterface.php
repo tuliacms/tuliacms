@@ -11,10 +11,5 @@ use Tulia\Cms\Menu\Domain\Builder\Hierarchy\HierarchyInterface;
  */
 interface HtmlBuilderInterface
 {
-    /**
-     * @param HierarchyInterface $hierarchy
-     *
-     * @return string
-     */
     public function build(HierarchyInterface $hierarchy): string;
 }
