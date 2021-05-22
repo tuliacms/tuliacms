@@ -93,6 +93,9 @@ class Menu
         return $changes;
     }
 
+    /**
+     * @return Item[]
+     */
     public function items(): iterable
     {
         foreach ($this->items as $item) {
@@ -110,21 +113,9 @@ class Menu
         $item->assignToMenu($this);
 
         if ($item->isRoot() === false) {
-            if ($item->getParentId() === null) {
-                $item->setParentId(Item::ROOT_ID);
-            }
-
-            if ($item->getPosition() === 0) {
-                $position = 0;
-
-                foreach ($this->items as $existingItem) {
-                    if ($existingItem->getParentId() === $item->getParentId()) {
-                        $position = max($position, $existingItem->getPosition());
-                    }
-                }
-
-                $item->setPosition($position + 1);
-            }
+            $this->resolveItemParent($item);
+            $this->calculateItemPosition($item);
+            $this->calculateItemLevel($item);
         }
 
         $this->recordItemChange('add', $item);
@@ -193,5 +184,33 @@ class Menu
         }
 
         $this->itemsChanges[] = ['type' => $type, 'item' => $item];
+    }
+
+    private function calculateItemLevel(Item $item): void
+    {
+        $parent = $this->getItem($item->getParentId());
+        $item->setLevel($parent->getLevel() + 1);
+    }
+
+    private function calculateItemPosition(Item $item): void
+    {
+        if ($item->getPosition() === 0) {
+            $position = 0;
+
+            foreach ($this->items as $existingItem) {
+                if ($existingItem->getParentId() === $item->getParentId()) {
+                    $position = max($position, $existingItem->getPosition());
+                }
+            }
+
+            $item->setPosition($position + 1);
+        }
+    }
+
+    private function resolveItemParent(Item $item): void
+    {
+        if ($item->getParentId() === null) {
+            $item->setParentId(Item::ROOT_ID);
+        }
     }
 }

@@ -22,15 +22,6 @@ backend.menu.delete:
     controller: Tulia\Cms\Menu\UserInterface\Web\Controller\Backend\Menu::delete
     methods: POST
 
-backend.menu.hierarchy:
-    path: /administrator/menu/{menuId}/hierarchy
-    controller: Tulia\Cms\Menu\UserInterface\Web\Controller\Backend\Hierarchy::index
-
-backend.menu.hierarchy.save:
-    path: /administrator/menu/{menuId}/hierarchy/save
-    controller: Tulia\Cms\Menu\UserInterface\Web\Controller\Backend\Hierarchy::save
-    methods: POST
-
 
 # Menu item routes
 backend.menu.item:
@@ -58,4 +49,13 @@ backend.menu.item.edit:
 backend.menu.item.delete:
     path: /administrator/menu/{menuId}/item/delete
     controller: Tulia\Cms\Menu\UserInterface\Web\Controller\Backend\MenuItem::delete
+    methods: POST
+
+backend.menu.item.hierarchy:
+    path: /administrator/menu/{menuId}/item/hierarchy
+    controller: Tulia\Cms\Menu\UserInterface\Web\Controller\Backend\Hierarchy::index
+
+backend.menu.item.hierarchy.save:
+    path: /administrator/menu/{menuId}/item/hierarchy/save
+    controller: Tulia\Cms\Menu\UserInterface\Web\Controller\Backend\Hierarchy::save
     methods: POST
