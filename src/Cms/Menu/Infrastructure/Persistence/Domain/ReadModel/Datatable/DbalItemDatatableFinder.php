@@ -68,12 +68,10 @@ class DbalItemDatatableFinder extends AbstractDatatableFinder
             'name' => [
                 'selector' => 'COALESCE(tl.name, tm.name)',
                 'label' => 'name',
-                'sortable' => true,
             ],
             'visibility' => [
                 'selector' => 'COALESCE(tl.visibility, tm.visibility)',
                 'label' => 'visibility',
-                'sortable' => true,
                 'value_translation' => [
                     '1' => $this->translator->trans('visible'),
                     '0' => $this->translator->trans('invisible'),
@@ -82,23 +80,6 @@ class DbalItemDatatableFinder extends AbstractDatatableFinder
                     '1' => 'text-success',
                     '0' => 'text-danger',
                 ],
-            ],
-        ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getFilters(): array
-    {
-        return [
-            'name' => [
-                'label' => 'name',
-                'type' => 'text',
-            ],
-            'visibility' => [
-                'label' => 'visibility',
-                'type' => 'yes_no',
             ],
         ];
     }
