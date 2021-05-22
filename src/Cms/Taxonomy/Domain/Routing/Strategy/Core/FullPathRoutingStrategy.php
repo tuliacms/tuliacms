@@ -6,6 +6,8 @@ namespace Tulia\Cms\Taxonomy\Domain\Routing\Strategy\Core;
 
 use Tulia\Cms\Taxonomy\Domain\Routing\Strategy\TaxonomyRoutingStrategyInterface;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Taxonomy;
+use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Term;
+use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\ValueObject\TermId;
 use Tulia\Cms\Taxonomy\Ports\Infrastructure\Persistence\Domain\WriteModel\TermWriteStorageInterface;
 
 /**
@@ -25,12 +27,12 @@ class FullPathRoutingStrategy implements TaxonomyRoutingStrategyInterface
     public function generateFromTaxonomy(Taxonomy $taxonomy, string $id): string
     {
         $path = '';
-        $term = $taxonomy->getTerm($id);
+        $term = $taxonomy->getTerm(new TermId($id));
 
         while ($term !== null) {
             $path = "/{$term->getSlug()}" . $path;
 
-            if ($term->getParentId()) {
+            if ($term->getParentId() && $term->getParentId()->getId() !== Term::ROOT_ID) {
                 $term = $taxonomy->getTerm($term->getParentId());
             } else {
                 break;
@@ -48,7 +50,7 @@ class FullPathRoutingStrategy implements TaxonomyRoutingStrategyInterface
         while ($term !== null) {
             $path = "/{$term['slug']}" . $path;
 
-            if ($term['parent_id']) {
+            if ($term['parent_id'] && $term['parent_id'] !== Term::ROOT_ID) {
                 $term = $this->storage->find($term['parent_id'], $locale, $defaultLocale);
             } else {
                 break;

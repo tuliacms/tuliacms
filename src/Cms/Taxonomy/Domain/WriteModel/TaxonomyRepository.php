@@ -11,8 +11,10 @@ use Tulia\Cms\Taxonomy\Domain\Metadata\TermMetadataEnum;
 use Tulia\Cms\Taxonomy\Domain\TaxonomyType\RegistryInterface;
 use Tulia\Cms\Taxonomy\Domain\TaxonomyType\TaxonomyTypeInterface;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\ActionsChain\TaxonomyActionsChainInterface;
+use Tulia\Cms\Taxonomy\Domain\WriteModel\Exception\TermNotFoundException;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Taxonomy;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Term;
+use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\ValueObject\TermId;
 use Tulia\Cms\Taxonomy\Ports\Infrastructure\Persistence\Domain\WriteModel\TermWriteStorageInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 
@@ -53,14 +55,13 @@ class TaxonomyRepository
         $this->actionsChain = $actionsChain;
     }
 
-    public function createNewTerm(array $data): Term
+    public function createNewTerm(Taxonomy $taxonomy): Term
     {
-        return Term::buildFromArray(array_merge($data, [
-            'id' => $this->uuidGenerator->generate(),
-            'locale' => $this->currentWebsite->getLocale()->getCode(),
-            'type' => 'category',
-            'website_id' => $this->currentWebsite->getId(),
-        ]));
+        return Term::createNew(
+            $this->uuidGenerator->generate(),
+            $taxonomy,
+            $this->currentWebsite->getLocale()->getCode()
+        );
     }
 
     public function getTaxonomyType(string $type): TaxonomyTypeInterface
@@ -70,10 +71,20 @@ class TaxonomyRepository
 
     public function get(string $type): Taxonomy
     {
-        $taxonomy = Taxonomy::buildFromArray([
-            'type' => $this->getTaxonomyType($type),
-            'terms' => $this->getTerms($type)
-        ]);
+        $taxonomy = Taxonomy::create(
+            $this->getTaxonomyType($type),
+            $this->currentWebsite->getId(),
+            $this->getTerms($type)
+        );
+
+        try {
+            $taxonomy->getTerm(new TermId(Term::ROOT_ID));
+        } catch (TermNotFoundException $e) {
+            $taxonomy->addTerm(Term::createRoot(
+                $taxonomy,
+                $this->currentWebsite->getLocale()->getCode()
+            ));
+        }
 
         $this->actionsChain->execute('find', $taxonomy);
 
@@ -142,22 +153,20 @@ class TaxonomyRepository
         $result = [];
 
         foreach ($terms as $term) {
-            $result[] = Term::buildFromArray([
-                'id'           => $term['id'],
-                'type'         => $term['type'] ?? '',
-                'locale'       => $term['locale'],
-                'level'        => (int) $term['level'],
-                'position'     => (int) $term['position'],
-                'global_order' => (int) $term['global_order'],
-                'website_id'   => $term['website_id'],
-                'parent_id'    => $term['parent_id'],
-                'name'         => $term['name'],
-                'slug'         => $term['slug'],
-                'path'         => $term['path'],
-                'visibility'   => $term['visibility'] === '1',
-                'metadata'     => $this->metadataRepository->findAll(TermMetadataEnum::TYPE, $term['id']),
-                'translated'   => $term['translated'] ?? true,
-            ]);
+            $result[] = [
+                'id'         => $term['id'],
+                'locale'     => $term['locale'],
+                'level'      => (int) $term['level'],
+                'position'   => (int) $term['position'],
+                'parent_id'  => $term['parent_id'],
+                'name'       => $term['name'],
+                'slug'       => $term['slug'],
+                'path'       => $term['path'],
+                'visibility' => $term['visibility'] === '1',
+                'is_root'    => (bool) $term['is_root'],
+                'metadata'   => $this->metadataRepository->findAll(TermMetadataEnum::TYPE, $term['id']),
+                'translated' => $term['translated'] ?? true,
+            ];
         }
 
         return $result;
@@ -166,18 +175,18 @@ class TaxonomyRepository
     private function extractTerm(Term $term): array
     {
         return [
-            'id'           => $term->getId()->getId(),
-            'type'         => $term->getType(),
-            'website_id'   => $term->getWebsiteId(),
-            'level'        => $term->getLevel(),
-            'position'     => $term->getPosition(),
-            'global_order' => $term->getGlobalOrder(),
-            'slug'         => $term->getSlug(),
-            'path'         => $term->getPath(),
-            'name'         => $term->getName(),
-            'visibility'   => $term->isVisible(),
-            'parent_id'    => $term->getParentId(),
-            'locale'       => $term->getLocale(),
+            'id'         => $term->getId()->getId(),
+            'website_id' => $term->getTaxonomy()->getWebsiteId(),
+            'type'       => $term->getTaxonomy()->getType()->getType(),
+            'level'      => $term->getLevel(),
+            'position'   => $term->getPosition(),
+            'slug'       => $term->getSlug(),
+            'path'       => $term->getPath(),
+            'name'       => $term->getName(),
+            'visibility' => $term->isVisible(),
+            'parent_id'  => $term->getParentId(),
+            'locale'     => $term->getLocale(),
+            'is_root'    => $term->isRoot(),
         ];
     }
 }

@@ -17,26 +17,12 @@ use Tulia\Cms\Taxonomy\Domain\TaxonomyType\RegistryInterface as TaxonomyRegistry
  */
 class NodeMenuBuilder implements BuilderInterface
 {
-    /**
-     * @var BuilderHelperInterface
-     */
-    protected $helper;
+    protected BuilderHelperInterface $helper;
 
-    /**
-     * @var NodeRegistry
-     */
-    protected $nodeRegistry;
+    protected NodeRegistry $nodeRegistry;
 
-    /**
-     * @var TaxonomyRegistry
-     */
-    protected $taxonomyRegistry;
+    protected TaxonomyRegistry $taxonomyRegistry;
 
-    /**
-     * @param BuilderHelperInterface $helper
-     * @param NodeRegistry $nodeRegistry
-     * @param TaxonomyRegistry $taxonomyRegistry
-     */
     public function __construct(
         BuilderHelperInterface $helper,
         NodeRegistry $nodeRegistry,
@@ -83,7 +69,7 @@ class NodeMenuBuilder implements BuilderInterface
 
             $registry->add($root . '_' . $taxonomy->getType(), [
                 'label'    => $this->helper->trans('taxonomy', [], $taxonomy->getTranslationDomain()),
-                'link'     => $this->helper->generateUrl('backend.term', [ 'taxonomy_type' => $taxonomy->getType() ]),
+                'link'     => $this->helper->generateUrl('backend.term', [ 'taxonomyType' => $taxonomy->getType() ]),
                 'parent'   => $root,
             ]);
         }

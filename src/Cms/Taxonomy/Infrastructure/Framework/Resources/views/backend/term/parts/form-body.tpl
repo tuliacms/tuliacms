@@ -1,7 +1,6 @@
 {{ form_start(form) }}
 {{ form_errors(form) }}
 {{ form_row(form.id) }}
-{{ form_row(form.type) }}
 {{ form_row(form._token) }}
 
 <div class="page-form" id="node-form">

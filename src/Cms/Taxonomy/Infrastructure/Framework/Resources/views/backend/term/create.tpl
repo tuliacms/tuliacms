@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block breadcrumbs %}
-    <li class="breadcrumb-item"><a href="{{ path('backend.term', { taxonomy_type: taxonomyType.type }) }}">{{ 'terms'|trans({}, taxonomyType.translationDomain) }}</a></li>
+    <li class="breadcrumb-item"><a href="{{ path('backend.term', { taxonomyType: taxonomyType.type }) }}">{{ 'terms'|trans({}, taxonomyType.translationDomain) }}</a></li>
     <li class="breadcrumb-item active" aria-current="page">{{ 'create'|trans }}</li>
 {% endblock %}
 

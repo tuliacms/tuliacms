@@ -6,6 +6,7 @@ namespace Tulia\Cms\Taxonomy\Domain\Routing\Strategy\Core;
 
 use Tulia\Cms\Taxonomy\Domain\Routing\Strategy\TaxonomyRoutingStrategyInterface;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Taxonomy;
+use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\ValueObject\TermId;
 use Tulia\Cms\Taxonomy\Ports\Infrastructure\Persistence\Domain\WriteModel\TermWriteStorageInterface;
 
 /**
@@ -24,7 +25,7 @@ class SimpleRoutingStrategy implements TaxonomyRoutingStrategyInterface
 
     public function generateFromTaxonomy(Taxonomy $taxonomy, string $id): string
     {
-        $term = $taxonomy->getTerm($id);
+        $term = $taxonomy->getTerm(new TermId($id));
 
         if ($term !== null) {
             return "/{$term->getSlug()}";

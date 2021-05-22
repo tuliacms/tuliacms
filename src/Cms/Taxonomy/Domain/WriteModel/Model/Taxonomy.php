@@ -10,7 +10,7 @@ use Tulia\Cms\Taxonomy\Domain\WriteModel\Event\TermCreated;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Event\TermDeleted;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Exception\TermNotFoundException;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Helper\TermsChangelog;
-use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\ValueObject\TaxonomyType;
+use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\ValueObject\TermId;
 
 /**
  * @author Adam Banaszkiewicz
@@ -19,6 +19,8 @@ class Taxonomy extends AggregateRoot
 {
     private TaxonomyTypeInterface $type;
 
+    private string $websiteId;
+
     /**
      * @var Term[]
      */
@@ -26,31 +28,33 @@ class Taxonomy extends AggregateRoot
 
     private TermsChangelog $changelog;
 
-    private function __construct(TaxonomyTypeInterface $type, array $terms = [])
+    private function __construct(TaxonomyTypeInterface $type, string $websiteId, array $terms = [])
     {
         $this->type = $type;
+        $this->websiteId = $websiteId;
 
         foreach ($terms as $term) {
-            $this->terms[$term->getId()->getId()] = $term;
-            $term->setTaxonomy($this, $this->produceTermChangeCallback());
+            $term['taxonomy'] = $this;
+            $this->terms[$term['id']] = Term::buildFromArray($term);
+            $this->terms[$term['id']]->setTaxonomy($this, $this->produceTermChangeCallback());
         }
 
         $this->changelog = new TermsChangelog();
     }
 
-    public static function createNew(TaxonomyTypeInterface $type): self
+    public static function create(TaxonomyTypeInterface $type, string $websiteId, array $terms = []): self
     {
-        return new self($type);
-    }
-
-    public static function buildFromArray(array $data): self
-    {
-        return new self($data['type'], $data['terms']);
+        return new self($type, $websiteId, $terms);
     }
 
     public function getType(): TaxonomyTypeInterface
     {
         return $this->type;
+    }
+
+    public function getWebsiteId(): string
+    {
+        return $this->websiteId;
     }
 
     /**
@@ -66,13 +70,13 @@ class Taxonomy extends AggregateRoot
     /**
      * @throws TermNotFoundException
      */
-    public function getTerm(string $id): Term
+    public function getTerm(TermId $id): Term
     {
-        if (isset($this->terms[$id])) {
-            return $this->terms[$id];
+        if (isset($this->terms[$id->getId()])) {
+            return $this->terms[$id->getId()];
         }
 
-        throw new TermNotFoundException(sprintf('Term %s not found.', $id));
+        throw new TermNotFoundException(sprintf('Term %s not found.', $id->getId()));
     }
 
     public function addTerm(Term $term): void
@@ -80,9 +84,15 @@ class Taxonomy extends AggregateRoot
         $this->terms[$term->getId()->getId()] = $term;
         $term->setTaxonomy($this, $this->produceTermChangeCallback());
 
+        if ($term->isRoot() === false) {
+            $this->resolveItemParent($term);
+            $this->calculateItemPosition($term);
+            $this->calculateItemLevel($term);
+        }
+
         $this->changelog->insert($term);
 
-        $this->recordThat(TermCreated::fromTerm($term));
+        //$this->recordThat(TermCreated::fromTerm($term));
     }
 
     public function removeTerm(Term $term): void
@@ -114,5 +124,33 @@ class Taxonomy extends AggregateRoot
         return function (Term $term) {
             $this->changelog->update($term);
         };
+    }
+
+    private function calculateItemLevel(Term $term): void
+    {
+        $parent = $this->getTerm($term->getParentId());
+        $term->setLevel($parent->getLevel() + 1);
+    }
+
+    private function calculateItemPosition(Term $term): void
+    {
+        if ($term->getPosition() === 0) {
+            $position = 0;
+
+            foreach ($this->terms as $existingItem) {
+                if ($existingItem->getParentId() === $term->getParentId()) {
+                    $position = max($position, $existingItem->getPosition());
+                }
+            }
+
+            $term->setPosition($position + 1);
+        }
+    }
+
+    private function resolveItemParent(Term $term): void
+    {
+        if ($term->getParentId() === null) {
+            $term->setParentId(new TermId(Term::ROOT_ID));
+        }
     }
 }

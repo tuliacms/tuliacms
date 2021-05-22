@@ -41,12 +41,6 @@ class TermForm extends AbstractFormSkeletonType
                     new Assert\Uuid(),
                 ],
             ])
-            ->add('type', Type\HiddenType::class, [
-                'constraints' => [
-                    new Assert\NotBlank(),
-                    new Assert\Choice([ 'choices' => [ $taxonomyType->getType() ] ]),
-                ],
-            ])
             ->add('name', Type\TextType::class, [
                 'constraints' => [
                     new Assert\NotBlank(),
@@ -55,7 +49,7 @@ class TermForm extends AbstractFormSkeletonType
             ->add('cancel', FormType\CancelType::class, [
                 'route' => 'backend.term',
                 'route_params' => [
-                    'taxonomy_type' => $taxonomyType->getType(),
+                    'taxonomyType' => $taxonomyType->getType(),
                 ],
             ])
             ->add('save', FormType\SubmitType::class)

@@ -16,7 +16,7 @@
     <div class="pane pane-lead">
         <div class="pane-header">
             <div class="pane-buttons">
-                <a href="" class="btn btn-secondary btn-icon-left"><i class="btn-icon fas fa-times"></i> {{ 'cancel'|trans }}</a>
+                <a href="{{ path('backend.menu.item', { menuId: menuId }) }}" class="btn btn-secondary btn-icon-left"><i class="btn-icon fas fa-times"></i> {{ 'cancel'|trans }}</a>
                 <a href="#" data-submit-form="hierarchy-form" class="btn btn-success btn-icon-left"><i class="btn-icon fas fa-save"></i> {{ 'save'|trans }}</a>
             </div>
             <i class="pane-header-icon fas fa-sitemap"></i>

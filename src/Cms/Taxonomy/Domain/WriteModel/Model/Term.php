@@ -16,21 +16,21 @@ class Term extends AggregateRoot
 {
     use MagickMetadataTrait;
 
+    public const ROOT_ID = '00000000-0000-0000-0000-000000000000';
+
     protected TermId $id;
 
-    protected string $type;
+    protected Taxonomy $taxonomy;
 
-    protected string $websiteId;
-
-    protected ?string $parentId = null;
+    protected ?TermId $parentId = null;
 
     protected int $position = 0;
 
-    protected int $globalOrder = 0;
-
-    protected string $locale;
-
     protected int $level = 0;
+
+    protected bool $isRoot = false;
+
+    protected string $locale = 'en_US';
 
     protected ?string $name = null;
 
@@ -40,38 +40,51 @@ class Term extends AggregateRoot
 
     protected bool $visibility;
 
-    protected ?Taxonomy $taxonomy = null;
+    protected bool $translated = false;
 
     protected $changeCallback;
 
-    private function __construct(string $id, string $type, string $websiteId, string $locale)
+    private function __construct(string $id, Taxonomy $taxonomy, string $locale, bool $isRoot = false)
     {
         $this->id = new TermId($id);
-        $this->type = $type;
-        $this->websiteId = $websiteId;
+        $this->taxonomy = $taxonomy;
         $this->locale = $locale;
+        $this->isRoot = $isRoot;
     }
 
-    public static function createNew(string $id, string $type, string $websiteId, string $locale): self
+    public static function createNew(string $id, Taxonomy $taxonomy, string $locale, bool $isRoot = false): self
     {
-        $self = new self($id, $type, $websiteId, $locale);
-        $self->recordThat(new Event\TermCreated($id, $type, $websiteId, $locale));
+        $self = new self($id, $taxonomy, $locale, $isRoot);
+        //$self->recordThat(new Event\TermCreated($id, $type, $locale));
 
         return $self;
+    }
+
+    public static function createRoot(Taxonomy $taxonomy, string $locale): self
+    {
+        $item = new self(self::ROOT_ID, $taxonomy, $locale, true);
+        $item->name = 'root';
+        $item->parentId = null;
+        $item->position = 0;
+        $item->level = 0;
+        $item->locale = $locale;
+        $item->translated = false;
+        $item->visibility = true;
+
+        return $item;
     }
 
     public static function buildFromArray(array $data): self
     {
         $self = new self(
             $data['id'],
-            $data['type'],
-            $data['website_id'],
-            $data['locale']
+            $data['taxonomy'],
+            $data['locale'],
+            (bool) $data['is_root']
         );
-        $self->parentId = $data['parent_id'] ?? null;
+        $self->parentId = $data['parent_id'] ? new TermId($data['parent_id']) : null;
         $self->level = (int) ($data['level'] ?? 0);
         $self->position = (int) ($data['position'] ?? 0);
-        $self->globalOrder = (int) ($data['globalOrder'] ?? 0);
         $self->name = $data['name'] ?? null;
         $self->slug = $data['slug'] ?? null;
         $self->path = $data['path'] ?? null;
@@ -92,34 +105,12 @@ class Term extends AggregateRoot
         $this->recordTermChanged();
     }
 
-    public function getType(): string
-    {
-        return $this->type;
-    }
-
-    public function setType(string $type): void
-    {
-        $this->type = $type;
-        $this->recordTermChanged();
-    }
-
-    public function getWebsiteId(): string
-    {
-        return $this->websiteId;
-    }
-
-    public function setWebsiteId(string $websiteId): void
-    {
-        $this->websiteId = $websiteId;
-        $this->recordTermChanged();
-    }
-
-    public function getParentId(): ?string
+    public function getParentId(): ?TermId
     {
         return $this->parentId;
     }
 
-    public function setParentId(?string $parentId): void
+    public function setParentId(?TermId $parentId): void
     {
         $this->parentId = $parentId;
         $this->recordTermChanged();
@@ -136,15 +127,20 @@ class Term extends AggregateRoot
         $this->recordTermChanged();
     }
 
-    public function getGlobalOrder(): int
+    public function getLevel(): int
     {
-        return $this->globalOrder;
+        return $this->level;
     }
 
-    public function setGlobalOrder(int $globalOrder): void
+    public function setLevel(int $level): void
     {
-        $this->globalOrder = $globalOrder;
+        $this->level = $level;
         $this->recordTermChanged();
+    }
+
+    public function isRoot(): bool
+    {
+        return $this->isRoot;
     }
 
     public function getLocale(): string
@@ -155,17 +151,6 @@ class Term extends AggregateRoot
     public function setLocale(string $locale): void
     {
         $this->locale = $locale;
-        $this->recordTermChanged();
-    }
-
-    public function getLevel(): int
-    {
-        return $this->level;
-    }
-
-    public function setLevel(int $level): void
-    {
-        $this->level = $level;
         $this->recordTermChanged();
     }
 
@@ -213,7 +198,12 @@ class Term extends AggregateRoot
         $this->recordTermChanged();
     }
 
-    public function setTaxonomy(?Taxonomy $taxonomy, ?callable $changeCallback): void
+    public function isTranslated(): bool
+    {
+        return $this->translated;
+    }
+
+    public function setTaxonomy(Taxonomy $taxonomy, ?callable $changeCallback): void
     {
         $this->taxonomy = $taxonomy;
         $this->changeCallback = $changeCallback;
@@ -224,7 +214,7 @@ class Term extends AggregateRoot
         return $this->taxonomy;
     }
 
-    private function recordTermChanged()
+    private function recordTermChanged(): void
     {
         if ($this->changeCallback) {
             call_user_func($this->changeCallback, $this);
