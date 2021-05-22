@@ -6,6 +6,7 @@ namespace Tulia\Cms\Taxonomy\UserInterface\Web\Frontend\Breadcrumbs;
 
 use Symfony\Component\Routing\RouterInterface;
 use Tulia\Cms\Breadcrumbs\Application\Crumbs\ResolverInterface;
+use Tulia\Cms\Taxonomy\Domain\ReadModel\TaxonomyBreadcrumbs;
 use Tulia\Cms\Taxonomy\Domain\TaxonomyType\RegistryInterface;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\Enum\TermFinderScopeEnum;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\Model\Term;
@@ -18,20 +19,24 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class CrumbsResolver implements ResolverInterface
 {
-    protected RouterInterface $router;
+    private RouterInterface $router;
 
-    protected RegistryInterface $typeRegistry;
+    private RegistryInterface $typeRegistry;
 
-    protected TermFinderInterface $termFinder;
+    private TermFinderInterface $termFinder;
+
+    private TaxonomyBreadcrumbs $taxonomyBreadcrumbs;
 
     public function __construct(
         RouterInterface $router,
         RegistryInterface $typeRegistry,
-        TermFinderInterface $termFinder
+        TermFinderInterface $termFinder,
+        TaxonomyBreadcrumbs $taxonomyBreadcrumbs
     ) {
         $this->router = $router;
         $this->typeRegistry = $typeRegistry;
         $this->termFinder = $termFinder;
+        $this->taxonomyBreadcrumbs = $taxonomyBreadcrumbs;
     }
 
     public function findRootCrumb(Request $request): ?object
@@ -45,18 +50,21 @@ class CrumbsResolver implements ResolverInterface
             : null;
     }
 
+    /**
+     * @param Term $term
+     * @param BreadcrumbsInterface $breadcrumbs
+     * @return object|null
+     */
     public function fillBreadcrumbs(object $term, BreadcrumbsInterface $breadcrumbs): ?object
     {
-        /** @var Term $term */
+        $path = $this->taxonomyBreadcrumbs->find($term->getId());
 
-        $breadcrumbs->unshift($this->router->generate('term_' . $term->getId()), $term->getName());
-
-        if ($this->typeRegistry->isTypeRegistered($term->getType())) {
-            $type = $this->typeRegistry->getType($term->getType());
-
-            if ($type->supports('hierarchy') && $term->getParentId()) {
-                $this->resolveHierarchyCrumbs($breadcrumbs, $term);
+        foreach ($path as $crumb) {
+            if ($crumb->isRoot()) {
+                continue;
             }
+
+            $breadcrumbs->unshift($this->router->generate('term_' . $crumb->getId()), $crumb->getName());
         }
 
         return null;
@@ -65,26 +73,5 @@ class CrumbsResolver implements ResolverInterface
     public function supports(object $identity): bool
     {
         return $identity instanceof Term;
-    }
-
-    private function resolveHierarchyCrumbs(BreadcrumbsInterface $breadcrumbs, Term $term): void
-    {
-        $parentId = $term->getParentId();
-        $terms = [];
-
-        while ($parentId) {
-            $parent = $this->termFinder->findOne(['id' => $parentId], TermFinderScopeEnum::BREADCRUMBS);
-
-            if ($parent) {
-                $terms[] = $parent;
-                $parentId = $parent->getParentId();
-            } else {
-                $parentId = null;
-            }
-        }
-
-        foreach ($terms as $parent) {
-            $breadcrumbs->unshift($this->router->generate('term_' . $parent->getId()), $parent->getName());
-        }
     }
 }
