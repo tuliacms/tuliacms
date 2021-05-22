@@ -22,9 +22,9 @@ class Item
 
     protected ?string $parentId = null;
 
-    protected int $position;
+    protected int $position = 0;
 
-    protected int $level;
+    protected int $level = 0;
 
     protected bool $isRoot = false;
 
@@ -36,13 +36,13 @@ class Item
 
     protected ?string $target = null;
 
-    protected string $locale;
+    protected string $locale = 'en_US';
 
     protected bool $translated = false;
 
     protected ?string $name = null;
 
-    protected bool $visibility;
+    protected bool $visibility = true;
 
     private function __construct(string $id, string $locale, bool $isRoot = false)
     {

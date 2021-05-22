@@ -109,6 +109,24 @@ class Menu
         $this->items[$item->getId()] = $item;
         $item->assignToMenu($this);
 
+        if ($item->isRoot() === false) {
+            if ($item->getParentId() === null) {
+                $item->setParentId(Item::ROOT_ID);
+            }
+
+            if ($item->getPosition() === 0) {
+                $position = 0;
+
+                foreach ($this->items as $existingItem) {
+                    if ($existingItem->getParentId() === $item->getParentId()) {
+                        $position = max($position, $existingItem->getPosition());
+                    }
+                }
+
+                $item->setPosition($position + 1);
+            }
+        }
+
         $this->recordItemChange('add', $item->getId());
     }
 
