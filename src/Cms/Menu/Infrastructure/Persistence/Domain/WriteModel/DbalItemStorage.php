@@ -100,7 +100,7 @@ ORDER BY path", [
     public function delete(string $id): void
     {
         $this->connection->delete('#__menu_item', ['id' => $id]);
-        $this->connection->delete('#__menu_item_lang', ['id' => $id]);
+        $this->connection->delete('#__menu_item_lang', ['menu_item_id' => $id]);
     }
 
     protected function insertMainRow(array $data): void

@@ -16,6 +16,7 @@
     <div class="pane pane-lead">
         <div class="pane-header">
             <div class="pane-buttons">
+                {{ form_row(form.cancel) }}
                 {{ form_row(form.save) }}
             </div>
             <i class="pane-header-icon fas fa-palette"></i>

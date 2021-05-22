@@ -129,7 +129,10 @@ class MenuItem extends AbstractController
             return $this->redirectToRoute('backend.menu.item', ['menuId' => $menuId]);
         }
 
-        $form = $this->createForm(MenuItemForm::class, $item, ['persist_mode' => 'update']);
+        $form = $this->createForm(MenuItemForm::class, $item, [
+            'persist_mode' => 'update',
+            'menu_id' => $menuId,
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -165,12 +168,13 @@ class MenuItem extends AbstractController
         foreach ($request->request->get('ids', []) as $id) {
             try {
                 $menu->removeItem($menu->getItem($id));
-                $this->repository->save($menu);
             } catch (ItemNotFoundException $e) {
                 // Do nothing when Item not exists.
                 continue;
             }
         }
+
+        $this->repository->update($menu);
 
         $this->setFlash('success', $this->trans('selectedItemsWereDeleted', [], 'menu'));
         return $this->redirectToRoute('backend.menu.item.list', [ 'menuId' => $menuId ]);

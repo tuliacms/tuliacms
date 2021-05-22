@@ -197,24 +197,13 @@ class MenuRepository
 
         $itemsChanges = $menu->getItemsChanges();
 
-        foreach ($menu->getItems() as $item) {
+        foreach ($itemsChanges as $changeData) {
+            /** @var Item $item */
+            $item = $changeData['item'];
             $id = $item->getId();
 
-            $changeType = null;
-
-            foreach ($itemsChanges as $change) {
-                if ($change['id'] === $id) {
-                    $changeType = $change['type'];
-                }
-            }
-
-            // If nothing change, skip this item
-            if ($changeType === null) {
-                continue;
-            }
-
             $data['items'][$id] = [
-                '_change_type' => $changeType,
+                '_change_type' => $changeData['type'],
                 'id' => $id,
                 'menu' => $item->getMenu() ? $item->getMenu()->getId() : null,
                 'position' => $item->getPosition(),

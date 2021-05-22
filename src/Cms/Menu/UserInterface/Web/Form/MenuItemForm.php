@@ -91,6 +91,10 @@ class MenuItemForm extends AbstractFormSkeletonType
                 'choice_translation_domain' => 'menu',
             ])
             ->add('menu_metadata', Type\TextType::class)
+            ->add('cancel', FormType\CancelType::class, [
+                'route' => 'backend.menu.item',
+                'route_params' => ['menuId' => $options['menu_id']],
+            ])
             ->add('save', FormType\SubmitType::class, [
                 'mapped' => false,
             ]);
