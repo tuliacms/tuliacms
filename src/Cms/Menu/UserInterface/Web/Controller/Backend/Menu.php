@@ -9,8 +9,8 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Tulia\Cms\Menu\Domain\WriteModel\Exception\MenuNotFoundException;
+use Tulia\Cms\Menu\Domain\WriteModel\MenuRepository;
 use Tulia\Cms\Menu\Infrastructure\Persistence\Domain\ReadModel\Datatable\DbalMenuDatatableFinder;
-use Tulia\Cms\Menu\Ports\Infrastructure\Persistence\WriteModel\MenuRepositoryInterface;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Component\Datatable\DatatableFactory;
 use Tulia\Component\Security\Http\Csrf\Annotation\CsrfToken;
@@ -21,9 +21,9 @@ use Tulia\Component\Templating\ViewInterface;
  */
 class Menu extends AbstractController
 {
-    protected MenuRepositoryInterface $repository;
+    protected MenuRepository $repository;
 
-    public function __construct(MenuRepositoryInterface $repository)
+    public function __construct(MenuRepository $repository)
     {
         $this->repository = $repository;
     }

@@ -16,7 +16,6 @@ use Tulia\Cms\Menu\Domain\WriteModel\Event\MenuUpdated;
 use Tulia\Cms\Menu\Domain\WriteModel\Exception\MenuNotFoundException;
 use Tulia\Cms\Menu\Domain\WriteModel\Model\Item;
 use Tulia\Cms\Menu\Domain\WriteModel\Model\Menu;
-use Tulia\Cms\Menu\Ports\Infrastructure\Persistence\WriteModel\MenuRepositoryInterface;
 use Tulia\Cms\Menu\Ports\Infrastructure\Persistence\WriteModel\MenuStorageInterface;
 use Tulia\Cms\Metadata\Domain\WriteModel\MetadataRepository;
 use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
@@ -25,7 +24,7 @@ use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 /**
  * @author Adam Banaszkiewicz
  */
-class MenuRepository implements MenuRepositoryInterface
+class MenuRepository
 {
     private MenuStorageInterface $storage;
 
@@ -55,7 +54,7 @@ class MenuRepository implements MenuRepositoryInterface
         $this->actionsChain = $actionsChain;
     }
 
-    public function createNewMenu(array $data = []): Menu
+    public function createNewMenu(): Menu
     {
         return Menu::create(
             $this->uuidGenerator->generate(),
@@ -64,14 +63,13 @@ class MenuRepository implements MenuRepositoryInterface
         );
     }
 
-    public function createNewItem(array $data = []): Item
+    public function createNewItem(): Item
     {
-        return Item::buildFromArray(array_merge($data, [
-            'id' => $this->uuidGenerator->generate(),
-            'locale' => $this->currentWebsite->getLocale()->getCode(),
-            'website_id' => $this->currentWebsite->getId(),
-            'is_root' => false,
-        ]));
+        return Item::create(
+            $this->uuidGenerator->generate(),
+            $this->currentWebsite->getLocale()->getCode(),
+            false
+        );
     }
 
     /**

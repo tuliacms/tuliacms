@@ -51,6 +51,11 @@ class Item
         $this->isRoot = $isRoot;
     }
 
+    public static function create(string $id, string $locale, bool $isRoot = false): self
+    {
+        return new self($id, $locale, $isRoot);
+    }
+
     public static function buildFromArray(array $data): self
     {
         $item = new self($data['id'], $data['locale'], (bool) $data['is_root']);

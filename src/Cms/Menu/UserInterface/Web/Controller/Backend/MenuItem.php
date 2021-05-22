@@ -10,8 +10,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\Menu\Domain\Builder\Type\RegistryInterface;
 use Tulia\Cms\Menu\Domain\WriteModel\Exception\ItemNotFoundException;
 use Tulia\Cms\Menu\Domain\WriteModel\Exception\MenuNotFoundException;
+use Tulia\Cms\Menu\Domain\WriteModel\MenuRepository;
 use Tulia\Cms\Menu\Infrastructure\Persistence\Domain\ReadModel\Datatable\DbalItemDatatableFinder;
-use Tulia\Cms\Menu\Ports\Infrastructure\Persistence\WriteModel\MenuRepositoryInterface;
 use Tulia\Cms\Menu\UserInterface\Web\Form\MenuItemForm;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Component\Datatable\DatatableFactory;
@@ -24,11 +24,12 @@ use Tulia\Component\Templating\ViewInterface;
  */
 class MenuItem extends AbstractController
 {
-    protected MenuRepositoryInterface $repository;
+    protected MenuRepository $repository;
+
     protected RegistryInterface $menuTypeRegistry;
 
     public function __construct(
-        MenuRepositoryInterface $repository,
+        MenuRepository $repository,
         RegistryInterface $menuTypeRegistry
     ) {
         $this->repository = $repository;
@@ -80,9 +81,8 @@ class MenuItem extends AbstractController
             return $this->redirectToRoute('backend.menu');
         }
 
-        $item = $this->repository->createNewItem([
-            'parent_id' => $request->query->get('parentId'),
-        ]);
+        $item = $this->repository->createNewItem();
+        $item->setParentId($request->query->get('parentId'));
 
         $form = $this->createForm(MenuItemForm::class, $item, [
             'persist_mode' => 'create',
