@@ -13,17 +13,17 @@ services:
     Tulia\Cms\Menu\Infrastructure\Framework\Twig\Extension\MenuExtension:
         tags: [ twig.extension ]
 
-    Tulia\Cms\Menu\UserInterface\Web\BackendMenu\MenuMenuBuilder:
+    Tulia\Cms\Menu\UserInterface\Web\Backend\BackendMenu\MenuMenuBuilder:
         tags: [ backend_menu.builder ]
 
-    Tulia\Cms\Menu\Infrastructure\Cms\SearchAnything\SearchProvider:
+    Tulia\Cms\Menu\Domain\SearchAnything\SearchProvider:
         tags:
             - { name: search.provider, priority: 500 }
 
-    Tulia\Cms\Menu\Infrastructure\Framework\Form\FormType\MenuItemChoiceType:
+    Tulia\Cms\Menu\UserInterface\Web\Shared\Form\FormType\MenuItemChoiceType:
         tags: [ form.type ]
 
-    Tulia\Cms\Menu\UserInterface\Web\Form\MenuItemForm:
+    Tulia\Cms\Menu\UserInterface\Web\Backend\Form\MenuItemForm:
         tags: [ form.type ]
 
     Tulia\Cms\Menu\Domain\Builder\Identity\RegistryInterface:

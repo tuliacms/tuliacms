@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Menu\Infrastructure\Framework\Form\FormType;
+namespace Tulia\Cms\Menu\UserInterface\Web\Shared\Form\FormType;
 
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Menu\UserInterface\Web\BackendMenu;
+namespace Tulia\Cms\Menu\UserInterface\Web\Backend\BackendMenu;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -24,8 +24,11 @@ class MenuMenuBuilder implements BuilderInterface, EventSubscriberInterface
     private const SESSION_KEY = '_cms_app_backendmenu_menu_cache_%s';
 
     protected BuilderHelperInterface $helper;
+
     protected MenuFinderInterface $menuFinder;
+
     protected RequestStack $requestStack;
+
     protected CurrentWebsiteInterface $currentWebsite;
 
     public function __construct(

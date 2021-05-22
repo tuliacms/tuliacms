@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Menu\UserInterface\Web\Controller\Backend;
+namespace Tulia\Cms\Menu\UserInterface\Web\Backend\Controller;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -12,7 +12,7 @@ use Tulia\Cms\Menu\Domain\WriteModel\Exception\ItemNotFoundException;
 use Tulia\Cms\Menu\Domain\WriteModel\Exception\MenuNotFoundException;
 use Tulia\Cms\Menu\Domain\WriteModel\MenuRepository;
 use Tulia\Cms\Menu\Infrastructure\Persistence\Domain\ReadModel\Datatable\DbalItemDatatableFinder;
-use Tulia\Cms\Menu\UserInterface\Web\Form\MenuItemForm;
+use Tulia\Cms\Menu\UserInterface\Web\Backend\Form\MenuItemForm;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Component\Datatable\DatatableFactory;
 use Tulia\Component\DependencyInjection\Exception\MissingServiceException;

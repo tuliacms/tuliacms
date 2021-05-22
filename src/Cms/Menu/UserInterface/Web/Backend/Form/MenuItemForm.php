@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Menu\UserInterface\Web\Form;
+namespace Tulia\Cms\Menu\UserInterface\Web\Backend\Form;
 
 use Symfony\Component\Form\Extension\Core\Type;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Cms\Menu\Domain\Builder\Type\RegistryInterface;
 use Tulia\Cms\Menu\Domain\Builder\Type\TypeInterface;
-use Tulia\Cms\Menu\Infrastructure\Framework\Form\FormType\MenuItemChoiceType;
+use Tulia\Cms\Menu\UserInterface\Web\Shared\Form\FormType\MenuItemChoiceType;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType;
 use Tulia\Component\FormSkeleton\Form\AbstractFormSkeletonType;
 
