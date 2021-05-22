@@ -17,6 +17,7 @@ use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 class Finder extends AbstractFinder implements MenuFinderInterface
 {
     private ConnectionInterface $connection;
+
     private MetadataFinder $metadataFinder;
 
     public function __construct(ConnectionInterface $connection, MetadataFinder $metadataFinder)

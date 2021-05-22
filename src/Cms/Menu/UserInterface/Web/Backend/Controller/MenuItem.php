@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Menu\UserInterface\Web\Controller\Backend;
+namespace Tulia\Cms\Menu\UserInterface\Web\Backend\Controller;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -10,9 +10,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\Menu\Domain\Builder\Type\RegistryInterface;
 use Tulia\Cms\Menu\Domain\WriteModel\Exception\ItemNotFoundException;
 use Tulia\Cms\Menu\Domain\WriteModel\Exception\MenuNotFoundException;
+use Tulia\Cms\Menu\Domain\WriteModel\MenuRepository;
 use Tulia\Cms\Menu\Infrastructure\Persistence\Domain\ReadModel\Datatable\DbalItemDatatableFinder;
-use Tulia\Cms\Menu\Ports\Infrastructure\Persistence\WriteModel\MenuRepositoryInterface;
-use Tulia\Cms\Menu\UserInterface\Web\Form\MenuItemForm;
+use Tulia\Cms\Menu\UserInterface\Web\Backend\Form\MenuItemForm;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Component\Datatable\DatatableFactory;
 use Tulia\Component\DependencyInjection\Exception\MissingServiceException;
@@ -24,11 +24,12 @@ use Tulia\Component\Templating\ViewInterface;
  */
 class MenuItem extends AbstractController
 {
-    protected MenuRepositoryInterface $repository;
+    protected MenuRepository $repository;
+
     protected RegistryInterface $menuTypeRegistry;
 
     public function __construct(
-        MenuRepositoryInterface $repository,
+        MenuRepository $repository,
         RegistryInterface $menuTypeRegistry
     ) {
         $this->repository = $repository;
@@ -80,9 +81,8 @@ class MenuItem extends AbstractController
             return $this->redirectToRoute('backend.menu');
         }
 
-        $item = $this->repository->createNewItem([
-            'parent_id' => $request->query->get('parentId'),
-        ]);
+        $item = $this->repository->createNewItem();
+        $item->setParentId($request->query->get('parentId'));
 
         $form = $this->createForm(MenuItemForm::class, $item, [
             'persist_mode' => 'create',
@@ -129,7 +129,10 @@ class MenuItem extends AbstractController
             return $this->redirectToRoute('backend.menu.item', ['menuId' => $menuId]);
         }
 
-        $form = $this->createForm(MenuItemForm::class, $item, ['persist_mode' => 'update']);
+        $form = $this->createForm(MenuItemForm::class, $item, [
+            'persist_mode' => 'update',
+            'menu_id' => $menuId,
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -165,12 +168,13 @@ class MenuItem extends AbstractController
         foreach ($request->request->get('ids', []) as $id) {
             try {
                 $menu->removeItem($menu->getItem($id));
-                $this->repository->save($menu);
             } catch (ItemNotFoundException $e) {
                 // Do nothing when Item not exists.
                 continue;
             }
         }
+
+        $this->repository->update($menu);
 
         $this->setFlash('success', $this->trans('selectedItemsWereDeleted', [], 'menu'));
         return $this->redirectToRoute('backend.menu.item.list', [ 'menuId' => $menuId ]);

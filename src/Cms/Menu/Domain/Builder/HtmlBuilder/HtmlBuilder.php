@@ -66,11 +66,6 @@ class HtmlBuilder implements HtmlBuilderInterface
         return $result . '</li>';
     }
 
-    /**
-     * @param array $attributes
-     *
-     * @return string
-     */
     private function buildAttributes(array $attributes): string
     {
         $result = [];

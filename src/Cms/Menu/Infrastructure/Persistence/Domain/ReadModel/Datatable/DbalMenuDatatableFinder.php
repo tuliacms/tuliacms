@@ -10,7 +10,7 @@ use Tulia\Component\Datatable\Finder\AbstractDatatableFinder;
 use Symfony\Component\Routing\RouterInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
-use Doctrine\DBAL\Query\QueryBuilder;
+use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
 
 /**
  * @author Adam Banaszkiewicz
@@ -18,6 +18,7 @@ use Doctrine\DBAL\Query\QueryBuilder;
 class DbalMenuDatatableFinder extends AbstractDatatableFinder
 {
     private RouterInterface $router;
+
     private TranslatorInterface $translator;
 
     public function __construct(

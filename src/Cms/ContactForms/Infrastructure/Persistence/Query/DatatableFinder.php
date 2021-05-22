@@ -5,35 +5,23 @@ declare(strict_types=1);
 namespace Tulia\Cms\ContactForms\Infrastructure\Persistence\Query;
 
 use PDO;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
+use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 use Tulia\Component\Datatable\Filter\ComparisonOperatorsEnum;
 use Tulia\Component\Datatable\Finder\AbstractDatatableFinder;
-use Symfony\Component\Routing\RouterInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
-use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
-use Doctrine\DBAL\Query\QueryBuilder;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class DatatableFinder extends AbstractDatatableFinder
 {
-    /**
-     * @var RouterInterface
-     */
-    private $router;
+    private RouterInterface $router;
 
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
+    private TranslatorInterface $translator;
 
-    /**
-     * @param ConnectionInterface $connection
-     * @param CurrentWebsiteInterface $currentWebsite
-     * @param RouterInterface $router
-     * @param TranslatorInterface $translator
-     */
     public function __construct(
         ConnectionInterface $connection,
         CurrentWebsiteInterface $currentWebsite,

@@ -14,31 +14,53 @@ class Item
 {
     use MagickMetadataTrait;
 
-    protected string $id;
-    protected ?Menu $menu = null;
-    protected ?string $parentId = null;
-    protected int $position;
-    protected int $level;
-    protected ?string $type = null;
-    protected ?string $identity = null;
-    protected ?string $hash = null;
-    protected ?string $target = null;
-    protected string $locale;
-    protected bool $translated = false;
-    protected ?string $name = null;
-    protected bool $visibility;
+    public const ROOT_ID = '00000000-0000-0000-0000-000000000000';
 
-    public function __construct(string $id, string $locale)
+    protected string $id;
+
+    protected ?Menu $menu = null;
+
+    protected ?string $parentId = null;
+
+    protected int $position = 0;
+
+    protected int $level = 0;
+
+    protected bool $isRoot = false;
+
+    protected ?string $type = null;
+
+    protected ?string $identity = null;
+
+    protected ?string $hash = null;
+
+    protected ?string $target = null;
+
+    protected string $locale = 'en_US';
+
+    protected bool $translated = false;
+
+    protected ?string $name = null;
+
+    protected bool $visibility = true;
+
+    private function __construct(string $id, string $locale, bool $isRoot = false)
     {
         $this->id = $id;
         $this->locale = $locale;
+        $this->isRoot = $isRoot;
+    }
+
+    public static function create(string $id, string $locale, bool $isRoot = false): self
+    {
+        return new self($id, $locale, $isRoot);
     }
 
     public static function buildFromArray(array $data): self
     {
-        $item = new self($data['id'], $data['locale']);
+        $item = new self($data['id'], $data['locale'], (bool) $data['is_root']);
         $item->name = $data['name'] ?? null;
-        $item->parentId = $data['parent_id'] ?? null;
+        $item->setParentId($data['parent_id'] ?? null);
         $item->position = (int) ($data['position'] ?? 0);
         $item->level = (int) ($data['level'] ?? 0);
         $item->type = $data['type'] ?? null;
@@ -47,9 +69,22 @@ class Item
         $item->target = $data['target'] ?? null;
         $item->locale = $data['locale'];
         $item->translated = (bool) ($data['translated'] ?? false);
-        $item->name = $data['name'] ?? null;
         $item->visibility = (bool) ($data['visibility'] ?? 1);
-        $item->metadata = $data['metadata'] ?? [];
+        $item->replaceMetadata($data['metadata'] ?? []);
+
+        return $item;
+    }
+
+    public static function createRoot(string $locale): self
+    {
+        $item = new self(self::ROOT_ID, $locale, true);
+        $item->name = 'root';
+        $item->parentId = null;
+        $item->position = 0;
+        $item->level = 0;
+        $item->locale = $locale;
+        $item->translated = false;
+        $item->visibility = true;
 
         return $item;
     }
@@ -71,8 +106,27 @@ class Item
 
     public function setParentId(?string $parentId): void
     {
-        $this->recordItemChanged();
+        if ($this->isRoot()) {
+            $this->parentId = null;
+            return;
+        }
+
+        if ($parentId === '') {
+            $parentId = null;
+        }
+
+        if (is_string($parentId) && $parentId !== self::ROOT_ID) {
+            if (! preg_match(
+                '/[a-f0-9]{8}\-[a-f0-9]{4}\-4[a-f0-9]{3}\-(8|9|a|b)[a-f0-9]{3}\-[a-f0-9]{12}/',
+                $parentId,
+                $m
+            )) {
+                throw new \InvalidArgumentException(sprintf('ParentID must be an UUID4 format, given "%s" (%s).', $parentId, gettype($parentId)));
+            }
+        }
+
         $this->parentId = $parentId;
+        $this->recordItemChanged();
     }
 
     public function getPosition(): int
@@ -95,6 +149,11 @@ class Item
     {
         $this->recordItemChanged();
         $this->level = $level;
+    }
+
+    public function isRoot(): bool
+    {
+        return $this->isRoot;
     }
 
     public function getType(): ?string

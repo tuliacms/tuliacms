@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\User\Infrastructure\Persistence\Query;
 
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 use Tulia\Component\Datatable\Finder\AbstractDatatableFinder;
-use Symfony\Component\Routing\RouterInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
-use Doctrine\DBAL\Query\QueryBuilder;
 
 /**
  * @author Adam Banaszkiewicz
@@ -17,6 +17,7 @@ use Doctrine\DBAL\Query\QueryBuilder;
 class DatatableFinder extends AbstractDatatableFinder
 {
     private RouterInterface $router;
+
     private TranslatorInterface $translator;
 
     public function __construct(

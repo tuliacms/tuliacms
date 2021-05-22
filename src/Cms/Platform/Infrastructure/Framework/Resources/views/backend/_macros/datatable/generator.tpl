@@ -11,8 +11,8 @@
             new Tulia.DataTable('#{{ datatableId }}', {
                 data_endpoint: '{{ options.data_endpoint ?? '#' }}',
                 per_page_limit: {{ options.per_page_limit ?? 20 }},
-                columns: {{ front.columns|json_encode|raw }},
-                filters: {{ front.filters|json_encode|raw }},
+                columns: {{ front.columns|default([])|json_encode|raw }},
+                filters: {{ front.filters|default([])|json_encode|raw }},
                 pagination: {{ (options.pagination ?? true) ? 'true' : 'false' }},
                 i18n: {
                     translations: {

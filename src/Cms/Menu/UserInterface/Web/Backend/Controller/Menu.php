@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Menu\UserInterface\Web\Controller\Backend;
+namespace Tulia\Cms\Menu\UserInterface\Web\Backend\Controller;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Tulia\Cms\Menu\Domain\WriteModel\Exception\MenuNotFoundException;
+use Tulia\Cms\Menu\Domain\WriteModel\MenuRepository;
 use Tulia\Cms\Menu\Infrastructure\Persistence\Domain\ReadModel\Datatable\DbalMenuDatatableFinder;
-use Tulia\Cms\Menu\Ports\Infrastructure\Persistence\WriteModel\MenuRepositoryInterface;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Component\Datatable\DatatableFactory;
 use Tulia\Component\Security\Http\Csrf\Annotation\CsrfToken;
@@ -21,9 +21,9 @@ use Tulia\Component\Templating\ViewInterface;
  */
 class Menu extends AbstractController
 {
-    protected MenuRepositoryInterface $repository;
+    protected MenuRepository $repository;
 
-    public function __construct(MenuRepositoryInterface $repository)
+    public function __construct(MenuRepository $repository)
     {
         $this->repository = $repository;
     }
@@ -47,9 +47,8 @@ class Menu extends AbstractController
      */
     public function create(Request $request): RedirectResponse
     {
-        $menu = $this->repository->createNewMenu([
-            'name' => $request->request->get('name')
-        ]);
+        $menu = $this->repository->createNewMenu();
+        $menu->setName($request->request->get('name'));
 
         $this->repository->save($menu);
 
@@ -87,7 +86,8 @@ class Menu extends AbstractController
     public function delete(Request $request): RedirectResponse
     {
         foreach ($request->request->get('ids', []) as $id) {
-            $this->repository->delete($id);
+            $menu = $this->repository->find($id);
+            $this->repository->delete($menu);
         }
 
         $this->setFlash('success', $this->trans('selectedMenusWereDeleted', [], 'menu'));

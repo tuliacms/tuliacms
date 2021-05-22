@@ -12,8 +12,11 @@ use Tulia\Cms\Menu\Domain\WriteModel\Exception\ItemNotFoundException;
 class Menu
 {
     protected string $id;
+
     protected string $websiteId;
+
     protected ?string $name = null;
+
     protected array $itemsChanges = [];
 
     /**
@@ -21,10 +24,20 @@ class Menu
      */
     protected array $items = [];
 
-    public function __construct(string $id, string $websiteId)
+    private function __construct(string $id, string $websiteId)
     {
         $this->id = $id;
         $this->websiteId = $websiteId;
+    }
+
+    public static function create(string $id, string $websiteId, string $locale): self
+    {
+        $root = Item::createRoot($locale);
+
+        $menu = new self($id, $websiteId);
+        $menu->addItem($root);
+
+        return $menu;
     }
 
     public static function buildFromArray(array $data): self
@@ -80,6 +93,16 @@ class Menu
         return $changes;
     }
 
+    /**
+     * @return Item[]
+     */
+    public function items(): iterable
+    {
+        foreach ($this->items as $item) {
+            yield $item;
+        }
+    }
+
     public function addItem(Item $item): void
     {
         if (isset($this->items[$item->getId()])) {
@@ -89,20 +112,26 @@ class Menu
         $this->items[$item->getId()] = $item;
         $item->assignToMenu($this);
 
-        $this->recordItemChange('add', $item->getId());
+        if ($item->isRoot() === false) {
+            $this->resolveItemParent($item);
+            $this->calculateItemPosition($item);
+            $this->calculateItemLevel($item);
+        }
+
+        $this->recordItemChange('add', $item);
     }
 
     public function removeItem(Item $item): void
     {
-        $position = array_search($item, $this->items, true);
-
-        if ($position !== false) {
-            $this->items[$position]->unassignFromMenu();
-
-            unset($this->items[$position]);
-
-            $this->recordItemChange('remove', $item->getId());
+        if (isset($this->items[$item->getId()]) === false) {
+            return;
         }
+
+        $this->items[$item->getId()]->unassignFromMenu();
+
+        unset($this->items[$item->getId()]);
+
+        $this->recordItemChange('remove', $item);
     }
 
     public function hasItem(Item $item): bool
@@ -126,14 +155,14 @@ class Menu
 
     public function recordItemChanged(Item $item): void
     {
-        $this->recordItemChange('update', $item->getId());
+        $this->recordItemChange('update', $item);
     }
 
-    private function recordItemChange(string $type, string $id): void
+    private function recordItemChange(string $type, Item $item): void
     {
         // Prevents multiple do the same change with the same item.
         foreach ($this->itemsChanges as $key => $change) {
-            if ($change['type'] === $type && $change['id'] === $id) {
+            if ($change['type'] === $type && $change['item']->getId() === $item->getId()) {
                 unset($this->itemsChanges[$key]);
             }
         }
@@ -141,19 +170,47 @@ class Menu
         if ($type === 'update') {
             // If item has beed added or removed already, we don't add any 'update' changes.
             foreach ($this->itemsChanges as $change) {
-                if ($change['id'] === $id && \in_array($change['type'], ['add', 'remove'])) {
+                if ($change['item']->getId() === $item->getId() && \in_array($change['type'], ['add', 'remove'])) {
                     return;
                 }
             }
         } elseif ($type === 'add' || $type === 'remove') {
             // If item has beed added or removed, we remove all the 'update' changes.
             foreach ($this->itemsChanges as $key => $change) {
-                if ($change['id'] === $id && $change['type'] === 'update') {
+                if ($change['item']->getId() === $item->getId() && $change['type'] === 'update') {
                     unset($this->itemsChanges[$key]);
                 }
             }
         }
 
-        $this->itemsChanges[] = ['type' => $type, 'id' => $id];
+        $this->itemsChanges[] = ['type' => $type, 'item' => $item];
+    }
+
+    private function calculateItemLevel(Item $item): void
+    {
+        $parent = $this->getItem($item->getParentId());
+        $item->setLevel($parent->getLevel() + 1);
+    }
+
+    private function calculateItemPosition(Item $item): void
+    {
+        if ($item->getPosition() === 0) {
+            $position = 0;
+
+            foreach ($this->items as $existingItem) {
+                if ($existingItem->getParentId() === $item->getParentId()) {
+                    $position = max($position, $existingItem->getPosition());
+                }
+            }
+
+            $item->setPosition($position + 1);
+        }
+    }
+
+    private function resolveItemParent(Item $item): void
+    {
+        if ($item->getParentId() === null) {
+            $item->setParentId(Item::ROOT_ID);
+        }
     }
 }

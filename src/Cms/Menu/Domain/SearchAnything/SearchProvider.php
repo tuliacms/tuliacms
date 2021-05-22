@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Menu\Infrastructure\Cms\SearchAnything;
+namespace Tulia\Cms\Menu\Domain\SearchAnything;
 
 use Tulia\Cms\Menu\Domain\ReadModel\Finder\Enum\ScopeEnum;
 use Tulia\Cms\Menu\Ports\Infrastructure\Persistence\ReadModel\MenuFinderInterface;
@@ -18,6 +18,7 @@ use Symfony\Component\Routing\RouterInterface;
 class SearchProvider extends AbstractProvider
 {
     protected MenuFinderInterface $menuFinder;
+
     protected RouterInterface $router;
 
     public function __construct(

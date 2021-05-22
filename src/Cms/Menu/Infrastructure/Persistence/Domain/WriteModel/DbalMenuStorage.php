@@ -15,6 +15,7 @@ use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 class DbalMenuStorage implements MenuStorageInterface
 {
     private ConnectionInterface $connection;
+
     private ItemStorageInterface $itemStorage;
 
     public function __construct(ConnectionInterface $connection, ItemStorageInterface $itemStorage)
@@ -96,7 +97,7 @@ class DbalMenuStorage implements MenuStorageInterface
                 $this->itemStorage->insert($item, $defaultLocale);
             } elseif ($item['_change_type'] === 'update') {
                 $this->itemStorage->update($item, $defaultLocale);
-            } elseif ($item['_change_type'] === 'delete') {
+            } elseif ($item['_change_type'] === 'remove') {
                 $this->itemStorage->delete($item['id']);
             }
         }

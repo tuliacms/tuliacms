@@ -6,6 +6,7 @@ namespace Tulia\Cms\Menu\Domain\WriteModel;
 
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Tulia\Cms\Menu\Domain\Metadata\Item\Enum\MetadataEnum;
+use Tulia\Cms\Menu\Domain\WriteModel\ActionsChain\MenuActionsChainInterface;
 use Tulia\Cms\Menu\Domain\WriteModel\Event\ItemAdded;
 use Tulia\Cms\Menu\Domain\WriteModel\Event\ItemRemoved;
 use Tulia\Cms\Menu\Domain\WriteModel\Event\ItemUpdated;
@@ -15,44 +16,60 @@ use Tulia\Cms\Menu\Domain\WriteModel\Event\MenuUpdated;
 use Tulia\Cms\Menu\Domain\WriteModel\Exception\MenuNotFoundException;
 use Tulia\Cms\Menu\Domain\WriteModel\Model\Item;
 use Tulia\Cms\Menu\Domain\WriteModel\Model\Menu;
-use Tulia\Cms\Menu\Ports\Infrastructure\Persistence\WriteModel\MenuRepositoryInterface;
 use Tulia\Cms\Menu\Ports\Infrastructure\Persistence\WriteModel\MenuStorageInterface;
 use Tulia\Cms\Metadata\Domain\WriteModel\MetadataRepository;
+use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class MenuRepository implements MenuRepositoryInterface
+class MenuRepository
 {
     private MenuStorageInterface $storage;
-    private MenuFactory $menuFactory;
+
+    private UuidGeneratorInterface $uuidGenerator;
+
     private EventDispatcherInterface $eventDispatcher;
+
     private CurrentWebsiteInterface $currentWebsite;
+
     private MetadataRepository $metadataRepository;
+
+    private MenuActionsChainInterface $actionsChain;
 
     public function __construct(
         MenuStorageInterface $storage,
-        MenuFactory $menuFactory,
+        UuidGeneratorInterface $uuidGenerator,
         EventDispatcherInterface $eventDispatcher,
         CurrentWebsiteInterface $currentWebsite,
-        MetadataRepository $metadataRepository
+        MetadataRepository $metadataRepository,
+        MenuActionsChainInterface $actionsChain
     ) {
         $this->storage = $storage;
-        $this->menuFactory = $menuFactory;
+        $this->uuidGenerator = $uuidGenerator;
         $this->eventDispatcher = $eventDispatcher;
         $this->currentWebsite = $currentWebsite;
         $this->metadataRepository = $metadataRepository;
+        $this->actionsChain = $actionsChain;
     }
 
-    public function createNewMenu(array $data = []): Menu
+    public function createNewMenu(): Menu
     {
-        return $this->menuFactory->createNewMenu($data);
+        return Menu::create(
+            $this->uuidGenerator->generate(),
+            $this->currentWebsite->getId(),
+            $this->currentWebsite->getLocale()->getCode()
+        );
     }
 
-    public function createNewItem(array $data = []): Item
+    public function createNewItem(): Item
     {
-        return $this->menuFactory->createNewItem($data);
+        return Item::create(
+            $this->uuidGenerator->generate(),
+            $this->currentWebsite->getLocale()->getCode(),
+            false
+        );
     }
 
     /**
@@ -81,11 +98,15 @@ class MenuRepository implements MenuRepositoryInterface
         // Reset items changes after create new Entity with data from storage.
         $menu->getItemsChanges();
 
+        $this->actionsChain->execute('find', $menu);
+
         return $menu;
     }
 
     public function save(Menu $menu): void
     {
+        $this->actionsChain->execute('save', $menu);
+
         $data = $this->extract($menu);
         $this->storage->beginTransaction();
 
@@ -112,7 +133,16 @@ class MenuRepository implements MenuRepositoryInterface
 
     public function update(Menu $menu): void
     {
+        $this->actionsChain->execute('update', $menu);
+
         $data = $this->extract($menu);
+
+        /**
+         * We dont want to overwrite root item in update. It must be created
+         * only once, at the creating of the menu, and must not be updated forever.
+         */
+        $data = $this->removeRootItem($data);
+
         $this->storage->beginTransaction();
 
         try {
@@ -136,10 +166,12 @@ class MenuRepository implements MenuRepositoryInterface
         $this->dispatchItemsEvents($data);
     }
 
-    public function delete(string $id): void
+    public function delete(Menu $menu): void
     {
-        $this->storage->delete($id);
-        $this->eventDispatcher->dispatch(new MenuDeleted($id));
+        $this->actionsChain->execute('delete', $menu);
+
+        $this->storage->delete($menu->getId());
+        $this->eventDispatcher->dispatch(new MenuDeleted($menu->getId()));
     }
 
     private function dispatchItemsEvents(array $data): void
@@ -165,29 +197,19 @@ class MenuRepository implements MenuRepositoryInterface
 
         $itemsChanges = $menu->getItemsChanges();
 
-        foreach ($menu->getItems() as $item) {
+        foreach ($itemsChanges as $changeData) {
+            /** @var Item $item */
+            $item = $changeData['item'];
             $id = $item->getId();
 
-            $changeType = null;
-
-            foreach ($itemsChanges as $change) {
-                if ($change['id'] === $id) {
-                    $changeType = $change['type'];
-                }
-            }
-
-            // If nothing change, skip this item
-            if ($changeType === null) {
-                continue;
-            }
-
             $data['items'][$id] = [
-                '_change_type' => $changeType,
+                '_change_type' => $changeData['type'],
                 'id' => $id,
                 'menu' => $item->getMenu() ? $item->getMenu()->getId() : null,
+                'parent_id' => $item->getParentId() ?: null,
                 'position' => $item->getPosition(),
-                'parent' => $item->getParentId() ?: null,
                 'level' => $item->getLevel(),
+                'is_root' => $item->isRoot(),
                 'type' => $item->getType(),
                 'identity' => $item->getIdentity(),
                 'hash' => $item->getHash(),
@@ -197,6 +219,17 @@ class MenuRepository implements MenuRepositoryInterface
                 'visibility' => $item->getVisibility(),
                 'metadata' => $item->getAllMetadata(),
             ];
+        }
+
+        return $data;
+    }
+
+    private function removeRootItem(array $data): array
+    {
+        foreach ($data['items'] as $key => $item) {
+            if ($item['is_root']) {
+                unset($data['items'][$key]);
+            }
         }
 
         return $data;

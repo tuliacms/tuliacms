@@ -87,4 +87,21 @@ class QueryBuilder extends DoctrineQueryBuilder
     {
         return parent::rightJoin($this->connection->prepareTablePrefix($fromAlias), $join, $alias, $condition);
     }
+
+    public function compileSQL(): string
+    {
+        $sql = $this->getSQL();
+
+        foreach ($this->getParameters() as $parameter => $value) {
+            if (is_numeric($value)) {
+                $sql = str_replace(":$parameter", $value, $sql);
+            } elseif ($value === null) {
+                $sql = str_replace(":$parameter", 'NULL', $sql);
+            } else{
+                $sql = str_replace(":$parameter", $this->connection->quote($value), $sql);
+            }
+        }
+
+        return $sql;
+    }
 }

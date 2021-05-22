@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Menu\Infrastructure\Framework\Form\FormType;
+namespace Tulia\Cms\Menu\UserInterface\Web\Shared\Form\FormType;
 
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -10,6 +10,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Cms\Menu\Domain\ReadModel\Finder\Enum\ScopeEnum;
+use Tulia\Cms\Menu\Domain\WriteModel\Model\Item;
 use Tulia\Cms\Menu\Ports\Infrastructure\Persistence\ReadModel\MenuFinderInterface;
 
 /**
@@ -18,6 +19,7 @@ use Tulia\Cms\Menu\Ports\Infrastructure\Persistence\ReadModel\MenuFinderInterfac
 class MenuItemChoiceType extends ChoiceType
 {
     protected MenuFinderInterface $menuFinder;
+
     protected TranslatorInterface $translator;
 
     public function __construct(MenuFinderInterface $menuFinder, TranslatorInterface $translator)
@@ -105,7 +107,7 @@ class MenuItemChoiceType extends ChoiceType
             $name = $item->getName();
 
             if ($item->getLevel()) {
-                $name = str_repeat('- ', $item->getLevel()) . $name;
+                $name = str_repeat('- ', $item->getLevel() - 1) . $name;
             }
 
             $choices[$item->getId()] = $name;
@@ -114,7 +116,7 @@ class MenuItemChoiceType extends ChoiceType
         return $choices;
     }
 
-    private function sort(array $items, int $level = 0, string $parent = null): array
+    private function sort(array $items, int $level = 1, string $parent = Item::ROOT_ID): array
     {
         $result = [];
 

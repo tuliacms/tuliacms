@@ -12,5 +12,6 @@ use Tulia\Cms\Menu\Domain\Builder\Hierarchy\HierarchyInterface;
 interface BuilderInterface
 {
     public function buildHierarchy(string $id): HierarchyInterface;
+
     public function buildHtml(string $id): string;
 }

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Component\Datatable\Finder;
 
 use Doctrine\DBAL\Driver\Connection;
-use Doctrine\DBAL\Query\QueryBuilder;
+use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 
@@ -18,6 +18,7 @@ abstract class AbstractDatatableFinder implements FinderInterface
      * @var ConnectionInterface|Connection
      */
     protected Connection $connection;
+
     protected CurrentWebsiteInterface $currentWebsite;
 
     public function __construct(Connection $connection, CurrentWebsiteInterface $currentWebsite)
@@ -48,5 +49,10 @@ abstract class AbstractDatatableFinder implements FinderInterface
     public function prepareResult(array $result): array
     {
         return $result;
+    }
+
+    public function fetchAllAssociative(QueryBuilder $queryBuilder): array
+    {
+        return $queryBuilder->execute()->fetchAllAssociative();
     }
 }
