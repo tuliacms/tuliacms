@@ -183,6 +183,12 @@ class Datatable
             }
 
             $result[$key]['actions'] = array_merge(...$actions);
+
+            foreach ($result[$key]['actions'] as $actionKey => $view) {
+                $result[$key]['actions'][$actionKey] = $this->engine->render(new View($view, [
+                    'row' => $row,
+                ]));
+            }
         }
 
         return $result;
