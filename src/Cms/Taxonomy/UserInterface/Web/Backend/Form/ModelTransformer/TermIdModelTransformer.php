@@ -21,8 +21,8 @@ class TermIdModelTransformer implements DataTransformerInterface
         return '';
     }
 
-    public function reverseTransform($value): TermId
+    public function reverseTransform($value): ?TermId
     {
-        return new TermId($value);
+        return $value ? new TermId($value) : null;
     }
 }

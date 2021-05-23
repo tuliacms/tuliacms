@@ -58,7 +58,7 @@ class TaxonomyTypeaheadType extends AbstractType
     {
         $options['search_route_params'] = array_merge(
             $options['search_route_params'],
-            [ 'taxonomy_type' => $options['taxonomy_type'] ]
+            [ 'taxonomyType' => $options['taxonomy_type'] ]
         );
 
         $view->vars['typeahead_url'] = $this->router->generate(

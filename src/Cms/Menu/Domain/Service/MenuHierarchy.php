@@ -28,7 +28,7 @@ class MenuHierarchy
             }
         }
 
-        $this->calculateLevel($menu, Item::ROOT_ID, 0);
+        $this->calculateLevel($menu, Item::ROOT_ID, Item::ROOT_LEVEL);
     }
 
     public function calculateLevel(Menu $menu, string $parentId, int $baseLevel): void

@@ -49,7 +49,7 @@ class EditLinksRegistrator implements EventSubscriberInterface
             $type = $this->registry->getType($term->getType());
 
             $event->add('term.edit', [
-                'link'  => $this->router->generate('backend.term.edit', [ 'taxonomy_type' => $term->getType(), 'id' => $term->getId() ]),
+                'link'  => $this->router->generate('backend.term.edit', [ 'taxonomyType' => $term->getType(), 'id' => $term->getId() ]),
                 'label' => $this->translator->trans('editTerm', [
                     'term' => mb_strtolower($this->translator->trans('term', [], $type->getTranslationDomain())),
                 ]),

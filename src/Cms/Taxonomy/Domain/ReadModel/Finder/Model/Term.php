@@ -25,9 +25,9 @@ class Term
 
     protected ?string $parentId = null;
 
-    protected int $level;
+    protected int $level = 1;
 
-    protected int $count;
+    protected int $count = 0;
 
     protected string $locale;
 
@@ -35,8 +35,9 @@ class Term
 
     protected ?string $slug = null;
 
-    protected bool $visibility;
+    protected bool $isRoot = false;
 
+    protected bool $visibility = true;
 
     public static function buildFromArray(array $data): self
     {
@@ -67,7 +68,7 @@ class Term
         $term->setLocale($data['locale']);
         $term->setName($data['name'] ?? '');
         $term->setSlug($data['slug'] ?? '');
-        $term->setVisibility((bool) ($data['visibility'] ?? true));
+        $term->isRoot = (bool) ($data['is_root'] ?? true);
         $term->replaceMetadata($data['metadata'] ?? []);
 
         return $term;
@@ -161,6 +162,11 @@ class Term
     public function setSlug(?string $slug): void
     {
         $this->slug = $slug;
+    }
+
+    public function isRoot(): bool
+    {
+        return $this->isRoot;
     }
 
     public function isVisibility(): bool

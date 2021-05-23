@@ -22,8 +22,6 @@ class DbalQuery extends AbstractDbalQuery
 {
     private MetadataFinder $metadataFinder;
 
-    private array $joinedTables = [];
-
     public function __construct(QueryBuilder $queryBuilder, MetadataFinder $metadataFinder)
     {
         parent::__construct($queryBuilder);
@@ -96,7 +94,7 @@ class DbalQuery extends AbstractDbalQuery
             /**
              * Allows to define custom sort option.
              */
-            'order' => 'tm.global_order',
+            'order' => 'tm.position',
             /**
              * If query have to count rows, please provide the column name
              * which should be counted. If column to count does not matter,
@@ -104,7 +102,7 @@ class DbalQuery extends AbstractDbalQuery
              */
             'count' => null,
             /**
-             * Search string. Seaching by title with LIKE operator.
+             * Search string. Searching by title with LIKE operator.
              */
             'search' => null,
             /**

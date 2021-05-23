@@ -10,6 +10,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType;
 use Tulia\Cms\Taxonomy\Domain\TaxonomyType\TaxonomyTypeInterface;
+use Tulia\Cms\Taxonomy\UserInterface\Web\Backend\Form\ModelTransformer\TermIdModelTransformer;
 use Tulia\Cms\Taxonomy\UserInterface\Web\Shared\Form\FormType\TaxonomyTypeaheadType;
 use Tulia\Cms\Taxonomy\UserInterface\Web\Backend\Form\TermForm;
 use Tulia\Component\FormSkeleton\Extension\AbstractExtension;
@@ -54,6 +55,8 @@ class TaxonomyTypeExtension extends AbstractExtension
                     }),
                 ],
             ]);
+
+            $builder->get('parent')->addModelTransformer(new TermIdModelTransformer());
         }
     }
 

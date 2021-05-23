@@ -51,6 +51,10 @@ class PathGenerator implements TaxonomyActionInterface
 
     private function createPathForTerm(Taxonomy $taxonomy, Term $term, TaxonomyRoutingStrategyInterface $strategy): void
     {
+        if ($term->isRoot()) {
+            return;
+        }
+
         $path = $strategy->generateFromTaxonomy(
             $taxonomy,
             $term->getId()->getId()
