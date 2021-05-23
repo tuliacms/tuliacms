@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Taxonomy\Domain\Routing\Strategy\Core;
 
 use Tulia\Cms\Taxonomy\Domain\Routing\Strategy\TaxonomyRoutingStrategyInterface;
+use Tulia\Cms\Taxonomy\Domain\WriteModel\Exception\TermNotFoundException;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Taxonomy;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Term;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\ValueObject\TermId;
@@ -27,7 +28,11 @@ class FullPathRoutingStrategy implements TaxonomyRoutingStrategyInterface
     public function generateFromTaxonomy(Taxonomy $taxonomy, string $id): string
     {
         $path = '';
-        $term = $taxonomy->getTerm(new TermId($id));
+        try {
+            $term = $taxonomy->getTerm(new TermId($id));
+        } catch (TermNotFoundException $e) {
+            return '';
+        }
 
         while ($term !== null) {
             $path = "/{$term->getSlug()}" . $path;

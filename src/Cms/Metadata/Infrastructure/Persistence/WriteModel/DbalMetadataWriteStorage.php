@@ -62,6 +62,18 @@ class DbalMetadataWriteStorage extends AbstractLocalizableStorage implements Met
         }
     }
 
+    public function delete(string $type, string $ownerId): void
+    {
+        $this->connection->executeUpdate("DELETE tm, tl
+            FROM #__{$type}_metadata AS tm
+            JOIN #__{$type}_metadata_lang AS tl
+                ON tm.id = tl.metadata_id
+            WHERE
+                tm.owner_id = :owner_id", [
+            'owner_id' => $ownerId,
+        ]);
+    }
+
     protected function insertMainRow(array $data): void
     {
         $this->connection->insert("#__{$data['type']}_metadata", [

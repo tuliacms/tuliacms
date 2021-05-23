@@ -2,6 +2,10 @@ backend.term.search.typeahead:
     path: /administrator/term/search/typeahead
     controller: Tulia\Cms\Taxonomy\UserInterface\Web\Backend\Controller\TypeaheadSearch::handleSearch
 
+backend.term.datatable:
+    path: /administrator/term/{taxonomyType}/datatable
+    controller: Tulia\Cms\Taxonomy\UserInterface\Web\Backend\Controller\Term::datatable
+
 backend.term.create:
     path: /administrator/term/{taxonomyType}/create
     controller: Tulia\Cms\Taxonomy\UserInterface\Web\Backend\Controller\Term::create

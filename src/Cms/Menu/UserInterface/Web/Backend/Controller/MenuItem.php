@@ -11,7 +11,7 @@ use Tulia\Cms\Menu\Domain\Builder\Type\RegistryInterface;
 use Tulia\Cms\Menu\Domain\WriteModel\Exception\ItemNotFoundException;
 use Tulia\Cms\Menu\Domain\WriteModel\Exception\MenuNotFoundException;
 use Tulia\Cms\Menu\Domain\WriteModel\MenuRepository;
-use Tulia\Cms\Menu\Infrastructure\Persistence\Domain\ReadModel\Datatable\DbalItemDatatableFinder;
+use Tulia\Cms\Menu\Ports\Infrastructure\Persistence\ReadModel\Datatable\ItemDatatableFinderInterface;
 use Tulia\Cms\Menu\UserInterface\Web\Backend\Form\MenuItemForm;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Component\Datatable\DatatableFactory;
@@ -24,16 +24,24 @@ use Tulia\Component\Templating\ViewInterface;
  */
 class MenuItem extends AbstractController
 {
-    protected MenuRepository $repository;
+    private MenuRepository $repository;
 
-    protected RegistryInterface $menuTypeRegistry;
+    private RegistryInterface $menuTypeRegistry;
+
+    private DatatableFactory $factory;
+
+    private ItemDatatableFinderInterface $finder;
 
     public function __construct(
         MenuRepository $repository,
-        RegistryInterface $menuTypeRegistry
+        RegistryInterface $menuTypeRegistry,
+        DatatableFactory $factory,
+        ItemDatatableFinderInterface $finder
     ) {
         $this->repository = $repository;
         $this->menuTypeRegistry = $menuTypeRegistry;
+        $this->factory = $factory;
+        $this->finder = $finder;
     }
 
     public function index(string $menuId): RedirectResponse
@@ -43,7 +51,7 @@ class MenuItem extends AbstractController
         ]);
     }
 
-    public function list(Request $request, DatatableFactory $factory, DbalItemDatatableFinder $finder, string $menuId)
+    public function list(Request $request, string $menuId)
     {
         try {
             $menu = $this->repository->find($menuId);
@@ -52,18 +60,18 @@ class MenuItem extends AbstractController
             return $this->redirectToRoute('backend.menu');
         }
 
-        $finder->setMenuId($menuId);
+        $this->finder->setMenuId($menuId);
 
         return $this->view('@backend/menu/item/list.tpl', [
             'menu' => $menu,
-            'datatable' => $factory->create($finder, $request),
+            'datatable' => $this->factory->create($this->finder, $request),
         ]);
     }
 
-    public function datatable(Request $request, DatatableFactory $factory, DbalItemDatatableFinder $finder, string $menuId): JsonResponse
+    public function datatable(Request $request, string $menuId): JsonResponse
     {
-        $finder->setMenuId($menuId);
-        return $factory->create($finder, $request)->generateResponse();
+        $this->finder->setMenuId($menuId);
+        return $this->factory->create($this->finder, $request)->generateResponse();
     }
 
     /**

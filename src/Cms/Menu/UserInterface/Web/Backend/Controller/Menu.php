@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Tulia\Cms\Menu\Domain\WriteModel\Exception\MenuNotFoundException;
 use Tulia\Cms\Menu\Domain\WriteModel\MenuRepository;
-use Tulia\Cms\Menu\Infrastructure\Persistence\Domain\ReadModel\Datatable\DbalMenuDatatableFinder;
+use Tulia\Cms\Menu\Ports\Infrastructure\Persistence\ReadModel\Datatable\MenuDatatableFinderInterface;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Component\Datatable\DatatableFactory;
 use Tulia\Component\Security\Http\Csrf\Annotation\CsrfToken;
@@ -21,23 +21,32 @@ use Tulia\Component\Templating\ViewInterface;
  */
 class Menu extends AbstractController
 {
-    protected MenuRepository $repository;
+    private MenuRepository $repository;
 
-    public function __construct(MenuRepository $repository)
-    {
+    private DatatableFactory $factory;
+
+    private MenuDatatableFinderInterface $finder;
+
+    public function __construct(
+        MenuRepository $repository,
+        DatatableFactory $factory,
+        MenuDatatableFinderInterface $finder
+    ) {
         $this->repository = $repository;
+        $this->factory = $factory;
+        $this->finder = $finder;
     }
 
-    public function list(Request $request, DatatableFactory $factory, DbalMenuDatatableFinder $finder): ViewInterface
+    public function list(Request $request): ViewInterface
     {
         return $this->view('@backend/menu/menu/list.tpl', [
-            'datatable' => $factory->create($finder, $request),
+            'datatable' => $this->factory->create($this->finder, $request),
         ]);
     }
 
-    public function datatable(Request $request, DatatableFactory $factory, DbalMenuDatatableFinder $finder): JsonResponse
+    public function datatable(Request $request): JsonResponse
     {
-        return $factory->create($finder, $request)->generateResponse();
+        return $this->factory->create($this->finder, $request)->generateResponse();
     }
 
     /**

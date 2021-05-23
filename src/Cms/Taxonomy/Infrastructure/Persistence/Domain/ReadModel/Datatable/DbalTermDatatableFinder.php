@@ -2,23 +2,23 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Menu\Infrastructure\Persistence\Domain\ReadModel\Datatable;
+namespace Tulia\Cms\Taxonomy\Infrastructure\Persistence\Domain\ReadModel\Datatable;
 
 use PDO;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Tulia\Cms\Menu\Domain\WriteModel\Model\Item;
-use Tulia\Cms\Menu\Ports\Infrastructure\Persistence\ReadModel\Datatable\ItemDatatableFinderInterface;
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
+use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Term;
+use Tulia\Cms\Taxonomy\Ports\Infrastructure\Persistence\Domain\ReadModel\Datatable\TermDatatableFinderInterface;
 use Tulia\Component\Datatable\Finder\AbstractDatatableFinder;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class DbalItemDatatableFinder extends AbstractDatatableFinder implements ItemDatatableFinderInterface
+class DbalTermDatatableFinder extends AbstractDatatableFinder implements TermDatatableFinderInterface
 {
     private RouterInterface $router;
 
@@ -26,7 +26,7 @@ class DbalItemDatatableFinder extends AbstractDatatableFinder implements ItemDat
 
     private CsrfTokenManagerInterface $csrfTokenManager;
 
-    private ?string $menuId = null;
+    private ?string $taxonomyType = null;
 
     public function __construct(
         ConnectionInterface $connection,
@@ -42,9 +42,9 @@ class DbalItemDatatableFinder extends AbstractDatatableFinder implements ItemDat
         $this->csrfTokenManager = $csrfTokenManager;
     }
 
-    public function setMenuId(string $menuId): void
+    public function setTaxonomyType(string $taxonomyType): void
     {
-        $this->menuId = $menuId;
+        $this->taxonomyType = $taxonomyType;
     }
 
     /**
@@ -91,12 +91,12 @@ class DbalItemDatatableFinder extends AbstractDatatableFinder implements ItemDat
     public function prepareQueryBuilder(QueryBuilder $queryBuilder): QueryBuilder
     {
         $queryBuilder
-            ->from('#__menu_item', 'tm')
-            ->addSelect('tm.menu_id, tm.level, tm.parent_id')
-            ->leftJoin('tm', '#__menu_item_lang', 'tl', 'tm.id = tl.menu_item_id AND tl.locale = :locale')
-            ->where('tm.menu_id = :menu_id')
+            ->from('#__term', 'tm')
+            ->addSelect('tm.type, tm.level, tm.parent_id')
+            ->leftJoin('tm', '#__term_lang', 'tl', 'tm.id = tl.term_id AND tl.locale = :locale')
+            ->where('tm.type = :type')
             ->andWhere('tm.is_root = 0')
-            ->setParameter('menu_id', $this->menuId, PDO::PARAM_STR)
+            ->setParameter('type', $this->taxonomyType, PDO::PARAM_STR)
             ->setParameter('locale', $this->currentWebsite->getLocale()->getCode(), PDO::PARAM_STR)
             ->addOrderBy('tm.level', 'ASC')
             ->addOrderBy('tm.position', 'ASC')
@@ -128,7 +128,7 @@ class DbalItemDatatableFinder extends AbstractDatatableFinder implements ItemDat
             $row['name'] = sprintf(
                 '<a href="%2$s" title="%1$s" class="link-title"><span class="boxur-depth boxur-depth-%4$s">%3$s %1$s</span></a>',
                 $row['name'],
-                $this->router->generate('backend.menu.item.edit', ['menuId' => $row['menu_id'], 'id' => $row['id']]),
+                $this->router->generate('backend.term.edit', ['taxonomyType' => $row['type'], 'id' => $row['id']]),
                 $badges,
                 $row['level'] - 1
             );
@@ -142,9 +142,9 @@ class DbalItemDatatableFinder extends AbstractDatatableFinder implements ItemDat
      */
     public function buildActions(array $row): array
     {
-        $editLink = $this->router->generate('backend.menu.item.edit', ['menuId' => $row['menu_id'], 'id' => $row['id']]);
-        $deleteLink = $this->router->generate('backend.menu.item.delete', ['menuId' => $row['menu_id']]);
-        $deleteCsrfToken = $this->csrfTokenManager->getToken('menu.item.delete');
+        $editLink = $this->router->generate('backend.term.edit', ['taxonomyType' => $row['type'], 'id' => $row['id']]);
+        $deleteLink = $this->router->generate('backend.term.delete', ['taxonomyType' => $row['type']]);
+        $deleteCsrfToken = $this->csrfTokenManager->getToken('term.delete');
         $delete = $this->translator->trans('deleteItem', [], 'menu');
 
         return [
@@ -166,7 +166,7 @@ class DbalItemDatatableFinder extends AbstractDatatableFinder implements ItemDat
         ];
     }
 
-    private function sort(array $items, int $level = 1, string $parent = Item::ROOT_ID): array
+    private function sort(array $items, int $level = 1, string $parent = Term::ROOT_ID): array
     {
         $result = [];
 

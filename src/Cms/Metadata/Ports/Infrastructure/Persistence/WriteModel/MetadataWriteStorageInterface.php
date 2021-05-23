@@ -16,4 +16,6 @@ interface MetadataWriteStorageInterface
     public function insert(array $data, string $defaultLocale): void;
 
     public function update(array $data, string $defaultLocale): void;
+
+    public function delete(string $type, string $ownerId): void;
 }

@@ -114,8 +114,8 @@ class Menu
 
         if ($item->isRoot() === false) {
             $this->resolveItemParent($item);
-            $this->calculateItemPosition($item);
             $this->calculateItemLevel($item);
+            $this->calculateItemPosition($item);
         }
 
         $this->recordItemChange('add', $item);
@@ -126,6 +126,8 @@ class Menu
         if (isset($this->items[$item->getId()]) === false) {
             return;
         }
+
+        $this->removeItemChildren($item);
 
         $this->items[$item->getId()]->unassignFromMenu();
 
@@ -211,6 +213,19 @@ class Menu
     {
         if ($item->getParentId() === null) {
             $item->setParentId(Item::ROOT_ID);
+        }
+    }
+
+    private function removeItemChildren(Item $item): void
+    {
+        foreach ($this->items as $existingItem) {
+            if ($existingItem->getParentId() === null) {
+                continue;
+            }
+
+            if ($existingItem->getParentId() === $item->getId()) {
+                $this->removeItem($existingItem);
+            }
         }
     }
 }

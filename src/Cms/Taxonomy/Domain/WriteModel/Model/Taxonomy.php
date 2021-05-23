@@ -86,13 +86,13 @@ class Taxonomy extends AggregateRoot
 
         if ($term->isRoot() === false) {
             $this->resolveItemParent($term);
-            $this->calculateItemPosition($term);
             $this->calculateItemLevel($term);
+            $this->calculateItemPosition($term);
         }
 
         $this->changelog->insert($term);
 
-        //$this->recordThat(TermCreated::fromTerm($term));
+        $this->recordThat(TermCreated::fromTerm($term));
     }
 
     public function removeTerm(Term $term): void
@@ -101,8 +101,10 @@ class Taxonomy extends AggregateRoot
             return;
         }
 
+        $this->removeTermChildren($term);
+
         unset($this->terms[$term->getId()->getId()]);
-        $term->setTaxonomy(null, null);
+        $term->setTaxonomy($this, null);
 
         $this->changelog->delete($term);
 
@@ -138,7 +140,11 @@ class Taxonomy extends AggregateRoot
             $position = 0;
 
             foreach ($this->terms as $existingItem) {
-                if ($existingItem->getParentId() === $term->getParentId()) {
+                if ($existingItem->getParentId() === null) {
+                    continue;
+                }
+
+                if ($existingItem->getParentId()->equals($term->getParentId())) {
                     $position = max($position, $existingItem->getPosition());
                 }
             }
@@ -151,6 +157,19 @@ class Taxonomy extends AggregateRoot
     {
         if ($term->getParentId() === null) {
             $term->setParentId(new TermId(Term::ROOT_ID));
+        }
+    }
+
+    private function removeTermChildren(Term $term): void
+    {
+        foreach ($this->terms as $existingTerm) {
+            if ($existingTerm->getParentId() === null) {
+                continue;
+            }
+
+            if ($existingTerm->getParentId()->equals($term->getId())) {
+                $this->removeTerm($existingTerm);
+            }
         }
     }
 }

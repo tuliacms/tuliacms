@@ -77,7 +77,23 @@ class PathGenerator implements TaxonomyActionInterface
      */
     private function getTerms(Taxonomy $taxonomy): array
     {
-        return array_merge(...array_values($taxonomy->collectChangedTerms()));
+        $changedTerms = array_merge(...array_values($taxonomy->collectChangedTerms()));
+        $existingTerms = iterator_to_array($taxonomy->terms());
+        $terms = [];
+
+        foreach ($existingTerms as $existingTerm) {
+            foreach ($changedTerms as $changedTerm) {
+                if ($changedTerm->isRoot() || $existingTerm->isRoot()) {
+                    continue;
+                }
+
+                if ($existingTerm->getId()->equals($changedTerm->getId())) {
+                    $terms[] = $changedTerm;
+                }
+            }
+        }
+
+        return $terms;
     }
 
     private function isTermVisible(Taxonomy $taxonomy, Term $term): bool
