@@ -8,6 +8,8 @@
     <li class="breadcrumb-item active" aria-current="page">{{ 'nodes'|trans({}, nodeType.translationDomain) }}</li>
 {% endblock %}
 
+{% import '@backend/_macros/datatable/generator.tpl' as generator %}
+
 {% block content %}
     <div class="pane pane-lead">
         <div class="pane-header">
@@ -25,12 +27,16 @@
                         <a class="dropdown-item dropdown-item-with-icon" href="{{ path('backend.settings', { group: 'node.' ~ nodeType.type }) }}"><i class="dropdown-icon fas fa-cogs"></i> {{ 'settings'|trans }}</a>
                     </div>
                 </div>
-                <a href="{{ path('backend.node.create', { node_type: criteria.node_type }) }}" class="btn btn-success btn-icon-left"><i class="btn-icon fas fa-plus"></i> {{ 'create'|trans }}</a>
+                <a href="{{ path('backend.node.create', { node_type: nodeType.type }) }}" class="btn btn-success btn-icon-left"><i class="btn-icon fas fa-plus"></i> {{ 'create'|trans }}</a>
             </div>
             <i class="pane-header-icon fas fa-file-powerpoint"></i>
             <h1 class="pane-title">{{ block('title') }}</h1>
         </div>
-        <div class="pane-body">
+        {{ generator.generate(datatable, {
+            data_endpoint: path('backend.node.datatable', { node_type: nodeType.type }),
+            pagination: false
+        }) }}
+        {#<div class="pane-body">
             <div class="pages-list-header">
                 <div class="action-group">
                     <div class="dropdown">
@@ -227,9 +233,9 @@
                     {{ paginator.position('right')|raw }}
                 </div>
             </div>
-        </div>
+        </div>#}
     </div>
-    <script nonce="{{ csp_nonce() }}">
+    {#<script nonce="{{ csp_nonce() }}">
         $(function () {
             new Tulia.ElementsActions({
                 actions: {
@@ -270,5 +276,5 @@
                 });
             }
         });
-    </script>
+    </script>#}
 {% endblock %}
