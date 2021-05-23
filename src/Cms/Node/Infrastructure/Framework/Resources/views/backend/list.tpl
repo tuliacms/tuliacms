@@ -103,24 +103,6 @@
                     },
                 }
             });
-
-            let query = '{{ app.request.query.get('q') }}';
-
-            if (query) {
-                $('.node-title').each(function () {
-                    let title = $(this).text();
-                    let position = title.toLowerCase().indexOf(query.toLowerCase());
-
-                    if (position >= 0) {
-                        let positionEnd = position + query.length;
-
-                        title = [title.slice(0, positionEnd), '</span>', title.slice(positionEnd)].join('');
-                        title = [title.slice(0, position), '<span class="text-highlight">', title.slice(position)].join('');
-
-                        $(this).html(title);
-                    }
-                });
-            }
         });
     </script>#}
 {% endblock %}

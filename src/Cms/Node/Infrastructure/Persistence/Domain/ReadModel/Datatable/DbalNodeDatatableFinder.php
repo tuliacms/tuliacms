@@ -148,9 +148,23 @@ class DbalNodeDatatableFinder extends AbstractDatatableFinder implements NodeDat
      */
     public function buildActions(array $row): array
     {
+        $context = [
+            'nodeType' => $this->nodeType,
+        ];
+
         return [
-            'main' => '@backend/node/parts/datatable/edit-link.tpl',
-            'delete' => '@backend/node/parts/datatable/delete-link.tpl',
+            'main' => [
+                'view' => '@backend/node/parts/datatable/links/edit-link.tpl',
+                'view_context' => $context,
+            ],
+            'preview' => [
+                'view' => '@backend/node/parts/datatable/links/preview-link.tpl',
+                'view_context' => $context,
+            ],
+            'delete' => [
+                'view' => '@backend/node/parts/datatable/links/delete-link.tpl',
+                'view_context' => $context,
+            ],
         ];
     }
 
