@@ -55,6 +55,12 @@ class DbalNodeDatatableFinder extends AbstractDatatableFinder implements NodeDat
                 'html_attr' => ['class' => 'col-title'],
                 'view' => '@backend/node/parts/datatable/title.tpl',
             ],
+            'published_at' => [
+                'selector' => 'tm.published_at',
+                'label' => 'date',
+                'html_attr' => ['class' => 'col-date'],
+                'view' => '@backend/node/parts/datatable/published.tpl',
+            ],
         ];
     }
 
