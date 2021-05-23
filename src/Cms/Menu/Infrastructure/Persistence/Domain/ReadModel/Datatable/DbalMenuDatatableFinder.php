@@ -6,6 +6,7 @@ namespace Tulia\Cms\Menu\Infrastructure\Persistence\Domain\ReadModel\Datatable;
 
 use PDO;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Tulia\Cms\Menu\Ports\Infrastructure\Persistence\ReadModel\Datatable\MenuDatatableFinderInterface;
 use Tulia\Component\Datatable\Finder\AbstractDatatableFinder;
 use Symfony\Component\Routing\RouterInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
@@ -15,7 +16,7 @@ use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder
 /**
  * @author Adam Banaszkiewicz
  */
-class DbalMenuDatatableFinder extends AbstractDatatableFinder
+class DbalMenuDatatableFinder extends AbstractDatatableFinder implements MenuDatatableFinderInterface
 {
     private RouterInterface $router;
 

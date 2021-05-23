@@ -9,6 +9,7 @@ use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Cms\Menu\Domain\WriteModel\Model\Item;
+use Tulia\Cms\Menu\Ports\Infrastructure\Persistence\ReadModel\Datatable\ItemDatatableFinderInterface;
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
 use Tulia\Component\Datatable\Finder\AbstractDatatableFinder;
@@ -17,7 +18,7 @@ use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 /**
  * @author Adam Banaszkiewicz
  */
-class DbalItemDatatableFinder extends AbstractDatatableFinder
+class DbalItemDatatableFinder extends AbstractDatatableFinder implements ItemDatatableFinderInterface
 {
     private RouterInterface $router;
 
