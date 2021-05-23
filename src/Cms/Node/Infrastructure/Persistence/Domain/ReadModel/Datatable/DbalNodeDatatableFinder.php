@@ -88,6 +88,12 @@ class DbalNodeDatatableFinder extends AbstractDatatableFinder implements NodeDat
     {
         $filters = [];
 
+        $filters['title'] = [
+            'label' => 'title',
+            'type' => 'text',
+            'selector' => 'COALESCE(tl.title, tm.title)'
+        ];
+
         if ($this->supportsCategoryTaxonomy()) {
             $filters['category'] = [
                 'label' => 'category',

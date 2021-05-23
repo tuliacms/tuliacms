@@ -70,18 +70,31 @@ class Datatable
                 'type'  => $info['type'] ?? 'text',
                 'label' => $this->translator->trans($info['label'] ?? $name, [], $info['translation_domain'] ?? null),
                 'choices' => $info['choices'] ?? [],
-                'comparison' => $info['comparison'] ?? ComparisonOperatorsEnum::EQUAL,
+                'comparison' => $info['comparison'] ?? null,
             ];
 
-            if ($front['filters'][$name]['type'] === 'yes_no' && empty($front['filters'][$name]['choices'])) {
-                $front['filters'][$name]['choices'] = [
-                    '1' => $this->translator->trans('yes'),
-                    '0' => $this->translator->trans('no'),
-                ];
+            if ($front['filters'][$name]['type'] === 'yes_no') {
+                if ($front['filters'][$name]['comparison'] === null) {
+                    $front['filters'][$name]['comparison'] = ComparisonOperatorsEnum::EQUAL;
+                }
+
+                if (empty($front['filters'][$name]['choices'])) {
+                    $front['filters'][$name]['choices'] = [
+                        '1' => $this->translator->trans('yes'),
+                        '0' => $this->translator->trans('no'),
+                    ];
+                }
             }
 
             if ($front['filters'][$name]['type'] === 'single_select') {
-                $front['filters'][$name]['comparison'] = ComparisonOperatorsEnum::EQUAL;
+                if ($front['filters'][$name]['comparison'] === null) {
+                    $front['filters'][$name]['comparison'] = ComparisonOperatorsEnum::EQUAL;
+                }
+            }
+            if ($front['filters'][$name]['type'] === 'text') {
+                if ($front['filters'][$name]['comparison'] === null) {
+                    $front['filters'][$name]['comparison'] = ComparisonOperatorsEnum::HAS;
+                }
             }
         }
 
