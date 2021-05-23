@@ -36,113 +36,11 @@
             data_endpoint: path('backend.node.datatable', { node_type: nodeType.type }),
             pagination: false
         }) }}
-        {#<div class="pane-body">
-            <div class="pages-list-header">
-                <div class="action-group">
-                    <div class="dropdown">
-                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-                            {{ 'selected'|trans }}
-                        </button>
-                        <div class="dropdown-menu">
-                            {% if criteria.node_status == 'trashed' %}
-                                <a class="dropdown-item dropdown-item-with-icon action-element-selected" href="#" data-action="publish" title="{{ 'publishSelected'|trans }}"><i class="dropdown-icon fas fa-eye"></i> {{ 'publishSelected'|trans }}</a>
-                                <a class="dropdown-item dropdown-item-with-icon dropdown-item-danger action-element-selected" href="#" data-action="delete" title="{{ 'deleteSelected'|trans }}"><i class="dropdown-icon fas fa-times"></i> {{ 'deleteSelected'|trans }}</a>
-                            {% endif %}
-                            {% if criteria.node_status == 'published' %}
-                                <a class="dropdown-item dropdown-item-with-icon action-element-selected" href="#" data-action="trash" title="{{ 'trashSelected'|trans }}"><i class="dropdown-icon fas fa-trash"></i> {{ 'trashSelected'|trans }}</a>
-                            {% endif %}
-                            {% if criteria.node_status == 'sketch' %}
-                                <a class="dropdown-item dropdown-item-with-icon action-element-selected" href="#" data-action="publish" title="{{ 'publishSelected'|trans }}"><i class="dropdown-icon fas fa-eye"></i> {{ 'publishSelected'|trans }}</a>
-                                <a class="dropdown-item dropdown-item-with-icon action-element-selected" href="#" data-action="trash" title="{{ 'trashSelected'|trans }}"><i class="dropdown-icon fas fa-trash"></i> {{ 'trashSelected'|trans }}</a>
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
-                <div class="action-group">
-                    <form action="" method="get" class="quick-search" autocomplete="off">
-                        <input type="hidden" name="node_type" value="{{ criteria.node_type }}" />
-                        <input type="hidden" name="node_status" value="{{ criteria.node_status }}" />
-                        <div class="input-group">
-                            <input type="text" class="form-control" name="q" placeholder="{{ 'searchPlaceholder'|trans }}" value="{{ app.request.query.get('q') }}" />
-                            {% if app.request.query.get('q') %}
-                                <div class="input-group-append">
-                                    <a href="{{ path('backend.node', { node_type: criteria.node_type }) }}" class="btn btn-icon-only btn-primary" data-toggle="tooltip" title="{{ 'clearSearch'|trans }}"><i class="btn-icon fas fa-times"></i></a>
-                                </div>
-                            {% endif %}
-                            <div class="input-group-append">
-                                <button class="btn btn-icon-only btn-primary" type="submit"><i class="btn-icon fas fa-search"></i></button>
-                            </div>
-                            <div class="input-group-append">
-                                <button class="btn btn-icon-only btn-primary btn-advanced-search" type="button" data-toggle="tooltip" title="{{ 'advancedSearch'|trans }}"><i class="btn-icon fas fa-chevron-down"></i></button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="action-group">
-                    <div class="dropdown">
-                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-                            {% if criteria.node_status == 'published' %}
-                                {{ 'showOfType'|trans({ type: 'published'|trans }) }}
-                            {% elseif criteria.node_status == 'sketch' %}
-                                {{ 'showOfType'|trans({ type: 'sketch'|trans }) }}
-                            {% elseif criteria.node_status == 'trashed' %}
-                                {{ 'showOfType'|trans({ type: 'trashed'|trans }) }}
-                            {% else %}
-                                {{ 'showAll'|trans }}
-                            {% endif %}
-                        </button>
-                        {% set currentQuery = app.request.query %}
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item dropdown-item-with-icon{{ criteria.node_status is empty ? ' active' : '' }}" href="{{ path('backend.node', currentQuery|merge({ node_type: criteria.node_type, node_status: '' })) }}"><i class="dropdown-icon fas fa-dot-circle"></i> {{ 'all'|trans }}</a>
-                            <a class="dropdown-item dropdown-item-with-icon{{ criteria.node_status == 'published' ? ' active' : '' }}" href="{{ path('backend.node', currentQuery|merge({ node_type: criteria.node_type, node_status: 'published' })) }}"><i class="dropdown-icon fas fa-eye"></i> {{ 'published'|trans }}</a>
-                            <a class="dropdown-item dropdown-item-with-icon{{ criteria.node_status == 'sketch' ? ' active' : '' }}" href="{{ path('backend.node', currentQuery|merge({ node_type: criteria.node_type, node_status: 'sketch' })) }}"><i class="dropdown-icon fas fa-pen-alt"></i> {{ 'sketch'|trans }}</a>
-                            <a class="dropdown-item dropdown-item-with-icon{{ criteria.node_status == 'trashed' ? ' active' : '' }}" href="{{ path('backend.node', currentQuery|merge({ node_type: criteria.node_type, node_status: 'trashed' })) }}"><i class="dropdown-icon fas fa-trash"></i> {{ 'trash'|trans }}</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        {% if nodes is not empty %}
+        {#{% if nodes is not empty %}
             <table class="table pages-list">
-                <thead>
-                <tr>
-                    <th class="col-checkbox">
-                        <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="node-row-checkbox-select-all" data-select-all=".node-row-checkbox">
-                            <label class="custom-control-label" for="node-row-checkbox-select-all"></label>
-                        </div>
-                    </th>
-                    <th class="text-center col-uuid">ID</th>
-                    <th class="">{{ 'title'|trans }}</th>
-                    <th class="text-center">{{ 'category'|trans }}</th>
-                    <th class="text-center">{{ 'status'|trans }}</th>
-                    <th class="col-date">{{ 'date'|trans }}</th>
-                    <th class="col-actions">{{ 'actions'|trans }}</th>
-                </tr>
-                </thead>
                 <tbody>
                 {% for node in nodes %}
                     <tr data-element-name="{{ node.title }}" data-element-id="{{ node.id }}">
-                        <td data-label="{{ 'category'|trans }}" class="text-center">
-                            {% if node.category and node.__category_name %}
-                                <a href="{{ path('backend.node', {
-                                    taxonomy: 'category',
-                                    taxonomy_term: node.category
-                                }) }}">{{ node.__category_name }}</a>
-                            {% endif %}
-                        </td>
-                        <td data-label="{{ 'status'|trans }}" class="text-center">
-                            <small>
-                                {% if node.status == 'sketch' %}
-                                    <span class="text-secondary">{{ node.status|trans }}</span>
-                                {% elseif node.status == 'trashed' %}
-                                    <span class="text-warning">{{ node.status|trans }}</span>
-                                {% else %}
-                                    <span class="text-success">{{ node.status|trans }}</span>
-                                {% endif %}
-                            </small>
-                        </td>
                         <td data-label="{{ 'actions'|trans }}" class="col-actions">
                             <div class="actions-box">
                                 <a href="#" class="btn btn-secondary btn-icon-only" data-toggle="tooltip" title="Szybka edycja"><i class="btn-icon fas fa-map"></i></a>
@@ -181,22 +79,7 @@
                 {% endfor %}
                 </tbody>
             </table>
-        {% else %}
-            <div class="table-empty">
-                <p>{{ 'emptyTableListAddSomethingToStart'|trans }}</p>
-                <a href="{{ path('backend.node.create', { node_type: criteria.node_type }) }}" class="btn btn-success btn-icon-left"><i class="btn-icon fas fa-plus"></i> {{ 'create'|trans }}</a>
-            </div>
-        {% endif %}
-        <div class="pane-footer">
-            <div class="pages-list-bottom">
-                <div class="actions-box">
-
-                </div>
-                <div class="pagination-box">
-                    {{ paginator.position('right')|raw }}
-                </div>
-            </div>
-        </div>#}
+        {% endif %}#}
     </div>
     {#<script nonce="{{ csp_nonce() }}">
         $(function () {

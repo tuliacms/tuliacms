@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Tulia\Cms\Node\Infrastructure\Persistence\Domain\ReadModel\Datatable;
 
 use PDO;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Cms\Node\Domain\NodeType\NodeTypeInterface;
 use Tulia\Cms\Node\Ports\Infrastructure\Persistence\Domain\ReadModel\Datatable\NodeDatatableFinderInterface;
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\Enum\TermFinderScopeEnum;
 use Tulia\Cms\Taxonomy\Ports\Infrastructure\Persistence\Domain\ReadModel\TermFinderInterface;
-use Tulia\Component\Datatable\Filter\ComparisonOperatorsEnum;
 use Tulia\Component\Datatable\Finder\AbstractDatatableFinder;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 
@@ -23,14 +23,17 @@ class DbalNodeDatatableFinder extends AbstractDatatableFinder implements NodeDat
     private NodeTypeInterface $nodeType;
 
     private TermFinderInterface $termFinder;
+    private TranslatorInterface $translator;
 
     public function __construct(
         ConnectionInterface $connection,
         CurrentWebsiteInterface $currentWebsite,
-        TermFinderInterface $termFinder
+        TermFinderInterface $termFinder,
+        TranslatorInterface $translator
     ) {
         parent::__construct($connection, $currentWebsite);
         $this->termFinder = $termFinder;
+        $this->translator = $translator;
     }
 
     public function setNodeType(NodeTypeInterface $nodeType): void
@@ -74,6 +77,7 @@ class DbalNodeDatatableFinder extends AbstractDatatableFinder implements NodeDat
         if ($this->supportsCategoryTaxonomy()) {
             $columns['category'] = [
                 'selector' => 'COALESCE(nt.name, ntl.name)',
+                'html_attr' => ['class' => 'text-center'],
             ];
         }
 
@@ -92,6 +96,13 @@ class DbalNodeDatatableFinder extends AbstractDatatableFinder implements NodeDat
                 'selector' => 'nt.id'
             ];
         }
+
+        $filters['status'] = [
+            'label' => 'status',
+            'type' => 'single_select',
+            'choices' => $this->createStatusChoices(),
+            'selector' => 'tm.status'
+        ];
 
         return $filters;
     }
@@ -161,5 +172,16 @@ class DbalNodeDatatableFinder extends AbstractDatatableFinder implements NodeDat
         }
 
         return false;
+    }
+
+    private function createStatusChoices(): array
+    {
+        $statuses = [];
+
+        foreach ($this->nodeType->getStatuses() as $status) {
+            $statuses[$status] = $this->translator->trans($status, [], $this->nodeType->getTranslationDomain());
+        }
+
+        return $statuses;
     }
 }

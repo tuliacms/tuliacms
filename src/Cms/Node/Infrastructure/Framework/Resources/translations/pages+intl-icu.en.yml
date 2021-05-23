@@ -23,3 +23,6 @@ parentNode: Parent node
 cannotAssignSelfNodeParent: Cannot assign self page as parent. Please select another parent page.
 activityUserCreatedNewNode: "User {username} created new <a href=\"{link}\">page</a>."
 activityUserDeletedNode: "User {username} deleted page."
+sketch: Sketch
+published: Published
+trashed: Trashed
