@@ -5,11 +5,9 @@ declare(strict_types=1);
 namespace Tulia\Cms\Taxonomy\Infrastructure\Persistence\Domain\ReadModel\Datatable;
 
 use PDO;
-use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
+use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Term;
 use Tulia\Cms\Taxonomy\Ports\Infrastructure\Persistence\Domain\ReadModel\Datatable\TermDatatableFinderInterface;
 use Tulia\Component\Datatable\Finder\AbstractDatatableFinder;
@@ -20,26 +18,18 @@ use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
  */
 class DbalTermDatatableFinder extends AbstractDatatableFinder implements TermDatatableFinderInterface
 {
-    private RouterInterface $router;
-
     private TranslatorInterface $translator;
-
-    private CsrfTokenManagerInterface $csrfTokenManager;
 
     private ?string $taxonomyType = null;
 
     public function __construct(
         ConnectionInterface $connection,
         CurrentWebsiteInterface $currentWebsite,
-        RouterInterface $router,
-        TranslatorInterface $translator,
-        CsrfTokenManagerInterface $csrfTokenManager
+        TranslatorInterface $translator
     ) {
         parent::__construct($connection, $currentWebsite);
 
-        $this->router = $router;
         $this->translator = $translator;
-        $this->csrfTokenManager = $csrfTokenManager;
     }
 
     public function setTaxonomyType(string $taxonomyType): void
@@ -69,6 +59,7 @@ class DbalTermDatatableFinder extends AbstractDatatableFinder implements TermDat
             'name' => [
                 'selector' => 'COALESCE(tl.name, tm.name)',
                 'label' => 'name',
+                'view' => '@backend/taxonomy/term/parts/datatable/name.tpl',
             ],
             'visibility' => [
                 'selector' => 'COALESCE(tl.visibility, tm.visibility)',
@@ -114,26 +105,6 @@ class DbalTermDatatableFinder extends AbstractDatatableFinder implements TermDat
      */
     public function prepareResult(array $result): array
     {
-        $missingLocale = $this->translator->trans('missingTranslationInThisLocale');
-
-        foreach ($result as &$row) {
-            $badges = '';
-
-            if (isset($row['translated']) && $row['translated'] !== '1') {
-                $badges .= '<span class="badge badge-info" data-toggle="tooltip" title="' . $missingLocale . '"><i class="dropdown-icon fas fa-language"></i></span> ';
-            }
-
-            $row['level'] = (int) $row['level'];
-
-            $row['name'] = sprintf(
-                '<a href="%2$s" title="%1$s" class="link-title"><span class="boxur-depth boxur-depth-%4$s">%3$s %1$s</span></a>',
-                $row['name'],
-                $this->router->generate('backend.term.edit', ['taxonomyType' => $row['type'], 'id' => $row['id']]),
-                $badges,
-                $row['level'] - 1
-            );
-        }
-
         return $this->sort($result);
     }
 
@@ -142,27 +113,9 @@ class DbalTermDatatableFinder extends AbstractDatatableFinder implements TermDat
      */
     public function buildActions(array $row): array
     {
-        $editLink = $this->router->generate('backend.term.edit', ['taxonomyType' => $row['type'], 'id' => $row['id']]);
-        $deleteLink = $this->router->generate('backend.term.delete', ['taxonomyType' => $row['type']]);
-        $deleteCsrfToken = $this->csrfTokenManager->getToken('term.delete');
-        $delete = $this->translator->trans('deleteItem', [], 'menu');
-
         return [
-            'main' => '<a href="' . $editLink . '" class="btn btn-secondary btn-icon-only"><i class="btn-icon fas fa-pen"></i></a>',
-            '<a
-                href="#"
-                class="dropdown-item-with-icon dropdown-item-danger"
-                title="' . $delete . '"
-                data-component="action"
-                data-settings="{
-                    \'action\': \'delete\',
-                    \'url\': \'' . $deleteLink . '\',
-                    \'data\': {
-                        \'ids\': [\'' . $row['id'] . '\']
-                    },
-                    \'csrf_token\': \'' . $deleteCsrfToken->getValue() . '\'
-                }"
-            ><i class="dropdown-icon fas fa-times"></i> ' . $delete . '</a>',
+            'main' => '@backend/taxonomy/term/parts/datatable/links/edit-link.tpl',
+            'delete' => '@backend/taxonomy/term/parts/datatable/links/delete-link.tpl',
         ];
     }
 
@@ -171,6 +124,7 @@ class DbalTermDatatableFinder extends AbstractDatatableFinder implements TermDat
         $result = [];
 
         foreach ($items as $item) {
+            $item['level'] = (int) $item['level'];
             if ($item['level'] === $level && $item['parent_id'] === $parent) {
                 $result[] = [$item];
                 $result[] = $this->sort($items, $level + 1, $item['id']);
