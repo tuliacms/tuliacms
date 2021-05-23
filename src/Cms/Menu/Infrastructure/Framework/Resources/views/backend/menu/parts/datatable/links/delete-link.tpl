@@ -1,0 +1,1 @@
+<a href="#" data-toggle="modal" data-target="#modal-menu-delete" data-element-id="{{ row.id }}" class="dropdown-item-with-icon dropdown-item-danger" title="{{ 'deleteMenu'|trans({}, 'menu') }}"><i class="dropdown-icon fas fa-times"></i> {{ 'deleteMenu'|trans({}, 'menu') }}</a>
