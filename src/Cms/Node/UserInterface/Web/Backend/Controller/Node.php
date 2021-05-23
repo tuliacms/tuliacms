@@ -68,6 +68,7 @@ class Node extends AbstractController
     public function list(Request $request, string $node_type): ViewInterface
     {
         $nodeTypeObject = $this->findNodeType($node_type);
+        $this->finder->setNodeType($nodeTypeObject);
 
         return $this->view('@backend/node/list.tpl', [
             'nodeType'   => $nodeTypeObject,
@@ -78,7 +79,8 @@ class Node extends AbstractController
 
     public function datatable(Request $request, string $node_type): JsonResponse
     {
-        $this->finder->setNodeType($node_type);
+        $nodeTypeObject = $this->findNodeType($node_type);
+        $this->finder->setNodeType($nodeTypeObject);
         return $this->factory->create($this->finder, $request)->generateResponse();
     }
 

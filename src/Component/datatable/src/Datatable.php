@@ -70,6 +70,7 @@ class Datatable
                 'type'  => $info['type'] ?? 'text',
                 'label' => $this->translator->trans($info['label'] ?? $name, [], $info['translation_domain'] ?? null),
                 'choices' => $info['choices'] ?? [],
+                'comparison' => $info['comparison'] ?? ComparisonOperatorsEnum::EQUAL,
             ];
 
             if ($front['filters'][$name]['type'] === 'yes_no' && empty($front['filters'][$name]['choices'])) {
@@ -77,6 +78,10 @@ class Datatable
                     '1' => $this->translator->trans('yes'),
                     '0' => $this->translator->trans('no'),
                 ];
+            }
+
+            if ($front['filters'][$name]['type'] === 'single_select') {
+                $front['filters'][$name]['comparison'] = ComparisonOperatorsEnum::EQUAL;
             }
         }
 

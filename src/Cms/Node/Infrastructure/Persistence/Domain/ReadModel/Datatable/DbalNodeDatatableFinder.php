@@ -5,9 +5,13 @@ declare(strict_types=1);
 namespace Tulia\Cms\Node\Infrastructure\Persistence\Domain\ReadModel\Datatable;
 
 use PDO;
+use Tulia\Cms\Node\Domain\NodeType\NodeTypeInterface;
 use Tulia\Cms\Node\Ports\Infrastructure\Persistence\Domain\ReadModel\Datatable\NodeDatatableFinderInterface;
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
+use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\Enum\TermFinderScopeEnum;
+use Tulia\Cms\Taxonomy\Ports\Infrastructure\Persistence\Domain\ReadModel\TermFinderInterface;
+use Tulia\Component\Datatable\Filter\ComparisonOperatorsEnum;
 use Tulia\Component\Datatable\Finder\AbstractDatatableFinder;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 
@@ -16,16 +20,20 @@ use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
  */
 class DbalNodeDatatableFinder extends AbstractDatatableFinder implements NodeDatatableFinderInterface
 {
-    private ?string $nodeType = null;
+    private NodeTypeInterface $nodeType;
+
+    private TermFinderInterface $termFinder;
 
     public function __construct(
         ConnectionInterface $connection,
-        CurrentWebsiteInterface $currentWebsite
+        CurrentWebsiteInterface $currentWebsite,
+        TermFinderInterface $termFinder
     ) {
         parent::__construct($connection, $currentWebsite);
+        $this->termFinder = $termFinder;
     }
 
-    public function setNodeType(string $nodeType): void
+    public function setNodeType(NodeTypeInterface $nodeType): void
     {
         $this->nodeType = $nodeType;
     }
@@ -43,7 +51,7 @@ class DbalNodeDatatableFinder extends AbstractDatatableFinder implements NodeDat
      */
     public function getColumns(): array
     {
-        return [
+        $columns = [
             'id' => [
                 'selector' => 'tm.id',
                 'type' => 'uuid',
@@ -62,6 +70,30 @@ class DbalNodeDatatableFinder extends AbstractDatatableFinder implements NodeDat
                 'view' => '@backend/node/parts/datatable/published.tpl',
             ],
         ];
+
+        if ($this->supportsCategoryTaxonomy()) {
+            $columns['category'] = [
+                'selector' => 'COALESCE(nt.name, ntl.name)',
+            ];
+        }
+
+        return $columns;
+    }
+
+    public function getFilters(): array
+    {
+        $filters = [];
+
+        if ($this->supportsCategoryTaxonomy()) {
+            $filters['category'] = [
+                'label' => 'category',
+                'type' => 'single_select',
+                'choices' => $this->createTaxonomyChoices(),
+                'selector' => 'nt.id'
+            ];
+        }
+
+        return $filters;
     }
 
     /**
@@ -74,13 +106,21 @@ class DbalNodeDatatableFinder extends AbstractDatatableFinder implements NodeDat
             ->addSelect('tm.type, tm.level, tm.parent_id, tm.slug, tm.status')
             ->leftJoin('tm', '#__node_lang', 'tl', 'tm.id = tl.node_id AND tl.locale = :locale')
             ->where('tm.type = :type')
-            ->setParameter('type', $this->nodeType, PDO::PARAM_STR)
+            ->setParameter('type', $this->nodeType->getType(), PDO::PARAM_STR)
             ->setParameter('locale', $this->currentWebsite->getLocale()->getCode(), PDO::PARAM_STR)
             ->addOrderBy('tm.level', 'ASC')
         ;
 
         if ($this->currentWebsite->getDefaultLocale()->getCode() !== $this->currentWebsite->getLocale()->getCode()) {
             $queryBuilder->addSelect('IF(ISNULL(tl.title), 0, 1) AS translated');
+        }
+
+        if ($this->supportsCategoryTaxonomy()) {
+            $queryBuilder
+                ->addSelect('nt.id AS term_id, nt.type AS taxonomy_type')
+                ->leftJoin('tm', '#__node_term_relationship', 'ntr', 'ntr.node_id = tm.id')
+                ->leftJoin('ntr', '#__term', 'nt', 'nt.id = ntr.term_id')
+                ->leftJoin('nt', '#__term_lang', 'ntl', 'ntl.term_id = nt.id AND ntl.locale = :locale');
         }
 
         return $queryBuilder;
@@ -95,5 +135,31 @@ class DbalNodeDatatableFinder extends AbstractDatatableFinder implements NodeDat
             'main' => '@backend/node/parts/datatable/edit-link.tpl',
             'delete' => '@backend/node/parts/datatable/delete-link.tpl',
         ];
+    }
+
+    private function createTaxonomyChoices(): array
+    {
+        $terms = $this->termFinder->find([
+            'sort_hierarchical' => true,
+        ], TermFinderScopeEnum::INTERNAL);
+
+        $result = [];
+
+        foreach ($terms as $term) {
+            $result[$term->getId()] = str_repeat('- ', $term->getLevel() - 1) . $term->getName();
+        }
+
+        return $result;
+    }
+
+    private function supportsCategoryTaxonomy(): bool
+    {
+        foreach ($this->nodeType->getTaxonomies() as $taxonomy) {
+            if ($taxonomy['taxonomy'] === 'category') {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

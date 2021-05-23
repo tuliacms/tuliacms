@@ -27,6 +27,8 @@ class Term
 
     protected int $level = 1;
 
+    protected int $position = 1;
+
     protected int $count = 0;
 
     protected string $locale;
@@ -64,6 +66,7 @@ class Term
         $term->setWebsiteId($data['website_id']);
         $term->setParentId($data['parent_id'] ?? null);
         $term->setLevel((int) ($data['level'] ?? 0));
+        $term->setPosition((int) ($data['position'] ?? 0));
         $term->setCount((int) ($data['count'] ?? 0));
         $term->setLocale($data['locale']);
         $term->setName($data['name'] ?? '');
@@ -122,6 +125,16 @@ class Term
     public function setLevel(int $level): void
     {
         $this->level = $level;
+    }
+
+    public function getPosition(): int
+    {
+        return $this->position;
+    }
+
+    public function setPosition(int $position): void
+    {
+        $this->position = $position;
     }
 
     public function getCount(): int

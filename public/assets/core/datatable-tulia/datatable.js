@@ -251,63 +251,11 @@ Tulia.DataTable.View.Filters.FilterTypeRenderer = class {
 
 Tulia.DataTable.View.Filters.Filter = class {
     constructor(name, options, root) {
+        console.log(options);
         this.name = name;
         this.options = options;
         this.root = root;
-        this.comparison = 'HAS';
-        this.availableComparisons = {
-            HAS: { label: 'Contains', code: '==' },
-            EQUAL: { label: 'Equal', code: '===' },
-            LESS: { label: 'Less than', code: '<' },
-            LESS_EQUAL: { label: 'Less or equal than', code: '<=' },
-            MORE: { label: 'More than', code: '>' },
-            MORE_EQUAL: { label: 'More or equal than', code: '>=' }
-        };
-    }
-
-    render () {
-    }
-
-    getValue () {
-    }
-
-    setValue (value) {
-    }
-
-    getAvailableComparisons () {
-        return this.availableComparisons;
-    }
-
-    getComparison () {
-        return this.comparison;
-    }
-
-    changeComparison (comparison) {
-        this.comparison = comparison;
-
-        this.root.find('.dtbl-filter-comparison-dropdown > a').text(this.availableComparisons[comparison].code);
-    }
-
-    updatePreview (value) {
-        let button = this.root.closest('.dtbl-filter-dropdown').find('button.dropdown-toggle');
-        let preview = button.find('.dtbl-filter-value-preview');
-
-        if (value) {
-            button.addClass('btn-primary').removeClass('btn-default');
-            preview.text(' ' + this.availableComparisons[this.comparison].code + ' ' + value);
-        } else {
-            button.addClass('btn-default').removeClass('btn-primary');
-            preview.empty();
-        }
-    }
-};
-
-Tulia.DataTable.View.Filters.Filter = class {
-    constructor(name, options, root) {
-        this.name = name;
-        this.options = options;
-        this.root = root;
-        this.comparison = 'HAS';
+        this.comparison = options.comparison;
         this.availableComparisons = {
             HAS: { label: 'Contains', code: '==' },
             EQUAL: { label: 'Equal', code: '===' },

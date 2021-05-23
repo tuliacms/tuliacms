@@ -29,12 +29,6 @@ class Filter
      */
     private $selector;
 
-    /**
-     * @param string $name
-     * @param mixed $value
-     * @param string $selector
-     * @param string $comparison
-     */
     public function __construct(string $name, $value, string $selector, string $comparison = ComparisonOperatorsEnum::HAS)
     {
         $this->name = $name;
