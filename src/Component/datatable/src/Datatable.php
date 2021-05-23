@@ -13,6 +13,8 @@ use Tulia\Component\Datatable\Filter\Filter;
 use Tulia\Component\Datatable\Filter\FilterCollectionBuilder;
 use Tulia\Component\Datatable\Finder\FinderInterface;
 use Tulia\Component\Datatable\Plugin\PluginInterface;
+use Tulia\Component\Templating\EngineInterface;
+use Tulia\Component\Templating\View;
 
 /**
  * @author Adam Banaszkiewicz
@@ -25,16 +27,24 @@ class Datatable
 
     private TranslatorInterface $translator;
 
+    private EngineInterface $engine;
+
     /**
      * @var array|PluginInterface[]
      */
-    protected array $plugins = [];
+    private array $plugins = [];
 
-    public function __construct(FinderInterface $finder, Request $request, TranslatorInterface $translator, array $plugins = [])
-    {
+    public function __construct(
+        FinderInterface $finder,
+        Request $request,
+        TranslatorInterface $translator,
+        EngineInterface $engine,
+        array $plugins = []
+    ) {
         $this->finder = $finder;
         $this->request = $request;
         $this->translator = $translator;
+        $this->engine = $engine;
         $this->plugins = $plugins;
     }
 
@@ -46,17 +56,7 @@ class Datatable
     public function generateFront(array $options): array
     {
         $front = [];
-
-        foreach ($this->getColumns() as $name => $info) {
-            $front['columns'][$name] = [
-                'type'      => $info['type'] ?? 'text',
-                'label'     => $this->translator->trans($info['label'] ?? $name, [], $info['translation_domain'] ?? null),
-                'sortable'  => (bool) ($info['sortable'] ?? false),
-                'html_attr' => $info['html_attr'] ?? [],
-                'value_translation' => $info['value_translation'] ?? [],
-                'value_class' => $info['value_class'] ?? [],
-            ];
-        }
+        $front['columns'] = $this->getColumns();
 
         if ($options['actions_column'] === true) {
             $front['columns']['actions'] = [
@@ -99,6 +99,16 @@ class Datatable
             (int) $this->request->get('page')
         );
 
+        foreach ($this->getColumns() as $column => $info) {
+            foreach ($result as $key => $row) {
+                if (isset($row[$column]) && isset($info['view'])) {
+                    $result[$key][$column] = $this->engine->render(new View($info['view'], [
+                        'row' => $row,
+                    ]));
+                }
+            }
+        }
+
         return new JsonResponse([
             'data' => $result,
             'meta' => [
@@ -119,7 +129,22 @@ class Datatable
             $columns[] = $plugin->getColumns();
         }
 
-        return array_merge(...$columns);
+        $columns = array_merge(...$columns);
+
+        foreach ($columns as $name => $info) {
+            $columns[$name] = [
+                'type' => $info['type'] ?? 'text',
+                'selector' => $info['selector'] ?? $name,
+                'label' => $this->translator->trans($info['label'] ?? $name, [], $info['translation_domain'] ?? null),
+                'sortable' => (bool) ($info['sortable'] ?? false),
+                'html_attr' => $info['html_attr'] ?? [],
+                'value_translation' => $info['value_translation'] ?? [],
+                'value_class' => $info['value_class'] ?? [],
+                'view' => $info['view'] ?? null,
+            ];
+        }
+
+        return $columns;
     }
 
     public function getFilters(): array
