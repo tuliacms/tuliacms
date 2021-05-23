@@ -251,7 +251,6 @@ Tulia.DataTable.View.Filters.FilterTypeRenderer = class {
 
 Tulia.DataTable.View.Filters.Filter = class {
     constructor(name, options, root) {
-        console.log(options);
         this.name = name;
         this.options = options;
         this.root = root;
@@ -796,6 +795,54 @@ Tulia.DataTable.View.Actions.Delete = class {
     }
 };
 
+Tulia.DataTable.View.Actions.Confirm = class {
+    performAction (settings) {
+        let self = this;
+        let options = {
+            title: settings.action_headline ?? null,
+            text: settings.action_question ?? null,
+        };
+
+        Tulia.Confirmation.confirm(options).then(function (v) {
+            if (! v.value) {
+                return;
+            }
+
+            Tulia.PageLoader.show();
+            self.createForm(settings).submit();
+        });
+    }
+
+    createForm (settings) {
+        let form = $('<form>');
+
+        form
+            .append(this.createFields(settings.data))
+            .append('<input type="hidden" name="_token" value="' + settings.csrf_token + '" />')
+            .attr('method', 'POST')
+            .attr('action', settings.url)
+            .appendTo('body');
+
+        return form;
+    }
+
+    createFields (data) {
+        let fields = $('<div>');
+
+        for (let name in data) {
+            if (Array.isArray(data[name])) {
+                for (let i in data[name]) {
+                    fields.append('<input type="hidden" name="' + name + '[]" value="' + data[name][i] + '" />');
+                }
+            } else {
+                fields.append('<input type="hidden" name="' + name + '" value="' + data[name] + '" />');
+            }
+        }
+
+        return fields;
+    }
+};
+
 Tulia.DataTable.Sortable = class {
     constructor(eventDispatcher, repository) {
         this.repository = repository;
@@ -916,6 +963,7 @@ Tulia.DataTable.Container = class {
         let filters = new Tulia.DataTable.View.Filters(eventDispatcher, repository, translator, root, options);
         let actions = new Tulia.DataTable.View.Actions(eventDispatcher, root);
         let deleteActions = new Tulia.DataTable.View.Actions.Delete();
+        let confirmActions = new Tulia.DataTable.View.Actions.Confirm();
 
         this.set('options', options);
         this.set('root', root);
@@ -928,11 +976,13 @@ Tulia.DataTable.Container = class {
         this.set('view.filters', filters);
         this.set('view.actions', actions);
         this.set('view.actions.delete', deleteActions);
+        this.set('view.actions.confirm', confirmActions);
         this.set('repository', repository);
         this.set('sortable', sortable);
 
         eventDispatcher.on('view.ready', function (...args) { actions.init(...args) });
         eventDispatcher.on('view.action.delete', function (...args) { deleteActions.performAction(...args) });
+        eventDispatcher.on('view.action.confirm', function (...args) { confirmActions.performAction(...args) });
     }
 
     get (name) {

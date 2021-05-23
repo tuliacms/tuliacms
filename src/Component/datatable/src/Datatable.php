@@ -200,12 +200,29 @@ class Datatable
                 $actions[] = $plugin->buildActions($row);
             }
 
+            foreach ($actions as $gk => $group) {
+                foreach ($group as $ak => $action) {
+                    if (is_string($action)) {
+                        $actions[$gk][$ak] = [
+                            'view' => $action,
+                        ];
+                    }
+                }
+            }
+
             $result[$key]['actions'] = array_merge(...$actions);
 
-            foreach ($result[$key]['actions'] as $actionKey => $view) {
-                $result[$key]['actions'][$actionKey] = $this->engine->render(new View($view, [
+            foreach ($result[$key]['actions'] as $actionKey => $action) {
+                $action = array_merge([
+                    'view' => null,
+                    'view_context' => [],
+                ], $action);
+
+                $data = array_merge($action['view_context'], [
                     'row' => $row,
-                ]));
+                ]);
+
+                $result[$key]['actions'][$actionKey] = $this->engine->render(new View($action['view'], $data));
             }
         }
 
