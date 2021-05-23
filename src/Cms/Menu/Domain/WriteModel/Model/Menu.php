@@ -127,6 +127,8 @@ class Menu
             return;
         }
 
+        $this->removeItemChildren($item);
+
         $this->items[$item->getId()]->unassignFromMenu();
 
         unset($this->items[$item->getId()]);
@@ -211,6 +213,19 @@ class Menu
     {
         if ($item->getParentId() === null) {
             $item->setParentId(Item::ROOT_ID);
+        }
+    }
+
+    private function removeItemChildren(Item $item): void
+    {
+        foreach ($this->items as $existingItem) {
+            if ($existingItem->getParentId() === null) {
+                continue;
+            }
+
+            if ($existingItem->getParentId() === $item->getId()) {
+                $this->removeItem($existingItem);
+            }
         }
     }
 }

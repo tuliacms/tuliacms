@@ -101,6 +101,8 @@ class Taxonomy extends AggregateRoot
             return;
         }
 
+        $this->removeTermChildren($term);
+
         unset($this->terms[$term->getId()->getId()]);
         $term->setTaxonomy($this, null);
 
@@ -155,6 +157,19 @@ class Taxonomy extends AggregateRoot
     {
         if ($term->getParentId() === null) {
             $term->setParentId(new TermId(Term::ROOT_ID));
+        }
+    }
+
+    private function removeTermChildren(Term $term): void
+    {
+        foreach ($this->terms as $existingTerm) {
+            if ($existingTerm->getParentId() === null) {
+                continue;
+            }
+
+            if ($existingTerm->getParentId()->equals($term->getId())) {
+                $this->removeTerm($existingTerm);
+            }
         }
     }
 }
