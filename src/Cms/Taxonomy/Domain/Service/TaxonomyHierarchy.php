@@ -29,7 +29,7 @@ class TaxonomyHierarchy
             }
         }
 
-        $this->calculateLevel($taxonomy, Term::ROOT_ID, 0);
+        $this->calculateLevel($taxonomy, Term::ROOT_ID, Term::ROOT_LEVEL);
     }
 
     public function calculateLevel(Taxonomy $taxonomy, string $parentId, int $baseLevel): void
