@@ -93,7 +93,7 @@ class DbalNodeDatatableFinder extends AbstractDatatableFinder implements NodeDat
     {
         $queryBuilder
             ->from('#__node', 'tm')
-            ->addSelect('tm.type, tm.level, tm.parent_id, tm.slug')
+            ->addSelect('tm.type, tm.level, tm.parent_id, tm.slug, tm.status')
             ->leftJoin('tm', '#__node_lang', 'tl', 'tm.id = tl.node_id AND tl.locale = :locale')
             ->where('tm.type = :type')
             ->setParameter('type', $this->nodeType, PDO::PARAM_STR)
