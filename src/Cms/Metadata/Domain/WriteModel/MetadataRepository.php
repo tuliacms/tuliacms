@@ -103,6 +103,6 @@ class MetadataRepository
 
     public function delete(string $type, string $ownerId): void
     {
-        throw new \RuntimeException('Please implements this method.');
+        $this->storage->delete($type, $ownerId);
     }
 }

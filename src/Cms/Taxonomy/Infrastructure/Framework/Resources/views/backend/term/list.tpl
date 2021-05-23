@@ -8,6 +8,8 @@
     <li class="breadcrumb-item active" aria-current="page">{{ 'terms'|trans({}, taxonomyType.translationDomain) }}</li>
 {% endblock %}
 
+{% import '@backend/_macros/datatable/generator.tpl' as generator %}
+
 {% block content %}
     <div class="pane pane-lead">
         <div class="pane-header">
@@ -22,13 +24,17 @@
                         <a class="dropdown-item dropdown-item-with-icon" href="{{ path('backend.settings', { group: 'taxonomy.' ~ taxonomyType.type }) }}"><i class="dropdown-icon fas fa-cogs"></i> {{ 'settings'|trans }}</a>
                     </div>
                 </div>
-                <a href="{{ path('backend.term.hierarchy', { taxonomyType: criteria.taxonomy_type }) }}" class="btn btn-secondary btn-icon-only" title="{{ 'hierarchy'|trans({}, 'taxonomy') }}" data-toggle="tooltip"><i class="btn-icon fas fa-sitemap"></i></a>
-                <a href="{{ path('backend.term.create', { taxonomyType: criteria.taxonomy_type }) }}" class="btn btn-success btn-icon-left"><i class="btn-icon fas fa-plus"></i> {{ 'create'|trans }}</a>
+                <a href="{{ path('backend.term.hierarchy', { taxonomyType: taxonomyType.type }) }}" class="btn btn-secondary btn-icon-only" title="{{ 'hierarchy'|trans({}, 'taxonomy') }}" data-toggle="tooltip"><i class="btn-icon fas fa-sitemap"></i></a>
+                <a href="{{ path('backend.term.create', { taxonomyType: taxonomyType.type }) }}" class="btn btn-success btn-icon-left"><i class="btn-icon fas fa-plus"></i> {{ 'create'|trans }}</a>
             </div>
             <i class="pane-header-icon fas fa-file-powerpoint"></i>
             <h1 class="pane-title">{{ block('title') }}</h1>
         </div>
-        <div class="pane-body">
+        {{ generator.generate(datatable, {
+            data_endpoint: path('backend.term.datatable', { taxonomyType: taxonomyType.type }),
+            pagination: false
+        }) }}
+        {#<div class="pane-body">
             <div class="pages-list-header">
                 <div class="action-group">
                     <form action="" method="get" class="quick-search" autocomplete="off">
@@ -139,9 +145,9 @@
                     {{ paginator.position('right')|raw }}
                 </div>
             </div>
-        </div>
+        </div>#}
     </div>
-    <script nonce="{{ csp_nonce() }}">
+    {#<script nonce="{{ csp_nonce() }}">
         $(function () {
             new Tulia.ElementsActions({
                 actions: {
@@ -171,5 +177,5 @@
                 });
             }
         });
-    </script>
+    </script>#}
 {% endblock %}

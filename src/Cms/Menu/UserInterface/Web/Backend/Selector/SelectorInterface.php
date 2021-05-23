@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Menu\Application\Selector;
+namespace Tulia\Cms\Menu\UserInterface\Web\Backend\Selector;
 
 use Tulia\Cms\Menu\Domain\Builder\Type\TypeInterface;
 

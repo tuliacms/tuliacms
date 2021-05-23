@@ -8,7 +8,7 @@ areYouSureYouWantToDeleteFollowingTaxonomies: >
         1 {Are You sure You want to delete following tags and their children?}
         other {Are You sure You want to delete following tags?}
     }
-selectedTaxonomiesWereDeleted: Selected tags were deleted.
+selectedTermsWereDeleted: Selected tags were deleted.
 previewTaxonomy: Preview tag
 taxonomiesList: Tags list
 editTaxonomy: Edit tag

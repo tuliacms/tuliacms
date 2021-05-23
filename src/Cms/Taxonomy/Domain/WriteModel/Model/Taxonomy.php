@@ -102,7 +102,7 @@ class Taxonomy extends AggregateRoot
         }
 
         unset($this->terms[$term->getId()->getId()]);
-        $term->setTaxonomy(null, null);
+        $term->setTaxonomy($this, null);
 
         $this->changelog->delete($term);
 

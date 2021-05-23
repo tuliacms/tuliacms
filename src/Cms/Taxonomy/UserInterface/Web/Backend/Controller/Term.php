@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Taxonomy\UserInterface\Web\Backend\Controller;
 
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
-use Tulia\Cms\Platform\Shared\Pagination\Paginator;
-use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\Enum\TermFinderScopeEnum;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Exception\TermNotFoundException;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\ValueObject\TermId;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\TaxonomyRepository;
+use Tulia\Cms\Taxonomy\Ports\Infrastructure\Persistence\Domain\ReadModel\Datatable\TermDatatableFinderInterface;
 use Tulia\Cms\Taxonomy\Ports\Infrastructure\Persistence\Domain\ReadModel\TermFinderInterface;
 use Tulia\Cms\Taxonomy\UserInterface\Web\Backend\Form\TermForm;
-use Tulia\Cms\Taxonomy\UserInterface\Web\Shared\CriteriaBuilder\RequestCriteriaBuilder;
+use Tulia\Component\Datatable\DatatableFactory;
 use Tulia\Component\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Component\Templating\ViewInterface;
 
@@ -28,12 +28,20 @@ class Term extends AbstractController
 
     private TaxonomyRepository $repository;
 
+    private DatatableFactory $factory;
+
+    private TermDatatableFinderInterface $finder;
+
     public function __construct(
         TermFinderInterface $termFinder,
-        TaxonomyRepository $repository
+        TaxonomyRepository $repository,
+        DatatableFactory $factory,
+        TermDatatableFinderInterface $finder
     ) {
         $this->termFinder = $termFinder;
         $this->repository = $repository;
+        $this->factory = $factory;
+        $this->finder = $finder;
     }
 
     public function index(string $taxonomyType): RedirectResponse
@@ -49,15 +57,19 @@ class Term extends AbstractController
      */
     public function list(Request $request, string $taxonomyType)
     {
-        $criteria = (new RequestCriteriaBuilder($request))->build([ 'taxonomy_type' => $taxonomyType ]);
-        $terms = $this->termFinder->find($criteria, TermFinderScopeEnum::BACKEND_LISTING);
+        $taxonomy = $this->repository->get($taxonomyType);
+        $this->finder->setTaxonomyType($taxonomyType);
 
         return $this->view('@backend/taxonomy/term/list.tpl', [
-            'terms'        => $terms,
-            'taxonomyType' => $this->repository->getTaxonomyType($criteria['taxonomy_type']),
-            'criteria'     => $criteria,
-            'paginator'    => new Paginator($request, $terms->totalRows(), $request->query->getInt('page', 1), $criteria['per_page']),
+            'taxonomyType' => $taxonomy->getType(),
+            'datatable' => $this->factory->create($this->finder, $request),
         ]);
+    }
+
+    public function datatable(Request $request, string $taxonomyType): JsonResponse
+    {
+        $this->finder->setTaxonomyType($taxonomyType);
+        return $this->factory->create($this->finder, $request)->generateResponse();
     }
 
     /**
@@ -81,7 +93,7 @@ class Term extends AbstractController
             $this->repository->save($taxonomy);
 
             $this->setFlash('success', $this->trans('termSaved', [], $taxonomyTypeObject->getTranslationDomain()));
-            return $this->redirectToRoute('backend.term.edit', [ 'id' => $term->getId(), 'taxonomyTypeObject' => $taxonomyTypeObject->getType() ]);
+            return $this->redirectToRoute('backend.term.edit', [ 'id' => $term->getId(), 'taxonomyType' => $taxonomyTypeObject->getType() ]);
         }
 
         return $this->view('@backend/taxonomy/term/create.tpl', [
@@ -132,7 +144,7 @@ class Term extends AbstractController
     /**
      * @param Request $request
      * @return RedirectResponse
-     * @CsrfToken(id="node.delete")
+     * @CsrfToken(id="term.delete")
      */
     public function delete(Request $request): RedirectResponse
     {
@@ -141,7 +153,7 @@ class Term extends AbstractController
 
         foreach ($request->request->get('ids') as $id) {
             try {
-                $term = $taxonomy->getTerm($id);
+                $term = $taxonomy->getTerm(new TermId($id));
             } catch (TermNotFoundException $e) {
                 continue;
             }
@@ -152,7 +164,7 @@ class Term extends AbstractController
 
         if ($removedNodes) {
             $this->repository->save($taxonomy);
-            $this->setFlash('success', $this->trans('selectedNodesWereDeleted', [], $taxonomy->getType()->getTranslationDomain()));
+            $this->setFlash('success', $this->trans('selectedTermsWereDeleted', [], $taxonomy->getType()->getTranslationDomain()));
         }
 
         return $this->redirectToRoute('backend.term', [ 'taxonomyType' => $taxonomy->getType()->getType() ]);
