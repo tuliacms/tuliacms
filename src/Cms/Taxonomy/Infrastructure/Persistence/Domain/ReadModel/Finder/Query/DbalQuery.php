@@ -102,7 +102,7 @@ class DbalQuery extends AbstractDbalQuery
              */
             'count' => null,
             /**
-             * Search string. Seaching by title with LIKE operator.
+             * Search string. Searching by title with LIKE operator.
              */
             'search' => null,
             /**

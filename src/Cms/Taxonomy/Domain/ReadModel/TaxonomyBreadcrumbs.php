@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Taxonomy\Domain\ReadModel;
 
-use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\Model\Term;
 use Tulia\Cms\Taxonomy\Ports\Infrastructure\Persistence\Domain\ReadModel\TaxonomyBreadcrumbsReadStorageInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;

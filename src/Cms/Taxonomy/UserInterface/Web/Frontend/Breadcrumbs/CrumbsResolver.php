@@ -4,15 +4,12 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Taxonomy\UserInterface\Web\Frontend\Breadcrumbs;
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
 use Tulia\Cms\Breadcrumbs\Application\Crumbs\ResolverInterface;
-use Tulia\Cms\Taxonomy\Domain\ReadModel\TaxonomyBreadcrumbs;
-use Tulia\Cms\Taxonomy\Domain\TaxonomyType\RegistryInterface;
-use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\Enum\TermFinderScopeEnum;
-use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\Model\Term;
-use Tulia\Cms\Taxonomy\Ports\Infrastructure\Persistence\Domain\ReadModel\TermFinderInterface;
 use Tulia\Cms\Platform\Shared\Breadcrumbs\BreadcrumbsInterface;
-use Symfony\Component\HttpFoundation\Request;
+use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\Model\Term;
+use Tulia\Cms\Taxonomy\Domain\ReadModel\TaxonomyBreadcrumbs;
 
 /**
  * @author Adam Banaszkiewicz
@@ -21,21 +18,13 @@ class CrumbsResolver implements ResolverInterface
 {
     private RouterInterface $router;
 
-    private RegistryInterface $typeRegistry;
-
-    private TermFinderInterface $termFinder;
-
     private TaxonomyBreadcrumbs $taxonomyBreadcrumbs;
 
     public function __construct(
         RouterInterface $router,
-        RegistryInterface $typeRegistry,
-        TermFinderInterface $termFinder,
         TaxonomyBreadcrumbs $taxonomyBreadcrumbs
     ) {
         $this->router = $router;
-        $this->typeRegistry = $typeRegistry;
-        $this->termFinder = $termFinder;
         $this->taxonomyBreadcrumbs = $taxonomyBreadcrumbs;
     }
 
