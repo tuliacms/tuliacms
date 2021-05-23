@@ -86,13 +86,13 @@ class Taxonomy extends AggregateRoot
 
         if ($term->isRoot() === false) {
             $this->resolveItemParent($term);
-            $this->calculateItemPosition($term);
             $this->calculateItemLevel($term);
+            $this->calculateItemPosition($term);
         }
 
         $this->changelog->insert($term);
 
-        //$this->recordThat(TermCreated::fromTerm($term));
+        $this->recordThat(TermCreated::fromTerm($term));
     }
 
     public function removeTerm(Term $term): void
@@ -138,7 +138,11 @@ class Taxonomy extends AggregateRoot
             $position = 0;
 
             foreach ($this->terms as $existingItem) {
-                if ($existingItem->getParentId() === $term->getParentId()) {
+                if ($existingItem->getParentId() === null) {
+                    continue;
+                }
+
+                if ($existingItem->getParentId()->equals($term->getParentId())) {
                     $position = max($position, $existingItem->getPosition());
                 }
             }

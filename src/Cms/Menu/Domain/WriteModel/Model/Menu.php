@@ -114,8 +114,8 @@ class Menu
 
         if ($item->isRoot() === false) {
             $this->resolveItemParent($item);
-            $this->calculateItemPosition($item);
             $this->calculateItemLevel($item);
+            $this->calculateItemPosition($item);
         }
 
         $this->recordItemChange('add', $item);

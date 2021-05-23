@@ -56,7 +56,7 @@ class Hierarchy extends AbstractController
 
         $this->repository->save($taxonomy);
 
-        $this->setFlash('success', $this->trans('hierarchyUpdated', [], 'taxonomy'));
+        $this->setFlash('success', $this->trans('hierarchyUpdated'));
         return $this->redirectToRoute('backend.term.hierarchy', ['taxonomyType' => $taxonomyType]);
     }
 
