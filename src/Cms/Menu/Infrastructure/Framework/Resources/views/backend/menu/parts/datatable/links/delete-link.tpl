@@ -1,1 +1,17 @@
-<a href="#" data-toggle="modal" data-target="#modal-menu-delete" data-element-id="{{ row.id }}" class="dropdown-item-with-icon dropdown-item-danger" title="{{ 'deleteMenu'|trans({}, 'menu') }}"><i class="dropdown-icon fas fa-times"></i> {{ 'deleteMenu'|trans({}, 'menu') }}</a>
+<a
+        href="#"
+        class="dropdown-item-with-icon dropdown-item-danger"
+        title="{{ 'deleteMenu'|trans({}, 'menu') }}"
+        data-component="action"
+        data-settings="{
+            'action': 'delete',
+            'url': '{{ path('backend.menu.delete') }}',
+            'data': {
+                'ids': ['{{ row.id }}']
+            },
+            'csrf_token': '{{ csrf_token('menu.delete') }}'
+        }"
+>
+    <i class="dropdown-icon fas fa-times"></i>
+    {{ 'deleteMenu'|trans({}, 'menu') }}
+</a>
