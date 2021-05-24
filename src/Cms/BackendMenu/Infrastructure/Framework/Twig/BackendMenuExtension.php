@@ -6,7 +6,6 @@ namespace Tulia\Cms\BackendMenu\Infrastructure\Framework\Twig;
 
 use Twig\TwigFunction;
 use Twig\Extension\AbstractExtension;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Tulia\Cms\BackendMenu\Domain\Builder\HtmlBuilderInterface;
 
 /**
@@ -16,12 +15,9 @@ class BackendMenuExtension extends AbstractExtension
 {
     protected HtmlBuilderInterface $builder;
 
-    protected RequestStack $requestStack;
-
-    public function __construct(HtmlBuilderInterface $builder, RequestStack $requestStack)
+    public function __construct(HtmlBuilderInterface $builder)
     {
         $this->builder = $builder;
-        $this->requestStack = $requestStack;
     }
 
     /**
@@ -30,19 +26,16 @@ class BackendMenuExtension extends AbstractExtension
     public function getFunctions()
     {
         return [
-            new TwigFunction('backend_menu', function () {
-                $ids = [];
-
-                if ($this->requestStack->getMasterRequest()) {
-                    $cookie = $this->requestStack->getMasterRequest()->cookies->get('aside-menuitems-opened');
-                    $ids = $cookie ? explode('|', $cookie) : [];
-                }
+            new TwigFunction('backend_menu', function ($context) {
+                $cookie = $context['app']->getRequest()->cookies->get('aside-menuitems-opened');
+                $ids = $cookie ? explode('|', $cookie) : [];
 
                 return $this->builder->build([
                     'opened' => $ids
                 ]);
             }, [
-                'is_safe' => ['html']
+                'is_safe' => ['html'],
+                'needs_context' => true,
             ])
         ];
     }
