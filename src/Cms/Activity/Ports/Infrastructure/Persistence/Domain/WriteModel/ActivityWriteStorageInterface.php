@@ -2,13 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Activity\Infrastructure\Persistence\Command;
+namespace Tulia\Cms\Activity\Ports\Infrastructure\Persistence\Domain\WriteModel;
 
 /**
  * @author Adam Banaszkiewicz
  */
-interface RepositoryInterface
+interface ActivityWriteStorageInterface
 {
     public function save(array $data): void;
+
     public function delete(string $id): void;
 }

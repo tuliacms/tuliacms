@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Activity\Infrastructure\Cms\Dashboard\Widget;
+namespace Tulia\Cms\Activity\UserInterface\Web\Backend\Dashboard\Widget;
 
-use Tulia\Cms\Activity\Query\FinderInterface;
+use Tulia\Cms\Activity\Domain\ReadModel\ActivityFinder;
 use Tulia\Cms\Dashboard\Widgets\AbstractWidget;
 
 /**
@@ -12,9 +12,9 @@ use Tulia\Cms\Dashboard\Widgets\AbstractWidget;
  */
 class ActivityWidget extends AbstractWidget
 {
-    private $finder;
+    private ActivityFinder $finder;
 
-    public function __construct(FinderInterface $finder)
+    public function __construct(ActivityFinder $finder)
     {
         $this->finder = $finder;
     }
