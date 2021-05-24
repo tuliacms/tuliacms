@@ -38,6 +38,13 @@ class TuliaCmsExtension extends Extension
         $container->registerForAutoconfiguration(\Tulia\Cms\Breadcrumbs\Ports\Domain\BreadcrumbsResolverInterface::class)
             ->addTag('breadcrumbs.resolver');
 
+        // Dashboard
+        $container->registerForAutoconfiguration(\Tulia\Cms\Dashboard\Ports\Domain\Tiles\DashboardTilesCollector::class)
+            ->addTag('dashboard.tiles_collector');
+
+        $container->registerForAutoconfiguration(\Tulia\Cms\Dashboard\Ports\Domain\Widgets\DashboardWidgetInterface::class)
+            ->addTag('dashboard.widget');
+
         // Menus
         $container->registerForAutoconfiguration(\Tulia\Cms\Menu\Domain\WriteModel\ActionsChain\MenuActionInterface::class)
             ->addTag('menu.action_chain');

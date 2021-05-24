@@ -2,15 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Dashboard\Widgets;
+namespace Tulia\Cms\Dashboard\Domain\Widgets;
+
+use Tulia\Cms\Dashboard\Ports\Domain\Widgets\DashboardWidgetInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class Registry
+class DashboardWidgetRegistry
 {
     /**
-     * @var iterable|array|WidgetInterface[]
+     * @var DashboardWidgetInterface[]
      */
     private $widgets;
 
@@ -20,19 +22,15 @@ class Registry
     }
 
     /**
-     * @return array|WidgetInterface[]
+     * @return DashboardWidgetInterface[]
      */
     public function all(): array
     {
-        $this->resolveIterable();
-
-        return $this->widgets;
+        return iterator_to_array($this->widgets);
     }
 
     /**
-     * @param string $group
-     *
-     * @return array|WidgetInterface[]
+     * @return DashboardWidgetInterface[]
      */
     public function allSupporting(string $group): array
     {
@@ -45,12 +43,5 @@ class Registry
         }
 
         return $result;
-    }
-
-    private function resolveIterable(): void
-    {
-        foreach ($this->widgets as $widget) {
-            // Do nothing...
-        }
     }
 }

@@ -7,10 +7,11 @@ namespace Tulia\Bundle\CmsBundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
+use Tulia\Bundle\CmsBundle\DependencyInjection\TuliaCmsExtension;
 use Tulia\Bundle\CmsBundle\DependencyInjection\CompilerPass\MenuPass;
 use Tulia\Bundle\CmsBundle\DependencyInjection\CompilerPass\TaxonomyPass;
-use Tulia\Bundle\CmsBundle\DependencyInjection\TuliaCmsExtension;
 use Tulia\Bundle\CmsBundle\DependencyInjection\CompilerPass\NodePass;
+use Tulia\Bundle\CmsBundle\DependencyInjection\CompilerPass\DashboardPass;
 
 /**
  * @author Adam Banaszkiewicz
@@ -27,5 +28,6 @@ class TuliaCmsBundle extends Bundle
         $container->addCompilerPass(new NodePass());
         $container->addCompilerPass(new TaxonomyPass());
         $container->addCompilerPass(new MenuPass());
+        $container->addCompilerPass(new DashboardPass());
     }
 }

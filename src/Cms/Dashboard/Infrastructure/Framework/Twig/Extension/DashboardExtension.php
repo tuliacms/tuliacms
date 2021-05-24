@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Dashboard\Infrastructure\Framework\Twig\Extension;
 
-use Tulia\Cms\Dashboard\Widgets\Registry;
+use Tulia\Cms\Dashboard\Domain\Widgets\DashboardWidgetRegistry;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -13,9 +13,9 @@ use Twig\TwigFunction;
  */
 class DashboardExtension extends AbstractExtension
 {
-    protected Registry $widgetsRegistry;
+    protected DashboardWidgetRegistry $widgetsRegistry;
 
-    public function __construct(Registry $widgetsRegistry)
+    public function __construct(DashboardWidgetRegistry $widgetsRegistry)
     {
         $this->widgetsRegistry = $widgetsRegistry;
     }

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Homepage\UserInterface\Web\Backend\Controller;
 
+use Tulia\Cms\Dashboard\Ports\Domain\Tiles\DashboardTilesRegistryInterface;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
-use Tulia\Cms\Dashboard\Tiles\ManagerInterface;
 use Tulia\Component\Templating\ViewInterface;
 
 /**
@@ -13,17 +13,24 @@ use Tulia\Component\Templating\ViewInterface;
  */
 class Misc extends AbstractController
 {
-    public function system(ManagerInterface $manager): ViewInterface
+    private DashboardTilesRegistryInterface $tilesRegistry;
+
+    public function __construct(DashboardTilesRegistryInterface $tilesRegistry)
+    {
+        $this->tilesRegistry = $tilesRegistry;
+    }
+
+    public function system(): ViewInterface
     {
         return $this->view('@backend/homepage/misc/system.tpl', [
-            'tiles' => $manager->getTiles('system'),
+            'tiles' => $this->tilesRegistry->getTiles('system'),
         ]);
     }
 
-    public function tools(ManagerInterface $manager): ViewInterface
+    public function tools(): ViewInterface
     {
         return $this->view('@backend/homepage/misc/tools.tpl', [
-            'tiles' => $manager->getTiles('tools'),
+            'tiles' => $this->tilesRegistry->getTiles('tools'),
         ]);
     }
 }

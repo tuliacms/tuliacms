@@ -10,6 +10,10 @@ services:
             - '../../../../**/Model/*'
             - '../../../../**/Exception/*'
 
-    Tulia\Cms\Dashboard\Widgets\Registry:
+    Tulia\Cms\Dashboard\Domain\Widgets\DashboardWidgetRegistry:
         bind:
             $widgets: !tagged_iterator dashboard.widget
+
+    Tulia\Cms\Dashboard\Domain\Tiles\DashboardTilesRegistry:
+        bind:
+            $collectors: !tagged_iterator dashboard.tiles_collector

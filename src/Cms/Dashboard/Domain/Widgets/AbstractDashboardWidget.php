@@ -2,15 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Dashboard\Widgets;
+namespace Tulia\Cms\Dashboard\Domain\Widgets;
 
+use Tulia\Cms\Dashboard\Ports\Domain\Widgets\DashboardWidgetInterface;
 use Tulia\Component\Templating\View;
 use Tulia\Component\Templating\EngineInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
-abstract class AbstractWidget implements WidgetInterface
+abstract class AbstractDashboardWidget implements DashboardWidgetInterface
 {
     private EngineInterface $engine;
 

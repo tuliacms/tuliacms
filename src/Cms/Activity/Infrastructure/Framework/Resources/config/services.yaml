@@ -9,6 +9,3 @@ services:
             - '../../../../Infrastructure/Framework/Resources/*'
             - '../../../../**/Model/*'
             - '../../../../**/Exception/*'
-
-    Tulia\Cms\Activity\UserInterface\Web\Backend\Dashboard\Widget\ActivityWidget:
-        tags: [ dashboard.widget ]

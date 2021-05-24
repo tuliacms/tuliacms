@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Tulia\Cms\Activity\UserInterface\Web\Backend\Dashboard\Widget;
 
 use Tulia\Cms\Activity\Domain\ReadModel\ActivityFinder;
-use Tulia\Cms\Dashboard\Widgets\AbstractWidget;
+use Tulia\Cms\Dashboard\Domain\Widgets\AbstractDashboardWidget;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class ActivityWidget extends AbstractWidget
+class ActivityWidget extends AbstractDashboardWidget
 {
     private ActivityFinder $finder;
 
