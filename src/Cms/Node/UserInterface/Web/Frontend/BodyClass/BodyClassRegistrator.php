@@ -4,33 +4,27 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\UserInterface\Web\Frontend\BodyClass;
 
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Tulia\Cms\BodyClass\Application\Event\CollectBodyClassEvent;
+use Symfony\Component\HttpFoundation\Request;
+use Tulia\Cms\BodyClass\Domain\BodyClassCollection;
+use Tulia\Cms\BodyClass\Ports\Domain\BodyClassCollectorInterface;
 use Tulia\Cms\Node\Domain\ReadModel\Finder\Model\Node;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class BodyClassRegistrator implements EventSubscriberInterface
+class BodyClassRegistrator implements BodyClassCollectorInterface
 {
-    public static function getSubscribedEvents(): array
+    public function collect(Request $request, BodyClassCollection $collection): void
     {
-        return [
-            CollectBodyClassEvent::class => ['handle', 0],
-        ];
-    }
-
-    public function handle(CollectBodyClassEvent $event): void
-    {
-        $node = $event->getRequest()->attributes->get('node');
+        $node = $request->attributes->get('node');
 
         if (! $node instanceof Node) {
             return;
         }
 
-        $event->add('node-page');
-        $event->add('node-type-' . $node->getType());
-        $event->add('node-slug-' . $node->getSlug());
-        $event->add('node-' . $node->getId());
+        $collection->add('is-node-page');
+        $collection->add('is-node-type-' . $node->getType());
+        $collection->add('is-node-slug-' . $node->getSlug());
+        $collection->add('is-node-' . $node->getId());
     }
 }

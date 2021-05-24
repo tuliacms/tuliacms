@@ -3,8 +3,13 @@ services:
         autoconfigure: true
         autowire: true
 
-    Tulia\Cms\BodyClass\Infrastructure\Framework\Twig\Extension\BodyClassExtension:
-        tags: [ twig.extension ]
+    Tulia\Cms\BodyClass\:
+        resource: '../../../../*'
+        exclude:
+            - '../../../../Infrastructure/Framework/Resources/*'
+            - '../../../../**/Model/*'
+            - '../../../../**/Exception/*'
 
-    Tulia\Cms\BodyClass\Application\EventListener\BodyClass:
-        tags: [ kernel.event_subscriber ]
+    Tulia\Cms\BodyClass\Domain\Service\BodyClassService:
+        bind:
+            $collectors: !tagged_iterator body_class.collector

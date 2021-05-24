@@ -9,7 +9,7 @@
         {{ theme_head() }}
         {% block head %}{% endblock %}
     </head>
-    <body class="{{ body_class() }}">
+    <body class="{{ body_class(app.request) }}">
         {% block beforebody %}{% endblock %}
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <a class="navbar-brand" href="{{ path('homepage') }}">{{ option('website_name') }}</a>

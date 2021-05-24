@@ -4,33 +4,27 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Taxonomy\UserInterface\Web\Frontend\BodyClass;
 
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Tulia\Cms\BodyClass\Domain\BodyClassCollection;
+use Tulia\Cms\BodyClass\Ports\Domain\BodyClassCollectorInterface;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\Model\Term;
-use Tulia\Cms\BodyClass\Application\Event\CollectBodyClassEvent;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class BodyClassRegistrator implements EventSubscriberInterface
+class BodyClassRegistrator implements BodyClassCollectorInterface
 {
-    public static function getSubscribedEvents(): array
+    public function collect(Request $request, BodyClassCollection $collection): void
     {
-        return [
-            CollectBodyClassEvent::class => ['handle', 0],
-        ];
-    }
-
-    public function handle(CollectBodyClassEvent $event): void
-    {
-        $term = $event->getRequest()->attributes->get('term');
+        $term = $request->attributes->get('term');
 
         if (! $term instanceof Term) {
             return;
         }
 
-        $event->add('term-page');
-        $event->add('term-type-' . $term->getType());
-        $event->add('term-slug-' . $term->getSlug());
-        $event->add('term-' . $term->getId());
+        $collection->add('is-term-page');
+        $collection->add('is-term-type-' . $term->getType());
+        $collection->add('is-term-slug-' . $term->getSlug());
+        $collection->add('is-term-' . $term->getId());
     }
 }
