@@ -22,7 +22,7 @@ class FilterCollectionBuilder
                 $name,
                 $data['value'],
                 $filters[$name]['selector'] ?? $columns[$name]['selector'],
-                $data['comparison']
+                $filters[$name]['comparison'] ?? $data['comparison']
             );
         }
 

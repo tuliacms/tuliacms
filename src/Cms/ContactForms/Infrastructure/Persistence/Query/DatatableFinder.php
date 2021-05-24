@@ -5,35 +5,14 @@ declare(strict_types=1);
 namespace Tulia\Cms\ContactForms\Infrastructure\Persistence\Query;
 
 use PDO;
-use Symfony\Component\Routing\RouterInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
-use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
-use Tulia\Component\Datatable\Filter\ComparisonOperatorsEnum;
 use Tulia\Component\Datatable\Finder\AbstractDatatableFinder;
-use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class DatatableFinder extends AbstractDatatableFinder
 {
-    private RouterInterface $router;
-
-    private TranslatorInterface $translator;
-
-    public function __construct(
-        ConnectionInterface $connection,
-        CurrentWebsiteInterface $currentWebsite,
-        RouterInterface $router,
-        TranslatorInterface $translator
-    ) {
-        parent::__construct($connection, $currentWebsite);
-
-        $this->router = $router;
-        $this->translator = $translator;
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -57,6 +36,7 @@ class DatatableFinder extends AbstractDatatableFinder
                 'selector' => 'COALESCE(tl.name, tm.name)',
                 'label' => 'name',
                 'sortable' => true,
+                'view' => '@backend/forms/parts/datatable/name.tpl',
             ],
         ];
     }
@@ -70,7 +50,6 @@ class DatatableFinder extends AbstractDatatableFinder
             'name' => [
                 'label' => 'name',
                 'type' => 'text',
-                'comparisons' => ComparisonOperatorsEnum::all(),
             ],
         ];
 
@@ -108,38 +87,11 @@ class DatatableFinder extends AbstractDatatableFinder
     /**
      * {@inheritdoc}
      */
-    public function prepareResult(array $result): array
-    {
-        $missingLocale = $this->translator->trans('missingTranslationInThisLocale');
-
-        foreach ($result as &$row) {
-            $badges = '';
-
-            if (isset($row['translated']) && $row['translated'] !== '1') {
-                $badges .= '<span class="badge badge-info" data-toggle="tooltip" title="' . $missingLocale . '"><i class="dropdown-icon fas fa-language"></i></span> ';
-            }
-
-            $row['name'] = sprintf(
-                '<a href="%2$s" title="%1$s" class="link-title">%3$s %1$s</a>',
-                $row['name'],
-                $this->router->generate('backend.form.edit', ['id' => $row['id']]),
-                $badges
-            );
-        }
-
-        return $result;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function buildActions(array $row): array
     {
-        $editLink = $this->router->generate('backend.form.edit', ['id' => $row['id']]);
-
         return [
-            'main' => '<a href="' . $editLink . '" class="btn btn-secondary btn-icon-only"><i class="btn-icon fas fa-pen"></i></a>',
-            '<a href="" class="dropdown-item-with-icon dropdown-item-danger"><i class="dropdown-icon fas fa-times"></i> Usuń</a>',
+            'main' => '@backend/forms/parts/datatable/links/edit-link.tpl',
+            'delete' => '@backend/forms/parts/datatable/links/delete-link.tpl',
         ];
     }
 }

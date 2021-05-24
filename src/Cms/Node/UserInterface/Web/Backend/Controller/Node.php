@@ -4,22 +4,22 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\UserInterface\Web\Backend\Controller;
 
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\Node\Domain\NodeType\NodeTypeInterface;
 use Tulia\Cms\Node\Domain\NodeType\RegistryInterface;
-use Tulia\Cms\Node\Domain\ReadModel\Finder\Enum\NodeFinderScopeEnum;
 use Tulia\Cms\Node\Domain\WriteModel\Exception\NodeNotFoundException;
 use Tulia\Cms\Node\Domain\WriteModel\NodeRepository;
+use Tulia\Cms\Node\Ports\Infrastructure\Persistence\Domain\ReadModel\Datatable\NodeDatatableFinderInterface;
 use Tulia\Cms\Node\Ports\Infrastructure\Persistence\Domain\ReadModel\NodeFinderInterface;
-use Tulia\Cms\Node\UserInterface\Web\Shared\CriteriaBuilder\RequestCriteriaBuilder;
 use Tulia\Cms\Node\UserInterface\Web\Backend\Form\NodeForm;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
-use Tulia\Cms\Platform\Shared\Pagination\Paginator;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\Enum\TermFinderScopeEnum;
 use Tulia\Cms\Taxonomy\Domain\TaxonomyType\RegistryInterface as TaxonomyRegistry;
 use Tulia\Cms\Taxonomy\Ports\Infrastructure\Persistence\Domain\ReadModel\TermFinderInterface;
+use Tulia\Component\Datatable\DatatableFactory;
 use Tulia\Component\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Component\Templating\ViewInterface;
 
@@ -38,18 +38,26 @@ class Node extends AbstractController
 
     private TermFinderInterface $termFinder;
 
+    private DatatableFactory $factory;
+
+    private NodeDatatableFinderInterface $finder;
+
     public function __construct(
         RegistryInterface $typeRegistry,
         NodeRepository $repository,
         NodeFinderInterface $nodeFinder,
         TaxonomyRegistry $registry,
-        TermFinderInterface $termFinder
+        TermFinderInterface $termFinder,
+        DatatableFactory $factory,
+        NodeDatatableFinderInterface $finder
     ) {
         $this->typeRegistry = $typeRegistry;
         $this->repository = $repository;
         $this->nodeFinder = $nodeFinder;
         $this->registry = $registry;
         $this->termFinder = $termFinder;
+        $this->factory = $factory;
+        $this->finder = $finder;
     }
 
     public function index(string $node_type): RedirectResponse
@@ -59,19 +67,21 @@ class Node extends AbstractController
 
     public function list(Request $request, string $node_type): ViewInterface
     {
-        $criteria = (new RequestCriteriaBuilder($request))->build([ 'node_type' => $node_type ]);
-        $nodes = $this->nodeFinder->find($criteria, NodeFinderScopeEnum::BACKEND_LISTING);
-
         $nodeTypeObject = $this->findNodeType($node_type);
-        $nodes = $this->fetchNodesCategories($nodes);
+        $this->finder->setNodeType($nodeTypeObject);
 
         return $this->view('@backend/node/list.tpl', [
-            'nodes'      => $nodes,
             'nodeType'   => $nodeTypeObject,
-            'criteria'   => $criteria,
-            'paginator'  => new Paginator($request, $nodes->totalRows(), $request->query->getInt('page', 1), $criteria['per_page']),
+            'datatable'  => $this->factory->create($this->finder, $request),
             'taxonomies' => $this->collectTaxonomies($nodeTypeObject),
         ]);
+    }
+
+    public function datatable(Request $request, string $node_type): JsonResponse
+    {
+        $nodeTypeObject = $this->findNodeType($node_type);
+        $this->finder->setNodeType($nodeTypeObject);
+        return $this->factory->create($this->finder, $request)->generateResponse();
     }
 
     /**

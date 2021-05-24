@@ -28,6 +28,10 @@ backend.node.list:
     defaults:
         node_type: page
 
+backend.node.datatable:
+    path: /administrator/node/{node_type}/datatable
+    controller: Tulia\Cms\Node\UserInterface\Web\Backend\Controller\Node::datatable
+
 backend.node:
     path: /administrator/node/{node_type}
     controller: Tulia\Cms\Node\UserInterface\Web\Backend\Controller\Node::index

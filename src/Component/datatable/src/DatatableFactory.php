@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Component\Datatable\Finder\FinderInterface;
 use Tulia\Component\Datatable\Plugin\PluginsRegistry;
+use Tulia\Component\Templating\EngineInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -15,12 +16,19 @@ use Tulia\Component\Datatable\Plugin\PluginsRegistry;
 class DatatableFactory
 {
     private TranslatorInterface $translator;
+
     private PluginsRegistry $pluginsRegistry;
 
-    public function __construct(TranslatorInterface $translator, PluginsRegistry $pluginsRegistry)
-    {
+    private EngineInterface $engine;
+
+    public function __construct(
+        TranslatorInterface $translator,
+        PluginsRegistry $pluginsRegistry,
+        EngineInterface $engine
+    ) {
         $this->translator = $translator;
         $this->pluginsRegistry = $pluginsRegistry;
+        $this->engine = $engine;
     }
 
     public function create(FinderInterface $finder, Request $request): Datatable
@@ -29,6 +37,7 @@ class DatatableFactory
             $finder,
             $request,
             $this->translator,
+            $this->engine,
             $this->pluginsRegistry->getForFinder($finder)
         );
     }

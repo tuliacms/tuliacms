@@ -5,12 +5,8 @@ declare(strict_types=1);
 namespace Tulia\Cms\Menu\Infrastructure\Persistence\Domain\ReadModel\Datatable;
 
 use PDO;
-use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Cms\Menu\Ports\Infrastructure\Persistence\ReadModel\Datatable\MenuDatatableFinderInterface;
 use Tulia\Component\Datatable\Finder\AbstractDatatableFinder;
-use Symfony\Component\Routing\RouterInterface;
-use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
-use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
 
 /**
@@ -18,22 +14,6 @@ use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder
  */
 class DbalMenuDatatableFinder extends AbstractDatatableFinder implements MenuDatatableFinderInterface
 {
-    private RouterInterface $router;
-
-    private TranslatorInterface $translator;
-
-    public function __construct(
-        ConnectionInterface $connection,
-        CurrentWebsiteInterface $currentWebsite,
-        RouterInterface $router,
-        TranslatorInterface $translator
-    ) {
-        parent::__construct($connection, $currentWebsite);
-
-        $this->router = $router;
-        $this->translator = $translator;
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -57,6 +37,7 @@ class DbalMenuDatatableFinder extends AbstractDatatableFinder implements MenuDat
                 'selector' => 'tm.name',
                 'label' => 'name',
                 'sortable' => true,
+                'view' => '@backend/menu/menu/parts/datatable/name.tpl',
             ],
         ];
     }
@@ -91,33 +72,12 @@ class DbalMenuDatatableFinder extends AbstractDatatableFinder implements MenuDat
     /**
      * {@inheritdoc}
      */
-    public function prepareResult(array $result): array
-    {
-        foreach ($result as &$row) {
-            $row['name.raw'] = $row['name'];
-            $row['name'] = sprintf(
-                '<a href="%2$s" title="%1$s" class="link-title">%1$s</a>',
-                $row['name'],
-                $this->router->generate('backend.menu.item.list', ['menuId' => $row['id']])
-            );
-        }
-
-        return $result;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function buildActions(array $row): array
     {
-        $itemsLink = $this->router->generate('backend.menu.item.list', ['menuId' => $row['id']]);
-        $itemsList = $this->translator->trans('menuItems', [], 'menu');
-        $delete    = $this->translator->trans('deleteMenu', [], 'menu');
-
         return [
-            'main' => '<a href="#" data-toggle="modal" data-target="#modal-menu-edit" data-element-name="' . $row['name.raw'] . '" data-element-id="' . $row['id'] . '" class="btn btn-secondary btn-icon-only"><i class="btn-icon fas fa-pen"></i></a>',
-            '<a href="' . $itemsLink . '" class="dropdown-item-with-icon" title="' . $itemsList . '"><i class="dropdown-icon fas fa-bars"></i> ' . $itemsList . '</a>',
-            '<a href="#" data-toggle="modal" data-target="#modal-menu-delete" data-element-id="' . $row['id'] . '" class="dropdown-item-with-icon dropdown-item-danger" title="' . $delete . '"><i class="dropdown-icon fas fa-times"></i> ' . $delete . '</a>',
+            'main' => '@backend/menu/menu/parts/datatable/links/edit-link.tpl',
+            'items' => '@backend/menu/menu/parts/datatable/links/items-link.tpl',
+            'delete' => '@backend/menu/menu/parts/datatable/links/delete-link.tpl',
         ];
     }
 }

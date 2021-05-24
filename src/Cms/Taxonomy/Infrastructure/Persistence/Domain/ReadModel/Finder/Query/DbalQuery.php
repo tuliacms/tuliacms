@@ -14,6 +14,7 @@ use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Query\AbstractDbalQuery;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\Model\Term;
+use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Term as WriteModelTerm;
 
 /**
  * @author Adam Banaszkiewicz
@@ -111,10 +112,14 @@ class DbalQuery extends AbstractDbalQuery
             'locale' => 'en_US',
             /**
              * Search for rows in the website. Given null search in all websites.
-             *
              * @param null|string
              */
             'website' => null,
+            /**
+             * Is fet to true, result will be sorted hierarchical after fetching.
+             * It will works only for full, complete fetched tree.
+             */
+            'sort_hierarchical' => false,
         ];
     }
 
@@ -140,15 +145,24 @@ class DbalQuery extends AbstractDbalQuery
 
         $this->callPlugins($criteria);
 
-        return $this->createCollection($this->queryBuilder->execute()->fetchAllAssociative());
+        return $this->createCollection($this->queryBuilder->execute()->fetchAllAssociative(), $criteria);
     }
 
-    protected function createCollection(array $result): Collection
+    protected function createCollection(array $result, array $criteria): Collection
     {
         $collection = new Collection();
 
         if ($result === []) {
             return $collection;
+        }
+
+        foreach ($result as $key => $row) {
+            $result[$key]['level'] = (int) $row['level'];
+            $result[$key]['position'] = (int) $row['position'];
+        }
+
+        if ($criteria['sort_hierarchical']) {
+            $result = $this->sortHierarchical($result, WriteModelTerm::ROOT_LEVEL + 1);
         }
 
         $metadata = $this->metadataFinder->findAllAggregated(NodeMetadataEnum::TYPE, array_column($result, 'id'));
@@ -302,5 +316,23 @@ class DbalQuery extends AbstractDbalQuery
         if ($criteria['order']) {
             $this->queryBuilder->add('orderBy', $criteria['order'], true);
         }
+    }
+
+    private function sortHierarchical(array $items, int $level, string $parent = WriteModelTerm::ROOT_ID): array
+    {
+        $result = [];
+
+        foreach ($items as $item) {
+            if ($item['level'] === $level && $item['parent_id'] === $parent) {
+                $result[] = [$item];
+                $result[] = $this->sortHierarchical($items, $level + 1, $item['id']);
+            }
+        }
+
+        if ($result === []) {
+            return [];
+        }
+
+        return array_merge(...$result);
     }
 }
