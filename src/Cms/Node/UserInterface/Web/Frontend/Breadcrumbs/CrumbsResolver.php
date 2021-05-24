@@ -6,7 +6,7 @@ namespace Tulia\Cms\Node\UserInterface\Web\Frontend\Breadcrumbs;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
-use Tulia\Cms\Breadcrumbs\Application\Crumbs\ResolverInterface;
+use Tulia\Cms\Breadcrumbs\Ports\Domain\BreadcrumbsResolverInterface;
 use Tulia\Cms\Node\Domain\NodeType\RegistryInterface as NodeTypeRegistry;
 use Tulia\Cms\Node\Domain\ReadModel\Finder\Enum\NodeFinderScopeEnum;
 use Tulia\Cms\Node\Domain\ReadModel\Finder\Model\Node;
@@ -18,7 +18,7 @@ use Tulia\Cms\Taxonomy\Ports\Infrastructure\Persistence\Domain\ReadModel\TermFin
 /**
  * @author Adam Banaszkiewicz
  */
-class CrumbsResolver implements ResolverInterface
+class CrumbsResolver implements BreadcrumbsResolverInterface
 {
     protected RouterInterface $router;
 

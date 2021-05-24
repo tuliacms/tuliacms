@@ -34,6 +34,10 @@ class TuliaCmsExtension extends Extension
         $container->registerForAutoconfiguration(\Tulia\Cms\BodyClass\Ports\Domain\BodyClassCollectorInterface::class)
             ->addTag('body_class.collector');
 
+        // Breadcrumbs
+        $container->registerForAutoconfiguration(\Tulia\Cms\Breadcrumbs\Ports\Domain\BreadcrumbsResolverInterface::class)
+            ->addTag('breadcrumbs.resolver');
+
         // Menus
         $container->registerForAutoconfiguration(\Tulia\Cms\Menu\Domain\WriteModel\ActionsChain\MenuActionInterface::class)
             ->addTag('menu.action_chain');

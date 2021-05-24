@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Breadcrumbs\Infrastructure\Framework\Twig\Extension;
 
-use Tulia\Cms\Breadcrumbs\Application\GeneratorInterface;
+use Tulia\Cms\Breadcrumbs\Domain\BreadcrumbsGeneratorInterface;
 use Tulia\Cms\Platform\Shared\Document\DocumentInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
@@ -14,11 +14,12 @@ use Twig\TwigFunction;
  */
 class BreadcrumbsExtension extends AbstractExtension
 {
-    protected GeneratorInterface $generator;
+    protected BreadcrumbsGeneratorInterface $generator;
+
     protected DocumentInterface $document;
 
     public function __construct(
-        GeneratorInterface $generator,
+        BreadcrumbsGeneratorInterface $generator,
         DocumentInterface $document
     ) {
         $this->generator = $generator;

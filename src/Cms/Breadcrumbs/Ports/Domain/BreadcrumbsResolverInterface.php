@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Breadcrumbs\Application\Crumbs;
+namespace Tulia\Cms\Breadcrumbs\Ports\Domain;
 
 use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\Platform\Shared\Breadcrumbs\BreadcrumbsInterface;
@@ -10,7 +10,7 @@ use Tulia\Cms\Platform\Shared\Breadcrumbs\BreadcrumbsInterface;
 /**
  * @author Adam Banaszkiewicz
  */
-interface ResolverInterface
+interface BreadcrumbsResolverInterface
 {
     /**
      * Based on Request, resolver finds a root crumb. That means this is a current page

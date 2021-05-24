@@ -3,16 +3,14 @@ services:
         autowire: true
         autoconfigure: true
 
-    Tulia\Cms\Breadcrumbs\Infrastructure\Framework\Twig\Extension\BreadcrumbsExtension:
-        tags: [ twig.extension ]
+    Tulia\Cms\Breadcrumbs\:
+        resource: '../../../../*'
+        exclude:
+            - '../../../../Infrastructure/Framework/Resources/*'
+            - '../../../../**/Model/*'
+            - '../../../../**/Exception/*'
 
-    Tulia\Cms\Breadcrumbs\Application\GeneratorInterface:
-        class: Tulia\Cms\Breadcrumbs\Application\Generator
-
-    Tulia\Cms\Breadcrumbs\Application\Crumbs\RegistryInterface:
-        class: Tulia\Cms\Breadcrumbs\Application\Crumbs\Registry
+    Tulia\Cms\Breadcrumbs\Domain\BreadcrumbsResolverRegistryInterface:
+        class: Tulia\Cms\Breadcrumbs\Domain\BreadcrumbsResolverRegistry
         arguments:
             - !tagged_iterator breadcrumbs.resolver
-
-    Tulia\Cms\Breadcrumbs\Application\Crumbs\HomepageResolver:
-        tags: [ breadcrumbs.resolver ]

@@ -70,8 +70,5 @@ services:
     Tulia\Cms\Node\UserInterface\Web\Backend\BackendMenu\NodeMenuBuilder:
         tags: [ backend_menu.builder ]
 
-    Tulia\Cms\Node\UserInterface\Web\Frontend\Breadcrumbs\CrumbsResolver:
-        tags: [ breadcrumbs.resolver ]
-
     Tulia\Cms\Node\Domain\Filemanager\ImageSize\DefaultSizesProvider:
         tags: [ filemanager.image_size.provider ]

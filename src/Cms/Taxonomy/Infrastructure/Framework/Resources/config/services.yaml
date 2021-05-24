@@ -38,5 +38,3 @@ services:
 #    Tulia\Cms\Taxonomy\Domain\Menu\TypeRegistrator:
 #        tags: [ menu.builder.type_registrator ]
 
-    Tulia\Cms\Taxonomy\UserInterface\Web\Frontend\Breadcrumbs\CrumbsResolver:
-        tags: [ breadcrumbs.resolver ]

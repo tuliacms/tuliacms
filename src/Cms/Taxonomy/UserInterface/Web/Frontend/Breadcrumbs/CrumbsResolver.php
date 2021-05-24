@@ -6,7 +6,7 @@ namespace Tulia\Cms\Taxonomy\UserInterface\Web\Frontend\Breadcrumbs;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
-use Tulia\Cms\Breadcrumbs\Application\Crumbs\ResolverInterface;
+use Tulia\Cms\Breadcrumbs\Ports\Domain\BreadcrumbsResolverInterface;
 use Tulia\Cms\Platform\Shared\Breadcrumbs\BreadcrumbsInterface;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\Model\Term;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\TaxonomyBreadcrumbs;
@@ -14,7 +14,7 @@ use Tulia\Cms\Taxonomy\Domain\ReadModel\TaxonomyBreadcrumbs;
 /**
  * @author Adam Banaszkiewicz
  */
-class CrumbsResolver implements ResolverInterface
+class CrumbsResolver implements BreadcrumbsResolverInterface
 {
     private RouterInterface $router;
 

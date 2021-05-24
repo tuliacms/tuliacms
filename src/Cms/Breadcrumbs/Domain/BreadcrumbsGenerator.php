@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Breadcrumbs\Application;
+namespace Tulia\Cms\Breadcrumbs\Domain;
 
-use Tulia\Cms\Breadcrumbs\Application\Crumbs\Homepage;
-use Tulia\Cms\Breadcrumbs\Application\Crumbs\RegistryInterface;
+use Tulia\Cms\Breadcrumbs\Domain\Homepage;
+use Tulia\Cms\Breadcrumbs\Domain\BreadcrumbsResolverRegistryInterface;
 use Tulia\Cms\Platform\Shared\Breadcrumbs\Breadcrumbs;
 use Tulia\Cms\Platform\Shared\Breadcrumbs\BreadcrumbsInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,11 +13,11 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * @author Adam Banaszkiewicz
  */
-class Generator implements GeneratorInterface
+class BreadcrumbsGenerator implements BreadcrumbsGeneratorInterface
 {
-    protected RegistryInterface $registry;
+    protected BreadcrumbsResolverRegistryInterface $registry;
 
-    public function __construct(RegistryInterface $registry)
+    public function __construct(BreadcrumbsResolverRegistryInterface $registry)
     {
         $this->registry = $registry;
     }

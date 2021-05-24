@@ -2,15 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Breadcrumbs\Application\Crumbs;
+namespace Tulia\Cms\Breadcrumbs\Domain;
+
+use Tulia\Cms\Breadcrumbs\Ports\Domain\BreadcrumbsResolverInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class Registry implements RegistryInterface
+class BreadcrumbsResolverRegistry implements BreadcrumbsResolverRegistryInterface
 {
     /**
-     * @var ResolverInterface[]
+     * @var BreadcrumbsResolverInterface[]
      */
     protected iterable $resolvers;
 

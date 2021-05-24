@@ -2,17 +2,19 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Breadcrumbs\Application\Crumbs;
+namespace Tulia\Cms\Breadcrumbs\UserInterface\Web\Frontend\Breadcrumbs;
 
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Tulia\Cms\Breadcrumbs\Ports\Domain\BreadcrumbsResolverInterface;
+use Tulia\Cms\Breadcrumbs\Domain\Homepage;
 use Tulia\Cms\Platform\Shared\Breadcrumbs\BreadcrumbsInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class HomepageResolver implements ResolverInterface
+class HomepageBreadcrumbsResolver implements BreadcrumbsResolverInterface
 {
     protected TranslatorInterface $translator;
     protected RouterInterface $router;
@@ -20,7 +22,7 @@ class HomepageResolver implements ResolverInterface
     public function __construct(TranslatorInterface $translator, RouterInterface $router)
     {
         $this->translator = $translator;
-        $this->router     = $router;
+        $this->router = $router;
     }
 
     public function findRootCrumb(Request $request): ?object
