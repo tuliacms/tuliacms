@@ -2,14 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Activity\Infrastructure\Persistence\Query;
+namespace Tulia\Cms\Activity\Infrastructure\Persistence\Domain\ReadModel;
 
+use Tulia\Cms\Activity\Ports\Infrastructure\Persistence\Domain\ReadModel\ActivityReadStorageInterface;
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class DbalQuery implements QueryInterface
+class DbalActivityReadStorage implements ActivityReadStorageInterface
 {
     private ConnectionInterface $connection;
 

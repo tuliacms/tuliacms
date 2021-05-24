@@ -2,14 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Activity\Infrastructure\Persistence\Command;
+namespace Tulia\Cms\Activity\Infrastructure\Persistence\Domain\WriteModel;
 
+use Tulia\Cms\Activity\Ports\Infrastructure\Persistence\Domain\WriteModel\ActivityWriteStorageInterface;
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class DbalRepository implements RepositoryInterface
+class DbalActivityWriteStorage implements ActivityWriteStorageInterface
 {
     protected ConnectionInterface $connection;
 
@@ -26,7 +27,7 @@ class DbalRepository implements RepositoryInterface
         if ($this->recordExists($row['id'])) {
             $this->connection->update('#__activity', [
                 'message'            => $row['message'],
-                'context'            => json_encode($row['context']),
+                'context'            => $row['context'],
                 'translation_domain' => $row['translationDomain'],
             ], [
                 'id' => $row['id'],
@@ -36,7 +37,7 @@ class DbalRepository implements RepositoryInterface
                 'id'                 => $row['id'],
                 'website_id'         => $row['websiteId'],
                 'message'            => $row['message'],
-                'context'            => json_encode($row['context']),
+                'context'            => $row['context'],
                 'translation_domain' => $row['translationDomain'],
                 'created_at'         => $row['createdAt'],
             ]);
