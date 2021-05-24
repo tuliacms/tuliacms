@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\BackendMenu\Application;
+namespace Tulia\Cms\BackendMenu\Domain\Builder;
 
 /**
  * @author Adam Banaszkiewicz

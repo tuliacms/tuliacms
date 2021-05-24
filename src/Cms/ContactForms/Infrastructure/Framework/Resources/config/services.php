@@ -5,7 +5,7 @@
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Tulia\Cms\BackendMenu\Application\Helper\BuilderHelperInterface;
+use Tulia\Cms\BackendMenu\Domain\Builder\Helper\BuilderHelperInterface;
 use Tulia\Cms\ContactForms\Application\Builder\Builder;
 use Tulia\Cms\ContactForms\Application\Builder\BuilderInterface;
 use Tulia\Cms\ContactForms\Application\Builder\Form;

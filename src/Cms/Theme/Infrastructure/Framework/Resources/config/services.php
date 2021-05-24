@@ -3,7 +3,7 @@
 use Requtize\Assetter\AssetterInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
-use Tulia\Cms\BackendMenu\Application\Helper\BuilderHelperInterface;
+use Tulia\Cms\BackendMenu\Domain\Builder\Helper\BuilderHelperInterface;
 use Tulia\Cms\FrontendToolbar\Application\Helper\HelperInterface;
 use Tulia\Cms\Options\Domain\ReadModel\Options;
 use Tulia\Cms\Theme\Application\Service\ThemeActivator;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\BackendMenu\Application\Helper;
+namespace Tulia\Cms\BackendMenu\Domain\Builder\Helper;
 
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Contracts\Translation\TranslatorInterface;

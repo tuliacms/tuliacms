@@ -7,7 +7,7 @@ namespace Tulia\Cms\BackendMenu\Infrastructure\Framework\Twig;
 use Twig\TwigFunction;
 use Twig\Extension\AbstractExtension;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Tulia\Cms\BackendMenu\Application\HtmlBuilderInterface;
+use Tulia\Cms\BackendMenu\Domain\Builder\HtmlBuilderInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -15,11 +15,12 @@ use Tulia\Cms\BackendMenu\Application\HtmlBuilderInterface;
 class BackendMenuExtension extends AbstractExtension
 {
     protected HtmlBuilderInterface $builder;
+
     protected RequestStack $requestStack;
 
     public function __construct(HtmlBuilderInterface $builder, RequestStack $requestStack)
     {
-        $this->builder      = $builder;
+        $this->builder = $builder;
         $this->requestStack = $requestStack;
     }
 

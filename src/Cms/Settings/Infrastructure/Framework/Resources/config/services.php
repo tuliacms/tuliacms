@@ -4,7 +4,7 @@
 
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Tulia\Cms\BackendMenu\Application\Helper\BuilderHelperInterface;
+use Tulia\Cms\BackendMenu\Domain\Builder\Helper\BuilderHelperInterface;
 use Tulia\Cms\Options\Domain\ReadModel\Options;
 use Tulia\Cms\Platform\Infrastructure\Utilities\DateTime\DateFormatterInterface;
 use Tulia\Cms\Settings\CmsSettingsGroup;

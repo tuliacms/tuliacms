@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\UserInterface\Web\Backend\BackendMenu;
 
-use Tulia\Cms\BackendMenu\Application\BuilderInterface;
-use Tulia\Cms\BackendMenu\Application\Helper\BuilderHelperInterface;
-use Tulia\Cms\BackendMenu\Application\Registry\ItemRegistryInterface;
+use Tulia\Cms\BackendMenu\Domain\Builder\BuilderInterface;
+use Tulia\Cms\BackendMenu\Domain\Builder\Helper\BuilderHelperInterface;
+use Tulia\Cms\BackendMenu\Domain\Builder\Registry\ItemRegistryInterface;
 use Tulia\Cms\Node\Domain\NodeType\Enum\ParametersEnum;
 use Tulia\Cms\Node\Domain\NodeType\NodeTypeInterface;
 use Tulia\Cms\Node\Domain\NodeType\RegistryInterface as NodeRegistry;
