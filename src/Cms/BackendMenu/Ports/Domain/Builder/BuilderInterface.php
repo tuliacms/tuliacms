@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\BackendMenu\Domain\Builder;
+namespace Tulia\Cms\BackendMenu\Ports\Domain\Builder;
 
 use Tulia\Cms\BackendMenu\Domain\Builder\Registry\ItemRegistryInterface;
 

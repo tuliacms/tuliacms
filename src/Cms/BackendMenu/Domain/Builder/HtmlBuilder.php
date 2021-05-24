@@ -6,6 +6,7 @@ namespace Tulia\Cms\BackendMenu\Domain\Builder;
 
 use Tulia\Cms\BackendMenu\Domain\Builder\Helper\BuilderHelperInterface;
 use Tulia\Cms\BackendMenu\Domain\Builder\Registry\ItemRegistry;
+use Tulia\Cms\BackendMenu\Ports\Domain\Builder\BuilderInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -13,7 +14,9 @@ use Tulia\Cms\BackendMenu\Domain\Builder\Registry\ItemRegistry;
 class HtmlBuilder implements HtmlBuilderInterface
 {
     protected BuilderHelperInterface $helper;
+
     protected array $builders = [];
+
     protected array $defaults = [
         /**
          * IDs of opened elements.
