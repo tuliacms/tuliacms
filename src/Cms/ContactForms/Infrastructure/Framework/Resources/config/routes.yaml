@@ -20,6 +20,11 @@ backend.form.edit:
     controller: Tulia\Cms\ContactForms\UserInterface\Web\Controller\Backend\Form::edit
     methods: GET|POST
 
+backend.form.delete:
+    path: /administrator/form/delete
+    controller: Tulia\Cms\ContactForms\UserInterface\Web\Controller\Backend\Form::delete
+    methods: POST
+
 form.submit:
     path: /form/submit/{id}
     controller: Tulia\Cms\ContactForms\UserInterface\Web\Controller\Frontend\Form::submit
