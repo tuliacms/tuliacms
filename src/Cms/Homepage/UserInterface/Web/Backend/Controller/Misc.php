@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Homepage\UserInterface\Web\Controller\Backend;
+namespace Tulia\Cms\Homepage\UserInterface\Web\Backend\Controller;
 
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Dashboard\Tiles\ManagerInterface;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Homepage\UserInterface\Web\Tiles;
+namespace Tulia\Cms\Homepage\UserInterface\Web\Backend\Tiles;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Routing\RouterInterface;
@@ -16,6 +16,7 @@ use Tulia\Cms\Dashboard\Tiles\Tile;
 class SystemTiles implements EventSubscriberInterface
 {
     protected RouterInterface $router;
+
     protected TranslatorInterface $translator;
 
     public function __construct(RouterInterface $router, TranslatorInterface $translator)

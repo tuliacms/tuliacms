@@ -10,9 +10,5 @@ services:
             - '../../../../**/Model/*'
             - '../../../../**/Exception/*'
 
-    Tulia\Cms\Homepage\UserInterface\Web\Controller\:
-        resource: '../../../../UserInterface/Web/Controller'
-        tags: ['controller.service_arguments']
-
-    Tulia\Cms\Homepage\Infrastructure\Cms\BackendMenu\DefaultCmsMenuBuilder:
+    Tulia\Cms\Homepage\UserInterface\Web\Backend\BackendMenu\DefaultCmsMenuBuilder:
         tags: [ backend_menu.builder ]

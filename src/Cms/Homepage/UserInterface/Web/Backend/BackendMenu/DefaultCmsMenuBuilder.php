@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Homepage\Infrastructure\Cms\BackendMenu;
+namespace Tulia\Cms\Homepage\UserInterface\Web\Backend\BackendMenu;
 
 use Tulia\Cms\BackendMenu\Ports\Domain\Builder\BuilderInterface;
 use Tulia\Cms\BackendMenu\Domain\Builder\Helper\BuilderHelperInterface;
