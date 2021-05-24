@@ -120,9 +120,11 @@ class Datatable
         foreach ($this->getColumns() as $column => $info) {
             foreach ($result as $key => $row) {
                 if (isset($row[$column]) && isset($info['view'])) {
-                    $result[$key][$column] = $this->engine->render(new View($info['view'], [
+                    $data = array_merge($info['view_context'] ?? [], [
                         'row' => $row,
-                    ]));
+                    ]);
+
+                    $result[$key][$column] = $this->engine->render(new View($info['view'], $data));
                 }
             }
         }
