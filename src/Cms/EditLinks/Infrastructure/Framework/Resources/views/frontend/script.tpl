@@ -2,12 +2,12 @@
 
 <script nonce="{{ csp_nonce() }}">
     $('body').on('click', '.tulia-edit-links-toggle', function () {
-        let show = Cookies.get('tulia-edit-links-show');
+        let show = Cookies.get('tulia_editlinks_show');
 
         if (show === 'yes') {
-            Cookies.remove('tulia-edit-links-show');
+            Cookies.remove('tulia_editlinks_show');
         } else {
-            Cookies.set('tulia-edit-links-show', 'yes', { expires: 365 });
+            Cookies.set('tulia_editlinks_show', 'yes', { expires: 365 });
         }
 
         document.location.reload();

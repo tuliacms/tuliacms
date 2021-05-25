@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\EditLinks\Infrastructure\Framework\Twig\Extension;
 
-use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Tulia\Cms\EditLinks\Application\Event\CollectEditLinksEvent;
+use Tulia\Cms\EditLinks\Domain\Service\EditLinksCollector;
 use Tulia\Component\Theme\Customizer\DetectorInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
@@ -17,40 +16,22 @@ use Twig\TwigFunction;
  */
 class EditLinksExtension extends AbstractExtension
 {
-    /**
-     * @var TranslatorInterface
-     */
-    protected $translator;
+    protected TranslatorInterface $translator;
 
-    /**
-     * @var EventDispatcherInterface
-     */
-    protected $eventDispatcher;
+    protected EditLinksCollector $collector;
 
-    /**
-     * @var AuthorizationCheckerInterface
-     */
-    protected $authorizationChecker;
+    protected AuthorizationCheckerInterface $authorizationChecker;
 
-    /**
-     * @var DetectorInterface
-     */
-    protected $detector;
+    protected DetectorInterface $detector;
 
-    /**
-     * @param TranslatorInterface $translator
-     * @param EventDispatcherInterface $eventDispatcher
-     * @param AuthorizationCheckerInterface $authorizationChecker
-     * @param DetectorInterface $detector
-     */
     public function __construct(
         TranslatorInterface $translator,
-        EventDispatcherInterface $eventDispatcher,
+        EditLinksCollector $collector,
         AuthorizationCheckerInterface $authorizationChecker,
         DetectorInterface $detector
     ) {
         $this->translator = $translator;
-        $this->eventDispatcher = $eventDispatcher;
+        $this->collector = $collector;
         $this->authorizationChecker = $authorizationChecker;
         $this->detector = $detector;
     }
@@ -66,26 +47,16 @@ class EditLinksExtension extends AbstractExtension
 
                 if (
                     $this->detector->isCustomizerMode()
-                    || $request->cookies->get('tulia-edit-links-show') !== 'yes'
-                    || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') === false) {
+                    || $request->cookies->get('tulia_editlinks_show') !== 'yes'
+                    || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') === false
+                ) {
                     return '';
                 }
 
-                $event = new CollectEditLinksEvent($object, $options);
-                $this->eventDispatcher->dispatch($event);
-
-                $links = $event->getAll();
+                $links = $this->collector->collect($object, $options);
 
                 if ($links === []) {
                     return '';
-                }
-
-                foreach ($links as $key => $link) {
-                    $links[$key] = array_merge([
-                        'label'    => '',
-                        'link'     => '',
-                        'priority' => 0,
-                    ], $link);
                 }
 
                 if (count($links) === 1) {
@@ -93,13 +64,9 @@ class EditLinksExtension extends AbstractExtension
                     return '<div class="tulia-edit-links"><a class="btn btn-secondary" href="' . $link['link'] . '">' . $link['label'] . '</a></div>';
                 }
 
-                usort($links, function ($a, $b) {
-                    return $a['priority'] - $b['priority'];
-                });
-
                 $html = [];
 
-                foreach ($links as $key => $link) {
+                foreach ($links as $link) {
                     $html[] = '<a class="dropdown-item" href="' . $link['link'] . '">' . $link['label'] . '</a>';
                 }
 

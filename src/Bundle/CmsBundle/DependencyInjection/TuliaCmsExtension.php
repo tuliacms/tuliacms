@@ -41,9 +41,16 @@ class TuliaCmsExtension extends Extension
         // Dashboard
         $container->registerForAutoconfiguration(\Tulia\Cms\Dashboard\Ports\Domain\Tiles\DashboardTilesCollector::class)
             ->addTag('dashboard.tiles_collector');
-
         $container->registerForAutoconfiguration(\Tulia\Cms\Dashboard\Ports\Domain\Widgets\DashboardWidgetInterface::class)
             ->addTag('dashboard.widget');
+
+        // EditLinks
+        $container->registerForAutoconfiguration(\Tulia\Cms\EditLinks\Ports\Domain\EditLinksCollectorInterface::class)
+            ->addTag('edit_links.collector');
+
+        // FrontendToolbar
+        $container->registerForAutoconfiguration(\Tulia\Cms\FrontendToolbar\Application\Links\ProviderInterface::class)
+            ->addTag('frontend_toolbar.links.provider');
 
         // Menus
         $container->registerForAutoconfiguration(\Tulia\Cms\Menu\Domain\WriteModel\ActionsChain\MenuActionInterface::class)

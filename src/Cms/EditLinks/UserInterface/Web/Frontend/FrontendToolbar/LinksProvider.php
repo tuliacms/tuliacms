@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\EditLinks\Infrastructure\Cms\FrontendToolbar;
+namespace Tulia\Cms\EditLinks\UserInterface\Web\Frontend\FrontendToolbar;
 
 use Tulia\Cms\FrontendToolbar\Application\Helper\HelperInterface;
 use Tulia\Cms\FrontendToolbar\Application\Links\Link;
@@ -16,10 +16,7 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class LinksProvider extends AbstractProvider
 {
-    /**
-     * @var HelperInterface
-     */
-    private $helper;
+    private HelperInterface $helper;
 
     public function __construct(HelperInterface $helper)
     {
@@ -40,7 +37,7 @@ class LinksProvider extends AbstractProvider
     {
         $translation = $this->helper->trans('turnOn');
 
-        if ($request->cookies->get('tulia-edit-links-show') === 'yes') {
+        if ($request->cookies->get('tulia_editlinks_show') === 'yes') {
             $translation = $this->helper->trans('turnOff');
         }
 

@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\UserInterface\Web\Frontend\EditLinks;
 
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Tulia\Cms\EditLinks\Application\Event\CollectEditLinksEvent;
+use Tulia\Cms\EditLinks\Domain\Collection;
+use Tulia\Cms\EditLinks\Ports\Domain\EditLinksCollectorInterface;
 use Tulia\Cms\Node\Domain\ReadModel\Finder\Model\Node;
 use Tulia\Cms\Node\Domain\NodeType\RegistryInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class EditLinksRegistrator implements EventSubscriberInterface
+class EditLinksRegistrator implements EditLinksCollectorInterface
 {
     protected TranslatorInterface $translator;
 
@@ -29,26 +29,12 @@ class EditLinksRegistrator implements EventSubscriberInterface
         $this->registry = $registry;
     }
 
-    public static function getSubscribedEvents(): array
+    public function collect(Collection $collection, object $node, array $options = []): void
     {
-        return [
-            CollectEditLinksEvent::class => ['handle', 0],
-        ];
-    }
-
-    public function handle(CollectEditLinksEvent $event): void
-    {
-        /** @var Node $node */
-        $node = $event->getObject();
-
-        if (! $node instanceof Node) {
-            return;
-        }
-
         try {
             $type = $this->registry->getType($node->getType());
 
-            $event->add('node.edit', [
+            $collection->add('node.edit', [
                 'link'  => $this->router->generate('backend.node.edit', [ 'node_type' => $node->getType(), 'id' => $node->getId() ]),
                 'label' => $this->translator->trans('editNode', [
                     'node' => mb_strtolower($this->translator->trans('node', [], $type->getTranslationDomain())),
@@ -57,5 +43,10 @@ class EditLinksRegistrator implements EventSubscriberInterface
         } catch (\Exception $e) {
             // Do nothing when Node Type not exists.
         }
+    }
+
+    public function supports(object $object): bool
+    {
+        return $object instanceof Node;
     }
 }

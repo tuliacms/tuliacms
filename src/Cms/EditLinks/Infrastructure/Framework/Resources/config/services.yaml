@@ -10,5 +10,6 @@ services:
             - '../../../../**/Model/*'
             - '../../../../**/Exception/*'
 
-    Tulia\Cms\EditLinks\Infrastructure\Cms\FrontendToolbar\LinksProvider:
-        tags: [ frontend_toolbar.links.provider ]
+    Tulia\Cms\EditLinks\Domain\CollectorsRegistry:
+        bind:
+            $collectors: !tagged_iterator edit_links.collector
