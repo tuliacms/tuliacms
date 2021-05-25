@@ -6,10 +6,9 @@ namespace Tulia\Cms\Menu\Domain\SearchAnything;
 
 use Tulia\Cms\Menu\Domain\ReadModel\Finder\Enum\ScopeEnum;
 use Tulia\Cms\Menu\Ports\Infrastructure\Persistence\ReadModel\MenuFinderInterface;
-use Tulia\Cms\SearchAnything\Provider\AbstractProvider;
-use Tulia\Cms\SearchAnything\Results\Hit;
-use Tulia\Cms\SearchAnything\Results\Results;
-use Tulia\Cms\SearchAnything\Results\ResultsInterface;
+use Tulia\Cms\SearchAnything\Ports\Provider\AbstractProvider;
+use Tulia\Cms\SearchAnything\Domain\Model\Hit;
+use Tulia\Cms\SearchAnything\Domain\Model\Results;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
@@ -29,7 +28,7 @@ class SearchProvider extends AbstractProvider
         $this->router = $router;
     }
 
-    public function search(string $query, int $limit = 5, int $page = 1): ResultsInterface
+    public function search(string $query, int $limit = 5, int $page = 1): Results
     {
         $menus = $this->menuFinder->find([
             'search'   => $query,
@@ -43,9 +42,8 @@ class SearchProvider extends AbstractProvider
             $hit = new Hit($menu->getName(), $this->router->generate('backend.menu.item.list', [
                 'menuId' => $menu->getId(),
             ]));
-            $hit->setId($menu->getId());
 
-            $results->add($hit);
+            $results->add($menu->getId(), $hit);
         }
 
         return $results;

@@ -10,7 +10,7 @@ services:
             - '../../../../**/Model/*'
             - '../../../../**/Exception/*'
 
-    Tulia\Cms\SearchAnything\Factory\EngineFactoryInterface:
-        class: Tulia\Cms\SearchAnything\Factory\EngineFactory
+    Tulia\Cms\SearchAnything\Ports\SearchEngine\SearchEngineInterface:
+        class: Tulia\Cms\SearchAnything\Domain\SearchEngine
         bind:
             $providers: !tagged_iterator search.provider

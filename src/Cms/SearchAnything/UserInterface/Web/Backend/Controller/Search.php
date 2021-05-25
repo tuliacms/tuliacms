@@ -2,21 +2,28 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\SearchAnything\UserInterface\Web\Controller\Backend;
+namespace Tulia\Cms\SearchAnything\UserInterface\Web\Backend\Controller;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Tulia\Cms\SearchAnything\Factory\EngineFactoryInterface;
-use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
+use Tulia\Cms\SearchAnything\Ports\SearchEngine\SearchEngineInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class Search extends AbstractController
 {
-    public function providers(EngineFactoryInterface $engineFactory): JsonResponse
+    private SearchEngineInterface $searchEngine;
+
+    public function __construct(SearchEngineInterface $searchEngine)
     {
-        $providers = $engineFactory->getProviders();
+        $this->searchEngine = $searchEngine;
+    }
+
+    public function providers(): JsonResponse
+    {
+        $providers = $this->searchEngine->getProviders();
         $ids = [];
 
         foreach ($providers as $provider) {
@@ -26,17 +33,16 @@ class Search extends AbstractController
         return new JsonResponse($ids);
     }
 
-    public function search(Request $request, EngineFactoryInterface $engineFactory): JsonResponse
+    public function search(Request $request): JsonResponse
     {
-        $query    = $request->query->get('q');
+        $query = $request->query->get('q');
         $provider = $request->query->get('p');
 
         if (empty($provider)) {
             return new JsonResponse([]);
         }
 
-        $engine = $engineFactory->providerEngine($provider);
-        $result = $engine->search($query);
+        $result = $this->searchEngine->searchInProvider($provider, $query);
         $flatResult = $result->toArray();
         $flatResult['label'] = $this->trans(...$flatResult['label']);
 

@@ -14,10 +14,9 @@ use Tulia\Cms\Node\Domain\ReadModel\Finder\Enum\NodeFinderScopeEnum as NodeScope
 use Tulia\Cms\Node\Domain\NodeType\Enum\ParametersEnum;
 use Tulia\Cms\Node\Domain\NodeType\RegistryInterface;
 use Tulia\Cms\Node\Ports\Infrastructure\Persistence\Domain\ReadModel\NodeFinderInterface;
-use Tulia\Cms\SearchAnything\Provider\AbstractProvider;
-use Tulia\Cms\SearchAnything\Results\Hit;
-use Tulia\Cms\SearchAnything\Results\Results;
-use Tulia\Cms\SearchAnything\Results\ResultsInterface;
+use Tulia\Cms\SearchAnything\Ports\Provider\AbstractProvider;
+use Tulia\Cms\SearchAnything\Domain\Model\Hit;
+use Tulia\Cms\SearchAnything\Domain\Model\Results;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
 
 /**
@@ -53,7 +52,7 @@ class SearchProvider extends AbstractProvider
         $this->imageUrlResolver = $imageUrlResolver;
     }
 
-    public function search(string $query, int $limit = 5, int $page = 1): ResultsInterface
+    public function search(string $query, int $limit = 5, int $page = 1): Results
     {
         $results = new Results();
 
@@ -66,7 +65,6 @@ class SearchProvider extends AbstractProvider
 
         foreach ($nodes as $node) {
             $hit = new Hit($node->getTitle(), $this->router->generate('backend.node.edit', ['node_type' => $node->getType(), 'id' => $node->getId() ]));
-            $hit->setId($node->getId());
             $hit->setDescription($node->getIntroduction());
 
             $nodeType = $this->typesRegistry->getType($node->getType());
@@ -75,7 +73,7 @@ class SearchProvider extends AbstractProvider
                 $nodeType->getParameter(ParametersEnum::ICON)
             );
 
-            $results->add($hit);
+            $results->add($node->getId(), $hit);
         }
 
         $this->includeImages($nodes, $results);
@@ -98,7 +96,7 @@ class SearchProvider extends AbstractProvider
         return 'fas fa-clipboard';
     }
 
-    private function includeImages(Collection $nodes, ResultsInterface $results): void
+    private function includeImages(Collection $nodes, Results $results): void
     {
         $ids = [];
 

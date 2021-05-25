@@ -7,10 +7,9 @@ namespace Tulia\Cms\ContactForms\Infrastructure\Cms\SearchAnything;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Cms\ContactForms\Query\Enum\ScopeEnum;
 use Tulia\Cms\ContactForms\Query\FinderFactoryInterface;
-use Tulia\Cms\SearchAnything\Provider\AbstractProvider;
-use Tulia\Cms\SearchAnything\Results\Hit;
-use Tulia\Cms\SearchAnything\Results\Results;
-use Tulia\Cms\SearchAnything\Results\ResultsInterface;
+use Tulia\Cms\SearchAnything\Ports\Provider\AbstractProvider;
+use Tulia\Cms\SearchAnything\Domain\Model\Hit;
+use Tulia\Cms\SearchAnything\Domain\Model\Results;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
@@ -19,7 +18,9 @@ use Symfony\Component\Routing\RouterInterface;
 class SearchProvider extends AbstractProvider
 {
     protected FinderFactoryInterface $finderFactory;
+
     protected RouterInterface $router;
+
     protected TranslatorInterface $translator;
 
     public function __construct(
@@ -32,7 +33,7 @@ class SearchProvider extends AbstractProvider
         $this->translator = $translator;
     }
 
-    public function search(string $query, int $limit = 5, int $page = 1): ResultsInterface
+    public function search(string $query, int $limit = 5, int $page = 1): Results
     {
         $finder = $this->finderFactory->getInstance(ScopeEnum::SEARCH);
         $finder->setCriteria([
@@ -49,9 +50,8 @@ class SearchProvider extends AbstractProvider
 
         foreach ($nodes as $node) {
             $hit = new Hit($node->getName(), $this->router->generate('backend.form.edit', ['id' => $node->getId() ]));
-            $hit->setId($node->getId());
 
-            $results->add($hit);
+            $results->add($node->getId(), $hit);
         }
 
         return $results;

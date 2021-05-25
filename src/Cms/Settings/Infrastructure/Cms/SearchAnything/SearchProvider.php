@@ -7,10 +7,9 @@ namespace Tulia\Cms\Settings\Infrastructure\Cms\SearchAnything;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Cms\Options\Ports\Infrastructure\Persistence\Domain\WriteModel\OptionsRepositoryInterface;
-use Tulia\Cms\SearchAnything\Provider\AbstractProvider;
-use Tulia\Cms\SearchAnything\Results\Hit;
-use Tulia\Cms\SearchAnything\Results\Results;
-use Tulia\Cms\SearchAnything\Results\ResultsInterface;
+use Tulia\Cms\SearchAnything\Ports\Provider\AbstractProvider;
+use Tulia\Cms\SearchAnything\Domain\Model\Hit;
+use Tulia\Cms\SearchAnything\Domain\Model\Results;
 use Tulia\Cms\Settings\RegistryInterface;
 use Symfony\Component\Routing\RouterInterface;
 
@@ -43,7 +42,7 @@ class SearchProvider extends AbstractProvider
         $this->router = $router;
     }
 
-    public function search(string $query, int $limit = 5, int $page = 1): ResultsInterface
+    public function search(string $query, int $limit = 5, int $page = 1): Results
     {
         $results = new Results();
 
@@ -66,7 +65,7 @@ class SearchProvider extends AbstractProvider
                         $this->translator->trans($groupObj->getName(), [], $groupObj->getTranslationDomain()),
                         $label
                     );
-                    $results->add(new Hit($label, $this->router->generate('backend.settings', [ 'group' => $group ])));
+                    $results->add($group, new Hit($label, $this->router->generate('backend.settings', [ 'group' => $group ])));
                     $limit--;
                 }
             }
