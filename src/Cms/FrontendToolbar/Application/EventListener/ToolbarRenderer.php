@@ -16,7 +16,9 @@ use Tulia\Cms\FrontendToolbar\Application\Builder\Builder;
 class ToolbarRenderer implements EventSubscriberInterface
 {
     private Builder $builder;
+
     private AuthorizationCheckerInterface $authorizationChecker;
+
     private TokenStorageInterface $tokenStorage;
 
     public function __construct(
