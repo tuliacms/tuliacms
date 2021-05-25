@@ -49,7 +49,7 @@ class TuliaCmsExtension extends Extension
             ->addTag('edit_links.collector');
 
         // FrontendToolbar
-        $container->registerForAutoconfiguration(\Tulia\Cms\FrontendToolbar\Application\Links\ProviderInterface::class)
+        $container->registerForAutoconfiguration(\Tulia\Cms\FrontendToolbar\Ports\Domain\Links\LinksCollectorInterface::class)
             ->addTag('frontend_toolbar.links.provider');
 
         // Menus

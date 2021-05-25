@@ -2,22 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\FrontendToolbar\Application\Links;
+namespace Tulia\Cms\FrontendToolbar\Domain\Links;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class Links
+class LinksCollection
 {
-    /**
-     * @var array
-     */
-    protected $links = [];
+    protected array $links = [];
 
-    /**
-     * @param string $name
-     * @param Link $link
-     */
     public function add(string $name, Link $link): void
     {
         $this->links[$name] = $link;

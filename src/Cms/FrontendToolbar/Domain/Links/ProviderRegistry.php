@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\FrontendToolbar\Application\Links;
+namespace Tulia\Cms\FrontendToolbar\Domain\Links;
 
 /**
  * @author Adam Banaszkiewicz
@@ -10,20 +10,17 @@ namespace Tulia\Cms\FrontendToolbar\Application\Links;
 class ProviderRegistry
 {
     /**
-     * @var ProviderInterface[]
+     * @var LinksCollectorInterface[]
      */
-    private $providers;
+    private iterable $providers;
 
-    /**
-     * @param ProviderInterface[] $providers
-     */
     public function __construct(iterable $providers)
     {
         $this->providers = $providers;
     }
 
     /**
-     * @return ProviderInterface[]
+     * @return LinksCollectorInterface[]
      */
     public function all(): array
     {

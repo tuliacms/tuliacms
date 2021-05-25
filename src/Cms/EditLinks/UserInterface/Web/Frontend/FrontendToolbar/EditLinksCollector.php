@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\EditLinks\UserInterface\Web\Frontend\FrontendToolbar;
 
-use Tulia\Cms\FrontendToolbar\Application\Helper\HelperInterface;
-use Tulia\Cms\FrontendToolbar\Application\Links\Link;
-use Tulia\Cms\FrontendToolbar\Application\Links\Links;
-use Tulia\Cms\FrontendToolbar\Application\Links\AbstractProvider;
+use Tulia\Cms\FrontendToolbar\Ports\Domain\Links\HelperInterface;
+use Tulia\Cms\FrontendToolbar\Domain\Links\Link;
+use Tulia\Cms\FrontendToolbar\Domain\Links\LinksCollection;
+use Tulia\Cms\FrontendToolbar\Ports\Domain\Links\AbstractLinksCollector;
 use Tulia\Component\Templating\View;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class LinksProvider extends AbstractProvider
+class EditLinksCollector extends AbstractLinksCollector
 {
     private HelperInterface $helper;
 
@@ -23,9 +23,9 @@ class LinksProvider extends AbstractProvider
         $this->helper = $helper;
     }
 
-    public function provideLinks(Links $links, Request $request): void
+    public function collect(LinksCollection $collection, Request $request): void
     {
-        $links->add('edit_links', $this->createEditLinksLink($request));
+        $collection->add('edit_links', $this->createEditLinksLink($request));
     }
 
     public function provideContent(Request $request): string

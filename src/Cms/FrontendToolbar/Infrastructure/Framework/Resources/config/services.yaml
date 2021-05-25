@@ -10,6 +10,6 @@ services:
             - '../../../../**/Model/*'
             - '../../../../**/Exception/*'
 
-    Tulia\Cms\FrontendToolbar\Application\Links\ProviderRegistry:
+    Tulia\Cms\FrontendToolbar\Domain\Links\ProviderRegistry:
         bind:
             $providers: !tagged_iterator frontend_toolbar.links.provider

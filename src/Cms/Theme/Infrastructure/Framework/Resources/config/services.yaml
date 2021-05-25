@@ -25,9 +25,6 @@ services:
     Tulia\Cms\Theme\Infrastructure\Filemanager\ImageSize\ThemeConfigurationProvider:
         tags: [ filemanager.image_size.provider ]
 
-    Tulia\Cms\Theme\Infrastructure\Cms\FrontendToolbar\LinksProvider:
-        tags: [ frontend_toolbar.links.provider ]
-
     Tulia\Component\Theme\Customizer\Changeset\Storage\StorageInterface:
         class: Tulia\Cms\Theme\Infrastructure\Framework\Theme\Customizer\Changeset\Storage\DatabaseStorage
 

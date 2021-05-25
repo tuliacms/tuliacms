@@ -8,7 +8,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Tulia\Cms\FrontendToolbar\Application\Builder\Builder;
+use Tulia\Cms\FrontendToolbar\Domain\Builder\Builder;
 
 /**
  * @author Adam Banaszkiewicz

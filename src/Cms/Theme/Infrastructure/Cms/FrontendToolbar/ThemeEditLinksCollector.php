@@ -4,30 +4,27 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Theme\Infrastructure\Cms\FrontendToolbar;
 
-use Tulia\Cms\FrontendToolbar\Application\Helper\HelperInterface;
-use Tulia\Cms\FrontendToolbar\Application\Links\Link;
-use Tulia\Cms\FrontendToolbar\Application\Links\Links;
-use Tulia\Cms\FrontendToolbar\Application\Links\AbstractProvider;
+use Tulia\Cms\FrontendToolbar\Ports\Domain\Links\HelperInterface;
+use Tulia\Cms\FrontendToolbar\Domain\Links\Link;
+use Tulia\Cms\FrontendToolbar\Domain\Links\LinksCollection;
+use Tulia\Cms\FrontendToolbar\Domain\Links\AbstractLinksCollector;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class LinksProvider extends AbstractProvider
+class ThemeEditLinksCollector extends AbstractLinksCollector
 {
-    /**
-     * @var HelperInterface
-     */
-    private $helper;
+    private HelperInterface $helper;
 
     public function __construct(HelperInterface $helper)
     {
         $this->helper = $helper;
     }
 
-    public function provideLinks(Links $links, Request $request): void
+    public function collect(LinksCollection $collection, Request $request): void
     {
-        $links->add('theme.customize', $this->createCustomizeLink($request));
+        $collection->add('theme.customize', $this->createCustomizeLink($request));
     }
 
     private function createCustomizeLink(Request $request): Link

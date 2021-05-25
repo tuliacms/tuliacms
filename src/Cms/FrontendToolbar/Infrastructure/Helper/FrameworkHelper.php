@@ -2,20 +2,23 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\FrontendToolbar\Application\Helper;
+namespace Tulia\Cms\FrontendToolbar\Infrastructure\Helper;
 
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Tulia\Cms\FrontendToolbar\Ports\Domain\Links\HelperInterface;
 use Tulia\Component\Templating\EngineInterface;
 use Tulia\Component\Templating\ViewInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class Helper implements HelperInterface
+class FrameworkHelper implements HelperInterface
 {
     protected TranslatorInterface $translator;
+
     protected RouterInterface $router;
+
     protected EngineInterface $engine;
 
     public function __construct(

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\FrontendToolbar\Application\Builder;
+namespace Tulia\Cms\FrontendToolbar\Domain\Builder;
 
-use Tulia\Cms\FrontendToolbar\Application\Links\Links;
-use Tulia\Cms\FrontendToolbar\Application\Links\ProviderRegistry;
+use Tulia\Cms\FrontendToolbar\Domain\Links\LinksCollection;
+use Tulia\Cms\FrontendToolbar\Domain\Links\ProviderRegistry;
 use Tulia\Component\Templating\EngineInterface;
 use Tulia\Component\Templating\View;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,19 +15,10 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class Builder
 {
-    /**
-     * @var ProviderRegistry
-     */
-    private $registry;
+    private ProviderRegistry $registry;
 
-    /**
-     * @var EngineInterface
-     */
-    private $engine;
+    private EngineInterface $engine;
 
-    /**
-     * @param ProviderRegistry $registry
-     */
     public function __construct(ProviderRegistry $registry, EngineInterface $engine)
     {
         $this->registry = $registry;
@@ -36,11 +27,11 @@ class Builder
 
     public function build(Request $request): string
     {
-        $links = new Links();
+        $links = new LinksCollection();
         $contents = '';
 
         foreach ($this->registry->all() as $provider) {
-            $provider->provideLinks($links, $request);
+            $provider->collect($links, $request);
 
             $contents .= $provider->provideContent($request);
         }
