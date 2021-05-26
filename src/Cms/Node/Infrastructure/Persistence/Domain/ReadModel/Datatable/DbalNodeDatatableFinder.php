@@ -23,6 +23,7 @@ class DbalNodeDatatableFinder extends AbstractDatatableFinder implements NodeDat
     private NodeTypeInterface $nodeType;
 
     private TermFinderInterface $termFinder;
+
     private TranslatorInterface $translator;
 
     public function __construct(
@@ -122,9 +123,10 @@ class DbalNodeDatatableFinder extends AbstractDatatableFinder implements NodeDat
             ->from('#__node', 'tm')
             ->addSelect('tm.type, tm.level, tm.parent_id, tm.slug, tm.status')
             ->leftJoin('tm', '#__node_lang', 'tl', 'tm.id = tl.node_id AND tl.locale = :locale')
-            ->where('tm.type = :type')
+            ->where('tm.type = :type AND tm.website_id = :website_id')
             ->setParameter('type', $this->nodeType->getType(), PDO::PARAM_STR)
             ->setParameter('locale', $this->currentWebsite->getLocale()->getCode(), PDO::PARAM_STR)
+            ->setParameter('website_id', $this->currentWebsite->getId(), PDO::PARAM_STR)
             ->addOrderBy('tm.level', 'ASC')
         ;
 
