@@ -20,6 +20,17 @@
         <div class="accordion">
             <div class="accordion-section">
                 <div class="accordion-section-button" data-toggle="collapse" data-target="#form-collapse-receivers">
+                    {{ 'shortcode'|trans }}
+                </div>
+                <div class="collapse show">
+                    <div class="accordion-section-body">
+                        <p>{{ 'shortcodeToInsertOnPage'|trans }}</p>
+                        <textarea class="form-control">[contact_form id="{{ form.id.vars.value }}"]</textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-section">
+                <div class="accordion-section-button" data-toggle="collapse" data-target="#form-collapse-receivers">
                     {{ 'receivers'|trans({}, 'forms') }}
                     {{ badge.errors_count(form, [ 'receivers' ]) }}
                 </div>
