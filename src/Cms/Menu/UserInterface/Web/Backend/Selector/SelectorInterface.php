@@ -11,5 +11,5 @@ use Tulia\Cms\Menu\Domain\Builder\Type\TypeInterface;
  */
 interface SelectorInterface
 {
-    public function render(TypeInterface $type, string $identity): string;
+    public function render(TypeInterface $type, ?string $identity): string;
 }

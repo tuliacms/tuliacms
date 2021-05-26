@@ -34,7 +34,3 @@ services:
 
     Tulia\Cms\Taxonomy\Domain\Menu\IdentityProvider:
         tags: [ menu.identity_provider ]
-
-#    Tulia\Cms\Taxonomy\Domain\Menu\TypeRegistrator:
-#        tags: [ menu.builder.type_registrator ]
-

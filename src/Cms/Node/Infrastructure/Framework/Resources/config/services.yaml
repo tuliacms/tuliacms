@@ -39,9 +39,6 @@ services:
     Tulia\Cms\Node\Domain\Menu\IdentityProvider:
         tags: [ menu.identity_provider ]
 
-#    Tulia\Cms\Node\Domain\Menu\TypeRegistrator:
-#        tags: [ menu.builder.type_registrator ]
-
     Tulia\Cms\Node\UserInterface\Web\Backend\Settings\SettingsFactory:
         tags: [ settings.group_factory ]
 

@@ -193,14 +193,14 @@ class MenuItem extends AbstractController
         $types = [];
 
         foreach ($this->menuTypeRegistry->all() as $type) {
-            if (empty($type->getSelectorService())) {
+            if ($type->getSelectorService() === null) {
                 continue;
             }
 
             try {
                 $types[] = [
                     'type'     => $type,
-                    'selector' => $this->container->get($type->getSelectorService()),
+                    'selector' => $type->getSelectorService(),
                 ];
             } catch (MissingServiceException $e) {
                 throw new \RuntimeException(sprintf('Cannot load SelectorService for %s type, searching for service named %s.', $type->getType(), $type->getSelectorService()), 0, $e);

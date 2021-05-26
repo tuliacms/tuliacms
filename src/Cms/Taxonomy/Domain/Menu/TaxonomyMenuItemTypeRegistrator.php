@@ -12,16 +12,10 @@ use Tulia\Cms\Taxonomy\Domain\TaxonomyType\RegistryInterface as TaxonomyRegistry
 /**
  * @author Adam Banaszkiewicz
  */
-class TypeRegistrator implements RegistratorInterface
+class TaxonomyMenuItemTypeRegistrator implements RegistratorInterface
 {
-    /**
-     * @var TaxonomyRegistryInterface
-     */
-    protected $taxonomyTypeRegistry;
+    protected TaxonomyRegistryInterface $taxonomyTypeRegistry;
 
-    /**
-     * @param TaxonomyRegistryInterface $taxonomyTypeRegistry
-     */
     public function __construct(TaxonomyRegistryInterface $taxonomyTypeRegistry)
     {
         $this->taxonomyTypeRegistry = $taxonomyTypeRegistry;
@@ -37,7 +31,7 @@ class TypeRegistrator implements RegistratorInterface
             $type = $registry->registerType('term:' . $taxonomyType->getType());
             $type->setLabel('taxonomy');
             $type->setTranslationDomain($taxonomyType->getTranslationDomain());
-            $type->setSelectorService(Selector::class);
+            //$type->setSelectorService(Selector::class);
         }
     }
 }

@@ -36,7 +36,7 @@ class Selector implements SelectorInterface
     /**
      * {@inheritdoc}
      */
-    public function render(TypeInterface $type, string $identity): string
+    public function render(TypeInterface $type, ?string $identity): string
     {
         [, $name] = explode(':', $type->getType());
         $field = 'node_search_' . $name;

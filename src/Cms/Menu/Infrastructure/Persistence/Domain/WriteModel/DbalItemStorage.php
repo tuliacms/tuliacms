@@ -88,6 +88,7 @@ WITH RECURSIVE tree_path (
             ON tp.id = tm.parent_id
         LEFT JOIN #__menu_item_lang AS tl
             ON tm.id = tl.menu_item_id AND tl.locale = :locale
+        WHERE tm.menu_id = :menu_id
 )
 SELECT * FROM tree_path
 ORDER BY path", [

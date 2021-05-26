@@ -4,34 +4,21 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Menu\Domain\Builder\Type;
 
+use Tulia\Cms\Menu\UserInterface\Web\Backend\Selector\SelectorInterface;
+
 /**
  * @author Adam Banaszkiewicz
  */
 class Type implements TypeInterface
 {
-    /**
-     * @var string
-     */
-    protected $type;
+    protected string $type;
 
-    /**
-     * @var string
-     */
-    protected $label = '';
+    protected string $label = '';
 
-    /**
-     * @var string
-     */
-    protected $translationDomain = '';
+    protected string $translationDomain = '';
 
-    /**
-     * @var null|string
-     */
-    protected $selectorService;
+    protected ?SelectorInterface $selectorService = null;
 
-    /**
-     * {@inheritdoc}
-     */
     public function __construct(string $type)
     {
         $this->type = $type;
@@ -88,7 +75,7 @@ class Type implements TypeInterface
     /**
      * {@inheritdoc}
      */
-    public function getSelectorService(): ?string
+    public function getSelectorService(): ?SelectorInterface
     {
         return $this->selectorService;
     }
@@ -96,7 +83,7 @@ class Type implements TypeInterface
     /**
      * {@inheritdoc}
      */
-    public function setSelectorService(?string $selectorService): void
+    public function setSelectorService(?SelectorInterface $selectorService): void
     {
         $this->selectorService = $selectorService;
     }

@@ -36,9 +36,6 @@ services:
         bind:
             $registrators: !tagged_iterator menu.builder.type_registrator
 
-    Tulia\Cms\Menu\Domain\Builder\Type\DefaultTypesRegistrator:
-        tags: [ menu.builder.type_registrator ]
-
     Tulia\Cms\Menu\Domain\Builder\Identity\Providers\HomepageProvider:
         tags: [ menu.identity_provider ]
         bind:

@@ -63,7 +63,7 @@ class Registry implements RegistryInterface
             return;
         }
 
-        foreach ($this->registrators as $key => $registrator) {
+        foreach ($this->registrators as $registrator) {
             $registrator->register($this);
         }
 
