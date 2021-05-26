@@ -86,7 +86,12 @@ class FormStorage
 
         $this->updateAggregate($form, $aggregate);
 
-        $this->repository->save($aggregate);
+        if ($aggregateExists) {
+            $this->repository->update($aggregate);
+        } else {
+            $this->repository->insert($aggregate);
+        }
+
         $this->eventDispatcher->dispatchCollection($aggregate->collectDomainEvents());
 
         if ($aggregateExists) {

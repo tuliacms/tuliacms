@@ -7,20 +7,20 @@ namespace Tulia\Cms\ContactForms\UserInterface\Web\Controller\Backend;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\ContactForms\Application\FieldsParser\Exception\InvalidFieldNameException;
-use Tulia\Cms\ContactForms\Application\FieldType\RegistryInterface;
 use Tulia\Cms\ContactForms\Application\FieldType\Parser\RegistryInterface as FieldParserInterface;
+use Tulia\Cms\ContactForms\Application\FieldType\RegistryInterface;
 use Tulia\Cms\ContactForms\Infrastructure\Persistence\Query\DatatableFinder;
-use Tulia\Cms\ContactForms\Query\Factory\FormFactoryInterface;
-use Tulia\Cms\ContactForms\Query\Model\Form as QueryForm;
 use Tulia\Cms\ContactForms\Query\Enum\ScopeEnum;
+use Tulia\Cms\ContactForms\Query\Factory\FormFactoryInterface;
 use Tulia\Cms\ContactForms\Query\FinderFactoryInterface;
+use Tulia\Cms\ContactForms\Query\Model\Form as QueryForm;
 use Tulia\Cms\ContactForms\UserInterface\Web\Form\FormManagerFactory;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Component\Datatable\DatatableFactory;
-use Tulia\Component\Templating\ViewInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Tulia\Component\Security\Http\Csrf\Annotation\CsrfToken;
+use Tulia\Component\Templating\ViewInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -34,21 +34,11 @@ class Form extends AbstractController
         $this->finderFactory = $finderFactory;
     }
 
-    /**
-     * @return RedirectResponse
-     */
     public function index(): RedirectResponse
     {
         return $this->redirectToRoute('backend.form.list');
     }
 
-    /**
-     * @param Request $request
-     * @param DatatableFactory $factory
-     * @param DatatableFinder $finder
-     *
-     * @return ViewInterface
-     */
     public function list(Request $request, DatatableFactory $factory, DatatableFinder $finder): ViewInterface
     {
         return $this->view('@backend/forms/index.tpl', [
@@ -56,13 +46,6 @@ class Form extends AbstractController
         ]);
     }
 
-    /**
-     * @param Request $request
-     * @param DatatableFactory $factory
-     * @param DatatableFinder $finder
-     *
-     * @return JsonResponse
-     */
     public function datatable(Request $request, DatatableFactory $factory, DatatableFinder $finder): JsonResponse
     {
         return $factory->create($finder, $request)->generateResponse();

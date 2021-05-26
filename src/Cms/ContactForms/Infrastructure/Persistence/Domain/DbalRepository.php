@@ -6,7 +6,6 @@ namespace Tulia\Cms\ContactForms\Infrastructure\Persistence\Domain;
 
 use Tulia\Cms\ContactForms\Domain\Aggregate\Field;
 use Tulia\Cms\ContactForms\Domain\Aggregate\FieldCollection;
-use Tulia\Cms\ContactForms\Domain\Aggregate\FieldsTemplate;
 use Tulia\Cms\ContactForms\Domain\Exception\FormNotFoundException;
 use Tulia\Cms\ContactForms\Domain\ValueObject\AggregateId;
 use Tulia\Cms\ContactForms\Domain\Aggregate\Form;
@@ -22,38 +21,16 @@ use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
  */
 class DbalRepository implements RepositoryInterface
 {
-    /**
-     * @var ConnectionInterface
-     */
-    protected $connection;
+    protected ConnectionInterface $connection;
 
-    /**
-     * @var DbalFormStorage
-     */
-    protected $formPersister;
+    protected DbalFormStorage $formPersister;
 
-    /**
-     * @var DbalFieldPersister
-     */
-    protected $fieldPersister;
+    protected DbalFieldPersister $fieldPersister;
 
-    /**
-     * @var HydratorInterface
-     */
-    protected $hydrator;
+    protected HydratorInterface $hydrator;
 
-    /**
-     * @var CurrentWebsiteInterface
-     */
-    protected $currentWebsite;
+    protected CurrentWebsiteInterface $currentWebsite;
 
-    /**
-     * @param ConnectionInterface $connection
-     * @param DbalFormStorage $formPersister
-     * @param DbalFieldPersister $fieldPersister
-     * @param HydratorInterface $hydrator
-     * @param CurrentWebsiteInterface $currentWebsite
-     */
     public function __construct(
         ConnectionInterface $connection,
         DbalFormStorage $formPersister,
@@ -128,14 +105,31 @@ class DbalRepository implements RepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function save(Form $form): void
+    public function insert(Form $form): void
     {
         $data = $this->extract($form);
 
         $this->connection->transactional(function () use ($data) {
             $defaultLocale = $this->currentWebsite->getDefaultLocale()->getCode();
 
-            $this->formPersister->save(
+            $this->formPersister->insert(
+                $data,
+                $defaultLocale
+            );
+        });
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function update(Form $form): void
+    {
+        $data = $this->extract($form);
+
+        $this->connection->transactional(function () use ($data) {
+            $defaultLocale = $this->currentWebsite->getDefaultLocale()->getCode();
+
+            $this->formPersister->update(
                 $data,
                 $defaultLocale
             );

@@ -14,22 +14,13 @@ use Tulia\Cms\ContactForms\Domain\Exception\FormNotFoundException;
 interface RepositoryInterface
 {
     /**
-     * @param AggregateId $id
-     * @param string $locale
-     *
-     * @return Form
-     *
      * @throws FormNotFoundException
      */
     public function find(AggregateId $id, string $locale): Form;
 
-    /**
-     * @param Form $form
-     */
-    public function save(Form $form): void;
+    public function insert(Form $form): void;
 
-    /**
-     * @param Form $form
-     */
+    public function update(Form $form): void;
+
     public function delete(Form $form): void;
 }
