@@ -13,8 +13,10 @@ use Tulia\Component\Widget\Storage\StorageInterface;
  */
 class DatabaseStorage implements StorageInterface
 {
-    protected ConnectionInterface $connection;
-    protected CurrentWebsiteInterface $currentWebsite;
+    private ConnectionInterface $connection;
+
+    private CurrentWebsiteInterface $currentWebsite;
+
     private static array $cache = [];
 
     public function __construct(ConnectionInterface $connection, CurrentWebsiteInterface $currentWebsite)

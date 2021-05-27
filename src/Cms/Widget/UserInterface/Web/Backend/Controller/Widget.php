@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Widget\Domain\WriteModel\Exception\WidgetNotFoundException;
 use Tulia\Cms\Widget\Domain\WriteModel\WidgetRepository;
-use Tulia\Cms\Widget\Infrastructure\Persistence\Query\DatatableFinder;
+use Tulia\Cms\Widget\Infrastructure\Persistence\Domain\ReadModel\Datatable\DatatableFinder;
 use Tulia\Cms\Widget\UserInterface\Web\Backend\Form\WidgetForm;
 use Tulia\Component\Datatable\DatatableFactory;
 use Tulia\Component\Security\Http\Csrf\Annotation\CsrfToken;

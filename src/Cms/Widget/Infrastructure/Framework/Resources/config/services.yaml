@@ -13,6 +13,10 @@ services:
     Tulia\Cms\Widget\UserInterface\Web\Backend\Form\Extension\DefaultFieldsExtension:
         tags: [ form_extension ]
 
+    Tulia\Cms\Widget\Domain\SearchAnything\SearchProvider:
+        tags:
+            - { name: search.provider, priority: 1000 }
+
     Tulia\Cms\Widget\Infrastructure\Framework\Twig\Extension\WidgetExtension:
         bind:
             $storage: '@Tulia\Cms\Widget\Infrastructure\Widget\Storage\DatabaseStorage'
