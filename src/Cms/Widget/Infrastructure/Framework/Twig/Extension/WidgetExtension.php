@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Widget\Infrastructure\Framework\Twig\Extension;
 
-use Tulia\Cms\Widget\Application\Renderer\RendererInterface;
+use Tulia\Cms\Widget\Ports\Domain\Renderer\RendererInterface;
 use Tulia\Component\Widget\Storage\StorageInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
@@ -21,7 +21,7 @@ class WidgetExtension extends AbstractExtension
     public function __construct(RendererInterface $renderer, StorageInterface $storage)
     {
         $this->renderer = $renderer;
-        $this->storage  = $storage;
+        $this->storage = $storage;
     }
 
     /**

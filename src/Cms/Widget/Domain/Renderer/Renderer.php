@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Widget\Application\Renderer;
+namespace Tulia\Cms\Widget\Domain\Renderer;
 
+use Tulia\Cms\Widget\Ports\Domain\Renderer\RendererInterface;
 use Tulia\Component\Templating\EngineInterface;
 use Tulia\Component\Widget\Configuration\ArrayConfiguration;
 use Tulia\Component\Widget\Registry\WidgetRegistryInterface;
@@ -25,9 +26,9 @@ class Renderer implements RendererInterface
         WidgetRegistryInterface $registry,
         EngineInterface $engine
     ) {
-        $this->storage  = $storage;
+        $this->storage = $storage;
         $this->registry = $registry;
-        $this->engine   = $engine;
+        $this->engine = $engine;
     }
 
     /**
@@ -92,7 +93,7 @@ class Renderer implements RendererInterface
 
         $view = $widget->render($config);
 
-        if (!$view) {
+        if (! $view) {
             return '';
         }
 
@@ -127,8 +128,8 @@ class Renderer implements RendererInterface
     private function prepareWidgetData(array $widget): array
     {
         $widget['visibility'] = (bool) $widget['visibility'];
-        $widget['styles']     = (array) json_decode($widget['styles'], true);
-        $widget['payload']    = (array) json_decode($widget['payload'], true);
+        $widget['styles'] = (array) json_decode($widget['styles'], true);
+        $widget['payload'] = (array) json_decode($widget['payload'], true);
         $widget['payload_localized'] = (array) json_decode($widget['payload_localized'], true);
 
         return $widget;

@@ -21,6 +21,7 @@ services:
         bind:
             $storage: '@Tulia\Cms\Widget\Infrastructure\Widget\Storage\DatabaseStorage'
 
-    Tulia\Cms\Widget\Application\Renderer\Renderer:
+    Tulia\Cms\Widget\Ports\Domain\Renderer\RendererInterface:
+        class: Tulia\Cms\Widget\Domain\Renderer\Renderer
         bind:
             $storage: '@Tulia\Cms\Widget\Infrastructure\Widget\Storage\DatabaseStorage'
