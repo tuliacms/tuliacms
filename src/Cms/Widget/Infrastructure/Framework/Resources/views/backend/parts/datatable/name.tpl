@@ -3,5 +3,5 @@
         <span class="badge badge-info" data-toggle="tooltip" title="{{ 'missingTranslationInThisLocale'|trans }}"><i class="dropdown-icon fas fa-language"></i></span>
     {% endif %}
     {{ row.name }}
-    <br /><span class="slug">{{ 'widgetType'|trans({}, 'widgets') }}: {{ widget_names[row.widget_id] ?? row.widget_id }}</span>
+    <br /><span class="slug">{{ 'widgetType'|trans({}, 'widgets') }}: {{ widget_names[row.widget_type] ?? row.widget_type }}</span>
 </a>

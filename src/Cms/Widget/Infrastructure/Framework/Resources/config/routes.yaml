@@ -1,27 +1,27 @@
 backend.widget:
     path: /administrator/widget
-    controller: Tulia\Cms\Widget\UserInterface\Web\Controller\Backend\Widget::index
+    controller: Tulia\Cms\Widget\UserInterface\Web\Backend\Controller\Widget::index
 
 backend.widget.list:
     path: /administrator/widget/list
-    controller: Tulia\Cms\Widget\UserInterface\Web\Controller\Backend\Widget::list
+    controller: Tulia\Cms\Widget\UserInterface\Web\Backend\Controller\Widget::list
 
 backend.widget.datatable:
     path: /administrator/widget/datatable
-    controller: Tulia\Cms\Widget\UserInterface\Web\Controller\Backend\Widget::datatable
+    controller: Tulia\Cms\Widget\UserInterface\Web\Backend\Controller\Widget::datatable
 
 backend.widget.create:
-    path: /administrator/widget/create/{id}
-    controller: Tulia\Cms\Widget\UserInterface\Web\Controller\Backend\Widget::create
+    path: /administrator/widget/create/{type}
+    controller: Tulia\Cms\Widget\UserInterface\Web\Backend\Controller\Widget::create
     methods: GET|POST
 
 backend.widget.edit:
     path: /administrator/widget/edit/{id}
-    controller: Tulia\Cms\Widget\UserInterface\Web\Controller\Backend\Widget::edit
+    controller: Tulia\Cms\Widget\UserInterface\Web\Backend\Controller\Widget::edit
     methods: GET|POST
 
 backend.widget.delete:
     path: /administrator/widget/delete
-    controller: Tulia\Cms\Widget\UserInterface\Web\Controller\Backend\Widget::delete
+    controller: Tulia\Cms\Widget\UserInterface\Web\Backend\Controller\Widget::delete
     methods: POST
 

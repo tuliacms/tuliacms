@@ -42,7 +42,7 @@
                                     </h5>
                                     <div class="card-body text-center">
                                         <p class="widget-description">{{ widget.info.description|default('')|trans({}, widget.info.translation_domain|default('widgets')) }}</p>
-                                        <a href="{{ path('backend.widget.create', { id: widget.id, space: space }) }}" class="btn btn-primary btn-sm">{{ 'addWidget'|trans({}, 'widgets') }}</a>
+                                        <a href="{{ path('backend.widget.create', { type: widget.id, space: space }) }}" class="btn btn-primary btn-sm">{{ 'addWidget'|trans({}, 'widgets') }}</a>
                                     </div>
                                 </div>
                             </div>

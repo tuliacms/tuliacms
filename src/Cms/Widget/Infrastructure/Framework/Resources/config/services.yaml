@@ -2,8 +2,6 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
-        bind:
-            $storage: '@Tulia\Cms\Widget\Infrastructure\Widget\Storage\DatabaseStorage'
 
     Tulia\Cms\Widget\:
         resource: '../../../../*'
@@ -12,5 +10,13 @@ services:
             - '../../../../**/Model/*'
             - '../../../../**/Exception/*'
 
-    Tulia\Cms\Widget\UserInterface\Web\Form\Extension\DefaultFieldsExtension:
+    Tulia\Cms\Widget\UserInterface\Web\Backend\Form\Extension\DefaultFieldsExtension:
         tags: [ form_extension ]
+
+    Tulia\Cms\Widget\Infrastructure\Framework\Twig\Extension\WidgetExtension:
+        bind:
+            $storage: '@Tulia\Cms\Widget\Infrastructure\Widget\Storage\DatabaseStorage'
+
+    Tulia\Cms\Widget\Application\Renderer\Renderer:
+        bind:
+            $storage: '@Tulia\Cms\Widget\Infrastructure\Widget\Storage\DatabaseStorage'

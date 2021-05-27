@@ -124,7 +124,7 @@ class DatatableFinder extends AbstractDatatableFinder
     {
         $queryBuilder
             ->from('#__widget', 'tm')
-            ->addSelect('tm.widget_id')
+            ->addSelect('tm.widget_type')
             ->leftJoin('tm', '#__widget_lang', 'tl', 'tm.id = tl.widget_id AND tl.locale = :locale')
             ->where('tm.website_id = :website_id')
             ->setParameter('website_id', $this->currentWebsite->getId(), PDO::PARAM_STR)
