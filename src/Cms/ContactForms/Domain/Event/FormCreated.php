@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContactForms\Domain\Event;
 
-use Tulia\Cms\ContactForms\Domain\ValueObject\AggregateId;
+use Tulia\Cms\ContactForms\Domain\WriteModel\Model\ValueObject\FormId;
 
 /**
  * @author Adam Banaszkiewicz

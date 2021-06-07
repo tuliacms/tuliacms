@@ -15,6 +15,7 @@ messageSubject: Message subject
 sender: Sender
 notificationMessages: Notifications
 fields: Fields
+fieldsTemplate: Fields template
 successMessage: Success message
 successMessageHelpText: This message will be shown when user successfully submit his form.
 failMessage: Fail message

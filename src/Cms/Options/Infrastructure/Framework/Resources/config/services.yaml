@@ -4,11 +4,8 @@ services:
         autoconfigure: true
 
     Tulia\Cms\Options\:
-        resource: '../../../../*'
-        exclude:
-            - '../../../../Infrastructure/Framework/Resources/*'
-            - '../../../../**/Model/*'
-            - '../../../../**/Exception/*'
+        resource: '../../../../**'
+        exclude: '../../../../{Infrastructure/Framework/Resources}'
 
     Tulia\Cms\Options\UserInterface\Console\Command\OptionsRegister:
         tags:

@@ -4,11 +4,9 @@ services:
         autoconfigure: true
 
     Tulia\Cms\FrontendToolbar\:
-        resource: '../../../../*'
+        resource: '../../../../**'
         exclude:
-            - '../../../../Infrastructure/Framework/Resources/*'
-            - '../../../../**/Model/*'
-            - '../../../../**/Exception/*'
+        exclude: '../../../../{Infrastructure/Framework/Resources}'
 
     Tulia\Cms\FrontendToolbar\Domain\Links\ProviderRegistry:
         bind:

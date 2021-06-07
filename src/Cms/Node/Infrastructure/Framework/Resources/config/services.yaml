@@ -12,11 +12,8 @@ services:
         autoconfigure: true
 
     Tulia\Cms\Node\:
-        resource: '../../../../*'
-        exclude:
-            - '../../../../Infrastructure/Framework/Resources/*'
-            - '../../../../**/Model/*'
-            - '../../../../**/Exception/*'
+        resource: '../../../../**'
+        exclude: '../../../../{Infrastructure/Framework/Resources}'
 
     Tulia\Cms\Node\Domain\NodeType\RegistryInterface:
         class: Tulia\Cms\Node\Domain\NodeType\Registry

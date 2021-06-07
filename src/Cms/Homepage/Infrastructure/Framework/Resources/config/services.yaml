@@ -4,11 +4,8 @@ services:
         autoconfigure: true
 
     Tulia\Cms\Homepage\:
-        resource: '../../../../*'
-        exclude:
-            - '../../../../Infrastructure/Framework/Resources/*'
-            - '../../../../**/Model/*'
-            - '../../../../**/Exception/*'
+        resource: '../../../../**'
+        exclude: '../../../../{Infrastructure/Framework/Resources}'
 
     Tulia\Cms\Homepage\UserInterface\Web\Backend\BackendMenu\DefaultCmsMenuBuilder:
         tags: [ backend_menu.builder ]

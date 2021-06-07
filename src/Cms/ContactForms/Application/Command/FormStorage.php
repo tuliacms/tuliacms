@@ -15,8 +15,8 @@ use Tulia\Cms\ContactForms\Domain\Event\FormDeleted;
 use Tulia\Cms\ContactForms\Domain\Exception\FormNotFoundException;
 use Tulia\Cms\ContactForms\Domain\Policy\FieldsTemplatePolicyInterface;
 use Tulia\Cms\ContactForms\Domain\RepositoryInterface;
-use Tulia\Cms\ContactForms\Domain\Aggregate\Form as Aggregate;
-use Tulia\Cms\ContactForms\Domain\ValueObject\AggregateId;
+use Tulia\Cms\ContactForms\Domain\WriteModel\Model\Form as Aggregate;
+use Tulia\Cms\ContactForms\Domain\WriteModel\Model\ValueObject\FormId;
 use Tulia\Cms\Platform\Infrastructure\Bus\Event\EventBusInterface;
 
 /**
@@ -59,14 +59,14 @@ class FormStorage
         $aggregateExists = false;
 
         try {
-            $aggregate = $this->repository->find(new AggregateId($form->getId()), $form->getLocale());
+            $aggregate = $this->repository->find(new FormId($form->getId()), $form->getLocale());
 
             // We can assign $aggregateExists only after call find() in repository,
             // to handle exception when node not exists, and perform proper action when node not exists.
             $aggregateExists = true;
         } catch (FormNotFoundException $exception) {
-            $aggregate = new Aggregate(
-                new AggregateId($form->getId()),
+            $aggregate = Aggregate::createNew(
+                $form->getId(),
                 $form->getWebsiteId(),
                 $form->getLocale()
             );
@@ -104,7 +104,7 @@ class FormStorage
     public function delete(ApplicationForm $form): void
     {
         try {
-            $aggregate = $this->repository->find(new AggregateId($form->getId()), $form->getLocale());
+            $aggregate = $this->repository->find(new FormId($form->getId()), $form->getLocale());
         } catch (FormNotFoundException $exception) {
             return;
         }

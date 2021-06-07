@@ -4,11 +4,8 @@ services:
         autoconfigure: true
 
     Tulia\Cms\Security\:
-        resource: '../../../../*'
-        exclude:
-            - '../../../../Infrastructure/Framework/Resources/*'
-            - '../../../../**/Model/*'
-            - '../../../../**/Exception/*'
+        resource: '../../../../**'
+        exclude: '../../../../{Infrastructure/Framework/Resources}'
 
     Tulia\Cms\Security\Infrastructure\Framework\Security\Authentication\Provider\UserProvider:
         tags: [ security.user_provider ]

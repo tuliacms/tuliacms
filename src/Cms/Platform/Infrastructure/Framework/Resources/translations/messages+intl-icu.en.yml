@@ -200,3 +200,4 @@ changeHierarchyMoveElementOnTheThree: Below you can change the hierarchy of item
 hierarchyUpdated: Hierarchy updated.
 shortcode: Shortcode
 shortcodeToInsertOnPage: Shortcode to insert on page.
+required: Required

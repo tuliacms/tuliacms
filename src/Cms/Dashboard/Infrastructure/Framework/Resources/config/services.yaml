@@ -4,11 +4,8 @@ services:
         autoconfigure: true
 
     Tulia\Cms\Dashboard\:
-        resource: '../../../../*'
-        exclude:
-            - '../../../../Infrastructure/Framework/Resources/*'
-            - '../../../../**/Model/*'
-            - '../../../../**/Exception/*'
+        resource: '../../../../**'
+        exclude: '../../../../{Infrastructure/Framework/Resources}'
 
     Tulia\Cms\Dashboard\Domain\Widgets\DashboardWidgetRegistry:
         bind:

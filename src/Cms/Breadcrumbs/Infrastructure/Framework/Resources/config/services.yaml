@@ -4,11 +4,8 @@ services:
         autoconfigure: true
 
     Tulia\Cms\Breadcrumbs\:
-        resource: '../../../../*'
-        exclude:
-            - '../../../../Infrastructure/Framework/Resources/*'
-            - '../../../../**/Model/*'
-            - '../../../../**/Exception/*'
+        resource: '../../../../**'
+        exclude: '../../../../{Infrastructure/Framework/Resources}'
 
     Tulia\Cms\Breadcrumbs\Domain\BreadcrumbsResolverRegistryInterface:
         class: Tulia\Cms\Breadcrumbs\Domain\BreadcrumbsResolverRegistry

@@ -1,4 +1,6 @@
 framework:
+    public_paths:
+        '%kernel.project_dir%/src/Cms/ContactForms/Infrastructure/Framework/Resources/public/dist': '/core/contact-forms'
     translator:
         paths:
             - '%kernel.project_dir%/src/Cms/ContactForms/Infrastructure/Framework/Resources/translations'
@@ -6,3 +8,8 @@ framework:
         paths:
             - { name: cms/forms, path: '%kernel.project_dir%/src/Cms/ContactForms/Infrastructure/Framework/Resources/views/frontend' }
             - { name: backend/forms, path: '%kernel.project_dir%/src/Cms/ContactForms/Infrastructure/Framework/Resources/views/backend' }
+    assetter:
+        assets:
+            tulia.contact_forms:
+                scripts:
+                    - /assets/core/contact-forms/js/build.js

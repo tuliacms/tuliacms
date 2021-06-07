@@ -4,11 +4,8 @@ services:
         autoconfigure: true
 
     Tulia\Cms\EditLinks\:
-        resource: '../../../../*'
-        exclude:
-            - '../../../../Infrastructure/Framework/Resources/*'
-            - '../../../../**/Model/*'
-            - '../../../../**/Exception/*'
+        resource: '../../../../**'
+        exclude: '../../../../{Infrastructure/Framework/Resources}'
 
     Tulia\Cms\EditLinks\Domain\CollectorsRegistry:
         bind:

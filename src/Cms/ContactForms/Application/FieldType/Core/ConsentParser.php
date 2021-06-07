@@ -54,7 +54,7 @@ class ConsentParser extends AbstractFieldParser
             'name' => 'Consent',
             'options' => [
                 'name' => [
-                    'name' => 'Field codename.',
+                    'name' => 'Field codename. Must be unique across whole form.',
                     'type' => 'text',
                     'required' => true,
                 ],

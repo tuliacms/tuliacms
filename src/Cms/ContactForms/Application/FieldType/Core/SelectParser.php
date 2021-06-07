@@ -59,7 +59,7 @@ class SelectParser extends AbstractFieldParser
             'name' => 'Select',
             'options' => [
                 'name' => [
-                    'name' => 'Field codename.',
+                    'name' => 'Field codename. Must be unique across whole form.',
                     'type' => 'text',
                     'required' => true,
                 ],

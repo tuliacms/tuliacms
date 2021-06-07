@@ -9,11 +9,8 @@ services:
             tags: [ cms.form.field_parser ]
 
     Tulia\Cms\ContactForms\:
-        resource: '../../../../*'
-        exclude:
-            - '../../../../Infrastructure/Framework/Resources/*'
-            - '../../../../**/Model/*'
-            - '../../../../**/Exception/*'
+        resource: '../../../../**'
+        exclude: '../../../../{Infrastructure/Framework/Resources}'
 
     Tulia\Cms\ContactForms\Application\FieldType\Parser\RegistryInterface:
         class: Tulia\Cms\ContactForms\Application\FieldType\Parser\Registry

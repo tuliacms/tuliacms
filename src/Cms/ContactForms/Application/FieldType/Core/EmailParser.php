@@ -56,7 +56,7 @@ class EmailParser extends AbstractFieldParser
             'name' => 'Email',
             'options' => [
                 'name' => [
-                    'name' => 'Field codename.',
+                    'name' => 'Field codename. Must be unique across whole form.',
                     'type' => 'text',
                     'required' => true,
                 ],

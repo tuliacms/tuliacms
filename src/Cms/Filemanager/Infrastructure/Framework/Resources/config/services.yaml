@@ -7,11 +7,8 @@ services:
             tags: [ filemanager.command ]
 
     Tulia\Cms\Filemanager\:
-        resource: '../../../../*'
-        exclude:
-            - '../../../../Infrastructure/Framework/Resources/*'
-            - '../../../../**/Model/*'
-            - '../../../../**/Exception/*'
+        resource: '../../../../**'
+        exclude: '../../../../{Infrastructure/Framework/Resources}'
 
     Tulia\Cms\Filemanager\Application\Cropper:
         bind:

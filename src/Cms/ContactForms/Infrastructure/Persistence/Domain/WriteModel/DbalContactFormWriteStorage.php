@@ -1,0 +1,181 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Tulia\Cms\ContactForms\Infrastructure\Persistence\Domain\WriteModel;
+
+use Tulia\Cms\ContactForms\Ports\Infrastructure\Persistence\Domain\WriteModel\ContactFormWriteStorageInterface;
+use Tulia\Cms\Platform\Infrastructure\Persistence\Domain\AbstractLocalizableStorage;
+use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
+
+/**
+ * @author Adam Banaszkiewicz
+ */
+class DbalContactFormWriteStorage extends AbstractLocalizableStorage implements ContactFormWriteStorageInterface
+{
+    private ConnectionInterface $connection;
+
+    public function __construct(ConnectionInterface $connection)
+    {
+        $this->connection = $connection;
+    }
+
+    public function find(string $id, string $locale, string $defaultLocale): array
+    {
+        if ($defaultLocale !== $locale) {
+            $translationColumn = 'IF(ISNULL(tl.title), 0, 1) AS translated';
+        } else {
+            $translationColumn = '1 AS translated';
+        }
+
+        $form = $this->connection->fetchAll("
+            SELECT
+                tm.*,
+                COALESCE(tl.locale, :defaultLocale) AS locale,
+                COALESCE(tl.name, tm.name) AS name,
+                COALESCE(tl.subject, tm.subject) AS subject,
+                COALESCE(tl.message_template, tm.message_template) AS message_template,
+                COALESCE(tl.fields_template, tm.fields_template) AS fields_template,
+                {$translationColumn}
+            FROM #__form AS tm
+            LEFT JOIN #__form_lang AS tl
+                ON tm.id = tl.form_id AND tl.locale = :locale
+            WHERE tm.id = :id
+            LIMIT 1", [
+            'id' => $id,
+            'locale' => $locale,
+            'defaultLocale' => $defaultLocale,
+        ]);
+
+        if (empty($form)) {
+            return [];
+        }
+
+        $fields = $this->connection->fetchAll('
+            SELECT *
+            FROM #__form_field AS tm
+            INNER JOIN #__form_field_lang AS tl
+                ON tl.form_id = :form_id AND tl.name = tm.name AND tl.locale = :locale
+            WHERE tm.form_id = :form_id', [
+            'form_id' => $id,
+            'locale' => $locale,
+        ]);
+
+        $form[0]['fields'] = $fields;
+
+        return $form[0];
+    }
+
+    public function delete(array $form): void
+    {
+        $this->connection->delete('#__form', ['id' => $form['id']]);
+        $this->connection->delete('#__form_lang', ['form_id' => $form['id']]);
+        $this->connection->delete('#__form_field', ['form_id' => $form['id']]);
+        $this->connection->delete('#__form_field_lang', ['form_id' => $form['id']]);
+    }
+
+    public function beginTransaction(): void
+    {
+        $this->connection->beginTransaction();
+    }
+
+    public function commit(): void
+    {
+        $this->connection->commit();
+    }
+
+    public function rollback(): void
+    {
+        $this->connection->rollback();
+    }
+
+    protected function insertMainRow(array $data): void
+    {
+        $mainTable = [];
+        $mainTable['id']               = $data['id'];
+        $mainTable['website_id']       = $data['website_id'];
+        $mainTable['receivers']        = $data['receivers'];
+        $mainTable['sender_name']      = $data['sender_name'];
+        $mainTable['sender_email']     = $data['sender_email'];
+        $mainTable['reply_to']         = $data['reply_to'];
+        $mainTable['name']             = $data['name'];
+        $mainTable['subject']          = $data['subject'];
+        $mainTable['message_template'] = $data['message_template'];
+        $mainTable['fields_template']  = $data['fields_template'];
+
+        $this->connection->insert('#__form', $mainTable);
+
+        foreach ($data['fields'] as $field) {
+            $this->connection->insert('#__form_field', [
+                'form_id' => $data['id'],
+                'name'    => $field['name'],
+                'type'    => $field['type'],
+                'options' => $field['options'],
+            ]);
+        }
+    }
+
+    protected function updateMainRow(array $data, bool $foreignLocale): void
+    {
+        $mainTable = [];
+        $mainTable['receivers']    = $data['receivers'];
+        $mainTable['sender_name']  = $data['sender_name'];
+        $mainTable['sender_email'] = $data['sender_email'];
+        $mainTable['reply_to']     = $data['replyTo'];
+
+        if ($foreignLocale === false) {
+            $mainTable['name']             = $data['name'];
+            $mainTable['subject']          = $data['subject'];
+            $mainTable['message_template'] = $data['message_template'];
+            $mainTable['fields_template']  = $data['fields_template'];
+        }
+
+        $this->connection->update('#__form', $mainTable, ['id' => $data['id']]);
+
+        foreach ($data['fields'] as $field) {
+            $this->connection->insert('#__form_field', [
+                'form_id' => $data['id'],
+                'name'    => $field['name'],
+                'type'    => $field['type'],
+                'options' => $field['options'],
+            ]);
+        }
+    }
+
+    protected function insertLangRow(array $data): void
+    {
+        $langTable = [];
+        $langTable['form_id']          = $data['id'];
+        $langTable['locale']           = $data['locale'];
+        $langTable['name']             = $data['name'];
+        $langTable['subject']          = $data['subject'];
+        $langTable['message_template'] = $data['message_template'];
+        $langTable['fields_template']  = $data['fields_template'];
+
+        $this->connection->insert('#__form_lang', $langTable);
+    }
+
+    protected function updateLangRow(array $data): void
+    {
+        $langTable = [];
+        $langTable['name']             = $data['name'];
+        $langTable['subject']          = $data['subject'];
+        $langTable['message_template'] = $data['message_template'];
+        $langTable['fields_template']  = $data['fields_template'];
+
+        $this->connection->update('#__form_lang', $langTable, [
+            'form_id' => $data['id'],
+            'locale'  => $data['locale'],
+        ]);
+    }
+
+    protected function langExists(array $data): bool
+    {
+        $result = $this->connection->fetchAllAssociative(
+            'SELECT form_id FROM #__form_lang WHERE form_id = :id AND locale = :locale LIMIT 1',
+            ['id' => $data['id'], 'locale' => $data['locale']]
+        );
+
+        return isset($result[0]['form_id']) && $result[0]['form_id'] === $data['id'];
+    }
+}

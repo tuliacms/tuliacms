@@ -12,14 +12,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class ConsentType extends AbstractType
 {
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
+    private TranslatorInterface $translator;
 
-    /**
-     * @param TranslatorInterface $translator
-     */
     public function __construct(TranslatorInterface $translator)
     {
         $this->translator = $translator;
@@ -39,8 +33,8 @@ class ConsentType extends AbstractType
     public function buildOptions(array $options): array
     {
         return [
-            'constraints' => $options['constraints'],
-            'label' => $options['label'],
+            'constraints' => $options['constraints'] ?? [],
+            'label' => $options['label'] ?? '',
         ];
     }
 

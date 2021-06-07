@@ -4,11 +4,8 @@ services:
         autoconfigure: true
 
     Tulia\Cms\User\:
-        resource: '../../../../*'
-        exclude:
-            - '../../../../Infrastructure/Framework/Resources/*'
-            - '../../../../**/Model/*'
-            - '../../../../**/Exception/*'
+        resource: '../../../../**'
+        exclude: '../../../../{Infrastructure/Framework/Resources}'
 
     Tulia\Cms\User\Infrastructure\Framework\Validator\PasswordValidatorInterface:
         class: Tulia\Cms\User\Infrastructure\Framework\Validator\PasswordValidator

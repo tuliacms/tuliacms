@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContactForms\Application\FieldsTemplate\Service;
 
-use Tulia\Cms\ContactForms\Application\FieldsParser\FieldsParserInterface;
+use Tulia\Cms\ContactForms\Domain\FieldsParser\FieldsParserInterface;
 use Tulia\Cms\ContactForms\Infrastructure\Persistence\Domain\DbalFieldPersister;
 use Tulia\Cms\ContactForms\Infrastructure\Persistence\Domain\DbalFieldsTemplate;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
@@ -37,13 +37,11 @@ class FieldsTemplateViewUpdater
     public function __construct(
         FieldsParserInterface $fieldsParser,
         DbalFieldPersister $fieldPersister,
-        CurrentWebsiteInterface $currentWebsite,
-        DbalFieldsTemplate $fieldsTemplate
+        CurrentWebsiteInterface $currentWebsite
     ) {
         $this->fieldPersister = $fieldPersister;
         $this->currentWebsite = $currentWebsite;
         $this->fieldsParser   = $fieldsParser;
-        $this->fieldsTemplate = $fieldsTemplate;
     }
 
     public function update(string $formId, ?string $newTemplate, string $newTemplateLocale): void

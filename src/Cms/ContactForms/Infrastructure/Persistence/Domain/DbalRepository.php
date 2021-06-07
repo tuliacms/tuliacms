@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContactForms\Infrastructure\Persistence\Domain;
 
-use Tulia\Cms\ContactForms\Domain\Aggregate\Field;
-use Tulia\Cms\ContactForms\Domain\Aggregate\FieldCollection;
+use Tulia\Cms\ContactForms\Domain\WriteModel\Model\Field;
+use Tulia\Cms\ContactForms\Domain\WriteModel\Model\FieldCollection;
 use Tulia\Cms\ContactForms\Domain\Exception\FormNotFoundException;
-use Tulia\Cms\ContactForms\Domain\ValueObject\AggregateId;
-use Tulia\Cms\ContactForms\Domain\Aggregate\Form;
+use Tulia\Cms\ContactForms\Domain\WriteModel\Model\ValueObject\FormId;
+use Tulia\Cms\ContactForms\Domain\WriteModel\Model\Form;
 use Tulia\Cms\ContactForms\Domain\RepositoryInterface;
-use Tulia\Cms\ContactForms\Domain\ValueObject\ReplyTo;
-use Tulia\Cms\ContactForms\Domain\ValueObject\Sender;
+use Tulia\Cms\ContactForms\Domain\WriteModel\Model\ValueObject\ReplyTo;
+use Tulia\Cms\ContactForms\Domain\WriteModel\Model\ValueObject\Sender;
 use Tulia\Cms\Platform\Infrastructure\DataManipulation\Hydrator\HydratorInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
@@ -48,7 +48,7 @@ class DbalRepository implements RepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function find(AggregateId $id, string $locale): Form
+    public function find(FormId $id, string $locale): Form
     {
         $form = $this->connection->fetchAll('
             SELECT
@@ -86,7 +86,7 @@ class DbalRepository implements RepositoryInterface
 
         /** @var Form $aggregate */
         $aggregate = $this->hydrator->hydrate([
-            'id'               => new AggregateId($form['id']),
+            'id'               => new FormId($form['id']),
             'fields'           => $this->hydrateFields($fields),
             'locale'           => $form['locale'],
             'websiteId'        => $form['website_id'],
@@ -171,17 +171,17 @@ class DbalRepository implements RepositoryInterface
         return $data;
     }
 
-    private function hydrateFields(array $fields): FieldCollection
+    private function hydrateFields(array $fields): array
     {
-        $collection = new FieldCollection();
+        $collection = [];
 
         foreach ($fields as $field)
         {
-            $collection[$field['name']] = new Field(
-                $field['name'],
-                $field['type'],
-                json_decode($field['options'], true)
-            );
+            $collection[$field['name']] = Field::buildFromArray([
+                'name' => $field['name'],
+                'type' => $field['type'],
+                'options' => json_decode($field['options'], true)
+            ]);
         }
 
         return $collection;

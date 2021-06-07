@@ -4,11 +4,8 @@ services:
         autoconfigure: true
 
     Tulia\Cms\Taxonomy\:
-        resource: '../../../../*'
-        exclude:
-            - '../../../../Infrastructure/Framework/Resources/*'
-            - '../../../../**/Model/*'
-            - '../../../../**/Exception/*'
+        resource: '../../../../**'
+        exclude: '../../../../{Infrastructure/Framework/Resources}'
 
     Tulia\Cms\Taxonomy\Domain\TaxonomyType\RegistryInterface:
         class: Tulia\Cms\Taxonomy\Domain\TaxonomyType\Registry

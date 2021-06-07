@@ -11,14 +11,8 @@ use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
  */
 class DbalFieldPersister
 {
-    /**
-     * @var ConnectionInterface
-     */
-    protected $connection;
+    protected ConnectionInterface $connection;
 
-    /**
-     * @param ConnectionInterface $connection
-     */
     public function __construct(ConnectionInterface $connection)
     {
         $this->connection = $connection;
@@ -154,9 +148,7 @@ class DbalFieldPersister
         ;
 
         if ($locale === null) {
-            $qb
-                ->from('#__form_field')
-            ;
+            $qb->from('#__form_field');
         } else {
             $qb
                 ->from('#__form_field_lang')
@@ -165,6 +157,6 @@ class DbalFieldPersister
             ;
         }
 
-        return $qb->execute()->fetchAll();
+        return $qb->execute()->fetchAllAssociative();
     }
 }

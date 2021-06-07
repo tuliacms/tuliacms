@@ -55,7 +55,7 @@ class TextParser extends AbstractFieldParser
             'name' => 'Text',
             'options' => [
                 'name' => [
-                    'name' => 'Field codename.',
+                    'name' => 'Field codename. Must be unique across whole form.',
                     'type' => 'text',
                     'required' => true,
                 ],
