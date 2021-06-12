@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Component\Shortcode;
 
+use Symfony\Component\Process\Process;
 use Thunder\Shortcode\HandlerContainer\HandlerContainer;
 use Thunder\Shortcode\Parser\RegularParser;
 use Thunder\Shortcode\Processor\Processor as BaseProcessor;
@@ -18,19 +19,10 @@ use Tulia\Component\Shortcode\Registry\CompilerRegistryInterface;
  */
 class Processor implements ProcessorInterface
 {
-    /**
-     * @var CompilerRegistryInterface
-     */
-    protected $compilers;
+    protected CompilerRegistryInterface $compilers;
 
-    /**
-     * @var BaseProcessor
-     */
-    protected $processor;
+    protected ?BaseProcessor $processor = null;
 
-    /**
-     * @param CompilerRegistryInterface $compilers
-     */
     public function __construct(CompilerRegistryInterface $compilers)
     {
         $this->compilers = $compilers;
@@ -70,6 +62,11 @@ class Processor implements ProcessorInterface
             $source = $event->getText();
             $result = $event->getText();
 
+            $htmlTagPattern = sprintf(
+                ProcessorInterface::HTML_TAG_PATTERN,
+                implode('|', ProcessorInterface::INLINE_HTML_TAGS)
+            );
+
             foreach (array_reverse($event->getReplacements()) as $replacement) {
                 $inputAfterShortcode = mb_substr($source, $replacement->getOffset() + mb_strlen($replacement->getText()));
                 $shortcodeInfo = [
@@ -90,6 +87,12 @@ class Processor implements ProcessorInterface
                         $shortcodeInfo['tagBefore'] = ltrim($tagBefore[0]);
                         $shortcodeInfo['tagAfter']  = rtrim($tagAfter[0]);
                     }
+                }
+
+                preg_match($htmlTagPattern, $shortcodeInfo['tagBefore'], $matches);
+
+                if (isset($matches[1]) === false || \in_array($matches[1], ProcessorInterface::INLINE_HTML_TAGS, true) === false) {
+                    continue;
                 }
 
                 $before = mb_strlen($shortcodeInfo['tagBefore']);
