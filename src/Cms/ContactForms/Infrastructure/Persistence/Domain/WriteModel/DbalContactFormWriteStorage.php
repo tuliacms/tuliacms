@@ -40,7 +40,7 @@ class DbalContactFormWriteStorage extends AbstractLocalizableStorage implements 
     public function find(string $id, string $locale, string $defaultLocale): array
     {
         if ($defaultLocale !== $locale) {
-            $translationColumn = 'IF(ISNULL(tl.title), 0, 1) AS translated';
+            $translationColumn = 'IF(ISNULL(tl.name), 0, 1) AS translated';
         } else {
             $translationColumn = '1 AS translated';
         }
@@ -48,7 +48,7 @@ class DbalContactFormWriteStorage extends AbstractLocalizableStorage implements 
         $form = $this->connection->fetchAll("
             SELECT
                 tm.*,
-                COALESCE(tl.locale, :defaultLocale) AS locale,
+                COALESCE(tl.locale, :locale) AS locale,
                 COALESCE(tl.name, tm.name) AS name,
                 COALESCE(tl.subject, tm.subject) AS subject,
                 COALESCE(tl.message_template, tm.message_template) AS message_template,
@@ -69,8 +69,6 @@ class DbalContactFormWriteStorage extends AbstractLocalizableStorage implements 
         }
 
         $form[0]['fields'] = $this->fieldStorage->find($id, $locale, $defaultLocale);
-
-        dump($form[0]);exit;
 
         return $form[0];
     }
@@ -122,7 +120,7 @@ class DbalContactFormWriteStorage extends AbstractLocalizableStorage implements 
         $mainTable['receivers']    = $data['receivers'];
         $mainTable['sender_name']  = $data['sender_name'];
         $mainTable['sender_email'] = $data['sender_email'];
-        $mainTable['reply_to']     = $data['replyTo'];
+        $mainTable['reply_to']     = $data['reply_to'];
 
         if ($foreignLocale === false) {
             $mainTable['name']             = $data['name'];

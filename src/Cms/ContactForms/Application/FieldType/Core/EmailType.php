@@ -15,6 +15,14 @@ class EmailType extends AbstractType
     /**
      * {@inheritdoc}
      */
+    public function getAlias(): string
+    {
+        return 'email';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getFormType(): string
     {
         return \Symfony\Component\Form\Extension\Core\Type\EmailType::class;

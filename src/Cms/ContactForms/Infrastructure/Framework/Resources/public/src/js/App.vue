@@ -1,30 +1,36 @@
 <template>
     <div class="app">
         <h3>{{ translations.availableFields }}</h3>
-        <p>{{ translations.fieldsBuilderInfo }}</p>
+        <p class="text-muted">{{ translations.availableFieldsInfo }}</p>
         <button
             type="button"
             class="btn btn-success mr-2"
             v-for="item in availableFields"
-            v-on:click="addInput(item.name)"
+            v-on:click="addInput(item.alias)"
         >{{ item.label }}</button>
         <hr />
         <h3>{{ translations.fieldsBuilder }}</h3>
+        <p class="text-muted">{{ translations.fieldsBuilderInfo }}</p>
         <div class="contact-form-fields-builder">
             <div
                 v-for="(field, key) in fields"
                 class="form-field-prototype"
-                :data-field-name="field.type"
+                :data-field-name="field.alias"
             >
                 <input
                     type="hidden"
-                    :name="'form[fields][' + key + '][type]'"
-                    v-model="field.type"
+                    :name="'form[fields][' + key + '][alias]'"
+                    v-model="field.alias"
                 />
-                <span v-on:click="removeField(key)" class="field-remove fas fa-window-close"></span>
-                [{{ field.type }}<!--
+                <span
+                    v-on:click="removeField(key)"
+                    class="field-remove fas fa-window-close"
+                    :title="translations.removeField"
+                    data-toggle="tooltip"
+                ></span>
+                [{{ field.alias }}<!--
                     --><span
-                        v-for="(option, name) in availableFields[field.type].options"
+                        v-for="(option, name) in availableFields[field.alias].options"
                         v-bind:class="{ 'text-danger': fields[key]['options'][name].error !== null }"
                         :title="fields[key]['options'][name].error"
                         data-toggle="tooltip"
@@ -38,10 +44,16 @@
                         v-model="fields[key]['options'][name].value"
                         @change="resizeInput"
                         @input="resizeInput"
-                        @focus="showLegend(field.type, name)"
-                        @blur="hideLegend(field.type, name)"
+                        @focus="showLegend(field.alias, name)"
+                        @blur="hideLegend(field.alias, name)"
                     />"</label><!--
                 --></span>]
+                <span
+                    v-on:click="addFieldToTemplate(key)"
+                    class="field-add-to-template fas fa-plus-square"
+                    :title="translations.addFieldToTemplate"
+                    data-toggle="tooltip"
+                ></span>
             </div>
             <div class="card" v-if="fields.length === 0">
                 <div class="card-body">
@@ -51,7 +63,7 @@
         </div>
         <div class="form-field-option-legends">
             <div v-for="field in availableFields">
-                <span v-for="(option, optionName) in field.options">
+                <div v-for="(option, optionName) in field.options">
                     <div
                         class="form-field-option-legend"
                         :data-option-legend-name="field.name + '_' + optionName"
@@ -77,6 +89,18 @@
                 </div>
             </div>
         </div>
+        <hr />
+        <h3>{{ translations.fieldsTemplate }}</h3>
+        <p class="text-muted">{{ translations.fieldsTemplateInfo }}</p>
+        <div class="form-group">
+            <textarea
+                id="form_form_template"
+                name="form[fields_template]"
+                style="height:300px;font-family:monospace;font-size:15px;"
+                class="form-control"
+                v-model="fieldsTemplate.value"
+            ></textarea>
+        </div>
     </div>
 </template>
 
@@ -96,16 +120,17 @@ export default {
             fields: window.ContactFormBuilder.fields,
             availableFields: availableFields,
             translations: window.ContactFormBuilder.translations,
+            fieldsTemplate: window.ContactFormBuilder.fieldsTemplate,
         }
     },
     methods: {
-        addInput: function (type) {
+        addInput: function (alias) {
             let field = {
-                type: type,
+                alias: alias,
                 options: {}
             };
 
-            for (let i in this.availableFields[type].options) {
+            for (let i in this.availableFields[alias].options) {
                 field.options[i] = {
                     name: i,
                     value: '',
@@ -121,16 +146,24 @@ export default {
         resizeInput: function (event) {
             event.target.style.width = ((event.target.value.length + 0.2) * 8) + 'px';
         },
-        showLegend: function (type, option) {
-            this.availableFields[type].options[option].focused = true;
+        showLegend: function (alias, option) {
+            this.availableFields[alias].options[option].focused = true;
         },
-        hideLegend: function (type, option) {
-            this.availableFields[type].options[option].focused = false;
+        hideLegend: function (alias, option) {
+            this.availableFields[alias].options[option].focused = false;
+        },
+        addFieldToTemplate: function (key) {
+            let textarea = $('#form_form_template');
+            let cursorPos = textarea.prop('selectionStart');
+            let v = textarea.val();
+            let textBefore = v.substring(0,  cursorPos );
+            let textAfter  = v.substring( cursorPos, v.length );
+            textarea.val(textBefore + '[' + this.fields[key].options.name.value + ']' + textAfter);
         }
     },
     mounted: function () {
         // Set default width form existing fields.
-        for (let input of this.$el.querySelectorAll('.form-control')) {
+        for (let input of this.$el.querySelectorAll('input.form-control')) {
             this.resizeInput({
                 target: input
             });

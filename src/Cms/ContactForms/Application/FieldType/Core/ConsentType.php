@@ -22,6 +22,14 @@ class ConsentType extends AbstractType
     /**
      * {@inheritdoc}
      */
+    public function getAlias(): string
+    {
+        return 'consent';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getFormType(): string
     {
         return \Symfony\Component\Form\Extension\Core\Type\CheckboxType::class;

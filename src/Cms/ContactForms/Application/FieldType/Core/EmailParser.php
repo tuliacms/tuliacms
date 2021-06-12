@@ -16,7 +16,7 @@ class EmailParser extends AbstractFieldParser
     /**
      * {@inheritdoc}
      */
-    public function getName(): string
+    public function getAlias(): string
     {
         return 'email';
     }

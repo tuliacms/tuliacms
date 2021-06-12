@@ -17,18 +17,21 @@ final class Field implements IndentifyableEntityInterface
 
     private string $type;
 
+    private string $typeAlias;
+
     private array $options;
 
-    private function __construct(string $name, string $type, array $options = [])
+    private function __construct(string $name, string $type, string $typeAlias, array $options = [])
     {
         $this->name = new SimpleEntityId($name);
         $this->type = $type;
+        $this->typeAlias = $typeAlias;
         $this->options = $options;
     }
 
     public static function buildFromArray(array $data): self
     {
-        return new self($data['name'], $data['type'], $data['options']);
+        return new self($data['name'], $data['type'], $data['type_alias'], $data['options']);
     }
 
     public function getId(): EntityIdInterface
@@ -44,6 +47,11 @@ final class Field implements IndentifyableEntityInterface
     public function getType(): string
     {
         return $this->type;
+    }
+
+    public function getTypeAlias(): string
+    {
+        return $this->typeAlias;
     }
 
     public function getOptions(): array

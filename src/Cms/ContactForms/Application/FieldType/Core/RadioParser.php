@@ -15,7 +15,7 @@ class RadioParser extends SelectParser
     /**
      * {@inheritdoc}
      */
-    public function getName(): string
+    public function getAlias(): string
     {
         return 'radio';
     }

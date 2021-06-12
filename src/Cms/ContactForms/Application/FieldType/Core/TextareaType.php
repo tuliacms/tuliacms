@@ -14,6 +14,14 @@ class TextareaType extends AbstractType
     /**
      * {@inheritdoc}
      */
+    public function getAlias(): string
+    {
+        return 'textarea';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getFormType(): string
     {
         return \Symfony\Component\Form\Extension\Core\Type\TextareaType::class;

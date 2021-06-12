@@ -46,7 +46,7 @@ class Registry implements RegistryInterface
      */
     public function add(FieldParserInterface $type): void
     {
-        $this->parsers[$type->getName()] = $type;
+        $this->parsers[$type->getAlias()] = $type;
     }
 
     /**

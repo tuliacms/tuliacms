@@ -21,22 +21,27 @@ class DbalFieldWriteStorage extends AbstractLocalizableStorage
 
     public function find(string $id, string $locale, string $defaultLocale): array
     {
-        throw new \Exception('Please implements it');
-
         if ($defaultLocale !== $locale) {
-            $translationColumn = 'IF(ISNULL(tl.title), 0, 1) AS translated';
+            $translationColumn = 'IF(ISNULL(tl.options), 0, 1) AS translated';
         } else {
             $translationColumn = '1 AS translated';
         }
 
-        return $this->connection->fetchAll('
-            SELECT *
+        return $this->connection->fetchAll("
+            SELECT
+                tm.name,
+                tm.type,
+                tm.type_alias,
+                COALESCE(tl.locale, :locale) AS locale,
+                COALESCE(tl.options, tm.options) AS options,
+                {$translationColumn}
             FROM #__form_field AS tm
-            INNER JOIN #__form_field_lang AS tl
+            LEFT JOIN #__form_field_lang AS tl
                 ON tl.form_id = :form_id AND tl.name = tm.name AND tl.locale = :locale
-            WHERE tm.form_id = :form_id', [
+            WHERE tm.form_id = :form_id", [
             'form_id' => $id,
             'locale' => $locale,
+            'defaultLocale' => $defaultLocale,
         ]);
     }
 
@@ -52,6 +57,7 @@ class DbalFieldWriteStorage extends AbstractLocalizableStorage
             'form_id' => $data['form_id'],
             'name' => $data['name'],
             'type' => $data['type'],
+            'type_alias' => $data['type_alias'],
             'options' => $data['options'],
         ]);
     }
@@ -61,23 +67,26 @@ class DbalFieldWriteStorage extends AbstractLocalizableStorage
         $mainTable = [];
         $mainTable['name'] = $data['name'];
         $mainTable['type'] = $data['type'];
+        $mainTable['type_alias'] = $data['type_alias'];
         $mainTable['options'] = $data['options'];
 
         /*if ($foreignLocale === false) {
             $mainTable['name'] = $data['name'];
         }*/
 
-        $this->connection->update('#__form_field', $mainTable, ['id' => $data['id']]);
+        $this->connection->update('#__form_field', $mainTable, [
+            'form_id' => $data['form_id'],
+            'name' => $data['name'],
+        ]);
     }
 
     protected function insertLangRow(array $data): void
     {
         $langTable = [];
-        $langTable['form_id'] = $data['id'];
+        $langTable['form_id'] = $data['form_id'];
         $langTable['locale'] = $data['locale'];
-        $mainTable['name'] = $data['name'];
-        $mainTable['type'] = $data['type'];
-        $mainTable['options'] = $data['options'];
+        $langTable['name'] = $data['name'];
+        $langTable['options'] = $data['options'];
 
         $this->connection->insert('#__form_field_lang', $langTable);
     }
@@ -85,13 +94,12 @@ class DbalFieldWriteStorage extends AbstractLocalizableStorage
     protected function updateLangRow(array $data): void
     {
         $langTable = [];
-        $langTable['name'] = $data['name'];
-        $langTable['type'] = $data['type'];
         $langTable['options'] = $data['options'];
 
         $this->connection->update('#__form_field_lang', $langTable, [
             'form_id' => $data['form_id'],
-            'locale'  => $data['locale'],
+            'name' => $data['name'],
+            'locale' => $data['locale'],
         ]);
     }
 

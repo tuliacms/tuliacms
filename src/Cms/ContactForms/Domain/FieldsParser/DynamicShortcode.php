@@ -13,20 +13,10 @@ use Tulia\Component\Shortcode\ShortcodeInterface;
  */
 class DynamicShortcode implements ShortcodeCompilerInterface
 {
-    /**
-     * @var FieldParserInterface
-     */
-    private $fieldParser;
+    private FieldParserInterface $fieldParser;
 
-    /**
-     * @var FieldsStreamInterface
-     */
-    private $fieldsStream;
+    private FieldsStreamInterface $fieldsStream;
 
-    /**
-     * @param FieldsStreamInterface $fieldsStream
-     * @param FieldParserInterface $fieldParser
-     */
     public function __construct(FieldsStreamInterface $fieldsStream, FieldParserInterface $fieldParser)
     {
         $this->fieldParser  = $fieldParser;
@@ -39,6 +29,8 @@ class DynamicShortcode implements ShortcodeCompilerInterface
     public function compile(ShortcodeInterface $shortcode): string
     {
         $fieldData = $this->fieldParser->parseShortcode($shortcode);
+        $fieldData['type_alias'] = $this->fieldParser->getAlias();
+        $fieldData['options']['constraints'] = $shortcode->getParameter('constraints');
 
         $this->fieldsStream->addField($fieldData['name'], $fieldData);
 
@@ -48,8 +40,8 @@ class DynamicShortcode implements ShortcodeCompilerInterface
     /**
      * {@inheritdoc}
      */
-    public function getName(): string
+    public function getAlias(): string
     {
-        return $this->fieldParser->getName();
+        return $this->fieldParser->getAlias();
     }
 }

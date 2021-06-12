@@ -17,10 +17,11 @@ services:
         bind:
             $sourceParsers: !tagged_iterator cms.form.field_parser
 
-    Tulia\Cms\ContactForms\Application\FieldType\RegistryInterface:
-        class: Tulia\Cms\ContactForms\Application\FieldType\Registry
+    Tulia\Cms\ContactForms\Application\FieldType\FieldsTypeRegistryInterface:
+        class: Tulia\Cms\ContactForms\Application\FieldType\FieldsTypeRegistry
         bind:
             $sourceTypes: !tagged_iterator cms.form.field_type
+            $sourceParsers: !tagged_iterator cms.form.field_parser
 
     Tulia\Cms\ContactForms\Infrastructure\Cms\BackendMenu\MenuBuilder:
         tags: [ backend_menu.builder ]

@@ -36,9 +36,9 @@ class FieldsType extends AbstractType
                 $data = $event->getData();
 
                 // Every field have this option
-                $form->add('type', Type\TextType::class);
+                $form->add('alias', Type\TextType::class);
 
-                $type = $this->registry->get($data['type']);
+                $type = $this->registry->get($data['alias']);
 
                 foreach ($type->getDefinition()['options'] ?? [] as $name => $option) {
                     $options = [];

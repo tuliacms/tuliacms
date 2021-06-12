@@ -30,7 +30,7 @@ class Gallery implements ShortcodeCompilerInterface
     /**
      * {@inheritdoc}
      */
-    public function getName(): string
+    public function getAlias(): string
     {
         return 'gallery';
     }

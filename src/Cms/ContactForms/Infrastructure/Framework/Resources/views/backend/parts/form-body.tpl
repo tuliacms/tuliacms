@@ -83,12 +83,6 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" data-toggle="tab" href="#tab-fields-template">
-                    {{ 'fieldsTemplate'|trans({}, 'forms') }}
-                    {{ badge.errors_count(form, [ 'fields_template' ]) }}
-                </a>
-            </li>
-            <li class="nav-item">
                 <a class="nav-link" data-toggle="tab" href="#tab-message">
                     {{ 'messageTemplate'|trans({}, 'forms') }}
                     {{ badge.errors_count(form, [ 'message_template' ]) }}
@@ -112,9 +106,18 @@
                     .contact-form-fields-builder .field-remove {
                         transition: .12s all;
                     }
+                    .contact-form-fields-builder .field-add-to-template {
+                        transition: .12s all;
+                        color: green;
+                        opacity: .7;
+                    }
                     .contact-form-fields-builder .field-remove:hover {
                         cursor: pointer;
                         color: red;
+                    }
+                    .contact-form-fields-builder .field-add-to-template:hover {
+                        cursor: pointer;
+                        color: green;
                     }
                     .contact-form-fields-builder .form-field-prototype {
                         font-family: monospace;
@@ -160,18 +163,25 @@
                     window.ContactFormBuilder = {
                         fields: {{ fields|json_encode|raw }},
                         availableFields: {{ availableFields|json_encode|raw }},
+                        fieldsTemplate: {{ {value: form.fields_template.vars.value}|json_encode|raw }},
                         translations: {
                             fieldsBuilder: '{{ 'fieldsBuilder'|trans({}, 'forms') }}',
-                            availableFields: '{{ 'availableFields'|trans({}, 'forms') }}',
                             fieldsBuilderInfo: '{{ 'fieldsBuilderInfo'|trans({}, 'forms') }}',
+                            availableFields: '{{ 'availableFields'|trans({}, 'forms') }}',
+                            availableFieldsInfo: '{{ 'availableFieldsInfo'|trans({}, 'forms') }}',
                             addAnyFieldsToCreateForm: '{{ 'addAnyFieldsToCreateForm'|trans({}, 'forms') }}',
                             controlOptionLabel: '{{ 'controlOptionLabel'|trans({}, 'forms') }}',
                             valuesSeparatedByPipeAllowedFollowing: '{{ 'valuesSeparatedByPipeAllowedFollowing'|trans({}, 'forms') }}',
+                            fieldsTemplate: '{{ 'fieldsTemplate'|trans({}, 'forms') }}',
+                            fieldsTemplateInfo: '{{ 'fieldsTemplateInfo'|trans({}, 'forms') }}',
+                            removeField: '{{ 'removeField'|trans({}, 'forms') }}',
+                            addFieldToTemplate: '{{ 'addFieldToTemplate'|trans({}, 'forms') }}',
                             name: '{{ 'name'|trans }}',
                             required: '{{ 'required'|trans }}',
                             multilingual: '{{ 'multilingual'|trans }}',
                             yes: '{{ 'yes'|trans }}',
                             type: '{{ 'type'|trans }}',
+                            add: '{{ 'add'|trans }}',
                         }
                     };
                 </script>
@@ -202,31 +212,6 @@
                         </tr>
                     </tbody>
                 </table>
-            </div>
-            <div class="tab-pane fade" id="tab-fields-template">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col">
-                            {{ form_row(form.fields_template, { attr: { style: 'height:300px;font-family:monospace;font-size:15px;' } }) }}
-                        </div>
-                    </div>
-                </div>
-                {#<table class="table">
-                    <thead>
-                        <tr>
-                            <th>{{ 'marker'|trans }}</th>
-                            <th>{{ 'name'|trans }}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for field in fieldParsers %}
-                            <tr>
-                                <th><code>[{{ field.name }}{{ _self.renderRequiredAttributes(field.definition.options) }}]</code></th>
-                                <td>{{ field.definition.name }}</td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>#}
             </div>
         </div>
     </div>

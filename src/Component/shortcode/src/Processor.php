@@ -47,7 +47,7 @@ class Processor implements ProcessorInterface
         $handlers = new HandlerContainer();
 
         foreach ($this->compilers->all() as $compiler) {
-            $handlers->add($compiler->getName(), function(ShortcodeInterface $s) use ($compiler) {
+            $handlers->add($compiler->getAlias(), function(ShortcodeInterface $s) use ($compiler) {
                 $shortcode = new Shortcode($s->getName(), $s->getParameters(), $s->getContent());
                 return $compiler->compile($shortcode);
             });
@@ -55,7 +55,7 @@ class Processor implements ProcessorInterface
 
         $events = new EventContainer();
         $events->addListener(Events::REPLACE_SHORTCODES, function(ReplaceShortcodesEvent $event) {
-            if ($event->getShortcode() || !$event->getReplacements()) {
+            if ($event->getShortcode() || ! $event->getReplacements()) {
                 return;
             }
 

@@ -4,20 +4,31 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContactForms\Application\FieldType;
 
+use Tulia\Cms\ContactForms\Application\FieldType\Parser\FieldParserInterface;
+
 /**
  * @author Adam Banaszkiewicz
  */
-class Registry implements RegistryInterface
+class FieldsTypeRegistry implements FieldsTypeRegistryInterface
 {
     /**
      * @var TypeInterface[]
      */
     private array $types = [];
+
+    /**
+     * @var FieldParserInterface[]
+     */
+    private array $parsers = [];
+
     private iterable $sourceTypes;
 
-    public function __construct(iterable $sourceTypes)
+    private iterable $sourceParsers;
+
+    public function __construct(iterable $sourceTypes, iterable $sourceParsers)
     {
         $this->sourceTypes = $sourceTypes;
+        $this->sourceParsers = $sourceParsers;
     }
 
     /**
@@ -33,19 +44,21 @@ class Registry implements RegistryInterface
     /**
      * {@inheritdoc}
      */
-    public function has(string $type): bool
+    public function getParser(string $type): FieldParserInterface
     {
         $this->prepareTypes();
 
-        return isset($this->types[$type]);
+        return $this->parsers[$type];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function add(TypeInterface $type): void
+    public function has(string $type): bool
     {
-        $this->types[\get_class($type)] = $type;
+        $this->prepareTypes();
+
+        return isset($this->types[$type]);
     }
 
     /**
@@ -60,12 +73,16 @@ class Registry implements RegistryInterface
 
     protected function prepareTypes(): void
     {
-        if ($this->types !== []) {
-            return;
+        if ($this->types === []) {
+            foreach ($this->sourceTypes as $type) {
+                $this->types[$type->getAlias()] = $type;
+            }
         }
 
-        foreach ($this->sourceTypes as $type) {
-            $this->add($type);
+        if ($this->parsers === []) {
+            foreach ($this->sourceParsers as $parser) {
+                $this->parsers[$parser->getAlias()] = $parser;
+            }
         }
     }
 }

@@ -14,8 +14,8 @@ use Tulia\Cms\ContactForms\Application\FieldsTemplate\EventListener\FieldsTempla
 use Tulia\Cms\ContactForms\Domain\FieldsParser\FieldsParser;
 use Tulia\Cms\ContactForms\Domain\FieldsParser\FieldsParserInterface;
 use Tulia\Cms\ContactForms\Application\FieldsTemplate\Service\FieldsTemplateViewUpdater;
-use Tulia\Cms\ContactForms\Application\FieldType\Registry as FieldTypeRegistry;
-use Tulia\Cms\ContactForms\Application\FieldType\RegistryInterface as FieldTypeRegistryInterface;
+use Tulia\Cms\ContactForms\Application\FieldType\FieldsTypeRegistry as FieldTypeRegistry;
+use Tulia\Cms\ContactForms\Application\FieldType\FieldsTypeRegistryInterface as FieldTypeRegistryInterface;
 use Tulia\Cms\ContactForms\Application\FieldType\Parser\Registry as FieldParserRegistry;
 use Tulia\Cms\ContactForms\Application\FieldType\Parser\RegistryInterface as FieldParserRegistryInterface;
 use Tulia\Cms\ContactForms\Application\Sender\FormDataExtractor;

@@ -28,6 +28,14 @@ class CheckboxType extends AbstractType
     /**
      * {@inheritdoc}
      */
+    public function getAlias(): string
+    {
+        return 'checkbox';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getFormType(): string
     {
         return \Symfony\Component\Form\Extension\Core\Type\CheckboxType::class;

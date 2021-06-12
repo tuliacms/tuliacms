@@ -15,7 +15,7 @@ class SubmitParser extends AbstractFieldParser
     /**
      * {@inheritdoc}
      */
-    public function getName(): string
+    public function getAlias(): string
     {
         return 'submit';
     }

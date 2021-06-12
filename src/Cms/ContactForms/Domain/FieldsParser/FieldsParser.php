@@ -75,12 +75,12 @@ class FieldsParser implements FieldsParserInterface
        return $fieldsContent;
     }
 
-    private function createShortcode($field): string
+    private function createShortcode(array $field): string
     {
         $shortcode = sprintf('[%s name="%s"', $field['type'], $field['name']);
 
         foreach ($field['options'] as $option => $value) {
-            if ($value === null) {
+            if ($value === null || $option === 'constraints_raw') {
                 continue;
             }
 

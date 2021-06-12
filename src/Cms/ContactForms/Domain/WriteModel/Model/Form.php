@@ -42,6 +42,8 @@ final class Form extends AggregateRoot
 
     private ?string $messageTemplate = null;
 
+    private bool $translated = true;
+
     private EntitiesChangelog $fieldsChangeLog;
 
     private function __construct(string $id, string $websiteId, string $locale)
@@ -70,10 +72,13 @@ final class Form extends AggregateRoot
         $self->setSenderEmail($data['sender_email'] ?? '');
         $self->setReplyTo($data['reply_to'] ?? '');
         $self->setName($data['name'] ?? '');
-        $self->setSubject($data['subject'] ?? '');
+        $self->subject = $data['subject'] ?? '';
+        $self->translated = (bool) ($data['translated'] ?? true);
+        $self->messageTemplate = $data['message_template'] ?? '';
+        $self->fieldsTemplate = $data['fields_template'] ?? '';
 
         foreach ($data['fields'] ?? [] as $field) {
-            $self->addField(Field::buildFromArray($field));
+            $self->fields[$field['name']] = Field::buildFromArray($field);
         }
 
         return $self;
@@ -209,8 +214,8 @@ final class Form extends AggregateRoot
         }
 
         foreach ($changelog['updated'] as $name) {
-            $this->fieldsChangeLog->recordEntityChange('update', $this->fields[$name]);
             $this->fields[$name] = Field::buildFromArray($newFields[$name]);
+            $this->fieldsChangeLog->recordEntityChange('update', $this->fields[$name]);
         }
     }
 
@@ -247,6 +252,16 @@ final class Form extends AggregateRoot
     public function getFieldsChanges(): array
     {
         return $this->fieldsChangeLog->collectEntitiesChanges();
+    }
+
+    public function isTranslated(): bool
+    {
+        return $this->translated;
+    }
+
+    public function setTranslated(bool $translated): void
+    {
+        $this->translated = $translated;
     }
 
     private function calculateFieldsChangelog(array $newFields, array $oldFields): array

@@ -16,6 +16,7 @@ sender: Sender
 notificationMessages: Notifications
 fields: Fields
 fieldsTemplate: Fields template
+fieldsTemplateInfo: Here You can define Your HTML code for the form. This Fields template will be used in frontend to show Your defined form fields. You can use HTML here. Click "Add" on one of the available fields defined in Fields Builder to add this field to Fields Template.
 successMessage: Success message
 successMessageHelpText: This message will be shown when user successfully submit his form.
 failMessage: Fail message
@@ -24,11 +25,14 @@ addField: Add field
 selectFieldType: Select field type
 formFieldNameContainsInvalidName: "Field name must be alphanum with underscore, \"{name}\" given. Please fix the name and save form again."
 fieldsBuilder: Fields builder
+fieldsBuilderInfo: Here You can define Your fields names, labels and other settings. Fields defined in this list can be placed in the Fields template.
 availableFields: Available fields
-fieldsBuilderInfo: Here are listed available fields which You can use to create Your form. Click on the specific field name to add it to the builder. In the next step You can use those fields in the Fields template.
+availableFieldsInfo: Here are listed available fields which You can use to create Your form. Click on the specific field name to add it to the builder. In the next step You can use those fields in the Fields template.
 addAnyFieldsToCreateForm: Please add any field listed above to create Your form.
 controlOptionLabel: Control option legend
 valuesSeparatedByPipeAllowedFollowing: "Values separated by pipe (<code>|</code>). Allowed one or many of the following:"
+removeField: Remove field
+addFieldToTemplate: Add field to template
 widget:
     name: Contact form
     description: Shows contact form.

@@ -38,7 +38,8 @@ class DomainModelTransformer
             $fields[] = array_merge(
                 ['name' => $field->getName()],
                 ['type' => $field->getType()],
-                $field->getOptions()
+                ['type_alias' => $field->getTypeAlias()],
+                $field->getOptions(),
             );
         }
 
@@ -61,7 +62,7 @@ class DomainModelTransformer
 
         foreach ($source['fields'] as $field) {
             $name = $field['name'];
-            $type = $field['type'];
+            $type = $field['alias'];
 
             unset($field['name'], $field['type']);
 
@@ -74,8 +75,12 @@ class DomainModelTransformer
 
         $model->setFieldsTemplate(
             $fields,
-            $source['fields_template'] = '<div class="asdasd">[name]</div><p>Insert your message:</p><div>[message][submit]</div>',
+            $source['fields_template'],
             $this->fieldsParser
         );
+
+        /*<div class="asdasd">[name]</div>
+<p>Insert your message:</p>
+<div><p id="asd">[message]</p>[submit]</div>*/
     }
 }

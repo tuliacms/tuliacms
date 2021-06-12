@@ -9,6 +9,7 @@ namespace Tulia\Cms\ContactForms\Application\FieldType;
  */
 interface TypeInterface
 {
+    public function getAlias(): string;
     public function getFormType(): string;
     public function getBuilder(): string;
     public function buildOptions(array $options): array;

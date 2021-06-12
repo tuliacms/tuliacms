@@ -8,7 +8,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Tulia\Cms\ContactForms\Application\FieldType\Core\SubmitType;
-use Tulia\Cms\ContactForms\Application\FieldType\RegistryInterface;
+use Tulia\Cms\ContactForms\Application\FieldType\FieldsTypeRegistryInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -16,14 +16,14 @@ use Tulia\Cms\ContactForms\Application\FieldType\RegistryInterface;
 class Form extends AbstractType
 {
     /**
-     * @var RegistryInterface
+     * @var FieldsTypeRegistryInterface
      */
     private $typesRegistry;
 
     /**
-     * @param RegistryInterface $typesRegistry
+     * @param FieldsTypeRegistryInterface $typesRegistry
      */
-    public function __construct(RegistryInterface $typesRegistry)
+    public function __construct(FieldsTypeRegistryInterface $typesRegistry)
     {
         $this->typesRegistry = $typesRegistry;
     }

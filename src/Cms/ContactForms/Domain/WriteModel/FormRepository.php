@@ -66,7 +66,19 @@ class FormRepository
 
     public function find(string $id): Form
     {
+        $form = $this->storage->find(
+            $id,
+            $this->currentWebsite->getLocale()->getCode(),
+            $this->currentWebsite->getDefaultLocale()->getCode()
+        );
 
+        $form['receivers'] = json_decode($form['receivers'], true);
+        $form['fields'] = array_map(function ($field) {
+            $field['options'] = json_decode($field['options'], true);
+            return $field;
+        }, $form['fields']);
+
+        return Form::buildFromArray($form);
     }
 
     public function insert(Form $form): void
@@ -86,7 +98,17 @@ class FormRepository
 
     public function update(Form $form): void
     {
+        $this->storage->beginTransaction();
 
+        try {
+            $this->storage->update($this->extract($form), $this->currentWebsite->getDefaultLocale()->getCode());
+            $this->storage->commit();
+        } catch (\Exception $exception) {
+            $this->storage->rollback();
+            throw $exception;
+        }
+
+        $this->eventBus->dispatchCollection($form->collectDomainEvents());
     }
 
     public function delete(Form $form): void
@@ -125,6 +147,7 @@ class FormRepository
                 'locale' => $form->getLocale(),
                 'name' => $field->getName(),
                 'type' => $field->getType(),
+                'type_alias' => $field->getTypeAlias(),
                 'options' => json_encode($field->getOptions()),
             ];
         }

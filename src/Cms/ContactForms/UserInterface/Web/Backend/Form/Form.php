@@ -67,7 +67,6 @@ class Form extends AbstractType
             ])
             ->add('fields_template', Type\TextareaType::class, [
                 'label' => false,
-                'mapped' => false,
             ])
             ->add('fields', Type\CollectionType::class, [
                 'entry_type' => FieldsType::class,

@@ -11,15 +11,7 @@ use Tulia\Component\Shortcode\ShortcodeInterface;
  */
 interface ShortcodeCompilerInterface
 {
-    /**
-     * @param ShortcodeInterface $shortcode
-     *
-     * @return string
-     */
     public function compile(ShortcodeInterface $shortcode): string;
 
-    /**
-     * @return string
-     */
-    public function getName(): string;
+    public function getAlias(): string;
 }

@@ -16,7 +16,7 @@ class SelectParser extends AbstractFieldParser
     /**
      * {@inheritdoc}
      */
-    public function getName(): string
+    public function getAlias(): string
     {
         return 'select';
     }

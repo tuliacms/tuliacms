@@ -14,6 +14,14 @@ class TextType extends AbstractType
     /**
      * {@inheritdoc}
      */
+    public function getAlias(): string
+    {
+        return 'text';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getFormType(): string
     {
         return \Symfony\Component\Form\Extension\Core\Type\TextType::class;
