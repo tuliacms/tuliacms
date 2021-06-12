@@ -15,9 +15,26 @@ class DbalContactFormWriteStorage extends AbstractLocalizableStorage implements 
 {
     private ConnectionInterface $connection;
 
-    public function __construct(ConnectionInterface $connection)
+    private DbalFieldWriteStorage $fieldStorage;
+
+    public function __construct(ConnectionInterface $connection, DbalFieldWriteStorage $fieldStorage)
     {
         $this->connection = $connection;
+        $this->fieldStorage = $fieldStorage;
+    }
+
+    public function insert(array $data, string $defaultLocale): void
+    {
+        parent::insert($data, $defaultLocale);
+
+        $this->storeFields($data['fields'], $defaultLocale);
+    }
+
+    public function update(array $data, string $defaultLocale): void
+    {
+        parent::update($data, $defaultLocale);
+
+        $this->storeFields($data['fields'], $defaultLocale);
     }
 
     public function find(string $id, string $locale, string $defaultLocale): array
@@ -51,17 +68,9 @@ class DbalContactFormWriteStorage extends AbstractLocalizableStorage implements 
             return [];
         }
 
-        $fields = $this->connection->fetchAll('
-            SELECT *
-            FROM #__form_field AS tm
-            INNER JOIN #__form_field_lang AS tl
-                ON tl.form_id = :form_id AND tl.name = tm.name AND tl.locale = :locale
-            WHERE tm.form_id = :form_id', [
-            'form_id' => $id,
-            'locale' => $locale,
-        ]);
+        $form[0]['fields'] = $this->fieldStorage->find($id, $locale, $defaultLocale);
 
-        $form[0]['fields'] = $fields;
+        dump($form[0]);exit;
 
         return $form[0];
     }
@@ -70,8 +79,8 @@ class DbalContactFormWriteStorage extends AbstractLocalizableStorage implements 
     {
         $this->connection->delete('#__form', ['id' => $form['id']]);
         $this->connection->delete('#__form_lang', ['form_id' => $form['id']]);
-        $this->connection->delete('#__form_field', ['form_id' => $form['id']]);
-        $this->connection->delete('#__form_field_lang', ['form_id' => $form['id']]);
+
+        $this->fieldStorage->delete($form);
     }
 
     public function beginTransaction(): void
@@ -102,17 +111,9 @@ class DbalContactFormWriteStorage extends AbstractLocalizableStorage implements 
         $mainTable['subject']          = $data['subject'];
         $mainTable['message_template'] = $data['message_template'];
         $mainTable['fields_template']  = $data['fields_template'];
+        $mainTable['fields_view']      = $data['fields_view'];
 
         $this->connection->insert('#__form', $mainTable);
-
-        foreach ($data['fields'] as $field) {
-            $this->connection->insert('#__form_field', [
-                'form_id' => $data['id'],
-                'name'    => $field['name'],
-                'type'    => $field['type'],
-                'options' => $field['options'],
-            ]);
-        }
     }
 
     protected function updateMainRow(array $data, bool $foreignLocale): void
@@ -128,18 +129,10 @@ class DbalContactFormWriteStorage extends AbstractLocalizableStorage implements 
             $mainTable['subject']          = $data['subject'];
             $mainTable['message_template'] = $data['message_template'];
             $mainTable['fields_template']  = $data['fields_template'];
+            $mainTable['fields_view']      = $data['fields_view'];
         }
 
         $this->connection->update('#__form', $mainTable, ['id' => $data['id']]);
-
-        foreach ($data['fields'] as $field) {
-            $this->connection->insert('#__form_field', [
-                'form_id' => $data['id'],
-                'name'    => $field['name'],
-                'type'    => $field['type'],
-                'options' => $field['options'],
-            ]);
-        }
     }
 
     protected function insertLangRow(array $data): void
@@ -151,6 +144,7 @@ class DbalContactFormWriteStorage extends AbstractLocalizableStorage implements 
         $langTable['subject']          = $data['subject'];
         $langTable['message_template'] = $data['message_template'];
         $langTable['fields_template']  = $data['fields_template'];
+        $langTable['fields_view']      = $data['fields_view'];
 
         $this->connection->insert('#__form_lang', $langTable);
     }
@@ -162,6 +156,7 @@ class DbalContactFormWriteStorage extends AbstractLocalizableStorage implements 
         $langTable['subject']          = $data['subject'];
         $langTable['message_template'] = $data['message_template'];
         $langTable['fields_template']  = $data['fields_template'];
+        $langTable['fields_view']      = $data['fields_view'];
 
         $this->connection->update('#__form_lang', $langTable, [
             'form_id' => $data['id'],
@@ -177,5 +172,18 @@ class DbalContactFormWriteStorage extends AbstractLocalizableStorage implements 
         );
 
         return isset($result[0]['form_id']) && $result[0]['form_id'] === $data['id'];
+    }
+
+    private function storeFields(array $fields, string $defaultLocale): void
+    {
+        foreach ($fields as $field) {
+            if ($field['_change_type'] === 'add') {
+                $this->fieldStorage->insert($field, $defaultLocale);
+            } elseif ($field['_change_type'] === 'update') {
+                $this->fieldStorage->update($field, $defaultLocale);
+            } elseif ($field['_change_type'] === 'remove') {
+                $this->fieldStorage->delete($field['id']);
+            }
+        }
     }
 }

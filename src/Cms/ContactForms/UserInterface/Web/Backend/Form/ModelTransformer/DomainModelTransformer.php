@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Tulia\Cms\ContactForms\UserInterface\Web\Backend\Form\ModelTransformer;
 
 use Tulia\Cms\ContactForms\Domain\FieldsParser\FieldsParserInterface;
-use Tulia\Cms\ContactForms\Domain\WriteModel\Model\Field;
 use Tulia\Cms\ContactForms\Domain\WriteModel\Model\Form;
 
 /**
@@ -55,7 +54,7 @@ class DomainModelTransformer
         $model->setSenderEmail($source['sender_email']);
         $model->setReplyTo($source['reply_to']);
         $model->setName($source['name']);
-        $model->setSenderEmail($source['subject']);
+        $model->setSubject($source['subject']);
         $model->setMessageTemplate($source['message_template']);
 
         $fields = [];

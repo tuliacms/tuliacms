@@ -75,13 +75,11 @@ class FormRepository
 
         try {
             $this->storage->insert($this->extract($form), $this->currentWebsite->getDefaultLocale()->getCode());
-            //$this->storage->commit();
+            $this->storage->commit();
         } catch (\Exception $exception) {
             $this->storage->rollback();
             throw $exception;
         }
-
-        exit;
 
         $this->eventBus->dispatchCollection($form->collectDomainEvents());
     }
@@ -114,8 +112,17 @@ class FormRepository
             'fields' => [],
         ];
 
-        foreach ($form->fields() as $field) {
+        $itemsChanges = $form->getFieldsChanges();
+
+        foreach ($itemsChanges as $changeData) {
+            /** @var Field $field */
+            $field = $changeData['entity'];
+
             $result['fields'][] = [
+                '_change_type' => $changeData['type'],
+                'id' => $field->getName(),
+                'form_id' => $form->getId(),
+                'locale' => $form->getLocale(),
                 'name' => $field->getName(),
                 'type' => $field->getType(),
                 'options' => json_encode($field->getOptions()),

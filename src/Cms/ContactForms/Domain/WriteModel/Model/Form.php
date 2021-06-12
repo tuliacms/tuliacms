@@ -9,6 +9,7 @@ use Tulia\Cms\ContactForms\Domain\FieldsParser\FieldsParserInterface;
 use Tulia\Cms\ContactForms\Domain\WriteModel\Model\ValueObject\FormId;
 use Tulia\Cms\ContactForms\Domain\Event;
 use Tulia\Cms\Platform\Domain\Aggregate\AggregateRoot;
+use Tulia\Cms\Platform\Domain\Model\EntitiesChangelog;
 
 /**
  * @author Adam Banaszkiewicz
@@ -41,11 +42,15 @@ final class Form extends AggregateRoot
 
     private ?string $messageTemplate = null;
 
+    private EntitiesChangelog $fieldsChangeLog;
+
     private function __construct(string $id, string $websiteId, string $locale)
     {
         $this->id = new FormId($id);
         $this->websiteId = $websiteId;
         $this->locale = $locale;
+
+        $this->fieldsChangeLog = new EntitiesChangelog();
     }
 
     public static function createNew(string $id, string $websiteId, string $locale): self
@@ -185,12 +190,27 @@ final class Form extends AggregateRoot
         $stream = $fieldsParser->parse((string) $fieldsTemplate, $fields);
         $newFields = $stream->allFields();
 
+        $changelog = $this->calculateFieldsChangelog(
+            array_keys($newFields),
+            array_keys($this->fields)
+        );
+
         $this->fieldsTemplate = $fieldsTemplate;
         $this->fieldsView = $stream->getResult();
-        $this->fields = [];
 
-        foreach ($newFields as $field) {
-            $this->addField(Field::buildFromArray($field));
+        foreach ($changelog['removed'] as $name) {
+            $this->fieldsChangeLog->recordEntityChange('remove', $this->fields[$name]);
+            unset($this->fields[$name]);
+        }
+
+        foreach ($changelog['added'] as $name) {
+            $this->fields[$name] = Field::buildFromArray($newFields[$name]);
+            $this->fieldsChangeLog->recordEntityChange('add', $this->fields[$name]);
+        }
+
+        foreach ($changelog['updated'] as $name) {
+            $this->fieldsChangeLog->recordEntityChange('update', $this->fields[$name]);
+            $this->fields[$name] = Field::buildFromArray($newFields[$name]);
         }
     }
 
@@ -224,8 +244,21 @@ final class Form extends AggregateRoot
         }
     }
 
-    private function addField(Field $field): void
+    public function getFieldsChanges(): array
     {
-        $this->fields[$field->getName()] = $field;
+        return $this->fieldsChangeLog->collectEntitiesChanges();
+    }
+
+    private function calculateFieldsChangelog(array $newFields, array $oldFields): array
+    {
+        $toUpdate = array_intersect($newFields, $oldFields);
+        $toAdd    = array_diff($newFields, $toUpdate);
+        $toRemove = array_diff($oldFields, $toUpdate);
+
+        $log['added'] = $toAdd;
+        $log['removed'] = $toRemove;
+        $log['updated'] = $toUpdate;
+
+        return $log;
     }
 }

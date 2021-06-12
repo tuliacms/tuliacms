@@ -63,7 +63,7 @@
                                 <span style="font-size:17px;">{{ option.name }}</span><br />
                                 <i>{{ translations.name }}:</i> <code>{{ optionName }}</code> |
                                 <span v-if="option.required"><i>{{ translations.required }}:</i> <code>yes</code> | </span>
-                                <span v-if="option.multilingual"><i>{{ translations.multilingual }}:</i> <code>{{ translations.yes }}</code> | </span>
+<!--                                <span v-if="option.multilingual"><i>{{ translations.multilingual }}:</i> <code>{{ translations.yes }}</code> | </span>-->
                                 <i>{{ translations.type }}:</i> <code>{{ option.type }}</code>
                                 <div v-if="option.type === 'collection'">
                                     <br />{{ translations.valuesSeparatedByPipeAllowedFollowing }}<br />
