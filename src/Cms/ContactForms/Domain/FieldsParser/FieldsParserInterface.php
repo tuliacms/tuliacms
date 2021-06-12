@@ -14,5 +14,5 @@ interface FieldsParserInterface
     /**
      * @throws InvalidFieldNameException
      */
-    public function parse(string $fieldsContent): FieldsStreamInterface;
+    public function parse(string $fieldsContent, array $fields): FieldsStreamInterface;
 }

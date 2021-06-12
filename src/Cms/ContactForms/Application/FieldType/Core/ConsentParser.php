@@ -62,11 +62,13 @@ class ConsentParser extends AbstractFieldParser
                     'name' => 'Label showed in field form.',
                     'type' => 'text',
                     'required' => true,
+                    'multilingual' => true,
                 ],
                 'consent' => [
                     'name' => 'The whole consent to which user must/should agree.',
                     'type' => 'text',
                     'required' => true,
+                    'multilingual' => true,
                 ],
                 'constraints' => [
                     'name' => 'Validation constraints for this field.',

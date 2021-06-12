@@ -23,15 +23,15 @@ final class Form extends AggregateRoot
 
     private array $receivers = [];
 
-    private string $senderName;
+    private string $senderName = '';
 
-    private string $senderEmail;
+    private string $senderEmail = '';
 
-    private string $replyTo;
+    private string $replyTo = '';
 
-    private string $name;
+    private string $name = '';
 
-    private string $subject;
+    private string $subject = '';
 
     private ?string $fieldsTemplate = null;
 
@@ -46,8 +46,6 @@ final class Form extends AggregateRoot
         $this->id = new FormId($id);
         $this->websiteId = $websiteId;
         $this->locale = $locale;
-
-        $this->fields[$locale] = [];
     }
 
     public static function createNew(string $id, string $websiteId, string $locale): self
@@ -70,7 +68,7 @@ final class Form extends AggregateRoot
         $self->setSubject($data['subject'] ?? '');
 
         foreach ($data['fields'] ?? [] as $field) {
-            $self->addField($field['locale'], Field::buildFromArray($field));
+            $self->addField(Field::buildFromArray($field));
         }
 
         return $self;
@@ -179,23 +177,20 @@ final class Form extends AggregateRoot
     /**
      * @throws InvalidFieldNameException
      */
-    public function setFieldsTemplate(?string $fieldsTemplate, FieldsParserInterface $fieldsParser): void
-    {
-        $stream = $fieldsParser->parse($fieldsTemplate);
+    public function setFieldsTemplate(
+        array $fields,
+        ?string $fieldsTemplate,
+        FieldsParserInterface $fieldsParser
+    ): void {
+        $stream = $fieldsParser->parse((string) $fieldsTemplate, $fields);
         $newFields = $stream->allFields();
-
-        if ($this->isForeignLanguage()) {
-
-        } else {
-
-        }
 
         $this->fieldsTemplate = $fieldsTemplate;
         $this->fieldsView = $stream->getResult();
-        $this->fields[$this->locale] = [];
+        $this->fields = [];
 
         foreach ($newFields as $field) {
-            $this->addField($this->locale, Field::buildFromArray($field));
+            $this->addField(Field::buildFromArray($field));
         }
     }
 
@@ -222,20 +217,15 @@ final class Form extends AggregateRoot
     /**
      * @return Field[]
      */
-    public function fields(?string $locale = null): iterable
+    public function fields(): iterable
     {
-        foreach ($this->fields[$locale ?? $this->locale] as $field) {
+        foreach ($this->fields as $field) {
             yield $field;
         }
     }
 
-    private function addField(string $locale, Field $field): void
+    private function addField(Field $field): void
     {
-        $this->fields[$locale][$field->getName()] = $field;
-    }
-
-    private function isForeignLanguage(): bool
-    {
-        return $this->locale !== $this->defaultLocale;
+        $this->fields[$field->getName()] = $field;
     }
 }

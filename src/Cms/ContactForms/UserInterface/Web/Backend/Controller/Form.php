@@ -11,14 +11,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\ContactForms\Application\FieldType\Parser\RegistryInterface as FieldParserInterface;
 use Tulia\Cms\ContactForms\Application\FieldType\RegistryInterface;
 use Tulia\Cms\ContactForms\Domain\FieldsParser\Exception\InvalidFieldNameException;
-use Tulia\Cms\ContactForms\Domain\FieldsParser\FieldsParserInterface;
 use Tulia\Cms\ContactForms\Domain\WriteModel\FormRepository;
 use Tulia\Cms\ContactForms\Infrastructure\Persistence\Query\DatatableFinder;
-use Tulia\Cms\ContactForms\Query\Enum\ScopeEnum;
-use Tulia\Cms\ContactForms\Query\FinderFactoryInterface;
-use Tulia\Cms\ContactForms\Query\Model\Form as QueryForm;
 use Tulia\Cms\ContactForms\UserInterface\Web\Backend\Form\Form as FormType;
 use Tulia\Cms\ContactForms\UserInterface\Web\Backend\Form\FormManagerFactory;
+use Tulia\Cms\ContactForms\UserInterface\Web\Backend\Form\ModelTransformer\DomainModelTransformer;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Component\Datatable\DatatableFactory;
 use Tulia\Component\Security\Http\Csrf\Annotation\CsrfToken;
@@ -29,28 +26,20 @@ use Tulia\Component\Templating\ViewInterface;
  */
 class Form extends AbstractController
 {
-    private FinderFactoryInterface $finderFactory;
-
     private FormRepository $repository;
 
     private RegistryInterface $typesRegistry;
 
     private FieldParserInterface $parsersRegistry;
 
-    private FieldsParserInterface $fieldsParser;
-
     public function __construct(
-        FinderFactoryInterface $finderFactory,
         FormRepository $repository,
         RegistryInterface $typesRegistry,
-        FieldParserInterface $parsersRegistry,
-        FieldsParserInterface $fieldsParser
+        FieldParserInterface $parsersRegistry
     ) {
-        $this->finderFactory = $finderFactory;
         $this->repository = $repository;
         $this->typesRegistry = $typesRegistry;
         $this->parsersRegistry = $parsersRegistry;
-        $this->fieldsParser = $fieldsParser;
     }
 
     public function index(): RedirectResponse
@@ -73,22 +62,16 @@ class Form extends AbstractController
     /**
      * @CsrfToken(id="form")
      */
-    public function create(Request $request)
+    public function create(Request $request, DomainModelTransformer $transformer)
     {
         $model = $this->repository->createNew();
 
-        $form = $this->createForm(FormType::class, $model);
-        $form->get('fields_template')->setData('[checkbox name="c" label="Checkbox"]
-[consent name="d" label="Zgoda" consent="Wyrażam zgodę"]
-[submit name="s" label="Wyślij"]');
+        $form = $this->createForm(FormType::class, $transformer->transform($model));
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             try {
-                $model->setFieldsTemplate(
-                    $form->get('fields_template')->getData(),
-                    $this->fieldsParser
-                );
+                $transformer->reverseTransform($form->getData(), $model);
 
                 $this->repository->insert($model);
 
@@ -100,12 +83,70 @@ class Form extends AbstractController
             }
         }
 
+        if ($form->isSubmitted()) {
+            $errors = $this->getErrorMessages($form);
+        }
+
+        $availableFields = [];
+
+        foreach ($this->parsersRegistry->all() as $field) {
+            $definition = $field->getDefinition();
+            $name = $field->getName();
+
+            $availableFields[$name] = [
+                'name' => $name,
+                'label' => $definition['name'],
+                'options' => $definition['options'],
+            ];
+        }
+
+        $fields = [];
+
+        foreach ($request->request->get('form')['fields'] ?? [] as $key => $options) {
+            $type = $options['type'];
+            unset($options['type']);
+
+            foreach ($options as $name => $value) {
+                $options[$name] = [
+                    'name' => $name,
+                    'value' => $value,
+                    'error' => $errors['fields'][$key][$name][0] ?? null
+                ];
+            }
+
+            $fields[] = [
+                'type' => $type,
+                'options' => $options,
+            ];
+        }
+
         return $this->view('@backend/forms/create.tpl', [
             'model' => $model,
             'form' => $form->createView(),
             'fieldTypes' => $this->typesRegistry->all(),
-            'fieldParsers' => $this->parsersRegistry->all(),
+            'fields' => $fields,
+            'availableFields' => $availableFields,
         ]);
+    }
+
+    private function getErrorMessages($form) {
+        $errors = array();
+
+        foreach ($form->getErrors() as $key => $error) {
+            if ($form->isRoot()) {
+                $errors['#'][] = $error->getMessage();
+            } else {
+                $errors[] = $error->getMessage();
+            }
+        }
+
+        foreach ($form->all() as $child) {
+            if (!$child->isValid()) {
+                $errors[$child->getName()] = $this->getErrorMessages($child);
+            }
+        }
+
+        return $errors;
     }
 
     /**
@@ -138,20 +179,5 @@ class Form extends AbstractController
             'form'  => $form->createView(),
             'fieldParsers' => $this->parsersRegistry->all(),
         ]);
-    }
-
-    private function getFormById(string $id): QueryForm
-    {
-        $finder = $this->finderFactory->getInstance(ScopeEnum::BACKEND_SINGLE);
-        $finder->setCriteria(['id' => $id, 'fetch_fields' => true]);
-        $finder->fetch();
-
-        $form = $finder->getResult()->first();
-
-        if (! $form) {
-            throw $this->createNotFoundException($this->trans('formNotFound', [], 'forms'));
-        }
-
-        return $form;
     }
 }

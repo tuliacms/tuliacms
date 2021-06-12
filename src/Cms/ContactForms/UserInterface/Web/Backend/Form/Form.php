@@ -11,7 +11,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
 use Tulia\Cms\ContactForms\UserInterface\Web\Backend\Form\ModelTransformer\FormIdTransformer;
 use Tulia\Cms\ContactForms\UserInterface\Web\Backend\Form\ModelTransformer\ReceiversTransformer;
-use Tulia\Cms\ContactForms\UserInterface\Web\Backend\Form\Type\FormFieldType;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType;
 
 /**
@@ -47,6 +46,7 @@ class Form extends AbstractType
             ->add('reply_to', Type\TextType::class, [
                 'constraints' => [
                     new Assert\Email(),
+                    new Assert\NotBlank(),
                 ],
             ])
             ->add('name', Type\TextType::class, [
@@ -68,6 +68,13 @@ class Form extends AbstractType
             ->add('fields_template', Type\TextareaType::class, [
                 'label' => false,
                 'mapped' => false,
+            ])
+            ->add('fields', Type\CollectionType::class, [
+                'entry_type' => FieldsType::class,
+                'label' => false,
+                'allow_add' => true,
+                'allow_delete' => true,
+                'by_reference' => false
             ])
             ->add('cancel', FormType\CancelType::class, [
                 'route' => 'backend.form',

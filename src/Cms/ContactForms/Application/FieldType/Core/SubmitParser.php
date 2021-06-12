@@ -51,6 +51,7 @@ class SubmitParser extends AbstractFieldParser
                     'name' => 'Label showed in field form.',
                     'type' => 'text',
                     'required' => true,
+                    'multilingual' => true,
                 ],
             ],
         ];

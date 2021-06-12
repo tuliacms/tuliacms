@@ -31,7 +31,7 @@ class FieldsParser implements FieldsParserInterface
     /**
      * {@inheritdoc}
      */
-    public function parse(string $fieldsContent): FieldsStreamInterface
+    public function parse(string $fieldsContent, array $fields): FieldsStreamInterface
     {
         $key = md5($fieldsContent);
 
@@ -45,6 +45,8 @@ class FieldsParser implements FieldsParserInterface
 
             return $stream;
         }
+
+        $fieldsContent = $this->replaceFieldsShortcodes($fieldsContent, $fields);
 
         $compilers = new CompilerRegistry();
         $stream = new FieldsStream($fieldsContent);
@@ -61,5 +63,30 @@ class FieldsParser implements FieldsParserInterface
         self::$cache[$key]['fields'] = $stream->allFields();
 
         return $stream;
+    }
+
+    private function replaceFieldsShortcodes(string $fieldsContent, array $fields): string
+    {
+        foreach ($fields as $field) {
+            $shortcode = $this->createShortcode($field);
+            $fieldsContent = str_replace("[{$field['name']}]", $shortcode, $fieldsContent);
+        }
+
+       return $fieldsContent;
+    }
+
+    private function createShortcode($field): string
+    {
+        $shortcode = sprintf('[%s name="%s"', $field['type'], $field['name']);
+
+        foreach ($field['options'] as $option => $value) {
+            if ($value === null) {
+                continue;
+            }
+
+            $shortcode .= sprintf(' %s="%s"', $option, $value);
+        }
+
+        return $shortcode . ']';
     }
 }

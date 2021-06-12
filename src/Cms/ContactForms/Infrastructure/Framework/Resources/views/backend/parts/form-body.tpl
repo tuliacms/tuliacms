@@ -78,7 +78,7 @@
         <ul class="nav nav-tabs page-form-tabs" role="tablist">
             <li class="nav-item">
                 <a class="nav-link active" data-toggle="tab" href="#tab-fields">
-                    {{ 'fields'|trans({}, 'forms') }}
+                    {{ 'fieldsBuilder'|trans({}, 'forms') }}
                     {{ badge.errors_count(form, [ 'fields_template' ]) }}
                 </a>
             </li>
@@ -97,56 +97,24 @@
         </ul>
         <div class="tab-content">
             <div class="tab-pane fade show active" id="tab-fields">
-                {% verbatim %}
-                    <div id="app">
-                        <h1>{{ msg }}</h1>
-                    </div>
-                {% endverbatim %}
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col">
-                            <div class="alert alert-info">
-                                Here You can define the fields collection that will be used in the form fields template.
-                            </div>
-                            <div class="contact-form-fields-builder">
-                                <div class="form-field-prototype" data-field-name="textarea">
-                                    [textarea
-                                        <label>name="<input data-option-name="name" class="form-control" type="text" name="" />"</label>
-                                        <label>label="<input data-option-name="label" class="form-control" type="text" name="" />"</label>
-                                        <label class="field-optional">help="<input data-option-name="help" class="form-control" type="text" name="" />"</label>
-                                        <label class="field-optional">constraints="<input data-option-name="constraints" class="form-control" type="text" name="" />"</label>]
-                                </div>
-                            </div>
-                            <div class="form-field-option-legends">
-                                {% for field in fieldParsers %}
-                                    {% for optionName, option in field.definition.options %}
-                                        <div class="form-field-option-legend" data-option-legend-name="{{ field.name }}_{{ optionName }}">
-                                            <div class="card">
-                                                <div class="card-header">
-                                                    <b>{{ optionName }}</b>
-                                                </div>
-                                                <div class="card-body">
-                                                    {% if option.required|default(false) %}<b>Required</b> | {% endif %}
-                                                    <i>type:</i> <code>{{ option.type }}</code><br /><br />
-                                                    {{ option.name }}
-                                                    {% if option.type == 'collection' and option.collection is defined and option.collection is iterable %}
-                                                        <br /><br />Values separated by pipe (<code>|</code>). Allowed one or many of the follwing:<br />
-                                                        {% for key, val in option.collection %}
-                                                            <b>{{ key }}</b> - {{ val }}<br />
-                                                        {% endfor %}
-                                                    {% endif %}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    {% endfor %}
-                                {% endfor %}
-                            </div>
+                            <div id="contact-form-builder"></div>
                         </div>
                     </div>
                 </div>
                 <style>
                     .contact-form-fields-builder {
                         margin-bottom: 30px;
+                        font-size: 15px;
+                    }
+                    .contact-form-fields-builder .field-remove {
+                        transition: .12s all;
+                    }
+                    .contact-form-fields-builder .field-remove:hover {
+                        cursor: pointer;
+                        color: red;
                     }
                     .contact-form-fields-builder .form-field-prototype {
                         font-family: monospace;
@@ -189,47 +157,24 @@
                     }
                 </style>
                 <script none="{{ csp_nonce() }}">
-                    const showOptionLegend = function (name) {
-                        $('.form-field-option-legend[data-option-legend-name=' + name +']').addClass('d-block');
+                    window.ContactFormBuilder = {
+                        fields: {{ fields|json_encode|raw }},
+                        availableFields: {{ availableFields|json_encode|raw }},
+                        translations: {
+                            fieldsBuilder: '{{ 'fieldsBuilder'|trans({}, 'forms') }}',
+                            availableFields: '{{ 'availableFields'|trans({}, 'forms') }}',
+                            fieldsBuilderInfo: '{{ 'fieldsBuilderInfo'|trans({}, 'forms') }}',
+                            addAnyFieldsToCreateForm: '{{ 'addAnyFieldsToCreateForm'|trans({}, 'forms') }}',
+                            controlOptionLabel: '{{ 'controlOptionLabel'|trans({}, 'forms') }}',
+                            valuesSeparatedByPipeAllowedFollowing: '{{ 'valuesSeparatedByPipeAllowedFollowing'|trans({}, 'forms') }}',
+                            name: '{{ 'name'|trans }}',
+                            required: '{{ 'required'|trans }}',
+                            multilingual: '{{ 'multilingual'|trans }}',
+                            yes: '{{ 'yes'|trans }}',
+                            type: '{{ 'type'|trans }}',
+                        }
                     };
-                    const hideOptionLegend = function (name) {
-                        $('.form-field-option-legend').removeClass('d-block');
-                    };
-
-                    $('.contact-form-fields-builder .form-field-prototype .form-control').on('change input', function () {
-                        this.style.width = ((this.value.length + 0.2) * 8) + 'px'
-                    }).on('focus', function () {
-                        showOptionLegend(
-                            $(this).closest('.form-field-prototype').attr('data-field-name')
-                            + '_' +
-                            $(this).attr('data-option-name')
-                        );
-                    }).on('blur', function () {
-                        hideOptionLegend(
-                            $(this).closest('.form-field-prototype').attr('data-field-name')
-                            + '_' +
-                            $(this).attr('data-option-name')
-                        );
-                    });
                 </script>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>{{ 'marker'|trans }}</th>
-                            <th>{{ 'name'|trans }}</th>
-                            <th class="text-right">{{ 'add'|trans }}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for field in fieldParsers %}
-                            <tr>
-                                <th><code>[{{ field.name }}{{ _self.renderRequiredAttributes(field.definition.options) }}]</code></th>
-                                <td>{{ field.definition.name }}</td>
-                                <td class="text-right"><button type="button" class="btn btn-sm btn-success">{{ 'add'|trans }}</button></td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
             </div>
             <div class="tab-pane fade" id="tab-message">
                 <div class="container-fluid">
@@ -266,7 +211,7 @@
                         </div>
                     </div>
                 </div>
-                <table class="table">
+                {#<table class="table">
                     <thead>
                         <tr>
                             <th>{{ 'marker'|trans }}</th>
@@ -281,10 +226,10 @@
                             </tr>
                         {% endfor %}
                     </tbody>
-                </table>
+                </table>#}
             </div>
         </div>
     </div>
 </div>
 
-{{ form_end(form) }}
+{{ form_end(form, {'render_rest': false}) }}

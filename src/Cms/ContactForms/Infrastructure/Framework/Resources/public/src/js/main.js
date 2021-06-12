@@ -1,6 +1,5 @@
+import App from './App.vue'
+
 new Vue({
-    el: '#app',
-    data: {
-        msg: 'Hello Vue 2d!'
-    }
-});
+    render: h => h(App)
+}).$mount("#contact-form-builder");

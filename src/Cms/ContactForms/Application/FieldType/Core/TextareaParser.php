@@ -63,11 +63,13 @@ class TextareaParser extends AbstractFieldParser
                     'name' => 'Label showed in field form.',
                     'type' => 'text',
                     'required' => true,
+                    'multilingual' => true,
                 ],
                 'help' => [
                     'name' => 'Help text showed under the field.',
                     'type' => 'text',
                     'required' => false,
+                    'multilingual' => true,
                 ],
                 'constraints' => [
                     'name' => 'Validation constraints for this field.',

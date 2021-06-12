@@ -67,11 +67,13 @@ class SelectParser extends AbstractFieldParser
                     'name' => 'Label showed in field form.',
                     'type' => 'text',
                     'required' => true,
+                    'multilingual' => true,
                 ],
                 'choices' => [
                     'name' => 'List of choices separated with "|".',
                     'type' => 'collection',
                     'required' => true,
+                    'multilingual' => true,
                 ],
                 'constraints' => [
                     'name' => 'Validation constraints for this field.',

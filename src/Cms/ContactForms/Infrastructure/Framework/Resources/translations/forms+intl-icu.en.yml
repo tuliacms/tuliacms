@@ -23,6 +23,12 @@ failMessageHelpText: asd
 addField: Add field
 selectFieldType: Select field type
 formFieldNameContainsInvalidName: "Field name must be alphanum with underscore, \"{name}\" given. Please fix the name and save form again."
+fieldsBuilder: Fields builder
+availableFields: Available fields
+fieldsBuilderInfo: Here are listed available fields which You can use to create Your form. Click on the specific field name to add it to the builder. In the next step You can use those fields in the Fields template.
+addAnyFieldsToCreateForm: Please add any field listed above to create Your form.
+controlOptionLabel: Control option legend
+valuesSeparatedByPipeAllowedFollowing: "Values separated by pipe (<code>|</code>). Allowed one or many of the following:"
 widget:
     name: Contact form
     description: Shows contact form.

@@ -13,6 +13,7 @@ class Registry implements RegistryInterface
      * @var array|FieldParserInterface[]
      */
     private array $parsers = [];
+
     private iterable $sourceParsers;
 
     public function __construct(iterable $sourceParsers)
@@ -45,7 +46,7 @@ class Registry implements RegistryInterface
      */
     public function add(FieldParserInterface $type): void
     {
-        $this->parsers[\get_class($type)] = $type;
+        $this->parsers[$type->getName()] = $type;
     }
 
     /**

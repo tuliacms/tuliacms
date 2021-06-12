@@ -51,17 +51,18 @@ class CheckboxParser extends AbstractFieldParser
     public function getDefinition(): array
     {
         return [
-            'name' => 'Email',
+            'name' => 'Checkbox',
             'options' => [
                 'name' => [
-                    'name' => 'Field codename. Must be unique across whole form.',
+                    'name' => 'Field codename. Must be unique across whole form. Use only small letters, digits and dashes.',
                     'type' => 'text',
                     'required' => true,
                 ],
                 'label' => [
-                    'name' => 'Label showed in field form.',
+                    'name' => 'Label showed in form on website.',
                     'type' => 'text',
                     'required' => true,
+                    'multilingual' => true,
                 ],
                 'constraints' => [
                     'name' => 'Validation constraints for this field.',
