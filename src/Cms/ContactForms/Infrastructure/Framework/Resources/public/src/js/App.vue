@@ -92,7 +92,12 @@
         <hr />
         <h3>{{ translations.fieldsTemplate }}</h3>
         <p class="text-muted">{{ translations.fieldsTemplateInfo }}</p>
-        <div class="form-group">
+        <div class="card" v-if="fields.length === 0">
+            <div class="card-body">
+                {{ translations.addAnyFieldsToCreateForm }}
+            </div>
+        </div>
+        <div class="form-group" v-else>
             <textarea
                 id="form_form_template"
                 name="form[fields_template]"

@@ -169,7 +169,7 @@ class DbalContactFormWriteStorage extends AbstractLocalizableStorage implements 
             ['id' => $data['id'], 'locale' => $data['locale']]
         );
 
-        return isset($result[0]['form_id']) && $result[0]['form_id'] === $data['id'];
+        return isset($result[0]['form_id']) && $result[0]['form_id'] === $data['id']->getId();
     }
 
     private function storeFields(array $fields, string $defaultLocale): void

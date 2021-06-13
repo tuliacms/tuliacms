@@ -68,11 +68,10 @@ class DbalFieldWriteStorage extends AbstractLocalizableStorage
         $mainTable['name'] = $data['name'];
         $mainTable['type'] = $data['type'];
         $mainTable['type_alias'] = $data['type_alias'];
-        $mainTable['options'] = $data['options'];
 
-        /*if ($foreignLocale === false) {
-            $mainTable['name'] = $data['name'];
-        }*/
+        if ($foreignLocale === false) {
+            $mainTable['options'] = $data['options'];
+        }
 
         $this->connection->update('#__form_field', $mainTable, [
             'form_id' => $data['form_id'],
@@ -107,7 +106,7 @@ class DbalFieldWriteStorage extends AbstractLocalizableStorage
     {
         $result = $this->connection->fetchAllAssociative(
             'SELECT name FROM #__form_field_lang WHERE form_id = :form_id AND name = :name AND locale = :locale LIMIT 1',
-            ['form_id' => $data['form_id'], 'name' => $data['name'], 'locale' => $data['locale']]
+            ['form_id' => $data['form_id']->getId(), 'name' => $data['name'], 'locale' => $data['locale']]
         );
 
         return isset($result[0]['name']) && $result[0]['name'] === $data['name'];

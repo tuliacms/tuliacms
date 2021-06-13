@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\ContactForms\Application\FieldType\Parser\RegistryInterface as FieldParserInterface;
 use Tulia\Cms\ContactForms\Application\FieldType\FieldsTypeRegistryInterface;
+use Tulia\Cms\ContactForms\Domain\Exception\FormNotFoundException;
 use Tulia\Cms\ContactForms\Domain\FieldsParser\Exception\InvalidFieldNameException;
 use Tulia\Cms\ContactForms\Domain\WriteModel\FormRepository;
 use Tulia\Cms\ContactForms\Infrastructure\Persistence\Query\DatatableFinder;
@@ -128,6 +129,31 @@ class Form extends AbstractController
             'fields' => $fields,
             'availableFields' => $this->collectAvailableFields(),
         ]);
+    }
+
+    /**
+     * @CsrfToken(id="form.delete")
+     */
+    public function delete(Request $request): RedirectResponse
+    {
+        $removedForms = 0;
+
+        foreach ($request->request->get('ids') as $id) {
+            try {
+                $node = $this->repository->find($id);
+            } catch (FormNotFoundException $e) {
+                continue;
+            }
+
+            $this->repository->delete($node);
+            $removedForms++;
+        }
+
+        if ($removedForms) {
+            $this->setFlash('success', $this->trans('selectedFormsWereRemoved', [], 'forms'));
+        }
+
+        return $this->redirectToRoute('backend.form.list');
     }
 
     private function getErrorMessages($form): array

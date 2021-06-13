@@ -33,6 +33,7 @@ controlOptionLabel: Control option legend
 valuesSeparatedByPipeAllowedFollowing: "Values separated by pipe (<code>|</code>). Allowed one or many of the following:"
 removeField: Remove field
 addFieldToTemplate: Add field to template
+selectedFormsWereRemoved: Selected forms were removed.
 widget:
     name: Contact form
     description: Shows contact form.

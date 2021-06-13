@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContactForms\Domain\WriteModel;
 
+use Tulia\Cms\ContactForms\Domain\Event\FormDeleted;
 use Tulia\Cms\ContactForms\Domain\WriteModel\Model\Field;
 use Tulia\Cms\ContactForms\Domain\WriteModel\Model\Form;
 use Tulia\Cms\ContactForms\Ports\Infrastructure\Persistence\Domain\WriteModel\ContactFormWriteStorageInterface;
@@ -113,7 +114,17 @@ class FormRepository
 
     public function delete(Form $form): void
     {
+        $this->storage->beginTransaction();
 
+        try {
+            $this->storage->delete($this->extract($form));
+            $this->storage->commit();
+        } catch (\Exception $exception) {
+            $this->storage->rollback();
+            throw $exception;
+        }
+
+        $this->eventBus->dispatch(FormDeleted::fromForm($form));
     }
 
     private function extract(Form $form): array
