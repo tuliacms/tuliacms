@@ -40,7 +40,7 @@ class ConsentParser extends AbstractFieldParser
             'type' => ConsentType::class,
             'options' => [
                 'constraints_raw' => $constraintsRaw,
-                'label' => $shortcode->getParameter('consent'),
+                'label' => $shortcode->getParameter('label'),
             ],
         ];
     }
@@ -59,12 +59,6 @@ class ConsentParser extends AbstractFieldParser
                     'required' => true,
                 ],
                 'label' => [
-                    'name' => 'Label showed in field form.',
-                    'type' => 'text',
-                    'required' => true,
-                    'multilingual' => true,
-                ],
-                'consent' => [
                     'name' => 'The whole consent to which user must/should agree.',
                     'type' => 'text',
                     'required' => true,

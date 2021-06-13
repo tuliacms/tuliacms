@@ -210,7 +210,7 @@ class Form extends AbstractController
                 $options[$name] = [
                     'name' => $name,
                     'value' => $value,
-                    'error' => $errors[$key][$name][0] ?? null,
+                    'error' => $errors['fields'][$key][$name][0] ?? null,
                 ];
             }
 
@@ -243,7 +243,7 @@ class Form extends AbstractController
             }
 
             $options['name'] = [
-                'name' => $name,
+                'name' => 'name',
                 'value' => $field->getName(),
                 'error' => null,
             ];

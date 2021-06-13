@@ -15,14 +15,8 @@ use Tulia\Cms\ContactForms\Application\FieldType\FieldsTypeRegistryInterface;
  */
 class Form extends AbstractType
 {
-    /**
-     * @var FieldsTypeRegistryInterface
-     */
-    private $typesRegistry;
+    private FieldsTypeRegistryInterface $typesRegistry;
 
-    /**
-     * @param FieldsTypeRegistryInterface $typesRegistry
-     */
     public function __construct(FieldsTypeRegistryInterface $typesRegistry)
     {
         $this->typesRegistry = $typesRegistry;
@@ -35,11 +29,18 @@ class Form extends AbstractType
          */
         $options['fields'][] = [
             'name' => 'submit',
-            'type' => SubmitType::class
+            'type_alias' => 'submit',
+            'type' => SubmitType::class,
         ];
 
         foreach ($options['fields'] as $field) {
-            $type = $this->typesRegistry->get($field['type']);
+            if ($field['type_alias'] !== 'submit') {
+                if (isset($field['options']['constraints']) === false || is_array($field['options']['constraints']) === false) {
+                    $field['options']['constraints'] = [];
+                }
+            }
+
+            $type = $this->typesRegistry->get($field['type_alias']);
             $options = $this->buildOptions($field['options']  ?? []);
 
             $builder->add(

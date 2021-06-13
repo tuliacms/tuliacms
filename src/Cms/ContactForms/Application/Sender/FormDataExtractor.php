@@ -13,14 +13,8 @@ use Symfony\Component\Form\FormInterface;
  */
 class FormDataExtractor implements FormDataExtractorInterface
 {
-    /**
-     * @var FieldsTypeRegistryInterface
-     */
-    private $fieldsTypes;
+    private FieldsTypeRegistryInterface $fieldsTypes;
 
-    /**
-     * @param FieldsTypeRegistryInterface $fieldsTypes
-     */
     public function __construct(FieldsTypeRegistryInterface $fieldsTypes)
     {
         $this->fieldsTypes = $fieldsTypes;
@@ -37,7 +31,7 @@ class FormDataExtractor implements FormDataExtractorInterface
                     continue;
                 }
 
-                $data[$name] = $this->fieldsTypes->get($field['type'])->prepareValueFromRequest(
+                $data[$name] = $this->fieldsTypes->get($field['type_alias'])->prepareValueFromRequest(
                     $value,
                     $form->get($name)->getConfig()->getOptions()
                 );
