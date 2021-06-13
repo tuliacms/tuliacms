@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContactForms\UserInterface\Web\Backend\Form\ModelTransformer;
 
+use Tulia\Cms\ContactForms\Domain\FieldsParser\Exception\InvalidFieldNameException;
+use Tulia\Cms\ContactForms\Domain\FieldsParser\Exception\MultipleFieldsInTemplateException;
 use Tulia\Cms\ContactForms\Domain\FieldsParser\FieldsParserInterface;
 use Tulia\Cms\ContactForms\Domain\WriteModel\Model\Form;
 
@@ -48,6 +50,10 @@ class DomainModelTransformer
         return $result;
     }
 
+    /**
+     * @throws MultipleFieldsInTemplateException
+     * @throws InvalidFieldNameException
+     */
     public function reverseTransform(array $source, Form $model): void
     {
         $model->setReceivers($source['receivers']);

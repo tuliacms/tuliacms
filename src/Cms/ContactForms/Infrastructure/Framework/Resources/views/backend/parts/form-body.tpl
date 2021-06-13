@@ -163,7 +163,10 @@
                     window.ContactFormBuilder = {
                         fields: {{ fields|json_encode|raw }},
                         availableFields: {{ availableFields|json_encode|raw }},
-                        fieldsTemplate: {{ {value: form.fields_template.vars.value}|json_encode|raw }},
+                        fieldsTemplate: {{ {
+                            value: form.fields_template.vars.value,
+                            error: form.fields_template.vars.errors[0].message|default(null)
+                        }|json_encode|raw }},
                         translations: {
                             fieldsBuilder: '{{ 'fieldsBuilder'|trans({}, 'forms') }}',
                             fieldsBuilderInfo: '{{ 'fieldsBuilderInfo'|trans({}, 'forms') }}',

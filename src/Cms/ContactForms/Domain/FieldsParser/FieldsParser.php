@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\ContactForms\Domain\FieldsParser;
 
 use Tulia\Cms\ContactForms\Application\FieldType\Parser\RegistryInterface;
+use Tulia\Cms\ContactForms\Domain\FieldsParser\Exception\MultipleFieldsInTemplateException;
 use Tulia\Component\Shortcode\Processor;
 use Tulia\Component\Shortcode\Registry\CompilerRegistry;
 
@@ -13,15 +14,11 @@ use Tulia\Component\Shortcode\Registry\CompilerRegistry;
  */
 class FieldsParser implements FieldsParserInterface
 {
-    /**
-     * @var RegistryInterface
-     */
-    private $registry;
+    private const REST_FIELDS_SEPARATOR = '<!--REST_FIELDS-->';
 
-    /**
-     * @var array
-     */
-    private static $cache = [];
+    private RegistryInterface $registry;
+
+    private static array $cache = [];
 
     public function __construct(RegistryInterface $registry)
     {
@@ -57,6 +54,9 @@ class FieldsParser implements FieldsParserInterface
 
         $processor = new Processor($compilers);
         $result = $processor->process($fieldsContent);
+
+        [$result, $restFields] = explode(self::REST_FIELDS_SEPARATOR, $result);
+
         $stream->setResult($result);
 
         self::$cache[$key]['result'] = $result;
@@ -65,14 +65,31 @@ class FieldsParser implements FieldsParserInterface
         return $stream;
     }
 
+    /**
+     * @throws MultipleFieldsInTemplateException
+     */
     private function replaceFieldsShortcodes(string $fieldsContent, array $fields): string
     {
+        $restFields = '';
+        $replacements = [];
+
         foreach ($fields as $field) {
-            $shortcode = $this->createShortcode($field);
-            $fieldsContent = str_replace("[{$field['name']}]", $shortcode, $fieldsContent);
+            $tag = "[{$field['name']}]";
+            $replacements[$tag] = $this->createShortcode($field);
+
+            if (substr_count($fieldsContent, $tag) > 1) {
+                throw MultipleFieldsInTemplateException::fromName($tag);
+            }
+
+            if (! strpos($fieldsContent, $tag)) {
+                $restFields .= $tag;
+            }
         }
 
-       return $fieldsContent;
+        $fieldsContent .= self::REST_FIELDS_SEPARATOR . $restFields;
+        $fieldsContent = str_replace(array_keys($replacements), array_values($replacements), $fieldsContent);
+
+        return $fieldsContent;
     }
 
     private function createShortcode(array $field): string

@@ -7,7 +7,6 @@ namespace Tulia\Cms\ContactForms\Application\Builder;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Tulia\Cms\ContactForms\Application\FieldType\Core\SubmitType;
 use Tulia\Cms\ContactForms\Application\FieldType\FieldsTypeRegistryInterface;
 
 /**
@@ -24,22 +23,7 @@ class Form extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        /**
-         * Add last field, the Submit button - always.
-         */
-        $options['fields'][] = [
-            'name' => 'submit',
-            'type_alias' => 'submit',
-            'type' => SubmitType::class,
-        ];
-
         foreach ($options['fields'] as $field) {
-            if ($field['type_alias'] !== 'submit') {
-                if (isset($field['options']['constraints']) === false || is_array($field['options']['constraints']) === false) {
-                    $field['options']['constraints'] = [];
-                }
-            }
-
             $type = $this->typesRegistry->get($field['type_alias']);
             $options = $this->buildOptions($field['options']  ?? []);
 
@@ -64,15 +48,18 @@ class Form extends AbstractType
 
     protected function buildConstraints(array $options): array
     {
-        if (isset($options['constraints_raw'])) {
-            foreach ($options['constraints_raw'] as $constraint) {
-                $constraint['arguments'] = $constraint['arguments'] ?? [];
+        if (isset($options['constraints'])) {
+            $constraints = [];
 
-                $options['constraints'][] = new $constraint['name'](...$constraint['arguments']);
+            foreach ($options['constraints'] as $constraint) {
+                $constraint['arguments'] = $constraint['arguments'] ?? [];
+                $constraints[] = new $constraint['name'](...$constraint['arguments']);
             }
 
-            unset($options['constraints_raw']);
+            $options['constraints'] = $constraints;
         }
+
+        unset($options['constraints_raw']);
 
         return $options;
     }

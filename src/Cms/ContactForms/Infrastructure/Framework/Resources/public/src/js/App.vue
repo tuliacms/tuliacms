@@ -21,6 +21,7 @@
                     type="hidden"
                     :name="'form[fields][' + key + '][alias]'"
                     v-model="field.alias"
+                    autocomplete="off"
                 />
                 <span
                     v-on:click="removeField(key)"
@@ -37,6 +38,7 @@
                     ><!--
                     -->&nbsp;<label v-bind:class="{ 'field-optional': !option.required }">{{ name }}="<input
                         type="text"
+                        autocomplete="off"
                         :data-option-name="name"
                         :data-option-key="key"
                         class="form-control"
@@ -98,11 +100,19 @@
             </div>
         </div>
         <div class="form-group" v-else>
+            <span class="invalid-feedback d-block" v-if="fieldsTemplate.error !== null">
+                <span class="d-block">
+                    <span class="form-error-icon badge badge-danger text-uppercase">Błąd</span>
+                    <span class="form-error-message">{{ fieldsTemplate.error }}</span>
+                </span>
+            </span>
             <textarea
                 id="form_form_template"
                 name="form[fields_template]"
-                style="height:300px;font-family:monospace;font-size:15px;"
+                v-bind:class="{ 'is-invalid': fieldsTemplate.error !== null }"
+                style="height: 150px; font-family: monospace; font-size: 15px;"
                 class="form-control"
+                autocomplete="off"
                 v-model="fieldsTemplate.value"
             ></textarea>
         </div>

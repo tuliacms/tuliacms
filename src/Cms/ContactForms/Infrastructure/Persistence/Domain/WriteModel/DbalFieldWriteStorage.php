@@ -45,10 +45,10 @@ class DbalFieldWriteStorage extends AbstractLocalizableStorage
         ]);
     }
 
-    public function delete(array $form): void
+    public function delete(array $field): void
     {
-        $this->connection->delete('#__form_field', ['form_id' => $form['id']]);
-        $this->connection->delete('#__form_field_lang', ['form_id' => $form['id']]);
+        $this->connection->delete('#__form_field', ['name' => $field['name'], 'form_id' => $field['form_id']]);
+        $this->connection->delete('#__form_field_lang', ['name' => $field['name'], 'form_id' => $field['form_id']]);
     }
 
     protected function insertMainRow(array $data): void

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\ContactForms\Domain\WriteModel\Model;
 
 use Tulia\Cms\ContactForms\Domain\FieldsParser\Exception\InvalidFieldNameException;
+use Tulia\Cms\ContactForms\Domain\FieldsParser\Exception\MultipleFieldsInTemplateException;
 use Tulia\Cms\ContactForms\Domain\FieldsParser\FieldsParserInterface;
 use Tulia\Cms\ContactForms\Domain\WriteModel\Model\ValueObject\FormId;
 use Tulia\Cms\ContactForms\Domain\Event;
@@ -186,12 +187,15 @@ final class Form extends AggregateRoot
 
     /**
      * @throws InvalidFieldNameException
+     * @throws MultipleFieldsInTemplateException
      */
     public function setFieldsTemplate(
         array $fields,
         ?string $fieldsTemplate,
         FieldsParserInterface $fieldsParser
     ): void {
+        $fields = $this->validateFieldsNames($fields);
+
         $stream = $fieldsParser->parse((string) $fieldsTemplate, $fields);
         $newFields = $stream->allFields();
 
@@ -275,5 +279,17 @@ final class Form extends AggregateRoot
         $log['updated'] = $toUpdate;
 
         return $log;
+    }
+
+    private function validateFieldsNames(array $fields): array
+    {
+        foreach ($fields as $key => $field) {
+            $name = strtolower($field['name']);
+            $name = preg_replace('/[^a-z0-9_]+/i', '_', $name);
+
+            $fields[$key]['name'] = substr($name, 0, 32);
+        }
+
+        return $fields;
     }
 }

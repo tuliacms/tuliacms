@@ -12,6 +12,7 @@ use Tulia\Cms\ContactForms\Application\FieldType\Parser\RegistryInterface as Fie
 use Tulia\Cms\ContactForms\Application\FieldType\FieldsTypeRegistryInterface;
 use Tulia\Cms\ContactForms\Domain\Exception\FormNotFoundException;
 use Tulia\Cms\ContactForms\Domain\FieldsParser\Exception\InvalidFieldNameException;
+use Tulia\Cms\ContactForms\Domain\FieldsParser\Exception\MultipleFieldsInTemplateException;
 use Tulia\Cms\ContactForms\Domain\WriteModel\FormRepository;
 use Tulia\Cms\ContactForms\Infrastructure\Persistence\Query\DatatableFinder;
 use Tulia\Cms\ContactForms\UserInterface\Web\Backend\Form\Form as FormType;
@@ -112,6 +113,9 @@ class Form extends AbstractController
                 return $this->redirectToRoute('backend.form.edit', [ 'id' => $model->getId() ]);
             } catch (InvalidFieldNameException $e) {
                 $error = new FormError($this->trans('formFieldNameContainsInvalidName', ['name' => $e->getName()], 'forms'));
+                $form->get('fields_template')->addError($error);
+            } catch (MultipleFieldsInTemplateException $e) {
+                $error = new FormError($this->trans('multipleFieldOccuredInTemplate', ['name' => $e->getName()], 'forms'));
                 $form->get('fields_template')->addError($error);
             }
         }
@@ -231,8 +235,12 @@ class Form extends AbstractController
             $alias = $field->getTypeAlias();
 
             foreach ($field->getOptions() as $name => $value) {
-                if ($name === 'constraints_raw') {
+                if ($name === 'constraints') {
                     continue;
+                }
+                // Rename for Vue model.
+                if ($name === 'constraints_raw') {
+                    $name = 'constraints';
                 }
 
                 $options[$name] = [

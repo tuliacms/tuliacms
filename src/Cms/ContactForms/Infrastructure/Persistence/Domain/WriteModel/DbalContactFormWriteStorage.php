@@ -180,7 +180,7 @@ class DbalContactFormWriteStorage extends AbstractLocalizableStorage implements 
             } elseif ($field['_change_type'] === 'update') {
                 $this->fieldStorage->update($field, $defaultLocale);
             } elseif ($field['_change_type'] === 'remove') {
-                $this->fieldStorage->delete($field['id']);
+                $this->fieldStorage->delete($field);
             }
         }
     }

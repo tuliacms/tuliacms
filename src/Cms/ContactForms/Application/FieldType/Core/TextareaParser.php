@@ -39,7 +39,7 @@ class TextareaParser extends AbstractFieldParser
             'name' => $shortcode->getParameter('name'),
             'type' => TextareaType::class,
             'options' => [
-                'constraints_raw' => $constraintsRaw,
+                'constraints' => $constraintsRaw,
                 'label' => $shortcode->getParameter('label'),
                 'help' => $shortcode->getParameter('help'),
             ],

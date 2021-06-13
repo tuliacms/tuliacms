@@ -12,6 +12,8 @@ use Tulia\Component\Shortcode\ShortcodeInterface;
 interface FieldParserInterface
 {
     public function getAlias(): string;
+
     public function parseShortcode(ShortcodeInterface $shortcode): array;
+
     public function getDefinition(): array;
 }

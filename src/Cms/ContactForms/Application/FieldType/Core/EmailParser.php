@@ -39,7 +39,7 @@ class EmailParser extends AbstractFieldParser
             'name' => $shortcode->getParameter('name'),
             'type' => EmailType::class,
             'options' => [
-                'constraints_raw' => $constraintsRaw,
+                'constraints' => $constraintsRaw,
                 'label' => $shortcode->getParameter('label'),
                 'help' => $shortcode->getParameter('help'),
                 'sender' => $shortcode->getParameter('sender', null),
