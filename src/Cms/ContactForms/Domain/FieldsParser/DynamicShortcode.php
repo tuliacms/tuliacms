@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContactForms\Domain\FieldsParser;
 
-use Tulia\Cms\ContactForms\Application\FieldType\Parser\FieldParserInterface;
+use Tulia\Cms\ContactForms\Ports\Domain\FieldType\FieldParserInterface;
 use Tulia\Component\Shortcode\Compiler\ShortcodeCompilerInterface;
 use Tulia\Component\Shortcode\ShortcodeInterface;
 

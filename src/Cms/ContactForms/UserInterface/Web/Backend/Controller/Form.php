@@ -8,13 +8,12 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Tulia\Cms\ContactForms\Application\FieldType\Parser\RegistryInterface as FieldParserInterface;
-use Tulia\Cms\ContactForms\Application\FieldType\FieldsTypeRegistryInterface;
+use Tulia\Cms\ContactForms\Ports\Domain\FieldType\FieldsTypeRegistryInterface;
 use Tulia\Cms\ContactForms\Domain\Exception\FormNotFoundException;
 use Tulia\Cms\ContactForms\Domain\FieldsParser\Exception\InvalidFieldNameException;
 use Tulia\Cms\ContactForms\Domain\FieldsParser\Exception\MultipleFieldsInTemplateException;
 use Tulia\Cms\ContactForms\Domain\WriteModel\FormRepository;
-use Tulia\Cms\ContactForms\Infrastructure\Persistence\Query\DatatableFinder;
+use Tulia\Cms\ContactForms\Infrastructure\Persistence\Domain\ReadModel\Datatable\DatatableFinder;
 use Tulia\Cms\ContactForms\UserInterface\Web\Backend\Form\Form as FormType;
 use Tulia\Cms\ContactForms\UserInterface\Web\Backend\Form\ModelTransformer\DomainModelTransformer;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
@@ -31,16 +30,12 @@ class Form extends AbstractController
 
     private FieldsTypeRegistryInterface $typesRegistry;
 
-    private FieldParserInterface $parsersRegistry;
-
     public function __construct(
         FormRepository $repository,
-        FieldsTypeRegistryInterface $typesRegistry,
-        FieldParserInterface $parsersRegistry
+        FieldsTypeRegistryInterface $typesRegistry
     ) {
         $this->repository = $repository;
         $this->typesRegistry = $typesRegistry;
-        $this->parsersRegistry = $parsersRegistry;
     }
 
     public function index(): RedirectResponse
@@ -185,9 +180,11 @@ class Form extends AbstractController
     {
         $availableFields = [];
 
-        foreach ($this->parsersRegistry->all() as $field) {
-            $definition = $field->getDefinition();
-            $alias = $field->getAlias();
+        foreach ($this->typesRegistry->all() as $field) {
+            $parser = $this->typesRegistry->getParser($field->getAlias());
+
+            $definition = $parser->getDefinition();
+            $alias = $parser->getAlias();
 
             $availableFields[$alias] = [
                 'alias' => $alias,

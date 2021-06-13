@@ -10,16 +10,16 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Validator\Constraints as Assert;
-use Tulia\Cms\ContactForms\Application\FieldType\Parser\RegistryInterface;
+use Tulia\Cms\ContactForms\Ports\Domain\FieldType\FieldsTypeRegistryInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class FieldsType extends AbstractType
 {
-    private RegistryInterface $registry;
+    private FieldsTypeRegistryInterface $registry;
 
-    public function __construct(RegistryInterface $registry)
+    public function __construct(FieldsTypeRegistryInterface $registry)
     {
         $this->registry = $registry;
     }
@@ -38,9 +38,9 @@ class FieldsType extends AbstractType
                 // Every field have this option
                 $form->add('alias', Type\TextType::class);
 
-                $type = $this->registry->get($data['alias']);
+                $parser = $this->registry->getParser($data['alias']);
 
-                foreach ($type->getDefinition()['options'] ?? [] as $name => $option) {
+                foreach ($parser->getDefinition()['options'] ?? [] as $name => $option) {
                     $options = [];
 
                     if (isset($option['required']) && $option['required'] === true) {

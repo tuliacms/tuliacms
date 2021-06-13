@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\ContactForms\Domain\WriteModel;
 
 use Tulia\Cms\ContactForms\Domain\Event\FormDeleted;
+use Tulia\Cms\ContactForms\Domain\Exception\FormNotFoundException;
 use Tulia\Cms\ContactForms\Domain\WriteModel\Model\Field;
 use Tulia\Cms\ContactForms\Domain\WriteModel\Model\Form;
 use Tulia\Cms\ContactForms\Ports\Infrastructure\Persistence\Domain\WriteModel\ContactFormWriteStorageInterface;
@@ -65,6 +66,9 @@ class FormRepository
         return $result;
     }
 
+    /**
+     * @throws FormNotFoundException
+     */
     public function find(string $id): Form
     {
         $form = $this->storage->find(
@@ -72,6 +76,10 @@ class FormRepository
             $this->currentWebsite->getLocale()->getCode(),
             $this->currentWebsite->getDefaultLocale()->getCode()
         );
+
+        if ($form === []) {
+            throw new FormNotFoundException(sprintf('Form %s not found.', $id));
+        }
 
         $form['receivers'] = json_decode($form['receivers'], true);
         $form['fields'] = array_map(function ($field) {

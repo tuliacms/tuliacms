@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContactForms\Domain\FieldsParser;
 
-use Tulia\Cms\ContactForms\Application\FieldType\Parser\RegistryInterface;
+use Tulia\Cms\ContactForms\Ports\Domain\FieldType\FieldsTypeRegistryInterface;
 use Tulia\Cms\ContactForms\Domain\FieldsParser\Exception\MultipleFieldsInTemplateException;
 use Tulia\Component\Shortcode\Processor;
 use Tulia\Component\Shortcode\Registry\CompilerRegistry;
@@ -16,11 +16,11 @@ class FieldsParser implements FieldsParserInterface
 {
     private const REST_FIELDS_SEPARATOR = '<!--REST_FIELDS-->';
 
-    private RegistryInterface $registry;
+    private FieldsTypeRegistryInterface $registry;
 
     private static array $cache = [];
 
-    public function __construct(RegistryInterface $registry)
+    public function __construct(FieldsTypeRegistryInterface $registry)
     {
         $this->registry = $registry;
     }
@@ -48,8 +48,8 @@ class FieldsParser implements FieldsParserInterface
         $compilers = new CompilerRegistry();
         $stream = new FieldsStream($fieldsContent);
 
-        foreach ($this->registry->all() as $parser) {
-            $compilers->add(new DynamicShortcode($stream, $parser));
+        foreach ($this->registry->all() as $fieldType) {
+            $compilers->add(new DynamicShortcode($stream, $this->registry->getParser($fieldType->getAlias())));
         }
 
         $processor = new Processor($compilers);

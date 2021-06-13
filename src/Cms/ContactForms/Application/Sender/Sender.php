@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContactForms\Application\Sender;
 
-use Tulia\Cms\ContactForms\Application\FieldType\Core\EmailType;
+use Tulia\Cms\ContactForms\Domain\FieldType\Core\EmailType;
 use Tulia\Cms\ContactForms\Query\Model\Form;
 use Tulia\Cms\Platform\Infrastructure\Mail\MailerInterface;
 use Tulia\Component\Templating\EngineInterface;

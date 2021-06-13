@@ -7,7 +7,7 @@ namespace Tulia\Cms\ContactForms\Application\Builder;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Tulia\Cms\ContactForms\Application\FieldType\FieldsTypeRegistryInterface;
+use Tulia\Cms\ContactForms\Ports\Domain\FieldType\FieldsTypeRegistryInterface;
 
 /**
  * @author Adam Banaszkiewicz

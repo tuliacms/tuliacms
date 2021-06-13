@@ -9,5 +9,4 @@ namespace Tulia\Cms\ContactForms\Domain\Exception;
  */
 class FormNotFoundException extends DomainException
 {
-
 }

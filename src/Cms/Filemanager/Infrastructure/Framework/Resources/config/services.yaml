@@ -31,10 +31,10 @@ services:
         bind:
             $projectDir: '%kernel.project_dir%'
 
-    Tulia\Cms\Filemanager\Infrastructure\Cms\Shortcode\Gallery:
+    Tulia\Cms\Filemanager\Domain\Shortcode\Gallery:
         tags: [ shortcode.compiler ]
 
-    Tulia\Cms\Filemanager\Infrastructure\Cms\Shortcode\Image:
+    Tulia\Cms\Filemanager\Domain\Shortcode\Image:
         tags: [ shortcode.compiler ]
 
     Tulia\Cms\Filemanager\Application\ImageSize\DefaultSizesProvider:
