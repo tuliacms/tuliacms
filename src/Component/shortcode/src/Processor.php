@@ -92,11 +92,13 @@ class Processor implements ProcessorInterface
                 preg_match($htmlTagPattern, $shortcodeInfo['tagBefore'], $matches);
 
                 if (isset($matches[1]) === false || \in_array($matches[1], ProcessorInterface::INLINE_HTML_TAGS, true) === false) {
-                    continue;
+                    $before = 0;
+                    $after  = 0;
+                } else {
+                    $before = mb_strlen($shortcodeInfo['tagBefore']);
+                    $after  = mb_strlen($shortcodeInfo['tagAfter']);
                 }
 
-                $before = mb_strlen($shortcodeInfo['tagBefore']);
-                $after  = mb_strlen($shortcodeInfo['tagAfter']);
                 $offset = $replacement->getOffset() - $before;
                 $length = mb_strlen($replacement->getText(), 'utf-8') + $before + $after;
                 $textLength = mb_strlen($result, 'utf-8');
