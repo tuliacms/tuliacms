@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContactForms\Domain\FieldsParser;
 
+use Tulia\Cms\ContactForms\Ports\Domain\FieldsParser\FieldsStreamInterface;
 use Tulia\Cms\ContactForms\Ports\Domain\FieldType\FieldParserInterface;
 use Tulia\Component\Shortcode\Compiler\ShortcodeCompilerInterface;
 use Tulia\Component\Shortcode\ShortcodeInterface;
@@ -19,7 +20,7 @@ class DynamicShortcode implements ShortcodeCompilerInterface
 
     public function __construct(FieldsStreamInterface $fieldsStream, FieldParserInterface $fieldParser)
     {
-        $this->fieldParser  = $fieldParser;
+        $this->fieldParser = $fieldParser;
         $this->fieldsStream = $fieldsStream;
     }
 

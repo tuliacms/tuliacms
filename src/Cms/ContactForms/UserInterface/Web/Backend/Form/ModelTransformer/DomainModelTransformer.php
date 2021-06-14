@@ -6,8 +6,8 @@ namespace Tulia\Cms\ContactForms\UserInterface\Web\Backend\Form\ModelTransformer
 
 use Tulia\Cms\ContactForms\Domain\FieldsParser\Exception\InvalidFieldNameException;
 use Tulia\Cms\ContactForms\Domain\FieldsParser\Exception\MultipleFieldsInTemplateException;
-use Tulia\Cms\ContactForms\Domain\FieldsParser\FieldsParserInterface;
 use Tulia\Cms\ContactForms\Domain\WriteModel\Model\Form;
+use Tulia\Cms\ContactForms\Ports\Domain\FieldsParser\FieldsParserInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -84,9 +84,5 @@ class DomainModelTransformer
             $source['fields_template'],
             $this->fieldsParser
         );
-
-        /*<div class="asdasd">[name]</div>
-<p>Insert your message:</p>
-<div><p id="asd">[message]</p>[submit]</div>*/
     }
 }

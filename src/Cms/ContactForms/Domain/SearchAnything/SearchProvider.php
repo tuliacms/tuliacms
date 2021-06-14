@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContactForms\Domain\SearchAnything;
 
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Cms\ContactForms\Query\Enum\ScopeEnum;
 use Tulia\Cms\ContactForms\Query\FinderFactoryInterface;
-use Tulia\Cms\SearchAnything\Ports\Provider\AbstractProvider;
 use Tulia\Cms\SearchAnything\Domain\Model\Hit;
 use Tulia\Cms\SearchAnything\Domain\Model\Results;
-use Symfony\Component\Routing\RouterInterface;
+use Tulia\Cms\SearchAnything\Ports\Provider\AbstractProvider;
 
 /**
  * @author Adam Banaszkiewicz

@@ -6,9 +6,9 @@ namespace Tulia\Cms\ContactForms\Domain\WriteModel\Model;
 
 use Tulia\Cms\ContactForms\Domain\FieldsParser\Exception\InvalidFieldNameException;
 use Tulia\Cms\ContactForms\Domain\FieldsParser\Exception\MultipleFieldsInTemplateException;
-use Tulia\Cms\ContactForms\Domain\FieldsParser\FieldsParserInterface;
 use Tulia\Cms\ContactForms\Domain\WriteModel\Model\ValueObject\FormId;
 use Tulia\Cms\ContactForms\Domain\Event;
+use Tulia\Cms\ContactForms\Ports\Domain\FieldsParser\FieldsParserInterface;
 use Tulia\Cms\Platform\Domain\Aggregate\AggregateRoot;
 use Tulia\Cms\Platform\Domain\Model\EntitiesChangelog;
 

@@ -17,7 +17,7 @@ class ContactForm implements ShortcodeCompilerInterface
      */
     public function compile(ShortcodeInterface $shortcode): string
     {
-        return "{{ contact_form('{$shortcode->getParameter('id')}') }}";
+        return sprintf("{{ contact_form('%s') }}", $shortcode->getParameter('id'));
     }
 
     /**
