@@ -21,9 +21,6 @@ services:
     Tulia\Cms\ContactForms\UserInterface\Web\Backend\BackendMenu\MenuBuilder:
         tags: [ backend_menu.builder ]
 
-    Tulia\Cms\ContactForms\Application\Builder\Form:
-        tags: [ form.type ]
-
     Tulia\Cms\ContactForms\Domain\Shortcode\ContactForm:
         tags: [ shortcode.compiler ]
 

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\ContactForms\Application\Builder;
+namespace Tulia\Cms\ContactForms\Ports\UserInterface\Web\Frontend\FormBuilder;
 
 use Symfony\Component\Form\FormInterface;
 use Tulia\Cms\ContactForms\Query\Model\Form;
@@ -10,7 +10,7 @@ use Tulia\Cms\ContactForms\Query\Model\Form;
 /**
  * @author Adam Banaszkiewicz
  */
-interface BuilderInterface
+interface ContactFormBuilderInterface
 {
     public function build(Form $form, array $data = [], array $options = []): FormInterface;
 }

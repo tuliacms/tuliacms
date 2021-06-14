@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\ContactForms\Application\Sender;
+namespace Tulia\Cms\ContactForms\Ports\Infrastructure\Transport\Email;
 
 use Tulia\Cms\ContactForms\Query\Model\Form;
 

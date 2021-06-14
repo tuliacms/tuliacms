@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContactForms\UserInterface\Web\Frontend\Controller;
 
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Tulia\Cms\ContactForms\Application\Builder\BuilderInterface;
-use Tulia\Cms\ContactForms\Application\Sender\FormDataExtractorInterface;
-use Tulia\Cms\ContactForms\Application\Sender\SenderInterface;
+use Tulia\Cms\ContactForms\Ports\Infrastructure\Transport\Email\SenderInterface;
+use Tulia\Cms\ContactForms\Ports\UserInterface\Web\Frontend\FormBuilder\ContactFormBuilderInterface;
 use Tulia\Cms\ContactForms\Query\Enum\ScopeEnum;
 use Tulia\Cms\ContactForms\Query\FinderFactoryInterface;
+use Tulia\Cms\ContactForms\UserInterface\Web\Frontend\Service\FormDataExtractor;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Component\Security\Http\Csrf\Annotation\IgnoreCsrfToken;
 
@@ -19,25 +20,31 @@ use Tulia\Component\Security\Http\Csrf\Annotation\IgnoreCsrfToken;
  */
 class Form extends AbstractController
 {
-    private BuilderInterface $builder;
+    private ContactFormBuilderInterface $builder;
 
     private FinderFactoryInterface $finderFactory;
 
-    public function __construct(BuilderInterface $builder, FinderFactoryInterface $finderFactory)
-    {
+    private SenderInterface $sender;
+
+    private FormDataExtractor $dataExtractor;
+
+    public function __construct(
+        ContactFormBuilderInterface $builder,
+        FinderFactoryInterface $finderFactory,
+        SenderInterface $sender,
+        FormDataExtractor $dataExtractor
+    ) {
         $this->builder = $builder;
         $this->finderFactory = $finderFactory;
+        $this->sender = $sender;
+        $this->dataExtractor = $dataExtractor;
     }
 
     /**
      * @IgnoreCsrfToken
      */
-    public function submit(
-        Request $request,
-        SenderInterface $sender,
-        FormDataExtractorInterface $dataExtractor,
-        string $id
-    ): RedirectResponse {
+    public function submit(Request $request, string $id): RedirectResponse
+    {
         if ($this->isCsrfTokenValid('contact_form_' . $id, $request->request->get('contact_form_' . $id)['_token'] ?? '') === false) {
             throw $this->createAccessDeniedException('CSRF token is not valid.');
         }
@@ -52,9 +59,9 @@ class Form extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $data = $dataExtractor->extract($model, $form);
+            $data = $this->dataExtractor->extract($model, $form);
 
-            if ($sender->send($model, $data)) {
+            if ($this->sender->send($model, $data)) {
                 $this->setFlash(
                     'cms.form.submit_success',
                     $this->trans('formHasBeenSentThankYou', [], 'forms')
@@ -73,10 +80,11 @@ class Form extends AbstractController
         return $this->redirect($request->headers->get('referer') . '#anchor_contact_form_' . $id);
     }
 
-    private function getErrorMessages($form) {
+    private function getErrorMessages(FormInterface $form): array
+    {
         $errors = [];
 
-        foreach ($form->getErrors() as $key => $error) {
+        foreach ($form->getErrors() as $error) {
             if ($form->isRoot()) {
                 $errors['#'][] = $error->getMessage();
             } else {

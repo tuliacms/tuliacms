@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\ContactForms\Application\Sender;
+namespace Tulia\Cms\ContactForms\Infrastructure\Transport\Email;
 
 use Tulia\Cms\ContactForms\Domain\FieldType\Core\EmailType;
+use Tulia\Cms\ContactForms\Ports\Infrastructure\Transport\Email\SenderInterface;
 use Tulia\Cms\ContactForms\Query\Model\Form;
 use Tulia\Cms\Platform\Infrastructure\Mail\MailerInterface;
 use Tulia\Component\Templating\EngineInterface;
@@ -15,19 +16,10 @@ use Tulia\Component\Templating\View;
  */
 class Sender implements SenderInterface
 {
-    /**
-     * @var MailerInterface
-     */
-    private $mailer;
+    private MailerInterface $mailer;
 
-    /**
-     * @var EngineInterface
-     */
-    private $engine;
+    private EngineInterface $engine;
 
-    /**
-     * @param MailerInterface $mailer
-     */
     public function __construct(MailerInterface $mailer, EngineInterface $engine)
     {
         $this->mailer = $mailer;

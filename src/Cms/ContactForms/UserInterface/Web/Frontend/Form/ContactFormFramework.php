@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\ContactForms\Application\Builder;
+namespace Tulia\Cms\ContactForms\UserInterface\Web\Frontend\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -12,7 +12,7 @@ use Tulia\Cms\ContactForms\Ports\Domain\FieldType\FieldsTypeRegistryInterface;
 /**
  * @author Adam Banaszkiewicz
  */
-class Form extends AbstractType
+class ContactFormFramework extends AbstractType
 {
     private FieldsTypeRegistryInterface $typesRegistry;
 

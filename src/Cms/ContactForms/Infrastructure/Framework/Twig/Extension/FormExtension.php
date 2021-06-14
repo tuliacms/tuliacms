@@ -6,11 +6,11 @@ namespace Tulia\Cms\ContactForms\Infrastructure\Framework\Twig\Extension;
 
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormView;
-use Tulia\Cms\ContactForms\Application\Builder\BuilderInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Tulia\Cms\ContactForms\Ports\UserInterface\Web\Frontend\FormBuilder\ContactFormBuilderInterface;
 use Tulia\Cms\ContactForms\Query\Enum\ScopeEnum;
 use Tulia\Cms\ContactForms\Query\FinderFactoryInterface;
 use Tulia\Cms\ContactForms\Query\Model\Form;
-use Symfony\Component\HttpFoundation\Request;
 use Twig\Environment;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
@@ -20,11 +20,11 @@ use Twig\TwigFunction;
  */
 class FormExtension extends AbstractExtension
 {
-    private BuilderInterface $builder;
+    private ContactFormBuilderInterface $builder;
 
     private FinderFactoryInterface $finderFactory;
 
-    public function __construct(BuilderInterface $builder, FinderFactoryInterface $finderFactory)
+    public function __construct(ContactFormBuilderInterface $builder, FinderFactoryInterface $finderFactory)
     {
         $this->builder = $builder;
         $this->finderFactory = $finderFactory;

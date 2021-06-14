@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\ContactForms\Application\Sender;
+namespace Tulia\Cms\ContactForms\UserInterface\Web\Frontend\Service;
 
 use Tulia\Cms\ContactForms\Ports\Domain\FieldType\FieldsTypeRegistryInterface;
 use Tulia\Cms\ContactForms\Query\Model\Form;
@@ -11,7 +11,7 @@ use Symfony\Component\Form\FormInterface;
 /**
  * @author Adam Banaszkiewicz
  */
-class FormDataExtractor implements FormDataExtractorInterface
+class FormDataExtractor
 {
     private FieldsTypeRegistryInterface $fieldsTypes;
 
