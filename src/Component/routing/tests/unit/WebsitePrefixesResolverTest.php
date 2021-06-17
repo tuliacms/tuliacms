@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Component\Routing\Tests\Unit;
 
-use Tulia\Tests\TestCase;
+use Tulia\Tests\Unit\TestCase;
 use Tulia\Component\Routing\Enum\SslModeEnum;
 use Tulia\Component\Routing\Website\CurrentWebsite;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;

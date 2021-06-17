@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Component\Shortcode;
 
+use Symfony\Component\Process\Process;
 use Thunder\Shortcode\HandlerContainer\HandlerContainer;
 use Thunder\Shortcode\Parser\RegularParser;
 use Thunder\Shortcode\Processor\Processor as BaseProcessor;
@@ -18,19 +19,10 @@ use Tulia\Component\Shortcode\Registry\CompilerRegistryInterface;
  */
 class Processor implements ProcessorInterface
 {
-    /**
-     * @var CompilerRegistryInterface
-     */
-    protected $compilers;
+    protected CompilerRegistryInterface $compilers;
 
-    /**
-     * @var BaseProcessor
-     */
-    protected $processor;
+    protected ?BaseProcessor $processor = null;
 
-    /**
-     * @param CompilerRegistryInterface $compilers
-     */
     public function __construct(CompilerRegistryInterface $compilers)
     {
         $this->compilers = $compilers;
@@ -55,7 +47,7 @@ class Processor implements ProcessorInterface
         $handlers = new HandlerContainer();
 
         foreach ($this->compilers->all() as $compiler) {
-            $handlers->add($compiler->getName(), function(ShortcodeInterface $s) use ($compiler) {
+            $handlers->add($compiler->getAlias(), function(ShortcodeInterface $s) use ($compiler) {
                 $shortcode = new Shortcode($s->getName(), $s->getParameters(), $s->getContent());
                 return $compiler->compile($shortcode);
             });
@@ -63,12 +55,17 @@ class Processor implements ProcessorInterface
 
         $events = new EventContainer();
         $events->addListener(Events::REPLACE_SHORTCODES, function(ReplaceShortcodesEvent $event) {
-            if ($event->getShortcode() || !$event->getReplacements()) {
+            if ($event->getShortcode() || ! $event->getReplacements()) {
                 return;
             }
 
             $source = $event->getText();
             $result = $event->getText();
+
+            $htmlTagPattern = sprintf(
+                ProcessorInterface::HTML_TAG_PATTERN,
+                implode('|', ProcessorInterface::INLINE_HTML_TAGS)
+            );
 
             foreach (array_reverse($event->getReplacements()) as $replacement) {
                 $inputAfterShortcode = mb_substr($source, $replacement->getOffset() + mb_strlen($replacement->getText()));
@@ -92,8 +89,16 @@ class Processor implements ProcessorInterface
                     }
                 }
 
-                $before = mb_strlen($shortcodeInfo['tagBefore']);
-                $after  = mb_strlen($shortcodeInfo['tagAfter']);
+                preg_match($htmlTagPattern, $shortcodeInfo['tagBefore'], $matches);
+
+                if (isset($matches[1]) === false || \in_array($matches[1], ProcessorInterface::INLINE_HTML_TAGS, true) === false) {
+                    $before = 0;
+                    $after  = 0;
+                } else {
+                    $before = mb_strlen($shortcodeInfo['tagBefore']);
+                    $after  = mb_strlen($shortcodeInfo['tagAfter']);
+                }
+
                 $offset = $replacement->getOffset() - $before;
                 $length = mb_strlen($replacement->getText(), 'utf-8') + $before + $after;
                 $textLength = mb_strlen($result, 'utf-8');

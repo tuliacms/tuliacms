@@ -4,8 +4,5 @@ services:
         autoconfigure: true
 
     Tulia\Cms\Activity\:
-        resource: '../../../../*'
-        exclude:
-            - '../../../../Infrastructure/Framework/Resources/*'
-            - '../../../../**/Model/*'
-            - '../../../../**/Exception/*'
+        resource: '../../../../**'
+        exclude: '../../../../{Infrastructure/Framework/Resources}'

@@ -4,7 +4,7 @@ services:
         autoconfigure: true
 
     Tulia\Cms\Metadata\:
-        resource: '../../../../../../Metadata/*'
+        resource: '../../../../../../Metadata/**'
         exclude:
             - '../../../../../../Metadata/**/Resources/**'
             - '../../../../../../Metadata/**/Model/**'

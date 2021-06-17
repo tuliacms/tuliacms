@@ -4,11 +4,8 @@ services:
         autoconfigure: true
 
     Tulia\Cms\Website\:
-        resource: '../../../../*'
-        exclude:
-            - '../../../../Infrastructure/Framework/Resources/*'
-            - '../../../../**/Model/*'
-            - '../../../../**/Exception/*'
+        resource: '../../../../**'
+        exclude: '../../../../{Infrastructure/Framework/Resources}'
 
     Tulia\Component\Routing\Website\WebsiteProviderInterface:
         class: Tulia\Cms\Website\Infrastructure\Framework\Routing\Website\WebsiteProvider

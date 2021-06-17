@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Component\Shortcode\Compiler;
 
+use Tulia\Cms\ContactForm\Domain\FieldsParser\Exception\InvalidFieldNameException;
 use Tulia\Component\Shortcode\ShortcodeInterface;
 
 /**
@@ -12,14 +13,9 @@ use Tulia\Component\Shortcode\ShortcodeInterface;
 interface ShortcodeCompilerInterface
 {
     /**
-     * @param ShortcodeInterface $shortcode
-     *
-     * @return string
+     * @throws InvalidFieldNameException
      */
     public function compile(ShortcodeInterface $shortcode): string;
 
-    /**
-     * @return string
-     */
-    public function getName(): string;
+    public function getAlias(): string;
 }

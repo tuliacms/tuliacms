@@ -93,7 +93,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Tulia\\Tests\\": "tests",
+            "Tulia\\Tests\\Unit\\": "tests/unit",
             "Tulia\\Component\\Routing\\Tests\\Unit\\": "src/Component/routing/tests/unit"
         }
     },

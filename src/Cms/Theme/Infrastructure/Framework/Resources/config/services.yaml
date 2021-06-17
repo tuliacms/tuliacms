@@ -4,12 +4,9 @@ services:
         autoconfigure: true
 
     Tulia\Cms\Theme\:
-        resource: '../../../../*'
+        resource: '../../../../**'
         exclude:
-            - '../../../../Infrastructure/Framework/Resources/*'
-            - '../../../../**/Model/*'
-            - '../../../../**/Exception/*'
-            - '../../../../UI/Web/Controller/Backend/Theme.php'
+        exclude: '../../../../{Infrastructure/Framework/Resources,UI/Web/Controller/Backend/Theme.php}'
 
     Tulia\Component\Theme\Loader\ThemeLoader\ThemeLoaderInterface:
         class: Tulia\Cms\Theme\Infrastructure\Framework\Theme\Loader\ThemeLoader

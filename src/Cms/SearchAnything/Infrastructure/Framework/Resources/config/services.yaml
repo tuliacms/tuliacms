@@ -4,11 +4,8 @@ services:
         autoconfigure: true
 
     Tulia\Cms\SearchAnything\:
-        resource: '../../../../*'
-        exclude:
-            - '../../../../Infrastructure/Framework/Resources/*'
-            - '../../../../**/Model/*'
-            - '../../../../**/Exception/*'
+        resource: '../../../../**'
+        exclude: '../../../../{Infrastructure/Framework/Resources}'
 
     Tulia\Cms\SearchAnything\Ports\SearchEngine\SearchEngineInterface:
         class: Tulia\Cms\SearchAnything\Domain\SearchEngine\SearchEngine

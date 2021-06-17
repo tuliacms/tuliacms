@@ -14,10 +14,7 @@ use Tulia\Component\Widget\Configuration\ConfigurationInterface;
  */
 abstract class AbstractWidget implements WidgetInterface
 {
-    /**
-     * @var string
-     */
-    protected $viewsDirectory;
+    protected string $viewsDirectory;
 
     /**
      * {@inheritdoc}

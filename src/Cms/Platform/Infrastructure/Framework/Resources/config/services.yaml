@@ -13,16 +13,8 @@ services:
             $assetsPublicPaths: '%framework.assets.public_paths%'
 
     Tulia\Cms\Platform\:
-        resource: '../../../../*'
-        exclude:
-            - '../../../../**/Resources/**'
-            - '../../../../**/Domain/**'
-            - '../../../../**/Model/**'
-            - '../../../../**/*Exception.php'
-            - '../../../../**/*Trait.php'
-            - '../../../../**/*View.php'
-            - '../../../../**/*Response.php'
-            - '../../../../**/*Event.php'
+        resource: '../../../../**'
+        exclude: '../../../../{Infrastructure/Framework/Resources}'
 
     Tulia\Cms\Platform\UserInterface\Console\Command\AssetsPublish:
         tags:

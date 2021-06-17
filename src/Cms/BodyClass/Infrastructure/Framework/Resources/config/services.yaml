@@ -4,11 +4,8 @@ services:
         autowire: true
 
     Tulia\Cms\BodyClass\:
-        resource: '../../../../*'
-        exclude:
-            - '../../../../Infrastructure/Framework/Resources/*'
-            - '../../../../**/Model/*'
-            - '../../../../**/Exception/*'
+        resource: '../../../../**'
+        exclude: '../../../../{Infrastructure/Framework/Resources}'
 
     Tulia\Cms\BodyClass\Domain\Service\BodyClassService:
         bind:
