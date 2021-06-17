@@ -8,6 +8,7 @@ framework:
         paths:
             - { name: cms/forms, path: '%kernel.project_dir%/src/Cms/ContactForms/Infrastructure/Framework/Resources/views/frontend' }
             - { name: backend/forms, path: '%kernel.project_dir%/src/Cms/ContactForms/Infrastructure/Framework/Resources/views/backend' }
+            - { name: widget/internal/contact_form, path: '%kernel.project_dir%/src/Cms/ContactForms/Infrastructure/Cms/Widget/Predefined' }
     assetter:
         assets:
             tulia.contact_forms:

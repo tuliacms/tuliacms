@@ -8,22 +8,19 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type;
 use Symfony\Component\Validator\Constraints as Assert;
-use Tulia\Cms\ContactForms\Query\Enum\ScopeEnum;
-use Tulia\Cms\ContactForms\Query\FinderFactoryInterface;
+use Tulia\Cms\ContactForms\Ports\Domain\ReadModel\ContactFormFinderScopeEnum;
+use Tulia\Cms\ContactForms\Ports\Domain\ReadModel\ContactFormFinderInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class ContactFormForm extends AbstractType
 {
-    protected $finderFactory;
+    protected ContactFormFinderInterface $finder;
 
-    /**
-     * @param FinderFactoryInterface $finderFactory
-     */
-    public function __construct(FinderFactoryInterface $finderFactory)
+    public function __construct(ContactFormFinderInterface $finder)
     {
-        $this->finderFactory = $finderFactory;
+        $this->finder = $finder;
     }
 
     /**
@@ -31,13 +28,12 @@ class ContactFormForm extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $finder = $this->finderFactory->getInstance(ScopeEnum::INTERNAL);
-        $finder->fetch();
+        $result = $this->finder->find([], ContactFormFinderScopeEnum::INTERNAL);
 
-        $menus = [];
+        $forms = [];
 
-        foreach ($finder->getResult() as $item) {
-            $menus[$item->getName()] = $item->getId();
+        foreach ($result->all() as $form) {
+            $forms[$form->getName()] = $form->getId();
         }
 
         $builder
@@ -47,9 +43,9 @@ class ContactFormForm extends AbstractType
                 'constraints' => [
                     new Assert\Uuid(),
                     new Assert\NotBlank(),
-                    new Assert\Choice([ 'choices' => $menus ]),
+                    new Assert\Choice([ 'choices' => $forms ]),
                 ],
-                'choices' => $menus,
+                'choices' => $forms,
                 'choice_translation_domain' => false,
             ])
         ;

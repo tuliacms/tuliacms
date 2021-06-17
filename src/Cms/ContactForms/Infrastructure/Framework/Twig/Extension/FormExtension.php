@@ -7,10 +7,10 @@ namespace Tulia\Cms\ContactForms\Infrastructure\Framework\Twig\Extension;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\HttpFoundation\Request;
+use Tulia\Cms\ContactForms\Domain\ReadModel\Finder\Model\Form;
+use Tulia\Cms\ContactForms\Ports\Domain\ReadModel\ContactFormFinderInterface;
 use Tulia\Cms\ContactForms\Ports\UserInterface\Web\Frontend\FormBuilder\ContactFormBuilderInterface;
-use Tulia\Cms\ContactForms\Query\Enum\ScopeEnum;
-use Tulia\Cms\ContactForms\Query\FinderFactoryInterface;
-use Tulia\Cms\ContactForms\Query\Model\Form;
+use Tulia\Cms\ContactForms\Ports\Domain\ReadModel\ContactFormFinderScopeEnum;
 use Twig\Environment;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
@@ -22,12 +22,12 @@ class FormExtension extends AbstractExtension
 {
     private ContactFormBuilderInterface $builder;
 
-    private FinderFactoryInterface $finderFactory;
+    private ContactFormFinderInterface $finder;
 
-    public function __construct(ContactFormBuilderInterface $builder, FinderFactoryInterface $finderFactory)
+    public function __construct(ContactFormBuilderInterface $builder, ContactFormFinderInterface $finder)
     {
         $this->builder = $builder;
-        $this->finderFactory = $finderFactory;
+        $this->finder = $finder;
     }
 
     /**
@@ -37,7 +37,7 @@ class FormExtension extends AbstractExtension
     {
         return [
             new TwigFunction('contact_form', function (Environment $env, $context, string $formId) {
-                $model = $this->finderFactory->find($formId, ScopeEnum::SINGLE);
+                $model = $this->finder->findOne(['id' => $formId, 'fetch_fields' => true], ContactFormFinderScopeEnum::SINGLE);
 
                 if ($model === null) {
                     return null;
@@ -57,7 +57,7 @@ class FormExtension extends AbstractExtension
                 'needs_context' => true,
             ]),
             new TwigFunction('get_contact_form', function ($context, string $formId) {
-                $model = $this->finderFactory->find($formId, ScopeEnum::SINGLE);
+                $model = $this->finderFactory->find($formId, ContactFormFinderScopeEnum::SINGLE);
 
                 if ($model === null) {
                     return null;

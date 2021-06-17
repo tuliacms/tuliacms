@@ -7,10 +7,10 @@ namespace Tulia\Cms\ContactForms\UserInterface\Web\Frontend\Controller;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Tulia\Cms\ContactForms\Ports\Domain\ReadModel\ContactFormFinderInterface;
 use Tulia\Cms\ContactForms\Ports\Infrastructure\Transport\Email\SenderInterface;
 use Tulia\Cms\ContactForms\Ports\UserInterface\Web\Frontend\FormBuilder\ContactFormBuilderInterface;
-use Tulia\Cms\ContactForms\Query\Enum\ScopeEnum;
-use Tulia\Cms\ContactForms\Query\FinderFactoryInterface;
+use Tulia\Cms\ContactForms\Ports\Domain\ReadModel\ContactFormFinderScopeEnum;
 use Tulia\Cms\ContactForms\UserInterface\Web\Frontend\Service\FormDataExtractor;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Component\Security\Http\Csrf\Annotation\IgnoreCsrfToken;
@@ -22,7 +22,7 @@ class Form extends AbstractController
 {
     private ContactFormBuilderInterface $builder;
 
-    private FinderFactoryInterface $finderFactory;
+    private ContactFormFinderInterface $finder;
 
     private SenderInterface $sender;
 
@@ -30,12 +30,12 @@ class Form extends AbstractController
 
     public function __construct(
         ContactFormBuilderInterface $builder,
-        FinderFactoryInterface $finderFactory,
+        ContactFormFinderInterface $finder,
         SenderInterface $sender,
         FormDataExtractor $dataExtractor
     ) {
         $this->builder = $builder;
-        $this->finderFactory = $finderFactory;
+        $this->finder = $finder;
         $this->sender = $sender;
         $this->dataExtractor = $dataExtractor;
     }
@@ -49,7 +49,7 @@ class Form extends AbstractController
             throw $this->createAccessDeniedException('CSRF token is not valid.');
         }
 
-        $model = $this->finderFactory->find($id, ScopeEnum::SINGLE);
+        $model = $this->finder->findOne(['id' => $id, 'fetch_fields' => true], ContactFormFinderScopeEnum::SINGLE);
 
         if ($model === null) {
             throw $this->createNotFoundException();

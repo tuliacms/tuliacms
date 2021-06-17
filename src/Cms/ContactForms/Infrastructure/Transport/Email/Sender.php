@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Tulia\Cms\ContactForms\Infrastructure\Transport\Email;
 
 use Tulia\Cms\ContactForms\Domain\FieldType\Core\EmailType;
+use Tulia\Cms\ContactForms\Domain\ReadModel\Finder\Model\Form;
 use Tulia\Cms\ContactForms\Ports\Infrastructure\Transport\Email\SenderInterface;
-use Tulia\Cms\ContactForms\Query\Model\Form;
 use Tulia\Cms\Platform\Infrastructure\Mail\MailerInterface;
 use Tulia\Component\Templating\EngineInterface;
 use Tulia\Component\Templating\View;
@@ -57,8 +57,8 @@ class Sender implements SenderInterface
         $possible = [];
 
         foreach ($form->getFields() as $field) {
-            if ($field['type'] === EmailType::class) {
-                $possible[] = $data[$field['name']];
+            if ($field->getType() === EmailType::class) {
+                $possible[] = $data[$field->getName()];
             }
         }
 
@@ -71,8 +71,8 @@ class Sender implements SenderInterface
         }
 
         foreach ($form->getFields() as $field) {
-            if ($field['type'] === EmailType::class && isset($field['options']['sender'])) {
-                return $data[$field['name']];
+            if ($field->getType() === EmailType::class && $field->hasOption('sender')) {
+                return $data[$field->getName()];
             }
         }
 

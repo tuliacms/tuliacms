@@ -7,6 +7,7 @@ namespace Tulia\Cms\ContactForms\UserInterface\Web\Frontend\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Tulia\Cms\ContactForms\Domain\ReadModel\Finder\Model\Field;
 use Tulia\Cms\ContactForms\Ports\Domain\FieldType\FieldsTypeRegistryInterface;
 
 /**
@@ -23,12 +24,13 @@ class ContactFormFramework extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        /** @var Field $field */
         foreach ($options['fields'] as $field) {
-            $type = $this->typesRegistry->get($field['type_alias']);
-            $options = $this->buildOptions($field['options']  ?? []);
+            $type = $this->typesRegistry->get($field->getTypeAlias());
+            $options = $this->buildOptions($field->getOptions());
 
             $builder->add(
-                $field['name'],
+                $field->getName(),
                 $type->getFormType(),
                 $type->buildOptions($options)
             );

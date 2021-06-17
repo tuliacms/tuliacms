@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContactForms\UserInterface\Web\Frontend\Service;
 
+use Tulia\Cms\ContactForms\Domain\ReadModel\Finder\Model\Form;
 use Tulia\Cms\ContactForms\Ports\Domain\FieldType\FieldsTypeRegistryInterface;
-use Tulia\Cms\ContactForms\Query\Model\Form;
 use Symfony\Component\Form\FormInterface;
 
 /**
@@ -27,11 +27,11 @@ class FormDataExtractor
 
         foreach ($data as $name => $value) {
             foreach ($fields as $field) {
-                if ($name !== $field['name']) {
+                if ($name !== $field->getName()) {
                     continue;
                 }
 
-                $data[$name] = $this->fieldsTypes->get($field['type_alias'])->prepareValueFromRequest(
+                $data[$name] = $this->fieldsTypes->get($field->getTypeAlias())->prepareValueFromRequest(
                     $value,
                     $form->get($name)->getConfig()->getOptions()
                 );

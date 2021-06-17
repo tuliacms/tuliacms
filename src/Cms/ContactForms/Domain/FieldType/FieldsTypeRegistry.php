@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContactForms\Domain\FieldType;
 
+use Tulia\Cms\ContactForms\Domain\Exception\FieldTypeNotFoundException;
 use Tulia\Cms\ContactForms\Ports\Domain\FieldType\FieldParserInterface;
 use Tulia\Cms\ContactForms\Ports\Domain\FieldType\FieldsTypeRegistryInterface;
 use Tulia\Cms\ContactForms\Ports\Domain\FieldType\FieldTypeInterface;
@@ -39,6 +40,10 @@ class FieldsTypeRegistry implements FieldsTypeRegistryInterface
     public function get(string $type): FieldTypeInterface
     {
         $this->prepareTypes();
+
+        if (isset($this->types[$type]) === false) {
+            throw FieldTypeNotFoundException::fromType($type);
+        }
 
         return $this->types[$type];
     }

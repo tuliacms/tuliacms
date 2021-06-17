@@ -6,8 +6,8 @@ namespace Tulia\Cms\ContactForms\Domain\SearchAnything;
 
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Tulia\Cms\ContactForms\Query\Enum\ScopeEnum;
-use Tulia\Cms\ContactForms\Query\FinderFactoryInterface;
+use Tulia\Cms\ContactForms\Ports\Domain\ReadModel\ContactFormFinderScopeEnum;
+use Tulia\Cms\ContactForms\Ports\Domain\ReadModel\ContactFormFinderInterface;
 use Tulia\Cms\SearchAnything\Domain\Model\Hit;
 use Tulia\Cms\SearchAnything\Domain\Model\Results;
 use Tulia\Cms\SearchAnything\Ports\Provider\AbstractProvider;
@@ -17,41 +17,37 @@ use Tulia\Cms\SearchAnything\Ports\Provider\AbstractProvider;
  */
 class SearchProvider extends AbstractProvider
 {
-    protected FinderFactoryInterface $finderFactory;
+    protected ContactFormFinderInterface $finder;
 
     protected RouterInterface $router;
 
     protected TranslatorInterface $translator;
 
     public function __construct(
-        FinderFactoryInterface $finderFactory,
+        ContactFormFinderInterface $finder,
         RouterInterface $router,
         TranslatorInterface $translator
     ) {
-        $this->finderFactory = $finderFactory;
+        $this->finder = $finder;
         $this->router = $router;
         $this->translator = $translator;
     }
 
     public function search(string $query, int $limit = 5, int $page = 1): Results
     {
-        $finder = $this->finderFactory->getInstance(ScopeEnum::SEARCH);
-        $finder->setCriteria([
+        $forms = $this->finder->find([
             'search'   => $query,
             'per_page' => $limit,
             'page'     => $page,
             'count_found_rows' => true,
-        ]);
-        $finder->fetch();
+        ], ContactFormFinderScopeEnum::SEARCH);
 
         $results = new Results();
 
-        $nodes = $finder->getResult();
+        foreach ($forms as $form) {
+            $hit = new Hit($form->getName(), $this->router->generate('backend.form.edit', ['id' => $form->getId() ]));
 
-        foreach ($nodes as $node) {
-            $hit = new Hit($node->getName(), $this->router->generate('backend.form.edit', ['id' => $node->getId() ]));
-
-            $results->add($node->getId(), $hit);
+            $results->add($form->getId(), $hit);
         }
 
         return $results;
@@ -59,7 +55,7 @@ class SearchProvider extends AbstractProvider
 
     public function getId(): string
     {
-        return 'form';
+        return 'contact_forms';
     }
 
     public function getLabel(): array
