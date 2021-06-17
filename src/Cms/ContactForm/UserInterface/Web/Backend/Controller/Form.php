@@ -40,7 +40,7 @@ class Form extends AbstractController
 
     public function index(): RedirectResponse
     {
-        return $this->redirectToRoute('backend.form.list');
+        return $this->redirectToRoute('backend.contact_form.list');
     }
 
     public function list(Request $request, DatatableFactory $factory, DatatableFinder $finder): ViewInterface
@@ -71,10 +71,10 @@ class Form extends AbstractController
 
                 $this->repository->insert($model);
 
-                $this->setFlash('success', $this->trans('formSaved', [], 'forms'));
-                return $this->redirectToRoute('backend.form.edit', [ 'id' => $model->getId() ]);
+                $this->setFlash('success', $this->trans('formSaved', [], 'contact-form'));
+                return $this->redirectToRoute('backend.contact_form.edit', [ 'id' => $model->getId() ]);
             } catch (InvalidFieldNameException $e) {
-                $error = new FormError($this->trans('formFieldNameContainsInvalidName', ['name' => $e->getName()], 'forms'));
+                $error = new FormError($this->trans('formFieldNameContainsInvalidName', ['name' => $e->getName()], 'contact-form'));
                 $form->get('fields_template')->addError($error);
             }
         }
@@ -104,13 +104,13 @@ class Form extends AbstractController
 
                 $this->repository->update($model);
 
-                $this->setFlash('success', $this->trans('formSaved', [], 'forms'));
-                return $this->redirectToRoute('backend.form.edit', [ 'id' => $model->getId() ]);
+                $this->setFlash('success', $this->trans('formSaved', [], 'contact-form'));
+                return $this->redirectToRoute('backend.contact_form.edit', [ 'id' => $model->getId() ]);
             } catch (InvalidFieldNameException $e) {
-                $error = new FormError($this->trans('formFieldNameContainsInvalidName', ['name' => $e->getName()], 'forms'));
+                $error = new FormError($this->trans('formFieldNameContainsInvalidName', ['name' => $e->getName()], 'contact-form'));
                 $form->get('fields_template')->addError($error);
             } catch (MultipleFieldsInTemplateException $e) {
-                $error = new FormError($this->trans('multipleFieldOccuredInTemplate', ['name' => $e->getName()], 'forms'));
+                $error = new FormError($this->trans('multipleFieldOccuredInTemplate', ['name' => $e->getName()], 'contact-form'));
                 $form->get('fields_template')->addError($error);
             }
         }
@@ -149,10 +149,10 @@ class Form extends AbstractController
         }
 
         if ($removedForms) {
-            $this->setFlash('success', $this->trans('selectedFormsWereRemoved', [], 'forms'));
+            $this->setFlash('success', $this->trans('selectedFormsWereRemoved', [], 'contact-form'));
         }
 
-        return $this->redirectToRoute('backend.form.list');
+        return $this->redirectToRoute('backend.contact_form.list');
     }
 
     private function getErrorMessages($form): array

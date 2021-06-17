@@ -76,7 +76,7 @@ class Form extends AbstractType
                 'by_reference' => false
             ])
             ->add('cancel', FormType\CancelType::class, [
-                'route' => 'backend.form',
+                'route' => 'backend.contact_form',
             ])
             ->add('save', FormType\SubmitType::class)
         ;
@@ -90,6 +90,6 @@ class Form extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefault('translation_domain', 'forms');
+        $resolver->setDefault('translation_domain', 'contact-form');
     }
 }

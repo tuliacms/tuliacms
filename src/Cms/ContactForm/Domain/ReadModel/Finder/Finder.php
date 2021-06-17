@@ -24,7 +24,7 @@ class Finder extends AbstractFinder implements ContactFormFinderInterface
 
     public function getAlias(): string
     {
-        return 'contact_forms';
+        return 'contact_form';
     }
 
     public function createQuery(): QueryInterface

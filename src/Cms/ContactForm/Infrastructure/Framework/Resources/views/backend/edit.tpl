@@ -3,12 +3,12 @@
 {% import '@backend/_macros/alerts.tpl' as alerts %}
 
 {% block title %}
-    {{ 'editForm'|trans({}, 'forms') }}
+    {{ 'editForm'|trans({}, 'contact-form') }}
 {% endblock %}
 
 {% block breadcrumbs %}
-    <li class="breadcrumb-item"><a href="{{ path('backend.form') }}">{{ 'forms'|trans({}, 'forms') }}</a></li>
-    <li class="breadcrumb-item active" aria-current="page">{{ 'editForm'|trans({}, 'forms') }}</li>
+    <li class="breadcrumb-item"><a href="{{ path('backend.contact_form') }}">{{ 'forms'|trans({}, 'contact-form') }}</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ 'editForm'|trans({}, 'contact-form') }}</li>
 {% endblock %}
 
 {% block content %}

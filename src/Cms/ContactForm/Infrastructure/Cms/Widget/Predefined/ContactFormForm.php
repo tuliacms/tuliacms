@@ -39,7 +39,7 @@ class ContactFormForm extends AbstractType
         $builder
             ->add('form_id', Type\ChoiceType::class, [
                 'label' => 'form',
-                'translation_domain' => 'forms',
+                'translation_domain' => 'contact-form',
                 'constraints' => [
                     new Assert\Uuid(),
                     new Assert\NotBlank(),

@@ -45,7 +45,7 @@ class SearchProvider extends AbstractProvider
         $results = new Results();
 
         foreach ($forms as $form) {
-            $hit = new Hit($form->getName(), $this->router->generate('backend.form.edit', ['id' => $form->getId() ]));
+            $hit = new Hit($form->getName(), $this->router->generate('backend.contact_form.edit', ['id' => $form->getId() ]));
 
             $results->add($form->getId(), $hit);
         }
@@ -55,12 +55,12 @@ class SearchProvider extends AbstractProvider
 
     public function getId(): string
     {
-        return 'contact_forms';
+        return 'contact_form';
     }
 
     public function getLabel(): array
     {
-        return ['forms', [], 'forms'];
+        return ['forms', [], 'contact-form'];
     }
 
     public function getIcon(): string

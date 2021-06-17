@@ -64,12 +64,12 @@ class Form extends AbstractController
             if ($this->sender->send($model, $data)) {
                 $this->setFlash(
                     'cms.form.submit_success',
-                    $this->trans('formHasBeenSentThankYou', [], 'forms')
+                    $this->trans('formHasBeenSentThankYou', [], 'contact-form')
                 );
             } else {
                 $this->setFlash(
                     'cms.form.submit_failed',
-                    $this->trans('formNotHasBeenSentTryAgain', [], 'forms')
+                    $this->trans('formNotHasBeenSentTryAgain', [], 'contact-form')
                 );
             }
         } else {

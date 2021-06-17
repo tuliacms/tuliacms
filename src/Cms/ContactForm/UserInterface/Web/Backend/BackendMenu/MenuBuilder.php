@@ -29,15 +29,15 @@ class MenuBuilder implements BuilderInterface
     public function build(ItemRegistryInterface $registry): void
     {
         $registry->add('forms', [
-            'label'    => $this->helper->trans('forms', [], 'forms'),
+            'label'    => $this->helper->trans('forms', [], 'contact-form'),
             'link'     => '#',
             'icon'     => 'fas fa-window-restore',
             'priority' => 2000,
         ]);
 
         $registry->add('forms.list', [
-            'label'    => $this->helper->trans('list', [], 'forms'),
-            'link'     => $this->helper->generateUrl('backend.form'),
+            'label'    => $this->helper->trans('list', [], 'contact-form'),
+            'link'     => $this->helper->generateUrl('backend.contact_form'),
             'parent'   => 'forms',
         ]);
     }

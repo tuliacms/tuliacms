@@ -26,7 +26,7 @@ class ContactFormWidget extends AbstractWidget
         return [
             'name' => 'widget.name',
             'description' => 'widget.description',
-            'translation_domain' => 'forms',
+            'translation_domain' => 'contact-form',
         ];
     }
 

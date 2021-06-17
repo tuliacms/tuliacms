@@ -38,7 +38,7 @@
             </div>
             <div class="accordion-section">
                 <div class="accordion-section-button" data-toggle="collapse" data-target="#form-collapse-receivers">
-                    {{ 'receivers'|trans({}, 'forms') }}
+                    {{ 'receivers'|trans({}, 'contact-form') }}
                     {{ badge.errors_count(form, [ 'receivers' ]) }}
                 </div>
                 <div id="form-collapse-receivers" class="collapse show">
@@ -49,7 +49,7 @@
             </div>
             <div class="accordion-section">
                 <div class="accordion-section-button" data-toggle="collapse" data-target="#form-collapse-sender">
-                    {{ 'sender'|trans({}, 'forms') }}
+                    {{ 'sender'|trans({}, 'contact-form') }}
                     {{ badge.errors_count(form, [ 'sender_name', 'sender_email', 'reply_to' ]) }}
                 </div>
                 <div id="form-collapse-sender" class="collapse show">
@@ -78,13 +78,13 @@
         <ul class="nav nav-tabs page-form-tabs" role="tablist">
             <li class="nav-item">
                 <a class="nav-link active" data-toggle="tab" href="#tab-fields">
-                    {{ 'fieldsBuilder'|trans({}, 'forms') }}
+                    {{ 'fieldsBuilder'|trans({}, 'contact-form') }}
                     {{ badge.errors_count(form, [ 'fields_template' ]) }}
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" data-toggle="tab" href="#tab-message">
-                    {{ 'messageTemplate'|trans({}, 'forms') }}
+                    {{ 'messageTemplate'|trans({}, 'contact-form') }}
                     {{ badge.errors_count(form, [ 'message_template' ]) }}
                 </a>
             </li>
@@ -168,17 +168,17 @@
                             error: form.fields_template.vars.errors[0].message|default(null)
                         }|json_encode|raw }},
                         translations: {
-                            fieldsBuilder: '{{ 'fieldsBuilder'|trans({}, 'forms') }}',
-                            fieldsBuilderInfo: '{{ 'fieldsBuilderInfo'|trans({}, 'forms') }}',
-                            availableFields: '{{ 'availableFields'|trans({}, 'forms') }}',
-                            availableFieldsInfo: '{{ 'availableFieldsInfo'|trans({}, 'forms') }}',
-                            addAnyFieldsToCreateForm: '{{ 'addAnyFieldsToCreateForm'|trans({}, 'forms') }}',
-                            controlOptionLabel: '{{ 'controlOptionLabel'|trans({}, 'forms') }}',
-                            valuesSeparatedByPipeAllowedFollowing: '{{ 'valuesSeparatedByPipeAllowedFollowing'|trans({}, 'forms') }}',
-                            fieldsTemplate: '{{ 'fieldsTemplate'|trans({}, 'forms') }}',
-                            fieldsTemplateInfo: '{{ 'fieldsTemplateInfo'|trans({}, 'forms') }}',
-                            removeField: '{{ 'removeField'|trans({}, 'forms') }}',
-                            addFieldToTemplate: '{{ 'addFieldToTemplate'|trans({}, 'forms') }}',
+                            fieldsBuilder: '{{ 'fieldsBuilder'|trans({}, 'contact-form') }}',
+                            fieldsBuilderInfo: '{{ 'fieldsBuilderInfo'|trans({}, 'contact-form') }}',
+                            availableFields: '{{ 'availableFields'|trans({}, 'contact-form') }}',
+                            availableFieldsInfo: '{{ 'availableFieldsInfo'|trans({}, 'contact-form') }}',
+                            addAnyFieldsToCreateForm: '{{ 'addAnyFieldsToCreateForm'|trans({}, 'contact-form') }}',
+                            controlOptionLabel: '{{ 'controlOptionLabel'|trans({}, 'contact-form') }}',
+                            valuesSeparatedByPipeAllowedFollowing: '{{ 'valuesSeparatedByPipeAllowedFollowing'|trans({}, 'contact-form') }}',
+                            fieldsTemplate: '{{ 'fieldsTemplate'|trans({}, 'contact-form') }}',
+                            fieldsTemplateInfo: '{{ 'fieldsTemplateInfo'|trans({}, 'contact-form') }}',
+                            removeField: '{{ 'removeField'|trans({}, 'contact-form') }}',
+                            addFieldToTemplate: '{{ 'addFieldToTemplate'|trans({}, 'contact-form') }}',
                             name: '{{ 'name'|trans }}',
                             required: '{{ 'required'|trans }}',
                             multilingual: '{{ 'multilingual'|trans }}',
