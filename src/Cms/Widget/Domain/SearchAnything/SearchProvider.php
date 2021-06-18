@@ -10,7 +10,7 @@ use Tulia\Cms\SearchAnything\Ports\Provider\AbstractProvider;
 use Tulia\Cms\SearchAnything\Domain\Model\Hit;
 use Tulia\Cms\SearchAnything\Domain\Model\Results;
 use Tulia\Cms\Widget\Domain\ReadModel\Finder\Enum\WidgetFinderScopeEnum;
-use Tulia\Cms\Widget\Ports\Infrastructure\Persistence\Domain\ReadModel\WidgetFinderInterface;
+use Tulia\Cms\Widget\Ports\Domain\ReadModel\WidgetFinderInterface;
 
 /**
  * @author Adam Banaszkiewicz

@@ -6,14 +6,14 @@ namespace Tulia\Cms\Node\Domain\SearchAnything;
 
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Tulia\Cms\Filemanager\Application\ImageUrlResolver;
-use Tulia\Cms\Filemanager\Enum\ScopeEnum as FilesScopeEnum;
+use Tulia\Cms\Filemanager\Application\Service\ImageUrlResolver;
+use Tulia\Cms\Filemanager\Domain\ReadModel\Finder\Enum\FilemanagerFinderScopeEnum as FilesScopeEnum;
 use Tulia\Cms\Filemanager\Enum\TypeEnum;
 use Tulia\Cms\Filemanager\Query\FinderFactoryInterface as FilemanagerFinderFactory;
 use Tulia\Cms\Node\Domain\ReadModel\Finder\Enum\NodeFinderScopeEnum as NodeScopeEnum;
 use Tulia\Cms\Node\Domain\NodeType\Enum\ParametersEnum;
 use Tulia\Cms\Node\Domain\NodeType\RegistryInterface;
-use Tulia\Cms\Node\Ports\Infrastructure\Persistence\Domain\ReadModel\NodeFinderInterface;
+use Tulia\Cms\Node\Ports\Domain\ReadModel\NodeFinderInterface;
 use Tulia\Cms\SearchAnything\Ports\Provider\AbstractProvider;
 use Tulia\Cms\SearchAnything\Domain\Model\Hit;
 use Tulia\Cms\SearchAnything\Domain\Model\Results;

@@ -7,7 +7,7 @@ namespace Tulia\Cms\Node\UserInterface\Web\Frontend\Controller;
 use Tulia\Cms\Node\Domain\ReadModel\Finder\Model\Node AS Model;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\Enum\TermFinderScopeEnum;
-use Tulia\Cms\Taxonomy\Ports\Infrastructure\Persistence\Domain\ReadModel\TermFinderInterface;
+use Tulia\Cms\Taxonomy\Ports\Domain\ReadModel\TermFinderInterface;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\Model\Term;
 use Tulia\Component\Templating\ViewInterface;
 

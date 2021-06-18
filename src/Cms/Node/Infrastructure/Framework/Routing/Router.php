@@ -13,7 +13,7 @@ use Symfony\Component\Routing\RouterInterface;
 use Tulia\Cms\Node\Domain\ReadModel\Finder\Model\Node;
 use Tulia\Cms\Node\Domain\NodeType\RegistryInterface;
 use Tulia\Cms\Node\Domain\ReadModel\Finder\Enum\NodeFinderScopeEnum;
-use Tulia\Cms\Node\Ports\Infrastructure\Persistence\Domain\ReadModel\NodeFinderInterface;
+use Tulia\Cms\Node\Ports\Domain\ReadModel\NodeFinderInterface;
 use Tulia\Cms\Platform\Infrastructure\Framework\Routing\FrontendRouteSuffixResolver;
 
 /**

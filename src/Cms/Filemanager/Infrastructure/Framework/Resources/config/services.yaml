@@ -3,14 +3,14 @@ services:
         autowire: true
         autoconfigure: true
     _instanceof:
-        Tulia\Cms\Filemanager\Command\CommandInterface:
+        Tulia\Cms\Filemanager\Ports\Domain\Command\CommandInterface:
             tags: [ filemanager.command ]
 
     Tulia\Cms\Filemanager\:
         resource: '../../../../**'
-        exclude: '../../../../{Infrastructure/Framework/Resources}'
+        exclude: '../../../../{Infrastructure/Framework/Resources,Domain/WriteModel/Model,Domain/ReadModel/Model}'
 
-    Tulia\Cms\Filemanager\Application\Cropper:
+    Tulia\Cms\Filemanager\Application\Service\Cropper:
         bind:
             $filesDirectory: '%kernel.public_dir%'
 
@@ -18,7 +18,7 @@ services:
         bind:
             $publicDir: '%kernel.public_dir%'
 
-    Tulia\Cms\Filemanager\Application\ImageSize\Registry:
+    Tulia\Cms\Filemanager\Domain\ImageSize\Registry:
         bind:
             $providers: !tagged_iterator filemanager.image_size.provider
 
@@ -27,7 +27,7 @@ services:
         bind:
             $commands: !tagged_iterator filemanager.command
 
-    Tulia\Cms\Filemanager\Command\Upload:
+    Tulia\Cms\Filemanager\Application\Command\Upload:
         bind:
             $projectDir: '%kernel.project_dir%'
 
@@ -37,7 +37,7 @@ services:
     Tulia\Cms\Filemanager\Domain\Shortcode\Image:
         tags: [ shortcode.compiler ]
 
-    Tulia\Cms\Filemanager\Application\ImageSize\DefaultSizesProvider:
+    Tulia\Cms\Filemanager\Domain\ImageSize\DefaultSizesImagesSizeProvider:
         tags: [ filemanager.image_size.provider ]
 
     Tulia\Cms\Filemanager\Infrastructure\Framework\Theme\Customizer\FilepickerControl:

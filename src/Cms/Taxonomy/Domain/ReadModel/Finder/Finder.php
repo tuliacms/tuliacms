@@ -9,7 +9,7 @@ use Tulia\Cms\Shared\Domain\ReadModel\Finder\AbstractFinder;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Query\QueryInterface;
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 use Tulia\Cms\Taxonomy\Infrastructure\Persistence\Domain\ReadModel\Finder\Query\DbalQuery;
-use Tulia\Cms\Taxonomy\Ports\Infrastructure\Persistence\Domain\ReadModel\TermFinderInterface;
+use Tulia\Cms\Taxonomy\Ports\Domain\ReadModel\TermFinderInterface;
 
 /**
  * @author Adam Banaszkiewicz

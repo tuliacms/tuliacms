@@ -10,10 +10,10 @@ use Tulia\Cms\Breadcrumbs\Ports\Domain\BreadcrumbsResolverInterface;
 use Tulia\Cms\Node\Domain\NodeType\RegistryInterface as NodeTypeRegistry;
 use Tulia\Cms\Node\Domain\ReadModel\Finder\Enum\NodeFinderScopeEnum;
 use Tulia\Cms\Node\Domain\ReadModel\Finder\Model\Node;
-use Tulia\Cms\Node\Ports\Infrastructure\Persistence\Domain\ReadModel\NodeFinderInterface;
+use Tulia\Cms\Node\Ports\Domain\ReadModel\NodeFinderInterface;
 use Tulia\Cms\Platform\Shared\Breadcrumbs\BreadcrumbsInterface;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\Enum\TermFinderScopeEnum;
-use Tulia\Cms\Taxonomy\Ports\Infrastructure\Persistence\Domain\ReadModel\TermFinderInterface;
+use Tulia\Cms\Taxonomy\Ports\Domain\ReadModel\TermFinderInterface;
 
 /**
  * @author Adam Banaszkiewicz

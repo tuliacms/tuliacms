@@ -13,7 +13,7 @@ use Tulia\Cms\Menu\Domain\ReadModel\Finder\Enum\ScopeEnum;
 use Tulia\Cms\Menu\Domain\WriteModel\Event\MenuCreated;
 use Tulia\Cms\Menu\Domain\WriteModel\Event\MenuDeleted;
 use Tulia\Cms\Menu\Domain\WriteModel\Event\MenuUpdated;
-use Tulia\Cms\Menu\Ports\Infrastructure\Persistence\ReadModel\MenuFinderInterface;
+use Tulia\Cms\Menu\Ports\Domain\ReadModel\MenuFinderInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 
 /**

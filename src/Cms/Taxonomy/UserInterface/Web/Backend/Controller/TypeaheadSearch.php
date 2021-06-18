@@ -6,7 +6,7 @@ namespace Tulia\Cms\Taxonomy\UserInterface\Web\Backend\Controller;
 
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\TypeaheadFormTypeSearch;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\Enum\TermFinderScopeEnum;
-use Tulia\Cms\Taxonomy\Ports\Infrastructure\Persistence\Domain\ReadModel\TermFinderInterface;
+use Tulia\Cms\Taxonomy\Ports\Domain\ReadModel\TermFinderInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

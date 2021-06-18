@@ -6,7 +6,7 @@ namespace Tulia\Cms\Filemanager\Query;
 
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Tulia\Cms\Filemanager\CollectionInterface;
-use Tulia\Cms\Filemanager\FileInterface;
+use Tulia\Cms\Filemanager\Domain\ReadModel\Finder\Model\File;
 use Tulia\Cms\Filemanager\Exception\MultipleFetchException;
 use Tulia\Cms\Filemanager\Exception\QueryException;
 use Tulia\Cms\Filemanager\Exception\QueryNotFetchedException;
@@ -70,13 +70,7 @@ interface FinderInterface
      */
     public function count(): int;
 
-    /**
-     * @param string $id
-     * @param string|null $type
-     *
-     * @return FileInterface|null
-     */
-    public function find(string $id, string $type = null): ?FileInterface;
+    public function find(string $id, string $type = null): ?File;
 
     /**
      * @param EventDispatcherInterface $eventDispatcher

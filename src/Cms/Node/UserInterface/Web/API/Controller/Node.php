@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\Node\Domain\ReadModel\Finder\Enum\NodeFinderScopeEnum;
 use Tulia\Cms\Node\Domain\NodeType\NodeTypeInterface;
 use Tulia\Cms\Node\Domain\NodeType\RegistryInterface;
-use Tulia\Cms\Node\Ports\Infrastructure\Persistence\Domain\ReadModel\NodeFinderInterface;
+use Tulia\Cms\Node\Ports\Domain\ReadModel\NodeFinderInterface;
 use Tulia\Cms\Node\UserInterface\Web\CriteriaBuilder\RequestCriteriaBuilder;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractApiController;
 

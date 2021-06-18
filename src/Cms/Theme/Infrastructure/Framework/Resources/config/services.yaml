@@ -19,7 +19,7 @@ services:
     Tulia\Cms\Theme\Infrastructure\Cms\BackendMenu\AppearenceMenuBuilder:
         tags: [ backend_menu.builder ]
 
-    Tulia\Cms\Theme\Infrastructure\Filemanager\ImageSize\ThemeConfigurationProvider:
+    Tulia\Cms\Theme\Infrastructure\Filemanager\ImageSize\ThemeConfigurationImagesSizeProvider:
         tags: [ filemanager.image_size.provider ]
 
     Tulia\Component\Theme\Customizer\Changeset\Storage\StorageInterface:

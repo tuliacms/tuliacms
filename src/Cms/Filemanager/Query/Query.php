@@ -8,7 +8,7 @@ use PDO;
 use Exception;
 use Tulia\Cms\Filemanager\Collection;
 use Tulia\Cms\Filemanager\CollectionInterface;
-use Tulia\Cms\Filemanager\File;
+use Tulia\Cms\Filemanager\Domain\ReadModel\Finder\Model\File;
 use Tulia\Cms\Filemanager\Exception\QueryException;
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
@@ -18,14 +18,8 @@ use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder
  */
 class Query
 {
-    /**
-     * @var QueryBuilder
-     */
-    protected $queryBuilder;
+    protected QueryBuilder $queryBuilder;
 
-    /**
-     * @param QueryBuilder $queryBuilder
-     */
     public function __construct(QueryBuilder $queryBuilder)
     {
         $this->queryBuilder = $queryBuilder;

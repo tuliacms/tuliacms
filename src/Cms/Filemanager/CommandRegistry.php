@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Filemanager;
 
-use Tulia\Cms\Filemanager\Command\CommandInterface;
+use Tulia\Cms\Filemanager\Ports\Domain\Command\CommandInterface;
 use Tulia\Cms\Filemanager\Exception\CommandNotFoundException;
 
 /**
@@ -14,9 +14,6 @@ class CommandRegistry implements CommandRegistryInterface
 {
     protected $commands = [];
 
-    /**
-     * @param iterable $commands
-     */
     public function __construct(iterable $commands)
     {
         $this->commands = $commands;

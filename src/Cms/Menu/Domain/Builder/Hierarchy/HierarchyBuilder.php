@@ -9,7 +9,7 @@ use Tulia\Cms\Menu\Domain\Builder\Identity\Identity;
 use Tulia\Cms\Menu\Domain\Builder\Identity\RegistryInterface;
 use Tulia\Cms\Menu\Domain\ReadModel\Finder\Enum\ScopeEnum;
 use Tulia\Cms\Menu\Domain\ReadModel\Finder\Model\Item;
-use Tulia\Cms\Menu\Ports\Infrastructure\Persistence\ReadModel\MenuFinderInterface;
+use Tulia\Cms\Menu\Ports\Domain\ReadModel\MenuFinderInterface;
 
 /**
  * @author Adam Banaszkiewicz

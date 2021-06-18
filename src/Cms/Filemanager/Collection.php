@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Filemanager;
 
+use Tulia\Cms\Filemanager\Domain\ReadModel\Finder\Model\File;
+
 /**
  * @author Adam Banaszkiewicz
  */
@@ -27,8 +29,8 @@ class Collection implements CollectionInterface
      */
     public function append($element): void
     {
-        if (! $element instanceof FileInterface) {
-            throw new \InvalidArgumentException(sprintf('Element must be instance of %s', FileInterface::class));
+        if (! $element instanceof File) {
+            throw new \InvalidArgumentException(sprintf('Element must be instance of %s', File::class));
         }
 
         $this->elements[] = $element;

@@ -64,5 +64,5 @@ services:
     Tulia\Cms\Node\UserInterface\Web\Backend\BackendMenu\NodeMenuBuilder:
         tags: [ backend_menu.builder ]
 
-    Tulia\Cms\Node\Domain\Filemanager\ImageSize\DefaultSizesProvider:
+    Tulia\Cms\Node\Domain\Filemanager\ImageSize\DefaultSizesImagesSizeProvider:
         tags: [ filemanager.image_size.provider ]

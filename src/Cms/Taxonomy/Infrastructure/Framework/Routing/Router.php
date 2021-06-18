@@ -15,7 +15,7 @@ use Tulia\Cms\Taxonomy\Domain\TaxonomyType\RegistryInterface;
 use Tulia\Cms\Taxonomy\Domain\TaxonomyType\TaxonomyTypeInterface;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\Enum\TermFinderScopeEnum;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\Model\Term;
-use Tulia\Cms\Taxonomy\Ports\Infrastructure\Persistence\Domain\ReadModel\TermFinderInterface;
+use Tulia\Cms\Taxonomy\Ports\Domain\ReadModel\TermFinderInterface;
 use Tulia\Cms\Taxonomy\Ports\Infrastructure\Persistence\Domain\ReadModel\TermPathReadStorageInterface;
 
 /**

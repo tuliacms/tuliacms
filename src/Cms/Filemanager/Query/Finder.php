@@ -7,9 +7,9 @@ namespace Tulia\Cms\Filemanager\Query;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Tulia\Cms\Filemanager\Collection;
 use Tulia\Cms\Filemanager\CollectionInterface;
+use Tulia\Cms\Filemanager\Domain\ReadModel\Finder\Model\File;
 use Tulia\Cms\Filemanager\Event\QueryFilterEvent;
 use Tulia\Cms\Filemanager\Event\QueryPrepareEvent;
-use Tulia\Cms\Filemanager\FileInterface;
 use Tulia\Cms\Filemanager\Exception\MultipleFetchException;
 use Tulia\Cms\Filemanager\Exception\QueryNotFetchedException;
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
@@ -201,7 +201,7 @@ class Finder implements FinderInterface
     /**
      * {@inheritdoc}
      */
-    public function find(string $id, string $type = null): ?FileInterface
+    public function find(string $id, string $type = null): ?File
     {
         $this->setCriteria([
             'id'        => $id,
