@@ -1,4 +1,4 @@
-{% assets ['jquery_ui', 'tulia.contact_forms'] %}
+{% assets ['tulia.contact_forms'] %}
 
 {%- macro renderRequiredAttributes(attributes) -%}
     {%- for name, attr in attributes -%}
