@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Settings;
+namespace Tulia\Cms\Settings\Ports\Domain\Group;
 
 /**
  * @author Adam Banaszkiewicz
  */
-abstract class AbstractGroupFactory implements GroupFactoryInterface
+abstract class AbstractSettingsGroupFactory implements SettingsGroupFactoryInterface
 {
     /**
      * {@inheritdoc}

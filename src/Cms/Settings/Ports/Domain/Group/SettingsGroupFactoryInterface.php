@@ -2,20 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Settings;
+namespace Tulia\Cms\Settings\Ports\Domain\Group;
 
 /**
  * @author Adam Banaszkiewicz
  */
-interface GroupFactoryInterface
+interface SettingsGroupFactoryInterface
 {
-    /**
-     * @return iterable
-     */
     public function factory(): iterable;
 
-    /**
-     * @return iterable
-     */
     public function doFactory(): iterable;
 }

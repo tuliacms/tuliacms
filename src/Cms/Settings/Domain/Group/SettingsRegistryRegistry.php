@@ -2,37 +2,37 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Settings;
+namespace Tulia\Cms\Settings\Domain\Group;
+
+use Tulia\Cms\Settings\Ports\Domain\Group\SettingsGroupFactoryInterface;
+use Tulia\Cms\Settings\Ports\Domain\Group\SettingsGroupInterface;
+use Tulia\Cms\Settings\Ports\Domain\Group\SettingsGroupRegistryInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class Registry implements RegistryInterface
+class SettingsRegistryRegistry implements SettingsGroupRegistryInterface
 {
     /**
-     * @var iterable
+     * @var SettingsGroupFactoryInterface[]
      */
     protected $factories = [];
 
     /**
-     * @var iterable|array|GroupInterface[]
+     * @var SettingsGroupInterface[]
      */
     protected $groups = [];
 
-    /**
-     * @param iterable $factories
-     * @param iterable $groups
-     */
     public function __construct(iterable $factories = [], iterable $groups = [])
     {
         $this->factories = $factories;
-        $this->groups    = $groups;
+        $this->groups = $groups;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function addGroupFactory(GroupFactoryInterface $factory): void
+    public function addGroupFactory(SettingsGroupFactoryInterface $factory): void
     {
         $this->factories[] = $factory;
     }
@@ -60,7 +60,7 @@ class Registry implements RegistryInterface
     /**
      * {@inheritdoc}
      */
-    public function getGroup(string $id): GroupInterface
+    public function getGroup(string $id): SettingsGroupInterface
     {
         $this->callFactories();
 
@@ -89,7 +89,7 @@ class Registry implements RegistryInterface
             $groups[$group->getId()] = $group;
         }
 
-        foreach ($this->factories as $key => $factory) {
+        foreach ($this->factories as $factory) {
             foreach ($factory->doFactory() as $group) {
                 $groups[$group->getId()] = $group;
             }

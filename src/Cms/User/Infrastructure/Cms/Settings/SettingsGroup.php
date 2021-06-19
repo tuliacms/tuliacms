@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Tulia\Cms\User\Infrastructure\Cms\Settings;
 
 use Symfony\Component\Form\FormInterface;
-use Tulia\Cms\Settings\AbstractGroup;
+use Tulia\Cms\Settings\Ports\Domain\Group\AbstractSettingsGroup;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class SettingsGroup extends AbstractGroup
+class SettingsGroup extends AbstractSettingsGroup
 {
     /**
      * {@inheritdoc}

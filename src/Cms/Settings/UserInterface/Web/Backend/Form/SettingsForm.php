@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Settings\UserInterface\Web\Form;
+namespace Tulia\Cms\Settings\UserInterface\Web\Backend\Form;
 
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\AbstractType;
@@ -19,13 +19,14 @@ use Tulia\Cms\WysiwygEditor\Core\Application\WysiwygEditorInterface;
 class SettingsForm extends AbstractType
 {
     protected DateFormatterInterface $formatter;
+
     protected RegistryInterface $editorRegistry;
 
     public function __construct(
         DateFormatterInterface $formatter,
         RegistryInterface $editorRegistry
     ) {
-        $this->formatter      = $formatter;
+        $this->formatter = $formatter;
         $this->editorRegistry = $editorRegistry;
     }
 

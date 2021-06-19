@@ -1,11 +1,11 @@
 backend.settings.send_test_email:
     path: /administrator/settings/-/send-test-email
-    controller: Tulia\Cms\Settings\UserInterface\Web\Controller\Backend\Settings::sendTestEmail
+    controller: Tulia\Cms\Settings\UserInterface\Web\Backend\Controller\Settings::sendTestEmail
     methods: POST|GET
 
 backend.settings:
     path: /administrator/settings/{group}
-    controller: Tulia\Cms\Settings\UserInterface\Web\Controller\Backend\Settings::show
+    controller: Tulia\Cms\Settings\UserInterface\Web\Backend\Controller\Settings::show
     methods: GET|POST
     requirements:
         group: '[a-z0-9\.]+'

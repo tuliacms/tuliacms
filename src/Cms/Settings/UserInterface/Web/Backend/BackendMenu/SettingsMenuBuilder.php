@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Settings\Infrastructure\Cms\BackendMenu;
+namespace Tulia\Cms\Settings\UserInterface\Web\Backend\BackendMenu;
 
 use Tulia\Cms\BackendMenu\Ports\Domain\Builder\BuilderInterface;
 use Tulia\Cms\BackendMenu\Domain\Builder\Helper\BuilderHelperInterface;
@@ -13,14 +13,8 @@ use Tulia\Cms\BackendMenu\Domain\Builder\Registry\ItemRegistryInterface;
  */
 class SettingsMenuBuilder implements BuilderInterface
 {
-    /**
-     * @var BuilderHelperInterface
-     */
-    protected $helper;
+    protected BuilderHelperInterface $helper;
 
-    /**
-     * @param BuilderHelperInterface $helper
-     */
     public function __construct(BuilderHelperInterface $helper)
     {
         $this->helper = $helper;

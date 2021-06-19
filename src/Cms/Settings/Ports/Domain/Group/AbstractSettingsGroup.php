@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Settings;
+namespace Tulia\Cms\Settings\Ports\Domain\Group;
 
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
@@ -11,7 +11,7 @@ use Tulia\Cms\Options\Ports\Infrastructure\Persistence\Domain\WriteModel\Options
 /**
  * @author Adam Banaszkiewicz
  */
-abstract class AbstractGroup implements GroupInterface
+abstract class AbstractSettingsGroup implements SettingsGroupInterface
 {
     protected FormFactoryInterface $formFactory;
 

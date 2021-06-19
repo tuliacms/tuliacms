@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Settings\UserInterface\Web\Controller\Backend;
+namespace Tulia\Cms\Settings\UserInterface\Web\Backend\Controller;
 
 use Swift_Plugins_LoggerPlugin;
 use Swift_Plugins_Loggers_ArrayLogger;
@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\Options\Ports\Infrastructure\Persistence\Domain\WriteModel\OptionsRepositoryInterface;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Platform\Infrastructure\Mail\MailerInterface;
-use Tulia\Cms\Settings\RegistryInterface;
+use Tulia\Cms\Settings\Ports\Domain\Group\SettingsGroupRegistryInterface;
 use Tulia\Component\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Component\Templating\ViewInterface;
 
@@ -22,12 +22,14 @@ use Tulia\Component\Templating\ViewInterface;
  */
 class Settings extends AbstractController
 {
-    protected RegistryInterface $settings;
-    protected OptionsRepositoryInterface $optionsRepository;
+    private SettingsGroupRegistryInterface $settings;
+
+    private OptionsRepositoryInterface $optionsRepository;
+
     private FormFactoryInterface $formFactory;
 
     public function __construct(
-        RegistryInterface $settings,
+        SettingsGroupRegistryInterface $settings,
         OptionsRepositoryInterface $optionsRepository,
         FormFactoryInterface $formFactory
     ) {
@@ -37,8 +39,6 @@ class Settings extends AbstractController
     }
 
     /**
-     * @param Request $request
-     * @param string|null $group
      * @return RedirectResponse|ViewInterface
      * @CsrfToken(id="settings_form")
      */
@@ -80,8 +80,6 @@ class Settings extends AbstractController
     }
 
     /**
-     * @param Request $request
-     * @return JsonResponse
      * @CsrfToken(id="cms_settings_test_mail")
      */
     public function sendTestEmail(Request $request, MailerInterface $mailer): JsonResponse
@@ -97,7 +95,7 @@ class Settings extends AbstractController
         try {
             $message = $mailer->createMessage($this->trans('testMessageSubject', [], 'settings'));
             $message->setTo($request->request->get('recipient'));
-            $message->setBody('<p>'.$this->trans('testMessageBody', [], 'settings').'</p>', 'text/html');
+            $message->setBody('<p>' . $this->trans('testMessageBody', [], 'settings') . '</p>', 'text/html');
 
             $logger = new Swift_Plugins_Loggers_ArrayLogger;
             $mailer->getMailer()->registerPlugin(new Swift_Plugins_LoggerPlugin($logger));

@@ -6,12 +6,12 @@ namespace Tulia\Cms\Node\UserInterface\Web\Backend\Settings;
 
 use Symfony\Component\Form\FormInterface;
 use Tulia\Cms\Node\Domain\NodeType\NodeType;
-use Tulia\Cms\Settings\AbstractGroup;
+use Tulia\Cms\Settings\Ports\Domain\Group\AbstractSettingsGroup;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class SettingsGroup extends AbstractGroup
+class SettingsGroup extends AbstractSettingsGroup
 {
     protected NodeType $nodeType;
 

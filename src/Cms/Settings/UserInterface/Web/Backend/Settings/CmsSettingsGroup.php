@@ -2,15 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Settings;
+namespace Tulia\Cms\Settings\UserInterface\Web\Backend\Settings;
 
 use Symfony\Component\Form\FormInterface;
-use Tulia\Cms\Settings\UserInterface\Web\Form\SettingsForm;
+use Tulia\Cms\Settings\Ports\Domain\Group\AbstractSettingsGroup;
+use Tulia\Cms\Settings\UserInterface\Web\Backend\Form\SettingsForm;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class CmsSettingsGroup extends AbstractGroup
+class CmsSettingsGroup extends AbstractSettingsGroup
 {
     /**
      * {@inheritdoc}

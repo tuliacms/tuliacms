@@ -7,19 +7,19 @@ services:
         resource: '../../../../**'
         exclude: '../../../../{Infrastructure/Framework/Resources}'
 
-    Tulia\Cms\Settings\RegistryInterface:
-        class: Tulia\Cms\Settings\Registry
+    Tulia\Cms\Settings\Ports\Domain\Group\SettingsGroupRegistryInterface:
+        class: Tulia\Cms\Settings\Domain\Group\SettingsRegistryRegistry
         bind:
             $factories: !tagged_iterator settings.group_factory
             $groups: !tagged_iterator settings.group
 
-    Tulia\Cms\Settings\Infrastructure\Cms\SearchAnything\SearchProvider:
+    Tulia\Cms\Settings\Domain\SearchAnything\SearchProvider:
         tags:
             - { name: search.provider, priority: 600 }
 
-    Tulia\Cms\Settings\CmsSettingsGroup:
+    Tulia\Cms\Settings\UserInterface\Web\Backend\Settings\CmsSettingsGroup:
         tags:
             - { name: settings.group, priority: 1000 }
 
-    Tulia\Cms\Settings\Infrastructure\Cms\BackendMenu\SettingsMenuBuilder:
+    Tulia\Cms\Settings\UserInterface\Web\Backend\BackendMenu\SettingsMenuBuilder:
         tags: [ backend_menu.builder ]
