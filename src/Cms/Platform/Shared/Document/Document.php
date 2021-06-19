@@ -10,10 +10,15 @@ namespace Tulia\Cms\Platform\Shared\Document;
 class Document implements DocumentInterface
 {
     protected $title;
+
     protected $description;
+
     protected $keywords;
+
     protected $attributes = [];
+
     protected $links = [];
+
     protected $metas = [];
 
     /**

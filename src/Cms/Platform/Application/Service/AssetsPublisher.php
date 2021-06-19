@@ -12,6 +12,7 @@ use Symfony\Component\Filesystem\Filesystem;
 class AssetsPublisher
 {
     private string $publicDir;
+
     private array $assetsPublicPaths;
 
     public function __construct(string $publicDir, array $assetsPublicPaths = [])

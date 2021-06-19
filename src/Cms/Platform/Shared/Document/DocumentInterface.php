@@ -9,5 +9,4 @@ namespace Tulia\Cms\Platform\Shared\Document;
  */
 interface DocumentInterface
 {
-
 }

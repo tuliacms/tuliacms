@@ -13,17 +13,15 @@ class Paginator extends \JasonGrimes\Paginator
 {
     const NUM_PLACEHOLDER = '__PAGE__';
 
-    /**
-     * @var Request
-     */
-    private $request;
+    private Request $request;
 
     protected $maxPagesToShow = 5;
+
     protected $previousText = '&laquo;';
+
     protected $nextText = '&raquo;';
-    protected $ulClasses = [
-        'pagination'
-    ];
+
+    protected $ulClasses = ['pagination'];
 
     public function __construct(Request $request, int $total, int $page = null, int $perPage = null)
     {

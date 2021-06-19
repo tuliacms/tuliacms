@@ -15,7 +15,9 @@ use Tulia\Cms\Platform\Application\Service\AssetsPublisher;
 class AssetsPublish extends Command
 {
     private AssetsPublisher $assetsPublisher;
+
     private array $assetsPublicPaths;
+
     private string $rootDir;
 
     public function __construct(AssetsPublisher $assetsPublisher, array $assetsPublicPaths, string $rootDir)

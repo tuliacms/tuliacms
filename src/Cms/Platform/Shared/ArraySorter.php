@@ -6,33 +6,20 @@ namespace Tulia\Cms\Platform\Shared;
 
 /**
  * Sorts array of arrays. An array inside must contain following indexes:
- * if - ID of element
- * level - Level of hierarchy
- * parent_id - ID of parent element
+ *   - id - ID of element
+ *   - level - Level of hierarchy
+ *   - parent_id - ID of parent element
  *
  * @author Adam Banaszkiewicz
  */
 class ArraySorter
 {
-    /**
-     * @var array
-     */
-    protected $source = [];
+    protected array $source = [];
 
-    /**
-     * @var array
-     */
-    protected $options = [];
+    protected array $options = [];
 
-    /**
-     * @var array
-     */
-    protected $result = [];
+    protected array $result = [];
 
-    /**
-     * @param array $source
-     * @param array $options
-     */
     public function __construct(array $source = [], array $options = [])
     {
         $this->source  = $source;
@@ -41,9 +28,6 @@ class ArraySorter
         ], $options);
     }
 
-    /**
-     * @return array
-     */
     public function sort(): array
     {
         foreach ($this->source as $item) {
@@ -63,9 +47,6 @@ class ArraySorter
         return $this->result;
     }
 
-    /**
-     * @param array $item
-     */
     private function sortFlat(array $item): void
     {
         foreach ($this->source as $sItem) {
@@ -76,11 +57,6 @@ class ArraySorter
         }
     }
 
-    /**
-     * @param array $item
-     *
-     * @return array
-     */
     private function sortHierarhy(array $item): array
     {
         $children = [];

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Platform\Domain\ValueObject;
+namespace Tulia\Cms\Platform\Domain\WriteModel\Model\ValueObject;
 
 use DateTime;
 use DateTimeImmutable;

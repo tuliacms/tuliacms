@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\User\Domain\Aggregate;
 
 use Tulia\Cms\Metadata\Domain\WriteModel\MagickMetadataTrait;
-use Tulia\Cms\Platform\Domain\Aggregate\AggregateRoot;
+use Tulia\Cms\Platform\Domain\WriteModel\Model\AggregateRoot;
 use Tulia\Cms\User\Domain\ValueObject\AggregateId;
 use Tulia\Cms\User\Domain\Exception;
 use Tulia\Cms\User\Domain\Event;

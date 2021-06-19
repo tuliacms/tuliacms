@@ -6,7 +6,7 @@ namespace Tulia\Cms\Widget\Domain\WriteModel\Model;
 
 use Tulia\Cms\Widget\Domain\WriteModel\Event;
 use Tulia\Cms\Widget\Domain\WriteModel\Model\ValueObject\WidgetId;
-use Tulia\Cms\Platform\Domain\Aggregate\AggregateRoot;
+use Tulia\Cms\Platform\Domain\WriteModel\Model\AggregateRoot;
 use Tulia\Component\Widget\Configuration\ArrayConfiguration;
 use Tulia\Component\Widget\Configuration\ConfigurationInterface;
 use Tulia\Component\Widget\WidgetInterface;

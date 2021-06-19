@@ -9,8 +9,8 @@ use Tulia\Cms\ContactForm\Domain\FieldsParser\Exception\MultipleFieldsInTemplate
 use Tulia\Cms\ContactForm\Domain\WriteModel\Model\ValueObject\FormId;
 use Tulia\Cms\ContactForm\Domain\Event;
 use Tulia\Cms\ContactForm\Ports\Domain\FieldsParser\FieldsParserInterface;
-use Tulia\Cms\Platform\Domain\Aggregate\AggregateRoot;
-use Tulia\Cms\Platform\Domain\Model\EntitiesChangelog;
+use Tulia\Cms\Platform\Domain\WriteModel\Model\AggregateRoot;
+use Tulia\Cms\Platform\Domain\WriteModel\EntitiesChangelog;
 
 /**
  * @author Adam Banaszkiewicz

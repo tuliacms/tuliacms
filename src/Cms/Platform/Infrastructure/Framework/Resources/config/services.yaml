@@ -14,7 +14,10 @@ services:
 
     Tulia\Cms\Platform\:
         resource: '../../../../**'
-        exclude: '../../../../{Infrastructure/Framework/Resources}'
+        exclude: '../../../../{Infrastructure/Framework/Resources,Domain/WriteModel,Shared}'
+
+    Tulia\Cms\Platform\Shared\Document\DocumentInterface:
+        class: Tulia\Cms\Platform\Shared\Document\Document
 
     Tulia\Cms\Platform\UserInterface\Console\Command\AssetsPublish:
         tags:

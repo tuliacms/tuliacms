@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Platform\Domain\Model;
+namespace Tulia\Cms\Platform\Domain\WriteModel;
+
+use Tulia\Cms\Platform\Domain\WriteModel\Model\Entity\IndentifyableEntityInterface;
 
 /**
  * @author Adam Banaszkiewicz

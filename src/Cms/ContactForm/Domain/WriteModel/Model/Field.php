@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContactForm\Domain\WriteModel\Model;
 
-use Tulia\Cms\Platform\Domain\Model\IndentifyableEntityInterface;
-use Tulia\Cms\Platform\Domain\ValueObject\EntityIdInterface;
-use Tulia\Cms\Platform\Domain\ValueObject\SimpleEntityId;
+use Tulia\Cms\Platform\Domain\WriteModel\Model\Entity\IndentifyableEntityInterface;
+use Tulia\Cms\Platform\Domain\WriteModel\Model\ValueObject\EntityIdInterface;
+use Tulia\Cms\Platform\Domain\WriteModel\Model\ValueObject\SimpleEntityId;
 
 /**
  * @author Adam Banaszkiewicz

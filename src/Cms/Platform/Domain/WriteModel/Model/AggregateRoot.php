@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Platform\Domain\Aggregate;
+namespace Tulia\Cms\Platform\Domain\WriteModel\Model;
 
-use Tulia\Cms\Platform\Domain\Event\DomainEvent;
+use Tulia\Cms\Platform\Domain\WriteModel\Event\DomainEvent;
 
 /**
  * @author Adam Banaszkiewicz

@@ -6,35 +6,23 @@ namespace Tulia\Cms\Platform\Shared;
 
 /**
  * Sorts array of objects. An object must contain following methods:
- * getId() - ID of element
- * getLevel() - Level of hierarchy
- * getParentId() - ID of parent element
+ *   - getId() - ID of element
+ *   - getLevel() - Level of hierarchy
+ *   - getParentId() - ID of parent element
  *
  * @author Adam Banaszkiewicz
  */
 class ObjectSorter
 {
-    /**
-     * @var array
-     */
-    protected $source = [];
+    protected array $source = [];
 
-    /**
-     * @var array
-     */
-    protected $result = [];
+    protected array $result = [];
 
-    /**
-     * @param array $source
-     */
     public function __construct(array $source = [])
     {
         $this->source = $source;
     }
 
-    /**
-     * @return array
-     */
     public function sort(): array
     {
         foreach ($this->source as $item) {
@@ -48,9 +36,6 @@ class ObjectSorter
         return $this->result;
     }
 
-    /**
-     * @param object $item
-     */
     private function sortForItem(object $item): void
     {
         foreach ($this->source as $sItem) {

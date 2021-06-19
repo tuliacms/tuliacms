@@ -9,10 +9,7 @@ namespace Tulia\Cms\Platform\Shared\Collection;
  */
 abstract class AbstractCollection implements \ArrayAccess, \IteratorAggregate
 {
-    /**
-     * @var array
-     */
-    protected $elements = [];
+    protected array $elements = [];
 
     /**
      * @param mixed $element
@@ -26,9 +23,6 @@ abstract class AbstractCollection implements \ArrayAccess, \IteratorAggregate
      */
     abstract public function first();
 
-    /**
-     * @param array $elements
-     */
     public function __construct(array $elements = [])
     {
         $this->replace($elements);

@@ -7,7 +7,7 @@ namespace Tulia\Cms\Taxonomy\Domain\WriteModel\Model;
 use Tulia\Cms\Metadata\Domain\WriteModel\MagickMetadataTrait;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Event;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\ValueObject\TermId;
-use Tulia\Cms\Platform\Domain\Aggregate\AggregateRoot;
+use Tulia\Cms\Platform\Domain\WriteModel\Model\AggregateRoot;
 
 /**
  * @author Adam Banaszkiewicz

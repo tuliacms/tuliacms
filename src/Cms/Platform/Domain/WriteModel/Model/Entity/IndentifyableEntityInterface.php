@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Platform\Domain\Model;
+namespace Tulia\Cms\Platform\Domain\WriteModel\Model\Entity;
 
-use Tulia\Cms\Platform\Domain\ValueObject\EntityIdInterface;
+use Tulia\Cms\Platform\Domain\WriteModel\Model\ValueObject\EntityIdInterface;
 
 /**
  * @author Adam Banaszkiewicz

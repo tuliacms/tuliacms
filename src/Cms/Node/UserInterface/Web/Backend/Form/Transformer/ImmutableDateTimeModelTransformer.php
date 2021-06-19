@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Node\UserInterface\Web\Backend\Form\Transformer;
 
 use Symfony\Component\Form\DataTransformerInterface;
-use Tulia\Cms\Platform\Domain\ValueObject\ImmutableDateTime;
+use Tulia\Cms\Platform\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
 
 /**
  * @author Adam Banaszkiewicz
