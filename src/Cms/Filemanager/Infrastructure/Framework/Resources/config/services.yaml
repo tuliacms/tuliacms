@@ -22,8 +22,7 @@ services:
         bind:
             $providers: !tagged_iterator filemanager.image_size.provider
 
-    Tulia\Cms\Filemanager\CommandRegistryInterface:
-        class: Tulia\Cms\Filemanager\CommandRegistry
+    Tulia\Cms\Filemanager\Application\Command\CommandRegistry:
         bind:
             $commands: !tagged_iterator filemanager.command
 

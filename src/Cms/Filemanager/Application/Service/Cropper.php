@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Filemanager\Application\Service;
 
 use Tulia\Cms\Filemanager\Domain\ReadModel\Finder\Model\File;
-use Tulia\Cms\Filemanager\Enum\TypeEnum;
+use Tulia\Cms\Filemanager\Ports\Domain\WriteModel\FileTypeEnum;
 use Tulia\Cms\Filemanager\Ports\Domain\ImageSize\ImagesSizeRegistryInterface;
 use Tulia\Component\Image\ImageInterface;
 use Tulia\Component\Image\ImageManagerInterface;
@@ -30,7 +30,7 @@ class Cropper
 
     public function crop(File $image, string $sizeName): string
     {
-        if ($image->getType() !== TypeEnum::IMAGE) {
+        if ($image->getType() !== FileTypeEnum::IMAGE) {
             throw new \InvalidArgumentException(sprintf('First argument of crop() method must be an image, "%s" given.', $image->getType()));
         }
 

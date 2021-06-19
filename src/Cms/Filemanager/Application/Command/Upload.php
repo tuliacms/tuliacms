@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\Filemanager\Application\Command\Helper\FileResponseFormatter;
-use Tulia\Cms\Filemanager\Enum\TypeEnum;
+use Tulia\Cms\Filemanager\Ports\Domain\WriteModel\FileTypeEnum;
 use Tulia\Cms\Filemanager\Ports\Domain\Command\CommandInterface;
 use Tulia\Cms\Filemanager\Ports\Domain\ReadModel\FileFinderInterface;
 use Tulia\Cms\Filemanager\Ports\Domain\ReadModel\FileFinderScopeEnum;
@@ -141,7 +141,7 @@ class Upload implements CommandInterface
 
         $this->connection->insert('#__filemanager_file', $file);
 
-        if ($file['type'] === TypeEnum::IMAGE) {
+        if ($file['type'] === FileTypeEnum::IMAGE) {
             $this->createThumbnails($file);
         }
 
@@ -172,19 +172,19 @@ class Upload implements CommandInterface
         switch ($extension) {
             case 'png':
             case 'jpg':
-            case 'jpeg': return TypeEnum::IMAGE;
+            case 'jpeg': return FileTypeEnum::IMAGE;
             case 'zip':
             case 'rar':
             case 'gz':
-            case 'tar': return TypeEnum::ARCHIVE;
+            case 'tar': return FileTypeEnum::ARCHIVE;
             case 'txt':
             case 'doc':
-            case 'docx': return TypeEnum::DOCUMENT;
-            case 'pdf': return TypeEnum::PDF;
-            case 'svg': return TypeEnum::SVG;
+            case 'docx': return FileTypeEnum::DOCUMENT;
+            case 'pdf': return FileTypeEnum::PDF;
+            case 'svg': return FileTypeEnum::SVG;
         }
 
-        return TypeEnum::FILE;
+        return FileTypeEnum::FILE;
     }
 
     private function createThumbnails(array $file): void

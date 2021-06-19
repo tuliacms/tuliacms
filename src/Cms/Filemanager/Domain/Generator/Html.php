@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Filemanager\Generator;
+namespace Tulia\Cms\Filemanager\Domain\Generator;
 
 /**
  * @author Adam Banaszkiewicz
@@ -24,11 +24,6 @@ class Html
         return "<figure><img {$attributes} />{$caption}</figure>";
     }
 
-    /**
-     * @param array $attributes
-     *
-     * @return string
-     */
     private function renderHtmlAttributes(array $attributes): string
     {
         $result = [];

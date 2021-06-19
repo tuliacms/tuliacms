@@ -7,7 +7,7 @@ namespace Tulia\Cms\Node\Domain\SearchAnything;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Cms\Filemanager\Application\Service\ImageUrlResolver;
-use Tulia\Cms\Filemanager\Enum\TypeEnum;
+use Tulia\Cms\Filemanager\Ports\Domain\WriteModel\FileTypeEnum;
 use Tulia\Cms\Filemanager\Ports\Domain\ReadModel\FileFinderInterface;
 use Tulia\Cms\Filemanager\Ports\Domain\ReadModel\FileFinderScopeEnum as FilesScopeEnum;
 use Tulia\Cms\Node\Domain\NodeType\Enum\ParametersEnum;
@@ -113,7 +113,7 @@ class SearchProvider extends AbstractProvider
 
         $images = $this->filesFinder->find([
             'id__in' => $ids,
-            'type'   => TypeEnum::IMAGE,
+            'type'   => FileTypeEnum::IMAGE,
         ], FilesScopeEnum::SEARCH);
 
         if ($images->count() === 0) {

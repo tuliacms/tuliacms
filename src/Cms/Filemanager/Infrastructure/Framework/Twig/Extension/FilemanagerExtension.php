@@ -7,9 +7,9 @@ namespace Tulia\Cms\Filemanager\Infrastructure\Framework\Twig\Extension;
 use Tulia\Cms\Filemanager\Application\Service\ImageUrlResolver;
 use Tulia\Cms\Filemanager\Ports\Domain\ReadModel\FileFinderInterface;
 use Tulia\Cms\Filemanager\Ports\Domain\ReadModel\FileFinderScopeEnum;
-use Tulia\Cms\Filemanager\Enum\TypeEnum;
+use Tulia\Cms\Filemanager\Ports\Domain\WriteModel\FileTypeEnum;
 use Tulia\Cms\Filemanager\Domain\ReadModel\Finder\Model\File;
-use Tulia\Cms\Filemanager\Generator\Html;
+use Tulia\Cms\Filemanager\Domain\Generator\Html;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -57,7 +57,7 @@ class FilemanagerExtension extends AbstractExtension
     {
         $image = $this->finder->findOne([
             'id' => $id,
-            'type' => TypeEnum::IMAGE,
+            'type' => FileTypeEnum::IMAGE,
         ], FileFinderScopeEnum::SINGLE);
 
         if ($image === null) {
@@ -92,7 +92,7 @@ class FilemanagerExtension extends AbstractExtension
         } else {
             $image = $this->finder->findOne([
                 'id' => $id,
-                'type' => TypeEnum::IMAGE,
+                'type' => FileTypeEnum::IMAGE,
             ], FileFinderScopeEnum::SINGLE);
 
             if ($image === null) {
@@ -107,7 +107,7 @@ class FilemanagerExtension extends AbstractExtension
     {
         $images = $this->finder->find([
             'id__in' => $ids,
-            'type'   => TypeEnum::IMAGE,
+            'type'   => FileTypeEnum::IMAGE,
             'order_by'  => 'id',
             'order_dir' => $ids
         ], FileFinderScopeEnum::SINGLE);
@@ -133,7 +133,7 @@ class FilemanagerExtension extends AbstractExtension
     {
         $svg = $this->finder->findOne([
             'id' => $id,
-            'type' => TypeEnum::SVG,
+            'type' => FileTypeEnum::SVG,
         ], FileFinderScopeEnum::SINGLE);
 
         if ($svg === null) {
@@ -160,7 +160,7 @@ class FilemanagerExtension extends AbstractExtension
         } else {
             $svg = $this->finder->findOne([
                 'id' => $id,
-                'type' => TypeEnum::SVG,
+                'type' => FileTypeEnum::SVG,
             ], FileFinderScopeEnum::SINGLE);
 
             if ($svg === null) {

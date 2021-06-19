@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Filemanager;
+namespace Tulia\Cms\Filemanager\Application\Command;
 
+use RuntimeException;
 use Tulia\Cms\Filemanager\Ports\Domain\Command\CommandInterface;
-use Tulia\Cms\Filemanager\Exception\CommandNotFoundException;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class CommandRegistry implements CommandRegistryInterface
+class CommandRegistry
 {
     protected $commands = [];
 
@@ -19,9 +19,6 @@ class CommandRegistry implements CommandRegistryInterface
         $this->commands = $commands;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function has(string $name): bool
     {
         /** @var CommandInterface $command */
@@ -35,7 +32,7 @@ class CommandRegistry implements CommandRegistryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @throws RuntimeException
      */
     public function get(string $name): CommandInterface
     {
@@ -46,6 +43,6 @@ class CommandRegistry implements CommandRegistryInterface
             }
         }
 
-        throw new CommandNotFoundException(sprintf('Command %s not found.', $name));
+        throw new RuntimeException(sprintf('Command %s not found.', $name));
     }
 }

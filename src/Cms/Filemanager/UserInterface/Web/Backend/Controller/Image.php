@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Tulia\Cms\Filemanager\Application\Service\Cropper;
 use Tulia\Cms\Filemanager\Domain\ReadModel\Finder\Model\File;
-use Tulia\Cms\Filemanager\Enum\TypeEnum;
+use Tulia\Cms\Filemanager\Ports\Domain\WriteModel\FileTypeEnum;
 use Tulia\Cms\Filemanager\Ports\Domain\ReadModel\FileFinderInterface;
 use Tulia\Cms\Filemanager\Ports\Domain\ReadModel\FileFinderScopeEnum;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
@@ -49,7 +49,7 @@ class Image extends AbstractController
     {
         $image = $this->finder->findOne([
             'id' => $id,
-            'type' => TypeEnum::IMAGE
+            'type' => FileTypeEnum::IMAGE
         ], FileFinderScopeEnum::SINGLE);
 
         if (! $image) {
