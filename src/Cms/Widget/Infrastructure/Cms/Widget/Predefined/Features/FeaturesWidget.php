@@ -14,6 +14,14 @@ use Tulia\Component\Widget\Configuration\ConfigurationInterface;
  */
 class FeaturesWidget extends AbstractWidget
 {
+    /**
+     * {@inheritdoc}
+     */
+    public static function getId(): string
+    {
+        return 'internal.features';
+    }
+
     public function configure(ConfigurationInterface $configuration): void
     {
         $configuration->multilingualFields(['features']);
@@ -40,17 +48,9 @@ class FeaturesWidget extends AbstractWidget
     /**
      * {@inheritdoc}
      */
-    public function getId(): string
-    {
-        return 'internal.features';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function render(ConfigurationInterface $config): ?ViewInterface
     {
-        return $this->view('frontend.tpl', [
+        return $this->view('@widget/internal/features/frontend.tpl', [
             'features' => $config->get('features'),
         ]);
     }
@@ -60,7 +60,7 @@ class FeaturesWidget extends AbstractWidget
      */
     public function getView(ConfigurationInterface $config): ?ViewInterface
     {
-        return $this->view('backend.tpl');
+        return $this->view('@widget/internal/features/backend.tpl');
     }
 
     public function saveAction(FormInterface $form, ConfigurationInterface $config): void

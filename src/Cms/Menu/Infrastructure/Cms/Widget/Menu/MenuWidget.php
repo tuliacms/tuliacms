@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Widget\Infrastructure\Cms\Widget\Predefined\Menu;
+namespace Tulia\Cms\Menu\Infrastructure\Cms\Widget\Menu;
 
 use Tulia\Cms\Menu\Domain\Builder\BuilderInterface;
 use Tulia\Component\Templating\ViewInterface;
@@ -11,7 +11,6 @@ use Tulia\Component\Widget\Configuration\ConfigurationInterface;
 
 /**
  * @author Adam Banaszkiewicz
- * @todo Move widget to Menu module.
  */
 class MenuWidget extends AbstractWidget
 {
@@ -20,6 +19,14 @@ class MenuWidget extends AbstractWidget
     public function __construct(BuilderInterface $builder)
     {
         $this->builder = $builder;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getId(): string
+    {
+        return 'internal.menu';
     }
 
     public function configure(ConfigurationInterface $configuration): void
@@ -43,17 +50,9 @@ class MenuWidget extends AbstractWidget
     /**
      * {@inheritdoc}
      */
-    public function getId(): string
-    {
-        return 'internal.menu';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function render(ConfigurationInterface $config): ?ViewInterface
     {
-        return $this->view('frontend.tpl', [
+        return $this->view('@widget/internal/menu/frontend.tpl', [
             'menu' => $this->builder->buildHtml($config->get('menu_id')),
         ]);
     }
@@ -63,7 +62,7 @@ class MenuWidget extends AbstractWidget
      */
     public function getView(ConfigurationInterface $config): ?ViewInterface
     {
-        return $this->view('backend.tpl');
+        return $this->view('@widget/internal/menu/backend.tpl');
     }
 
     /**

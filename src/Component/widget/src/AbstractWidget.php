@@ -62,16 +62,8 @@ abstract class AbstractWidget implements WidgetInterface
 
     }
 
-    /**
-     * @param string $view
-     * @param array $data
-     *
-     * @return ViewInterface
-     */
     public function view(string $view, array $data = []): ViewInterface
     {
-        $name = str_replace('.', '/', $this->getId());
-
-        return new View("@widget/{$name}/{$view}", $data);
+        return new View($view, $data);
     }
 }

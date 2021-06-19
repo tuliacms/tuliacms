@@ -12,7 +12,6 @@ use Tulia\Bundle\FrameworkBundle\DependencyInjection\CompilerPass\CommandBusPass
 use Tulia\Bundle\FrameworkBundle\DependencyInjection\CompilerPass\FinderPass;
 use Tulia\Bundle\FrameworkBundle\DependencyInjection\CompilerPass\RoutingPass;
 use Tulia\Bundle\FrameworkBundle\DependencyInjection\CompilerPass\TemplatingPass;
-use Tulia\Bundle\FrameworkBundle\DependencyInjection\CompilerPass\ThemePass;
 use Tulia\Bundle\FrameworkBundle\DependencyInjection\TuliaCmsExtension;
 use Tulia\Component\Security\DependencyInjection\CompilerPass\SecurityPass;
 
@@ -48,7 +47,6 @@ class TuliaFrameworkBundle extends FrameworkBundle
         $container->addCompilerPass(new TemplatingPass());
         $container->addCompilerPass(new CommandBusPass());
         $container->addCompilerPass(new RoutingPass());
-        $container->addCompilerPass(new ThemePass());
         $container->addCompilerPass(new SecurityPass());
         $container->addCompilerPass(new FinderPass());
     }
