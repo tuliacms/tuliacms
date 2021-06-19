@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Widget\Domain\ReadModel\Finder\Enum;
+namespace Tulia\Cms\Widget\Ports\Domain\ReadModel;
 
 /**
  * @author Adam Banaszkiewicz

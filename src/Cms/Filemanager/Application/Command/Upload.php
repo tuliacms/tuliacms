@@ -9,7 +9,7 @@ use Tulia\Component\Image\ImageManagerInterface;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\File;
 use Tulia\Cms\Filemanager\Application\Command\Helper\FileResponseFormatter;
-use Tulia\Cms\Filemanager\Domain\ReadModel\Finder\Enum\FilemanagerFinderScopeEnum;
+use Tulia\Cms\Filemanager\Ports\Domain\ReadModel\FileFinderScopeEnum;
 use Tulia\Cms\Filemanager\Enum\TypeEnum;
 use Tulia\Cms\Filemanager\Query\FinderFactoryInterface;
 use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Slug\SluggerInterface;
@@ -82,7 +82,7 @@ class Upload implements CommandInterface
         foreach ($request->files as $source) {
             $id = $this->upload($source, $directory[0]);
 
-            $file = $this->finderFactory->getInstance(FilemanagerFinderScopeEnum::FILEMANAGER)->find($id);
+            $file = $this->finderFactory->getInstance(FileFinderScopeEnum::FILEMANAGER)->find($id);
 
             $files[] = $this->formatter->format($file);
         }

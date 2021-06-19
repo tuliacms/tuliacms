@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Filemanager\Domain\ReadModel\Finder\Enum;
+namespace Tulia\Cms\Filemanager\Ports\Domain\ReadModel;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class FilemanagerFinderScopeEnum
+class FileFinderScopeEnum
 {
     public const SINGLE = 'single';
 

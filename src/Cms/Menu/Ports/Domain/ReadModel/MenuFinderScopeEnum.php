@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Menu\Domain\ReadModel\Finder\Enum;
+namespace Tulia\Cms\Menu\Ports\Domain\ReadModel;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class ScopeEnum
+class MenuFinderScopeEnum
 {
     /**
      * Backend, nodes listing.

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Node\Domain\WriteModel\ActionsChain\Core;
 
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Tulia\Cms\Node\Domain\ReadModel\Finder\Enum\NodeFinderScopeEnum;
+use Tulia\Cms\Node\Ports\Domain\ReadModel\NodeFinderScopeEnum;
 use Tulia\Cms\Node\Domain\WriteModel\ActionsChain\NodeActionInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Exception\NodeCannotBeRemovedException;
 use Tulia\Cms\Node\Domain\WriteModel\Model\Node;

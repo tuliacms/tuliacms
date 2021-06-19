@@ -16,7 +16,7 @@ use Tulia\Cms\Node\Ports\Domain\ReadModel\NodeFinderInterface;
 use Tulia\Cms\Node\UserInterface\Web\Backend\Form\NodeForm;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
-use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\Enum\TermFinderScopeEnum;
+use Tulia\Cms\Taxonomy\Ports\Domain\ReadModel\TermFinderScopeEnum;
 use Tulia\Cms\Taxonomy\Domain\TaxonomyType\RegistryInterface as TaxonomyRegistry;
 use Tulia\Cms\Taxonomy\Ports\Domain\ReadModel\TermFinderInterface;
 use Tulia\Component\Datatable\DatatableFactory;

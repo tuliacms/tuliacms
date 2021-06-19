@@ -10,7 +10,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Tulia\Cms\Options\Application\Service\WebsitesOptionsRegistrator;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
-use Tulia\Cms\Website\Domain\ReadModel\Finder\Enum\ScopeEnum;
+use Tulia\Cms\Website\Ports\Domain\ReadModel\WebsiteFinderScopeEnum;
 use Tulia\Cms\Website\Ports\Domain\ReadModel\WebsiteFinderInterface;
 
 /**
@@ -65,6 +65,6 @@ class OptionsRegister extends Command
             $criteria = ['id__in' => $websiteIdList];
         }
 
-        return $this->websiteFinder->find($criteria, ScopeEnum::INTERNAL);
+        return $this->websiteFinder->find($criteria, WebsiteFinderScopeEnum::INTERNAL);
     }
 }

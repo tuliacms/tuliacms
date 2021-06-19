@@ -6,7 +6,7 @@ namespace Tulia\Cms\Node\Infrastructure\Framework\Form\FormType;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Tulia\Cms\Node\Domain\ReadModel\Finder\Enum\NodeFinderScopeEnum;
+use Tulia\Cms\Node\Ports\Domain\ReadModel\NodeFinderScopeEnum;
 use Tulia\Cms\Node\Ports\Domain\ReadModel\NodeFinderInterface;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\TypeaheadType;
 

@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Tulia\Cms\BackendMenu\Ports\Domain\Builder\BuilderInterface;
 use Tulia\Cms\BackendMenu\Domain\Builder\Helper\BuilderHelperInterface;
 use Tulia\Cms\BackendMenu\Domain\Builder\Registry\ItemRegistryInterface;
-use Tulia\Cms\Menu\Domain\ReadModel\Finder\Enum\ScopeEnum;
+use Tulia\Cms\Menu\Ports\Domain\ReadModel\MenuFinderScopeEnum;
 use Tulia\Cms\Menu\Domain\WriteModel\Event\MenuCreated;
 use Tulia\Cms\Menu\Domain\WriteModel\Event\MenuDeleted;
 use Tulia\Cms\Menu\Domain\WriteModel\Event\MenuUpdated;
@@ -100,7 +100,7 @@ class MenuMenuBuilder implements BuilderInterface, EventSubscriberInterface
             return $request->getSession()->get($this->getCachekey());
         }
 
-        $source = $this->menuFinder->find([], ScopeEnum::INTERNAL);
+        $source = $this->menuFinder->find([], MenuFinderScopeEnum::INTERNAL);
 
         $menus = [];
 

@@ -9,7 +9,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Tulia\Cms\Menu\Domain\ReadModel\Finder\Enum\ScopeEnum;
+use Tulia\Cms\Menu\Ports\Domain\ReadModel\MenuFinderScopeEnum;
 use Tulia\Cms\Menu\Domain\WriteModel\Model\Item;
 use Tulia\Cms\Menu\Ports\Domain\ReadModel\MenuFinderInterface;
 
@@ -93,7 +93,7 @@ class MenuItemChoiceType extends ChoiceType
 
     protected function collectChoices(string $menuId): array
     {
-        $source = $this->menuFinder->findOne(['id' => $menuId], ScopeEnum::INTERNAL);
+        $source = $this->menuFinder->findOne(['id' => $menuId], MenuFinderScopeEnum::INTERNAL);
 
         if (! $source) {
             return [];

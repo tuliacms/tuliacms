@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Filemanager\Infrastructure\Framework\Twig\Extension;
 
 use Tulia\Cms\Filemanager\Application\Service\ImageUrlResolver;
-use Tulia\Cms\Filemanager\Domain\ReadModel\Finder\Enum\FilemanagerFinderScopeEnum;
+use Tulia\Cms\Filemanager\Ports\Domain\ReadModel\FileFinderScopeEnum;
 use Tulia\Cms\Filemanager\Enum\TypeEnum;
 use Tulia\Cms\Filemanager\Domain\ReadModel\Finder\Model\File;
 use Tulia\Cms\Filemanager\Generator\Html;
@@ -73,7 +73,7 @@ class FilemanagerExtension extends AbstractExtension
      */
     public function image(string $id, $params = []): string
     {
-        $image = $this->finderFactory->getInstance(FilemanagerFinderScopeEnum::SINGLE)->find($id, TypeEnum::IMAGE);
+        $image = $this->finderFactory->getInstance(FileFinderScopeEnum::SINGLE)->find($id, TypeEnum::IMAGE);
 
         if ($image === null) {
             return '';
@@ -102,7 +102,7 @@ class FilemanagerExtension extends AbstractExtension
         if ($id instanceof File) {
             $image = $id;
         } else {
-            $image = $this->finderFactory->getInstance(FilemanagerFinderScopeEnum::SINGLE)->find($id, TypeEnum::IMAGE);
+            $image = $this->finderFactory->getInstance(FileFinderScopeEnum::SINGLE)->find($id, TypeEnum::IMAGE);
 
             if ($image === null) {
                 return '';
@@ -114,7 +114,7 @@ class FilemanagerExtension extends AbstractExtension
 
     public function gallery(array $ids, array $params = []): string
     {
-        $finder = $this->finderFactory->getInstance(FilemanagerFinderScopeEnum::SINGLE);
+        $finder = $this->finderFactory->getInstance(FileFinderScopeEnum::SINGLE);
         $finder->setCriteria([
             'id__in' => $ids,
             'type'   => TypeEnum::IMAGE,
@@ -144,7 +144,7 @@ class FilemanagerExtension extends AbstractExtension
 
     public function svg(string $id, $params = []): string
     {
-        $svg = $this->finderFactory->getInstance(FilemanagerFinderScopeEnum::SINGLE)->find($id, TypeEnum::SVG);
+        $svg = $this->finderFactory->getInstance(FileFinderScopeEnum::SINGLE)->find($id, TypeEnum::SVG);
 
         if ($svg === null) {
             return '';
@@ -167,7 +167,7 @@ class FilemanagerExtension extends AbstractExtension
         if ($id instanceof File) {
             $svg = $id;
         } else {
-            $svg = $this->finderFactory->getInstance(FilemanagerFinderScopeEnum::SINGLE)->find($id, TypeEnum::SVG);
+            $svg = $this->finderFactory->getInstance(FileFinderScopeEnum::SINGLE)->find($id, TypeEnum::SVG);
 
             if ($svg === null) {
                 return '';
@@ -179,6 +179,6 @@ class FilemanagerExtension extends AbstractExtension
 
     public function isFileType(string $id, string $type): bool
     {
-        return (bool) $this->finderFactory->getInstance(FilemanagerFinderScopeEnum::SINGLE)->find($id, $type);
+        return (bool) $this->finderFactory->getInstance(FileFinderScopeEnum::SINGLE)->find($id, $type);
     }
 }

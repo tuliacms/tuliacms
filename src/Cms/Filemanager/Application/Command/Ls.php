@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Filemanager\Application\Command;
 
 use Tulia\Cms\Filemanager\Application\Command\Helper\FileResponseFormatter;
-use Tulia\Cms\Filemanager\Domain\ReadModel\Finder\Enum\FilemanagerFinderScopeEnum;
+use Tulia\Cms\Filemanager\Ports\Domain\ReadModel\FileFinderScopeEnum;
 use Tulia\Cms\Filemanager\Domain\ReadModel\Finder\Model\File;
 use Tulia\Cms\Filemanager\Ports\Domain\Command\CommandInterface;
 use Tulia\Cms\Filemanager\Query\FinderFactoryInterface;
@@ -70,7 +70,7 @@ class Ls implements CommandInterface
             $criteria['type'] = $types;
         }
 
-        $finder = $this->finderFactory->getInstance(FilemanagerFinderScopeEnum::FILEMANAGER);
+        $finder = $this->finderFactory->getInstance(FileFinderScopeEnum::FILEMANAGER);
         $finder->setCriteria($criteria);
         $finder->fetch();
 

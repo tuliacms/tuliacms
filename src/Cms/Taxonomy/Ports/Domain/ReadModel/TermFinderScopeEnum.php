@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\Enum;
+namespace Tulia\Cms\Taxonomy\Ports\Domain\ReadModel;
 
 /**
  * @author Adam Banaszkiewicz

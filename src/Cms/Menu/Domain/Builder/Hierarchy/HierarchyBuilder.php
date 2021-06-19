@@ -7,7 +7,7 @@ namespace Tulia\Cms\Menu\Domain\Builder\Hierarchy;
 use Tulia\Cms\Menu\Domain\Builder\Hierarchy\Item as BuilderItem;
 use Tulia\Cms\Menu\Domain\Builder\Identity\Identity;
 use Tulia\Cms\Menu\Domain\Builder\Identity\RegistryInterface;
-use Tulia\Cms\Menu\Domain\ReadModel\Finder\Enum\ScopeEnum;
+use Tulia\Cms\Menu\Ports\Domain\ReadModel\MenuFinderScopeEnum;
 use Tulia\Cms\Menu\Domain\ReadModel\Finder\Model\Item;
 use Tulia\Cms\Menu\Ports\Domain\ReadModel\MenuFinderInterface;
 
@@ -45,7 +45,7 @@ class HierarchyBuilder implements HierarchyBuilderInterface
 
     private function getItems(string $id): array
     {
-        $menu = $this->menuFinder->findOne(['id' => $id], ScopeEnum::BUILD_MENU);
+        $menu = $this->menuFinder->findOne(['id' => $id], MenuFinderScopeEnum::BUILD_MENU);
 
         return $menu ? $menu->getItems() : [];
     }

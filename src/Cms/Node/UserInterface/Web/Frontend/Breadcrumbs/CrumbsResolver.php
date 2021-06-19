@@ -8,11 +8,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
 use Tulia\Cms\Breadcrumbs\Ports\Domain\BreadcrumbsResolverInterface;
 use Tulia\Cms\Node\Domain\NodeType\RegistryInterface as NodeTypeRegistry;
-use Tulia\Cms\Node\Domain\ReadModel\Finder\Enum\NodeFinderScopeEnum;
+use Tulia\Cms\Node\Ports\Domain\ReadModel\NodeFinderScopeEnum;
 use Tulia\Cms\Node\Domain\ReadModel\Finder\Model\Node;
 use Tulia\Cms\Node\Ports\Domain\ReadModel\NodeFinderInterface;
 use Tulia\Cms\Platform\Shared\Breadcrumbs\BreadcrumbsInterface;
-use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\Enum\TermFinderScopeEnum;
+use Tulia\Cms\Taxonomy\Ports\Domain\ReadModel\TermFinderScopeEnum;
 use Tulia\Cms\Taxonomy\Ports\Domain\ReadModel\TermFinderInterface;
 
 /**

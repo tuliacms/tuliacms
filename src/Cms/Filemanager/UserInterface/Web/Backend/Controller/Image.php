@@ -7,7 +7,7 @@ namespace Tulia\Cms\Filemanager\UserInterface\Web\Backend\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Tulia\Cms\Filemanager\Application\Service\Cropper;
-use Tulia\Cms\Filemanager\Domain\ReadModel\Finder\Enum\FilemanagerFinderScopeEnum;
+use Tulia\Cms\Filemanager\Ports\Domain\ReadModel\FileFinderScopeEnum;
 use Tulia\Cms\Filemanager\Enum\TypeEnum;
 use Tulia\Cms\Filemanager\Query\FinderFactoryInterface;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
@@ -56,7 +56,7 @@ class Image extends AbstractController
 
     private function getImage(string $id)
     {
-        $image = $this->finderFactory->getInstance(FilemanagerFinderScopeEnum::SINGLE)->find($id, TypeEnum::IMAGE);
+        $image = $this->finderFactory->getInstance(FileFinderScopeEnum::SINGLE)->find($id, TypeEnum::IMAGE);
 
         if (!$image) {
             throw $this->createNotFoundException('Image not found.');

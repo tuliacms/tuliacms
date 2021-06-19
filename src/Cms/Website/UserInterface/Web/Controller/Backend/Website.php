@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
-use Tulia\Cms\Website\Domain\ReadModel\Finder\Enum\ScopeEnum;
+use Tulia\Cms\Website\Ports\Domain\ReadModel\WebsiteFinderScopeEnum;
 use Tulia\Cms\Website\Domain\ReadModel\Finder\Finder;
 use Tulia\Cms\Website\Ports\Infrastructure\Persistence\Domain\WriteModel\WebsiteRepositoryInterface;
 use Tulia\Cms\Website\UserInterface\Web\Form\WebsiteForm;
@@ -42,7 +42,7 @@ class Website extends AbstractController
      */
     public function list()
     {
-        $result = $this->finder->find([], ScopeEnum::BACKEND_LISTING);
+        $result = $this->finder->find([], WebsiteFinderScopeEnum::BACKEND_LISTING);
 
         return $this->view('@backend/website/list.tpl', [
             'websites' => $result,
