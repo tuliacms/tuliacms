@@ -15,10 +15,13 @@ use Twig\Source;
 class AdvancedFilesystemLoader implements LoaderInterface
 {
     protected array $paths = [];
+
     protected array $cache = [];
+
     protected array $errorCache = [];
 
     private string $rootPath;
+
     private FilterInterface $filter;
 
     public function __construct(FilterInterface $filter, array $paths = [], string $rootPath = null)

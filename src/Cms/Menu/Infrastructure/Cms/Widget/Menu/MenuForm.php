@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Widget\Infrastructure\Cms\Widget\Predefined\Menu;
+namespace Tulia\Cms\Menu\Infrastructure\Cms\Widget\Menu;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Cms\Menu\Ports\Domain\ReadModel\MenuFinderScopeEnum;
 use Tulia\Cms\Menu\Ports\Domain\ReadModel\MenuFinderInterface;
 
@@ -16,11 +17,14 @@ use Tulia\Cms\Menu\Ports\Domain\ReadModel\MenuFinderInterface;
  */
 class MenuForm extends AbstractType
 {
-    protected MenuFinderInterface $menuFinder;
+    private MenuFinderInterface $menuFinder;
 
-    public function __construct(MenuFinderInterface $menuFinder)
+    private TranslatorInterface $translator;
+
+    public function __construct(MenuFinderInterface $menuFinder, TranslatorInterface $translator)
     {
         $this->menuFinder = $menuFinder;
+        $this->translator = $translator;
     }
 
     /**
@@ -36,8 +40,8 @@ class MenuForm extends AbstractType
         }
 
         $layout = [
-            'Horizontal' => 0,
-            'Vertical' => 1,
+            $this->translator->trans('horizontal', [], 'menu') => 0,
+            $this->translator->trans('vertical', [], 'menu') => 1,
         ];
 
         $builder

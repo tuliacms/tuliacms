@@ -34,3 +34,5 @@ addChildItem: Add child item
 changeHierarchy: Change hierarchy
 menuCreated: Menu created successfully.
 menuItemNotFound: Sorry, this menu item does not exists.
+horizontal: Horizontal
+vertical: Vertical

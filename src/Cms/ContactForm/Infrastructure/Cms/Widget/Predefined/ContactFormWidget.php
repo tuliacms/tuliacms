@@ -33,9 +33,9 @@ class ContactFormWidget extends AbstractWidget
     /**
      * {@inheritdoc}
      */
-    public function getId(): string
+    public static function getId(): string
     {
-        return 'internal.contact_form';
+        return 'internal.contact-form';
     }
 
     /**
@@ -43,7 +43,7 @@ class ContactFormWidget extends AbstractWidget
      */
     public function render(ConfigurationInterface $config): ?ViewInterface
     {
-        return $this->view('frontend.tpl', [
+        return $this->view('@widget/internal/contact-form/frontend.tpl', [
             'form_id' => $config->get('form_id'),
         ]);
     }
@@ -53,7 +53,7 @@ class ContactFormWidget extends AbstractWidget
      */
     public function getView(ConfigurationInterface $config): ?ViewInterface
     {
-        return $this->view('backend.tpl');
+        return $this->view('@widget/internal/contact-form/backend.tpl');
     }
 
     /**
