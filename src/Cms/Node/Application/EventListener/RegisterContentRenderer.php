@@ -34,17 +34,16 @@ class RegisterContentRenderer implements EventSubscriberInterface
 
     public function handle(QueryFilterEvent $event): void
     {
+        if ($event->getAlias() !== 'node') {
+            return;
+        }
+
         if ($event->hasScope($this->scopes) === false) {
             return;
         }
 
         foreach ($event->getCollection() as $node) {
-            $this->render($node);
+            $this->contentRenderer->render($node);
         }
-    }
-
-    private function render(Node $node): void
-    {
-        $this->contentRenderer->render($node);
     }
 }

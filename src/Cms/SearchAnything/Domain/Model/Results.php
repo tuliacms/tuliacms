@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\SearchAnything\Domain\Model;
 
+use ArrayIterator;
+use IteratorAggregate;
+
 /**
  * @author Adam Banaszkiewicz
  */
-class Results
+class Results implements IteratorAggregate
 {
     protected array $hits  = [];
 
@@ -74,5 +77,10 @@ class Results
     public function setIcon(string $icon): void
     {
         $this->icon = $icon;
+    }
+
+    public function getIterator(): ArrayIterator
+    {
+        return new ArrayIterator($this->hits);
     }
 }

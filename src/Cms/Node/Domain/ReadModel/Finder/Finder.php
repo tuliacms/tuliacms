@@ -9,7 +9,7 @@ use Tulia\Cms\Shared\Domain\ReadModel\Finder\AbstractFinder;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Query\QueryInterface;
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 use Tulia\Cms\Node\Infrastructure\Persistence\Domain\ReadModel\Finder\Query\DbalQuery;
-use Tulia\Cms\Node\Ports\Infrastructure\Persistence\Domain\ReadModel\NodeFinderInterface;
+use Tulia\Cms\Node\Ports\Domain\ReadModel\NodeFinderInterface;
 
 /**
  * @author Adam Banaszkiewicz

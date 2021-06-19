@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Tulia\Cms\Taxonomy\UserInterface\Web\Frontend\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
-use Tulia\Cms\Node\Domain\ReadModel\Finder\Enum\NodeFinderScopeEnum;
-use Tulia\Cms\Node\Ports\Infrastructure\Persistence\Domain\ReadModel\NodeFinderInterface;
+use Tulia\Cms\Node\Ports\Domain\ReadModel\NodeFinderScopeEnum;
+use Tulia\Cms\Node\Ports\Domain\ReadModel\NodeFinderInterface;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Platform\Shared\Pagination\Paginator;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\Model\Term as QueryModelTerm;

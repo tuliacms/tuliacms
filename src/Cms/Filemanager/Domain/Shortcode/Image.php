@@ -6,7 +6,7 @@ namespace Tulia\Cms\Filemanager\Domain\Shortcode;
 
 use Tulia\Component\Shortcode\Compiler\ShortcodeCompilerInterface;
 use Tulia\Component\Shortcode\ShortcodeInterface;
-use Tulia\Cms\Filemanager\Generator\Html;
+use Tulia\Cms\Filemanager\Domain\Generator\Html;
 
 /**
  * @author Adam Banaszkiewicz
