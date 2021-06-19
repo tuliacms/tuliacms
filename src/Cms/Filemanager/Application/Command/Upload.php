@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Filemanager\Application\Command;
 
-use Tulia\Cms\Filemanager\Ports\Domain\Command\CommandInterface;
-use Tulia\Component\Image\ImageManagerInterface;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\Filemanager\Application\Command\Helper\FileResponseFormatter;
-use Tulia\Cms\Filemanager\Ports\Domain\ReadModel\FileFinderScopeEnum;
 use Tulia\Cms\Filemanager\Enum\TypeEnum;
-use Tulia\Cms\Filemanager\Query\FinderFactoryInterface;
+use Tulia\Cms\Filemanager\Ports\Domain\Command\CommandInterface;
+use Tulia\Cms\Filemanager\Ports\Domain\ReadModel\FileFinderInterface;
+use Tulia\Cms\Filemanager\Ports\Domain\ReadModel\FileFinderScopeEnum;
+use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Slug\SluggerInterface;
 use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
-use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
-use Symfony\Component\HttpFoundation\Request;
+use Tulia\Component\Image\ImageManagerInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -28,7 +28,7 @@ class Upload implements CommandInterface
 
     protected UuidGeneratorInterface $uuidGenerator;
 
-    protected FinderFactoryInterface $finderFactory;
+    protected FileFinderInterface $finder;
 
     protected ImageManagerInterface $imageManager;
 
@@ -40,18 +40,18 @@ class Upload implements CommandInterface
         ConnectionInterface $connection,
         SluggerInterface $slugger,
         UuidGeneratorInterface $uuidGenerator,
-        FinderFactoryInterface $finderFactory,
+        FileFinderInterface $finder,
         ImageManagerInterface $imageManager,
         FileResponseFormatter $formatter,
         string $projectDir
     ) {
-        $this->connection    = $connection;
-        $this->slugger       = $slugger;
+        $this->connection = $connection;
+        $this->slugger = $slugger;
         $this->uuidGenerator = $uuidGenerator;
-        $this->finderFactory = $finderFactory;
-        $this->imageManager  = $imageManager;
-        $this->formatter     = $formatter;
-        $this->projectDir    = $projectDir;
+        $this->finder = $finder;
+        $this->imageManager = $imageManager;
+        $this->formatter = $formatter;
+        $this->projectDir = $projectDir;
     }
 
     /**
@@ -67,7 +67,7 @@ class Upload implements CommandInterface
      */
     public function handle(Request $request): array
     {
-        $directory = $this->connection->fetchAll('SELECT * FROM #__filemanager_directory WHERE id = :id', [
+        $directory = $this->connection->fetchAllAssociative('SELECT * FROM #__filemanager_directory WHERE id = :id', [
             'id' => $request->get('directory', DirectoryTree::ROOT),
         ]);
 
@@ -82,7 +82,7 @@ class Upload implements CommandInterface
         foreach ($request->files as $source) {
             $id = $this->upload($source, $directory[0]);
 
-            $file = $this->finderFactory->getInstance(FileFinderScopeEnum::FILEMANAGER)->find($id);
+            $file = $this->finder->findOne(['id' => $id], FileFinderScopeEnum::FILEMANAGER);
 
             $files[] = $this->formatter->format($file);
         }
@@ -110,7 +110,7 @@ class Upload implements CommandInterface
         $newFilename = $safeFilename . '.' . $extension;
 
         if (is_dir($destination) === false) {
-            if (!mkdir($destination, 0777, true) && !is_dir($destination)) {
+            if (! mkdir($destination, 0777, true) && !is_dir($destination)) {
                 throw new \RuntimeException(sprintf('Directory "%s" was not created', $destination));
             }
         }

@@ -5,40 +5,31 @@ declare(strict_types=1);
 namespace Tulia\Cms\Filemanager\UserInterface\Web\Backend\Controller;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Tulia\Cms\Filemanager\Application\Service\Cropper;
-use Tulia\Cms\Filemanager\Ports\Domain\ReadModel\FileFinderScopeEnum;
+use Tulia\Cms\Filemanager\Domain\ReadModel\Finder\Model\File;
 use Tulia\Cms\Filemanager\Enum\TypeEnum;
-use Tulia\Cms\Filemanager\Query\FinderFactoryInterface;
+use Tulia\Cms\Filemanager\Ports\Domain\ReadModel\FileFinderInterface;
+use Tulia\Cms\Filemanager\Ports\Domain\ReadModel\FileFinderScopeEnum;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class Image extends AbstractController
 {
-    /**
-     * @var FinderFactoryInterface
-     */
-    protected $finderFactory;
+    protected FileFinderInterface $finder;
 
-    /**
-     * @var Cropper
-     */
-    protected $cropper;
+    protected Cropper $cropper;
 
-    /**
-     * @param FinderFactoryInterface $finderFactory
-     * @param Cropper $cropper
-     */
-    public function __construct(FinderFactoryInterface $finderFactory, Cropper $cropper)
+    public function __construct(FileFinderInterface $finder, Cropper $cropper)
     {
-        $this->finderFactory = $finderFactory;
+        $this->finder = $finder;
         $this->cropper = $cropper;
     }
 
-    public function size(Request $request, $size, $id)
+    public function size(Request $request, string $size, string $id): RedirectResponse
     {
         $image = $this->getImage($id);
 
@@ -54,11 +45,14 @@ class Image extends AbstractController
         );
     }
 
-    private function getImage(string $id)
+    private function getImage(string $id): File
     {
-        $image = $this->finderFactory->getInstance(FileFinderScopeEnum::SINGLE)->find($id, TypeEnum::IMAGE);
+        $image = $this->finder->findOne([
+            'id' => $id,
+            'type' => TypeEnum::IMAGE
+        ], FileFinderScopeEnum::SINGLE);
 
-        if (!$image) {
+        if (! $image) {
             throw $this->createNotFoundException('Image not found.');
         }
 

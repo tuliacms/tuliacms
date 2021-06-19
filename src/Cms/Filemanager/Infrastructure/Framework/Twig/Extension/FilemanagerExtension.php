@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Tulia\Cms\Filemanager\Infrastructure\Framework\Twig\Extension;
 
 use Tulia\Cms\Filemanager\Application\Service\ImageUrlResolver;
+use Tulia\Cms\Filemanager\Ports\Domain\ReadModel\FileFinderInterface;
 use Tulia\Cms\Filemanager\Ports\Domain\ReadModel\FileFinderScopeEnum;
 use Tulia\Cms\Filemanager\Enum\TypeEnum;
 use Tulia\Cms\Filemanager\Domain\ReadModel\Finder\Model\File;
 use Tulia\Cms\Filemanager\Generator\Html;
-use Tulia\Cms\Filemanager\Query\FinderFactoryInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -18,30 +18,17 @@ use Twig\TwigFunction;
  */
 class FilemanagerExtension extends AbstractExtension
 {
-    /**
-     * @var FinderFactoryInterface
-     */
-    protected $finderFactory;
+    protected FileFinderInterface $finder;
 
-    /**
-     * @var ImageUrlResolver
-     */
-    protected $urlResolver;
+    protected ImageUrlResolver $urlResolver;
 
-    /**
-     * @var string
-     */
-    protected $publicDir;
+    protected string $publicDir;
 
-    /**
-     * @param FinderFactoryInterface $finderFactory
-     * @param ImageUrlResolver $urlResolver
-     */
-    public function __construct(FinderFactoryInterface $finderFactory, ImageUrlResolver $urlResolver, string $publicDir)
+    public function __construct(FileFinderInterface $finder, ImageUrlResolver $urlResolver, string $publicDir)
     {
-        $this->finderFactory = $finderFactory;
-        $this->urlResolver   = $urlResolver;
-        $this->publicDir     = $publicDir;
+        $this->finder = $finder;
+        $this->urlResolver = $urlResolver;
+        $this->publicDir = $publicDir;
     }
 
     /**
@@ -65,15 +52,13 @@ class FilemanagerExtension extends AbstractExtension
      *     - size = Size name of the image.
      *     - version = Version of the image, added at the end of the URL
      *       as query string, to force reload by browser.
-     *
-     * @param string $id
-     * @param array $params
-     *
-     * @return string
      */
-    public function image(string $id, $params = []): string
+    public function image(string $id, array $params = []): string
     {
-        $image = $this->finderFactory->getInstance(FileFinderScopeEnum::SINGLE)->find($id, TypeEnum::IMAGE);
+        $image = $this->finder->findOne([
+            'id' => $id,
+            'type' => TypeEnum::IMAGE,
+        ], FileFinderScopeEnum::SINGLE);
 
         if ($image === null) {
             return '';
@@ -82,7 +67,13 @@ class FilemanagerExtension extends AbstractExtension
         $data = array_merge([
             'alt' => '',
         ], $params['attributes'] ?? []);
-        $data['src'] = $this->urlResolver->size($image, $params['size'] ?? 'original');
+
+        $data['src'] = $this->urlResolver->size(
+            $image,
+            isset($params['size']) && empty($params['size']) === false
+                ? $params['size']
+                : 'original'
+        );
 
         if (isset($params['version']) && empty($params['version']) === false) {
             $data['src'] .= '?version=' . $params['version'];
@@ -93,16 +84,16 @@ class FilemanagerExtension extends AbstractExtension
 
     /**
      * @param string|File $id
-     * @param string $sizeName
-     *
-     * @return string
      */
     public function imageUrl($id, string $sizeName): string
     {
         if ($id instanceof File) {
             $image = $id;
         } else {
-            $image = $this->finderFactory->getInstance(FileFinderScopeEnum::SINGLE)->find($id, TypeEnum::IMAGE);
+            $image = $this->finder->findOne([
+                'id' => $id,
+                'type' => TypeEnum::IMAGE,
+            ], FileFinderScopeEnum::SINGLE);
 
             if ($image === null) {
                 return '';
@@ -114,16 +105,12 @@ class FilemanagerExtension extends AbstractExtension
 
     public function gallery(array $ids, array $params = []): string
     {
-        $finder = $this->finderFactory->getInstance(FileFinderScopeEnum::SINGLE);
-        $finder->setCriteria([
+        $images = $this->finder->find([
             'id__in' => $ids,
             'type'   => TypeEnum::IMAGE,
             'order_by'  => 'id',
             'order_dir' => $ids
-        ]);
-        $finder->fetch();
-
-        $images = $finder->getResult();
+        ], FileFinderScopeEnum::SINGLE);
 
         if ($images->count() === 0) {
             return '';
@@ -142,9 +129,12 @@ class FilemanagerExtension extends AbstractExtension
         return $result . '</div>';
     }
 
-    public function svg(string $id, $params = []): string
+    public function svg(string $id, array $params = []): string
     {
-        $svg = $this->finderFactory->getInstance(FileFinderScopeEnum::SINGLE)->find($id, TypeEnum::SVG);
+        $svg = $this->finder->findOne([
+            'id' => $id,
+            'type' => TypeEnum::SVG,
+        ], FileFinderScopeEnum::SINGLE);
 
         if ($svg === null) {
             return '';
@@ -153,6 +143,7 @@ class FilemanagerExtension extends AbstractExtension
         $data = array_merge([
             'alt' => '',
         ], $params['attributes'] ?? []);
+
         $data['src'] = '/' . $svg->getPath() . '/' . $svg->getFilename();
 
         if (isset($params['version']) && empty($params['version']) === false) {
@@ -167,7 +158,10 @@ class FilemanagerExtension extends AbstractExtension
         if ($id instanceof File) {
             $svg = $id;
         } else {
-            $svg = $this->finderFactory->getInstance(FileFinderScopeEnum::SINGLE)->find($id, TypeEnum::SVG);
+            $svg = $this->finder->findOne([
+                'id' => $id,
+                'type' => TypeEnum::SVG,
+            ], FileFinderScopeEnum::SINGLE);
 
             if ($svg === null) {
                 return '';
@@ -179,6 +173,9 @@ class FilemanagerExtension extends AbstractExtension
 
     public function isFileType(string $id, string $type): bool
     {
-        return (bool) $this->finderFactory->getInstance(FileFinderScopeEnum::SINGLE)->find($id, $type);
+        return (bool) $this->finder->findOne([
+            'id' => $id,
+            'type' => $type,
+        ], FileFinderScopeEnum::SINGLE);
     }
 }

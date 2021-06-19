@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Filemanager\Application\Command;
 
+use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\Filemanager\Application\Command\Helper\FileResponseFormatter;
-use Tulia\Cms\Filemanager\Ports\Domain\ReadModel\FileFinderScopeEnum;
 use Tulia\Cms\Filemanager\Domain\ReadModel\Finder\Model\File;
 use Tulia\Cms\Filemanager\Ports\Domain\Command\CommandInterface;
-use Tulia\Cms\Filemanager\Query\FinderFactoryInterface;
+use Tulia\Cms\Filemanager\Ports\Domain\ReadModel\FileFinderInterface;
+use Tulia\Cms\Filemanager\Ports\Domain\ReadModel\FileFinderScopeEnum;
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author Adam Banaszkiewicz
@@ -19,17 +19,17 @@ class Ls implements CommandInterface
 {
     protected ConnectionInterface $connection;
 
-    protected FinderFactoryInterface $finderFactory;
+    protected FileFinderInterface $finder;
 
     protected FileResponseFormatter $fileResponseFormatter;
 
     public function __construct(
         ConnectionInterface $connection,
-        FinderFactoryInterface $finderFactory,
+        FileFinderInterface $finder,
         FileResponseFormatter $fileResponseFormatter
     ) {
-        $this->connection    = $connection;
-        $this->finderFactory = $finderFactory;
+        $this->connection = $connection;
+        $this->finder = $finder;
         $this->fileResponseFormatter = $fileResponseFormatter;
     }
 
@@ -70,11 +70,9 @@ class Ls implements CommandInterface
             $criteria['type'] = $types;
         }
 
-        $finder = $this->finderFactory->getInstance(FileFinderScopeEnum::FILEMANAGER);
-        $finder->setCriteria($criteria);
-        $finder->fetch();
+        $files = $this->finder->find($criteria, FileFinderScopeEnum::FILEMANAGER);
 
-        $directories = $this->connection->fetchAll("SELECT * FROM #__filemanager_directory WHERE parent_id = :parent_id ORDER BY `name` ASC", [
+        $directories = $this->connection->fetchAllAssociative("SELECT * FROM #__filemanager_directory WHERE parent_id = :parent_id ORDER BY `name` ASC", [
             'parent_id' => $directory
         ]);
 
@@ -92,7 +90,7 @@ class Ls implements CommandInterface
         }
 
         /** @var File $file */
-        foreach ($finder->getResult() as $file) {
+        foreach ($files as $file) {
             $result[] = $this->fileResponseFormatter->format($file);
         }
 

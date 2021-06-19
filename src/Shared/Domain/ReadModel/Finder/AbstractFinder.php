@@ -69,7 +69,7 @@ abstract class AbstractFinder
 
     protected function afterQuery(Collection $collection, array $criteria, string $scope): Collection
     {
-        $event = new QueryFilterEvent($collection, $criteria, $scope, []);
+        $event = new QueryFilterEvent($collection, $criteria, $scope, $this->getAlias(), []);
         $this->eventDispatcher->dispatch($event);
 
         return $event->getCollection();

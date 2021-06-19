@@ -7,16 +7,17 @@ namespace Tulia\Cms\Node\Domain\SearchAnything;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Cms\Filemanager\Application\Service\ImageUrlResolver;
-use Tulia\Cms\Filemanager\Ports\Domain\ReadModel\FileFinderScopeEnum as FilesScopeEnum;
 use Tulia\Cms\Filemanager\Enum\TypeEnum;
-use Tulia\Cms\Filemanager\Query\FinderFactoryInterface as FilemanagerFinderFactory;
-use Tulia\Cms\Node\Ports\Domain\ReadModel\NodeFinderScopeEnum as NodeScopeEnum;
+use Tulia\Cms\Filemanager\Ports\Domain\ReadModel\FileFinderInterface;
+use Tulia\Cms\Filemanager\Ports\Domain\ReadModel\FileFinderScopeEnum as FilesScopeEnum;
 use Tulia\Cms\Node\Domain\NodeType\Enum\ParametersEnum;
 use Tulia\Cms\Node\Domain\NodeType\RegistryInterface;
+use Tulia\Cms\Node\Domain\ReadModel\Finder\Model\Node;
 use Tulia\Cms\Node\Ports\Domain\ReadModel\NodeFinderInterface;
-use Tulia\Cms\SearchAnything\Ports\Provider\AbstractProvider;
+use Tulia\Cms\Node\Ports\Domain\ReadModel\NodeFinderScopeEnum as NodeScopeEnum;
 use Tulia\Cms\SearchAnything\Domain\Model\Hit;
 use Tulia\Cms\SearchAnything\Domain\Model\Results;
+use Tulia\Cms\SearchAnything\Ports\Provider\AbstractProvider;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
 
 /**
@@ -26,7 +27,7 @@ class SearchProvider extends AbstractProvider
 {
     protected NodeFinderInterface $nodeFinder;
 
-    protected FilemanagerFinderFactory $filesFinderFactory;
+    protected FileFinderInterface $filesFinder;
 
     protected RouterInterface $router;
 
@@ -38,14 +39,14 @@ class SearchProvider extends AbstractProvider
 
     public function __construct(
         NodeFinderInterface $nodeFinder,
-        FilemanagerFinderFactory $filesFinderFactory,
+        FileFinderInterface $filesFinder,
         RouterInterface $router,
         TranslatorInterface $translator,
         RegistryInterface $typesRegistry,
         ImageUrlResolver $imageUrlResolver
     ) {
         $this->nodeFinder  = $nodeFinder;
-        $this->filesFinderFactory = $filesFinderFactory;
+        $this->filesFinder = $filesFinder;
         $this->router = $router;
         $this->translator = $translator;
         $this->typesRegistry = $typesRegistry;
@@ -60,7 +61,6 @@ class SearchProvider extends AbstractProvider
             'search' => $query,
             'per_page' => $limit,
             'page' => $page,
-            'count_found_rows' => true,
         ], NodeScopeEnum::SEARCH);
 
         foreach ($nodes as $node) {
@@ -100,28 +100,29 @@ class SearchProvider extends AbstractProvider
     {
         $ids = [];
 
+        /** @var Node $node */
         foreach ($nodes as $node) {
             if ($node->getMeta('thumbnail')) {
                 $ids[$node->getId()] = $node->getMeta('thumbnail');
             }
         }
 
-        $finder = $this->filesFinderFactory->getInstance(FilesScopeEnum::SEARCH);
-        $finder->setCriteria([
+        if ($ids === []) {
+            return;
+        }
+
+        $images = $this->filesFinder->find([
             'id__in' => $ids,
             'type'   => TypeEnum::IMAGE,
-        ]);
-        $finder->fetchRaw();
-
-        $images = $finder->getResult();
+        ], FilesScopeEnum::SEARCH);
 
         if ($images->count() === 0) {
             return;
         }
 
-        foreach ($results->getHits() as $hit) {
+        foreach ($results as $id => $hit) {
             foreach ($ids as $nodeId => $imageId) {
-                if ($hit->getId() === $nodeId) {
+                if ($id === $nodeId) {
                     foreach ($images as $image) {
                         if ($image->getId() === $imageId) {
                             $hit->setImage($this->imageUrlResolver->thumbnail($image));
