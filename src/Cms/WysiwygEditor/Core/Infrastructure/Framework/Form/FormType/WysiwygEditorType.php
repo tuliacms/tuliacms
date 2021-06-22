@@ -10,6 +10,7 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Tulia\Cms\Metadata\Ports\Domain\WriteModel\MetadataAwareInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -30,8 +31,11 @@ class WysiwygEditorType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'label' => false,
+            'label' => false
         ]);
+
+        $resolver->setRequired('entity');
+        $resolver->setAllowedTypes('entity', [MetadataAwareInterface::class]);
     }
 
     /**
@@ -40,6 +44,7 @@ class WysiwygEditorType extends AbstractType
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
         $view->vars['label'] = false;
+        $view->vars['entity'] = $options['entity'];
     }
 
     /**

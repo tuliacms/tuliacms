@@ -34,7 +34,7 @@ class Uploader implements UploaderInterface
         }
 
         $newAvatar = $this->upload($avatarFile);
-        $oldAvatar = $user->getMeta(UserMetadataEnum::AVATAR);
+        $oldAvatar = $user->meta(UserMetadataEnum::AVATAR);
 
         $user->setMeta(UserMetadataEnum::AVATAR, $newAvatar);
 
@@ -70,11 +70,11 @@ class Uploader implements UploaderInterface
      */
     public function removeUploadedForUser(User $user): void
     {
-        if (! $user->getMeta(UserMetadataEnum::AVATAR)) {
+        if (! $user->meta(UserMetadataEnum::AVATAR)) {
             return;
         }
 
-        $this->removeUploaded($user->getMeta(UserMetadataEnum::AVATAR));
+        $this->removeUploaded($user->meta(UserMetadataEnum::AVATAR));
 
         $user->setMeta(UserMetadataEnum::AVATAR, null);
     }

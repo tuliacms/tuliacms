@@ -105,7 +105,7 @@
 
 
 {% block wysiwyg_editor_widget -%}
-    {{ wysiwyg_editor(full_name, value, { id: id }) }}
+    {{ wysiwyg_editor(full_name, value, { id: id, entity: entity }) }}
 {%- endblock wysiwyg_editor_widget %}
 
 

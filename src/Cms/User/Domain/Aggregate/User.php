@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\User\Domain\Aggregate;
 
 use Tulia\Cms\Metadata\Domain\WriteModel\MagickMetadataTrait;
+use Tulia\Cms\Metadata\Ports\Domain\WriteModel\MetadataAwareInterface;
 use Tulia\Cms\Platform\Domain\WriteModel\Model\AggregateRoot;
 use Tulia\Cms\User\Domain\ValueObject\AggregateId;
 use Tulia\Cms\User\Domain\Exception;
@@ -13,7 +14,7 @@ use Tulia\Cms\User\Domain\Event;
 /**
  * @author Adam Banaszkiewicz
  */
-class User extends AggregateRoot
+class User extends AggregateRoot implements MetadataAwareInterface
 {
     use MagickMetadataTrait;
 

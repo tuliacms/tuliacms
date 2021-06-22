@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace Tulia\Cms\User\Query\Model;
 
 use Tulia\Cms\Metadata\Domain\ReadModel\MagickMetadataTrait;
+use Tulia\Cms\Metadata\Ports\Domain\WriteModel\MetadataAwareInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class User
+class User implements MetadataAwareInterface
 {
     use MagickMetadataTrait;
 

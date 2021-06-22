@@ -25,6 +25,11 @@ class SectionsBuilder implements SectionsBuilderInterface
         return $this;
     }
 
+    public function get(string $id): array
+    {
+        return $this->sections[$id] ?? [];
+    }
+
     public function all(?string $group = null): array
     {
         $sections = [];

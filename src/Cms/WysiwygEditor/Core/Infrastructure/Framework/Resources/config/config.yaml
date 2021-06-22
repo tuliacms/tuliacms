@@ -1,4 +1,0 @@
-framework:
-    templating:
-        paths:
-            - { name: backend/wysiwyg-editor/tulia-editor, path: '%kernel.project_dir%/src/Cms/WysiwygEditor/TuliaEditor/Infrastructure/Framework/Resources/views/tulia-editor' }

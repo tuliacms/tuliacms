@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\WysiwygEditor\TuliaEditor\Domain;
+namespace Tulia\Cms\TuliaEditor\Domain;
 
 use Tulia\Cms\WysiwygEditor\Core\Application\AbstractWysiwygEditor;
 use Tulia\Component\Templating\EngineInterface;
@@ -13,14 +13,8 @@ use Tulia\Component\Templating\View;
  */
 class Editor extends AbstractWysiwygEditor
 {
-    /**
-     * @var EngineInterface
-     */
-    protected $engine;
+    protected EngineInterface $engine;
 
-    /**
-     * @param EngineInterface $engine
-     */
     public function __construct(EngineInterface $engine)
     {
         $this->engine = $engine;
@@ -51,7 +45,7 @@ class Editor extends AbstractWysiwygEditor
             $params['id'] = uniqid('', true);
         }
 
-        return $this->engine->render(new View('@backend/wysiwyg-editor/tulia-editor/editor.tpl', [
+        return $this->engine->render(new View('@backend/tulia-editor/editor.tpl', [
             'name'    => $name,
             'content' => $content,
             'params'  => $params,

@@ -5,6 +5,7 @@ services:
 
     Tulia\Cms\WysiwygEditor\:
         resource: '../../../../../*'
+        exclude: '../../../../../{Infrastructure/Framework/Resources}'
 
     Tulia\Cms\WysiwygEditor\Core\Application\RegistryInterface:
         class: Tulia\Cms\WysiwygEditor\Core\Application\Registry
@@ -13,7 +14,4 @@ services:
             $editors: !tagged_iterator wysiwyg_editor
 
     Tulia\Cms\WysiwygEditor\Core\Application\DefaultEditor:
-        tags: [ wysiwyg_editor ]
-
-    Tulia\Cms\WysiwygEditor\TuliaEditor\Domain\Editor:
         tags: [ wysiwyg_editor ]

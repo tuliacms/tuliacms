@@ -40,7 +40,9 @@ class NodeTypeExtension extends AbstractExtension
         }
 
         if ($this->nodeType->supports('content')) {
-            $builder->add('content', WysiwygEditorType::class);
+            $builder->add('content', WysiwygEditorType::class, [
+                'entity' => $builder->getOption('data'),
+            ]);
         }
 
         if ($this->nodeType->supports('thumbnail')) {

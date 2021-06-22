@@ -10,7 +10,7 @@ namespace Tulia\Cms\Node\Domain\NodeType;
 interface RegistryInterface
 {
     /**
-     * @return iterable
+     * @return NodeTypeInterface[]
      */
     public function all(): iterable;
 

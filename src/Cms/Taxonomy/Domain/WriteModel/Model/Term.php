@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Taxonomy\Domain\WriteModel\Model;
 
 use Tulia\Cms\Metadata\Domain\WriteModel\MagickMetadataTrait;
+use Tulia\Cms\Metadata\Ports\Domain\WriteModel\MetadataAwareInterface;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Event;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\ValueObject\TermId;
 use Tulia\Cms\Platform\Domain\WriteModel\Model\AggregateRoot;
@@ -12,7 +13,7 @@ use Tulia\Cms\Platform\Domain\WriteModel\Model\AggregateRoot;
 /**
  * @author Adam Banaszkiewicz
  */
-class Term extends AggregateRoot
+class Term extends AggregateRoot implements MetadataAwareInterface
 {
     use MagickMetadataTrait;
 

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Node\Domain\WriteModel\Model;
 
 use Tulia\Cms\Metadata\Domain\WriteModel\MagickMetadataTrait;
+use Tulia\Cms\Metadata\Ports\Domain\WriteModel\MetadataAwareInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Event;
 use Tulia\Cms\Node\Domain\WriteModel\Model\ValueObject\NodeId;
 use Tulia\Cms\Platform\Domain\WriteModel\Model\AggregateRoot;
@@ -13,7 +14,7 @@ use Tulia\Cms\Platform\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
 /**
  * @author Adam Banaszkiewicz
  */
-class Node extends AggregateRoot
+class Node extends AggregateRoot implements MetadataAwareInterface
 {
     use MagickMetadataTrait;
 

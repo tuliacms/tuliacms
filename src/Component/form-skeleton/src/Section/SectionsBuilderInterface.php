@@ -11,5 +11,7 @@ interface SectionsBuilderInterface
 {
     public function add(string $id, array $data): SectionsBuilderInterface;
 
+    public function get(string $id): array;
+
     public function all(?string $group = null): array;
 }
