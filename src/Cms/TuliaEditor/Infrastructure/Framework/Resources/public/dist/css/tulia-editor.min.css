@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;700&display=swap");
 .tued-container.tued-placement-inline {
   position: relative;
   z-index: 100; }
@@ -28,9 +29,26 @@
   position: relative; }
   .tued-preview .tued-preview-iframe {
     width: 100%;
-    padding: 0;
     margin: 0;
-    display: block; }
+    padding: 25px 0;
+    display: block;
+    border: 1px solid #ddd; }
+  .tued-preview .tued-preview-toolbar {
+    background-color: #f1f1f1;
+    border: 1px solid #ddd;
+    border-bottom: none;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between; }
+  .tued-preview .tued-preview-headline {
+    color: #333;
+    font-size: 17px;
+    margin-left: 10px; }
+  .tued-preview .tued-logo {
+    color: #333;
+    font-weight: bold;
+    display: inline-block; }
 
 body.tued-editor-opened {
   overflow: hidden !important; }
@@ -46,7 +64,7 @@ body.tued-editor-opened {
 .tued-container {
   font-size: 14px;
   line-height: 1.2;
-  font-family: Arial,Tahoma,Verdana,sans-serif;
+  font-family: 'Poppins',Arial,Tahoma,Verdana,sans-serif;
   color: #000; }
 
 .tued-container a,
@@ -270,13 +288,13 @@ body .tued-disabled {
   left: -1px;
   top: -20px;
   height: 20px;
-  padding: 0 10px;
+  padding: 0 8px;
   line-height: 20px;
   color: #fff;
   background-color: #0088cc;
   border-radius: 3px 3px 0 0;
   text-transform: uppercase;
-  font-size: 12px; }
+  font-size: 11px; }
 
 .tued-visual-builder .tued-element-boundaries.tued-element-hovered-boundaries {
   background-color: rgba(0, 136, 204, 0.04);
