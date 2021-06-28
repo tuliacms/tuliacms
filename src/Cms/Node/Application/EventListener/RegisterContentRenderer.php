@@ -6,7 +6,6 @@ namespace Tulia\Cms\Node\Application\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Tulia\Cms\Node\Domain\ReadModel\NodeContent\ContentRenderer;
-use Tulia\Cms\Node\Domain\ReadModel\Finder\Model\Node;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Event\QueryFilterEvent;
 
 /**
