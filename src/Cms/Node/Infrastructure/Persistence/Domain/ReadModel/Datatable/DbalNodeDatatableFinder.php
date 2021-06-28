@@ -7,7 +7,7 @@ namespace Tulia\Cms\Node\Infrastructure\Persistence\Domain\ReadModel\Datatable;
 use PDO;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Cms\Node\Domain\NodeType\NodeTypeInterface;
-use Tulia\Cms\Node\Ports\Infrastructure\Persistence\Domain\ReadModel\Datatable\NodeDatatableFinderInterface;
+use Tulia\Cms\Node\Domain\ReadModel\Datatable\NodeDatatableFinderInterface;
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
 use Tulia\Cms\Taxonomy\Ports\Domain\ReadModel\TermFinderScopeEnum;

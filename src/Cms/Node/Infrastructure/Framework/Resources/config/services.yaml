@@ -3,8 +3,8 @@ parameters:
     # content rendering in many more scopes than default ones, even for custom created
     # by extensions.
     cms.node.finder.content_renderer.scopes:
-        - !php/const Tulia\Cms\Node\Ports\Domain\ReadModel\NodeFinderScopeEnum::SINGLE
-        - !php/const Tulia\Cms\Node\Ports\Domain\ReadModel\NodeFinderScopeEnum::ROUTING_MATCHER
+        - !php/const Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderScopeEnum::SINGLE
+        - !php/const Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderScopeEnum::ROUTING_MATCHER
 
 services:
     _defaults:
