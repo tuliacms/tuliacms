@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContactForm\UserInterface\Web\Frontend\Service;
 
-use Tulia\Cms\ContactForm\Domain\ReadModel\Finder\Model\Form;
+use Tulia\Cms\ContactForm\Domain\ReadModel\Model\Form;
 use Tulia\Cms\ContactForm\Ports\Domain\FieldType\FieldsTypeRegistryInterface;
 use Symfony\Component\Form\FormInterface;
 

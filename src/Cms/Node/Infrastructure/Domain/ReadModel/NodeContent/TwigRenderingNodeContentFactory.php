@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Infrastructure\Domain\ReadModel\NodeContent;
 
-use Tulia\Cms\Node\Domain\ReadModel\Finder\Model\Node;
+use Tulia\Cms\Node\Domain\ReadModel\Model\Node;
 use Tulia\Cms\Node\Domain\ReadModel\NodeContent\NodeContentFactoryInterface;
 use Tulia\Cms\Node\Domain\ReadModel\NodeContent\NodeContentInterface;
 use Tulia\Component\Templating\EngineInterface;

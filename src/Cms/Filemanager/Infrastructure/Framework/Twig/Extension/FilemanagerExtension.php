@@ -8,7 +8,7 @@ use Tulia\Cms\Filemanager\Application\Service\ImageUrlResolver;
 use Tulia\Cms\Filemanager\Ports\Domain\ReadModel\FileFinderInterface;
 use Tulia\Cms\Filemanager\Ports\Domain\ReadModel\FileFinderScopeEnum;
 use Tulia\Cms\Filemanager\Ports\Domain\WriteModel\FileTypeEnum;
-use Tulia\Cms\Filemanager\Domain\ReadModel\Finder\Model\File;
+use Tulia\Cms\Filemanager\Domain\ReadModel\Model\File;
 use Tulia\Cms\Filemanager\Domain\Generator\Html;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;

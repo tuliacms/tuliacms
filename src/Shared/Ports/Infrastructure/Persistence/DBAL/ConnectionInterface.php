@@ -17,7 +17,12 @@ use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder
 interface ConnectionInterface
 {
     public const PARAM_ARRAY_INT = Connection::PARAM_INT_ARRAY;
+
     public const PARAM_ARRAY_STR = Connection::PARAM_STR_ARRAY;
+
+    public const PARAM_INT = \PDO::PARAM_INT;
+
+    public const PARAM_STR = \PDO::PARAM_STR;
 
     /**
      * @param $query

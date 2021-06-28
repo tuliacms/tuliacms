@@ -7,7 +7,7 @@ namespace Tulia\Cms\Node\UserInterface\Web\Frontend\BodyClass;
 use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\BodyClass\Domain\BodyClassCollection;
 use Tulia\Cms\BodyClass\Ports\Domain\BodyClassCollectorInterface;
-use Tulia\Cms\Node\Domain\ReadModel\Finder\Model\Node;
+use Tulia\Cms\Node\Domain\ReadModel\Model\Node;
 
 /**
  * @author Adam Banaszkiewicz

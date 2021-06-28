@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Website\Ports\Domain\ReadModel;
 
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
-use Tulia\Cms\Website\Domain\ReadModel\Finder\Model\Website;
+use Tulia\Cms\Website\Domain\ReadModel\Model\Website;
 
 /**
  * @author Adam Banaszkiewicz

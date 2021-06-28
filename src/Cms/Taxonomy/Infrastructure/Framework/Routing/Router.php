@@ -14,7 +14,7 @@ use Tulia\Cms\Platform\Infrastructure\Framework\Routing\FrontendRouteSuffixResol
 use Tulia\Cms\Taxonomy\Domain\TaxonomyType\RegistryInterface;
 use Tulia\Cms\Taxonomy\Domain\TaxonomyType\TaxonomyTypeInterface;
 use Tulia\Cms\Taxonomy\Ports\Domain\ReadModel\TermFinderScopeEnum;
-use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\Model\Term;
+use Tulia\Cms\Taxonomy\Domain\ReadModel\Model\Term;
 use Tulia\Cms\Taxonomy\Ports\Domain\ReadModel\TermFinderInterface;
 use Tulia\Cms\Taxonomy\Ports\Infrastructure\Persistence\Domain\ReadModel\TermPathReadStorageInterface;
 

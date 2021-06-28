@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
 use Tulia\Cms\Breadcrumbs\Ports\Domain\BreadcrumbsResolverInterface;
 use Tulia\Cms\Platform\Shared\Breadcrumbs\BreadcrumbsInterface;
-use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\Model\Term;
+use Tulia\Cms\Taxonomy\Domain\ReadModel\Model\Term;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\TaxonomyBreadcrumbs;
 
 /**

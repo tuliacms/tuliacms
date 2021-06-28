@@ -26,3 +26,4 @@ activityUserDeletedNode: "User {username} deleted page."
 sketch: Sketch
 published: Published
 trashed: Trashed
+singularFlagImposedOnMoreThanOneNode: "Singular flag imposed on more than one Page: \"{flag}\". Please take this flag off from other Nodes to impose on this one."

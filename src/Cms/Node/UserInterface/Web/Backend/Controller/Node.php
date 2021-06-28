@@ -4,15 +4,17 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\UserInterface\Web\Backend\Controller;
 
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\Node\Domain\NodeType\NodeTypeInterface;
-use Tulia\Cms\Node\Domain\NodeType\RegistryInterface;
+use Tulia\Cms\Node\Domain\NodeType\NodeTypeRegistryInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Exception\NodeNotFoundException;
+use Tulia\Cms\Node\Domain\WriteModel\Exception\SingularFlagImposedOnMoreThanOneNodeException;
 use Tulia\Cms\Node\Domain\WriteModel\NodeRepository;
-use Tulia\Cms\Node\Ports\Infrastructure\Persistence\Domain\ReadModel\Datatable\NodeDatatableFinderInterface;
-use Tulia\Cms\Node\Ports\Domain\ReadModel\NodeFinderInterface;
+use Tulia\Cms\Node\Domain\ReadModel\Datatable\NodeDatatableFinderInterface;
+use Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderInterface;
 use Tulia\Cms\Node\UserInterface\Web\Backend\Form\NodeForm;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
@@ -28,7 +30,7 @@ use Tulia\Component\Templating\ViewInterface;
  */
 class Node extends AbstractController
 {
-    private RegistryInterface $typeRegistry;
+    private NodeTypeRegistryInterface $typeRegistry;
 
     private NodeRepository $repository;
 
@@ -43,7 +45,7 @@ class Node extends AbstractController
     private NodeDatatableFinderInterface $finder;
 
     public function __construct(
-        RegistryInterface $typeRegistry,
+        NodeTypeRegistryInterface $typeRegistry,
         NodeRepository $repository,
         NodeFinderInterface $nodeFinder,
         TaxonomyRegistry $registry,
@@ -135,10 +137,14 @@ class Node extends AbstractController
         $nodeType = $this->typeRegistry->getType($node_type);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->repository->update($form->getData());
-
-            $this->setFlash('success', $this->trans('nodeSaved', [], $nodeType->getTranslationDomain()));
-            return $this->redirectToRoute('backend.node.edit', [ 'id' => $model->getId(), 'node_type' => $nodeType->getType() ]);
+            try {
+                $this->repository->update($form->getData());
+                $this->setFlash('success', $this->trans('nodeSaved', [], $nodeType->getTranslationDomain()));
+                return $this->redirectToRoute('backend.node.edit', [ 'id' => $model->getId(), 'node_type' => $nodeType->getType() ]);
+            } catch (SingularFlagImposedOnMoreThanOneNodeException $e) {
+                $error = new FormError($this->trans('singularFlagImposedOnMoreThanOneNode', ['flag' => $e->getFlag()], $nodeType->getTranslationDomain()));
+                $form->get('flags')->addError($error);
+            }
         }
 
         return $this->view('@backend/node/edit.tpl', [

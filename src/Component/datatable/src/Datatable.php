@@ -161,6 +161,7 @@ class Datatable
                 'value_translation' => $info['value_translation'] ?? [],
                 'value_class' => $info['value_class'] ?? [],
                 'view' => $info['view'] ?? null,
+                'view_context' => $info['view_context'] ?? [],
             ];
         }
 

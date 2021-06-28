@@ -11,7 +11,7 @@ use Tulia\Cms\Node\Domain\WriteModel\Event\NodeUpdated;
 use Tulia\Cms\Node\Domain\WriteModel\Exception\NodeNotFoundException;
 use Tulia\Cms\Node\Domain\WriteModel\Model\Node;
 use Tulia\Cms\Node\Domain\Metadata\NodeMetadataEnum;
-use Tulia\Cms\Node\Ports\Infrastructure\Persistence\Domain\WriteModel\NodeWriteStorageInterface;
+use Tulia\Cms\Node\Domain\WriteModel\Ports\NodeWriteStorageInterface;
 use Tulia\Cms\Platform\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
 use Tulia\Cms\Platform\Infrastructure\Bus\Event\EventBusInterface;
 use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
@@ -97,6 +97,7 @@ class NodeRepository
             'locale'        => $node['locale'],
             'metadata'      => $this->metadataRepository->findAll(NodeMetadataEnum::TYPE, $id),
             'translated'    => $node['translated'] ?? true,
+            'flags'         => array_filter(explode(',', (string) $node['flags'])),
         ]);
 
         $this->actionsChain->execute('find', $node);
@@ -187,6 +188,7 @@ class NodeRepository
             'level'         => $node->getLevel(),
             'parent_id'     => $node->getParentId(),
             'locale'        => $node->getLocale(),
+            'flags'         => $node->getFlags(),
         ];
     }
 }

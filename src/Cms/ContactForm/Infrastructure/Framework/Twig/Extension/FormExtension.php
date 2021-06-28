@@ -7,7 +7,7 @@ namespace Tulia\Cms\ContactForm\Infrastructure\Framework\Twig\Extension;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\HttpFoundation\Request;
-use Tulia\Cms\ContactForm\Domain\ReadModel\Finder\Model\Form;
+use Tulia\Cms\ContactForm\Domain\ReadModel\Model\Form;
 use Tulia\Cms\ContactForm\Ports\Domain\ReadModel\ContactFormFinderInterface;
 use Tulia\Cms\ContactForm\Ports\UserInterface\Web\Frontend\FormBuilder\ContactFormBuilderInterface;
 use Tulia\Cms\ContactForm\Ports\Domain\ReadModel\ContactFormFinderScopeEnum;

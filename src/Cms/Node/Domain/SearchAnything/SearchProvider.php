@@ -11,10 +11,10 @@ use Tulia\Cms\Filemanager\Ports\Domain\WriteModel\FileTypeEnum;
 use Tulia\Cms\Filemanager\Ports\Domain\ReadModel\FileFinderInterface;
 use Tulia\Cms\Filemanager\Ports\Domain\ReadModel\FileFinderScopeEnum as FilesScopeEnum;
 use Tulia\Cms\Node\Domain\NodeType\Enum\ParametersEnum;
-use Tulia\Cms\Node\Domain\NodeType\RegistryInterface;
-use Tulia\Cms\Node\Domain\ReadModel\Finder\Model\Node;
-use Tulia\Cms\Node\Ports\Domain\ReadModel\NodeFinderInterface;
-use Tulia\Cms\Node\Ports\Domain\ReadModel\NodeFinderScopeEnum as NodeScopeEnum;
+use Tulia\Cms\Node\Domain\NodeType\NodeTypeRegistryInterface;
+use Tulia\Cms\Node\Domain\ReadModel\Model\Node;
+use Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderInterface;
+use Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderScopeEnum as NodeScopeEnum;
 use Tulia\Cms\SearchAnything\Domain\Model\Hit;
 use Tulia\Cms\SearchAnything\Domain\Model\Results;
 use Tulia\Cms\SearchAnything\Ports\Provider\AbstractProvider;
@@ -33,7 +33,7 @@ class SearchProvider extends AbstractProvider
 
     protected TranslatorInterface $translator;
 
-    protected RegistryInterface $typesRegistry;
+    protected NodeTypeRegistryInterface $typesRegistry;
 
     protected ImageUrlResolver $imageUrlResolver;
 
@@ -42,7 +42,7 @@ class SearchProvider extends AbstractProvider
         FileFinderInterface $filesFinder,
         RouterInterface $router,
         TranslatorInterface $translator,
-        RegistryInterface $typesRegistry,
+        NodeTypeRegistryInterface $typesRegistry,
         ImageUrlResolver $imageUrlResolver
     ) {
         $this->nodeFinder  = $nodeFinder;

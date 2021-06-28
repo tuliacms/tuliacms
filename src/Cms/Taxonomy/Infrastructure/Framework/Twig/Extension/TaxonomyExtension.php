@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Taxonomy\Infrastructure\Framework\Twig\Extension;
 
 use Symfony\Component\Routing\RouterInterface;
-use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\Model\Term;
+use Tulia\Cms\Taxonomy\Domain\ReadModel\Model\Term;
 use Tulia\Component\Routing\Exception\RoutingException;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;

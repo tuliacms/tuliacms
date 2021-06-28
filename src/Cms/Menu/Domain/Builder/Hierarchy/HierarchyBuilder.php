@@ -8,7 +8,7 @@ use Tulia\Cms\Menu\Domain\Builder\Hierarchy\Item as BuilderItem;
 use Tulia\Cms\Menu\Domain\Builder\Identity\Identity;
 use Tulia\Cms\Menu\Domain\Builder\Identity\RegistryInterface;
 use Tulia\Cms\Menu\Ports\Domain\ReadModel\MenuFinderScopeEnum;
-use Tulia\Cms\Menu\Domain\ReadModel\Finder\Model\Item;
+use Tulia\Cms\Menu\Domain\ReadModel\Model\Item;
 use Tulia\Cms\Menu\Ports\Domain\ReadModel\MenuFinderInterface;
 
 /**

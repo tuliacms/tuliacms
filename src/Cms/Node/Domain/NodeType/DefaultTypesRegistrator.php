@@ -11,12 +11,12 @@ use Tulia\Cms\Node\Domain\NodeType\Enum\ParametersEnum;
  *
  * @author Adam Banaszkiewicz
  */
-class DefaultTypesRegistrator implements RegistratorInterface
+class DefaultTypesRegistrator implements NodeTypeRegistratorInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function register(RegistryInterface $registry): void
+    public function register(NodeTypeRegistryInterface $registry): void
     {
         $type = $registry->registerType('page');
         $type->addSupport([ 'introduction', 'thumbnail', 'quick-create', 'searchable', 'hierarchy' ]);

@@ -11,5 +11,16 @@
         <span class="node-title">{{ row.title }}</span>
         <br />
         <span class="slug">{{ 'slugValue'|trans({ slug: row.slug }) }}</span>
+        {% if row.flags is not empty %}
+            <br />
+            {% for flag in row.flags %}
+                {% set flagName = trans_exists('flagType.' ~ flag)
+                    ? ('flagType.' ~ flag)|trans
+                    : flag %}
+                <span class="badge badge-secondary">
+                    {{ 'flagWithName'|trans({ flag: flagName }) }}
+                </span>
+            {% endfor %}
+        {% endif %}
     </span>
 </a>

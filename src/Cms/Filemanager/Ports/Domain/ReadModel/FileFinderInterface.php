@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Filemanager\Ports\Domain\ReadModel;
 
-use Tulia\Cms\Filemanager\Domain\ReadModel\Finder\Model\File;
+use Tulia\Cms\Filemanager\Domain\ReadModel\Model\File;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
 
 /**

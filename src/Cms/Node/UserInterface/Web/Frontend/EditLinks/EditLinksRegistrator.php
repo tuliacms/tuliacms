@@ -8,8 +8,8 @@ use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Cms\EditLinks\Domain\Collection;
 use Tulia\Cms\EditLinks\Ports\Domain\EditLinksCollectorInterface;
-use Tulia\Cms\Node\Domain\ReadModel\Finder\Model\Node;
-use Tulia\Cms\Node\Domain\NodeType\RegistryInterface;
+use Tulia\Cms\Node\Domain\ReadModel\Model\Node;
+use Tulia\Cms\Node\Domain\NodeType\NodeTypeRegistryInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -20,9 +20,9 @@ class EditLinksRegistrator implements EditLinksCollectorInterface
 
     protected RouterInterface $router;
 
-    protected RegistryInterface $registry;
+    protected NodeTypeRegistryInterface $registry;
 
-    public function __construct(TranslatorInterface $translator, RouterInterface $router, RegistryInterface $registry)
+    public function __construct(TranslatorInterface $translator, RouterInterface $router, NodeTypeRegistryInterface $registry)
     {
         $this->translator = $translator;
         $this->router = $router;

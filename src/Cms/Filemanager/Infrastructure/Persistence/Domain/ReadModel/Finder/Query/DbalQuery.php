@@ -7,9 +7,9 @@ namespace Tulia\Cms\Filemanager\Infrastructure\Persistence\Domain\ReadModel\Find
 use Doctrine\DBAL\Connection;
 use Exception;
 use PDO;
-use Tulia\Cms\Filemanager\Domain\ReadModel\Finder\Model\File;
+use Tulia\Cms\Filemanager\Domain\ReadModel\Model\File;
 use Tulia\Cms\Metadata\Domain\ReadModel\MetadataFinder;
-use Tulia\Cms\Node\Domain\ReadModel\Finder\Model\Node;
+use Tulia\Cms\Node\Domain\ReadModel\Model\Node;
 use Tulia\Cms\Node\Domain\WriteModel\Model\Enum\TermTypeEnum;
 use Tulia\Cms\Node\Domain\Metadata\NodeMetadataEnum;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Exception\QueryException;

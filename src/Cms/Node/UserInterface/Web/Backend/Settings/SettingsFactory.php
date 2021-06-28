@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\UserInterface\Web\Backend\Settings;
 
-use Tulia\Cms\Node\Domain\NodeType\RegistryInterface;
+use Tulia\Cms\Node\Domain\NodeType\NodeTypeRegistryInterface;
 use Tulia\Cms\Settings\Ports\Domain\Group\AbstractSettingsGroupFactory;
 
 /**
@@ -12,9 +12,9 @@ use Tulia\Cms\Settings\Ports\Domain\Group\AbstractSettingsGroupFactory;
  */
 class SettingsFactory extends AbstractSettingsGroupFactory
 {
-    protected RegistryInterface $registry;
+    protected NodeTypeRegistryInterface $registry;
 
-    public function __construct(RegistryInterface $registry)
+    public function __construct(NodeTypeRegistryInterface $registry)
     {
         $this->registry = $registry;
     }
