@@ -15,14 +15,16 @@ services:
         resource: '../../../../**'
         exclude: '../../../../{Infrastructure/Framework/Resources}'
 
-    Tulia\Cms\Node\Domain\NodeType\RegistryInterface:
-        class: Tulia\Cms\Node\Domain\NodeType\Registry
+    Tulia\Cms\Node\Domain\NodeType\NodeTypeRegistryInterface:
+        class: Tulia\Cms\Node\Domain\NodeType\NodeTypeRegistry
         bind:
             $registrators: !tagged_iterator node.type.registrator
             $storages: !tagged_iterator node.type.storage
 
-    Tulia\Cms\Node\Domain\NodeType\Storage\DatabaseStorage:
-        tags: [ node.type.storage ]
+    Tulia\Cms\Node\Domain\NodeFlag\NodeFlagRegistryInterface:
+        class: Tulia\Cms\Node\Domain\NodeFlag\NodeFlagRegistry
+        bind:
+            $providers: !tagged_iterator node.flag_provider
 
     Tulia\Cms\Node\Infrastructure\Framework\Routing\Router:
         tags: [ routing_chain.router ]
@@ -66,8 +68,3 @@ services:
 
     Tulia\Cms\Node\Domain\Filemanager\ImageSize\DefaultSizesImagesSizeProvider:
         tags: [ filemanager.image_size.provider ]
-
-    Tulia\Cms\Node\Domain\NodeFlag\NodeFlagRegistryInterface:
-        class: Tulia\Cms\Node\Domain\NodeFlag\NodeFlagRegistry
-        bind:
-            $providers: !tagged_iterator node.flag_provider

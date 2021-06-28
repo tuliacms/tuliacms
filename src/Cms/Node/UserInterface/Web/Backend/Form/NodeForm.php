@@ -9,7 +9,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
 use Tulia\Cms\Node\Domain\NodeType\NodeTypeInterface;
-use Tulia\Cms\Node\Domain\NodeType\RegistryInterface as NodeTypeRegistry;
+use Tulia\Cms\Node\Domain\NodeType\NodeTypeRegistryInterface as NodeTypeRegistry;
 use Tulia\Cms\Node\UserInterface\Web\Backend\Form\Transformer\NodeIdModelTransformer;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType;
 use Tulia\Component\FormSkeleton\Form\AbstractFormSkeletonType;

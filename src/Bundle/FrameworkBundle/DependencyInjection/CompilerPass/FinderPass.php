@@ -17,7 +17,7 @@ class FinderPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container): void
     {
-        foreach ($container->findTaggedServiceIds('finder') as $id => $tags) {
+        foreach ($container->findTaggedServiceIds('DbalFinder') as $id => $tags) {
             $definition = $container->getDefinition($id);
             $definition->addMethodCall('setEventDispatcher', [new Reference(EventDispatcherInterface::class)]);
             $definition->addMethodCall('setPluginsRegistry', [new Reference(PluginRegistry::class)]);

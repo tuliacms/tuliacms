@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\Node\Domain\NodeType\NodeTypeInterface;
-use Tulia\Cms\Node\Domain\NodeType\RegistryInterface;
+use Tulia\Cms\Node\Domain\NodeType\NodeTypeRegistryInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Exception\NodeNotFoundException;
 use Tulia\Cms\Node\Domain\WriteModel\Exception\SingularFlagImposedOnMoreThanOneNodeException;
 use Tulia\Cms\Node\Domain\WriteModel\NodeRepository;
@@ -30,7 +30,7 @@ use Tulia\Component\Templating\ViewInterface;
  */
 class Node extends AbstractController
 {
-    private RegistryInterface $typeRegistry;
+    private NodeTypeRegistryInterface $typeRegistry;
 
     private NodeRepository $repository;
 
@@ -45,7 +45,7 @@ class Node extends AbstractController
     private NodeDatatableFinderInterface $finder;
 
     public function __construct(
-        RegistryInterface $typeRegistry,
+        NodeTypeRegistryInterface $typeRegistry,
         NodeRepository $repository,
         NodeFinderInterface $nodeFinder,
         TaxonomyRegistry $registry,

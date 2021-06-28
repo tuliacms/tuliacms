@@ -7,7 +7,7 @@ namespace Tulia\Cms\Node\Domain\Menu;
 use Tulia\Cms\Menu\Domain\Builder\Type\RegistratorInterface;
 use Tulia\Cms\Menu\Domain\Builder\Type\RegistryInterface;
 use Tulia\Cms\Node\Domain\NodeType\NodeTypeInterface;
-use Tulia\Cms\Node\Domain\NodeType\RegistryInterface as NodeRegistryInterface;
+use Tulia\Cms\Node\Domain\NodeType\NodeTypeRegistryInterface as NodeRegistryInterface;
 use Tulia\Cms\Node\UserInterface\Web\Backend\Menu\Selector;
 
 /**

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Node\Infrastructure\Persistence\Domain\WriteModel;
+namespace Tulia\Cms\Node\Infrastructure\Persistence\Dbal\WriteModel;
 
 use Tulia\Cms\Node\Domain\WriteModel\Ports\NodeByFlagFinderInterface;
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;

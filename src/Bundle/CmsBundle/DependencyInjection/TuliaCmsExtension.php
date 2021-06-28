@@ -63,6 +63,8 @@ class TuliaCmsExtension extends Extension
             ->addTag('node.action_chain');
         $container->registerForAutoconfiguration(\Tulia\Cms\Node\Domain\NodeFlag\NodeFlagProviderInterface::class)
             ->addTag('node.flag_provider');
+        $container->registerForAutoconfiguration(\Tulia\Cms\Node\Domain\NodeType\NodeTypeStorageInterface::class)
+            ->addTag('node.type.storage');
 
         // Terms
         $container->registerForAutoconfiguration(\Tulia\Cms\Taxonomy\Domain\WriteModel\ActionsChain\TaxonomyActionInterface::class)

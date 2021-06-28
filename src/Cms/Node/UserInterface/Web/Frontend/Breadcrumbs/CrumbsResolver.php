@@ -7,7 +7,7 @@ namespace Tulia\Cms\Node\UserInterface\Web\Frontend\Breadcrumbs;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
 use Tulia\Cms\Breadcrumbs\Ports\Domain\BreadcrumbsResolverInterface;
-use Tulia\Cms\Node\Domain\NodeType\RegistryInterface as NodeTypeRegistry;
+use Tulia\Cms\Node\Domain\NodeType\NodeTypeRegistryInterface as NodeTypeRegistry;
 use Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderScopeEnum;
 use Tulia\Cms\Node\Domain\ReadModel\Model\Node;
 use Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderInterface;

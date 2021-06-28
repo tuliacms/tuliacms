@@ -11,7 +11,7 @@ use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\RouterInterface;
 use Tulia\Cms\Node\Domain\ReadModel\Model\Node;
-use Tulia\Cms\Node\Domain\NodeType\RegistryInterface;
+use Tulia\Cms\Node\Domain\NodeType\NodeTypeRegistryInterface;
 use Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderScopeEnum;
 use Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderInterface;
 use Tulia\Cms\Platform\Infrastructure\Framework\Routing\FrontendRouteSuffixResolver;
@@ -23,7 +23,7 @@ class Router implements RouterInterface, RequestMatcherInterface
 {
     private NodeFinderInterface $nodeFinder;
 
-    private RegistryInterface $registry;
+    private NodeTypeRegistryInterface $registry;
 
     private FrontendRouteSuffixResolver $frontendRouteSuffixResolver;
 
@@ -31,7 +31,7 @@ class Router implements RouterInterface, RequestMatcherInterface
 
     public function __construct(
         NodeFinderInterface $nodeFinder,
-        RegistryInterface $registry,
+        NodeTypeRegistryInterface $registry,
         FrontendRouteSuffixResolver $frontendRouteSuffixResolver
     ) {
         $this->nodeFinder = $nodeFinder;

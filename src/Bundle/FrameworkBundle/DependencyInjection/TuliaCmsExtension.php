@@ -42,7 +42,7 @@ class TuliaCmsExtension extends FrameworkExtension
 
         // Finders
         $container->registerForAutoconfiguration(\Tulia\Cms\Shared\Domain\ReadModel\Finder\AbstractFinder::class)
-            ->addTag('finder');
+            ->addTag('DbalFinder');
         $container->registerForAutoconfiguration(\Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Plugin\PluginInterface::class)
             ->addTag('finder.plugin');
         // Themes

@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderScopeEnum;
 use Tulia\Cms\Node\Domain\NodeType\NodeTypeInterface;
-use Tulia\Cms\Node\Domain\NodeType\RegistryInterface;
+use Tulia\Cms\Node\Domain\NodeType\NodeTypeRegistryInterface;
 use Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderInterface;
 use Tulia\Cms\Node\UserInterface\Web\CriteriaBuilder\RequestCriteriaBuilder;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractApiController;
@@ -18,12 +18,12 @@ use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractApiController
  */
 class Node extends AbstractApiController
 {
-    private RegistryInterface $nodeRegistry;
+    private NodeTypeRegistryInterface $nodeRegistry;
 
     private NodeFinderInterface $nodeFinder;
 
     public function __construct(
-        RegistryInterface $nodeRegistry,
+        NodeTypeRegistryInterface $nodeRegistry,
         NodeFinderInterface $nodeFinder
     ) {
         $this->nodeRegistry  = $nodeRegistry;

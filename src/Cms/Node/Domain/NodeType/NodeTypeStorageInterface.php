@@ -7,7 +7,7 @@ namespace Tulia\Cms\Node\Domain\NodeType;
 /**
  * @author Adam Banaszkiewicz
  */
-interface RegistratorInterface
+interface NodeTypeStorageInterface
 {
-    public function register(RegistryInterface $registry): void;
+    public function all(): array;
 }

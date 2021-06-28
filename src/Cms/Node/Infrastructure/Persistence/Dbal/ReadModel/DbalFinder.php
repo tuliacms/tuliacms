@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Node\Infrastructure\Persistence\Domain\ReadModel\Finder;
+namespace Tulia\Cms\Node\Infrastructure\Persistence\Dbal\ReadModel;
 
 use Tulia\Cms\Metadata\Domain\ReadModel\MetadataFinder;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\AbstractFinder;
@@ -13,7 +13,7 @@ use Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderInterface;
 /**
  * @author Adam Banaszkiewicz
  */
-class Finder extends AbstractFinder implements NodeFinderInterface
+class DbalFinder extends AbstractFinder implements NodeFinderInterface
 {
     private ConnectionInterface $connection;
 
@@ -32,6 +32,6 @@ class Finder extends AbstractFinder implements NodeFinderInterface
 
     public function createQuery(): QueryInterface
     {
-        return new DbalQuery($this->connection->createQueryBuilder(), $this->metadataFinder);
+        return new DbalFinderQuery($this->connection->createQueryBuilder(), $this->metadataFinder);
     }
 }

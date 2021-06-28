@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Node\Infrastructure\Persistence\Domain\ReadModel\Finder;
+namespace Tulia\Cms\Node\Infrastructure\Persistence\Dbal\ReadModel;
 
 use Doctrine\DBAL\Connection;
 use Exception;
@@ -20,7 +20,7 @@ use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 /**
  * @author Adam Banaszkiewicz
  */
-class DbalQuery extends AbstractDbalQuery
+class DbalFinderQuery extends AbstractDbalQuery
 {
     private MetadataFinder $metadataFinder;
 

@@ -7,7 +7,7 @@ namespace Tulia\Cms\Node\UserInterface\Web\Backend\Menu;
 use Symfony\Component\Form\FormFactoryInterface;
 use Tulia\Cms\Menu\Domain\Builder\Type\TypeInterface;
 use Tulia\Cms\Menu\UserInterface\Web\Backend\Selector\SelectorInterface;
-use Tulia\Cms\Node\Domain\NodeType\RegistryInterface as NodeRegistryInterface;
+use Tulia\Cms\Node\Domain\NodeType\NodeTypeRegistryInterface as NodeRegistryInterface;
 use Tulia\Cms\Node\UserInterface\Web\Backend\Form\MenuItemSelectorForm;
 use Tulia\Component\Templating\EngineInterface;
 use Tulia\Component\Templating\View;

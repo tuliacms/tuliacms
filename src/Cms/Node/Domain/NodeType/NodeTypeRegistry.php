@@ -7,44 +7,20 @@ namespace Tulia\Cms\Node\Domain\NodeType;
 /**
  * @author Adam Banaszkiewicz
  */
-class Registry implements RegistryInterface
+class NodeTypeRegistry implements NodeTypeRegistryInterface
 {
-    /**
-     * @var array
-     */
-    protected $types = [];
+    protected array $types = [];
 
-    /**
-     * @var iterable
-     */
-    protected $registrators = [];
+    protected iterable $registrators = [];
 
-    /**
-     * @var iterable
-     */
-    protected $storages = [];
+    protected iterable $storages = [];
 
-    /**
-     * @param iterable $registrators
-     * @param iterable $storages
-     */
     public function __construct(iterable $registrators = [], iterable $storages = [])
     {
         $this->registrators = $registrators;
-        $this->storages     = $storages;
+        $this->storages = $storages;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function addRegistrator(RegistratorInterface $registrator): void
-    {
-        $this->registrators[] = $registrator;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function all(): iterable
     {
         $this->callRegistrators();
@@ -52,9 +28,6 @@ class Registry implements RegistryInterface
         return $this->types;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function registerType(string $type): NodeTypeInterface
     {
         if (isset($this->types[$type])) {
@@ -64,9 +37,6 @@ class Registry implements RegistryInterface
         return $this->types[$type] = new NodeType($type);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getType(string $type): NodeTypeInterface
     {
         $this->callRegistrators();
@@ -78,9 +48,6 @@ class Registry implements RegistryInterface
         return $this->types[$type];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isTypeRegistered(string $type): bool
     {
         $this->callRegistrators();
@@ -88,9 +55,6 @@ class Registry implements RegistryInterface
         return isset($this->types[$type]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getRegisteredTypesNames(): iterable
     {
         $this->callRegistrators();
@@ -100,7 +64,7 @@ class Registry implements RegistryInterface
 
     private function callRegistrators(): void
     {
-        foreach ($this->registrators as $key => $registrator) {
+        foreach ($this->registrators as $registrator) {
             $registrator->register($this);
         }
 

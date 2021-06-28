@@ -2,25 +2,20 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Node\Domain\NodeType\Storage;
+namespace Tulia\Cms\Node\Infrastructure\Persistence\Dbal\ReadModel;
 
 use Tulia\Cms\Node\Domain\NodeType\NodeType;
 use Tulia\Cms\Node\Domain\NodeType\NodeTypeInterface;
+use Tulia\Cms\Node\Domain\NodeType\NodeTypeStorageInterface;
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class DatabaseStorage implements StorageInterface
+class DbalNodeTypeStorage implements NodeTypeStorageInterface
 {
-    /**
-     * @var ConnectionInterface
-     */
-    protected $connection;
+    protected ConnectionInterface $connection;
 
-    /**
-     * @param ConnectionInterface $connection
-     */
     public function __construct(ConnectionInterface $connection)
     {
         $this->connection = $connection;

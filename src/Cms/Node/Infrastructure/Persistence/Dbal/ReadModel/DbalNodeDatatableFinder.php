@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Node\Infrastructure\Persistence\Domain\ReadModel\Datatable;
+namespace Tulia\Cms\Node\Infrastructure\Persistence\Dbal\ReadModel;
 
 use PDO;
 use Symfony\Contracts\Translation\TranslatorInterface;
