@@ -53,6 +53,8 @@ class Node extends AggregateRoot
 
     protected ?string $contentCompiled = null;
 
+    protected array $flags = [];
+
     protected bool $translated = true;
 
     private function __construct(string $id, string $type, string $websiteId, string $locale)
@@ -95,6 +97,7 @@ class Node extends AggregateRoot
         $self->content = $data['content'] ?? null;
         $self->contentCompiled = $data['content_compiled'] ?? null;
         $self->translated = (bool) ($data['translated'] ?? true);
+        $self->flags = $data['flags'] ?? [];
         $self->replaceMetadata($data['metadata'] ?? []);
 
         return $self;
@@ -278,6 +281,21 @@ class Node extends AggregateRoot
     public function setContentCompiled(?string $contentCompiled): void
     {
         $this->contentCompiled = $contentCompiled;
+    }
+
+    public function hasFlag(string $name): bool
+    {
+        return \in_array($name, $this->flags, true);
+    }
+
+    public function getFlags(): array
+    {
+        return $this->flags;
+    }
+
+    public function setFlags(array $flags): void
+    {
+        $this->flags = $flags;
     }
 
     public function isTranslated(): bool

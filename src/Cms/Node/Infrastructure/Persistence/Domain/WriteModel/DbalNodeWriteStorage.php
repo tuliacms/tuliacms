@@ -39,11 +39,15 @@ class DbalNodeWriteStorage extends AbstractLocalizableStorage implements NodeWri
                 COALESCE(tl.content, tm.content) AS content,
                 COALESCE(tl.content_compiled, tm.content_compiled) AS content_compiled,
                 COALESCE(tl.locale, :locale) AS locale,
+                GROUP_CONCAT(tnhf.flag SEPARATOR ',') AS flags,
                 {$translationColumn}
             FROM #__node AS tm
             LEFT JOIN #__node_lang AS tl
                 ON tm.id = tl.node_id AND tl.locale = :locale
+            LEFT JOIN #__node_has_flag AS tnhf
+                ON tm.id = tnhf.node_id
             WHERE tm.id = :id
+            GROUP BY tm.id
             LIMIT 1", [
             'id'     => $id,
             'locale' => $locale
@@ -76,6 +80,7 @@ class DbalNodeWriteStorage extends AbstractLocalizableStorage implements NodeWri
         $this->connection->delete('#__node', ['id' => $node['id']]);
         $this->connection->delete('#__node_lang', ['node_id' => $node['id']]);
         $this->connection->delete('#__node_term_relationship', ['node_id' => $node['id']]);
+        $this->connection->delete('#__node_has_flag', ['node_id' => $node['id']]);
     }
 
     public function beginTransaction(): void
@@ -116,6 +121,7 @@ class DbalNodeWriteStorage extends AbstractLocalizableStorage implements NodeWri
         $this->connection->insert('#__node', $mainTable);
 
         $this->insertCategories($data['id'], $data['category'] ? [$data['category']] : [], TermTypeEnum::MAIN);
+        $this->insertFlags($data['id'], $data['flags']);
     }
 
     protected function updateMainRow(array $data, bool $foreignLocale): void
@@ -144,6 +150,7 @@ class DbalNodeWriteStorage extends AbstractLocalizableStorage implements NodeWri
         $this->connection->update('#__node', $mainTable, ['id' => $data['id']]);
 
         $this->insertCategories($data['id'], $data['category'] ? [$data['category']] : [], TermTypeEnum::MAIN);
+        $this->insertFlags($data['id'], $data['flags']);
     }
 
     protected function insertLangRow(array $data): void
@@ -244,4 +251,15 @@ class DbalNodeWriteStorage extends AbstractLocalizableStorage implements NodeWri
         }
     }
 
+    private function insertFlags(string $nodeId, array $flags): void
+    {
+        $this->connection->delete('#__node_has_flag', ['node_id' => $nodeId]);
+
+        foreach ($flags as $flag) {
+            $this->connection->insert('#__node_has_flag', [
+                'node_id' => $nodeId,
+                'flag' => $flag,
+            ]);
+        }
+    }
 }

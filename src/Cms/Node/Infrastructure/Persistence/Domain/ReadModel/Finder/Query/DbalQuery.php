@@ -8,9 +8,9 @@ use Doctrine\DBAL\Connection;
 use Exception;
 use PDO;
 use Tulia\Cms\Metadata\Domain\ReadModel\MetadataFinder;
+use Tulia\Cms\Node\Domain\Metadata\NodeMetadataEnum;
 use Tulia\Cms\Node\Domain\ReadModel\Finder\Model\Node;
 use Tulia\Cms\Node\Domain\WriteModel\Model\Enum\TermTypeEnum;
-use Tulia\Cms\Node\Domain\Metadata\NodeMetadataEnum;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Exception\QueryException;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
@@ -165,6 +165,11 @@ class DbalQuery extends AbstractDbalQuery
              */
             'website' => null,
             'limit' => null,
+            /**
+             * Posts with defined flag or flags.
+             * @param null|string|array
+             */
+            'flag' => null,
         ];
     }
 
@@ -181,6 +186,7 @@ class DbalQuery extends AbstractDbalQuery
         $this->buildTaxonomy($criteria);
         $this->buildNodeType($criteria);
         $this->buildNodeStatus($criteria);
+        $this->buildNodeFlag($criteria);
         $this->buildDate($criteria);
         $this->buildOffset($criteria);
         $this->buildOrderBy($criteria);
@@ -212,6 +218,7 @@ class DbalQuery extends AbstractDbalQuery
                 }
 
                 $row['metadata'] = $metadata[$row['id']] ?? [];
+                $row['flags'] = array_filter(explode(',', (string) $row['flags']));
 
                 $collection->append(Node::buildFromArray($row));
             }
@@ -254,19 +261,20 @@ class DbalQuery extends AbstractDbalQuery
                 COALESCE(tl.slug, tm.slug) AS slug,
                 COALESCE(tl.introduction, tm.introduction) AS introduction,
                 COALESCE(tl.content_compiled, tm.content_compiled) AS content,
-                COALESCE(tl.locale, :tl_locale) AS locale
+                COALESCE(tl.locale, :tl_locale) AS locale,
+                GROUP_CONCAT(tnhf.flag SEPARATOR \',\') AS flags
             ');
         }
 
         $this->queryBuilder
             ->from('#__node', 'tm')
             ->leftJoin('tm', '#__node_lang', 'tl', 'tm.id = tl.node_id AND tl.locale = :tl_locale')
-            ->setParameter('tl_locale', $criteria['locale'], PDO::PARAM_STR);
+            ->setParameter('tl_locale', $criteria['locale'], PDO::PARAM_STR)
+            ->leftJoin('tm', '#__node_has_flag', 'tnhf', 'tm.id = tnhf.node_id')
+            ->addGroupBy('tm.id')
+        ;
     }
 
-    /**
-     * @param array $criteria
-     */
     protected function searchById(array $criteria): void
     {
         if ($criteria['id']) {
@@ -301,9 +309,6 @@ class DbalQuery extends AbstractDbalQuery
         }
     }
 
-    /**
-     * @param array $criteria
-     */
     protected function searchBySlug(array $criteria): void
     {
         if (! $criteria['slug']) {
@@ -316,9 +321,6 @@ class DbalQuery extends AbstractDbalQuery
             ->setMaxResults(1);
     }
 
-    /**
-     * @param array $criteria
-     */
     protected function searchByTitle(array $criteria): void
     {
         if (! $criteria['search']) {
@@ -330,9 +332,6 @@ class DbalQuery extends AbstractDbalQuery
             ->setParameter('tl_title', '%' . $criteria['search'] . '%', PDO::PARAM_STR);
     }
 
-    /**
-     * @param array $criteria
-     */
     protected function buildCategory(array $criteria): void
     {
         if (empty($criteria['category'])) {
@@ -350,9 +349,6 @@ class DbalQuery extends AbstractDbalQuery
             ->setParameter('ttr_category', $criteria['category'], ConnectionInterface::PARAM_ARRAY_STR);
     }
 
-    /**
-     * @param array $criteria
-     */
     protected function buildTaxonomy(array $criteria): void
     {
         if ($criteria['taxonomy'] === []) {
@@ -398,9 +394,6 @@ class DbalQuery extends AbstractDbalQuery
         $this->queryBuilder->andWhere('(' . implode(" $relation ", $wheres) . ')');
     }
 
-    /**
-     * @param array $criteria
-     */
     protected function buildNodeType(array $criteria): void
     {
         $types    = \is_array($criteria['node_type'])      ? $criteria['node_type']      : [ $criteria['node_type'] ];
@@ -419,9 +412,6 @@ class DbalQuery extends AbstractDbalQuery
         }
     }
 
-    /**
-     * @param array $criteria
-     */
     protected function buildNodeStatus(array $criteria): void
     {
         $statuses    = \is_array($criteria['node_status'])      ? $criteria['node_status']      : [ $criteria['node_status'] ];
@@ -440,9 +430,22 @@ class DbalQuery extends AbstractDbalQuery
         }
     }
 
-    /**
-     * @param array $criteria
-     */
+    protected function buildNodeFlag(array $criteria): void
+    {
+        if (! $criteria['flag']) {
+            return;
+        }
+
+        if (is_array($criteria['flag']) === false) {
+            $criteria['flag'] = [$criteria['flag']];
+        }
+
+        $this->queryBuilder
+            ->innerJoin('tm', '#__node_has_flag', 'nhf', 'tm.id = nhf.node_id AND nhf.flag IN (:nhf_flag)')
+            ->setParameter('nhf_flag', $criteria['flag'], Connection::PARAM_STR_ARRAY)
+        ;
+    }
+
     protected function buildDate(array $criteria): void
     {
         if (! $criteria['published_after']) {
@@ -472,9 +475,6 @@ class DbalQuery extends AbstractDbalQuery
         }
     }
 
-    /**
-     * @param array $criteria
-     */
     protected function buildOffset(array $criteria): void
     {
         if ($criteria['per_page'] && $criteria['page']) {
@@ -486,9 +486,6 @@ class DbalQuery extends AbstractDbalQuery
         }
     }
 
-    /**
-     * @param array $criteria
-     */
     protected function buildOrderBy(array $criteria): void
     {
         if ($criteria['order_hierarchical']) {

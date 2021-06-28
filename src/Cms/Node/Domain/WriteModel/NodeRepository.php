@@ -97,6 +97,7 @@ class NodeRepository
             'locale'        => $node['locale'],
             'metadata'      => $this->metadataRepository->findAll(NodeMetadataEnum::TYPE, $id),
             'translated'    => $node['translated'] ?? true,
+            'flags'         => array_filter(explode(',', (string) $node['flags'])),
         ]);
 
         $this->actionsChain->execute('find', $node);
@@ -187,6 +188,7 @@ class NodeRepository
             'level'         => $node->getLevel(),
             'parent_id'     => $node->getParentId(),
             'locale'        => $node->getLocale(),
+            'flags'         => $node->getFlags(),
         ];
     }
 }

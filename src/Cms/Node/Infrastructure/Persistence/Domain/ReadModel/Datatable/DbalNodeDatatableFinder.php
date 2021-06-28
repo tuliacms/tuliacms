@@ -55,6 +55,10 @@ class DbalNodeDatatableFinder extends AbstractDatatableFinder implements NodeDat
      */
     public function getColumns(): array
     {
+        $context = [
+            'nodeType' => $this->nodeType,
+        ];
+
         $columns = [
             'id' => [
                 'selector' => 'tm.id',
@@ -66,6 +70,7 @@ class DbalNodeDatatableFinder extends AbstractDatatableFinder implements NodeDat
                 'label' => 'title',
                 'html_attr' => ['class' => 'col-title'],
                 'view' => '@backend/node/parts/datatable/title.tpl',
+                'view_context' => $context,
             ],
             'published_at' => [
                 'selector' => 'tm.published_at',
@@ -121,13 +126,15 @@ class DbalNodeDatatableFinder extends AbstractDatatableFinder implements NodeDat
     {
         $queryBuilder
             ->from('#__node', 'tm')
-            ->addSelect('tm.type, tm.level, tm.parent_id, tm.slug, tm.status')
+            ->addSelect('tm.type, tm.level, tm.parent_id, tm.slug, tm.status, GROUP_CONCAT(tnhf.flag SEPARATOR \',\') AS flags')
             ->leftJoin('tm', '#__node_lang', 'tl', 'tm.id = tl.node_id AND tl.locale = :locale')
+            ->leftJoin('tm', '#__node_has_flag', 'tnhf', 'tm.id = tnhf.node_id')
             ->where('tm.type = :type AND tm.website_id = :website_id')
             ->setParameter('type', $this->nodeType->getType(), PDO::PARAM_STR)
             ->setParameter('locale', $this->currentWebsite->getLocale()->getCode(), PDO::PARAM_STR)
             ->setParameter('website_id', $this->currentWebsite->getId(), PDO::PARAM_STR)
             ->addOrderBy('tm.level', 'ASC')
+            ->addGroupBy('tm.id')
         ;
 
         if ($this->currentWebsite->getDefaultLocale()->getCode() !== $this->currentWebsite->getLocale()->getCode()) {
@@ -143,6 +150,15 @@ class DbalNodeDatatableFinder extends AbstractDatatableFinder implements NodeDat
         }
 
         return $queryBuilder;
+    }
+
+    public function prepareResult(array $result): array
+    {
+        foreach ($result as $key => $row) {
+            $result[$key]['flags'] = array_filter(explode(',', (string) $row['flags']));
+        }
+
+        return $result;
     }
 
     /**

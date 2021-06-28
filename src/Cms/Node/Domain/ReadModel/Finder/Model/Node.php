@@ -35,6 +35,7 @@ class Node
     protected $introduction;
     protected NodeContentInterface $content;
     protected $visibility;
+    protected array $flags = [];
 
     public function __construct()
     {
@@ -79,6 +80,7 @@ class Node
         $node->setSlug($data['slug'] ?? '');
         $node->setIntroduction($data['introduction'] ?? '');
         $node->setContent($data['content'] ?? '');
+        $node->setFlags($data['flags'] ?? []);
         $node->replaceMetadata($data['metadata'] ?? []);
 
         return $node;
@@ -277,5 +279,20 @@ class Node
         } else {
             $this->content->setSource($content);
         }
+    }
+
+    public function hasFlag(string $flag): bool
+    {
+        return in_array($flag, $this->flags);
+    }
+
+    public function getFlags(): array
+    {
+        return $this->flags;
+    }
+
+    public function setFlags(array $flags): void
+    {
+        $this->flags = $flags;
     }
 }

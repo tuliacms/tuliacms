@@ -66,3 +66,8 @@ services:
 
     Tulia\Cms\Node\Domain\Filemanager\ImageSize\DefaultSizesImagesSizeProvider:
         tags: [ filemanager.image_size.provider ]
+
+    Tulia\Cms\Node\Domain\NodeFlag\NodeFlagRegistryInterface:
+        class: Tulia\Cms\Node\Domain\NodeFlag\NodeFlagRegistry
+        bind:
+            $providers: !tagged_iterator node.flag_provider

@@ -9,8 +9,5 @@ namespace Tulia\Cms\Node\Domain\NodeType;
  */
 interface RegistratorInterface
 {
-    /**
-     * @param RegistryInterface $registry
-     */
     public function register(RegistryInterface $registry): void;
 }
