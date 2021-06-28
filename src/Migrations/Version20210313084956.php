@@ -86,6 +86,13 @@ CREATE TABLE `#__node_type` (
 EOL
 );
         $this->addSql(<<<EOL
+CREATE TABLE `#__node_has_flag` (
+  `node_id` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
+  `flag` varchar(64) COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+EOL
+        );
+        $this->addSql(<<<EOL
 ALTER TABLE `#__node`
   ADD PRIMARY KEY (`id`) USING BTREE,
   ADD KEY `parent_id` (`parent_id`),
@@ -128,6 +135,12 @@ ALTER TABLE `#__node_type`
 EOL
 );
         $this->addSql(<<<EOL
+ALTER TABLE `#__node_has_flag`
+  ADD UNIQUE KEY `UNIQUE` (`node_id`,`flag`),
+  ADD KEY `node_id` (`node_id`);
+EOL
+);
+        $this->addSql(<<<EOL
 ALTER TABLE `#__node`
   ADD CONSTRAINT `fk_node_author_id` FOREIGN KEY (`author_id`) REFERENCES `#__user` (`id`) ON UPDATE SET NULL,
   ADD CONSTRAINT `fk_node_parent_id` FOREIGN KEY (`parent_id`) REFERENCES `#__node` (`id`) ON DELETE SET NULL,
@@ -153,6 +166,11 @@ EOL
 ALTER TABLE `#__node_term_relationship`
   ADD CONSTRAINT `fk_node_term_relationship_node_id` FOREIGN KEY (`node_id`) REFERENCES `#__node` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_node_term_relationship_term_id` FOREIGN KEY (`term_id`) REFERENCES `#__term` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+EOL
+);
+        $this->addSql(<<<EOL
+ALTER TABLE `#__node_has_flag`
+  ADD CONSTRAINT `fk_node_has_flag_node_id` FOREIGN KEY (`node_id`) REFERENCES `#__node` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 EOL
 );
     }

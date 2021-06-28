@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Domain\NodeFlag;
 
+use Tulia\Cms\Node\Domain\NodeFlag\Exception\FlagNotFoundException;
+
 /**
  * @author Adam Banaszkiewicz
  */
@@ -26,6 +28,19 @@ class NodeFlagRegistry implements NodeFlagRegistryInterface
         $this->resolveFlags();
 
         return $this->flags;
+    }
+
+    public function isSingular(string $name): bool
+    {
+        $this->resolveFlags();
+
+        foreach ($this->flags as $key => $flag) {
+            if ($key === $name) {
+                return (bool) $flag['singular'];
+            }
+        }
+
+        throw FlagNotFoundException::fromName($name);
     }
 
     private function resolveFlags(): void
