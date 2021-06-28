@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Tulia\Cms\Filemanager\Application\Service\Cropper;
-use Tulia\Cms\Filemanager\Domain\ReadModel\Finder\Model\File;
+use Tulia\Cms\Filemanager\Domain\ReadModel\Model\File;
 use Tulia\Cms\Filemanager\Ports\Domain\WriteModel\FileTypeEnum;
 use Tulia\Cms\Filemanager\Ports\Domain\ReadModel\FileFinderInterface;
 use Tulia\Cms\Filemanager\Ports\Domain\ReadModel\FileFinderScopeEnum;

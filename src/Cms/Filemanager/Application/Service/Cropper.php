@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Filemanager\Application\Service;
 
-use Tulia\Cms\Filemanager\Domain\ReadModel\Finder\Model\File;
+use Tulia\Cms\Filemanager\Domain\ReadModel\Model\File;
 use Tulia\Cms\Filemanager\Ports\Domain\WriteModel\FileTypeEnum;
 use Tulia\Cms\Filemanager\Ports\Domain\ImageSize\ImagesSizeRegistryInterface;
 use Tulia\Component\Image\ImageInterface;

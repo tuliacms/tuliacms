@@ -7,8 +7,8 @@ namespace Tulia\Cms\ContactForm\Infrastructure\Persistence\Domain\ReadModel\Find
 use Doctrine\DBAL\Connection;
 use Exception;
 use PDO;
-use Tulia\Cms\ContactForm\Domain\ReadModel\Finder\Model\Field;
-use Tulia\Cms\ContactForm\Domain\ReadModel\Finder\Model\Form;
+use Tulia\Cms\ContactForm\Domain\ReadModel\Model\Field;
+use Tulia\Cms\ContactForm\Domain\ReadModel\Model\Form;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Exception\QueryException;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Query\AbstractDbalQuery;

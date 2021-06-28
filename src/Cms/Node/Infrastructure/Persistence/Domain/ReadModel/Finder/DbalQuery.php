@@ -9,7 +9,7 @@ use Exception;
 use PDO;
 use Tulia\Cms\Metadata\Domain\ReadModel\MetadataFinder;
 use Tulia\Cms\Node\Domain\Metadata\NodeMetadataEnum;
-use Tulia\Cms\Node\Domain\ReadModel\Finder\Model\Node;
+use Tulia\Cms\Node\Domain\ReadModel\Model\Node;
 use Tulia\Cms\Node\Domain\WriteModel\Model\Enum\TermTypeEnum;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Exception\QueryException;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;

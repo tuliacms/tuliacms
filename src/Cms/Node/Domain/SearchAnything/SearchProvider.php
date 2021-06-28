@@ -12,7 +12,7 @@ use Tulia\Cms\Filemanager\Ports\Domain\ReadModel\FileFinderInterface;
 use Tulia\Cms\Filemanager\Ports\Domain\ReadModel\FileFinderScopeEnum as FilesScopeEnum;
 use Tulia\Cms\Node\Domain\NodeType\Enum\ParametersEnum;
 use Tulia\Cms\Node\Domain\NodeType\RegistryInterface;
-use Tulia\Cms\Node\Domain\ReadModel\Finder\Model\Node;
+use Tulia\Cms\Node\Domain\ReadModel\Model\Node;
 use Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderInterface;
 use Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderScopeEnum as NodeScopeEnum;
 use Tulia\Cms\SearchAnything\Domain\Model\Hit;

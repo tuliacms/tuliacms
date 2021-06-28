@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Node\Domain\ReadModel\Finder;
 
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
-use Tulia\Cms\Node\Domain\ReadModel\Finder\Model\Node;
+use Tulia\Cms\Node\Domain\ReadModel\Model\Node;
 
 /**
  * @author Adam Banaszkiewicz

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\Model;
+namespace Tulia\Cms\Taxonomy\Domain\ReadModel\Model;
 
 use DateTime;
 use InvalidArgumentException;

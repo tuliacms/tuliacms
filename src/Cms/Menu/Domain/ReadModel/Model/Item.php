@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Menu\Domain\ReadModel\Finder\Model;
+namespace Tulia\Cms\Menu\Domain\ReadModel\Model;
 
 use InvalidArgumentException;
 use Tulia\Cms\Metadata\Domain\ReadModel\MagickMetadataTrait;

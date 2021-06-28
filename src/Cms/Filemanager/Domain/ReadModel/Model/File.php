@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Filemanager\Domain\ReadModel\Finder\Model;
+namespace Tulia\Cms\Filemanager\Domain\ReadModel\Model;
 
 use DateTime;
 use DateTimeImmutable;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Menu\Ports\Domain\ReadModel;
 
-use Tulia\Cms\Menu\Domain\ReadModel\Finder\Model\Menu;
+use Tulia\Cms\Menu\Domain\ReadModel\Model\Menu;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
 
 /**

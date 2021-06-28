@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\ContactForm\Domain\ReadModel\Finder\Model;
+namespace Tulia\Cms\ContactForm\Domain\ReadModel\Model;
 
 use InvalidArgumentException;
 

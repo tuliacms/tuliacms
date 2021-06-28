@@ -8,7 +8,7 @@ use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Cms\EditLinks\Domain\Collection;
 use Tulia\Cms\EditLinks\Ports\Domain\EditLinksCollectorInterface;
-use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\Model\Term;
+use Tulia\Cms\Taxonomy\Domain\ReadModel\Model\Term;
 use Tulia\Cms\Taxonomy\Domain\TaxonomyType\RegistryInterface;
 
 /**
