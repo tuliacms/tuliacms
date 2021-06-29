@@ -1,4 +1,5 @@
 {% assets ['tulia_editor'] %}
+{% assets theme.config.all('editor_plugin')|keys %}
 
 {% set data = params.entity.meta('tulia-editor-data', 'null') %}
 
@@ -23,11 +24,7 @@
             framework: 'bootstrap-5',
             lang: '{{ user().locale }}',
             include: {
-                stylesheets: {
-                    'bootstrap-5': 'https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css',
-                    'summernote': 'assets/summernote/summernote-lite.min.css',
-                    'page-style': 'assets/stylesheets/style.css',
-                }
+                stylesheets: {{ (assetter_standalone_assets(theme.config.all('editor_asset')|keys).stylesheets)|json_encode|raw }}
             },
             styles: {
                 predefined: {
