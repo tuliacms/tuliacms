@@ -1,7 +1,7 @@
 {% assets ['tulia_editor'] %}
 {% assets theme.config.all('editor_plugin')|keys %}
 
-{% set data = params.entity.meta('tulia-editor-data', 'null') %}
+{% set data = entity.meta('tulia-editor-data', 'null') %}
 
 <textarea style="display: none !important;" id="tulia-editor-{{ params.id }}-content" name="{{ name }}">{{ content|raw }}</textarea>
 

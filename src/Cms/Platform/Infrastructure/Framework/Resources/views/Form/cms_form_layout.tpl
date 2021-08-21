@@ -105,8 +105,15 @@
 
 
 {% block wysiwyg_editor_widget -%}
-    {{ wysiwyg_editor(full_name, value, { id: id, entity: entity }) }}
+    {{ wysiwyg_editor(full_name, value, { id: id }) }}
 {%- endblock wysiwyg_editor_widget %}
+
+
+
+
+{% block tulia_editor_widget -%}
+    {{ tulia_editor(full_name, value, entity, { id: id }) }}
+{%- endblock tulia_editor_widget %}
 
 
 

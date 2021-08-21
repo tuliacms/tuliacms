@@ -7,9 +7,6 @@ services:
         resource: '../../../../*'
         exclude: '../../../../{Infrastructure/Framework/Resources}'
 
-    Tulia\Cms\TuliaEditor\Domain\Editor:
-        tags: [ wysiwyg_editor ]
-
     Tulia\Cms\TuliaEditor\Domain\Metadata\EditorMetadataRegistrator:
         tags: [ metadata.registrator ]
 

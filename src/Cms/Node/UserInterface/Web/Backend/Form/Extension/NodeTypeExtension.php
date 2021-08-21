@@ -14,7 +14,7 @@ use Tulia\Cms\Node\Domain\NodeType\NodeTypeInterface;
 use Tulia\Cms\Node\UserInterface\Web\Backend\Form\NodeForm;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType;
 use Tulia\Cms\Taxonomy\UserInterface\Web\Shared\Form\FormType\TaxonomyTypeaheadType;
-use Tulia\Cms\WysiwygEditor\Core\Infrastructure\Framework\Form\FormType\WysiwygEditorType;
+use Tulia\Cms\TuliaEditor\Infrastructure\Framework\Form\FormType\TuliaEditorType;
 use Tulia\Component\FormSkeleton\Extension\AbstractExtension;
 use Tulia\Component\FormSkeleton\Section\SectionsBuilderInterface;
 
@@ -40,7 +40,7 @@ class NodeTypeExtension extends AbstractExtension
         }
 
         if ($this->nodeType->supports('content')) {
-            $builder->add('content', WysiwygEditorType::class, [
+            $builder->add('content', TuliaEditorType::class, [
                 'entity' => $builder->getOption('data'),
             ]);
         }
