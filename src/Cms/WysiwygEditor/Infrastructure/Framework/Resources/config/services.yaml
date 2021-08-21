@@ -4,8 +4,8 @@ services:
         autoconfigure: true
 
     Tulia\Cms\WysiwygEditor\:
-        resource: '../../../../../*'
-        exclude: '../../../../../{Infrastructure/Framework/Resources}'
+        resource: '../../../../*'
+        exclude: '../../../../{Infrastructure/Framework/Resources}'
 
     Tulia\Cms\WysiwygEditor\Application\RegistryInterface:
         class: Tulia\Cms\WysiwygEditor\Application\Registry
