@@ -84,7 +84,7 @@ class Customizer extends AbstractController
             return $this->redirectToRoute('backend.theme');
         }
 
-        if (!$changeset) {
+        if (! $changeset) {
             return $this->redirectToRoute('backend.theme.customize.current');
         }
 

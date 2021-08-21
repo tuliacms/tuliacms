@@ -9,15 +9,8 @@ namespace Tulia\Component\Theme\Customizer\Builder\Section;
  */
 class Section implements SectionInterface
 {
-    /**
-     * @var array
-     */
-    protected $params = [];
+    protected array $params = [];
 
-    /**
-     * @param string $id
-     * @param array $params
-     */
     public function __construct(string $id, array $params = [])
     {
         $this->params = array_merge([
@@ -29,36 +22,21 @@ class Section implements SectionInterface
         ], $params);
     }
 
-    /**
-     * @param string $name
-     * @param array $arguments
-     *
-     * @return mixed|null
-     */
     public function __call(string $name, array $arguments = [])
     {
         return $this->get($name);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function get(string $name, $default = null)
     {
         return $this->params[$name] ?? $default;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function set(string $name, $value): void
     {
         $this->params[$name] = $value;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function render(string $controls, array $sections): string
     {
         $id = str_replace('.', '_', $this->get('id'));

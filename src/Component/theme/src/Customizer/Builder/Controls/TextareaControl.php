@@ -9,20 +9,14 @@ namespace Tulia\Component\Theme\Customizer\Builder\Controls;
  */
 class TextareaControl extends AbstractControl
 {
-    /**
-     * {@inheritdoc}
-     */
     public function build(array $params): string
     {
         return '<div class="form-group">
-            <label>'.$params['label'].'</label>
-            <textarea id="'.$params['control_id'].'" name="'.$params['control_name'].'" class="customizer-control form-control" data-transport="'.$params['transport'].'">'.$this->escapeAttribute($params['value']).'</textarea>
+            <label>' . $this->trans($params['label'], [], $params['translation_domain']) . '</label>
+            <textarea id="' . $params['control_id'] . '" name="' . $params['control_name'] . '" class="customizer-control form-control" data-transport="' . $params['transport'] . '">' . $this->escapeAttribute($params['value']) . '</textarea>
         </div>';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public static function getName(): string
     {
         return 'textarea';
