@@ -2,36 +2,23 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\WysiwygEditor\Core\Application;
+namespace Tulia\Cms\WysiwygEditor\Application;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class Registry implements RegistryInterface
 {
-    /**
-     * @var array|iterable
-     */
-    protected $editors = [];
+    protected iterable $editors = [];
 
-    /**
-     * @var string|null
-     */
-    protected $active;
+    protected ?string $active = null;
 
-    /**
-     * @param iterable $editors
-     * @param string|null $active
-     */
     public function __construct(iterable $editors, ?string $active = null)
     {
         $this->editors = $editors;
         $this->active  = $active;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getActiveEditor(): WysiwygEditorInterface
     {
         foreach ($this->editors as $editor) {
@@ -43,9 +30,6 @@ class Registry implements RegistryInterface
         return new DefaultEditor();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getEditors(): iterable
     {
         return $this->editors;

@@ -7,11 +7,11 @@ services:
         resource: '../../../../../*'
         exclude: '../../../../../{Infrastructure/Framework/Resources}'
 
-    Tulia\Cms\WysiwygEditor\Core\Application\RegistryInterface:
-        class: Tulia\Cms\WysiwygEditor\Core\Application\Registry
-        factory: Tulia\Cms\WysiwygEditor\Core\Application\RegistryFactory::create
+    Tulia\Cms\WysiwygEditor\Application\RegistryInterface:
+        class: Tulia\Cms\WysiwygEditor\Application\Registry
+        factory: Tulia\Cms\WysiwygEditor\Application\RegistryFactory::create
         bind:
             $editors: !tagged_iterator wysiwyg_editor
 
-    Tulia\Cms\WysiwygEditor\Core\Application\DefaultEditor:
+    Tulia\Cms\WysiwygEditor\Application\DefaultEditor:
         tags: [ wysiwyg_editor ]
