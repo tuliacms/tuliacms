@@ -13,30 +13,18 @@ use Tulia\Component\Theme\Customizer\Builder\Controls\AbstractControl;
  */
 class FilepickerControl extends AbstractControl
 {
-    /**
-     * @var EngineInterface
-     */
-    protected $engine;
+    protected EngineInterface $engine;
 
-    /**
-     * @param EngineInterface $engine
-     */
     public function __construct(EngineInterface $engine)
     {
         $this->engine = $engine;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function build(array $params): string
     {
         return $this->engine->render(new View('@backend/filemanager/customizer/filepicker.tpl', $params));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public static function getName(): string
     {
         return 'filepicker';

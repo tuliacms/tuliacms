@@ -6,7 +6,7 @@ namespace Tulia\Cms\Widget\Infrastructure\Cms\Widget\Predefined\Text;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Tulia\Cms\WysiwygEditor\Core\Infrastructure\Framework\Form\FormType\WysiwygEditorType;
+use Tulia\Cms\WysiwygEditor\Infrastructure\Framework\Form\FormType\WysiwygEditorType;
 
 /**
  * @author Adam Banaszkiewicz

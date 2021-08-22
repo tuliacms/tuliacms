@@ -138,7 +138,3 @@ framework:
                     - '/assets/core/filemanager/js/src/config.js'
                 require: [ 'jquery', 'jstree', 'fileapi' ]
                 group: head
-            tulia-editor:
-                styles: [ '/assets/core/tulia-editor/css/tulia-editor.min.css' ]
-                scripts: [ '/assets/core/tulia-editor/js/tulia-editor.min.js', '/assets/core/tulia-editor/js/tulia-editor.run.js' ]
-                group: head

@@ -26,7 +26,7 @@ class DatetimeExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('format_date', function ($date, string $format = null) {
+            new TwigFunction('format_date', function ($date = 'now', string $format = null) {
                 return $this->formatter->format($date, $format);
             }, [
                 'is_safe' => [ 'html' ]

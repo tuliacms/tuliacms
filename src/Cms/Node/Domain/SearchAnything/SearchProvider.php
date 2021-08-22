@@ -102,8 +102,8 @@ class SearchProvider extends AbstractProvider
 
         /** @var Node $node */
         foreach ($nodes as $node) {
-            if ($node->getMeta('thumbnail')) {
-                $ids[$node->getId()] = $node->getMeta('thumbnail');
+            if ($node->meta('thumbnail')) {
+                $ids[$node->getId()] = $node->meta('thumbnail');
             }
         }
 

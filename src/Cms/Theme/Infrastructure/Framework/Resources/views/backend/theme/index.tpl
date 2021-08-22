@@ -28,7 +28,7 @@
             <div class="row">
                 {% for item in themes %}
                     <div class="col-3">
-                        <div class="card{{ theme.name == item.name ? ' bg-light' : '' }}">
+                        <div class="card{{ theme.name == item.name ? ' bg-light' : '' }} mb-4">
                             {% if theme.name == item.name %}
                                 <div class="ribbon"><span>{{ 'activeTheme'|trans({}, 'themes') }}</span></div>
                             {% endif %}
@@ -103,10 +103,10 @@
             top: 26px;
             right: -24px;
         }
-        .ribbon span::before {
+        .ribbon span:before {
             content: "";
             position: absolute;
-            left: 0px;
+            left: 0;
             top: 100%;
             z-index: -1;
             border-left: 3px solid #1e5799;
@@ -114,10 +114,10 @@
             border-bottom: 3px solid transparent;
             border-top: 3px solid #1e5799;
         }
-        .ribbon span::after {
+        .ribbon span:after {
             content: "";
             position: absolute;
-            right: 0px;
+            right: 0;
             top: 100%;
             z-index: -1;
             border-left: 3px solid transparent;

@@ -6,11 +6,12 @@ namespace Tulia\Cms\Menu\Domain\WriteModel\Model;
 
 use Tulia\Cms\Menu\Domain\WriteModel\Exception\ParentItemReccurencyException;
 use Tulia\Cms\Metadata\Domain\WriteModel\MagickMetadataTrait;
+use Tulia\Cms\Metadata\Ports\Domain\WriteModel\MetadataAwareInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class Item
+class Item implements MetadataAwareInterface
 {
     use MagickMetadataTrait;
 

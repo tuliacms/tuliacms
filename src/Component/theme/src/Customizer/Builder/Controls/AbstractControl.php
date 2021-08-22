@@ -4,12 +4,25 @@ declare(strict_types=1);
 
 namespace Tulia\Component\Theme\Customizer\Builder\Controls;
 
+use Symfony\Contracts\Translation\TranslatorInterface;
+
 /**
  * @author Adam Banaszkiewicz
  */
 abstract class AbstractControl implements ControlInterface
 {
-    protected $params = [];
+    protected array $params = [];
+    protected TranslatorInterface $translator;
+
+    public function setTranslator(TranslatorInterface $translator): void
+    {
+        $this->translator = $translator;
+    }
+
+    public function trans(?string $id, array $parameters = [], string $domain = null, string $locale = null): ?string
+    {
+        return $this->translator->trans($id, $parameters, $domain, $locale);
+    }
 
     /**
      * {@inheritdoc}

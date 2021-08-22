@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Tulia\Component\Theme\Customizer;
 
 use Tulia\Component\Theme\Customizer\Builder\Controls\ControlInterface;
-use Tulia\Component\Theme\Customizer\Builder\Section\Section;
 use Tulia\Component\Theme\Customizer\Builder\Section\SectionInterface;
+use Tulia\Component\Theme\Customizer\Builder\Section\SectionsFactoryInterface;
 use Tulia\Component\Theme\Customizer\Changeset\ChangesetInterface;
 use Tulia\Component\Theme\Customizer\Changeset\Factory\ChangesetFactoryInterface;
 use Tulia\Component\Theme\Customizer\Changeset\Transformer\ChangesetFieldsDefinitionControlsTransformer;
@@ -19,30 +19,28 @@ use Tulia\Component\Theme\ThemeInterface;
 class Customizer implements CustomizerInterface
 {
     protected ChangesetFactoryInterface $changesetFactory;
+    protected SectionsFactoryInterface $sectionsFactory;
     protected iterable $providers;
     protected array $sections = [];
     protected array $controls = [];
     protected bool $fetched = false;
+    protected ?string $translationDomain = null;
 
     public function __construct(
         ChangesetFactoryInterface $changesetFactory,
+        SectionsFactoryInterface $sectionsFactory,
         iterable $providers
     ) {
         $this->changesetFactory = $changesetFactory;
+        $this->sectionsFactory = $sectionsFactory;
         $this->providers = $providers;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function addProvider(ProviderInterface $provider): void
     {
         $this->providers[] = $provider;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getProviders(): iterable
     {
         return $this->providers;
@@ -57,19 +55,20 @@ class Customizer implements CustomizerInterface
             ->transform($changeset, $this->getControls());
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function addSection(string $id, array $params = []): SectionInterface
+    public function setTranslationDomain(?string $translationDomain): void
     {
-        $section = new Section($id, $params);
-
-        return $this->sections[$id] = $section;
+        $this->translationDomain = $translationDomain;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    public function addSection(string $id, array $params = []): SectionInterface
+    {
+        $params = array_merge([
+            'translation_domain' => $this->translationDomain,
+        ], $params);
+
+        return $this->sections[$id] = $this->sectionsFactory->create($id, $params);
+    }
+
     public function addControl(string $id, string $type, array $params = []): void
     {
         $params = array_merge([
@@ -82,7 +81,7 @@ class Customizer implements CustomizerInterface
             'section'      => null,
             'priority'     => 0,
             'input_attrs'  => [],
-            'translation_domain' => false,
+            'translation_domain' => $this->translationDomain,
         ], $params);
 
         $params['id'] = $id;
@@ -91,9 +90,6 @@ class Customizer implements CustomizerInterface
         $this->controls[$id] = $params;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getSections(): iterable
     {
         $this->fetchProviders();
@@ -105,9 +101,6 @@ class Customizer implements CustomizerInterface
         return $this->sections;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getSection(string $id): ?SectionInterface
     {
         $this->fetchProviders();
@@ -115,9 +108,6 @@ class Customizer implements CustomizerInterface
         return $this->sections[$id] ?? null;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getControls(): array
     {
         $this->fetchProviders();
@@ -129,9 +119,6 @@ class Customizer implements CustomizerInterface
         return $this->controls;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getControl(string $id): ?ControlInterface
     {
         $this->fetchProviders();
@@ -139,9 +126,6 @@ class Customizer implements CustomizerInterface
         return $this->controls[$id] ?? null;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function fillChangesetWithDefaults(ChangesetInterface $changeset): void
     {
         foreach ($this->getControls() as $control) {
@@ -149,9 +133,6 @@ class Customizer implements CustomizerInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function buildDefaultChangeset(ThemeInterface $theme): ChangesetInterface
     {
         $changeset = $this->changesetFactory->factory();
@@ -162,9 +143,6 @@ class Customizer implements CustomizerInterface
         return $changeset;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getPredefinedChangesets(): iterable
     {
         $predefined = [];

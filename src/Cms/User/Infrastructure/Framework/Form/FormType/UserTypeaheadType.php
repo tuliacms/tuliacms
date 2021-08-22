@@ -46,8 +46,8 @@ class UserTypeaheadType extends AbstractType
 
                 $username = $user->getUsername();
 
-                if ($user->getMeta(UserMetadataEnum::NAME)) {
-                    $username = $user->getMeta(UserMetadataEnum::NAME) . " ({$username})";
+                if ($user->meta(UserMetadataEnum::NAME)) {
+                    $username = $user->meta(UserMetadataEnum::NAME) . " ({$username})";
                 }
 
                 return ['username' => $username];

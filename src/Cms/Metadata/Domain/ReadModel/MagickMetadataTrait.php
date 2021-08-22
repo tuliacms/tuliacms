@@ -40,7 +40,7 @@ trait MagickMetadataTrait
             return $this->{$name}(...$arguments);
         }
 
-        return $this->getMeta($name);
+        return $this->meta($name);
     }
 
     public function __isset(string $name): bool
@@ -48,7 +48,7 @@ trait MagickMetadataTrait
         return method_exists($this, $name) || isset($this->metadata[$name]);
     }
 
-    public function getMeta(string $name, $default = null)
+    public function meta(string $name, $default = null)
     {
         return $this->metadata[$name] ?? $default;
     }

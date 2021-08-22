@@ -7,13 +7,14 @@ namespace Tulia\Cms\Node\Domain\ReadModel\Model;
 use DateTime;
 use InvalidArgumentException;
 use Tulia\Cms\Metadata\Domain\ReadModel\MagickMetadataTrait;
+use Tulia\Cms\Metadata\Ports\Domain\WriteModel\MetadataAwareInterface;
 use Tulia\Cms\Node\Domain\ReadModel\NodeContent\NodeContentInterface;
 use Tulia\Cms\Node\Infrastructure\Domain\ReadModel\NodeContent\VoidNodeContent;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class Node
+class Node implements MetadataAwareInterface
 {
     use MagickMetadataTrait;
 

@@ -111,6 +111,13 @@
 
 
 
+{% block tulia_editor_widget -%}
+    {{ tulia_editor(full_name, value, entity, { id: id }) }}
+{%- endblock tulia_editor_widget %}
+
+
+
+
 {% block typeahead_widget -%}
     {% assets ['jquery_typeahead'] %}
 

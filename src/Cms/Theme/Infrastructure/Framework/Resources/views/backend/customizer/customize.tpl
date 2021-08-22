@@ -56,7 +56,7 @@
                         {% for section in customizer.sections %}
                             {% if section.parent is empty %}
                                 <div class="control-trigger" data-show-pane="{{ section.id|str_replace('.', '_') }}">
-                                    {{ section.label }}
+                                    {{ section.label|trans({}, section.translation_domain) }}
                                 </div>
                             {% endif %}
                         {% endfor %}

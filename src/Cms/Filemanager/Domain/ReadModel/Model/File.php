@@ -9,11 +9,12 @@ use DateTimeImmutable;
 use Exception;
 use InvalidArgumentException;
 use Tulia\Cms\Metadata\Domain\ReadModel\MagickMetadataTrait;
+use Tulia\Cms\Metadata\Ports\Domain\WriteModel\MetadataAwareInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class File
+class File implements MetadataAwareInterface
 {
     use MagickMetadataTrait;
 

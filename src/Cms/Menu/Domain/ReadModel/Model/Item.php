@@ -6,11 +6,12 @@ namespace Tulia\Cms\Menu\Domain\ReadModel\Model;
 
 use InvalidArgumentException;
 use Tulia\Cms\Metadata\Domain\ReadModel\MagickMetadataTrait;
+use Tulia\Cms\Metadata\Ports\Domain\WriteModel\MetadataAwareInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class Item
+class Item implements MetadataAwareInterface
 {
     use MagickMetadataTrait;
 

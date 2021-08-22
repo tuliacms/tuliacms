@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as SymfonyContr
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Cms\Platform\Shared\Document\DocumentInterface;
 use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
@@ -108,5 +109,10 @@ abstract class AbstractController extends SymfonyController
     public function getCommandBus(): CommandBusInterface
     {
         return $this->container->get(CommandBusInterface::class);
+    }
+
+    public function isHomepage(Request $request): bool
+    {
+        return $request->getUri() === $this->generateUrl('homepage', [], UrlGeneratorInterface::ABSOLUTE_URL);
     }
 }

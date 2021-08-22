@@ -15,31 +15,14 @@ use Tulia\Component\Theme\Customizer\CustomizerInterface;
  */
 class Builder implements BuilderInterface
 {
-    /**
-     * @var CustomizerInterface
-     */
-    protected $customizer;
+    protected CustomizerInterface $customizer;
 
-    /**
-     * @var ControlsRegistry
-     */
-    protected $controlRegistry;
+    protected ControlsRegistry $controlRegistry;
 
-    /**
-     * @var RegistryInterface
-     */
-    protected $plugins;
+    protected RegistryInterface $plugins;
 
-    /**
-     * @var bool
-     */
-    protected $composed = false;
+    protected bool $composed = false;
 
-    /**
-     * @param CustomizerInterface $customizer
-     * @param ControlsRegistry $controlRegistry
-     * @param RegistryInterface $plugins
-     */
     public function __construct(
         CustomizerInterface $customizer,
         ControlsRegistry $controlRegistry,
@@ -58,7 +41,7 @@ class Builder implements BuilderInterface
         $html = '';
 
         /** @var SectionInterface $section */
-        foreach ($this->customizer->getSections() as $id => $section) {
+        foreach ($this->customizer->getSections() as $section) {
             $sections = [];
 
             /** @var SectionInterface $child */

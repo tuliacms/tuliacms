@@ -15,20 +15,10 @@ use Twig\TwigFunction;
  */
 class AssetterExtention extends AbstractExtension implements GlobalsInterface
 {
-    /**
-     * @var AssetterInterface
-     */
-    protected $assetter;
+    protected AssetterInterface $assetter;
 
-    /**
-     * @var string
-     */
-    protected $basePath;
+    protected string $basePath;
 
-    /**
-     * @param AssetterInterface $assetter
-     * @param string            $basePath
-     */
     public function __construct(AssetterInterface $assetter, string $basePath = '/')
     {
         $this->assetter = $assetter;
@@ -56,7 +46,19 @@ class AssetterExtention extends AbstractExtension implements GlobalsInterface
                     return $path;
                 }
 
-                return $this->basePath.$path;
+                return $this->basePath . $path;
+            }, [
+                'is_safe' => [ 'html' ]
+            ]),
+            new TwigFunction('assetter_standalone_assets', function (array $assets) {
+                $standalone = $this->assetter->standalone();
+                $standalone->require($assets);
+                $build = $standalone->build();
+
+               return [
+                   'scripts' => $build->collectScripts(),
+                   'stylesheets' => $build->collectStyles(),
+               ];
             }, [
                 'is_safe' => [ 'html' ]
             ]),

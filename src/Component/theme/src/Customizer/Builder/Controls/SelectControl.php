@@ -23,7 +23,7 @@ class SelectControl extends AbstractControl
         }
 
         return '<div class="form-group">
-            <label>' . $params['label'] . '</label>
+            <label>' . $this->trans($params['label'], [], $params['translation_domain']) . '</label>
             <select id="' . $params['control_id'] . '" name="' . $params['control_name'] . '" class="customizer-control form-control" data-transport="'.$params['transport'].'">'.$values.'</select>
         </div>';
     }
