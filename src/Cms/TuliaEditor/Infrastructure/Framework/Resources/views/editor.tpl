@@ -1,5 +1,5 @@
 {% assets ['tulia_editor'] %}
-{% assets theme.config.all('editor_plugin')|keys %}
+{% assets theme.config.all('tulia_editor_plugin')|keys %}
 
 {% set data = entity.meta('tulia-editor-data', 'null') %}
 
@@ -24,7 +24,7 @@
             framework: 'bootstrap-5',
             lang: '{{ user().locale }}',
             include: {
-                stylesheets: {{ (assetter_standalone_assets(theme.config.all('editor_asset')|keys).stylesheets)|json_encode|raw }}
+                stylesheets: {{ (assetter_standalone_assets(theme.config.all('tulia_editor_asset')|keys).stylesheets)|json_encode|raw }}
             },
             styles: {
                 predefined: {
