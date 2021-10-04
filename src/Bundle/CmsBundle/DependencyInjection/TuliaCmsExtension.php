@@ -7,6 +7,8 @@ namespace Tulia\Bundle\CmsBundle\DependencyInjection;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
+use Tulia\Cms\ContentBuilder\Model\NodeType\NodeType;
+use Tulia\Cms\ContentBuilder\Model\NodeType\NodeTypeRegistry;
 
 /**
  * @author Adam Banaszkiewicz
@@ -28,6 +30,8 @@ class TuliaCmsExtension extends Extension
         $configuration = $this->getConfiguration($configs, $container);
         $config = $this->processConfiguration($configuration, $configs);
 
+        $container->setParameter('cms.content_builder.node_types', $config['content_building']['node_types']);
+        $container->setParameter('cms.content_builder.layout_types', $config['content_building']['layout_types']);
         $container->setParameter('cms.options.definitions', $this->validateOptionsValues($config['options']['definitions'] ?? []));
 
         // BodyClass
@@ -73,6 +77,10 @@ class TuliaCmsExtension extends Extension
             ->addTag('taxonomy.routing.strategy');
         $container->registerForAutoconfiguration(\Tulia\Cms\Taxonomy\Domain\TaxonomyType\RegistratorInterface::class)
             ->addTag('taxonomy.type.registrator');
+
+        // ContentBuilder
+        $container->registerForAutoconfiguration(\Tulia\Cms\ContentBuilder\Domain\NodeType\Service\NodeTypeProviderInterface::class)
+            ->addTag('content_builder.node_type.provider');
     }
 
     protected function validateOptionsValues(array $definitions): array

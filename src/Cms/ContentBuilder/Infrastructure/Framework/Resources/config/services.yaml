@@ -1,0 +1,13 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    Tulia\Cms\ContentBuilder\:
+        resource: '../../../../**'
+        exclude: '../../../../{Infrastructure/Framework/Resources,Domain/NodeType/Model}'
+
+    Tulia\Cms\ContentBuilder\Infrastructure\Persistence\NodeTypeProvider\ContainerProvider:
+        bind:
+            $config: '%cms.content_builder.node_types%'

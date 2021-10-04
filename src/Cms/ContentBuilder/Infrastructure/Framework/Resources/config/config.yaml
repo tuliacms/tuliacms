@@ -1,0 +1,54 @@
+cms:
+    content_building:
+        node_types:
+            page:
+                controller: 'Tulia\Cms\Node\UserInterface\Web\Frontend\Controller\Node::show'
+                is_routable: true
+                is_hierarchical: true
+                routable_taxonomy_field: category
+                translation_domain: page
+                layout: default
+                fields:
+                    title:
+                        label: title
+                        type: text
+                        is_title: true
+                    introduction:
+                        label: introduction
+                        type: textarea
+                    slug:
+                        label: slug
+                        type: text
+                        is_slug: true
+                    content:
+                        label: content
+                        type: wysiwyg
+                    #category:
+                    #    label: category
+                    #    type: taxonomy
+                        #relation:
+                        #    type:
+
+#        taxonomy_types:
+#            category:
+#                translation_domain: category
+#
+        layout_types:
+            default:
+                label: defaultLayout
+                sections:
+                    lead:
+                        groups:
+                            main:
+                                label: ~
+                                fields: [title, slug]
+                    main:
+                        groups:
+                            introduction:
+                                label: introduction
+                                fields: [introduction]
+                            content:
+                                label: content
+                                fields: [content]
+                    sidebar:
+                        groups: []

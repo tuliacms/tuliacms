@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Homepage\UserInterface\Web\Backend\Controller;
 
+use Tulia\Cms\ContentBuilder\Domain\NodeType\Service\NodeTypeRegistry;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Component\Templating\ViewInterface;
 
@@ -12,8 +13,9 @@ use Tulia\Component\Templating\ViewInterface;
  */
 class Homepage extends AbstractController
 {
-    public function index(/*DependencyFactory $dependencyFactory*/): ViewInterface
+    public function index(/*DependencyFactory $dependencyFactory*/ NodeTypeRegistry $registry): ViewInterface
     {
+        dump($registry->get('page'));exit;
         /*$input = new ArrayInput([]);
 
         $dependencyFactory->getMetadataStorage()->ensureInitialized();
