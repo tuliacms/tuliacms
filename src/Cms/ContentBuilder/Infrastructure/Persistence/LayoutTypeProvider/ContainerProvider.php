@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\ContentBuilder\Infrastructure\Persistence\NodeTypeProvider;
+namespace Tulia\Cms\ContentBuilder\Infrastructure\Persistence\LayoutTypeProvider;
 
-use Tulia\Cms\ContentBuilder\Domain\NodeType\Service\AbstractNodeTypeProviderProvider;
+use Tulia\Cms\ContentBuilder\Domain\LayoutType\Service\AbstractLayoutTypeProviderProvider;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class ContainerProvider extends AbstractNodeTypeProviderProvider
+class ContainerProvider extends AbstractLayoutTypeProviderProvider
 {
     private array $config;
 
@@ -23,7 +23,7 @@ class ContainerProvider extends AbstractNodeTypeProviderProvider
         $types = [];
 
         foreach ($this->config as $name => $options) {
-            $types[] = $this->buildNodeType($name, $options);
+            $types[] = $this->buildLayoutType($name, $options);
         }
 
         return $types;

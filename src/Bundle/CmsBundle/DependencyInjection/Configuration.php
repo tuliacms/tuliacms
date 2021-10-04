@@ -101,10 +101,10 @@ class Configuration implements ConfigurationInterface
                                 ->addDefaultsIfNotSet()
                                 ->children()
                                     ->scalarNode('label')->defaultNull()->end()
-                                    ->scalarNode('translation_domain')->defaultNull()->end()
+                                    ->scalarNode('translation_domain')->defaultValue('messages')->end()
                                     // Builder service, which implements LayoutBuilderInterface.
                                     // Builder is responsible for render layout with defined fields and sections for form.
-                                    ->scalarNode('builder')->defaultValue('LayoutBuilderInterface')->end()
+                                    ->scalarNode('builder')->defaultValue(\Tulia\Cms\ContentBuilder\Model\LayoutType\LayoutBuilderInterface::class)->end()
                                     ->arrayNode('sections')
                                         ->useAttributeAsKey('name')
                                         ->arrayPrototype()

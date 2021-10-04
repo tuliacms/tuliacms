@@ -2,22 +2,27 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\ContentBuilder\Model\LayoutType;
+namespace Tulia\Cms\ContentBuilder\Domain\LayoutType\Model;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class Layout
+class LayoutType
 {
     protected string $name;
     protected string $label;
     protected ?string $translationDomain = null;
     protected string $builder;
+
+    /**
+     * @var Section[]
+     */
     protected array $sections = [];
 
-    public function __construct(string $name)
+    public function __construct(string $name, string $translationDomain)
     {
         $this->name = $name;
+        $this->translationDomain = $translationDomain;
     }
 
     public function getName(): string
@@ -53,5 +58,20 @@ class Layout
     public function setBuilder(string $builder): void
     {
         $this->builder = $builder;
+    }
+
+    public function getSections(): array
+    {
+        return $this->sections;
+    }
+
+    public function setSections(array $sections): void
+    {
+        $this->sections = $sections;
+    }
+
+    public function addSection(Section $section): void
+    {
+        $this->sections[$section->getName()] = $section;
     }
 }

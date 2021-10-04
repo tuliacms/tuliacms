@@ -40,7 +40,7 @@ cms:
                     lead:
                         groups:
                             main:
-                                label: ~
+                                label: main
                                 fields: [title, slug]
                     main:
                         groups:

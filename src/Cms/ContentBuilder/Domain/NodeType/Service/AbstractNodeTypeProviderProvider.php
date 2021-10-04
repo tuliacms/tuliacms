@@ -2,18 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\ContentBuilder\Domain\NodeType\Model\Provider;
+namespace Tulia\Cms\ContentBuilder\Domain\NodeType\Service;
 
 use Tulia\Cms\ContentBuilder\Domain\NodeType\Model\Field;
 use Tulia\Cms\ContentBuilder\Domain\NodeType\Model\NodeType;
-use Tulia\Cms\ContentBuilder\Domain\NodeType\Service\NodeTypeProviderInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 abstract class AbstractNodeTypeProviderProvider implements NodeTypeProviderInterface
 {
-    protected function buildNodeTypeService(string $name, array $options): NodeType
+    protected function buildNodeType(string $name, array $options): NodeType
     {
         $nodeType = new NodeType($name, $options['translation_domain']);
         $nodeType->setController($options['controller']);
@@ -23,13 +22,13 @@ abstract class AbstractNodeTypeProviderProvider implements NodeTypeProviderInter
         $nodeType->setRoutableTaxonomyField($options['routable_taxonomy_field']);
 
         foreach ($options['fields'] as $fieldName => $fieldOptions) {
-            $nodeType->addField($this->buildNodeFieldService($fieldName, $fieldOptions));
+            $nodeType->addField($this->buildNodeField($fieldName, $fieldOptions));
         }
 
         return $nodeType;
     }
 
-    protected function buildNodeFieldService(string $name, array $options): Field
+    protected function buildNodeField(string $name, array $options): Field
     {
         $field = new Field($name, $options['type']);
         $field->setLabel($options['label']);

@@ -81,6 +81,8 @@ class TuliaCmsExtension extends Extension
         // ContentBuilder
         $container->registerForAutoconfiguration(\Tulia\Cms\ContentBuilder\Domain\NodeType\Service\NodeTypeProviderInterface::class)
             ->addTag('content_builder.node_type.provider');
+        $container->registerForAutoconfiguration(\Tulia\Cms\ContentBuilder\Domain\LayoutType\Service\LayoutTypeProviderInterface::class)
+            ->addTag('content_builder.layout_type.provider');
     }
 
     protected function validateOptionsValues(array $definitions): array

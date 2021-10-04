@@ -6,8 +6,12 @@ services:
 
     Tulia\Cms\ContentBuilder\:
         resource: '../../../../**'
-        exclude: '../../../../{Infrastructure/Framework/Resources,Domain/NodeType/Model}'
+        exclude: '../../../../{Infrastructure/Framework/Resources,Domain/NodeType/Model,Domain/LayoutType/Model}'
 
     Tulia\Cms\ContentBuilder\Infrastructure\Persistence\NodeTypeProvider\ContainerProvider:
         bind:
             $config: '%cms.content_builder.node_types%'
+
+    Tulia\Cms\ContentBuilder\Infrastructure\Persistence\LayoutTypeProvider\ContainerProvider:
+        bind:
+            $config: '%cms.content_builder.layout_types%'
