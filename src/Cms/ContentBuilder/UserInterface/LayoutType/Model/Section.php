@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\ContentBuilder\Domain\LayoutType\Model;
+namespace Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Model;
 
 /**
  * @author Adam Banaszkiewicz
@@ -35,6 +35,11 @@ class Section
     public function getFieldsGroups(): array
     {
         return $this->fieldsGroups;
+    }
+
+    public function getFieldsGroup(string $name): FieldsGroup
+    {
+        return $this->fieldsGroups[$name];
     }
 
     public function setFieldsGroups(array $fieldsGroups): void

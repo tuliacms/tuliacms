@@ -8,6 +8,8 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\LayoutBuilder;
+use Tulia\Cms\ContentBuilder\UserInterface\Web\Service\FormService;
 use Tulia\Cms\Node\Domain\NodeType\NodeTypeInterface;
 use Tulia\Cms\Node\Domain\NodeType\NodeTypeRegistryInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Exception\NodeNotFoundException;
@@ -44,6 +46,9 @@ class Node extends AbstractController
 
     private NodeDatatableFinderInterface $finder;
 
+    private LayoutBuilder $layoutBuilder;
+    private FormService $formService;
+
     public function __construct(
         NodeTypeRegistryInterface $typeRegistry,
         NodeRepository $repository,
@@ -51,7 +56,9 @@ class Node extends AbstractController
         TaxonomyRegistry $registry,
         TermFinderInterface $termFinder,
         DatatableFactory $factory,
-        NodeDatatableFinderInterface $finder
+        NodeDatatableFinderInterface $finder,
+        LayoutBuilder $layoutBuilder,
+        FormService $formService
     ) {
         $this->typeRegistry = $typeRegistry;
         $this->repository = $repository;
@@ -60,6 +67,8 @@ class Node extends AbstractController
         $this->termFinder = $termFinder;
         $this->factory = $factory;
         $this->finder = $finder;
+        $this->layoutBuilder = $layoutBuilder;
+        $this->formService = $formService;
     }
 
     public function index(string $node_type): RedirectResponse
@@ -131,10 +140,19 @@ class Node extends AbstractController
             return $this->redirectToRoute('backend.node.list');
         }
 
-        $form = $this->createForm(NodeForm::class, $model, ['node_type' => $node_type]);
-        $form->handleRequest($request);
+        /*$form = $this->createForm(NodeForm::class, $model, ['node_type' => $node_type]);
+        $form->handleRequest($request);*/
 
         $nodeType = $this->typeRegistry->getType($node_type);
+
+        $formDescriptor = $this->formService->buildFormDescriptor($nodeType->getType(), [
+            'id' => $model->getId(),
+            'title' => $model->getTitle(),
+            'slug' => $model->getSlug(),
+            'introduction' => $model->getIntroduction(),
+            'content' => $model->getContent(),
+        ], $request);
+        $form = $formDescriptor->getForm();
 
         if ($form->isSubmitted() && $form->isValid()) {
             try {
@@ -150,7 +168,21 @@ class Node extends AbstractController
         return $this->view('@backend/node/edit.tpl', [
             'nodeType' => $nodeType,
             'node'     => $model,
-            'form'     => $form->createView(),
+            'formDescriptor' => $formDescriptor//$form->createView(),
+        ]);
+
+        // ==============
+
+        $model = $this->repository->find($id);
+        $nodeType = $this->nodeTypeRegistry->get($type);
+
+
+
+        $data = $this->modelTransformer->toArray($model);
+
+        return $this->view('@backend/node/edit.tpl', [
+            'nodeType' => $nodeType,
+            'layout'   => $layout,
         ]);
     }
 

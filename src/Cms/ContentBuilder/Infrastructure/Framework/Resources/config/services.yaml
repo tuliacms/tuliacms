@@ -6,7 +6,7 @@ services:
 
     Tulia\Cms\ContentBuilder\:
         resource: '../../../../**'
-        exclude: '../../../../{Infrastructure/Framework/Resources,Domain/NodeType/Model,Domain/LayoutType/Model}'
+        exclude: '../../../../{Infrastructure/Framework/Resources,Domain/NodeType/Model,UserInterface/LayoutType/Model}'
 
     Tulia\Cms\ContentBuilder\Infrastructure\Persistence\NodeTypeProvider\ContainerProvider:
         bind:

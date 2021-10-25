@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\ContentBuilder\Domain\LayoutType\Service;
+namespace Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service;
 
-use Tulia\Cms\ContentBuilder\Domain\LayoutType\Model\FieldsGroup;
-use Tulia\Cms\ContentBuilder\Domain\LayoutType\Model\LayoutType;
-use Tulia\Cms\ContentBuilder\Domain\LayoutType\Model\Section;
+use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Model\FieldsGroup;
+use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Model\LayoutType;
+use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Model\Section;
 
 /**
  * @author Adam Banaszkiewicz
@@ -36,7 +36,7 @@ abstract class AbstractLayoutTypeProviderProvider implements LayoutTypeProviderI
         $result = [];
 
         foreach ($groups as $name => $info) {
-            $result[$name] = new FieldsGroup($name, $info['label'], $info['fields']);
+            $result[$name] = new FieldsGroup($name, $info['label'], $info['active'], $info['fields']);
         }
 
         return $result;

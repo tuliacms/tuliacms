@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContentBuilder\Infrastructure\Persistence\LayoutTypeProvider;
 
-use Tulia\Cms\ContentBuilder\Domain\LayoutType\Service\AbstractLayoutTypeProviderProvider;
+use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\AbstractLayoutTypeProviderProvider;
 
 /**
  * @author Adam Banaszkiewicz

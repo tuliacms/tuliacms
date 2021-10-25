@@ -1,3 +1,11 @@
+framework:
+    translator:
+        paths:
+            - '%kernel.project_dir%/src/Cms/ContentBuilder/Infrastructure/Framework/Resources/translations'
+    templating:
+        paths:
+            - { name: backend/contentbuilder, path: '%kernel.project_dir%/src/Cms/ContentBuilder/Infrastructure/Framework/Resources/views/backend' }
+
 cms:
     content_building:
         node_types:
@@ -10,18 +18,15 @@ cms:
                 layout: default
                 fields:
                     title:
-                        label: title
                         type: text
                         is_title: true
                     introduction:
-                        label: introduction
+                        label: false
                         type: textarea
                     slug:
-                        label: slug
                         type: text
                         is_slug: true
                     content:
-                        label: content
                         type: wysiwyg
                     #category:
                     #    label: category
@@ -51,4 +56,13 @@ cms:
                                 label: content
                                 fields: [content]
                     sidebar:
-                        groups: []
+                        groups:
+                            introduction:
+                                active: true
+                                label: introduction
+                                fields: [introduction]
+
+        field_types:
+            mapping:
+                text:
+                    classname: 'Symfony\Component\Form\Extension\Core\Type\TextType'

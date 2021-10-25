@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\ContentBuilder\Domain\LayoutType\Service;
+namespace Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service;
 
-use Tulia\Cms\ContentBuilder\Model\LayoutType\LayoutType;
+use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\LayoutType;
 
 /**
  * @author Adam Banaszkiewicz

@@ -94,6 +94,9 @@ class NodeType
         $this->routableTaxonomyField = $routableTaxonomyField;
     }
 
+    /**
+     * @return Field[]
+     */
     public function getFields(): array
     {
         return $this->fields;

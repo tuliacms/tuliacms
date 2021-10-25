@@ -7,8 +7,6 @@ namespace Tulia\Bundle\CmsBundle\DependencyInjection;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
-use Tulia\Cms\ContentBuilder\Model\NodeType\NodeType;
-use Tulia\Cms\ContentBuilder\Model\NodeType\NodeTypeRegistry;
 
 /**
  * @author Adam Banaszkiewicz
@@ -32,6 +30,8 @@ class TuliaCmsExtension extends Extension
 
         $container->setParameter('cms.content_builder.node_types', $config['content_building']['node_types']);
         $container->setParameter('cms.content_builder.layout_types', $config['content_building']['layout_types']);
+        $container->setParameter('cms.content_builder.layout_types', $config['content_building']['layout_types']);
+        $container->setParameter('cms.content_builder.field_types.mapping', $config['content_building']['field_types']['mapping']);
         $container->setParameter('cms.options.definitions', $this->validateOptionsValues($config['options']['definitions'] ?? []));
 
         // BodyClass
@@ -81,8 +81,10 @@ class TuliaCmsExtension extends Extension
         // ContentBuilder
         $container->registerForAutoconfiguration(\Tulia\Cms\ContentBuilder\Domain\NodeType\Service\NodeTypeProviderInterface::class)
             ->addTag('content_builder.node_type.provider');
-        $container->registerForAutoconfiguration(\Tulia\Cms\ContentBuilder\Domain\LayoutType\Service\LayoutTypeProviderInterface::class)
+        $container->registerForAutoconfiguration(\Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\LayoutTypeProviderInterface::class)
             ->addTag('content_builder.layout_type.provider');
+        $container->registerForAutoconfiguration(\Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\LayoutTypeBuilderInterface::class)
+            ->addTag('content_builder.layout_type.builder');
     }
 
     protected function validateOptionsValues(array $definitions): array

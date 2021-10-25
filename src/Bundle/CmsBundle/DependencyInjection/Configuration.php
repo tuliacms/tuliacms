@@ -8,6 +8,7 @@ use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
+use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\LayoutTypeBuilderInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -62,6 +63,19 @@ class Configuration implements ConfigurationInterface
             ->children()
                 ->arrayNode('content_building')
                     ->children()
+                        ->arrayNode('field_types')
+                            ->children()
+                                ->arrayNode('mapping')
+                                    ->useAttributeAsKey('name')
+                                    ->arrayPrototype()
+                                        ->addDefaultsIfNotSet()
+                                        ->children()
+                                            ->scalarNode('classname')->isRequired()->end()
+                                        ->end()
+                                    ->end()
+                                ->end()
+                            ->end()
+                        ->end()
                         ->arrayNode('node_types')
                             ->useAttributeAsKey('name')
                             ->arrayPrototype()
@@ -85,10 +99,22 @@ class Configuration implements ConfigurationInterface
                                         ->arrayPrototype()
                                             ->addDefaultsIfNotSet()
                                             ->children()
-                                                ->scalarNode('label')->defaultNull()->end()
+                                                ->scalarNode('label')
+                                                    ->defaultNull()
+                                                    ->beforeNormalization()
+                                                        ->always(function ($v) {
+                                                            if ($v === false) {
+                                                                return '';
+                                                            }
+
+                                                            return $v;
+                                                        })
+                                                    ->end()
+                                                ->end()
                                                 ->scalarNode('type')->defaultNull()->end()
                                                 ->booleanNode('is_title')->defaultFalse()->end()
                                                 ->booleanNode('is_slug')->defaultFalse()->end()
+                                                ->variableNode('options')->defaultValue([])->end()
                                             ->end()
                                         ->end()
                                     ->end()
@@ -104,7 +130,15 @@ class Configuration implements ConfigurationInterface
                                     ->scalarNode('translation_domain')->defaultValue('messages')->end()
                                     // Builder service, which implements LayoutBuilderInterface.
                                     // Builder is responsible for render layout with defined fields and sections for form.
-                                    ->scalarNode('builder')->defaultValue(\Tulia\Cms\ContentBuilder\Model\LayoutType\LayoutBuilderInterface::class)->end()
+                                    ->scalarNode('builder')
+                                        ->defaultValue(\Tulia\Cms\ContentBuilder\Infrastructure\Presentation\TwigLayoutTypeBuilder::class)
+                                        ->validate()
+                                            ->ifTrue(static function ($v) {
+                                                return ! $v instanceof LayoutTypeBuilderInterface;
+                                            })
+                                            ->thenInvalid('LayoutBuilder must be instance of ' . LayoutTypeBuilderInterface::class . ' %s given.')
+                                        ->end()
+                                    ->end()
                                     ->arrayNode('sections')
                                         ->useAttributeAsKey('name')
                                         ->arrayPrototype()
@@ -116,6 +150,7 @@ class Configuration implements ConfigurationInterface
                                                         ->addDefaultsIfNotSet()
                                                         ->children()
                                                             ->scalarNode('label')->isRequired()->end()
+                                                            ->booleanNode('active')->defaultFalse()->end()
                                                             ->arrayNode('fields')->scalarPrototype()->end()
                                                         ->end()
                                                     ->end()

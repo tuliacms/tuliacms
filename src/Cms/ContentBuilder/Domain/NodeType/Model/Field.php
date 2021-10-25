@@ -14,11 +14,13 @@ class Field
     private ?string $label = null;
     private bool $isTitle = false;
     private bool $isSlug = false;
+    private array $options;
 
-    public function __construct(string $name, string $type)
+    public function __construct(string $name, string $type, array $options)
     {
         $this->name = $name;
         $this->type = $type;
+        $this->options = $options;
     }
 
     public function getName(): string
@@ -33,7 +35,7 @@ class Field
 
     public function getLabel(): ?string
     {
-        return $this->label;
+        return $this->label ?? $this->name;
     }
 
     public function setLabel(?string $label): void
@@ -59,5 +61,10 @@ class Field
     public function setIsSlug(bool $isSlug): void
     {
         $this->isSlug = $isSlug;
+    }
+
+    public function getOptions(array $mergeWithOptions = []): array
+    {
+        return array_merge($mergeWithOptions, $this->options);
     }
 }
