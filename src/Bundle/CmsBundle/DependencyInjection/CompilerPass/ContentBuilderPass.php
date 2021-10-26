@@ -7,6 +7,7 @@ namespace Tulia\Bundle\CmsBundle\DependencyInjection\CompilerPass;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
+use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\ConstraintTypeMappingRegistry;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\FieldTypeMappingRegistry;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\LayoutTypeBuilderRegistry;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\LayoutTypeRegistry;
@@ -40,6 +41,12 @@ class ContentBuilderPass implements CompilerPassInterface
         $registry = $container->getDefinition(FieldTypeMappingRegistry::class);
 
         foreach ($container->getParameter('cms.content_builder.field_types.mapping') as $type => $info) {
+            $registry->addMethodCall('addMapping', [$type, $info]);
+        }
+
+        $registry = $container->getDefinition(ConstraintTypeMappingRegistry::class);
+
+        foreach ($container->getParameter('cms.content_builder.constraints_types.mapping') as $type => $info) {
             $registry->addMethodCall('addMapping', [$type, $info]);
         }
     }

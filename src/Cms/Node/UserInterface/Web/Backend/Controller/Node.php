@@ -129,7 +129,7 @@ class Node extends AbstractController
      * @param string $node_type
      * @param string $id
      * @return RedirectResponse|ViewInterface
-     * @CsrfToken(id="node_form")
+     * @CsrfToken(id="content_builder_form_page")
      */
     public function edit(Request $request, string $node_type, string $id)
     {
@@ -156,6 +156,7 @@ class Node extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             try {
+                exit;
                 $this->repository->update($form->getData());
                 $this->setFlash('success', $this->trans('nodeSaved', [], $nodeType->getTranslationDomain()));
                 return $this->redirectToRoute('backend.node.edit', [ 'id' => $model->getId(), 'node_type' => $nodeType->getType() ]);

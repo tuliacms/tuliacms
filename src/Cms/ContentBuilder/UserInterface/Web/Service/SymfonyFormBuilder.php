@@ -9,6 +9,7 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Tulia\Cms\ContentBuilder\Domain\NodeType\Model\NodeType;
+use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\ConstraintsBuilder;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\FieldTypeMappingRegistry;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\CancelType;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\SubmitType;
@@ -20,15 +21,18 @@ class SymfonyFormBuilder
 {
     private FormFactoryInterface $formFactory;
     private FieldTypeMappingRegistry $mappingRegistry;
+    private ConstraintsBuilder $constraintsBuilder;
     private LoggerInterface $logger;
 
     public function __construct(
         FormFactoryInterface $formFactory,
         FieldTypeMappingRegistry $mappingRegistry,
+        ConstraintsBuilder $constraintsBuilder,
         LoggerInterface $logger
     ) {
         $this->formFactory = $formFactory;
         $this->mappingRegistry = $mappingRegistry;
+        $this->constraintsBuilder = $constraintsBuilder;
         $this->logger = $logger;
     }
 
@@ -53,6 +57,7 @@ class SymfonyFormBuilder
                     'label' => $field->getLabel() === ''
                         ? false
                         : $field->getLabel(),
+                    'constraints' => $this->constraintsBuilder->build($field->getConstraints())
                 ])
             );
         }

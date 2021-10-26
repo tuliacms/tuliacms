@@ -14,12 +14,14 @@ class Field
     private ?string $label = null;
     private bool $isTitle = false;
     private bool $isSlug = false;
+    private array $constraints;
     private array $options;
 
-    public function __construct(string $name, string $type, array $options)
+    public function __construct(string $name, string $type, array $constraints, array $options)
     {
         $this->name = $name;
         $this->type = $type;
+        $this->constraints = $constraints;
         $this->options = $options;
     }
 
@@ -63,8 +65,23 @@ class Field
         $this->isSlug = $isSlug;
     }
 
+    public function getConstraints(): array
+    {
+        return $this->constraints;
+    }
+
+    public function setConstraints(array $constraints): void
+    {
+        $this->constraints = $constraints;
+    }
+
     public function getOptions(array $mergeWithOptions = []): array
     {
         return array_merge($mergeWithOptions, $this->options);
+    }
+
+    public function getOption(string $name, $default = null)
+    {
+        return $this->options[$name] ?? $default;
     }
 }

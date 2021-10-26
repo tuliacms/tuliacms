@@ -36,7 +36,13 @@ abstract class AbstractLayoutTypeProviderProvider implements LayoutTypeProviderI
         $result = [];
 
         foreach ($groups as $name => $info) {
-            $result[$name] = new FieldsGroup($name, $info['label'], $info['active'], $info['fields']);
+            $result[$name] = new FieldsGroup(
+                $name,
+                $info['label'],
+                $info['active'],
+                $info['interior'],
+                $info['fields']
+            );
         }
 
         return $result;

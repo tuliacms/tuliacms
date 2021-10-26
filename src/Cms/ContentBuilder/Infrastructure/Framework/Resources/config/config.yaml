@@ -20,6 +20,10 @@ cms:
                     title:
                         type: text
                         is_title: true
+                        constraints:
+                            - { name: required }
+                        options:
+                            required: true
                     introduction:
                         label: false
                         type: textarea
@@ -28,6 +32,8 @@ cms:
                         is_slug: true
                     content:
                         type: wysiwyg
+                    rest:
+                        type: text
                     #category:
                     #    label: category
                     #    type: taxonomy
@@ -53,6 +59,8 @@ cms:
                                 label: introduction
                                 fields: [introduction]
                             content:
+                                active: true
+                                interior: full-width
                                 label: content
                                 fields: [content]
                     sidebar:
@@ -60,9 +68,14 @@ cms:
                             introduction:
                                 active: true
                                 label: introduction
-                                fields: [introduction]
+                                fields: []
 
         field_types:
             mapping:
                 text:
                     classname: 'Symfony\Component\Form\Extension\Core\Type\TextType'
+
+        constraints_types:
+            mapping:
+                required:
+                    classname: 'Symfony\Component\Validator\Constraints\NotBlank'

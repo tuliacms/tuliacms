@@ -30,7 +30,7 @@ abstract class AbstractNodeTypeProviderProvider implements NodeTypeProviderInter
 
     protected function buildNodeField(string $name, array $options): Field
     {
-        $field = new Field($name, $options['type'], $options['options']);
+        $field = new Field($name, $options['type'], $options['constraints'], $options['options']);
         $field->setLabel($options['label']);
         $field->setIsTitle($options['is_title']);
         $field->setIsSlug($options['is_slug']);
