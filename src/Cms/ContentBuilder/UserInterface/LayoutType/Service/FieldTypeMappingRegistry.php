@@ -16,6 +16,9 @@ class FieldTypeMappingRegistry
         'textarea' => [
             'classname' => 'Symfony\Component\Form\Extension\Core\Type\TextareaType',
         ],
+        'choice' => [
+            'classname' => 'Symfony\Component\Form\Extension\Core\Type\ChoiceType',
+        ],
     ];
 
     public function addMapping(string $type, array $mapingInfo): void

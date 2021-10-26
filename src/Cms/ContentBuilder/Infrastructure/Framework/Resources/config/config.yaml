@@ -22,18 +22,16 @@ cms:
                         is_title: true
                         constraints:
                             - { name: required }
-                        options:
-                            required: true
-                    introduction:
-                        label: false
-                        type: textarea
                     slug:
                         type: text
                         is_slug: true
+                        constraints:
+                            - { name: required }
+                    introduction:
+                        label: false
+                        type: textarea
                     content:
                         type: wysiwyg
-                    rest:
-                        type: text
                     #category:
                     #    label: category
                     #    type: taxonomy

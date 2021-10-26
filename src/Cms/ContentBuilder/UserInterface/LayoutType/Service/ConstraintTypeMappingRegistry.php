@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service;
 
+use Symfony\Component\Validator\Constraint;
+
 /**
  * @author Adam Banaszkiewicz
  */
@@ -20,9 +22,9 @@ class ConstraintTypeMappingRegistry
         $this->mapping[$type] = $mapingInfo;
     }
 
-    public function getTypeClassname(string $type): string
+    public function getConstraint(string $type, array $args = []): Constraint
     {
-        return $this->mapping[$type]['classname'];
+        return new $this->mapping[$type]['classname'](...$args);
     }
 
     public function hasType(string $type): bool

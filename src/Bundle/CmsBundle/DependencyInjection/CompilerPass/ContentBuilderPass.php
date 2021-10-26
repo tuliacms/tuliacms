@@ -25,6 +25,9 @@ class ContentBuilderPass implements CompilerPassInterface
         foreach ($container->findTaggedServiceIds('content_builder.node_type.provider') as $id => $options) {
             $registry->addMethodCall('addProvider', [new Reference($id)]);
         }
+        foreach ($container->findTaggedServiceIds('content_builder.node_type.decorator') as $id => $options) {
+            $registry->addMethodCall('addDecorator', [new Reference($id)]);
+        }
 
         $registry = $container->getDefinition(LayoutTypeRegistry::class);
 

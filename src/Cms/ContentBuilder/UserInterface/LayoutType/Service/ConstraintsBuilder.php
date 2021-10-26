@@ -22,6 +22,12 @@ class ConstraintsBuilder
             return [];
         }
 
-        dump($constraints);exit;
+        $result = [];
+
+        foreach ($constraints as $constraint) {
+            $result[] = $this->mapping->getConstraint($constraint['name']);
+        }
+
+        return $result;
     }
 }

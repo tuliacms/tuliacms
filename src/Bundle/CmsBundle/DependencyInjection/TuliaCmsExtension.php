@@ -82,6 +82,8 @@ class TuliaCmsExtension extends Extension
         // ContentBuilder
         $container->registerForAutoconfiguration(\Tulia\Cms\ContentBuilder\Domain\NodeType\Service\NodeTypeProviderInterface::class)
             ->addTag('content_builder.node_type.provider');
+        $container->registerForAutoconfiguration(\Tulia\Cms\ContentBuilder\Domain\NodeType\Service\NodeTypeDecoratorInterface::class)
+            ->addTag('content_builder.node_type.decorator');
         $container->registerForAutoconfiguration(\Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\LayoutTypeProviderInterface::class)
             ->addTag('content_builder.layout_type.provider');
         $container->registerForAutoconfiguration(\Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\LayoutTypeBuilderInterface::class)

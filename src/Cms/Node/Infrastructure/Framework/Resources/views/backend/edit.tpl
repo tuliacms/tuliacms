@@ -28,7 +28,6 @@
         <div class="pane-body p-0">
             {{ alerts.translation_missing_info(node.translated) }}
             {{ render_content_builder_form_layout(formDescriptor) }}
-            {#{% include relative(_self, 'parts/form-body.tpl') %}#}
         </div>
     </div>
 {% endblock %}

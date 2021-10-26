@@ -99,28 +99,37 @@ class Node extends AbstractController
      * @param Request $request
      * @param string $node_type
      * @return RedirectResponse|ViewInterface
-     * @CsrfToken(id="node_form")
+     * @CsrfToken(id="content_builder_form_page")
      */
     public function create(Request $request, string $node_type)
     {
-        $node = $this->repository->createNew(['type' => $node_type]);
-
-        $form = $this->createForm(NodeForm::class, $node, ['node_type' => $node_type]);
-        $form->handleRequest($request);
+        $model = $this->repository->createNew(['type' => $node_type]);
 
         $nodeType = $this->typeRegistry->getType($node_type);
 
+        $formDescriptor = $this->formService->buildFormDescriptor($nodeType->getType(), [
+            'id' => $model->getId(),
+            'title' => $model->getTitle(),
+            'slug' => $model->getSlug(),
+            'introduction' => $model->getIntroduction(),
+            'content' => $model->getContent(),
+            'flags' => $model->getFlags(),
+        ], $request);
+        $form = $formDescriptor->getForm();
+
         if ($form->isSubmitted() && $form->isValid()) {
+            dump($form->getData());exit;
+            exit;
             $this->repository->insert($form->getData());
 
             $this->setFlash('success', $this->trans('nodeSaved', [], $nodeType->getTranslationDomain()));
-            return $this->redirectToRoute('backend.node.edit', [ 'id' => $node->getId(), 'node_type' => $nodeType->getType() ]);
+            return $this->redirectToRoute('backend.node.edit', [ 'id' => $model->getId(), 'node_type' => $nodeType->getType() ]);
         }
 
         return $this->view('@backend/node/create.tpl', [
             'nodeType' => $nodeType,
-            'node'     => $node,
-            'form'     => $form->createView(),
+            'node'     => $model,
+            'formDescriptor' => $formDescriptor,
         ]);
     }
 
@@ -140,9 +149,6 @@ class Node extends AbstractController
             return $this->redirectToRoute('backend.node.list');
         }
 
-        /*$form = $this->createForm(NodeForm::class, $model, ['node_type' => $node_type]);
-        $form->handleRequest($request);*/
-
         $nodeType = $this->typeRegistry->getType($node_type);
 
         $formDescriptor = $this->formService->buildFormDescriptor($nodeType->getType(), [
@@ -151,11 +157,13 @@ class Node extends AbstractController
             'slug' => $model->getSlug(),
             'introduction' => $model->getIntroduction(),
             'content' => $model->getContent(),
+            'flags' => $model->getFlags(),
         ], $request);
         $form = $formDescriptor->getForm();
 
         if ($form->isSubmitted() && $form->isValid()) {
             try {
+                dump($form->getData());exit;
                 exit;
                 $this->repository->update($form->getData());
                 $this->setFlash('success', $this->trans('nodeSaved', [], $nodeType->getTranslationDomain()));
@@ -169,21 +177,7 @@ class Node extends AbstractController
         return $this->view('@backend/node/edit.tpl', [
             'nodeType' => $nodeType,
             'node'     => $model,
-            'formDescriptor' => $formDescriptor//$form->createView(),
-        ]);
-
-        // ==============
-
-        $model = $this->repository->find($id);
-        $nodeType = $this->nodeTypeRegistry->get($type);
-
-
-
-        $data = $this->modelTransformer->toArray($model);
-
-        return $this->view('@backend/node/edit.tpl', [
-            'nodeType' => $nodeType,
-            'layout'   => $layout,
+            'formDescriptor' => $formDescriptor,
         ]);
     }
 
