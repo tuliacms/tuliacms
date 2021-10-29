@@ -35,7 +35,12 @@ class FlagsDecorator implements NodeTypeDecoratorInterface
 
         $nodeType->addField(new Field(
             'flags',
-            'choice',
+            'select',
+            'flags',
+            false,
+            false,
+            false,
+            true,
             [],
             [
                 'choices' => $availableFlags,

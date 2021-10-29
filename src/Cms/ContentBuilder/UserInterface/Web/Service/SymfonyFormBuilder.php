@@ -28,18 +28,18 @@ class SymfonyFormBuilder
         FormFactoryInterface $formFactory,
         FieldTypeMappingRegistry $mappingRegistry,
         ConstraintsBuilder $constraintsBuilder,
-        LoggerInterface $logger
+        LoggerInterface $contentBuilderLogger
     ) {
         $this->formFactory = $formFactory;
         $this->mappingRegistry = $mappingRegistry;
         $this->constraintsBuilder = $constraintsBuilder;
-        $this->logger = $logger;
+        $this->logger = $contentBuilderLogger;
     }
 
     public function createForm(NodeType $nodeType, array $data): FormInterface
     {
         $builder = $this->formFactory->createNamedBuilder(
-            sprintf('content_builder_form_%s', $nodeType->getName()),
+            sprintf('content_builder_form_%s', $nodeType->getType()),
             'Symfony\Component\Form\Extension\Core\Type\FormType',
             $data
         );
@@ -50,15 +50,17 @@ class SymfonyFormBuilder
                 continue;
             }
 
+            $options = array_merge([
+                'label' => $field->getLabel() === ''
+                    ? false
+                    : $field->getLabel(),
+                'constraints' => $this->constraintsBuilder->build($field->getConstraints())
+            ], $field->getOptions());
+
             $builder->add(
                 $field->getName(),
                 $this->mappingRegistry->getTypeClassname($field->getType()),
-                $field->getOptions([
-                    'label' => $field->getLabel() === ''
-                        ? false
-                        : $field->getLabel(),
-                    'constraints' => $this->constraintsBuilder->build($field->getConstraints())
-                ])
+                $options
             );
         }
 

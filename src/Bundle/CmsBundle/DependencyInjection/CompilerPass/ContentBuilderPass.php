@@ -43,7 +43,7 @@ class ContentBuilderPass implements CompilerPassInterface
 
         $registry = $container->getDefinition(FieldTypeMappingRegistry::class);
 
-        foreach ($container->getParameter('cms.content_builder.field_types.mapping') as $type => $info) {
+        foreach ($container->getParameter('cms.content_builder.data_types.mapping') as $type => $info) {
             $registry->addMethodCall('addMapping', [$type, $info]);
         }
 

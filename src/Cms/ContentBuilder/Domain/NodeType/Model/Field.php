@@ -11,16 +11,32 @@ class Field
 {
     private string $name;
     private string $type;
-    private ?string $label = null;
-    private bool $isTitle = false;
-    private bool $isSlug = false;
+    private string $label;
+    private bool $isTitle;
+    private bool $isSlug;
+    private bool $multilingual;
+    private bool $multiple;
     private array $constraints;
     private array $options;
 
-    public function __construct(string $name, string $type, array $constraints, array $options)
-    {
+    public function __construct(
+        string $name,
+        string $type,
+        string $label,
+        bool $isTitle,
+        bool $isSlug,
+        bool $multilingual,
+        bool $multiple,
+        array $constraints,
+        array $options
+    ) {
         $this->name = $name;
         $this->type = $type;
+        $this->label = $label;
+        $this->isTitle = $isTitle;
+        $this->isSlug = $isSlug;
+        $this->multilingual = $multilingual;
+        $this->multiple = $multiple;
         $this->constraints = $constraints;
         $this->options = $options;
     }
@@ -35,14 +51,19 @@ class Field
         return $this->type;
     }
 
-    public function getLabel(): ?string
+    public function isMultilingual(): bool
     {
-        return $this->label ?? $this->name;
+        return $this->multilingual;
     }
 
-    public function setLabel(?string $label): void
+    public function isMultiple(): bool
     {
-        $this->label = $label;
+        return $this->multiple;
+    }
+
+    public function getLabel(): string
+    {
+        return $this->label;
     }
 
     public function isTitle(): bool
@@ -50,19 +71,9 @@ class Field
         return $this->isTitle;
     }
 
-    public function setIsTitle(bool $isTitle): void
-    {
-        $this->isTitle = $isTitle;
-    }
-
     public function isSlug(): bool
     {
         return $this->isSlug;
-    }
-
-    public function setIsSlug(bool $isSlug): void
-    {
-        $this->isSlug = $isSlug;
     }
 
     public function getConstraints(): array
@@ -70,14 +81,9 @@ class Field
         return $this->constraints;
     }
 
-    public function setConstraints(array $constraints): void
-    {
-        $this->constraints = $constraints;
-    }
-
     public function getOptions(array $mergeWithOptions = []): array
     {
-        return array_merge($mergeWithOptions, $this->options);
+        return $this->options;
     }
 
     public function getOption(string $name, $default = null)

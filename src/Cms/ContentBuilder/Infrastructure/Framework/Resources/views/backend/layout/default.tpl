@@ -51,14 +51,14 @@
     </div>
 {% endmacro %}
 
-{% macro section(id, group, form) %}
+{% macro section(id, group, form, translationDomain) %}
     <div class="accordion-section">
         <div
                 class="accordion-section-button {{ group.active ? '' : 'collapsed' }}"
                 data-bs-toggle="collapse"
                 data-bs-target="#form-collapse-sidebar-{{ id }}"
         >
-            {{ group.label }}
+            {{ group.label|trans({}, translationDomain) }}
         </div>
         <div
                 id="form-collapse-sidebar-{{ id }}"
@@ -84,7 +84,7 @@
     <div class="page-form-sidebar">
         <div class="accordion">
             {% for id, group in layout.section('sidebar').fieldsGroups %}
-                {{ _self.section(id, group, form) }}
+                {{ _self.section(id, group, form, type.translationDomain) }}
             {% endfor %}
         </div>
     </div>
@@ -102,15 +102,23 @@
         </div>
         <ul class="nav nav-tabs page-form-tabs" role="tablist">
             {% for id, group in layout.section('main').fieldsGroups %}
-                {{ _self.tab(id, group, form) }}
+                {{ _self.tab(id, {
+                    active: group.active,
+                    name: group.name|trans({}, type.translationDomain)
+                }, form) }}
             {% endfor %}
-            {{ _self.tab('rest', {active: false, name: 'otherSettings'}, form) }}
+
+            {{ _self.tab('rest', {
+                active: false,
+                name: 'otherSettings'|trans({}, 'messages')
+            }, form) }}
         </ul>
         <div class="tab-content">
             {% for id, group in layout.section('main').fieldsGroups %}
                 {{ _self.tab_content(id, group, form) }}
             {% endfor %}
-            {{ _self.tab_rest_content('rest', form) }}
+
+            {{ _self.tab_rest_content('rest', form, type.translationDomain) }}
         </div>
     </div>
 </div>

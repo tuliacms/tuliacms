@@ -105,9 +105,7 @@ class Node extends AbstractController
     {
         $model = $this->repository->createNew(['type' => $node_type]);
 
-        $nodeType = $this->typeRegistry->getType($node_type);
-
-        $formDescriptor = $this->formService->buildFormDescriptor($nodeType->getType(), [
+        $formDescriptor = $this->formService->buildFormDescriptor($node_type, [
             'id' => $model->getId(),
             'title' => $model->getTitle(),
             'slug' => $model->getSlug(),
@@ -115,10 +113,10 @@ class Node extends AbstractController
             'content' => $model->getContent(),
             'flags' => $model->getFlags(),
         ], $request);
-        $form = $formDescriptor->getForm();
+        $nodeType = $formDescriptor->getNodeType();
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            dump($form->getData());exit;
+        if ($formDescriptor->isFormValid()) {
+            dump($formDescriptor->getData());exit;
             exit;
             $this->repository->insert($form->getData());
 

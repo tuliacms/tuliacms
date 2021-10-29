@@ -1,6 +1,7 @@
 cms:
     content_building:
-        field_types:
+        data_types:
             mapping:
                 wysiwyg:
+                    label: WYSIWYG editor
                     classname: 'Tulia\Cms\WysiwygEditor\Infrastructure\Framework\Form\FormType\WysiwygEditorType'

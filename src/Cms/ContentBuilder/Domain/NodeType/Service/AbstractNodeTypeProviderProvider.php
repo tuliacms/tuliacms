@@ -14,12 +14,12 @@ abstract class AbstractNodeTypeProviderProvider implements NodeTypeProviderInter
 {
     protected function buildNodeType(string $name, array $options): NodeType
     {
-        $nodeType = new NodeType($name, $options['translation_domain']);
+        $nodeType = new NodeType($name, $options['layout']);
         $nodeType->setController($options['controller']);
         $nodeType->setIsRoutable($options['is_routable']);
         $nodeType->setIsHierarchical($options['is_hierarchical']);
-        $nodeType->setLayout($options['layout']);
         $nodeType->setRoutableTaxonomyField($options['routable_taxonomy_field']);
+        $nodeType->setTranslationDomain($options['translation_domain']);
 
         foreach ($options['fields'] as $fieldName => $fieldOptions) {
             $nodeType->addField($this->buildNodeField($fieldName, $fieldOptions));
@@ -30,11 +30,16 @@ abstract class AbstractNodeTypeProviderProvider implements NodeTypeProviderInter
 
     protected function buildNodeField(string $name, array $options): Field
     {
-        $field = new Field($name, $options['type'], $options['constraints'], $options['options']);
-        $field->setLabel($options['label']);
-        $field->setIsTitle($options['is_title']);
-        $field->setIsSlug($options['is_slug']);
-
-        return $field;
+        return new Field(
+            $name,
+            $options['type'],
+            (string) $options['label'],
+            $options['is_title'],
+            $options['is_slug'],
+            $options['multilingual'],
+            $options['multiple'],
+            $options['constraints'],
+            $options['options']
+        );
     }
 }

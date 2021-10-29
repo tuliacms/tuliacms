@@ -9,17 +9,7 @@ namespace Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service;
  */
 class FieldTypeMappingRegistry
 {
-    private array $mapping = [
-        'text' => [
-            'classname' => 'Symfony\Component\Form\Extension\Core\Type\TextType',
-        ],
-        'textarea' => [
-            'classname' => 'Symfony\Component\Form\Extension\Core\Type\TextareaType',
-        ],
-        'choice' => [
-            'classname' => 'Symfony\Component\Form\Extension\Core\Type\ChoiceType',
-        ],
-    ];
+    private array $mapping = [];
 
     public function addMapping(string $type, array $mapingInfo): void
     {

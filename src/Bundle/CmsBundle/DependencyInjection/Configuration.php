@@ -8,6 +8,7 @@ use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
+use Symfony\Component\DependencyInjection\Exception\LogicException;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\LayoutTypeBuilderInterface;
 
 /**
@@ -76,13 +77,14 @@ class Configuration implements ConfigurationInterface
                                 ->end()
                             ->end()
                         ->end()
-                        ->arrayNode('field_types')
+                        ->arrayNode('data_types')
                             ->children()
                                 ->arrayNode('mapping')
                                     ->useAttributeAsKey('name')
                                     ->arrayPrototype()
                                         ->addDefaultsIfNotSet()
                                         ->children()
+                                            ->scalarNode('label')->isRequired()->end()
                                             ->scalarNode('classname')->isRequired()->end()
                                         ->end()
                                     ->end()
@@ -111,7 +113,21 @@ class Configuration implements ConfigurationInterface
                                         ->useAttributeAsKey('name')
                                         ->arrayPrototype()
                                             ->addDefaultsIfNotSet()
-                                            ->fixXmlConfig('connection')
+                                            ->beforeNormalization()
+                                                ->always(function (array $v) {
+                                                    if (
+                                                        ($v['multiple'] ?? false)
+                                                        && (
+                                                            ($v['is_title'] ?? false)
+                                                            || ($v['is_slug'] ?? false)
+                                                        )
+                                                    ) {
+                                                        throw new LogicException('Cannot set "multiple: true" on field that is set as title or slug.');
+                                                    }
+
+                                                    return $v;
+                                                })
+                                            ->end()
                                             ->children()
                                                 ->scalarNode('label')
                                                     ->defaultNull()
@@ -128,6 +144,8 @@ class Configuration implements ConfigurationInterface
                                                 ->scalarNode('type')->defaultNull()->end()
                                                 ->booleanNode('is_title')->defaultFalse()->end()
                                                 ->booleanNode('is_slug')->defaultFalse()->end()
+                                                ->booleanNode('multilingual')->defaultFalse()->end()
+                                                ->booleanNode('multiple')->defaultFalse()->end()
                                                 ->variableNode('options')->defaultValue([])->end()
                                                 ->arrayNode('constraints')
                                                     ->arrayPrototype()

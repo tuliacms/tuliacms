@@ -41,4 +41,28 @@ class FormDescriptor
     {
         return $this->nodeType;
     }
+
+    public function getData(): array
+    {
+        $rawData = $this->form->getData();
+
+        $result['id'] = [
+            'values' => $rawData['id'],
+            'multiple' => false,
+        ];
+
+        foreach ($this->getNodeType()->getFields() as $field) {
+            $result[$field->getName()] = [
+                'values' => $rawData[$field->getName()],
+                'multiple' => $field->isMultiple(),
+            ];
+        }
+
+        return $result;
+    }
+
+    public function isFormValid(): bool
+    {
+        return $this->form->isSubmitted() && $this->form->isValid();
+    }
 }

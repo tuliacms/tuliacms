@@ -6,6 +6,9 @@ framework:
         paths:
             - { name: backend/contentbuilder, path: '%kernel.project_dir%/src/Cms/ContentBuilder/Infrastructure/Framework/Resources/views/backend' }
 
+monolog:
+    channels: ['contentBuilder']
+
 cms:
     content_building:
         node_types:
@@ -18,20 +21,64 @@ cms:
                 layout: default
                 fields:
                     title:
-                        type: text
                         is_title: true
+                        type: text
+                        label: title
+                        multilingual: true
                         constraints:
                             - { name: required }
                     slug:
+                        label: slug
                         type: text
                         is_slug: true
+                        multilingual: true
                         constraints:
                             - { name: required }
                     introduction:
-                        label: false
                         type: textarea
+                        multilingual: true
+                        label: ~
                     content:
                         type: wysiwyg
+                        multilingual: true
+
+                    ##########
+                    #title:
+                    #    name: Title
+                    #    help: Title of tne entry
+                    #    datatype: text
+                    #    multiple: false
+                    #    multilingual: true
+                    #    appearance: textline
+                    #    is_title: true
+                    #    validation:
+                    #        - { type: required }
+                    #slug:
+                    #    name: Title
+                    #    help: Title of tne entry
+                    #    datatype: text
+                    #    multiple: false
+                    #    multilingual: true
+                    #    appearance: textline
+                    #    is_slug: true
+                    #    validation:
+                    #        - { type: required }
+                    #        - { type: unique, globally: true }
+                    #content:
+                    #    name: Content
+                    #    help: This is main content of the node
+                    #    datatype: text
+                    #    multiple: false
+                    #    multilingual: true
+                    #    appearance: tulia-editor
+                    #introduction:
+                    #    name: Introduction
+                    #    help: Introductions of the node's content
+                    #    datatype: text
+                    #    multiple: false
+                    #    multilingual: true
+                    #    appearance: text-block
+
                     #category:
                     #    label: category
                     #    type: taxonomy
@@ -68,10 +115,17 @@ cms:
                                 label: introduction
                                 fields: []
 
-        field_types:
+        data_types:
             mapping:
                 text:
+                    label: Textline
                     classname: 'Symfony\Component\Form\Extension\Core\Type\TextType'
+                textarea:
+                    label: Textarea
+                    classname: 'Symfony\Component\Form\Extension\Core\Type\TextareaType'
+                select:
+                    label: Select
+                    classname: 'Symfony\Component\Form\Extension\Core\Type\ChoiceType'
 
         constraints_types:
             mapping:

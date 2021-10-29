@@ -4,44 +4,36 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContentBuilder\Domain\NodeType\Model;
 
+use Tulia\Cms\ContentBuilder\Domain\NodeType\Exception\MultipleValueForTitleOrSlugOccuredException;
+
 /**
  * @author Adam Banaszkiewicz
  */
 class NodeType
 {
-    private string $name;
+    private string $type;
     private string $layout;
-    private string $translationDomain;
+    private string $translationDomain = 'messages';
     private string $controller = 'Tulia\Cms\Node\UserInterface\Web\Frontend\Controller\Node::show';
     private bool $isRoutable = true;
     private bool $isHierarchical = false;
-    private string $routableTaxonomyField = 'category';
+    private ?string $routableTaxonomyField = null;
     private array $fields = [];
 
-    public function __construct(string $name, string $layout)
+    public function __construct(string $type, string $layout)
     {
-        $this->name = $name;
+        $this->type = $type;
         $this->layout = $layout;
     }
 
-    public function getName(): string
+    public function getType(): string
     {
-        return $this->name;
-    }
-
-    public function setName(string $name): void
-    {
-        $this->name = $name;
+        return $this->type;
     }
 
     public function getLayout(): string
     {
         return $this->layout;
-    }
-
-    public function setLayout(string $layout): void
-    {
-        $this->layout = $layout;
     }
 
     public function getTranslationDomain(): string
@@ -84,12 +76,12 @@ class NodeType
         $this->isHierarchical = $isHierarchical;
     }
 
-    public function getRoutableTaxonomyField(): string
+    public function getRoutableTaxonomyField(): ?string
     {
         return $this->routableTaxonomyField;
     }
 
-    public function setRoutableTaxonomyField(string $routableTaxonomyField): void
+    public function setRoutableTaxonomyField(?string $routableTaxonomyField): void
     {
         $this->routableTaxonomyField = $routableTaxonomyField;
     }
@@ -107,8 +99,40 @@ class NodeType
         $this->fields = $fields;
     }
 
-    public function addField(Field $field): void
+    public function getField(string $name): Field
     {
+        return $this->fields[$name];
+    }
+
+    /**
+     * @throws MultipleValueForTitleOrSlugOccuredException
+     */
+    public function addField(Field $field): Field
+    {
+        $this->validateField($field);
+
         $this->fields[$field->getName()] = $field;
+
+        return $field;
+    }
+
+    /**
+     * @throws MultipleValueForTitleOrSlugOccuredException
+     */
+    private function validateField(Field $field): void
+    {
+        $this->checkMultiplenessForTitleAndSlugField($field);
+    }
+
+    /**
+     * @throws MultipleValueForTitleOrSlugOccuredException
+     */
+    private function checkMultiplenessForTitleAndSlugField(Field $field): void
+    {
+        if ($field->isMultiple() && ($field->isSlug() || $field->isTitle())) {
+            throw MultipleValueForTitleOrSlugOccuredException::fromFieldType(
+                $field->isTitle() ? 'title' : 'slug'
+            );
+        }
     }
 }
