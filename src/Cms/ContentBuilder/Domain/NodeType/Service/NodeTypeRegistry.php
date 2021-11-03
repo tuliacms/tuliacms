@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContentBuilder\Domain\NodeType\Service;
 
+use Tulia\Cms\ContentBuilder\Domain\NodeType\Exception\NodeTypeNotExistsException;
 use Tulia\Cms\ContentBuilder\Domain\NodeType\Model\NodeType;
 
 /**
@@ -36,9 +37,16 @@ class NodeTypeRegistry
         $this->nodeTypeProviders[] = $nodeTypeProvider;
     }
 
+    /**
+     * @throws NodeTypeNotExistsException
+     */
     public function get(string $type): NodeType
     {
         $this->fetch();
+
+        if (isset($this->nodeTypes[$type]) === false) {
+            throw NodeTypeNotExistsException::fromType($type);
+        }
 
         return $this->nodeTypes[$type];
     }

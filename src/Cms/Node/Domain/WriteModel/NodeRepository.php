@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Domain\WriteModel;
 
+use Tulia\Cms\ContentBuilder\Domain\NodeType\Exception\NodeTypeNotExistsException;
 use Tulia\Cms\ContentBuilder\Domain\NodeType\Model\NodeType;
 use Tulia\Cms\ContentBuilder\Domain\NodeType\Service\NodeTypeRegistry;
 use Tulia\Cms\Metadata\Domain\WriteModel\MetadataRepository;
@@ -35,6 +36,7 @@ class NodeRepository
     private EventBusInterface $eventBus;
 
     private NodeActionsChainInterface $actionsChain;
+
     private NodeTypeRegistry $nodeTypeRegistry;
 
     public function __construct(
@@ -67,6 +69,7 @@ class NodeRepository
 
     /**
      * @throws NodeNotFoundException
+     * @throws NodeTypeNotExistsException
      * @throws \Exception
      */
     public function find(string $id): Node
@@ -81,48 +84,43 @@ class NodeRepository
             throw new NodeNotFoundException();
         }
 
-        $node = Node::buildFromArray([
+        $node = Node::buildFromArray($this->nodeTypeRegistry->get($node['type']), [
             'id'            => $node['id'],
-            'type'          => $node['type'] ?? '',
             'website_id'    => $node['website_id'],
             'published_at'  => new ImmutableDateTime($node['published_at']),
             'published_to'  => $node['published_to'] ? new ImmutableDateTime($node['published_to']) : null,
             'created_at'    => new ImmutableDateTime($node['created_at']),
             'updated_at'    => $node['updated_at'] ? new ImmutableDateTime($node['updated_at']) : null,
             'status'        => $node['status'] ?? '',
-            'author_id'     => $node['author_id'] ?? '',
-            'category'      => $node['category'] ?? null,
+            'author_id'     => $node['author_id'] ?? null,
+            //'category'      => $node['category'] ?? null,
             'slug'          => $node['slug'] ?? '',
             'title'         => $node['title'] ?? '',
-            'content'       => $node['content'] ?? '',
-            'content_source' => $node['content_source'] ?? '',
-            'introduction'  => $node['introduction'] ?? '',
             'level'         => (int) $node['level'],
-            'parent_id'     => $node['parent_id'] ?? '',
+            'parent_id'     => $node['parent_id'] ?? null,
             'locale'        => $node['locale'],
-            'metadata'      => $this->metadataRepository->findAll(NodeMetadataEnum::TYPE, $id),
             'translated'    => $node['translated'] ?? true,
             'flags'         => array_filter(explode(',', (string) $node['flags'])),
         ]);
 
-        $this->actionsChain->execute('find', $node);
+        //$this->actionsChain->execute('find', $node);
 
         return $node;
     }
 
     public function insert(Node $node): void
     {
-        $this->actionsChain->execute('insert', $node);
+        //$this->actionsChain->execute('insert', $node);
 
         $this->storage->beginTransaction();
 
         try {
             $this->storage->insert($this->extract($node), $this->currentWebsite->getDefaultLocale()->getCode());
-            $this->metadataRepository->persist(
+            /*$this->metadataRepository->persist(
                 NodeMetadataEnum::TYPE,
                 $node->getId()->getId(),
                 $node->getAllMetadata()
-            );
+            );*/
             $this->storage->commit();
         } catch (\Exception $exception) {
             $this->storage->rollback();
@@ -134,17 +132,17 @@ class NodeRepository
 
     public function update(Node $node): void
     {
-        $this->actionsChain->execute('update', $node);
+        //$this->actionsChain->execute('update', $node);
 
         $this->storage->beginTransaction();
 
         try {
             $this->storage->update($this->extract($node), $this->currentWebsite->getDefaultLocale()->getCode());
-            $this->metadataRepository->persist(
+            /*$this->metadataRepository->persist(
                 NodeMetadataEnum::TYPE,
                 $node->getId()->getId(),
                 $node->getAllMetadata()
-            );
+            );*/
             $this->storage->commit();
         } catch (\Exception $exception) {
             $this->storage->rollback();
@@ -176,7 +174,7 @@ class NodeRepository
     {
         return [
             'id'            => $node->getId()->getId(),
-            'type'          => $node->getType(),
+            'type'          => $node->getType()->getType(),
             'website_id'    => $node->getWebsiteId(),
             'published_at'  => $node->getPublishedAt(),
             'published_to'  => $node->getPublishedTo(),
@@ -184,12 +182,9 @@ class NodeRepository
             'updated_at'    => $node->getUpdatedAt(),
             'status'        => $node->getStatus(),
             'author_id'     => $node->getAuthorId(),
-            'category'      => $node->getCategoryId(),
+            //'category'      => $node->getCategoryId(),
             'slug'          => $node->getSlug(),
             'title'         => $node->getTitle(),
-            'content'       => $node->getContent(),
-            'content_compiled' => $node->getContentCompiled(),
-            'introduction'  => $node->getIntroduction(),
             'level'         => $node->getLevel(),
             'parent_id'     => $node->getParentId(),
             'locale'        => $node->getLocale(),

@@ -8,6 +8,7 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Tulia\Cms\ContentBuilder\Domain\NodeType\Exception\NodeTypeNotExistsException;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\LayoutBuilder;
 use Tulia\Cms\ContentBuilder\UserInterface\Web\Service\FormService;
 use Tulia\Cms\Node\Domain\NodeType\NodeTypeInterface;
@@ -138,31 +139,32 @@ class Node extends AbstractController
     public function edit(Request $request, string $node_type, string $id)
     {
         try {
-            $model = $this->repository->find($id);
-        } catch (NodeNotFoundException $e) {
+            $node = $this->repository->find($id);
+
+            if ($node->getType()->getType() !== $node_type) {
+                throw new NodeNotFoundException();
+            }
+        } catch (NodeNotFoundException|NodeTypeNotExistsException $e) {
             $this->setFlash('warning', $this->trans('nodeNotFound'));
             return $this->redirectToRoute('backend.node.list');
         }
 
-        $nodeType = $this->typeRegistry->getType($node_type);
-
-        $formDescriptor = $this->formService->buildFormDescriptor($nodeType->getType(), [
-            'id' => $model->getId(),
-            'title' => $model->getTitle(),
-            'slug' => $model->getSlug(),
-            'introduction' => $model->getIntroduction(),
-            'content' => $model->getContent(),
-            'flags' => $model->getFlags(),
-        ], $request);
+        $formDescriptor = $this->formService->buildFormDescriptor(
+            $node->getType()->getType(),
+            $node->getId()->getId(),
+            $node->getAttributes(),
+            $request
+        );
         $form = $formDescriptor->getForm();
+        $nodeType = $formDescriptor->getNodeType();
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($formDescriptor->isFormValid()) {
             try {
-                dump($form->getData());exit;
-                exit;
-                $this->repository->update($form->getData());
+                $node->updateAttributes($formDescriptor->getData());
+
+                $this->repository->update($node);
                 $this->setFlash('success', $this->trans('nodeSaved', [], $nodeType->getTranslationDomain()));
-                return $this->redirectToRoute('backend.node.edit', [ 'id' => $model->getId(), 'node_type' => $nodeType->getType() ]);
+                return $this->redirectToRoute('backend.node.edit', [ 'id' => $node->getId(), 'node_type' => $nodeType->getType() ]);
             } catch (SingularFlagImposedOnMoreThanOneNodeException $e) {
                 $error = new FormError($this->trans('singularFlagImposedOnMoreThanOneNode', ['flag' => $e->getFlag()], $nodeType->getTranslationDomain()));
                 $form->get('flags')->addError($error);
@@ -171,7 +173,7 @@ class Node extends AbstractController
 
         return $this->view('@backend/node/edit.tpl', [
             'nodeType' => $nodeType,
-            'node'     => $model,
+            'node'     => $node,
             'formDescriptor' => $formDescriptor,
         ]);
     }

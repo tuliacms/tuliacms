@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Domain\WriteModel\Model;
 
+use Tulia\Cms\ContentBuilder\Domain\NodeType\Model\FieldValue;
 use Tulia\Cms\ContentBuilder\Domain\NodeType\Model\NodeType;
 use Tulia\Cms\Node\Domain\WriteModel\Event;
 use Tulia\Cms\Node\Domain\WriteModel\Model\ValueObject\NodeId;
@@ -19,7 +20,7 @@ class Node extends AggregateRoot
 
     protected NodeType $type;
 
-    protected string $status;
+    protected string $status = 'draft';
 
     protected string $websiteId;
 
@@ -37,7 +38,7 @@ class Node extends AggregateRoot
 
     protected int $level = 0;
 
-    protected ?string $categoryId = null;
+    //protected ?string $categoryId = null;
 
     protected string $locale;
 
@@ -51,7 +52,8 @@ class Node extends AggregateRoot
         $this->type = $type;
         $this->websiteId = $websiteId;
         $this->locale = $locale;
-        $this->createdAt = new ImmutableDateTime();
+        $this->createdAt = $this->updatedAt = new ImmutableDateTime();
+        $this->updatedAt = new ImmutableDateTime();
         $this->publishedAt = new ImmutableDateTime();
     }
 
@@ -63,11 +65,11 @@ class Node extends AggregateRoot
         return $self;
     }
 
-    public static function buildFromArray(array $data): self
+    public static function buildFromArray(NodeType $nodeType, array $data): self
     {
         $self = new self(
             $data['id'],
-            $data['type'],
+            $nodeType,
             $data['website_id'],
             $data['locale']
         );
@@ -76,17 +78,41 @@ class Node extends AggregateRoot
         $self->updatedAt = $data['updated_at'] ?? null;
         $self->publishedAt = $data['published_at'] ?? new ImmutableDateTime();
         $self->publishedTo = $data['published_to'] ?? null;
-        $self->authorId = $data['authorId'] ?? null;
-        $self->parentId = $data['parentId'] ?? null;
+        $self->authorId = $data['author_id'] ?? null;
+        $self->parentId = $data['parent_id'] ?? null;
         $self->level = (int) ($data['level'] ?? 0);
-        $self->categoryId = $data['category'] ?? null;
-        $self->title = $data['title'] ?? null;
-        $self->slug = $data['slug'] ?? null;
-        $self->introduction = $data['introduction'] ?? null;
-        $self->content = $data['content'] ?? null;
-        $self->contentCompiled = $data['content_compiled'] ?? null;
+        //$self->categoryId = $data['category'] ?? null;
         $self->translated = (bool) ($data['translated'] ?? true);
-        $self->flags = $data['flags'] ?? [];
+
+        unset(
+            $data['id'],
+            $data['website_id'],
+            $data['locale'],
+            $data['status'],
+            $data['translated'],
+            //$data['category'],
+            $data['level'],
+            $data['author_id'],
+            $data['parent_id'],
+            $data['created_at'],
+            $data['updated_at'],
+            $data['published_at'],
+            $data['published_to'],
+        );
+
+        foreach ($data as $key => $value) {
+            if ($nodeType->hasField($key) === false) {
+                continue;
+            }
+
+            $field = $nodeType->getField($key);
+
+            $self->attributes[$field->getName()] = new FieldValue(
+                $value,
+                $field->isMultiple(),
+                $field->isMultilingual()
+            );
+        }
 
         return $self;
     }
@@ -105,33 +131,42 @@ class Node extends AggregateRoot
     {
         return array_combine(
             array_keys($this->attributes),
-            array_column($this->attributes, 'value')
+            array_map(static function ($value) {
+                return $value->getValue();
+            }, $this->attributes)
         );
     }
 
-    public function updateAttributes(array $data): void
+    /**
+     * @param FieldValue[] $attributes
+     */
+    public function updateAttributes(array $attributes): void
     {
         unset(
-            $data['id'],
-            $data['type'],
-            $data['status']
+            $attributes['id'],
+            $attributes['type'],
+            $attributes['status']
         );
 
-        foreach ($data as $code => $info) {
-            $this->validateDataCode($code);
-            $info = $this->validateDataInformations($code, $info);
+        foreach ($attributes as $name => $attribute) {
+            $this->validateAttributeName($name);
+            $this->validateAttributeClassname($attribute);
 
-            if ($code === 'flags') {
-                $this->updateFlags($info['value']);
+            if ($name === 'flags') {
+                $this->updateFlags($attribute->getValue());
             }
 
-            $this->attributes[$code] = $info;
+            $this->attributes[$name] = $attribute;
         }
+
+        $this->markAsUpdated();
     }
 
     public function removeAttribute(string $code): void
     {
         unset($this->attributes[$code]);
+
+        $this->markAsUpdated();
     }
 
     /**
@@ -146,12 +181,12 @@ class Node extends AggregateRoot
 
     public function hasFlag(string $flag): bool
     {
-        return isset($this->attributes['flags']['value']) && \in_array($flag, $this->attributes['flags']['value'], true);
+        return isset($this->attributes['flags']) && \in_array($flag, $this->attributes['flags']->getValue(), true);
     }
 
     public function getFlags(): array
     {
-        return $this->attributes['flags']['value'] ?? [];
+        return $this->attributes['flags']->getValue() ?? [];
     }
 
 
@@ -165,14 +200,14 @@ class Node extends AggregateRoot
     {
         $this->attributes['flags'] = $this->attributes['flags'] ?? [];
 
-        $oldFlags = array_diff($this->attributes['flags'], $flags);
-        $newFlags = array_diff($flags, $this->attributes['flags']);
+        /*$oldFlags = array_diff($this->attributes['flags'], $flags);
+        $newFlags = array_diff($flags, $this->attributes['flags']);*/
     }
 
     /**
      * @param mixed $code
      */
-    private function validateDataCode($code): void
+    private function validateAttributeName($code): void
     {
         if (is_string($code) === false) {
             echo 'Must be string.';exit;
@@ -185,36 +220,16 @@ class Node extends AggregateRoot
         }
     }
 
-    /**
-     * @param string $code
-     * @param mixed $info
-     * @return array
-     */
-    private function validateDataInformations(string $code, $info): array
+    private function validateAttributeClassname($attribute): void
     {
-        if (isset($info['value'], $info['multiple'], $info['multilingual']) === false) {
-            if ($this->type->hasField($code) === false) {
-                echo 'Must contains "value", "multilingual" and "multiple" informations, if the field not exists in the NodeType.';exit;
-            }
-
-            $field = $this->type->getField($code);
-
-            $info = [
-                'value' => $info,
-                'multiple' => $field->isMultiple(),
-                'multilingual' => $field->isMultilingual(),
-            ];
+        if (! $attribute instanceof FieldValue) {
+            echo 'Must be instance of ' . FieldValue::class;exit;
         }
+    }
 
-        if (is_bool($info['multiple']) === false) {
-            echo 'The "multiple" must be boolean.';exit;
-        }
-
-        if (is_bool($info['multilingual']) === false) {
-            echo 'The "multilingual" must be boolean.';exit;
-        }
-
-        return $info;
+    private function markAsUpdated(): void
+    {
+        $this->updatedAt = new ImmutableDateTime();
     }
 
 
@@ -260,19 +275,9 @@ class Node extends AggregateRoot
         return $this->createdAt;
     }
 
-    public function setCreatedAt(ImmutableDateTime $createdAt): void
-    {
-        $this->createdAt = $createdAt;
-    }
-
     public function getUpdatedAt(): ?ImmutableDateTime
     {
         return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(?ImmutableDateTime $updatedAt): void
-    {
-        $this->updatedAt = $updatedAt;
     }
 
     public function getAuthorId(): ?string
@@ -305,7 +310,7 @@ class Node extends AggregateRoot
         $this->level = $level;
     }
 
-    public function getCategoryId(): ?string
+    /*public function getCategoryId(): ?string
     {
         return $this->categoryId;
     }
@@ -313,66 +318,34 @@ class Node extends AggregateRoot
     public function setCategoryId(?string $categoryId): void
     {
         $this->categoryId = $categoryId;
-    }
+    }*/
 
     public function getLocale(): string
     {
         return $this->locale;
     }
 
-    public function setLocale(string $locale): void
-    {
-        $this->locale = $locale;
-    }
-
     public function getTitle(): ?string
     {
-        return $this->title;
-    }
+        $field = $this->type->getTitleField();
 
-    public function setTitle(?string $title): void
-    {
-        $this->title = $title;
+
+        if ($field === null || isset($this->attributes[$field->getName()]) === false) {
+            return null;
+        }
+
+        return $this->attributes[$field->getName()]->getValue();
     }
 
     public function getSlug(): ?string
     {
-        return $this->slug;
-    }
+        $field = $this->type->getSlugField();
 
-    public function setSlug(?string $slug): void
-    {
-        $this->slug = $slug;
-    }
+        if ($field === null || isset($this->attributes[$field->getName()]) === false) {
+            return null;
+        }
 
-    public function getIntroduction(): ?string
-    {
-        return $this->introduction;
-    }
-
-    public function setIntroduction(?string $introduction): void
-    {
-        $this->introduction = $introduction;
-    }
-
-    public function getContent(): ?string
-    {
-        return $this->content;
-    }
-
-    public function setContent(?string $content): void
-    {
-        $this->content = $content;
-    }
-
-    public function getContentCompiled(): ?string
-    {
-        return $this->contentCompiled;
-    }
-
-    public function setContentCompiled(?string $contentCompiled): void
-    {
-        $this->contentCompiled = $contentCompiled;
+        return $this->attributes[$field->getName()]->getValue();
     }
 
     public function isTranslated(): bool

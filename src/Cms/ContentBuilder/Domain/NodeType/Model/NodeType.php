@@ -18,6 +18,10 @@ class NodeType
     private bool $isRoutable = true;
     private bool $isHierarchical = false;
     private ?string $routableTaxonomyField = null;
+
+    /**
+     * @var Field[]
+     */
     private array $fields = [];
 
     public function __construct(string $type, string $layout)
@@ -119,6 +123,28 @@ class NodeType
         $this->fields[$field->getName()] = $field;
 
         return $field;
+    }
+
+    public function getTitleField(): ?Field
+    {
+        foreach ($this->fields as $field) {
+            if ($field->isTitle()) {
+                return $field;
+            }
+        }
+
+        return null;
+    }
+
+    public function getSlugField(): ?Field
+    {
+        foreach ($this->fields as $field) {
+            if ($field->isSlug()) {
+                return $field;
+            }
+        }
+
+        return null;
     }
 
     /**
