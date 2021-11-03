@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Domain\WriteModel;
 
+use Tulia\Cms\ContentBuilder\Domain\NodeType\Model\NodeType;
+use Tulia\Cms\ContentBuilder\Domain\NodeType\Service\NodeTypeRegistry;
 use Tulia\Cms\Metadata\Domain\WriteModel\MetadataRepository;
 use Tulia\Cms\Node\Domain\WriteModel\ActionsChain\NodeActionsChainInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Event\NodeDeleted;
@@ -33,6 +35,7 @@ class NodeRepository
     private EventBusInterface $eventBus;
 
     private NodeActionsChainInterface $actionsChain;
+    private NodeTypeRegistry $nodeTypeRegistry;
 
     public function __construct(
         NodeWriteStorageInterface $storage,
@@ -40,7 +43,8 @@ class NodeRepository
         MetadataRepository $metadataRepository,
         UuidGeneratorInterface $uuidGenerator,
         EventBusInterface $eventBus,
-        NodeActionsChainInterface $actionsChain
+        NodeActionsChainInterface $actionsChain,
+        NodeTypeRegistry $nodeTypeRegistry
     ) {
         $this->storage = $storage;
         $this->currentWebsite = $currentWebsite;
@@ -48,16 +52,17 @@ class NodeRepository
         $this->uuidGenerator = $uuidGenerator;
         $this->eventBus = $eventBus;
         $this->actionsChain = $actionsChain;
+        $this->nodeTypeRegistry = $nodeTypeRegistry;
     }
 
-    public function createNew(array $data): Node
+    public function createNew(string $nodeType): Node
     {
-        return Node::buildFromArray(array_merge($data, [
-            'id' => $this->uuidGenerator->generate(),
-            'locale' => $this->currentWebsite->getLocale()->getCode(),
-            'node_type' => 'page',
-            'website_id' => $this->currentWebsite->getId(),
-        ]));
+        return Node::createNew(
+            $this->uuidGenerator->generate(),
+            $this->nodeTypeRegistry->get($nodeType),
+            $this->currentWebsite->getId(),
+            $this->currentWebsite->getLocale()->getCode()
+        );
     }
 
     /**
@@ -179,7 +184,7 @@ class NodeRepository
             'updated_at'    => $node->getUpdatedAt(),
             'status'        => $node->getStatus(),
             'author_id'     => $node->getAuthorId(),
-            'category'      => $node->getCategory(),
+            'category'      => $node->getCategoryId(),
             'slug'          => $node->getSlug(),
             'title'         => $node->getTitle(),
             'content'       => $node->getContent(),

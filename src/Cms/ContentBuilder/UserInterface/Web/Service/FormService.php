@@ -24,7 +24,7 @@ class FormService
         $this->formBuilder = $formBuilder;
     }
 
-    public function buildFormDescriptor(string $type, array $nodeData, Request $request): FormDescriptor
+    public function buildFormDescriptor(string $type, string $nodeId, array $nodeData, Request $request): FormDescriptor
     {
         $nodeType = $this->nodeTypeRegistry->get($type);
 

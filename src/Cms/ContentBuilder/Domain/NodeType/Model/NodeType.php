@@ -104,6 +104,11 @@ class NodeType
         return $this->fields[$name];
     }
 
+    public function hasField(string $name): bool
+    {
+        return isset($this->fields[$name]);
+    }
+
     /**
      * @throws MultipleValueForTitleOrSlugOccuredException
      */

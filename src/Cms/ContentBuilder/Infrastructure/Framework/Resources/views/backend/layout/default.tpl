@@ -1,6 +1,16 @@
 {% macro form_row(form, field) %}
     {% if form[field] is not defined %}
+        {% set id = "not-existing-field-popover-" ~ uniqid() %}
+        <label>No existing field <a href="#" id="{{ id }}" data-bs-content="If this field is created in NodeType, please check ContentBuilder logs to more informations. Otherwise, You have a typo or You used not existing field in layout."><b>Why?</b></a></label>
         <input class="form-control" type="text" value="The '{{ field }}' field not exists in configuration of this form." disabled readonly>
+        <script nonce="{{ csp_nonce() }}">
+            $(function () {
+                let popover = new bootstrap.Popover(document.querySelector('#{{ id }}'), {
+                    container: 'body',
+                    placement: 'top'
+                });
+            })
+        </script>
     {% else %}
         {{ form_row(form[field]) }}
     {% endif %}

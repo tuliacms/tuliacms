@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service;
 
+use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Exception\FieldTypeNotExistsException;
+
 /**
  * @author Adam Banaszkiewicz
  */
@@ -16,8 +18,15 @@ class FieldTypeMappingRegistry
         $this->mapping[$type] = $mapingInfo;
     }
 
+    /**
+     * @throws FieldTypeNotExistsException
+     */
     public function getTypeClassname(string $type): string
     {
+        if (isset($this->mapping[$type]['classname']) === false) {
+            throw FieldTypeNotExistsException::fromName($type);
+        }
+
         return $this->mapping[$type]['classname'];
     }
 

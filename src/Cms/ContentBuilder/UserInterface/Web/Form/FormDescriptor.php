@@ -47,14 +47,16 @@ class FormDescriptor
         $rawData = $this->form->getData();
 
         $result['id'] = [
-            'values' => $rawData['id'],
+            'value' => $rawData['id'],
             'multiple' => false,
+            'multilingual' => false,
         ];
 
         foreach ($this->getNodeType()->getFields() as $field) {
             $result[$field->getName()] = [
-                'values' => $rawData[$field->getName()],
+                'value' => $rawData[$field->getName()],
                 'multiple' => $field->isMultiple(),
+                'multilingual' => $field->isMultilingual(),
             ];
         }
 

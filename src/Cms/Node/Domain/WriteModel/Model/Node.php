@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Domain\WriteModel\Model;
 
-use Tulia\Cms\Metadata\Domain\WriteModel\MagickMetadataTrait;
-use Tulia\Cms\Metadata\Ports\Domain\WriteModel\MetadataAwareInterface;
+use Tulia\Cms\ContentBuilder\Domain\NodeType\Model\NodeType;
 use Tulia\Cms\Node\Domain\WriteModel\Event;
 use Tulia\Cms\Node\Domain\WriteModel\Model\ValueObject\NodeId;
 use Tulia\Cms\Platform\Domain\WriteModel\Model\AggregateRoot;
@@ -14,13 +13,11 @@ use Tulia\Cms\Platform\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
 /**
  * @author Adam Banaszkiewicz
  */
-class Node extends AggregateRoot implements MetadataAwareInterface
+class Node extends AggregateRoot
 {
-    use MagickMetadataTrait;
-
     protected NodeId $id;
 
-    protected string $type;
+    protected NodeType $type;
 
     protected string $status;
 
@@ -38,39 +35,30 @@ class Node extends AggregateRoot implements MetadataAwareInterface
 
     protected ?string $parentId = null;
 
-    protected int $level;
+    protected int $level = 0;
 
-    protected ?string $category = null;
+    protected ?string $categoryId = null;
 
     protected string $locale;
 
-    protected ?string $title = null;
-
-    protected ?string $slug = null;
-
-    protected ?string $introduction = null;
-
-    protected ?string $content = null;
-
-    protected ?string $contentCompiled = null;
-
-    protected array $flags = [];
-
     protected bool $translated = true;
 
-    private function __construct(string $id, string $type, string $websiteId, string $locale)
+    protected array $attributes = [];
+
+    private function __construct(string $id, NodeType $type, string $websiteId, string $locale)
     {
         $this->id = new NodeId($id);
         $this->type = $type;
         $this->websiteId = $websiteId;
         $this->locale = $locale;
         $this->createdAt = new ImmutableDateTime();
+        $this->publishedAt = new ImmutableDateTime();
     }
 
-    public static function createNew(string $id, string $type, string $websiteId, string $locale): self
+    public static function createNew(string $id, NodeType $type, string $websiteId, string $locale): self
     {
         $self = new self($id, $type, $websiteId, $locale);
-        $self->recordThat(new Event\NodeCreated($id, $websiteId, $locale, $type));
+        $self->recordThat(new Event\NodeCreated($id, $websiteId, $locale, $type->getType()));
 
         return $self;
     }
@@ -91,7 +79,7 @@ class Node extends AggregateRoot implements MetadataAwareInterface
         $self->authorId = $data['authorId'] ?? null;
         $self->parentId = $data['parentId'] ?? null;
         $self->level = (int) ($data['level'] ?? 0);
-        $self->category = $data['category'] ?? null;
+        $self->categoryId = $data['category'] ?? null;
         $self->title = $data['title'] ?? null;
         $self->slug = $data['slug'] ?? null;
         $self->introduction = $data['introduction'] ?? null;
@@ -99,7 +87,6 @@ class Node extends AggregateRoot implements MetadataAwareInterface
         $self->contentCompiled = $data['content_compiled'] ?? null;
         $self->translated = (bool) ($data['translated'] ?? true);
         $self->flags = $data['flags'] ?? [];
-        $self->replaceMetadata($data['metadata'] ?? []);
 
         return $self;
     }
@@ -109,20 +96,129 @@ class Node extends AggregateRoot implements MetadataAwareInterface
         return $this->id;
     }
 
-    public function setId(NodeId $id): void
-    {
-        $this->id = $id;
-    }
-
-    public function getType(): string
+    public function getType(): NodeType
     {
         return $this->type;
     }
 
-    public function setType(string $type): void
+    public function getAttributes(): array
     {
-        $this->type = $type;
+        return array_combine(
+            array_keys($this->attributes),
+            array_column($this->attributes, 'value')
+        );
     }
+
+    public function updateAttributes(array $data): void
+    {
+        unset(
+            $data['id'],
+            $data['type'],
+            $data['status']
+        );
+
+        foreach ($data as $code => $info) {
+            $this->validateDataCode($code);
+            $info = $this->validateDataInformations($code, $info);
+
+            if ($code === 'flags') {
+                $this->updateFlags($info['value']);
+            }
+
+            $this->attributes[$code] = $info;
+        }
+    }
+
+    public function removeAttribute(string $code): void
+    {
+        unset($this->attributes[$code]);
+    }
+
+    /**
+     * @param string $name
+     * @param mixed $default
+     * @return mixed
+     */
+    public function getAttribute(string $name, $default = null)
+    {
+        return $this->attributes[$name] ?? $default;
+    }
+
+    public function hasFlag(string $flag): bool
+    {
+        return isset($this->attributes['flags']['value']) && \in_array($flag, $this->attributes['flags']['value'], true);
+    }
+
+    public function getFlags(): array
+    {
+        return $this->attributes['flags']['value'] ?? [];
+    }
+
+
+
+
+
+
+
+
+    private function updateFlags(array $flags): void
+    {
+        $this->attributes['flags'] = $this->attributes['flags'] ?? [];
+
+        $oldFlags = array_diff($this->attributes['flags'], $flags);
+        $newFlags = array_diff($flags, $this->attributes['flags']);
+    }
+
+    /**
+     * @param mixed $code
+     */
+    private function validateDataCode($code): void
+    {
+        if (is_string($code) === false) {
+            echo 'Must be string.';exit;
+        }
+        if (strlen($code) < 2) {
+            echo 'Must have more than 2 chars.';exit;
+        }
+        if (! preg_match('/^([a-z0-9_]+)$/m', $code)) {
+            echo 'Must contains only alphanumericals and underscores.';exit;
+        }
+    }
+
+    /**
+     * @param string $code
+     * @param mixed $info
+     * @return array
+     */
+    private function validateDataInformations(string $code, $info): array
+    {
+        if (isset($info['value'], $info['multiple'], $info['multilingual']) === false) {
+            if ($this->type->hasField($code) === false) {
+                echo 'Must contains "value", "multilingual" and "multiple" informations, if the field not exists in the NodeType.';exit;
+            }
+
+            $field = $this->type->getField($code);
+
+            $info = [
+                'value' => $info,
+                'multiple' => $field->isMultiple(),
+                'multilingual' => $field->isMultilingual(),
+            ];
+        }
+
+        if (is_bool($info['multiple']) === false) {
+            echo 'The "multiple" must be boolean.';exit;
+        }
+
+        if (is_bool($info['multilingual']) === false) {
+            echo 'The "multilingual" must be boolean.';exit;
+        }
+
+        return $info;
+    }
+
+
+    #######################
 
     public function getStatus(): string
     {
@@ -137,11 +233,6 @@ class Node extends AggregateRoot implements MetadataAwareInterface
     public function getWebsiteId(): string
     {
         return $this->websiteId;
-    }
-
-    public function setWebsiteId(string $websiteId): void
-    {
-        $this->websiteId = $websiteId;
     }
 
     public function getPublishedAt(): ImmutableDateTime
@@ -214,14 +305,14 @@ class Node extends AggregateRoot implements MetadataAwareInterface
         $this->level = $level;
     }
 
-    public function getCategory(): ?string
+    public function getCategoryId(): ?string
     {
-        return $this->category;
+        return $this->categoryId;
     }
 
-    public function setCategory(?string $category): void
+    public function setCategoryId(?string $categoryId): void
     {
-        $this->category = $category;
+        $this->categoryId = $categoryId;
     }
 
     public function getLocale(): string
@@ -282,21 +373,6 @@ class Node extends AggregateRoot implements MetadataAwareInterface
     public function setContentCompiled(?string $contentCompiled): void
     {
         $this->contentCompiled = $contentCompiled;
-    }
-
-    public function hasFlag(string $name): bool
-    {
-        return \in_array($name, $this->flags, true);
-    }
-
-    public function getFlags(): array
-    {
-        return $this->flags;
-    }
-
-    public function setFlags(array $flags): void
-    {
-        $this->flags = $flags;
     }
 
     public function isTranslated(): bool

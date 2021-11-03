@@ -90,8 +90,7 @@ class Node extends AbstractController
 
     public function datatable(Request $request, string $node_type): JsonResponse
     {
-        $nodeTypeObject = $this->findNodeType($node_type);
-        $this->finder->setNodeType($nodeTypeObject);
+        $this->finder->setNodeType($this->findNodeType($node_type));
         return $this->factory->create($this->finder, $request)->generateResponse();
     }
 
@@ -103,30 +102,28 @@ class Node extends AbstractController
      */
     public function create(Request $request, string $node_type)
     {
-        $model = $this->repository->createNew(['type' => $node_type]);
+        $node = $this->repository->createNew($node_type);
 
-        $formDescriptor = $this->formService->buildFormDescriptor($node_type, [
-            'id' => $model->getId(),
-            'title' => $model->getTitle(),
-            'slug' => $model->getSlug(),
-            'introduction' => $model->getIntroduction(),
-            'content' => $model->getContent(),
-            'flags' => $model->getFlags(),
-        ], $request);
+        $formDescriptor = $this->formService->buildFormDescriptor(
+            $node->getType()->getType(),
+            $node->getId()->getId(),
+            $node->getAttributes(),
+            $request
+        );
         $nodeType = $formDescriptor->getNodeType();
 
         if ($formDescriptor->isFormValid()) {
-            dump($formDescriptor->getData());exit;
-            exit;
-            $this->repository->insert($form->getData());
+            $node->updateAttributes($formDescriptor->getData());
+
+            $this->repository->insert($node);
 
             $this->setFlash('success', $this->trans('nodeSaved', [], $nodeType->getTranslationDomain()));
-            return $this->redirectToRoute('backend.node.edit', [ 'id' => $model->getId(), 'node_type' => $nodeType->getType() ]);
+            return $this->redirectToRoute('backend.node.edit', [ 'id' => $node->getId(), 'node_type' => $nodeType->getType() ]);
         }
 
         return $this->view('@backend/node/create.tpl', [
             'nodeType' => $nodeType,
-            'node'     => $model,
+            'node'     => $node,
             'formDescriptor' => $formDescriptor,
         ]);
     }

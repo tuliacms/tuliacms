@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service;
 
+use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Exception\ConstraintNotExistsException;
+
 /**
  * @author Adam Banaszkiewicz
  */
@@ -16,6 +18,9 @@ class ConstraintsBuilder
         $this->mapping = $mapping;
     }
 
+    /**
+     * @throws ConstraintNotExistsException
+     */
     public function build(array $constraints): array
     {
         if ($constraints === []) {

@@ -17,7 +17,7 @@ cms:
                 is_routable: true
                 is_hierarchical: true
                 routable_taxonomy_field: category
-                translation_domain: page
+                translation_domain: pages
                 layout: default
                 fields:
                     title:
@@ -34,6 +34,7 @@ cms:
                         multilingual: true
                         constraints:
                             - { name: required }
+                            #- { name: unique, flags: globally }
                     introduction:
                         type: textarea
                         multilingual: true
@@ -41,44 +42,6 @@ cms:
                     content:
                         type: wysiwyg
                         multilingual: true
-
-                    ##########
-                    #title:
-                    #    name: Title
-                    #    help: Title of tne entry
-                    #    datatype: text
-                    #    multiple: false
-                    #    multilingual: true
-                    #    appearance: textline
-                    #    is_title: true
-                    #    validation:
-                    #        - { type: required }
-                    #slug:
-                    #    name: Title
-                    #    help: Title of tne entry
-                    #    datatype: text
-                    #    multiple: false
-                    #    multilingual: true
-                    #    appearance: textline
-                    #    is_slug: true
-                    #    validation:
-                    #        - { type: required }
-                    #        - { type: unique, globally: true }
-                    #content:
-                    #    name: Content
-                    #    help: This is main content of the node
-                    #    datatype: text
-                    #    multiple: false
-                    #    multilingual: true
-                    #    appearance: tulia-editor
-                    #introduction:
-                    #    name: Introduction
-                    #    help: Introductions of the node's content
-                    #    datatype: text
-                    #    multiple: false
-                    #    multilingual: true
-                    #    appearance: text-block
-
                     #category:
                     #    label: category
                     #    type: taxonomy

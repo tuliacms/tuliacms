@@ -9,6 +9,8 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Tulia\Cms\ContentBuilder\Domain\NodeType\Model\NodeType;
+use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Exception\ConstraintNotExistsException;
+use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Exception\FieldTypeNotExistsException;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\ConstraintsBuilder;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\FieldTypeMappingRegistry;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\CancelType;
@@ -45,23 +47,26 @@ class SymfonyFormBuilder
         );
 
         foreach ($nodeType->getFields() as $field) {
-            if ($this->mappingRegistry->hasType($field->getType()) === false) {
-                $this->logger->warning(sprintf('Cms\ContentBuilder: Mapping for field type "%s" not exists. Field wasn\'t created in form.', $field->getType()));
-                continue;
+            try {
+                $options = array_merge([
+                    'label' => $field->getLabel() === ''
+                        ? false
+                        : $field->getLabel(),
+                    'constraints' => $this->constraintsBuilder->build(
+                        $field->getConstraints()
+                    )
+                ], $field->getOptions());
+
+                $builder->add(
+                    $field->getName(),
+                    $this->mappingRegistry->getTypeClassname($field->getType()),
+                    $options
+                );
+            } catch (ConstraintNotExistsException $e) {
+                $this->logger->warning(sprintf('Cms\ContentBuilder: Constraint "%s" not exists. Field "%s" wasn\'t created in form.', $e->getName(), $field->getName()));
+            } catch (FieldTypeNotExistsException $e) {
+                $this->logger->warning(sprintf('Cms\ContentBuilder: Mapping for field type "%s" not exists. Field "%s" wasn\'t created in form.', $field->getType(), $field->getName()));
             }
-
-            $options = array_merge([
-                'label' => $field->getLabel() === ''
-                    ? false
-                    : $field->getLabel(),
-                'constraints' => $this->constraintsBuilder->build($field->getConstraints())
-            ], $field->getOptions());
-
-            $builder->add(
-                $field->getName(),
-                $this->mappingRegistry->getTypeClassname($field->getType()),
-                $options
-            );
         }
 
         $builder
