@@ -30,9 +30,9 @@ class TuliaCmsExtension extends Extension
 
         $container->setParameter('cms.content_builder.node_types', $config['content_building']['node_types']);
         $container->setParameter('cms.content_builder.layout_types', $config['content_building']['layout_types']);
-        $container->setParameter('cms.content_builder.layout_types', $config['content_building']['layout_types']);
+        $container->setParameter('cms.content_builder.taxonomy_types', $config['content_building']['taxonomy_types']);
         $container->setParameter('cms.content_builder.data_types.mapping', $config['content_building']['data_types']['mapping']);
-        $container->setParameter('cms.content_builder.constraints_types.mapping', $config['content_building']['constraints_types']['mapping']);
+        $container->setParameter('cms.content_builder.constraint_types.mapping', $config['content_building']['constraint_types']['mapping']);
         $container->setParameter('cms.options.definitions', $this->validateOptionsValues($config['options']['definitions'] ?? []));
 
         // BodyClass

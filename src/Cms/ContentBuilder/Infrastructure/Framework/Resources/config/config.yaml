@@ -47,10 +47,27 @@ cms:
                         #relation:
                         #    type:
 
-#        taxonomy_types:
-#            category:
-#                translation_domain: category
-#
+        taxonomy_types:
+            category:
+                translation_domain: category
+                controller: 'Tulia\Cms\Taxonomy\UserInterface\Web\Frontend\Controller\Term::show'
+                routing_strategy: simple
+                is_routable: true
+                is_hierarchical: true
+                fields:
+                    name:
+                        type: text
+                        label: name
+                        multilingual: true
+                        constraints:
+                            - { name: required }
+                    slug:
+                        label: slug
+                        type: text
+                        multilingual: true
+                        constraints:
+                            - { name: required }
+
         layout_types:
             default:
                 label: defaultLayout
@@ -89,7 +106,7 @@ cms:
                     label: Select
                     classname: 'Symfony\Component\Form\Extension\Core\Type\ChoiceType'
 
-        constraints_types:
+        constraint_types:
             mapping:
                 required:
                     classname: 'Symfony\Component\Validator\Constraints\NotBlank'

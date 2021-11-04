@@ -7,11 +7,12 @@ namespace Tulia\Bundle\CmsBundle\DependencyInjection\CompilerPass;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
+use Tulia\Cms\ContentBuilder\Domain\NodeType\Service\NodeTypeRegistry;
+use Tulia\Cms\ContentBuilder\Domain\TaxonomyType\Service\TaxonomyTypeRegistry;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\ConstraintTypeMappingRegistry;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\FieldTypeMappingRegistry;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\LayoutTypeBuilderRegistry;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\LayoutTypeRegistry;
-use Tulia\Cms\ContentBuilder\Domain\NodeType\Service\NodeTypeRegistry;
 
 /**
  * @author Adam Banaszkiewicz
@@ -26,6 +27,15 @@ class ContentBuilderPass implements CompilerPassInterface
             $registry->addMethodCall('addProvider', [new Reference($id)]);
         }
         foreach ($container->findTaggedServiceIds('content_builder.node_type.decorator') as $id => $options) {
+            $registry->addMethodCall('addDecorator', [new Reference($id)]);
+        }
+
+        $registry = $container->getDefinition(TaxonomyTypeRegistry::class);
+
+        foreach ($container->findTaggedServiceIds('content_builder.taxonomy_type.provider') as $id => $options) {
+            $registry->addMethodCall('addProvider', [new Reference($id)]);
+        }
+        foreach ($container->findTaggedServiceIds('content_builder.taxonomy_type.decorator') as $id => $options) {
             $registry->addMethodCall('addDecorator', [new Reference($id)]);
         }
 
@@ -49,7 +59,7 @@ class ContentBuilderPass implements CompilerPassInterface
 
         $registry = $container->getDefinition(ConstraintTypeMappingRegistry::class);
 
-        foreach ($container->getParameter('cms.content_builder.constraints_types.mapping') as $type => $info) {
+        foreach ($container->getParameter('cms.content_builder.constraint_types.mapping') as $type => $info) {
             $registry->addMethodCall('addMapping', [$type, $info]);
         }
     }

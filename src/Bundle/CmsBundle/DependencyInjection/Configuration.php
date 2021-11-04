@@ -64,7 +64,7 @@ class Configuration implements ConfigurationInterface
             ->children()
                 ->arrayNode('content_building')
                     ->children()
-                        ->arrayNode('constraints_types')
+                        ->arrayNode('constraint_types')
                             ->children()
                                 ->arrayNode('mapping')
                                     ->useAttributeAsKey('name')
@@ -94,6 +94,21 @@ class Configuration implements ConfigurationInterface
                         ->end()
                         ->arrayNode('node_types')
                             ->useAttributeAsKey('name')
+                            ->beforeNormalization()
+                                ->always(function ($types) {
+                                    foreach ($types as $name => $type) {
+                                        if (! ($type['is_routable'] ?? false)) {
+                                            continue;
+                                        }
+
+                                        if (isset($type['fields']['slug']) === false) {
+                                            throw new LogicException(sprintf('Routable NodeType (%s) must have "slug" field.', $name));
+                                        }
+                                    }
+
+                                    return $types;
+                                })
+                            ->end()
                             ->arrayPrototype()
                                 ->addDefaultsIfNotSet()
                                 ->children()
@@ -110,6 +125,67 @@ class Configuration implements ConfigurationInterface
                                     ->booleanNode('is_hierarchical')->defaultFalse()->end()
                                     // Layout name with defines where each field should be showed on admin page.
                                     ->scalarNode('layout')->defaultValue('default')->end()
+                                    // Fields for given type
+                                    ->arrayNode('fields')
+                                        ->useAttributeAsKey('name')
+                                        ->arrayPrototype()
+                                            ->addDefaultsIfNotSet()
+                                            ->children()
+                                                ->scalarNode('label')
+                                                    ->defaultNull()
+                                                    ->beforeNormalization()
+                                                        ->always(function ($v) {
+                                                            if ($v === false) {
+                                                                return '';
+                                                            }
+
+                                                            return $v;
+                                                        })
+                                                    ->end()
+                                                ->end()
+                                                ->scalarNode('type')->defaultNull()->end()
+                                                ->booleanNode('multilingual')->defaultFalse()->end()
+                                                ->booleanNode('multiple')->defaultFalse()->end()
+                                                ->variableNode('options')->defaultValue([])->end()
+                                                ->arrayNode('constraints')
+                                                    ->arrayPrototype()
+                                                        ->children()
+                                                            ->scalarNode('name')->isRequired()->end()
+                                                            ->scalarNode('flags')->defaultValue('')->end()
+                                                        ->end()
+                                                    ->end()
+                                                ->end()
+                                            ->end()
+                                        ->end()
+                                    ->end()
+                                ->end()
+                            ->end()
+                        ->end()
+                        ->arrayNode('taxonomy_types')
+                            ->useAttributeAsKey('name')
+                            ->beforeNormalization()
+                                ->always(function ($types) {
+                                    foreach ($types as $name => $type) {
+                                        if (! ($type['is_routable'] ?? false)) {
+                                            continue;
+                                        }
+
+                                        if (isset($type['fields']['slug']) === false) {
+                                            throw new LogicException(sprintf('Routable TaxonomyType (%s) must have "slug" field.', $name));
+                                        }
+                                    }
+
+                                    return $types;
+                                })
+                            ->end()
+                            ->arrayPrototype()
+                                ->addDefaultsIfNotSet()
+                                ->children()
+                                    ->variableNode('controller')->defaultValue('Tulia\Cms\Taxonomy\UserInterface\Web\Frontend\Controller\Term::show')->end()
+                                    ->booleanNode('is_routable')->defaultTrue()->end()
+                                    ->scalarNode('translation_domain')->defaultValue('page')->end()
+                                    ->booleanNode('is_hierarchical')->defaultFalse()->end()
+                                    ->scalarNode('routing_strategy')->defaultValue('simple')->end()
                                     // Fields for given type
                                     ->arrayNode('fields')
                                         ->useAttributeAsKey('name')
