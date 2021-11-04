@@ -18,7 +18,7 @@
                 {{ form_row(formDescriptor.formView.cancel) }}
                 {{ form_row(formDescriptor.formView.save) }}
             </div>
-            <i class="pane-header-icon fas fa-file-powerpoint"></i>
+            <i class="pane-header-icon {{ nodeType.icon }}"></i>
             <h1 class="pane-title">{{ block('title') }}</h1>
         </div>
         <div class="pane-body p-0">

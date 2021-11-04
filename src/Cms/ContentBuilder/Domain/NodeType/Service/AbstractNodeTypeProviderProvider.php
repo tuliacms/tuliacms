@@ -28,6 +28,7 @@ abstract class AbstractNodeTypeProviderProvider implements NodeTypeProviderInter
         $nodeType->setIsHierarchical($options['is_hierarchical']);
         $nodeType->setRoutableTaxonomyField($options['routable_taxonomy_field']);
         $nodeType->setTranslationDomain($options['translation_domain']);
+        $nodeType->setIcon($options['icon']);
 
         foreach ($options['fields'] as $fieldName => $fieldOptions) {
             $nodeType->addField($this->buildNodeField($fieldName, $fieldOptions));

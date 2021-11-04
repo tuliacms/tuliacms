@@ -29,7 +29,7 @@
                 </div>
                 <a href="{{ path('backend.node.create', { node_type: nodeType.type }) }}" class="btn btn-success btn-icon-left"><i class="btn-icon fas fa-plus"></i> {{ 'create'|trans }}</a>
             </div>
-            <i class="pane-header-icon fas fa-file-powerpoint"></i>
+            <i class="pane-header-icon fas {{ nodeType.icon }}"></i>
             <h1 class="pane-title">{{ block('title') }}</h1>
         </div>
         {{ generator.generate(datatable, {

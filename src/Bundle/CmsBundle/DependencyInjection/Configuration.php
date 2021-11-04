@@ -97,6 +97,7 @@ class Configuration implements ConfigurationInterface
                             ->arrayPrototype()
                                 ->addDefaultsIfNotSet()
                                 ->children()
+                                    ->variableNode('icon')->defaultValue('fas fa-circle')->end()
                                     ->variableNode('controller')->defaultValue('Tulia\Cms\Node\UserInterface\Web\Frontend\Controller\Node::show')->end()
                                     // Any node of this type can be reached through it's own route (using it's slug)?
                                     ->booleanNode('is_routable')->defaultTrue()->end()

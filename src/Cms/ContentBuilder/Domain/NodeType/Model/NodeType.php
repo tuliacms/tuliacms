@@ -17,6 +17,7 @@ class NodeType
     private string $controller = 'Tulia\Cms\Node\UserInterface\Web\Frontend\Controller\Node::show';
     private bool $isRoutable = true;
     private bool $isHierarchical = false;
+    private string $icon;
     private ?string $routableTaxonomyField = null;
 
     /**
@@ -123,6 +124,16 @@ class NodeType
         $this->fields[$field->getName()] = $field;
 
         return $field;
+    }
+
+    public function getIcon(): string
+    {
+        return $this->icon;
+    }
+
+    public function setIcon(string $icon): void
+    {
+        $this->icon = $icon;
     }
 
     /**

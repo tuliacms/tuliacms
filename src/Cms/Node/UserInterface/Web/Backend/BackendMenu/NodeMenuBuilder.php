@@ -46,7 +46,7 @@ class NodeMenuBuilder implements BuilderInterface
         $registry->add($root, [
             'label'    => $this->helper->trans('node', [], $type->getTranslationDomain()),
             'link'     => '#',
-            'icon'     => 'fas fa-circle',
+            'icon'     => $type->getIcon(),
             'priority' => 3500,
         ]);
 

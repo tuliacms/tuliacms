@@ -13,7 +13,7 @@ cms:
     content_building:
         node_types:
             page:
-                #icon: 'fas fa-file-powerpoint'
+                icon: 'fas fa-file-powerpoint'
                 controller: 'Tulia\Cms\Node\UserInterface\Web\Frontend\Controller\Node::show'
                 is_routable: true
                 is_hierarchical: true
