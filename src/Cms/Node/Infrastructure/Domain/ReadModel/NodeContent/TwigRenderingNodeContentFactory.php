@@ -24,8 +24,8 @@ class TwigRenderingNodeContentFactory implements NodeContentFactoryInterface
         $this->environment = $environment;
     }
 
-    public function createForNode(Node $node): NodeContentInterface
+    public function createForNode(Node $node, string $content): NodeContentInterface
     {
-        return new TwigRenderingNodeContent($node, $node->getContent()->getSource(), $this->engine, $this->environment);
+        return new TwigRenderingNodeContent($node, $content, $this->engine, $this->environment);
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Infrastructure\Framework\Routing;
 
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
@@ -29,14 +30,18 @@ class Router implements RouterInterface, RequestMatcherInterface
 
     private ?RequestContext $context = null;
 
+    private LoggerInterface $logger;
+
     public function __construct(
         NodeFinderInterface $nodeFinder,
         NodeTypeRegistryInterface $registry,
-        FrontendRouteSuffixResolver $frontendRouteSuffixResolver
+        FrontendRouteSuffixResolver $frontendRouteSuffixResolver,
+        LoggerInterface $logger
     ) {
         $this->nodeFinder = $nodeFinder;
         $this->registry = $registry;
         $this->frontendRouteSuffixResolver = $frontendRouteSuffixResolver;
+        $this->logger = $logger;
     }
 
     public function setContext(RequestContext $context): void
@@ -75,6 +80,7 @@ class Router implements RouterInterface, RequestMatcherInterface
                 return null;
             }
         } catch (\Exception $e) {
+            $this->logger->error(sprintf('Exception during generation node path: %s', $e->getMessage()));
             return null;
         }
 
@@ -98,6 +104,7 @@ class Router implements RouterInterface, RequestMatcherInterface
             /** @var Node $node */
             $node = $this->getNode(substr($pathinfo, 1));
         } catch (\Exception $e) {
+            $this->logger->error(sprintf('Exception during match node path: %s', $e->getMessage()));
             throw new ResourceNotFoundException('Node not found with given path.');
         }
 

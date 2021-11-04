@@ -11,5 +11,5 @@ use Tulia\Cms\Node\Domain\ReadModel\Model\Node;
  */
 interface NodeContentFactoryInterface
 {
-    public function createForNode(Node $node): NodeContentInterface;
+    public function createForNode(Node $node, string $content): NodeContentInterface;
 }

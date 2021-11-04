@@ -4,43 +4,61 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Domain\ReadModel\Model;
 
-use DateTime;
 use InvalidArgumentException;
-use Tulia\Cms\Metadata\Domain\ReadModel\MagickMetadataTrait;
-use Tulia\Cms\Metadata\Ports\Domain\WriteModel\MetadataAwareInterface;
 use Tulia\Cms\Node\Domain\ReadModel\NodeContent\NodeContentInterface;
 use Tulia\Cms\Node\Infrastructure\Domain\ReadModel\NodeContent\VoidNodeContent;
+use Tulia\Cms\Platform\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class Node implements MetadataAwareInterface
+class Node implements \ArrayAccess
 {
-    use MagickMetadataTrait;
-
-    protected $id;
-    protected $type;
-    protected $status;
-    protected $websiteId;
-    protected $publishedAt;
-    protected $publishedTo;
-    protected $createdAt;
-    protected $updatedAt;
-    protected $authorId;
-    protected $parentId;
-    protected $level;
-    protected $category;
-    protected $locale;
-    protected $title;
-    protected $slug;
-    protected $introduction;
-    protected NodeContentInterface $content;
-    protected $visibility;
+    protected string $id;
+    protected string $type;
+    protected string $status;
+    protected string $websiteId;
+    protected ImmutableDateTime $publishedAt;
+    protected ?ImmutableDateTime $publishedTo;
+    protected ImmutableDateTime $createdAt;
+    protected ImmutableDateTime $updatedAt;
+    protected string $authorId;
+    protected ?string $parentId;
+    protected int $level;
+    //protected $category;
+    protected string $locale;
+    protected ?string $title;
+    protected ?string $slug;
+    protected bool $visibility;
     protected array $flags = [];
+    protected array $attributes = [];
 
-    public function __construct()
+    public function __get(string $name)
     {
-        $this->content = new VoidNodeContent();
+        return $this->{$name} ?? $this->attributes[$name] ?? null;
+    }
+
+    public function __set(string $name, $value): void
+    {
+        if (method_exists($this, $name)) {
+            $this->{$name} = $value;
+        } else {
+            $this->attributes[$name] = $value;
+        }
+    }
+
+    public function __call(string $name, array $arguments)
+    {
+        if (method_exists($this, $name)) {
+            return $this->{$name}(...$arguments);
+        }
+
+        return $this->attributes[$name] ?? null;
+    }
+
+    public function __isset(string $name): bool
+    {
+        return method_exists($this, $name) || isset($this->attributes[$name]);
     }
 
     public static function buildFromArray(array $data): self
@@ -59,13 +77,13 @@ class Node implements MetadataAwareInterface
             $data['locale'] = 'en_US';
         }
 
-        $data = static::setDatetime($data, 'published_at', new DateTime());
+        $data = static::setDatetime($data, 'published_at', new ImmutableDateTime());
         $data = static::setDatetime($data, 'published_to');
-        $data = static::setDatetime($data, 'created_at', new DateTime());
+        $data = static::setDatetime($data, 'created_at', new ImmutableDateTime());
         $data = static::setDatetime($data, 'updated_at');
 
-        $node->setId($data['id']);
-        $node->setType($data['type'] ?? 'page');
+        $node->id = $data['id'];
+        $node->type = $data['type'] ?? 'page';
         $node->setStatus($data['status'] ?? 'published');
         $node->setWebsiteId($data['website_id']);
         $node->setPublishedAt($data['published_at']);
@@ -75,14 +93,18 @@ class Node implements MetadataAwareInterface
         $node->setAuthorId($data['author_id'] ?? null);
         $node->setParentId($data['parent_id'] ?? null);
         $node->setLevel((int) ($data['level'] ?? 0));
-        $node->setCategory($data['category'] ?? null);
+        //$node->setCategory($data['category'] ?? null);
         $node->setLocale($data['locale']);
         $node->setTitle($data['title'] ?? '');
         $node->setSlug($data['slug'] ?? '');
-        $node->setIntroduction($data['introduction'] ?? '');
-        $node->setContent($data['content'] ?? '');
         $node->setFlags($data['flags'] ?? []);
-        $node->replaceMetadata($data['metadata'] ?? []);
+        $node->attributes = $data['attributes'];
+
+        foreach ($data['attributes_info'] as $name => $info) {
+            if ($info['compilable']) {
+                $node->attributes[$name] = new VoidNodeContent($node->attributes[$name]);
+            }
+        }
 
         return $node;
     }
@@ -93,16 +115,11 @@ class Node implements MetadataAwareInterface
             $data[$key] = $default;
         } elseif ($data[$key] === null && $default === null) {
             // Do nothing, allow to null;
-        } elseif ($data[$key] instanceof DateTime === false) {
-            $data[$key] = new DateTime($data[$key]);
+        } elseif ($data[$key] instanceof ImmutableDateTime === false) {
+            $data[$key] = new ImmutableDateTime($data[$key]);
         }
 
         return $data;
-    }
-
-    public function hasId(): bool
-    {
-        return (bool) $this->id;
     }
 
     public function getId(): string
@@ -110,19 +127,9 @@ class Node implements MetadataAwareInterface
         return $this->id;
     }
 
-    public function setId(?string $id): void
-    {
-        $this->id = $id;
-    }
-
     public function getType(): string
     {
         return $this->type;
-    }
-
-    public function setType(string $type): void
-    {
-        $this->type = $type;
     }
 
     public function getStatus(): string
@@ -145,52 +152,52 @@ class Node implements MetadataAwareInterface
         $this->websiteId = $websiteId;
     }
 
-    public function getPublishedAt(): DateTime
+    public function getPublishedAt(): ImmutableDateTime
     {
         return $this->publishedAt;
     }
 
-    public function setPublishedAt(DateTime $publishedAt): void
+    public function setPublishedAt(ImmutableDateTime $publishedAt): void
     {
         $this->publishedAt = $publishedAt;
     }
 
-    public function getPublishedTo(): ?DateTime
+    public function getPublishedTo(): ?ImmutableDateTime
     {
         return $this->publishedTo;
     }
 
-    public function setPublishedTo(?DateTime $publishedTo): void
+    public function setPublishedTo(?ImmutableDateTime $publishedTo): void
     {
         $this->publishedTo = $publishedTo;
     }
 
-    public function getCreatedAt(): DateTime
+    public function getCreatedAt(): ImmutableDateTime
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(DateTime $createdAt): void
+    public function setCreatedAt(ImmutableDateTime $createdAt): void
     {
         $this->createdAt = $createdAt;
     }
 
-    public function getUpdatedAt(): ?DateTime
+    public function getUpdatedAt(): ?ImmutableDateTime
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(?DateTime $updatedAt): void
+    public function setUpdatedAt(?ImmutableDateTime $updatedAt): void
     {
         $this->updatedAt = $updatedAt;
     }
 
-    public function getAuthorId(): ?string
+    public function getAuthorId(): string
     {
         return $this->authorId;
     }
 
-    public function setAuthorId(?string $authorId): void
+    public function setAuthorId(string $authorId): void
     {
         $this->authorId = $authorId;
     }
@@ -255,33 +262,6 @@ class Node implements MetadataAwareInterface
         $this->slug = $slug;
     }
 
-    public function getIntroduction(): ?string
-    {
-        return $this->introduction;
-    }
-
-    public function setIntroduction(?string $introduction): void
-    {
-        $this->introduction = $introduction;
-    }
-
-    public function getContent(): NodeContentInterface
-    {
-        return $this->content;
-    }
-
-    /**
-     * @param null|string|NodeContentInterface $content
-     */
-    public function setContent($content): void
-    {
-        if ($content instanceof NodeContentInterface) {
-            $this->content = $content;
-        } else {
-            $this->content->setSource($content);
-        }
-    }
-
     public function hasFlag(string $flag): bool
     {
         return in_array($flag, $this->flags);
@@ -295,5 +275,30 @@ class Node implements MetadataAwareInterface
     public function setFlags(array $flags): void
     {
         $this->flags = $flags;
+    }
+
+    public function getAttributes(): array
+    {
+        return $this->attributes;
+    }
+
+    public function offsetExists($offset)
+    {
+        return array_key_exists($offset, $this->attributes);
+    }
+
+    public function offsetGet($offset)
+    {
+        return $this->attributes[$offset];
+    }
+
+    public function offsetSet($offset, $value)
+    {
+        $this->attributes[$offset] = $value;
+    }
+
+    public function offsetUnset($offset)
+    {
+        unset($this->attributes[$offset]);
     }
 }
