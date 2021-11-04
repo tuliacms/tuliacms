@@ -39,8 +39,6 @@ class FlagsDecorator implements NodeTypeDecoratorInterface
             'flags',
             false,
             false,
-            false,
-            true,
             [],
             [
                 'choices' => $availableFlags,

@@ -93,8 +93,6 @@ class Node extends AggregateRoot
                 $info['multilingual'],
                 $info['multiple'],
                 $info['compilable'],
-                $info['is_slug'],
-                $info['is_title'],
             );
         }
 
@@ -313,24 +311,12 @@ class Node extends AggregateRoot
 
     public function getTitle(): ?string
     {
-        foreach ($this->attributesInfo as $name => $info) {
-            if ($info->isTitle()) {
-                return $this->attributes[$name] ?? null;
-            }
-        }
-
-        return null;
+        return $this->attributes['title'] ?? null;
     }
 
     public function getSlug(): ?string
     {
-        foreach ($this->attributesInfo as $name => $info) {
-            if ($info->isSlug()) {
-                return $this->attributes[$name] ?? null;
-            }
-        }
-
-        return null;
+        return $this->attributes['slug'] ?? null;
     }
 
     public function isTranslated(): bool

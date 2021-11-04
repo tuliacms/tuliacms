@@ -51,9 +51,7 @@ class ContentShortcodeCompiler implements NodeActionInterface
             $node->addAttributeInfo($compiledAttributeName, new AttributeInfo(
                 $info->isMultilingual(),
                 $info->isMultiple(),
-                $info->isCompilable(),
-                $info->isSlug(),
-                $info->isTitle()
+                $info->isCompilable()
             ));
 
             $node->updateAttributes([

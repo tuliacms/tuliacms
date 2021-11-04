@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Tulia\Cms\Node\Domain\ReadModel\Model;
 
 use InvalidArgumentException;
-use Tulia\Cms\Node\Domain\ReadModel\NodeContent\NodeContentInterface;
 use Tulia\Cms\Node\Infrastructure\Domain\ReadModel\NodeContent\VoidNodeContent;
 use Tulia\Cms\Platform\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
 

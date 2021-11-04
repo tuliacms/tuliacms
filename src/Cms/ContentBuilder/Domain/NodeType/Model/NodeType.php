@@ -125,28 +125,6 @@ class NodeType
         return $field;
     }
 
-    public function getTitleField(): ?Field
-    {
-        foreach ($this->fields as $field) {
-            if ($field->isTitle()) {
-                return $field;
-            }
-        }
-
-        return null;
-    }
-
-    public function getSlugField(): ?Field
-    {
-        foreach ($this->fields as $field) {
-            if ($field->isSlug()) {
-                return $field;
-            }
-        }
-
-        return null;
-    }
-
     /**
      * @throws MultipleValueForTitleOrSlugOccuredException
      */
@@ -160,10 +138,8 @@ class NodeType
      */
     private function checkMultiplenessForTitleAndSlugField(Field $field): void
     {
-        if ($field->isMultiple() && ($field->isSlug() || $field->isTitle())) {
-            throw MultipleValueForTitleOrSlugOccuredException::fromFieldType(
-                $field->isTitle() ? 'title' : 'slug'
-            );
+        if ($field->isMultiple() && in_array($field->getName(), ['title', 'slug'])) {
+            throw MultipleValueForTitleOrSlugOccuredException::fromFieldType($field->getName());
         }
     }
 }

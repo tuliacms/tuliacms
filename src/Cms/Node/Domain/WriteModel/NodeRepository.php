@@ -73,8 +73,6 @@ class NodeRepository
                 $info['multilingual'],
                 $info['multiple'],
                 $info['compilable'],
-                $info['is_slug'],
-                $info['is_title'],
             ));
         }
 
@@ -102,13 +100,8 @@ class NodeRepository
 
         $attributes = $this->metadataRepository->findAll('node', $id);
         $attributes['flags'] = array_filter(explode(',', (string) $node['flags']));
-
-        if ($field = $nodeType->getTitleField()) {
-            $attributes[$field->getName()] = $node['title'];
-        }
-        if ($field = $nodeType->getSlugField()) {
-            $attributes[$field->getName()] = $node['slug'];
-        }
+        $attributes['title'] = $node['title'];
+        $attributes['slug'] = $node['slug'];
 
         $node = Node::buildFromArray($node['type'], [
             'id'            => $node['id'],
@@ -247,8 +240,6 @@ class NodeRepository
                 'multilingual' => $field->isMultilingual(),
                 'multiple' => $field->isMultiple(),
                 'compilable' => $field->hasFlag('compilable'),
-                'is_slug' => $field->isSlug(),
-                'is_title' => $field->isTitle(),
             ];
         }
 

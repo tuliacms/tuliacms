@@ -21,7 +21,6 @@ cms:
                 layout: default
                 fields:
                     title:
-                        is_title: true
                         type: text
                         label: title
                         multilingual: true
@@ -30,7 +29,6 @@ cms:
                     slug:
                         label: slug
                         type: text
-                        is_slug: true
                         multilingual: true
                         constraints:
                             - { name: required }

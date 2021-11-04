@@ -42,8 +42,6 @@ abstract class AbstractNodeTypeProviderProvider implements NodeTypeProviderInter
             $name,
             $options['type'],
             (string) $options['label'],
-            $options['is_title'],
-            $options['is_slug'],
             $options['multilingual'],
             $options['multiple'],
             $options['constraints'],
