@@ -101,7 +101,7 @@ class NodeRepository
 
         $nodeType = $this->nodeTypeRegistry->get($node['type']);
 
-        $attributes = [];
+        $attributes = $this->metadataRepository->findAll(NodeMetadataEnum::TYPE, $id);
         $attributes['flags'] = array_filter(explode(',', (string) $node['flags']));
 
         if ($field = $nodeType->getTitleField()) {
@@ -141,12 +141,14 @@ class NodeRepository
         $this->storage->beginTransaction();
 
         try {
-            $this->storage->insert($this->extract($node), $this->currentWebsite->getDefaultLocale()->getCode());
-            /*$this->metadataRepository->persist(
+            $data = $this->extract($node);
+
+            $this->storage->insert($data, $this->currentWebsite->getDefaultLocale()->getCode());
+            $this->metadataRepository->persist(
                 NodeMetadataEnum::TYPE,
                 $node->getId()->getId(),
-                $node->getAllMetadata()
-            );*/
+                $data['attributes']
+            );
             $this->storage->commit();
         } catch (\Exception $exception) {
             $this->storage->rollback();
@@ -163,12 +165,14 @@ class NodeRepository
         $this->storage->beginTransaction();
 
         try {
-            $this->storage->update($this->extract($node), $this->currentWebsite->getDefaultLocale()->getCode());
-            /*$this->metadataRepository->persist(
+            $data = $this->extract($node);
+
+            $this->storage->update($data, $this->currentWebsite->getDefaultLocale()->getCode());
+            $this->metadataRepository->persist(
                 NodeMetadataEnum::TYPE,
                 $node->getId()->getId(),
-                $node->getAllMetadata()
-            );*/
+                $data['attributes']
+            );
             $this->storage->commit();
         } catch (\Exception $exception) {
             $this->storage->rollback();
@@ -198,6 +202,22 @@ class NodeRepository
 
     private function extract(Node $node): array
     {
+        $attributes = [];
+
+        foreach ($node->getAttributes() as $name => $value) {
+            if (in_array($name, ['title', 'slug', 'flags'])) {
+                continue;
+            }
+
+            $info = $node->getAttributeInfo($name);
+
+            $attributes[$name] = [
+                'value' => $value,
+                'multilingual' => $info->isMultilingual(),
+                'multiple' => $info->isMultiple(),
+            ];
+        }
+
         return [
             'id'            => $node->getId()->getId(),
             'type'          => $node->getType(),
@@ -215,6 +235,7 @@ class NodeRepository
             'parent_id'     => $node->getParentId(),
             'locale'        => $node->getLocale(),
             'flags'         => $node->getFlags(),
+            'attributes'    => $attributes,
         ];
     }
 
