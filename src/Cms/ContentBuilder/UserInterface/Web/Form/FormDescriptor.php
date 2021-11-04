@@ -6,7 +6,6 @@ namespace Tulia\Cms\ContentBuilder\UserInterface\Web\Form;
 
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
-use Tulia\Cms\ContentBuilder\Domain\NodeType\Model\FieldValue;
 use Tulia\Cms\ContentBuilder\Domain\NodeType\Model\NodeType;
 
 /**
@@ -47,14 +46,10 @@ class FormDescriptor
     {
         $rawData = $this->form->getData();
 
-        $result['id'] = new FieldValue($rawData['id'], false, false);
+        $result['id'] = $rawData['id'];
 
         foreach ($this->getNodeType()->getFields() as $field) {
-            $result[$field->getName()] = new FieldValue(
-                $rawData[$field->getName()],
-                $field->isMultiple(),
-                $field->isMultilingual()
-            );
+            $result[$field->getName()] = $rawData[$field->getName()];
         }
 
         return $result;

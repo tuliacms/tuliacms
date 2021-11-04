@@ -39,7 +39,7 @@ class SlugGenerator implements NodeActionInterface
         $title = $node->getTitle();
 
         if (! $slug && ! $title) {
-            $node->setSlug(uniqid('temporary-slug-', true));
+            $node->updateAttributes(['slug' => uniqid('temporary-slug-', true)]);
             return;
         }
 
@@ -48,7 +48,7 @@ class SlugGenerator implements NodeActionInterface
 
         $slug = $this->findUniqueSlug($input, $node->getId()->getId());
 
-        $node->setSlug($slug);
+        $node->updateAttributes(['slug' => $slug]);
     }
 
     private function findUniqueSlug(string $slug, ?string $nodeId): string

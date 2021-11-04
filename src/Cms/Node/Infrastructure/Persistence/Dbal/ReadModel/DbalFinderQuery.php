@@ -259,8 +259,6 @@ class DbalFinderQuery extends AbstractDbalQuery
                 tm.*,
                 COALESCE(tl.title, tm.title) AS title,
                 COALESCE(tl.slug, tm.slug) AS slug,
-                COALESCE(tl.introduction, tm.introduction) AS introduction,
-                COALESCE(tl.content_compiled, tm.content_compiled) AS content,
                 COALESCE(tl.locale, :tl_locale) AS locale,
                 GROUP_CONCAT(tnhf.flag SEPARATOR \',\') AS flags
             ');

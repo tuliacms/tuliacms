@@ -8,12 +8,13 @@ use Tulia\Cms\ContentBuilder\Domain\NodeType\Exception\NodeTypeNotExistsExceptio
 use Tulia\Cms\ContentBuilder\Domain\NodeType\Model\NodeType;
 use Tulia\Cms\ContentBuilder\Domain\NodeType\Service\NodeTypeRegistry;
 use Tulia\Cms\Metadata\Domain\WriteModel\MetadataRepository;
+use Tulia\Cms\Node\Domain\Metadata\NodeMetadataEnum;
 use Tulia\Cms\Node\Domain\WriteModel\ActionsChain\NodeActionsChainInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Event\NodeDeleted;
 use Tulia\Cms\Node\Domain\WriteModel\Event\NodeUpdated;
 use Tulia\Cms\Node\Domain\WriteModel\Exception\NodeNotFoundException;
 use Tulia\Cms\Node\Domain\WriteModel\Model\Node;
-use Tulia\Cms\Node\Domain\Metadata\NodeMetadataEnum;
+use Tulia\Cms\Node\Domain\WriteModel\Model\ValueObject\AttributeInfo;
 use Tulia\Cms\Node\Domain\WriteModel\Ports\NodeWriteStorageInterface;
 use Tulia\Cms\Platform\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
 use Tulia\Cms\Platform\Infrastructure\Bus\Event\EventBusInterface;
@@ -59,12 +60,26 @@ class NodeRepository
 
     public function createNew(string $nodeType): Node
     {
-        return Node::createNew(
+        $type = $this->nodeTypeRegistry->get($nodeType);
+
+        $node = Node::createNew(
             $this->uuidGenerator->generate(),
-            $this->nodeTypeRegistry->get($nodeType),
+            $nodeType,
             $this->currentWebsite->getId(),
             $this->currentWebsite->getLocale()->getCode()
         );
+
+        foreach ($this->buildAttributesMapping($type) as $name => $info) {
+            $node->addAttributeInfo($name, new AttributeInfo(
+                $info['multilingual'],
+                $info['multiple'],
+                $info['compilable'],
+                $info['is_slug'],
+                $info['is_title'],
+            ));
+        }
+
+        return $node;
     }
 
     /**
@@ -84,7 +99,19 @@ class NodeRepository
             throw new NodeNotFoundException();
         }
 
-        $node = Node::buildFromArray($this->nodeTypeRegistry->get($node['type']), [
+        $nodeType = $this->nodeTypeRegistry->get($node['type']);
+
+        $attributes = [];
+        $attributes['flags'] = array_filter(explode(',', (string) $node['flags']));
+
+        if ($field = $nodeType->getTitleField()) {
+            $attributes[$field->getName()] = $node['title'];
+        }
+        if ($field = $nodeType->getSlugField()) {
+            $attributes[$field->getName()] = $node['slug'];
+        }
+
+        $node = Node::buildFromArray($node['type'], [
             'id'            => $node['id'],
             'website_id'    => $node['website_id'],
             'published_at'  => new ImmutableDateTime($node['published_at']),
@@ -94,23 +121,22 @@ class NodeRepository
             'status'        => $node['status'] ?? '',
             'author_id'     => $node['author_id'] ?? null,
             //'category'      => $node['category'] ?? null,
-            'slug'          => $node['slug'] ?? '',
-            'title'         => $node['title'] ?? '',
             'level'         => (int) $node['level'],
             'parent_id'     => $node['parent_id'] ?? null,
             'locale'        => $node['locale'],
             'translated'    => $node['translated'] ?? true,
-            'flags'         => array_filter(explode(',', (string) $node['flags'])),
+            'attributes'    => $attributes,
+            'attributes_mapping' => $this->buildAttributesMapping($nodeType),
         ]);
 
-        //$this->actionsChain->execute('find', $node);
+        $this->actionsChain->execute('find', $node);
 
         return $node;
     }
 
     public function insert(Node $node): void
     {
-        //$this->actionsChain->execute('insert', $node);
+        $this->actionsChain->execute('insert', $node);
 
         $this->storage->beginTransaction();
 
@@ -132,7 +158,7 @@ class NodeRepository
 
     public function update(Node $node): void
     {
-        //$this->actionsChain->execute('update', $node);
+        $this->actionsChain->execute('update', $node);
 
         $this->storage->beginTransaction();
 
@@ -174,7 +200,7 @@ class NodeRepository
     {
         return [
             'id'            => $node->getId()->getId(),
-            'type'          => $node->getType()->getType(),
+            'type'          => $node->getType(),
             'website_id'    => $node->getWebsiteId(),
             'published_at'  => $node->getPublishedAt(),
             'published_to'  => $node->getPublishedTo(),
@@ -190,5 +216,22 @@ class NodeRepository
             'locale'        => $node->getLocale(),
             'flags'         => $node->getFlags(),
         ];
+    }
+
+    private function buildAttributesMapping(NodeType $nodeType): array
+    {
+        $result = [];
+
+        foreach ($nodeType->getFields() as $field) {
+            $result[$field->getName()] = [
+                'multilingual' => $field->isMultilingual(),
+                'multiple' => $field->isMultiple(),
+                'compilable' => $field->hasFlag('compilable'),
+                'is_slug' => $field->isSlug(),
+                'is_title' => $field->isTitle(),
+            ];
+        }
+
+        return $result;
     }
 }

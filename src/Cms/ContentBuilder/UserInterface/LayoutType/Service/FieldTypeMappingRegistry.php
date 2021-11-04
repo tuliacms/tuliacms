@@ -30,6 +30,11 @@ class FieldTypeMappingRegistry
         return $this->mapping[$type]['classname'];
     }
 
+    public function getTypeFlags(string $type): array
+    {
+        return isset($this->mapping[$type]) ? $this->mapping[$type]['flags'] : [];
+    }
+
     public function hasType(string $type): bool
     {
         return isset($this->mapping[$type]);

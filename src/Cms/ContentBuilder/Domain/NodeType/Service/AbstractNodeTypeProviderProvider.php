@@ -6,12 +6,20 @@ namespace Tulia\Cms\ContentBuilder\Domain\NodeType\Service;
 
 use Tulia\Cms\ContentBuilder\Domain\NodeType\Model\Field;
 use Tulia\Cms\ContentBuilder\Domain\NodeType\Model\NodeType;
+use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\FieldTypeMappingRegistry;
 
 /**
  * @author Adam Banaszkiewicz
  */
 abstract class AbstractNodeTypeProviderProvider implements NodeTypeProviderInterface
 {
+    private FieldTypeMappingRegistry $fieldTypeMappingRegistry;
+
+    public function __construct(FieldTypeMappingRegistry $fieldTypeMappingRegistry)
+    {
+        $this->fieldTypeMappingRegistry = $fieldTypeMappingRegistry;
+    }
+
     protected function buildNodeType(string $name, array $options): NodeType
     {
         $nodeType = new NodeType($name, $options['layout']);
@@ -39,7 +47,8 @@ abstract class AbstractNodeTypeProviderProvider implements NodeTypeProviderInter
             $options['multilingual'],
             $options['multiple'],
             $options['constraints'],
-            $options['options']
+            $options['options'],
+            $this->fieldTypeMappingRegistry->getTypeFlags($options['type'])
         );
     }
 }

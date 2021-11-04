@@ -84,6 +84,7 @@ class Configuration implements ConfigurationInterface
                                     ->arrayPrototype()
                                         ->addDefaultsIfNotSet()
                                         ->children()
+                                            ->arrayNode('flags')->scalarPrototype()->defaultValue([])->end()->end()
                                             ->scalarNode('label')->isRequired()->end()
                                             ->scalarNode('classname')->isRequired()->end()
                                         ->end()

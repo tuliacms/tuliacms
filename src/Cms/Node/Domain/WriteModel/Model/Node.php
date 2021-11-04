@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Domain\WriteModel\Model;
 
-use Tulia\Cms\ContentBuilder\Domain\NodeType\Model\FieldValue;
-use Tulia\Cms\ContentBuilder\Domain\NodeType\Model\NodeType;
 use Tulia\Cms\Node\Domain\WriteModel\Event;
+use Tulia\Cms\Node\Domain\WriteModel\Model\ValueObject\AttributeInfo;
 use Tulia\Cms\Node\Domain\WriteModel\Model\ValueObject\NodeId;
 use Tulia\Cms\Platform\Domain\WriteModel\Model\AggregateRoot;
 use Tulia\Cms\Platform\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
@@ -18,7 +17,7 @@ class Node extends AggregateRoot
 {
     protected NodeId $id;
 
-    protected NodeType $type;
+    protected string $type;
 
     protected string $status = 'draft';
 
@@ -46,7 +45,12 @@ class Node extends AggregateRoot
 
     protected array $attributes = [];
 
-    private function __construct(string $id, NodeType $type, string $websiteId, string $locale)
+    /**
+     * @var AttributeInfo[]
+     */
+    protected array $attributesInfo = [];
+
+    private function __construct(string $id, string $type, string $websiteId, string $locale)
     {
         $this->id = new NodeId($id);
         $this->type = $type;
@@ -57,15 +61,15 @@ class Node extends AggregateRoot
         $this->publishedAt = new ImmutableDateTime();
     }
 
-    public static function createNew(string $id, NodeType $type, string $websiteId, string $locale): self
+    public static function createNew(string $id, string $type, string $websiteId, string $locale): self
     {
         $self = new self($id, $type, $websiteId, $locale);
-        $self->recordThat(new Event\NodeCreated($id, $websiteId, $locale, $type->getType()));
+        $self->recordThat(new Event\NodeCreated($id, $websiteId, $locale, $type));
 
         return $self;
     }
 
-    public static function buildFromArray(NodeType $nodeType, array $data): self
+    public static function buildFromArray(string $nodeType, array $data): self
     {
         $self = new self(
             $data['id'],
@@ -84,34 +88,22 @@ class Node extends AggregateRoot
         //$self->categoryId = $data['category'] ?? null;
         $self->translated = (bool) ($data['translated'] ?? true);
 
-        unset(
-            $data['id'],
-            $data['website_id'],
-            $data['locale'],
-            $data['status'],
-            $data['translated'],
-            //$data['category'],
-            $data['level'],
-            $data['author_id'],
-            $data['parent_id'],
-            $data['created_at'],
-            $data['updated_at'],
-            $data['published_at'],
-            $data['published_to'],
-        );
+        foreach ($data['attributes_mapping'] as $name => $info) {
+            $self->attributesInfo[$name] = new AttributeInfo(
+                $info['multilingual'],
+                $info['multiple'],
+                $info['compilable'],
+                $info['is_slug'],
+                $info['is_title'],
+            );
+        }
 
-        foreach ($data as $key => $value) {
-            if ($nodeType->hasField($key) === false) {
+        foreach ($data['attributes'] as $name => $value) {
+            if (isset($self->attributesInfo[$name]) === false) {
                 continue;
             }
 
-            $field = $nodeType->getField($key);
-
-            $self->attributes[$field->getName()] = new FieldValue(
-                $value,
-                $field->isMultiple(),
-                $field->isMultilingual()
-            );
+            $self->attributes[$name] = $value;
         }
 
         return $self;
@@ -122,24 +114,23 @@ class Node extends AggregateRoot
         return $this->id;
     }
 
-    public function getType(): NodeType
+    public function getType(): string
     {
         return $this->type;
     }
 
-    public function getAttributes(): array
+    public function getAttributeInfo(string $name): AttributeInfo
     {
-        return array_combine(
-            array_keys($this->attributes),
-            array_map(static function ($value) {
-                return $value->getValue();
-            }, $this->attributes)
-        );
+        return $this->attributesInfo[$name];
     }
 
-    /**
-     * @param FieldValue[] $attributes
-     */
+    public function addAttributeInfo(string $name, AttributeInfo $info): void
+    {
+        $this->validateAttributeName($name);
+
+        $this->attributesInfo[$name] = $info;
+    }
+
     public function updateAttributes(array $attributes): void
     {
         unset(
@@ -148,18 +139,20 @@ class Node extends AggregateRoot
             $attributes['status']
         );
 
-        foreach ($attributes as $name => $attribute) {
-            $this->validateAttributeName($name);
-            $this->validateAttributeClassname($attribute);
-
-            if ($name === 'flags') {
-                $this->updateFlags($attribute->getValue());
+        foreach ($attributes as $name => $value) {
+            if (isset($this->attributesInfo[$name]) === false) {
+                throw new \Exception(sprintf('Attribute "%s" Must have AttributeInfo for this attribute.', $name));
             }
 
-            $this->attributes[$name] = $attribute;
+            $this->attributes[$name] = $value;
         }
 
         $this->markAsUpdated();
+    }
+
+    public function getAttributes(): array
+    {
+        return $this->attributes;
     }
 
     public function removeAttribute(string $code): void
@@ -181,12 +174,12 @@ class Node extends AggregateRoot
 
     public function hasFlag(string $flag): bool
     {
-        return isset($this->attributes['flags']) && \in_array($flag, $this->attributes['flags']->getValue(), true);
+        return isset($this->attributes['flags']) && \in_array($flag, $this->attributes['flags'], true);
     }
 
     public function getFlags(): array
     {
-        return $this->attributes['flags']->getValue() ?? [];
+        return $this->attributes['flags'] ?? [];
     }
 
 
@@ -210,20 +203,13 @@ class Node extends AggregateRoot
     private function validateAttributeName($code): void
     {
         if (is_string($code) === false) {
-            echo 'Must be string.';exit;
+            throw new \Exception('Must be string.');
         }
         if (strlen($code) < 2) {
-            echo 'Must have more than 2 chars.';exit;
+            throw new \Exception('Must have more than 2 chars.');
         }
         if (! preg_match('/^([a-z0-9_]+)$/m', $code)) {
-            echo 'Must contains only alphanumericals and underscores.';exit;
-        }
-    }
-
-    private function validateAttributeClassname($attribute): void
-    {
-        if (! $attribute instanceof FieldValue) {
-            echo 'Must be instance of ' . FieldValue::class;exit;
+            throw new \Exception('Must contains only alphanumericals and underscores.');
         }
     }
 
@@ -327,25 +313,24 @@ class Node extends AggregateRoot
 
     public function getTitle(): ?string
     {
-        $field = $this->type->getTitleField();
-
-
-        if ($field === null || isset($this->attributes[$field->getName()]) === false) {
-            return null;
+        foreach ($this->attributesInfo as $name => $info) {
+            if ($info->isTitle()) {
+                return $this->attributes[$name] ?? null;
+            }
         }
 
-        return $this->attributes[$field->getName()]->getValue();
+        return null;
     }
 
     public function getSlug(): ?string
     {
-        $field = $this->type->getSlugField();
-
-        if ($field === null || isset($this->attributes[$field->getName()]) === false) {
-            return null;
+        foreach ($this->attributesInfo as $name => $info) {
+            if ($info->isSlug()) {
+                return $this->attributes[$name] ?? null;
+            }
         }
 
-        return $this->attributes[$field->getName()]->getValue();
+        return null;
     }
 
     public function isTranslated(): bool

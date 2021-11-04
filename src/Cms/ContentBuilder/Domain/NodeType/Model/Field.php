@@ -18,6 +18,7 @@ class Field
     private bool $multiple;
     private array $constraints;
     private array $options;
+    private array $flags;
 
     public function __construct(
         string $name,
@@ -28,7 +29,8 @@ class Field
         bool $multilingual,
         bool $multiple,
         array $constraints,
-        array $options
+        array $options,
+        array $flags = []
     ) {
         $this->name = $name;
         $this->type = $type;
@@ -39,6 +41,7 @@ class Field
         $this->multiple = $multiple;
         $this->constraints = $constraints;
         $this->options = $options;
+        $this->flags = $flags;
     }
 
     public function getName(): string
@@ -89,5 +92,10 @@ class Field
     public function getOption(string $name, $default = null)
     {
         return $this->options[$name] ?? $default;
+    }
+
+    public function hasFlag(string $flag): bool
+    {
+        return in_array($flag, $this->flags, true);
     }
 }

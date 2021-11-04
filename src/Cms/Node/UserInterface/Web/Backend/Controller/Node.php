@@ -106,7 +106,7 @@ class Node extends AbstractController
         $node = $this->repository->createNew($node_type);
 
         $formDescriptor = $this->formService->buildFormDescriptor(
-            $node->getType()->getType(),
+            $node->getType(),
             $node->getId()->getId(),
             $node->getAttributes(),
             $request
@@ -141,7 +141,7 @@ class Node extends AbstractController
         try {
             $node = $this->repository->find($id);
 
-            if ($node->getType()->getType() !== $node_type) {
+            if ($node->getType() !== $node_type) {
                 throw new NodeNotFoundException();
             }
         } catch (NodeNotFoundException|NodeTypeNotExistsException $e) {
@@ -150,7 +150,7 @@ class Node extends AbstractController
         }
 
         $formDescriptor = $this->formService->buildFormDescriptor(
-            $node->getType()->getType(),
+            $node->getType(),
             $node->getId()->getId(),
             $node->getAttributes(),
             $request
