@@ -24,6 +24,7 @@ cms:
                         type: text
                         label: title
                         multilingual: true
+                        multiple: true
                         constraints:
                             - { name: required }
                     slug:

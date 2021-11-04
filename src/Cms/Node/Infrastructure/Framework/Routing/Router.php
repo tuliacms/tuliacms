@@ -73,14 +73,9 @@ class Router implements RouterInterface, RequestMatcherInterface
             '_locale' => 'pl_PL',//$this->getContext()->getParameter('_content_locale'),
         ], $parameters);
 
-        try {
-            $node = $this->getNodeForGenerate($identity, $parameters['_locale']);
+        $node = $this->getNodeForGenerate($identity, $parameters['_locale']);
 
-            if (! $node) {
-                return null;
-            }
-        } catch (\Exception $e) {
-            $this->logger->error(sprintf('Exception during generation node path: %s', $e->getMessage()));
+        if (! $node) {
             return null;
         }
 
@@ -100,13 +95,7 @@ class Router implements RouterInterface, RequestMatcherInterface
         $pathinfo = urldecode($pathinfo);
         $pathinfo = $this->frontendRouteSuffixResolver->removeSuffix($pathinfo);
 
-        try {
-            /** @var Node $node */
-            $node = $this->getNode(substr($pathinfo, 1));
-        } catch (\Exception $e) {
-            $this->logger->error(sprintf('Exception during match node path: %s', $e->getMessage()));
-            throw new ResourceNotFoundException('Node not found with given path.');
-        }
+        $node = $this->getNode(substr($pathinfo, 1));
 
         if (! $node) {
             throw new ResourceNotFoundException('Node not found with given path.');

@@ -150,7 +150,7 @@ class SymfonyRouterDecorator implements RouterInterface, RequestMatcherInterface
             ? "this request\n$request"
             : "url '$pathinfo'";
 
-        throw $methodNotAllowedException ?: new ResourceNotFoundException("None of the routers in the chain matched $info");
+        throw $methodNotAllowedException ?: new ResourceNotFoundException("None of the routers in the chain matched $info", 0, $e);
     }
 
     private function createRequest(string $pathinfo): Request
