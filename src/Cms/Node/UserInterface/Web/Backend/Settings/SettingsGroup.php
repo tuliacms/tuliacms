@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Node\UserInterface\Web\Backend\Settings;
 
 use Symfony\Component\Form\FormInterface;
-use Tulia\Cms\Node\Domain\NodeType\NodeType;
+use Tulia\Cms\ContentBuilder\Domain\NodeType\Model\NodeType;
 use Tulia\Cms\Settings\Ports\Domain\Group\AbstractSettingsGroup;
 
 /**

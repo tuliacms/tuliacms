@@ -15,12 +15,6 @@ services:
         resource: '../../../../**'
         exclude: '../../../../{Infrastructure/Framework/Resources}'
 
-    Tulia\Cms\Node\Domain\NodeType\NodeTypeRegistryInterface:
-        class: Tulia\Cms\Node\Domain\NodeType\NodeTypeRegistry
-        bind:
-            $registrators: !tagged_iterator node.type.registrator
-            $storages: !tagged_iterator node.type.storage
-
     Tulia\Cms\Node\Domain\NodeFlag\NodeFlagRegistryInterface:
         class: Tulia\Cms\Node\Domain\NodeFlag\NodeFlagRegistry
         bind:
@@ -28,9 +22,6 @@ services:
 
     Tulia\Cms\Node\Infrastructure\Framework\Routing\Router:
         tags: [ routing_chain.router ]
-
-    Tulia\Cms\Node\Domain\NodeType\DefaultTypesRegistrator:
-        tags: [ node.type.registrator ]
 
     Tulia\Cms\Node\Domain\Menu\IdentityProvider:
         tags: [ menu.identity_provider ]
@@ -53,9 +44,6 @@ services:
 
     Tulia\Cms\Node\UserInterface\Web\Backend\Form\Extension\AuthorExtension:
         tags: [ form_extension ]
-
-    Tulia\Cms\Node\UserInterface\Web\Backend\Form\Extension\NodeTypeExtensionAggregate:
-        tags: [ form_extension_aggregate ]
 
     Tulia\Cms\Node\UserInterface\Web\Backend\Form\Extension\DefaultFieldsExtension:
         tags: [ form_extension ]

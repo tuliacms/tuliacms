@@ -7,9 +7,8 @@ namespace Tulia\Cms\Node\UserInterface\Web\Backend\BackendMenu;
 use Tulia\Cms\BackendMenu\Ports\Domain\Builder\BuilderInterface;
 use Tulia\Cms\BackendMenu\Domain\Builder\Helper\BuilderHelperInterface;
 use Tulia\Cms\BackendMenu\Domain\Builder\Registry\ItemRegistryInterface;
-use Tulia\Cms\Node\Domain\NodeType\Enum\ParametersEnum;
-use Tulia\Cms\Node\Domain\NodeType\NodeTypeInterface;
-use Tulia\Cms\Node\Domain\NodeType\NodeTypeRegistryInterface as NodeRegistry;
+use Tulia\Cms\ContentBuilder\Domain\NodeType\Model\NodeType;
+use Tulia\Cms\ContentBuilder\Domain\NodeType\Service\NodeTypeRegistry;
 use Tulia\Cms\Taxonomy\Domain\TaxonomyType\RegistryInterface as TaxonomyRegistry;
 
 /**
@@ -19,13 +18,13 @@ class NodeMenuBuilder implements BuilderInterface
 {
     protected BuilderHelperInterface $helper;
 
-    protected NodeRegistry $nodeRegistry;
+    protected NodeTypeRegistry $nodeRegistry;
 
     protected TaxonomyRegistry $taxonomyRegistry;
 
     public function __construct(
         BuilderHelperInterface $helper,
-        NodeRegistry $nodeRegistry,
+        NodeTypeRegistry $nodeRegistry,
         TaxonomyRegistry $taxonomyRegistry
     ) {
         $this->helper = $helper;
@@ -33,28 +32,21 @@ class NodeMenuBuilder implements BuilderInterface
         $this->taxonomyRegistry = $taxonomyRegistry;
     }
 
-    /**
-     * @param ItemRegistryInterface $registry
-     */
     public function build(ItemRegistryInterface $registry): void
     {
-        foreach ($this->nodeRegistry->getRegisteredTypesNames() as $name) {
-            $this->registerNodeType($registry, $this->nodeRegistry->getType($name));
+        foreach ($this->nodeRegistry->getTypes() as $type) {
+            $this->registerNodeType($registry, $this->nodeRegistry->get($type));
         }
     }
 
-    /**
-     * @param ItemRegistryInterface $registry
-     * @param NodeTypeInterface     $type
-     */
-    private function registerNodeType(ItemRegistryInterface $registry, NodeTypeInterface $type): void
+    private function registerNodeType(ItemRegistryInterface $registry, NodeType $type): void
     {
         $root = 'node_' . $type->getType();
 
         $registry->add($root, [
             'label'    => $this->helper->trans('node', [], $type->getTranslationDomain()),
             'link'     => '#',
-            'icon'     => $type->getParameter(ParametersEnum::ICON, 'fas fa-circle'),
+            'icon'     => 'fas fa-circle',
             'priority' => 3500,
         ]);
 
@@ -64,7 +56,7 @@ class NodeMenuBuilder implements BuilderInterface
             'parent'   => $root,
         ]);
 
-        foreach ($type->getTaxonomies() as $tax) {
+        /*foreach ($type->getTaxonomies() as $tax) {
             $taxonomy = $this->taxonomyRegistry->getType($tax['taxonomy']);
 
             $registry->add($root . '_' . $taxonomy->getType(), [
@@ -72,6 +64,6 @@ class NodeMenuBuilder implements BuilderInterface
                 'link'     => $this->helper->generateUrl('backend.term', [ 'taxonomyType' => $taxonomy->getType() ]),
                 'parent'   => $root,
             ]);
-        }
+        }*/
     }
 }

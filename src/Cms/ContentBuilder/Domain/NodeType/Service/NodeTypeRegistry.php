@@ -65,6 +65,14 @@ class NodeTypeRegistry
         return array_keys($this->nodeTypes);
     }
 
+    /**
+     * @return NodeType[]
+     */
+    public function all(): array
+    {
+        return $this->nodeTypes;
+    }
+
     private function fetch(): void
     {
         if ($this->nodeTypes !== []) {

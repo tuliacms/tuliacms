@@ -13,6 +13,7 @@ cms:
     content_building:
         node_types:
             page:
+                #icon: 'fas fa-file-powerpoint'
                 controller: 'Tulia\Cms\Node\UserInterface\Web\Frontend\Controller\Node::show'
                 is_routable: true
                 is_hierarchical: true
@@ -24,7 +25,6 @@ cms:
                         type: text
                         label: title
                         multilingual: true
-                        multiple: true
                         constraints:
                             - { name: required }
                     slug:
@@ -33,7 +33,7 @@ cms:
                         multilingual: true
                         constraints:
                             - { name: required }
-                            #- { name: unique, flags: globally }
+                            #- { name: unique, flags: 'globally' }
                     introduction:
                         type: textarea
                         multilingual: true

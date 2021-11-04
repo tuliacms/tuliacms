@@ -9,8 +9,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use Tulia\Cms\ContentBuilder\Domain\NodeType\Model\NodeType;
 use Tulia\Cms\Node\Infrastructure\Framework\Form\FormType\NodeTypeaheadType;
-use Tulia\Cms\Node\Domain\NodeType\NodeTypeInterface;
 use Tulia\Cms\Node\UserInterface\Web\Backend\Form\NodeForm;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType;
 use Tulia\Cms\Taxonomy\UserInterface\Web\Shared\Form\FormType\TaxonomyTypeaheadType;
@@ -23,9 +23,9 @@ use Tulia\Component\FormSkeleton\Section\SectionsBuilderInterface;
  */
 class NodeTypeExtension extends AbstractExtension
 {
-    protected NodeTypeInterface $nodeType;
+    protected NodeType $nodeType;
 
-    public function __construct(NodeTypeInterface $nodeType)
+    public function __construct(NodeType $nodeType)
     {
         $this->nodeType = $nodeType;
     }
@@ -35,6 +35,7 @@ class NodeTypeExtension extends AbstractExtension
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        return;
         if ($this->nodeType->supports('introduction')) {
             $builder->add('introduction', Type\TextareaType::class);
         }

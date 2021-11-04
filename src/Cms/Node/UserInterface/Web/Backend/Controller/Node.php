@@ -9,16 +9,14 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\ContentBuilder\Domain\NodeType\Exception\NodeTypeNotExistsException;
+use Tulia\Cms\ContentBuilder\Domain\NodeType\Model\NodeType;
+use Tulia\Cms\ContentBuilder\Domain\NodeType\Service\NodeTypeRegistry;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\LayoutBuilder;
 use Tulia\Cms\ContentBuilder\UserInterface\Web\Service\FormService;
-use Tulia\Cms\Node\Domain\NodeType\NodeTypeInterface;
-use Tulia\Cms\Node\Domain\NodeType\NodeTypeRegistryInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Exception\NodeNotFoundException;
 use Tulia\Cms\Node\Domain\WriteModel\Exception\SingularFlagImposedOnMoreThanOneNodeException;
 use Tulia\Cms\Node\Domain\WriteModel\NodeRepository;
 use Tulia\Cms\Node\Domain\ReadModel\Datatable\NodeDatatableFinderInterface;
-use Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderInterface;
-use Tulia\Cms\Node\UserInterface\Web\Backend\Form\NodeForm;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
 use Tulia\Cms\Taxonomy\Ports\Domain\ReadModel\TermFinderScopeEnum;
@@ -33,11 +31,9 @@ use Tulia\Component\Templating\ViewInterface;
  */
 class Node extends AbstractController
 {
-    private NodeTypeRegistryInterface $typeRegistry;
+    private NodeTypeRegistry $typeRegistry;
 
     private NodeRepository $repository;
-
-    private NodeFinderInterface $nodeFinder;
 
     private TaxonomyRegistry $registry;
 
@@ -48,12 +44,12 @@ class Node extends AbstractController
     private NodeDatatableFinderInterface $finder;
 
     private LayoutBuilder $layoutBuilder;
+
     private FormService $formService;
 
     public function __construct(
-        NodeTypeRegistryInterface $typeRegistry,
+        NodeTypeRegistry $typeRegistry,
         NodeRepository $repository,
-        NodeFinderInterface $nodeFinder,
         TaxonomyRegistry $registry,
         TermFinderInterface $termFinder,
         DatatableFactory $factory,
@@ -63,7 +59,6 @@ class Node extends AbstractController
     ) {
         $this->typeRegistry = $typeRegistry;
         $this->repository = $repository;
-        $this->nodeFinder = $nodeFinder;
         $this->registry = $registry;
         $this->termFinder = $termFinder;
         $this->factory = $factory;
@@ -85,7 +80,7 @@ class Node extends AbstractController
         return $this->view('@backend/node/list.tpl', [
             'nodeType'   => $nodeTypeObject,
             'datatable'  => $this->factory->create($this->finder, $request),
-            'taxonomies' => $this->collectTaxonomies($nodeTypeObject),
+            'taxonomies' => []//$this->collectTaxonomies($nodeTypeObject),
         ]);
     }
 
@@ -221,7 +216,6 @@ class Node extends AbstractController
      */
     public function delete(Request $request): RedirectResponse
     {
-        $nodeType = $this->findNodeType($request->query->get('node_type', 'page'));
         $removedNodes = 0;
 
         foreach ($request->request->get('ids') as $id) {
@@ -236,15 +230,15 @@ class Node extends AbstractController
         }
 
         if ($removedNodes) {
-            $this->setFlash('success', $this->trans('selectedNodesWereDeleted', [], $nodeType->getTranslationDomain()));
+            $this->setFlash('success', $this->trans('selectedElementsWereDeleted'));
         }
 
-        return $this->redirectToRoute('backend.node', [ 'node_type' => $nodeType->getType() ]);
+        return $this->redirectToRoute('backend.node', [ 'node_type' => $request->query->get('node_type', 'page') ]);
     }
 
-    protected function findNodeType(string $type): NodeTypeInterface
+    protected function findNodeType(string $type): NodeType
     {
-        $nodeType = $this->typeRegistry->getType($type);
+        $nodeType = $this->typeRegistry->get($type);
 
         if (! $nodeType) {
             throw $this->createNotFoundException('Node type not found.');
@@ -253,7 +247,7 @@ class Node extends AbstractController
         return $nodeType;
     }
 
-    private function collectTaxonomies(NodeTypeInterface $nodeType): array
+    private function collectTaxonomies(NodeType $nodeType): array
     {
         $result = [];
 

@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Tulia\Cms\Node\UserInterface\Web\Backend\Menu;
 
 use Symfony\Component\Form\FormFactoryInterface;
+use Tulia\Cms\ContentBuilder\Domain\NodeType\Service\NodeTypeRegistry;
 use Tulia\Cms\Menu\Domain\Builder\Type\TypeInterface;
 use Tulia\Cms\Menu\UserInterface\Web\Backend\Selector\SelectorInterface;
-use Tulia\Cms\Node\Domain\NodeType\NodeTypeRegistryInterface as NodeRegistryInterface;
 use Tulia\Cms\Node\UserInterface\Web\Backend\Form\MenuItemSelectorForm;
 use Tulia\Component\Templating\EngineInterface;
 use Tulia\Component\Templating\View;
@@ -17,14 +17,14 @@ use Tulia\Component\Templating\View;
  */
 class Selector implements SelectorInterface
 {
-    protected NodeRegistryInterface $nodeTypeRegistry;
+    protected NodeTypeRegistry $nodeTypeRegistry;
 
     protected EngineInterface $engine;
 
     protected FormFactoryInterface $formFactory;
 
     public function __construct(
-        NodeRegistryInterface $nodeTypeRegistry,
+        NodeTypeRegistry $nodeTypeRegistry,
         EngineInterface $engine,
         FormFactoryInterface $formFactory
     ) {
@@ -41,7 +41,7 @@ class Selector implements SelectorInterface
         [, $name] = explode(':', $type->getType());
         $field = 'node_search_' . $name;
 
-        $nodeType = $this->nodeTypeRegistry->getType($name);
+        $nodeType = $this->nodeTypeRegistry->get($name);
         $form = $this->formFactory->create(MenuItemSelectorForm::class, [
             $field => $identity,
         ], [

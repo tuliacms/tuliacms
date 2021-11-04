@@ -11,8 +11,8 @@ use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\RouterInterface;
+use Tulia\Cms\ContentBuilder\Domain\NodeType\Service\NodeTypeRegistry;
 use Tulia\Cms\Node\Domain\ReadModel\Model\Node;
-use Tulia\Cms\Node\Domain\NodeType\NodeTypeRegistryInterface;
 use Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderScopeEnum;
 use Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderInterface;
 use Tulia\Cms\Platform\Infrastructure\Framework\Routing\FrontendRouteSuffixResolver;
@@ -24,7 +24,7 @@ class Router implements RouterInterface, RequestMatcherInterface
 {
     private NodeFinderInterface $nodeFinder;
 
-    private NodeTypeRegistryInterface $registry;
+    private NodeTypeRegistry $registry;
 
     private FrontendRouteSuffixResolver $frontendRouteSuffixResolver;
 
@@ -34,7 +34,7 @@ class Router implements RouterInterface, RequestMatcherInterface
 
     public function __construct(
         NodeFinderInterface $nodeFinder,
-        NodeTypeRegistryInterface $registry,
+        NodeTypeRegistry $registry,
         FrontendRouteSuffixResolver $frontendRouteSuffixResolver,
         LoggerInterface $logger
     ) {
@@ -101,7 +101,7 @@ class Router implements RouterInterface, RequestMatcherInterface
             throw new ResourceNotFoundException('Node not found with given path.');
         }
 
-        $nodeType = $this->registry->getType($node->getType());
+        $nodeType = $this->registry->get($node->getType());
 
         if (! $nodeType || $nodeType->isRoutable() === false) {
             throw new ResourceNotFoundException('Node type not exists or is not routable.');
