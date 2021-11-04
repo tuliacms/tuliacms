@@ -8,7 +8,6 @@ use Doctrine\DBAL\Connection;
 use Exception;
 use PDO;
 use Tulia\Cms\Metadata\Domain\ReadModel\MetadataFinder;
-use Tulia\Cms\Node\Domain\Metadata\NodeMetadataEnum;
 use Tulia\Cms\Node\Domain\ReadModel\Model\Node;
 use Tulia\Cms\Node\Domain\WriteModel\Model\Enum\TermTypeEnum;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Exception\QueryException;
@@ -209,7 +208,7 @@ class DbalFinderQuery extends AbstractDbalQuery
         }
 
         $terms = $this->fetchTerms(array_column($result, 'id'));
-        $metadata = $this->metadataFinder->findAllAggregated(NodeMetadataEnum::TYPE, array_column($result, 'id'));
+        $metadata = $this->metadataFinder->findAllAggregated('node', array_column($result, 'id'));
 
         try {
             foreach ($result as $row) {

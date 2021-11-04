@@ -32,9 +32,6 @@ services:
     Tulia\Cms\Node\Domain\NodeType\DefaultTypesRegistrator:
         tags: [ node.type.registrator ]
 
-    Tulia\Cms\Node\Domain\Metadata\DefaultMetadataRegistrator:
-        tags: [ metadata.registrator ]
-
     Tulia\Cms\Node\Domain\Menu\IdentityProvider:
         tags: [ menu.identity_provider ]
 

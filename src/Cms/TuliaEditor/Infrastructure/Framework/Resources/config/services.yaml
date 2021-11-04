@@ -7,8 +7,5 @@ services:
         resource: '../../../../*'
         exclude: '../../../../{Infrastructure/Framework/Resources}'
 
-    Tulia\Cms\TuliaEditor\Domain\Metadata\EditorMetadataRegistrator:
-        tags: [ metadata.registrator ]
-
     Tulia\Cms\TuliaEditor\UserInterface\Web\Backend\Form\Extension\NodeFormExtension:
         tags: [ form_extension ]

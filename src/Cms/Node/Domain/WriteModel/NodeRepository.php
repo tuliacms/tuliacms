@@ -8,7 +8,6 @@ use Tulia\Cms\ContentBuilder\Domain\NodeType\Exception\NodeTypeNotExistsExceptio
 use Tulia\Cms\ContentBuilder\Domain\NodeType\Model\NodeType;
 use Tulia\Cms\ContentBuilder\Domain\NodeType\Service\NodeTypeRegistry;
 use Tulia\Cms\Metadata\Domain\WriteModel\MetadataRepository;
-use Tulia\Cms\Node\Domain\Metadata\NodeMetadataEnum;
 use Tulia\Cms\Node\Domain\WriteModel\ActionsChain\NodeActionsChainInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Event\NodeDeleted;
 use Tulia\Cms\Node\Domain\WriteModel\Event\NodeUpdated;
@@ -101,7 +100,7 @@ class NodeRepository
 
         $nodeType = $this->nodeTypeRegistry->get($node['type']);
 
-        $attributes = $this->metadataRepository->findAll(NodeMetadataEnum::TYPE, $id);
+        $attributes = $this->metadataRepository->findAll('node', $id);
         $attributes['flags'] = array_filter(explode(',', (string) $node['flags']));
 
         if ($field = $nodeType->getTitleField()) {
@@ -145,7 +144,7 @@ class NodeRepository
 
             $this->storage->insert($data, $this->currentWebsite->getDefaultLocale()->getCode());
             $this->metadataRepository->persist(
-                NodeMetadataEnum::TYPE,
+                'node',
                 $node->getId()->getId(),
                 $data['attributes']
             );
@@ -169,7 +168,7 @@ class NodeRepository
 
             $this->storage->update($data, $this->currentWebsite->getDefaultLocale()->getCode());
             $this->metadataRepository->persist(
-                NodeMetadataEnum::TYPE,
+                'node',
                 $node->getId()->getId(),
                 $data['attributes']
             );
@@ -190,7 +189,7 @@ class NodeRepository
 
         try {
             $this->storage->delete($this->extract($node));
-            $this->metadataRepository->delete(NodeMetadataEnum::TYPE, $node->getId()->getId());
+            $this->metadataRepository->delete('node', $node->getId()->getId());
             $this->storage->commit();
         } catch (\Exception $exception) {
             $this->storage->rollback();

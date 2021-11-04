@@ -19,9 +19,6 @@ services:
     Tulia\Cms\Taxonomy\UserInterface\Web\Backend\Form\Extension\TaxonomyTypeExtensionAggregate:
         tags: [ form_extension_aggregate ]
 
-    Tulia\Cms\Taxonomy\Domain\Metadata\DefaultMetadataRegistrator:
-        tags: [ metadata.registrator ]
-
     Tulia\Cms\Taxonomy\Infrastructure\Framework\Routing\Router:
         tags: [ routing_chain.router ]
 

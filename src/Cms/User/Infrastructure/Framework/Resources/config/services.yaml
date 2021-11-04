@@ -15,9 +15,6 @@ services:
         class: Tulia\Cms\User\Infrastructure\Framework\Validator\UsernameValidator
         factory: Tulia\Cms\User\Infrastructure\Framework\Validator\UsernameValidatorFactory::factory
 
-    Tulia\Cms\User\Infrastructure\Cms\Metadata\DefaultMetadataRegistrator:
-        tags: [ metadata.registrator ]
-
     Tulia\Cms\User\Infrastructure\Cms\Settings\SettingsGroup:
         tags: [ settings.group ]
 

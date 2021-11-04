@@ -8,7 +8,6 @@ use Doctrine\DBAL\Connection;
 use Exception;
 use PDO;
 use Tulia\Cms\Metadata\Domain\ReadModel\MetadataFinder;
-use Tulia\Cms\Node\Domain\Metadata\NodeMetadataEnum;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Exception\QueryException;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
@@ -165,7 +164,7 @@ class DbalQuery extends AbstractDbalQuery
             $result = $this->sortHierarchical($result, WriteModelTerm::ROOT_LEVEL + 1);
         }
 
-        $metadata = $this->metadataFinder->findAllAggregated(NodeMetadataEnum::TYPE, array_column($result, 'id'));
+        $metadata = $this->metadataFinder->findAllAggregated('node', array_column($result, 'id'));
 
         try {
             foreach ($result as $row) {
