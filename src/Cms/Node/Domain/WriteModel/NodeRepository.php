@@ -70,9 +70,10 @@ class NodeRepository
 
         foreach ($this->buildAttributesMapping($type) as $name => $info) {
             $node->addAttributeInfo($name, new AttributeInfo(
-                $info['multilingual'],
-                $info['multiple'],
-                $info['compilable'],
+                $info['is_multilingual'],
+                $info['is_multiple'],
+                $info['is_compilable'],
+                $info['is_taxonomy'],
             ));
         }
 
@@ -102,7 +103,17 @@ class NodeRepository
 
         foreach ($nodeType->getFields() as $field) {
             if ($field->isMultiple()) {
-                $attributes[$field->getName()] = (array) unserialize((string) $attributes[$field->getName()], ['allowed_classes' => []]);
+                try {
+                    $value = (array) unserialize(
+                        (string) $attributes[$field->getName()],
+                        ['allowed_classes' => []]
+                    );
+                } catch (\ErrorException $e) {
+                    // If error, than empty or cannot be unserialized from singular value
+                    $value = $attributes[$field->getName()];
+                }
+
+                $attributes[$field->getName()] = $value;
             }
         }
 
@@ -203,8 +214,9 @@ class NodeRepository
 
             $attributes[$name] = [
                 'value' => $value,
-                'multilingual' => $info->isMultilingual(),
-                'multiple' => $info->isMultiple(),
+                'is_multilingual' => $info->isMultilingual(),
+                'is_multiple' => $info->isMultiple(),
+                'is_taxonomy' => $info->isTaxonomy(),
             ];
         }
 
@@ -232,9 +244,10 @@ class NodeRepository
 
         foreach ($nodeType->getFields() as $field) {
             $result[$field->getName()] = [
-                'multilingual' => $field->isMultilingual(),
-                'multiple' => $field->isMultiple(),
-                'compilable' => $field->hasFlag('compilable'),
+                'is_multilingual' => $field->isMultilingual(),
+                'is_multiple' => $field->isMultiple(),
+                'is_compilable' => $field->hasFlag('compilable'),
+                'is_taxonomy' => $field->getType() === 'taxonomy',
             ];
         }
 

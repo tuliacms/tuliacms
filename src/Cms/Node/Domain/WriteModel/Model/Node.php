@@ -87,9 +87,10 @@ class Node extends AggregateRoot
 
         foreach ($data['attributes_mapping'] as $name => $info) {
             $self->attributesInfo[$name] = new AttributeInfo(
-                $info['multilingual'],
-                $info['multiple'],
-                $info['compilable'],
+                $info['is_multilingual'],
+                $info['is_multiple'],
+                $info['is_compilable'],
+                $info['is_taxonomy'],
             );
         }
 

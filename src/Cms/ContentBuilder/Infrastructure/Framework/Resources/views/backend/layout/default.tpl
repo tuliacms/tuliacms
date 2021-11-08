@@ -17,6 +17,7 @@
 {% endmacro %}
 
 {% macro tab(id, group, form) %}
+    {% import '@backend/_macros/form/bootstrap/badge.tpl' as badge %}
     <li class="nav-item">
         <a
                 href="#"
@@ -25,6 +26,7 @@
                 data-bs-target="#tab-{{ id }}"
         >
             {{ group.name }}
+            {{ badge.errors_count(form, group.fields|default([])) }}
         </a>
     </li>
 {% endmacro %}
@@ -62,6 +64,7 @@
 {% endmacro %}
 
 {% macro section(id, group, form, translationDomain) %}
+    {% import '@backend/_macros/form/bootstrap/badge.tpl' as badge %}
     <div class="accordion-section">
         <div
                 class="accordion-section-button {{ group.active ? '' : 'collapsed' }}"
@@ -69,6 +72,7 @@
                 data-bs-target="#form-collapse-sidebar-{{ id }}"
         >
             {{ group.label|trans({}, translationDomain) }}
+            {{ badge.errors_count(form, group.fields|default([])) }}
         </div>
         <div
                 id="form-collapse-sidebar-{{ id }}"
@@ -114,13 +118,15 @@
             {% for id, group in layout.section('main').fieldsGroups %}
                 {{ _self.tab(id, {
                     active: group.active,
-                    name: group.name|trans({}, type.translationDomain)
+                    name: group.name|trans({}, type.translationDomain),
+                    fields: group.fields
                 }, form) }}
             {% endfor %}
 
             {{ _self.tab('rest', {
                 active: false,
-                name: 'otherSettings'|trans({}, 'messages')
+                name: 'otherSettings'|trans({}, 'messages'),
+                fields: []
             }, form) }}
         </ul>
         <div class="tab-content">

@@ -47,13 +47,13 @@ class MetadataRepository
         foreach ($metadata as $name => $info) {
             $structure[$name] = [
                 'id' => $this->uuidGenerator->generate(),
-                'value' => $info['multiple'] ? serialize($info['value']) : $info['value'],
+                'value' => $info['is_multiple'] ? serialize($info['value']) : $info['value'],
                 'owner_id' => $ownerId,
                 'name' => $name,
                 'locale' => $locale,
                 'type' => $type,
-                'multilingual' => $info['multilingual'],
-                'multiple' => $info['multiple'],
+                'multilingual' => $info['is_multilingual'],
+                'multiple' => $info['is_multiple'],
             ];
         }
 
