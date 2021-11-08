@@ -30,11 +30,9 @@ class DbalNodeWriteStorage extends AbstractLocalizableStorage implements NodeWri
             $translationColumn = '1 AS translated';
         }
 
-        $node = $this->connection->fetchAll("
+        $node = $this->connection->fetchAllAssociative("
             SELECT
                 tm.*,
-                COALESCE(tl.title, tm.title) AS title,
-                COALESCE(tl.slug, tm.slug) AS slug,
                 COALESCE(tl.locale, :locale) AS locale,
                 GROUP_CONCAT(tnhf.flag SEPARATOR ',') AS flags,
                 {$translationColumn}
@@ -54,7 +52,7 @@ class DbalNodeWriteStorage extends AbstractLocalizableStorage implements NodeWri
             return [];
         }
 
-        $terms = $this->connection->fetchAll('
+        $terms = $this->connection->fetchAllAssociative('
             SELECT *
             FROM #__node_term_relationship
             WHERE node_id = :node_id', [
@@ -107,15 +105,15 @@ class DbalNodeWriteStorage extends AbstractLocalizableStorage implements NodeWri
         $mainTable['updated_at'] = $this->formatDatetime($data['updated_at']);
         $mainTable['status'] = $data['status'];
         $mainTable['author_id'] = $data['author_id'];
-        $mainTable['slug'] = $data['slug'];
-        $mainTable['title'] = $data['title'];
+        $mainTable['slug'] = $data['attributes']['slug']['value'] ?? null;
+        $mainTable['title'] = $data['attributes']['title']['value'] ?? null;
         $mainTable['level'] = $this->calculateLevel($data['parent_id']);
         $mainTable['parent_id'] = $data['parent_id'];
 
         $this->connection->insert('#__node', $mainTable);
 
-        //$this->insertCategories($data['id'], $data['category'] ? [$data['category']] : [], TermTypeEnum::MAIN);
-        $this->insertFlags($data['id'], $data['flags']);
+        $this->insertCategories($data['id'], $data['category_id'] ? [$data['category_id']] : [], TermTypeEnum::MAIN);
+        $this->insertFlags($data['id'], $data['attributes']['flags']['value'] ?? []);
     }
 
     protected function updateMainRow(array $data, bool $foreignLocale): void
@@ -134,14 +132,14 @@ class DbalNodeWriteStorage extends AbstractLocalizableStorage implements NodeWri
         $mainTable['parent_id'] = $data['parent_id'];
 
         if ($foreignLocale === false) {
-            $mainTable['slug'] = $data['slug'];
-            $mainTable['title'] = $data['title'];
+            $mainTable['slug'] = $data['attributes']['slug']['value'] ?? null;
+            $mainTable['title'] = $data['attributes']['title']['value'] ?? null;
         }
 
         $this->connection->update('#__node', $mainTable, ['id' => $data['id']]);
 
-        //$this->insertCategories($data['id'], $data['category'] ? [$data['category']] : [], TermTypeEnum::MAIN);
-        $this->insertFlags($data['id'], $data['flags']);
+        $this->insertCategories($data['id'], $data['category_id'] ? [$data['category_id']] : [], TermTypeEnum::MAIN);
+        $this->insertFlags($data['id'], $data['attributes']['flags']['value'] ?? []);
     }
 
     protected function insertLangRow(array $data): void
@@ -149,8 +147,8 @@ class DbalNodeWriteStorage extends AbstractLocalizableStorage implements NodeWri
         $langTable = [];
         $langTable['node_id'] = $data['id'];
         $langTable['locale'] = $data['locale'];
-        $langTable['slug'] = $data['slug'];
-        $langTable['title'] = $data['title'];
+        $langTable['slug'] = $data['attributes']['slug']['value'] ?? null;
+        $langTable['title'] = $data['attributes']['title']['value'] ?? null;
 
         $this->connection->insert('#__node_lang', $langTable);
     }
@@ -158,8 +156,8 @@ class DbalNodeWriteStorage extends AbstractLocalizableStorage implements NodeWri
     protected function updateLangRow(array $data): void
     {
         $langTable = [];
-        $langTable['slug'] = $data['slug'];
-        $langTable['title'] = $data['title'];
+        $langTable['slug'] = $data['attributes']['slug']['value'] ?? null;
+        $langTable['title'] = $data['attributes']['title']['value'] ?? null;
 
         $this->connection->update('#__node_lang', $langTable, [
             'node_id' => $data['id'],
@@ -206,7 +204,7 @@ class DbalNodeWriteStorage extends AbstractLocalizableStorage implements NodeWri
             $new = [$new[0]];
         }
 
-        $current = $this->connection->fetchAll('
+        $current = $this->connection->fetchAllAssociative('
             SELECT term_id
             FROM #__node_term_relationship
             WHERE node_id = :node_id AND `type` = :type', [

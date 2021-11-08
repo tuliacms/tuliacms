@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContentBuilder\Domain\TaxonomyType\Model;
 
+use Tulia\Cms\ContentBuilder\Domain\Field\Model\Field;
 use Tulia\Cms\ContentBuilder\Domain\TaxonomyType\Exception\MultipleValueForTitleOrSlugOccuredException;
 
 /**

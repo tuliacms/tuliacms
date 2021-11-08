@@ -35,8 +35,8 @@ class SlugGenerator implements NodeActionInterface
 
     public function execute(Node $node): void
     {
-        $slug  = $node->getSlug();
-        $title = $node->getTitle();
+        $slug  = $node->getAttribute('slug');
+        $title = $node->getAttribute('title');
 
         if (! $slug && ! $title) {
             $node->updateAttributes(['slug' => uniqid('temporary-slug-', true)]);

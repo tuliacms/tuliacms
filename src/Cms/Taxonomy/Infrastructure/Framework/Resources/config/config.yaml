@@ -6,3 +6,12 @@ framework:
         paths:
             - { name: backend/taxonomy, path: '%kernel.project_dir%/src/Cms/Taxonomy/Infrastructure/Framework/Resources/views/backend' }
             - { name: cms/taxonomy, path: '%kernel.project_dir%/src/Cms/Taxonomy/Infrastructure/Framework/Resources/views/frontend' }
+
+cms:
+    content_building:
+        data_types:
+            mapping:
+                taxonomy:
+                    label: Taxonomy
+                    classname: 'Tulia\Cms\Taxonomy\UserInterface\Web\Shared\Form\FormType\TaxonomyTypeaheadType'
+                    builder: 'Tulia\Cms\Taxonomy\UserInterface\Web\Shared\Form\FormType\TaxonomyTypeaheadTypeBuilder'

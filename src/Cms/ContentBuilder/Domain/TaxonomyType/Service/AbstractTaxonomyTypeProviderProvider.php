@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContentBuilder\Domain\TaxonomyType\Service;
 
-use Tulia\Cms\ContentBuilder\Domain\TaxonomyType\Model\Field;
+use Tulia\Cms\ContentBuilder\Domain\Field\Model\Field;
 use Tulia\Cms\ContentBuilder\Domain\TaxonomyType\Model\TaxonomyType;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\FieldTypeMappingRegistry;
 
@@ -38,15 +38,15 @@ abstract class AbstractTaxonomyTypeProviderProvider implements TaxonomyTypeProvi
 
     protected function buildNodeField(string $name, array $options): Field
     {
-        return new Field(
-            $name,
-            $options['type'],
-            (string) $options['label'],
-            $options['multilingual'],
-            $options['multiple'],
-            $options['constraints'],
-            $options['options'],
-            $this->fieldTypeMappingRegistry->getTypeFlags($options['type'])
-        );
+        return new Field([
+            'name' => $name,
+            'type' => $options['type'],
+            'label' => (string) $options['label'],
+            'multilingual' => $options['multilingual'],
+            'multiple' => $options['multiple'],
+            'constraints' => $options['constraints'],
+            'flags' => $options['options'],
+            'options' => $this->fieldTypeMappingRegistry->getTypeFlags($options['type'])
+        ]);
     }
 }

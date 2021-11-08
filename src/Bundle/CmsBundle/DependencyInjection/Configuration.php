@@ -87,6 +87,7 @@ class Configuration implements ConfigurationInterface
                                             ->arrayNode('flags')->scalarPrototype()->defaultValue([])->end()->end()
                                             ->scalarNode('label')->isRequired()->end()
                                             ->scalarNode('classname')->isRequired()->end()
+                                            ->scalarNode('builder')->defaultNull()->end()
                                         ->end()
                                     ->end()
                                 ->end()
@@ -97,12 +98,10 @@ class Configuration implements ConfigurationInterface
                             ->beforeNormalization()
                                 ->always(function ($types) {
                                     foreach ($types as $name => $type) {
-                                        if (! ($type['is_routable'] ?? false)) {
-                                            continue;
-                                        }
-
-                                        if (isset($type['fields']['slug']) === false) {
-                                            throw new LogicException(sprintf('Routable NodeType (%s) must have "slug" field.', $name));
+                                        foreach ($type['fields'] as $fieldName => $field) {
+                                            if (isset($field['taxonomy']) && $field['type'] !== 'taxonomy') {
+                                                throw new LogicException(sprintf('Field "%s" cannot have "taxonomy" option set, if field is not a "taxonomy" type.', $fieldName));
+                                            }
                                         }
                                     }
 
@@ -146,7 +145,7 @@ class Configuration implements ConfigurationInterface
                                                 ->scalarNode('type')->defaultNull()->end()
                                                 ->booleanNode('multilingual')->defaultFalse()->end()
                                                 ->booleanNode('multiple')->defaultFalse()->end()
-                                                ->variableNode('options')->defaultValue([])->end()
+                                                ->scalarNode('taxonomy')->defaultNull()->end()
                                                 ->arrayNode('constraints')
                                                     ->arrayPrototype()
                                                         ->children()
@@ -207,7 +206,6 @@ class Configuration implements ConfigurationInterface
                                                 ->scalarNode('type')->defaultNull()->end()
                                                 ->booleanNode('multilingual')->defaultFalse()->end()
                                                 ->booleanNode('multiple')->defaultFalse()->end()
-                                                ->variableNode('options')->defaultValue([])->end()
                                                 ->arrayNode('constraints')
                                                     ->arrayPrototype()
                                                         ->children()

@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContentBuilder\Infrastructure\Persistence\NodeTypeProvider;
 
-use Tulia\Cms\ContentBuilder\Domain\NodeType\Service\AbstractNodeTypeProviderProvider;
+use Tulia\Cms\ContentBuilder\Domain\NodeType\Service\AbstractNodeTypeProvider;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\FieldTypeMappingRegistry;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class ContainerProvider extends AbstractNodeTypeProviderProvider
+class ContainerProvider extends AbstractNodeTypeProvider
 {
     private array $config;
 

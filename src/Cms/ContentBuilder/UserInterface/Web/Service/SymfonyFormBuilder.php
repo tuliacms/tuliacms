@@ -48,6 +48,8 @@ class SymfonyFormBuilder
 
         foreach ($nodeType->getFields() as $field) {
             try {
+                $typeBuilder = $this->mappingRegistry->getTypeBuilder($field->getType());
+
                 $options = array_merge([
                     'label' => $field->getLabel() === ''
                         ? false
@@ -56,6 +58,10 @@ class SymfonyFormBuilder
                         $field->getConstraints()
                     )
                 ], $field->getOptions());
+
+                if ($typeBuilder) {
+                    $options = (new $typeBuilder)->build($field, $options);
+                }
 
                 $builder->add(
                     $field->getName(),

@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContentBuilder\Domain\NodeType\Model;
 
+use Tulia\Cms\ContentBuilder\Domain\Field\Model\Field;
+use Tulia\Cms\ContentBuilder\Domain\NodeType\Exception\CannotSetRoutableNodeTypeWithoutSlugField;
+use Tulia\Cms\ContentBuilder\Domain\NodeType\Exception\MissingRoutableFieldException;
 use Tulia\Cms\ContentBuilder\Domain\NodeType\Exception\MultipleValueForTitleOrSlugOccuredException;
+use Tulia\Cms\ContentBuilder\Domain\NodeType\Exception\RoutableFieldIsNotTaxonomyTypeException;
 
 /**
  * @author Adam Banaszkiewicz
@@ -66,9 +70,16 @@ class NodeType
         return $this->isRoutable;
     }
 
+    /**
+     * @throws CannotSetRoutableNodeTypeWithoutSlugField
+     */
     public function setIsRoutable(bool $isRoutable): void
     {
         $this->isRoutable = $isRoutable;
+
+        if ($isRoutable) {
+            $this->validateRoutableNodeType();
+        }
     }
 
     public function isHierarchical(): bool
@@ -86,9 +97,17 @@ class NodeType
         return $this->routableTaxonomyField;
     }
 
+    /**
+     * @throws MissingRoutableFieldException
+     * @throws RoutableFieldIsNotTaxonomyTypeException
+     */
     public function setRoutableTaxonomyField(?string $routableTaxonomyField): void
     {
         $this->routableTaxonomyField = $routableTaxonomyField;
+
+        if ($routableTaxonomyField) {
+            $this->validateRoutableTaxonomy();
+        }
     }
 
     /**
@@ -126,6 +145,11 @@ class NodeType
         return $field;
     }
 
+    public function getRutableField(): ?Field
+    {
+        return $this->fields[$this->routableTaxonomyField] ?? null;
+    }
+
     public function getIcon(): string
     {
         return $this->icon;
@@ -151,6 +175,29 @@ class NodeType
     {
         if ($field->isMultiple() && in_array($field->getName(), ['title', 'slug'])) {
             throw MultipleValueForTitleOrSlugOccuredException::fromFieldType($field->getName());
+        }
+    }
+
+    /**
+     * @throws MissingRoutableFieldException
+     * @throws RoutableFieldIsNotTaxonomyTypeException
+     */
+    private function validateRoutableTaxonomy(): void
+    {
+        if (isset($this->fields[$this->routableTaxonomyField]) === false) {
+            throw MissingRoutableFieldException::fromName($this->type, $this->routableTaxonomyField);
+        } elseif ($this->fields[$this->routableTaxonomyField]->getType() !== 'taxonomy') {
+            throw RoutableFieldIsNotTaxonomyTypeException::fromName($this->type, $this->routableTaxonomyField);
+        }
+    }
+
+    /**
+     * @throws CannotSetRoutableNodeTypeWithoutSlugField
+     */
+    private function validateRoutableNodeType(): void
+    {
+        if ($this->isRoutable && isset($this->fields['slug']) === false) {
+            throw CannotSetRoutableNodeTypeWithoutSlugField::fromType($this->type);
         }
     }
 }

@@ -41,11 +41,14 @@ cms:
                     content:
                         type: wysiwyg
                         multilingual: true
-                    #category:
-                    #    label: category
-                    #    type: taxonomy
-                        #relation:
-                        #    type:
+                    category:
+                        label: category
+                        type: taxonomy
+                        taxonomy: category
+                    tags:
+                        label: tags
+                        type: taxonomy
+                        taxonomy: tag
 
         taxonomy_types:
             category:
@@ -89,10 +92,10 @@ cms:
                                 fields: [content]
                     sidebar:
                         groups:
-                            introduction:
+                            category:
                                 active: true
-                                label: introduction
-                                fields: []
+                                label: category
+                                fields: [category, tags]
 
         data_types:
             mapping:

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\ContentBuilder\Domain\NodeType\Service\Decorators;
 
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Tulia\Cms\ContentBuilder\Domain\NodeType\Model\Field;
+use Tulia\Cms\ContentBuilder\Domain\Field\Model\Field;
 use Tulia\Cms\ContentBuilder\Domain\NodeType\Model\NodeType;
 use Tulia\Cms\ContentBuilder\Domain\NodeType\Service\NodeTypeDecoratorInterface;
 use Tulia\Cms\Node\Domain\NodeFlag\NodeFlagRegistryInterface;
@@ -33,20 +33,20 @@ class FlagsDecorator implements NodeTypeDecoratorInterface
             $availableFlags[$this->translator->trans($flag['label'])] = $type;
         }
 
-        $nodeType->addField(new Field(
-            'flags',
-            'select',
-            'flags',
-            false,
-            false,
-            [],
-            [
+        $nodeType->addField(new Field([
+            'name' => 'flags',
+            'type' => 'select',
+            'label' => 'flags',
+            'multilingual' => false,
+            'multiple' => true,
+            'constraints' => [],
+            'flags' => [],
+            'options' => [
                 'choices' => $availableFlags,
-                'label' => 'flags',
                 'help' => 'flagsHelp',
                 'choice_translation_domain' => false,
                 'multiple' => true,
             ]
-        ));
+        ]));
     }
 }

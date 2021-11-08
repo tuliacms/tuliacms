@@ -37,8 +37,6 @@ class Node extends AggregateRoot
 
     protected int $level = 0;
 
-    //protected ?string $categoryId = null;
-
     protected string $locale;
 
     protected bool $translated = true;
@@ -85,7 +83,6 @@ class Node extends AggregateRoot
         $self->authorId = $data['author_id'] ?? null;
         $self->parentId = $data['parent_id'] ?? null;
         $self->level = (int) ($data['level'] ?? 0);
-        //$self->categoryId = $data['category'] ?? null;
         $self->translated = (bool) ($data['translated'] ?? true);
 
         foreach ($data['attributes_mapping'] as $name => $info) {
@@ -294,29 +291,14 @@ class Node extends AggregateRoot
         $this->level = $level;
     }
 
-    /*public function getCategoryId(): ?string
+    public function getCategoryId(): ?string
     {
-        return $this->categoryId;
+        return $this->attributes['category'] ?? null;
     }
-
-    public function setCategoryId(?string $categoryId): void
-    {
-        $this->categoryId = $categoryId;
-    }*/
 
     public function getLocale(): string
     {
         return $this->locale;
-    }
-
-    public function getTitle(): ?string
-    {
-        return $this->attributes['title'] ?? null;
-    }
-
-    public function getSlug(): ?string
-    {
-        return $this->attributes['slug'] ?? null;
     }
 
     public function isTranslated(): bool

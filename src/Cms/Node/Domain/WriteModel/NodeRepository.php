@@ -99,9 +99,12 @@ class NodeRepository
         $nodeType = $this->nodeTypeRegistry->get($node['type']);
 
         $attributes = $this->metadataRepository->findAll('node', $id);
-        $attributes['flags'] = array_filter(explode(',', (string) $node['flags']));
-        $attributes['title'] = $node['title'];
-        $attributes['slug'] = $node['slug'];
+
+        foreach ($nodeType->getFields() as $field) {
+            if ($field->isMultiple()) {
+                $attributes[$field->getName()] = (array) unserialize((string) $attributes[$field->getName()], ['allowed_classes' => []]);
+            }
+        }
 
         $node = Node::buildFromArray($node['type'], [
             'id'            => $node['id'],
@@ -112,7 +115,6 @@ class NodeRepository
             'updated_at'    => $node['updated_at'] ? new ImmutableDateTime($node['updated_at']) : null,
             'status'        => $node['status'] ?? '',
             'author_id'     => $node['author_id'] ?? null,
-            //'category'      => $node['category'] ?? null,
             'level'         => (int) $node['level'],
             'parent_id'     => $node['parent_id'] ?? null,
             'locale'        => $node['locale'],
@@ -197,10 +199,6 @@ class NodeRepository
         $attributes = [];
 
         foreach ($node->getAttributes() as $name => $value) {
-            if (in_array($name, ['title', 'slug', 'flags'])) {
-                continue;
-            }
-
             $info = $node->getAttributeInfo($name);
 
             $attributes[$name] = [
@@ -220,13 +218,10 @@ class NodeRepository
             'updated_at'    => $node->getUpdatedAt(),
             'status'        => $node->getStatus(),
             'author_id'     => $node->getAuthorId(),
-            //'category'      => $node->getCategoryId(),
-            'slug'          => $node->getSlug(),
-            'title'         => $node->getTitle(),
+            'category_id'   => $node->getCategoryId(),
             'level'         => $node->getLevel(),
             'parent_id'     => $node->getParentId(),
             'locale'        => $node->getLocale(),
-            'flags'         => $node->getFlags(),
             'attributes'    => $attributes,
         ];
     }
