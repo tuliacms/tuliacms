@@ -234,6 +234,8 @@ class NodeRepository
             'level'         => $node->getLevel(),
             'parent_id'     => $node->getParentId(),
             'locale'        => $node->getLocale(),
+            'title'         => $attributes['title']['value'] ?? '',
+            'slug'          => $attributes['slug']['value'] ?? '',
             'attributes'    => $attributes,
         ];
     }

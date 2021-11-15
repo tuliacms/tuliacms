@@ -13,16 +13,16 @@ class NodeCreated extends DomainEvent
 {
     private string $type;
 
-    public function __construct(string $nodeId, string $websiteId, string $locale, string $type)
+    public function __construct(string $nodeId, string $nodeType, string $websiteId, string $locale, string $type)
     {
-        parent::__construct($nodeId, $websiteId, $locale);
+        parent::__construct($nodeId, $nodeType, $websiteId, $locale);
 
         $this->type = $type;
     }
 
     public static function fromNode(Node $node): self
     {
-        return new self($node->getId()->getId(), $node->getWebsiteId(), $node->getLocale(), $node->getType());
+        return new self($node->getId()->getId(), $node->getType(), $node->getWebsiteId(), $node->getLocale(), $node->getType());
     }
 
     public function getType(): string

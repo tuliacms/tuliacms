@@ -18,6 +18,17 @@ abstract class AggregateRoot
         $this->domainEvents[] = $event;
     }
 
+    protected function recordUniqueThat(DomainEvent $event, callable $isDuplicatedEvent): void
+    {
+        foreach ($this->domainEvents as $key => $item) {
+            if ($isDuplicatedEvent($item)) {
+                unset($this->domainEvents[$key]);
+            }
+        }
+
+        $this->domainEvents[] = $event;
+    }
+
     public function collectDomainEvents(): array
     {
         $events = $this->domainEvents;

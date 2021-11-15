@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Node\Domain\WriteModel\Model;
 
 use Tulia\Cms\Node\Domain\WriteModel\Event;
+use Tulia\Cms\Node\Domain\WriteModel\Event\AttributeUpdated;
 use Tulia\Cms\Node\Domain\WriteModel\Model\ValueObject\AttributeInfo;
 use Tulia\Cms\Node\Domain\WriteModel\Model\ValueObject\NodeId;
 use Tulia\Cms\Platform\Domain\WriteModel\Model\AggregateRoot;
@@ -62,7 +63,7 @@ class Node extends AggregateRoot
     public static function createNew(string $id, string $type, string $websiteId, string $locale): self
     {
         $self = new self($id, $type, $websiteId, $locale);
-        $self->recordThat(new Event\NodeCreated($id, $websiteId, $locale, $type));
+        $self->recordThat(new Event\NodeCreated($id, $type, $websiteId, $locale, $type));
 
         return $self;
     }
@@ -140,7 +141,19 @@ class Node extends AggregateRoot
                 throw new \Exception(sprintf('Attribute "%s" Must have AttributeInfo for this attribute.', $name));
             }
 
-            $this->attributes[$name] = $value;
+            if (isset($this->attributes[$name]) === false || $this->attributes[$name] !== $value) {
+                $this->attributes[$name] = $value;
+                /**
+                 * Calling recordUniqueThat() prevents the system to record multiple changes on the same attribute.
+                 * This may be caused, in example, by SlugGenerator: first time system sets raw value from From,
+                 * and then SlugGenerator sets the validated and normalized slug. For us, the last updated
+                 * attribute's value matters, so we remove all previous events and adds new, at the end of
+                 * collection.
+                 */
+                $this->recordUniqueThat(AttributeUpdated::fromNode($this, $name, $value), function ($event) use ($name) {
+                    return $name === $event->getAttribute();
+                });
+            }
         }
 
         $this->markAsUpdated();

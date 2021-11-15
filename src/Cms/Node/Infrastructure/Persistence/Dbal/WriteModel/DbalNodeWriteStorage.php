@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Infrastructure\Persistence\Dbal\WriteModel;
 
-use Tulia\Cms\Node\Domain\WriteModel\Model\Enum\TermTypeEnum;
 use Tulia\Cms\Node\Domain\WriteModel\Ports\NodeWriteStorageInterface;
 use Tulia\Cms\Platform\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
 use Tulia\Cms\Platform\Infrastructure\Persistence\Domain\AbstractLocalizableStorage;
@@ -52,21 +51,6 @@ class DbalNodeWriteStorage extends AbstractLocalizableStorage implements NodeWri
             return [];
         }
 
-        $terms = $this->connection->fetchAllAssociative('
-            SELECT *
-            FROM #__node_term_relationship
-            WHERE node_id = :node_id', [
-            'node_id' => $id
-        ]);
-
-        $node[0]['category'] = null;
-
-        foreach ($terms as $term) {
-            if ($term['type'] === TermTypeEnum::MAIN) {
-                $node[0]['category'] = $term['term_id'];
-            }
-        }
-
         return $node[0];
     }
 
@@ -105,15 +89,11 @@ class DbalNodeWriteStorage extends AbstractLocalizableStorage implements NodeWri
         $mainTable['updated_at'] = $this->formatDatetime($data['updated_at']);
         $mainTable['status'] = $data['status'];
         $mainTable['author_id'] = $data['author_id'];
-        $mainTable['slug'] = $data['attributes']['slug']['value'] ?? null;
-        $mainTable['title'] = $data['attributes']['title']['value'] ?? null;
-        $mainTable['level'] = $this->calculateLevel($data['parent_id']);
+        $mainTable['slug'] = $data['slug'];
+        $mainTable['title'] = $data['title'];
         $mainTable['parent_id'] = $data['parent_id'];
 
         $this->connection->insert('#__node', $mainTable);
-
-        $this->insertCategories($data['id'], $data['category_id'] ? [$data['category_id']] : [], TermTypeEnum::MAIN);
-        $this->insertFlags($data['id'], $data['attributes']['flags']['value'] ?? []);
     }
 
     protected function updateMainRow(array $data, bool $foreignLocale): void
@@ -128,18 +108,14 @@ class DbalNodeWriteStorage extends AbstractLocalizableStorage implements NodeWri
         $mainTable['updated_at'] = $this->formatDatetime($data['updated_at']);
         $mainTable['status'] = $data['status'];
         $mainTable['author_id'] = $data['author_id'];
-        $mainTable['level'] = $data['level'];
         $mainTable['parent_id'] = $data['parent_id'];
 
         if ($foreignLocale === false) {
-            $mainTable['slug'] = $data['attributes']['slug']['value'] ?? null;
-            $mainTable['title'] = $data['attributes']['title']['value'] ?? null;
+            $mainTable['slug'] = $data['slug'];
+            $mainTable['title'] = $data['title'];
         }
 
         $this->connection->update('#__node', $mainTable, ['id' => $data['id']]);
-
-        $this->insertCategories($data['id'], $data['category_id'] ? [$data['category_id']] : [], TermTypeEnum::MAIN);
-        $this->insertFlags($data['id'], $data['attributes']['flags']['value'] ?? []);
     }
 
     protected function insertLangRow(array $data): void
@@ -147,8 +123,8 @@ class DbalNodeWriteStorage extends AbstractLocalizableStorage implements NodeWri
         $langTable = [];
         $langTable['node_id'] = $data['id'];
         $langTable['locale'] = $data['locale'];
-        $langTable['slug'] = $data['attributes']['slug']['value'] ?? null;
-        $langTable['title'] = $data['attributes']['title']['value'] ?? null;
+        $langTable['slug'] = $data['slug'];
+        $langTable['title'] = $data['title'];
 
         $this->connection->insert('#__node_lang', $langTable);
     }
@@ -156,8 +132,8 @@ class DbalNodeWriteStorage extends AbstractLocalizableStorage implements NodeWri
     protected function updateLangRow(array $data): void
     {
         $langTable = [];
-        $langTable['slug'] = $data['attributes']['slug']['value'] ?? null;
-        $langTable['title'] = $data['attributes']['title']['value'] ?? null;
+        $langTable['slug'] = $data['slug'];
+        $langTable['title'] = $data['title'];
 
         $this->connection->update('#__node_lang', $langTable, [
             'node_id' => $data['id'],
@@ -180,7 +156,10 @@ class DbalNodeWriteStorage extends AbstractLocalizableStorage implements NodeWri
         return $date instanceof ImmutableDateTime ? $date->format('Y-m-d H:i:s') : null;
     }
 
-    private function calculateLevel(?string $parentId): int
+    /**
+     * @todo Calculate level after NodeUpdated, NodeCreated and NodeDeleted events.
+     */
+    /*private function calculateLevel(?string $parentId): int
     {
         if (! $parentId) {
             return 0;
@@ -195,54 +174,5 @@ class DbalNodeWriteStorage extends AbstractLocalizableStorage implements NodeWri
         }
 
         return $level + 1;
-    }
-
-    private function insertCategories(string $nodeId, array $new, string $type): void
-    {
-        // There can be only one MAIN category for node.
-        if ($type === 'MAIN' && count($new) > 1) {
-            $new = [$new[0]];
-        }
-
-        $current = $this->connection->fetchAllAssociative('
-            SELECT term_id
-            FROM #__node_term_relationship
-            WHERE node_id = :node_id AND `type` = :type', [
-            'type'    => $type,
-            'node_id' => $nodeId,
-        ]);
-        $current = array_column($current, 'term_id');
-
-        $toUpdate = array_intersect($new, $current);
-        $toAdd    = array_diff($new, $toUpdate);
-        $toRemove = array_diff($current, $toUpdate);
-
-        $this->connection->delete('#__node_term_relationship', [
-            'node_id' => $nodeId,
-            'term_id' => $toRemove,
-        ], [
-            'node_id' => \PDO::PARAM_STR,
-            'term_id' => ConnectionInterface::PARAM_ARRAY_STR,
-        ]);
-
-        foreach ($toAdd as $termId) {
-            $this->connection->insert('#__node_term_relationship', [
-                'node_id' => $nodeId,
-                'term_id' => $termId,
-                'type'    => $type,
-            ]);
-        }
-    }
-
-    private function insertFlags(string $nodeId, array $flags): void
-    {
-        $this->connection->delete('#__node_has_flag', ['node_id' => $nodeId]);
-
-        foreach ($flags as $flag) {
-            $this->connection->insert('#__node_has_flag', [
-                'node_id' => $nodeId,
-                'flag' => $flag,
-            ]);
-        }
-    }
+    }*/
 }
