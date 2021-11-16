@@ -6,3 +6,11 @@ framework:
         paths:
             - { name: backend/node, path: '%kernel.project_dir%/src/Cms/Node/Infrastructure/Framework/Resources/views/backend' }
             - { name: cms/node, path: '%kernel.project_dir%/src/Cms/Node/Infrastructure/Framework/Resources/views/frontend' }
+
+cms:
+    content_building:
+        data_types:
+            mapping:
+                node_select:
+                    label: Node Typehead
+                    classname: 'Tulia\Cms\Node\Infrastructure\Framework\Form\FormType\NodeTypeaheadType'

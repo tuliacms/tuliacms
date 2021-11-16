@@ -53,11 +53,10 @@ class SymfonyFormBuilder
                 $options = array_merge([
                     'label' => $field->getLabel() === ''
                         ? false
-                        : $field->getLabel(),
-                    'constraints' => $this->constraintsBuilder->build(
-                        $field->getConstraints()
-                    )
+                        : $field->getLabel()
                 ], $field->getOptions());
+
+                $options['constraints'] = $this->constraintsBuilder->build($options['constraints'] ?? []);
 
                 if ($typeBuilder) {
                     $options = (new $typeBuilder)->build($field, $options);

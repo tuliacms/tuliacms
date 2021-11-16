@@ -102,7 +102,6 @@ class Node extends AbstractController
 
         $formDescriptor = $this->formService->buildFormDescriptor(
             $node->getType(),
-            $node->getId()->getId(),
             $node->getAttributes(),
             $request
         );
@@ -146,7 +145,6 @@ class Node extends AbstractController
 
         $formDescriptor = $this->formService->buildFormDescriptor(
             $node->getType(),
-            $node->getId()->getId(),
             $node->getAttributes(),
             $request
         );

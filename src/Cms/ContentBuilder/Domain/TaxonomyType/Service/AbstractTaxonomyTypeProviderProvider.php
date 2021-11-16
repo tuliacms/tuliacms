@@ -45,8 +45,8 @@ abstract class AbstractTaxonomyTypeProviderProvider implements TaxonomyTypeProvi
             'multilingual' => $options['multilingual'],
             'multiple' => $options['multiple'],
             'constraints' => $options['constraints'],
-            'flags' => $options['options'],
-            'options' => $this->fieldTypeMappingRegistry->getTypeFlags($options['type'])
+            'options' => $options['options'],
+            'flags' => $this->fieldTypeMappingRegistry->getTypeFlags($options['type'])
         ]);
     }
 }

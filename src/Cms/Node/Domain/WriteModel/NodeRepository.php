@@ -110,7 +110,7 @@ class NodeRepository
                     );
                 } catch (\ErrorException $e) {
                     // If error, than empty or cannot be unserialized from singular value
-                    $value = $attributes[$field->getName()];
+                    $value = $attributes[$field->getName()] ?? null;
                 }
 
                 $attributes[$field->getName()] = $value;
@@ -232,7 +232,7 @@ class NodeRepository
             'author_id'     => $node->getAuthorId(),
             'category_id'   => $node->getCategoryId(),
             'level'         => $node->getLevel(),
-            'parent_id'     => $node->getParentId(),
+            'parent_id'     => $attributes['parent_id']['value'] ?? null,
             'locale'        => $node->getLocale(),
             'title'         => $attributes['title']['value'] ?? '',
             'slug'          => $attributes['slug']['value'] ?? '',

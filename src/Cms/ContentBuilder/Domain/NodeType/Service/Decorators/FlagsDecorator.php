@@ -39,8 +39,6 @@ class FlagsDecorator implements NodeTypeDecoratorInterface
             'label' => 'flags',
             'multilingual' => false,
             'multiple' => true,
-            'constraints' => [],
-            'flags' => [],
             'options' => [
                 'choices' => $availableFlags,
                 'help' => 'flagsHelp',

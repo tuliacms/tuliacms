@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service;
 
+use Symfony\Component\Validator\Constraint;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Exception\ConstraintNotExistsException;
 
 /**
@@ -30,7 +31,11 @@ class ConstraintsBuilder
         $result = [];
 
         foreach ($constraints as $constraint) {
-            $result[] = $this->mapping->getConstraint($constraint['name']);
+            if ($constraint instanceof Constraint) {
+                $result[] = $constraint;
+            } else {
+                $result[] = $this->mapping->getConstraint($constraint['name']);
+            }
         }
 
         return $result;

@@ -17,7 +17,6 @@ class Field
         'label' => '',
         'multilingual' => false,
         'multiple' => false,
-        'constraints' => [],
         'flags' => [],
         'options' => []
     ];
@@ -30,7 +29,6 @@ class Field
         \assert(\is_string($this->options['label']), 'The "label" option must be a string.');
         \assert(\is_bool($this->options['multilingual']), 'The "multilingual" option must be a boolean.');
         \assert(\is_bool($this->options['multiple']), 'The "multiple" option must be a boolean.');
-        \assert(\is_array($this->options['constraints']), 'The "constraints" option must be an array.');
         \assert(\is_array($this->options['flags']), 'The "flags" option must be an array.');
         \assert(\is_array($this->options['options']), 'The "options" option must be an array.');
 
@@ -64,11 +62,6 @@ class Field
         return $this->options['label'];
     }
 
-    public function getConstraints(): array
-    {
-        return $this->options['constraints'];
-    }
-
     public function hasFlag(string $flag): bool
     {
         return in_array($flag, $this->options['flags'], true);
@@ -82,7 +75,7 @@ class Field
     public function getTaxonomy(): string
     {
         if ($this->options['type'] !== 'taxonomy') {
-            throw new \LogicException('Cannot get "taxonomy" from field that os not a taxonomy type.');
+            throw new \LogicException('Cannot get "taxonomy" from field that is not a taxonomy type.');
         }
         return $this->options['taxonomy'];
     }

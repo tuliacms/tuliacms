@@ -32,7 +32,6 @@ cms:
                         type: text
                         multilingual: true
                         constraints:
-                            - { name: required }
                             #- { name: unique, flags: 'globally' }
                     introduction:
                         type: textarea
