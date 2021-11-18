@@ -1,5 +1,6 @@
 imports:
     - { resource: assets.yaml }
+
 framework:
     translator:
         default_path: '%kernel.project_dir%/src/Cms/Platform/Infrastructure/Framework/Resources/translations'
@@ -20,8 +21,24 @@ framework:
                         template: "{% extends '@backend/layout/layout.tpl' %}"
                     theme:
                         template: "{% extends [ '@theme/layout.tpl', '@parent/layout.tpl' ] %}"
+
 twig:
     paths:
         '%kernel.project_dir%/src/Cms/Platform/Infrastructure/Framework/Resources/views/backend': backend
         '%kernel.project_dir%/src/Cms/Platform/Infrastructure/Framework/Resources/views/Form': form
-    form_themes: ['@form/cms_form_layout.tpl']
+    form_themes:
+        - '@form/cms_form_layout.tpl'
+
+cms:
+    content_building:
+        data_types:
+            mapping:
+                datetime:
+                    label: Datetime
+                    classname: 'Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\DateTimeType'
+                yes_no:
+                    label: Yes/No
+                    classname: 'Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\YesNoType'
+                filepicker:
+                    label: Filepicker
+                    classname: 'Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\FilepickerType'

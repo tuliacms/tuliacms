@@ -39,7 +39,7 @@ class ParentNodeDecorator implements NodeTypeDecoratorInterface
                 ],
                 'constraints' => [
                     new Callback(function ($value, ExecutionContextInterface $context) use ($nodeType) {
-                        if ($value === $context->getRoot()->get('id')->getData()) {
+                        if (empty($value) === false && $value === $context->getRoot()->get('id')->getData()) {
                             $context->buildViolation('cannotAssignSelfNodeParent')
                                 ->setTranslationDomain($nodeType->getTranslationDomain())
                                 ->atPath('parent_id')

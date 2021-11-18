@@ -6,3 +6,11 @@ framework:
         paths:
             - { name: cms/user, path: '%kernel.project_dir%/src/Cms/User/Infrastructure/Framework/Resources/views/frontend' }
             - { name: backend/user, path: '%kernel.project_dir%/src/Cms/User/Infrastructure/Framework/Resources/views/backend' }
+
+cms:
+    content_building:
+        data_types:
+            mapping:
+                user:
+                    label: User
+                    classname: 'Tulia\Cms\User\Infrastructure\Framework\Form\FormType\UserTypeaheadType'

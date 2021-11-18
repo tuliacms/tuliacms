@@ -25,6 +25,8 @@ use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
  */
 class NodeRepository
 {
+    private const RESERVED_NAMES = ['title', 'slug', 'parent_id', 'published_at', 'published_to', 'status', 'author_id'];
+
     private NodeWriteStorageInterface $storage;
 
     private CurrentWebsiteInterface $currentWebsite;
@@ -125,11 +127,13 @@ class NodeRepository
             'created_at'    => new ImmutableDateTime($node['created_at']),
             'updated_at'    => $node['updated_at'] ? new ImmutableDateTime($node['updated_at']) : null,
             'status'        => $node['status'] ?? '',
-            'author_id'     => $node['author_id'] ?? null,
+            'author_id'     => $node['author_id'],
             'level'         => (int) $node['level'],
             'parent_id'     => $node['parent_id'] ?? null,
             'locale'        => $node['locale'],
             'translated'    => $node['translated'] ?? true,
+            'title'         => $node['title'],
+            'slug'          => $node['slug'],
             'attributes'    => $attributes,
             'attributes_mapping' => $this->buildAttributesMapping($nodeType),
         ]);
@@ -210,6 +214,10 @@ class NodeRepository
         $attributes = [];
 
         foreach ($node->getAttributes() as $name => $value) {
+            if (\in_array($name, self::RESERVED_NAMES)) {
+                continue;
+            }
+
             $info = $node->getAttributeInfo($name);
 
             $attributes[$name] = [
@@ -220,24 +228,26 @@ class NodeRepository
             ];
         }
 
-        return [
+        $result = [
             'id'            => $node->getId()->getId(),
             'type'          => $node->getType(),
             'website_id'    => $node->getWebsiteId(),
-            'published_at'  => $node->getPublishedAt(),
-            'published_to'  => $node->getPublishedTo(),
+            'published_at'  => $node->getPublishedAt()->format('Y-m-d H:i:s'),
+            'published_to'  => $node->getPublishedTo() ? $node->getPublishedTo()->format('Y-m-d H:i:s') : null,
             'created_at'    => $node->getCreatedAt(),
             'updated_at'    => $node->getUpdatedAt(),
             'status'        => $node->getStatus(),
             'author_id'     => $node->getAuthorId(),
             'category_id'   => $node->getCategoryId(),
             'level'         => $node->getLevel(),
-            'parent_id'     => $attributes['parent_id']['value'] ?? null,
+            'parent_id'     => $node->getParentId(),
             'locale'        => $node->getLocale(),
-            'title'         => $attributes['title']['value'] ?? '',
-            'slug'          => $attributes['slug']['value'] ?? '',
+            'title'         => $node->getTitle(),
+            'slug'          => $node->getSlug(),
             'attributes'    => $attributes,
         ];
+
+        return $result;
     }
 
     private function buildAttributesMapping(NodeType $nodeType): array

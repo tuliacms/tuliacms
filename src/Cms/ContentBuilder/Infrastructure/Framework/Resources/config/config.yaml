@@ -21,18 +21,6 @@ cms:
                 translation_domain: pages
                 layout: default
                 fields:
-                    title:
-                        type: text
-                        label: title
-                        multilingual: true
-                        constraints:
-                            - { name: required }
-                    slug:
-                        label: slug
-                        type: text
-                        multilingual: true
-                        constraints:
-                            #- { name: unique, flags: 'globally' }
                     introduction:
                         type: textarea
                         multilingual: true
@@ -48,6 +36,9 @@ cms:
                         label: tags
                         type: taxonomy
                         taxonomy: tag
+                    thumbnail:
+                        label: thumbnail
+                        type: filepicker
 
         taxonomy_types:
             category:
@@ -93,7 +84,7 @@ cms:
                         groups:
                             category:
                                 active: true
-                                label: category
+                                label: taxonomy
                                 fields: [category, tags]
 
         data_types:

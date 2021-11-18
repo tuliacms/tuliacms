@@ -88,6 +88,8 @@ class NodeTypeRegistry
         /** @var NodeType $type */
         foreach (array_merge(...$types) as $type) {
             $this->decorate($type);
+            $type->validate();
+
             $this->nodeTypes[$type->getType()] = $type;
         }
     }

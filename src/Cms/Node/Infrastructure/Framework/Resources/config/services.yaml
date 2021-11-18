@@ -42,12 +42,6 @@ services:
         bind:
             $environment: '%kernel.environment%'
 
-    Tulia\Cms\Node\UserInterface\Web\Backend\Form\Extension\AuthorExtension:
-        tags: [ form_extension ]
-
-    Tulia\Cms\Node\UserInterface\Web\Backend\Form\Extension\DefaultFieldsExtension:
-        tags: [ form_extension ]
-
     Tulia\Cms\Node\UserInterface\Web\Backend\BackendMenu\NodeMenuBuilder:
         tags: [ backend_menu.builder ]
 

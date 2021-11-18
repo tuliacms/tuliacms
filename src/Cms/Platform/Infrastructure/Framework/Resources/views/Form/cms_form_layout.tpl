@@ -41,6 +41,10 @@
         </div>
     </div>
 
+    {% if value %}
+        {{ image(value, { size: 'thumbnail-md', attributes: { alt: 'Node thumbnail', class: 'img-thumbnail' } }) }}
+    {% endif %}
+
     <script nonce="{{ csp_nonce() }}">
         $(function () {
             Tulia.Filemanager.create({

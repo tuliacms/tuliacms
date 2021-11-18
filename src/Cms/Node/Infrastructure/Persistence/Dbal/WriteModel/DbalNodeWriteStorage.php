@@ -153,7 +153,15 @@ class DbalNodeWriteStorage extends AbstractLocalizableStorage implements NodeWri
 
     private function formatDatetime($date): ?string
     {
-        return $date instanceof ImmutableDateTime ? $date->format('Y-m-d H:i:s') : null;
+        if ($date instanceof ImmutableDateTime) {
+            return $date->format('Y-m-d H:i:s');
+        }
+
+        if (is_string($date)) {
+            return $date;
+        }
+
+        return null;
     }
 
     /**

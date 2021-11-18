@@ -12,11 +12,13 @@ use Tulia\Cms\ContentBuilder\Domain\NodeType\Exception\NodeTypeNotExistsExceptio
 use Tulia\Cms\ContentBuilder\Domain\NodeType\Model\NodeType;
 use Tulia\Cms\ContentBuilder\Domain\NodeType\Service\NodeTypeRegistry;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\LayoutBuilder;
+use Tulia\Cms\ContentBuilder\UserInterface\Web\Form\FormDescriptor;
 use Tulia\Cms\ContentBuilder\UserInterface\Web\Service\FormService;
 use Tulia\Cms\Node\Domain\WriteModel\Exception\NodeNotFoundException;
 use Tulia\Cms\Node\Domain\WriteModel\Exception\SingularFlagImposedOnMoreThanOneNodeException;
 use Tulia\Cms\Node\Domain\WriteModel\NodeRepository;
 use Tulia\Cms\Node\Domain\ReadModel\Datatable\NodeDatatableFinderInterface;
+use Tulia\Cms\Platform\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
 use Tulia\Cms\Taxonomy\Ports\Domain\ReadModel\TermFinderScopeEnum;
@@ -25,6 +27,7 @@ use Tulia\Cms\Taxonomy\Ports\Domain\ReadModel\TermFinderInterface;
 use Tulia\Component\Datatable\DatatableFactory;
 use Tulia\Component\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Component\Templating\ViewInterface;
+use Tulia\Cms\Node\Domain\WriteModel\Model\Node as Model;
 
 /**
  * @author Adam Banaszkiewicz
@@ -100,17 +103,11 @@ class Node extends AbstractController
     {
         $node = $this->repository->createNew($node_type);
 
-        $formDescriptor = $this->formService->buildFormDescriptor(
-            $node->getType(),
-            $node->getAttributes(),
-            $request
-        );
+        $formDescriptor = $this->produceFormDescriptor($node, $request);
         $nodeType = $formDescriptor->getNodeType();
 
         if ($formDescriptor->isFormValid()) {
-            $node->updateAttributes($formDescriptor->getData());
-
-            $this->repository->insert($node);
+            $this->updateModel($formDescriptor, $node);
 
             $this->setFlash('success', $this->trans('nodeSaved', [], $nodeType->getTranslationDomain()));
             return $this->redirectToRoute('backend.node.edit', [ 'id' => $node->getId(), 'node_type' => $nodeType->getType() ]);
@@ -143,19 +140,13 @@ class Node extends AbstractController
             return $this->redirectToRoute('backend.node.list');
         }
 
-        $formDescriptor = $this->formService->buildFormDescriptor(
-            $node->getType(),
-            $node->getAttributes(),
-            $request
-        );
+        $formDescriptor = $this->produceFormDescriptor($node, $request);
         $form = $formDescriptor->getForm();
         $nodeType = $formDescriptor->getNodeType();
 
         if ($formDescriptor->isFormValid()) {
             try {
-                $node->updateAttributes($formDescriptor->getData());
-
-                $this->repository->update($node);
+                $this->updateModel($formDescriptor, $node);
                 $this->setFlash('success', $this->trans('nodeSaved', [], $nodeType->getTranslationDomain()));
                 return $this->redirectToRoute('backend.node.edit', [ 'id' => $node->getId(), 'node_type' => $nodeType->getType() ]);
             } catch (SingularFlagImposedOnMoreThanOneNodeException $e) {
@@ -281,5 +272,42 @@ class Node extends AbstractController
         }
 
         return $nodes;
+    }
+
+    private function produceFormDescriptor(Model $node, Request $request): FormDescriptor
+    {
+        $formDescriptor = $this->formService->buildFormDescriptor(
+            $node->getType(),
+            array_merge(
+                [
+                    'title' => $node->getTitle(),
+                    'slug' => $node->getSlug(),
+                    'published_at' => $node->getPublishedAt(),
+                    'published_to' => $node->getPublishedTo(),
+                    'parent_id' => $node->getParentId(),
+                    'status' => $node->getStatus(),
+                    'author_id' => $node->getAuthorId(),
+                ],
+                $node->getAttributes()
+            ),
+            $request
+        );
+        return $formDescriptor;
+    }
+
+    private function updateModel(FormDescriptor $formDescriptor, Model $node): void
+    {
+        $data = $formDescriptor->getData();
+
+        $node->setStatus($data['status']);
+        $node->setSlug($data['slug']);
+        $node->setTitle($data['title']);
+        $node->setPublishedAt(new ImmutableDateTime($data['published_at']));
+        $node->setPublishedTo($data['published_to'] ? new ImmutableDateTime($data['published_to']) : null);
+        $node->setParentId($data['parent_id']);
+        $node->setAuthorId($data['author_id']);
+        $node->updateAttributes($data);
+
+        $this->repository->update($node);
     }
 }

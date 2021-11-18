@@ -76,10 +76,6 @@ class NodeType
     public function setIsRoutable(bool $isRoutable): void
     {
         $this->isRoutable = $isRoutable;
-
-        if ($isRoutable) {
-            $this->validateRoutableNodeType();
-        }
     }
 
     public function isHierarchical(): bool
@@ -104,10 +100,6 @@ class NodeType
     public function setRoutableTaxonomyField(?string $routableTaxonomyField): void
     {
         $this->routableTaxonomyField = $routableTaxonomyField;
-
-        if ($routableTaxonomyField) {
-            $this->validateRoutableTaxonomy();
-        }
     }
 
     /**
@@ -158,6 +150,22 @@ class NodeType
     public function setIcon(string $icon): void
     {
         $this->icon = $icon;
+    }
+
+    /**
+     * @throws RoutableFieldIsNotTaxonomyTypeException
+     * @throws CannotSetRoutableNodeTypeWithoutSlugField
+     * @throws MissingRoutableFieldException
+     */
+    public function validate(): void
+    {
+        if ($this->routableTaxonomyField) {
+            $this->validateRoutableTaxonomy();
+        }
+
+        if ($this->isRoutable) {
+            $this->validateRoutableNodeType();
+        }
     }
 
     /**

@@ -42,6 +42,10 @@ class Node extends AggregateRoot
 
     protected bool $translated = true;
 
+    protected string $title = '';
+
+    protected ?string $slug = null;
+
     protected array $attributes = [];
 
     /**
@@ -83,6 +87,8 @@ class Node extends AggregateRoot
         $self->publishedTo = $data['published_to'] ?? null;
         $self->authorId = $data['author_id'] ?? null;
         $self->parentId = $data['parent_id'] ?? null;
+        $self->title = $data['title'] ?? '';
+        $self->slug = $data['slug'] ?? null;
         $self->level = (int) ($data['level'] ?? 0);
         $self->translated = (bool) ($data['translated'] ?? true);
 
@@ -133,7 +139,9 @@ class Node extends AggregateRoot
         unset(
             $attributes['id'],
             $attributes['type'],
-            $attributes['status']
+            $attributes['status'],
+            $attributes['title'],
+            $attributes['status'],
         );
 
         foreach ($attributes as $name => $value) {
@@ -191,12 +199,130 @@ class Node extends AggregateRoot
         return $this->attributes['flags'] ?? [];
     }
 
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
 
+    public function setTitle(string $title): void
+    {
+        $this->title = $title;
+    }
 
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
 
+    public function setSlug(?string $slug): void
+    {
+        $this->slug = $slug;
+    }
 
+    public function getStatus(): string
+    {
+        return $this->status;
+    }
 
+    public function setStatus(string $status): void
+    {
+        $this->status = $status;
+    }
 
+    public function getWebsiteId(): string
+    {
+        return $this->websiteId;
+    }
+
+    public function getPublishedAt(): ImmutableDateTime
+    {
+        return $this->publishedAt;
+    }
+
+    public function setPublishedAt(ImmutableDateTime $publishedAt): void
+    {
+        $this->publishedAt = $publishedAt;
+
+        $this->markAsUpdated();
+    }
+
+    public function getPublishedTo(): ?ImmutableDateTime
+    {
+        return $this->publishedTo;
+    }
+
+    public function setPublishedTo(?ImmutableDateTime $publishedTo): void
+    {
+        $this->publishedTo = $publishedTo;
+
+        $this->markAsUpdated();
+    }
+
+    public function getCreatedAt(): ImmutableDateTime
+    {
+        return $this->createdAt;
+    }
+
+    public function getUpdatedAt(): ?ImmutableDateTime
+    {
+        return $this->updatedAt;
+    }
+
+    public function getAuthorId(): ?string
+    {
+        return $this->authorId;
+    }
+
+    public function setAuthorId(?string $authorId): void
+    {
+        $this->authorId = $authorId;
+
+        $this->markAsUpdated();
+    }
+
+    public function getParentId(): ?string
+    {
+        return $this->parentId;
+    }
+
+    public function setParentId(?string $parentId): void
+    {
+        $this->parentId = $parentId;
+
+        $this->markAsUpdated();
+    }
+
+    public function getLevel(): int
+    {
+        return $this->level;
+    }
+
+    public function setLevel(int $level): void
+    {
+        $this->level = $level;
+
+        $this->markAsUpdated();
+    }
+
+    public function getCategoryId(): ?string
+    {
+        return $this->attributes['category'] ?? null;
+    }
+
+    public function getLocale(): string
+    {
+        return $this->locale;
+    }
+
+    public function isTranslated(): bool
+    {
+        return $this->translated;
+    }
+
+    public function setTranslated(bool $translated): void
+    {
+        $this->translated = $translated;
+    }
 
     private function updateFlags(array $flags): void
     {
@@ -225,103 +351,5 @@ class Node extends AggregateRoot
     private function markAsUpdated(): void
     {
         $this->updatedAt = new ImmutableDateTime();
-    }
-
-
-    #######################
-
-    public function getStatus(): string
-    {
-        return $this->status;
-    }
-
-    public function setStatus(string $status): void
-    {
-        $this->status = $status;
-    }
-
-    public function getWebsiteId(): string
-    {
-        return $this->websiteId;
-    }
-
-    public function getPublishedAt(): ImmutableDateTime
-    {
-        return $this->publishedAt;
-    }
-
-    public function setPublishedAt(ImmutableDateTime $publishedAt): void
-    {
-        $this->publishedAt = $publishedAt;
-    }
-
-    public function getPublishedTo(): ?ImmutableDateTime
-    {
-        return $this->publishedTo;
-    }
-
-    public function setPublishedTo(?ImmutableDateTime $publishedTo): void
-    {
-        $this->publishedTo = $publishedTo;
-    }
-
-    public function getCreatedAt(): ImmutableDateTime
-    {
-        return $this->createdAt;
-    }
-
-    public function getUpdatedAt(): ?ImmutableDateTime
-    {
-        return $this->updatedAt;
-    }
-
-    public function getAuthorId(): ?string
-    {
-        return $this->authorId;
-    }
-
-    public function setAuthorId(?string $authorId): void
-    {
-        $this->authorId = $authorId;
-    }
-
-    public function getParentId(): ?string
-    {
-        return $this->parentId;
-    }
-
-    public function setParentId(?string $parentId): void
-    {
-        $this->parentId = $parentId;
-    }
-
-    public function getLevel(): int
-    {
-        return $this->level;
-    }
-
-    public function setLevel(int $level): void
-    {
-        $this->level = $level;
-    }
-
-    public function getCategoryId(): ?string
-    {
-        return $this->attributes['category'] ?? null;
-    }
-
-    public function getLocale(): string
-    {
-        return $this->locale;
-    }
-
-    public function isTranslated(): bool
-    {
-        return $this->translated;
-    }
-
-    public function setTranslated(bool $translated): void
-    {
-        $this->translated = $translated;
     }
 }
