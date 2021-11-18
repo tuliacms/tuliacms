@@ -174,7 +174,7 @@
         };
         let hide = function () {
             $('.published-to-date-selector').addClass('d-none');
-            $('#node_form_publishedTo').val('');
+            $('#content_builder_form_page_published_to').val('');
         };
         $('#node-published-to-switch').change(function () {
             if ($(this).is(':checked')) {
