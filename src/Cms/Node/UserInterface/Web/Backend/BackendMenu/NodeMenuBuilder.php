@@ -56,14 +56,18 @@ class NodeMenuBuilder implements BuilderInterface
             'parent'   => $root,
         ]);
 
-        /*foreach ($type->getTaxonomies() as $tax) {
-            $taxonomy = $this->taxonomyRegistry->getType($tax['taxonomy']);
+        foreach ($type->getFields() as $field) {
+            if ($field->getType() !== 'taxonomy') {
+                continue;
+            }
+
+            $taxonomy = $this->taxonomyRegistry->getType($field->getTaxonomy());
 
             $registry->add($root . '_' . $taxonomy->getType(), [
                 'label'    => $this->helper->trans('taxonomy', [], $taxonomy->getTranslationDomain()),
                 'link'     => $this->helper->generateUrl('backend.term', [ 'taxonomyType' => $taxonomy->getType() ]),
                 'parent'   => $root,
             ]);
-        }*/
+        }
     }
 }

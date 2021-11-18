@@ -187,7 +187,7 @@ Tulia.Filemanager.template = '<div class="filemanager filemanager-container">\n'
     '                    <button type="button" class="btn btn-outline-secondary btn-icon-only" data-action="refresh" title="Refresh"><i class="btn-icon fas fa-sync-alt"></i></button>\n' +
     '                    <button type="button" class="btn btn-outline-secondary btn-icon-only" data-action="new-directory" title="New directory"><i class="btn-icon fas fa-folder-plus"></i></button>\n' +
     '                    <div class="dropdown d-inline-block">\n' +
-    '                        <button class="btn btn-outline-secondary btn-icon-only" type="button" data-toggle="dropdown" title="Order by"><i class="btn-icon fas fa-sort-alpha-down"></i></button>\n' +
+    '                        <button class="btn btn-outline-secondary btn-icon-only" type="button" data-bs-toggle="dropdown" title="Order by"><i class="btn-icon fas fa-sort-alpha-down"></i></button>\n' +
     '                        <div class="dropdown-menu">\n' +
     '                            <a class="dropdown-item active dropdown-item-with-icon" href="#" data-cmd="order-by-created-desc"><i class="dropdown-icon fas fa-sort-amount-down-alt"></i>Newest first</a>\n' +
     '                            <a class="dropdown-item dropdown-item-with-icon" href="#" data-cmd="order-by-created-asc"><i class="dropdown-icon fas fa-sort-amount-down"></i>Oldest first</a>\n' +

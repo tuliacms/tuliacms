@@ -170,7 +170,17 @@
 <script nonce="{{ csp_nonce() }}">
     $(function () {
         let show = function () {
+            let d = new Date();
+
             $('.published-to-date-selector').removeClass('d-none');
+            $('#content_builder_form_page_published_to').val(
+                d.getFullYear() + '-' +
+                (d.getMonth() + 1) + '-' +
+                d.getDate() + ' ' +
+                d.getHours() + ':' +
+                d.getMinutes() + ':' +
+                d.getSeconds()
+            );
         };
         let hide = function () {
             $('.published-to-date-selector').addClass('d-none');

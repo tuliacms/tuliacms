@@ -83,7 +83,7 @@ class Node extends AbstractController
         return $this->view('@backend/node/list.tpl', [
             'nodeType'   => $nodeTypeObject,
             'datatable'  => $this->factory->create($this->finder, $request),
-            'taxonomies' => []//$this->collectTaxonomies($nodeTypeObject),
+            'taxonomies' => $this->collectTaxonomies($nodeTypeObject),
         ]);
     }
 
@@ -240,8 +240,12 @@ class Node extends AbstractController
     {
         $result = [];
 
-        foreach ($nodeType->getTaxonomies() as $tax) {
-            $result[] = $this->registry->getType($tax['taxonomy']);
+        foreach ($nodeType->getFields() as $field) {
+            if ($field->getType() !== 'taxonomy') {
+                continue;
+            }
+
+            $result[] = $this->registry->getType($field->getTaxonomy());
         }
 
         return $result;

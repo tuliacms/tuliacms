@@ -58,7 +58,7 @@
                                 <a href="{{ path('backend.website.edit', { id: website.id }) }}" class="card-link py-3 d-inline-block" title="{{ 'edit'|trans }}">{{ 'edit'|trans }}</a>
                                 <a href="#" class="card-link"></a>
                                 <div class="dropup d-inline-block float-right">
-                                    <a href="#" class="card-link d-inline-block px-4 py-3 text-dark" data-toggle="dropdown">
+                                    <a href="#" class="card-link d-inline-block px-4 py-3 text-dark" data-bs-toggle="dropdown">
                                         <i class="fas fa-ellipsis-v"></i>
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right">
