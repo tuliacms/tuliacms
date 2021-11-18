@@ -32,7 +32,7 @@ class DbalMetadataWriteStorage extends AbstractLocalizableStorage implements Met
         WHERE
             tm.owner_id IN (:owner_id)";
 
-        $source = $this->connection->fetchAll($sql, [
+        $source = $this->connection->fetchAllAssociative($sql, [
             'locale' => $locale,
             'owner_id' => $ownerIdList,
         ], [
@@ -140,7 +140,7 @@ class DbalMetadataWriteStorage extends AbstractLocalizableStorage implements Met
             tm.owner_id IN (:owner_id) AND tm.`name` = :name
         LIMIT 1";
 
-        $result = $this->connection->fetchAll($sql, [
+        $result = $this->connection->fetchAllAssociative($sql, [
             'locale' => $data['locale'],
             'owner_id' => $data['owner_id'],
             'name' => $data['name'],

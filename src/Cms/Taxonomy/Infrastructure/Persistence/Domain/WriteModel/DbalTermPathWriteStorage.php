@@ -24,7 +24,7 @@ class DbalTermPathWriteStorage implements TermPathWriteStorageInterface
      */
     public function find(string $termId, string $locale): array
     {
-        $result = $this->connection->fetchAll('
+        $result = $this->connection->fetchAllAssociative('
             SELECT *
             FROM #__term_path
             WHERE term_id = :term_id AND locale = :locale

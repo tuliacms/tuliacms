@@ -38,7 +38,7 @@ class DirectoryTree implements CommandInterface
     {
         $open = $request->get('open', self::ROOT);
 
-        $source = $this->connection->fetchAll('SELECT * FROM #__filemanager_directory ORDER BY `name`');
+        $source = $this->connection->fetchAllAssociative('SELECT * FROM #__filemanager_directory ORDER BY `name`');
         $result = [];
 
         foreach ($source as $dir) {

@@ -88,7 +88,7 @@ class UserProvider implements UserProviderInterface
             return $this->users[$username];
         }
 
-        $result = $this->connection->fetchAll('SELECT * FROM #__user WHERE username = :username OR email = :username LIMIT 1', [
+        $result = $this->connection->fetchAllAssociative('SELECT * FROM #__user WHERE username = :username OR email = :username LIMIT 1', [
             'username' => $username
         ]);
 

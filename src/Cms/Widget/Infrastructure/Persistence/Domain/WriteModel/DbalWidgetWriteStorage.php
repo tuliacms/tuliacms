@@ -28,7 +28,7 @@ class DbalWidgetWriteStorage extends AbstractLocalizableStorage implements Widge
             $translationColumn = '1 AS translated';
         }
 
-        $widget = $this->connection->fetchAll("
+        $widget = $this->connection->fetchAllAssociative("
             SELECT
                 tm.*,
                 tm.widget_type,

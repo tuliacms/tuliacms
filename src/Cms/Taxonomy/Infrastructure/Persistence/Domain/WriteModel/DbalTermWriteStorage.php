@@ -165,7 +165,7 @@ class DbalTermWriteStorage extends AbstractLocalizableStorage implements TermWri
 
         $where = implode(' AND ', $where);
 
-        $result = $this->connection->fetchAll("
+        $result = $this->connection->fetchAllAssociative("
 WITH RECURSIVE tree_path (
     id,
     website_id,

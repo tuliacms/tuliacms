@@ -28,7 +28,7 @@ class DbalItemStorage extends AbstractLocalizableStorage implements ItemStorageI
             $translationColumn = '1 AS translated';
         }
 
-        return $this->connection->fetchAll("
+        return $this->connection->fetchAllAssociative("
 WITH RECURSIVE tree_path (
     id,
     menu_id,

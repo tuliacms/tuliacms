@@ -41,7 +41,7 @@ class DbalMenuStorage implements MenuStorageInterface
 
     public function find(string $id, string $defaultLocale, string $locale): ?array
     {
-        $menu = $this->connection->fetchAll(
+        $menu = $this->connection->fetchAllAssociative(
             'SELECT * FROM #__menu AS tm WHERE tm.id = :id LIMIT 1',
             ['id' => $id]
         );

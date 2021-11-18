@@ -8,6 +8,8 @@ use CLosure;
 use Doctrine\DBAL\Connection as DoctrineConnection;
 use Doctrine\DBAL\Cache\QueryCacheProfile;
 use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Result;
+use Doctrine\DBAL\Statement;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Schema\SchemaManager;
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
@@ -20,27 +22,31 @@ class Connection extends DoctrineConnection implements ConnectionInterface
     /**
      * {@inheritdoc}
      */
-    public function executeQuery($query, array $params = [], $types = [], ?QueryCacheProfile $qcp = null)
-    {
-        $query = $this->prepareTablePrefix($query);
+    public function executeQuery(
+        string $sql,
+        array $params = [],
+        $types = [],
+        ?QueryCacheProfile $qcp = null
+    ): Result {
+        $sql = $this->prepareTablePrefix($sql);
 
-        return parent::executeQuery($query, $params, $types, $qcp);
+        return parent::executeQuery($sql, $params, $types, $qcp);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function executeUpdate($query, array $params = [], array $types = [])
+    public function executeUpdate(string $sql, array $params = [], array $types = []): int
     {
-        $query = $this->prepareTablePrefix($query);
+        $sql = $this->prepareTablePrefix($sql);
 
-        return parent::executeUpdate($query, $params, $types);
+        return parent::executeUpdate($sql, $params, $types);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function query()
+    public function query(string $sql): Result
     {
         $args = func_get_args();
         $args[0] = $this->prepareTablePrefix($args[0]);
@@ -51,7 +57,7 @@ class Connection extends DoctrineConnection implements ConnectionInterface
     /**
      * {@inheritdoc}
      */
-    public function exec($sql)
+    public function exec(string $sql): int
     {
         return parent::exec($this->prepareTablePrefix($sql));
     }
@@ -67,11 +73,11 @@ class Connection extends DoctrineConnection implements ConnectionInterface
     /**
      * {@inheritdoc}
      */
-    public function prepare($statement)
+    public function prepare(string $sql): Statement
     {
-        $statement = $this->prepareTablePrefix($statement);
+        $sql = $this->prepareTablePrefix($sql);
 
-        return parent::prepare($statement);
+        return parent::prepare($sql);
     }
 
     /**

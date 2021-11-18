@@ -54,7 +54,7 @@ class UserProvider implements UserProviderInterface, PasswordUpgraderInterface
 
     private function getUser(string $username): UserInterface
     {
-        $result = $this->connection->fetchAll('SELECT * FROM #__user WHERE username = :username OR email = :username LIMIT 1', [
+        $result = $this->connection->fetchAllAssociative('SELECT * FROM #__user WHERE username = :username OR email = :username LIMIT 1', [
             'username' => $username
         ]);
 

@@ -65,11 +65,6 @@ cms:
             default:
                 label: defaultLayout
                 sections:
-                    lead:
-                        groups:
-                            main:
-                                label: main
-                                fields: [title, slug]
                     main:
                         groups:
                             introduction:
@@ -83,7 +78,6 @@ cms:
                     sidebar:
                         groups:
                             category:
-                                active: true
                                 label: taxonomy
                                 fields: [category, tags]
 

@@ -20,7 +20,7 @@ class Node implements \ArrayAccess
     protected ImmutableDateTime $publishedAt;
     protected ?ImmutableDateTime $publishedTo;
     protected ImmutableDateTime $createdAt;
-    protected ImmutableDateTime $updatedAt;
+    protected ?ImmutableDateTime $updatedAt;
     protected string $authorId;
     protected ?string $parentId;
     protected int $level;

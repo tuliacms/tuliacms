@@ -97,6 +97,30 @@
 <div class="page-form" id="node-form">
     <div class="page-form-sidebar">
         <div class="accordion">
+            <div class="accordion-section">
+                <div class="accordion-section-button " data-bs-toggle="collapse" data-bs-target="#form-collapse-sidebar-category">
+                    {{ 'publicationStatus'|trans }}
+                </div>
+                <div id="form-collapse-sidebar-category" class="accordion-collapse collapse show">
+                    <div class="accordion-section-body">
+                        {{ form_row(form.published_at) }}
+
+                        {% set publishedToManually = form.published_to.vars.value != '' %}
+                        <div class="node-published-to-selector mb-4">
+                            <div class="published-to-date-selector{{ publishedToManually ? '' : ' d-none' }}">
+                                {{ form_row(form.published_to) }}
+                            </div>
+                            <div class="published-to-checkbox">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="node-published-to-switch"{{ publishedToManually ? ' checked="checked"' : '' }} />
+                                    <label class="custom-control-label" for="node-published-to-switch">{{ 'setPublicationEndDate'|trans }}</label>
+                                </div>
+                            </div>
+                        </div>
+                        {{ form_row(form.status) }}
+                    </div>
+                </div>
+            </div>
             {% for id, group in layout.section('sidebar').fieldsGroups %}
                 {{ _self.section(id, group, form, type.translationDomain) }}
             {% endfor %}
@@ -106,11 +130,14 @@
         <div class="page-form-header">
             <div class="container-fluid">
                 <div class="row">
-                    {% for field in layout.section('lead').fieldsGroup('main').fields %}
+                    <div class="col">
+                        {{ _self.form_row(form, 'title') }}
+                    </div>
+                    {% if form.slug is defined %}
                         <div class="col">
-                            {{ _self.form_row(form, field) }}
+                            {{ _self.form_row(form, 'slug') }}
                         </div>
-                    {% endfor %}
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -139,3 +166,22 @@
     </div>
 </div>
 {{ form_end(form) }}
+
+<script nonce="{{ csp_nonce() }}">
+    $(function () {
+        let show = function () {
+            $('.published-to-date-selector').removeClass('d-none');
+        };
+        let hide = function () {
+            $('.published-to-date-selector').addClass('d-none');
+            $('#node_form_publishedTo').val('');
+        };
+        $('#node-published-to-switch').change(function () {
+            if ($(this).is(':checked')) {
+                show();
+            } else {
+                hide();
+            }
+        });
+    });
+</script>

@@ -28,7 +28,7 @@ class DatabaseStorage implements StorageInterface
 
     public function all(): array
     {
-        $sourceData = $this->connection->fetchAll('SELECT * FROM #__node_type WHERE active = 1');
+        $sourceData = $this->connection->fetchAllAssociative('SELECT * FROM #__node_type WHERE active = 1');
         $types = [];
 
         foreach ($sourceData as $source) {

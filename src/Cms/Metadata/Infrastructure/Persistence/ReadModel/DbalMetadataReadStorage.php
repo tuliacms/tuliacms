@@ -35,7 +35,7 @@ class DbalMetadataReadStorage implements MetadataReadStorageInterface
         WHERE
             tm.owner_id IN (:owner_id)";
 
-        $source = $this->connection->fetchAll($sql, [
+        $source = $this->connection->fetchAllAssociative($sql, [
             'locale' => $this->currentWebsite->getLocale()->getCode(),
             'owner_id' => $ownerId,
         ], [

@@ -45,7 +45,7 @@ class DbalContactFormWriteStorage extends AbstractLocalizableStorage implements 
             $translationColumn = '1 AS translated';
         }
 
-        $form = $this->connection->fetchAll("
+        $form = $this->connection->fetchAllAssociative("
             SELECT
                 tm.*,
                 COALESCE(tl.locale, :locale) AS locale,

@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL;
 
 use Closure;
+use Doctrine\DBAL\Result;
+use Doctrine\DBAL\Statement;
 use Exception;
 use Throwable;
 use Doctrine\DBAL\Cache\QueryCacheProfile;
@@ -32,25 +34,20 @@ interface ConnectionInterface
      *
      * @return mixed
      */
-    public function executeQuery($query, array $params = [], $types = [], ?QueryCacheProfile $qcp = null);
+    public function executeQuery(
+        string $sql,
+        array $params = [],
+        $types = [],
+        ?QueryCacheProfile $qcp = null
+    ): Result;
 
-    /**
-     * @param $query
-     * @param array $params
-     * @param array $types
-     *
-     * @return mixed
-     */
-    public function executeUpdate($query, array $params = [], array $types = []);
+    public function executeUpdate(string $sql, array $params = [], array $types = []): int;
 
-    public function query();
+    public function query(string $sql): Result;
 
-    /**
-     * @param $statement
-     *
-     * @return mixed
-     */
-    public function prepare($statement);
+    public function exec(string $sql): int;
+
+    public function prepare(string $sql): Statement;
 
     /**
      * @param $tableExpression

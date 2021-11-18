@@ -21,7 +21,7 @@ class DbalTermPathReadStorage implements TermPathReadStorageInterface
 
     public function find(string $termId, string $locale): array
     {
-        $result = $this->connection->fetchAll('
+        $result = $this->connection->fetchAllAssociative('
             SELECT *
             FROM #__term_path
             WHERE term_id = :term_id AND locale = :locale
@@ -36,7 +36,7 @@ class DbalTermPathReadStorage implements TermPathReadStorageInterface
 
     public function findTermIdByPath(string $path, string $locale): ?string
     {
-        $result = $this->connection->fetchAll('
+        $result = $this->connection->fetchAllAssociative('
             SELECT term_id
             FROM #__term_path
             WHERE path = :path AND locale = :locale
