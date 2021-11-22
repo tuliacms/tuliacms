@@ -20,20 +20,23 @@ class StatusDecorator implements NodeTypeDecoratorInterface
             'name' => 'status',
             'type' => 'select',
             'label' => 'publicationStatus',
+            'internal' => true,
             'constraints' => [
                 ['name' => 'required'],
             ],
-            'options' => [
-                'constraints' => [
-                    new Assert\NotBlank(),
-                    new Assert\Choice([ 'choices' => ['draft', 'published', 'trashed'] ]),
-                ],
-                'choices' => [
-                    'Draft' => 'draft',
-                    'Published' => 'published',
-                    'Trashed' => 'trashed',
-                ],
-            ],
+            'builder_options' => function () {
+                return [
+                    'constraints' => [
+                        new Assert\NotBlank(),
+                        new Assert\Choice([ 'choices' => ['draft', 'published', 'trashed'] ]),
+                    ],
+                    'choices' => [
+                        'Draft' => 'draft',
+                        'Published' => 'published',
+                        'Trashed' => 'trashed',
+                    ],
+                ];
+            }
         ]));
     }
 }

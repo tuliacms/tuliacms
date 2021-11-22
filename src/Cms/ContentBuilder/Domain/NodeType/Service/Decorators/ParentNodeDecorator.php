@@ -32,22 +32,25 @@ class ParentNodeDecorator implements NodeTypeDecoratorInterface
         $nodeType->addField(new Field([
             'name' => 'parent_id',
             'type' => 'node_select',
-            'label' => 'parent',
-            'options' => [
-                'search_route_params' => [
-                    'node_type' => $nodeType->getType(),
-                ],
-                'constraints' => [
-                    new Callback(function ($value, ExecutionContextInterface $context) use ($nodeType) {
-                        if (empty($value) === false && $value === $context->getRoot()->get('id')->getData()) {
-                            $context->buildViolation('cannotAssignSelfNodeParent')
-                                ->setTranslationDomain($nodeType->getTranslationDomain())
-                                ->atPath('parent_id')
-                                ->addViolation();
-                        }
-                    }),
-                ]
-            ]
+            'label' => 'parentNode',
+            'internal' => true,
+            'builder_options' => function () use ($nodeType) {
+                return [
+                    'search_route_params' => [
+                        'node_type' => $nodeType->getType(),
+                    ],
+                    'constraints' => [
+                        new Callback(function ($value, ExecutionContextInterface $context) use ($nodeType) {
+                            if (empty($value) === false && $value === $context->getRoot()->get('id')->getData()) {
+                                $context->buildViolation('cannotAssignSelfNodeParent')
+                                    ->setTranslationDomain($nodeType->getTranslationDomain())
+                                    ->atPath('parent_id')
+                                    ->addViolation();
+                            }
+                        }),
+                    ]
+                ];
+            }
         ]));
     }
 }

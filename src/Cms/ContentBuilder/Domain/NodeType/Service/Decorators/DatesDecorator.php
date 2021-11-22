@@ -19,14 +19,20 @@ class DatesDecorator implements NodeTypeDecoratorInterface
             'name' => 'published_at',
             'type' => 'datetime',
             'label' => 'publishedAt',
-            'constraints' => [
-                ['name' => 'required'],
-            ],
+            'internal' => true,
+            'builder_options' => function () {
+                return [
+                    'constraints' => [
+                        ['name' => 'required'],
+                    ],
+                ];
+            }
         ]));
         $nodeType->addField(new Field([
             'name' => 'published_to',
             'type' => 'datetime',
             'label' => 'publicationEndsAt',
+            'internal' => true,
         ]));
     }
 }

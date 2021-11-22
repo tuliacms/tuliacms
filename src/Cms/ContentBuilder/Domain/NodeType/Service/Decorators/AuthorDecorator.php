@@ -24,19 +24,22 @@ class AuthorDecorator implements NodeTypeDecoratorInterface
 
     public function decorate(NodeType $nodeType): void
     {
-        /** @var User $author */
-        $author = $this->authenticatedUserProvider->getUser();
-
         $nodeType->addField(new Field([
             'name' => 'author_id',
             'type' => 'user',
-            'label' => '',
-            'constraints' => [
-                ['name' => 'required'],
-            ],
-            'options' => [
-                'empty_data' => $author->getId(),
-            ]
+            'label' => 'author',
+            'internal' => true,
+            'builder_options' => function () {
+                /** @var User $author */
+                $author = $this->authenticatedUserProvider->getUser();
+
+                return [
+                    'empty_data' => $author->getId(),
+                    'constraints' => [
+                        ['name' => 'required'],
+                    ],
+                ];
+            }
         ]));
     }
 }

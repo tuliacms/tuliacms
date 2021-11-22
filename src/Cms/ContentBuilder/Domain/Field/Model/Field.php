@@ -10,6 +10,7 @@ namespace Tulia\Cms\ContentBuilder\Domain\Field\Model;
 class Field
 {
     private array $options;
+    private array $builderOptions = [];
 
     private static $defaults = [
         'name' => '',
@@ -17,8 +18,9 @@ class Field
         'label' => '',
         'multilingual' => false,
         'multiple' => false,
+        'internal' => false,
         'flags' => [],
-        'options' => []
+        'builder_options' => null,
     ];
 
     public function __construct(array $options) {
@@ -29,8 +31,9 @@ class Field
         \assert(\is_string($this->options['label']), 'The "label" option must be a string.');
         \assert(\is_bool($this->options['multilingual']), 'The "multilingual" option must be a boolean.');
         \assert(\is_bool($this->options['multiple']), 'The "multiple" option must be a boolean.');
+        \assert(\is_bool($this->options['internal']), 'The "internal" option must be a boolean.');
         \assert(\is_array($this->options['flags']), 'The "flags" option must be an array.');
-        \assert(\is_array($this->options['options']), 'The "options" option must be an array.');
+        \assert($this->options['builder_options'] === null || \is_callable($this->options['builder_options']), 'The "builder_options" option must be an array.');
 
         if ($this->options['type'] === 'taxonomy') {
             \assert(\is_string($this->options['taxonomy']), 'The "taxonomy" option must be a string.');
@@ -57,6 +60,11 @@ class Field
         return $this->options['multiple'];
     }
 
+    public function isInternal(): bool
+    {
+        return $this->options['internal'];
+    }
+
     public function getLabel(): string
     {
         return $this->options['label'];
@@ -67,9 +75,17 @@ class Field
         return in_array($flag, $this->options['flags'], true);
     }
 
-    public function getOptions(): array
+    public function getBuilderOptions(): array
     {
-        return $this->options['options'];
+        if ($this->builderOptions !== []) {
+            return $this->builderOptions;
+        }
+
+        if (is_callable($this->options['builder_options'])) {
+            return $this->options['builder_options'] = $this->options['builder_options']();
+        }
+
+        return [];
     }
 
     public function getTaxonomy(): string

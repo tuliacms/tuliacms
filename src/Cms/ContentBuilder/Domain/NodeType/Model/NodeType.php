@@ -9,6 +9,7 @@ use Tulia\Cms\ContentBuilder\Domain\NodeType\Exception\CannotSetRoutableNodeType
 use Tulia\Cms\ContentBuilder\Domain\NodeType\Exception\MissingRoutableFieldException;
 use Tulia\Cms\ContentBuilder\Domain\NodeType\Exception\MultipleValueForTitleOrSlugOccuredException;
 use Tulia\Cms\ContentBuilder\Domain\NodeType\Exception\RoutableFieldIsNotTaxonomyTypeException;
+use Tulia\Cms\ContentBuilder\Domain\TaxonomyType\Exception\CannotOverwriteInternalFieldException;
 
 /**
  * @author Adam Banaszkiewicz
@@ -127,6 +128,7 @@ class NodeType
 
     /**
      * @throws MultipleValueForTitleOrSlugOccuredException
+     * @throws CannotOverwriteInternalFieldException
      */
     public function addField(Field $field): Field
     {
@@ -170,19 +172,16 @@ class NodeType
 
     /**
      * @throws MultipleValueForTitleOrSlugOccuredException
+     * @throws CannotOverwriteInternalFieldException
      */
     private function validateField(Field $field): void
     {
-        $this->checkMultiplenessForTitleAndSlugField($field);
-    }
-
-    /**
-     * @throws MultipleValueForTitleOrSlugOccuredException
-     */
-    private function checkMultiplenessForTitleAndSlugField(Field $field): void
-    {
         if ($field->isMultiple() && in_array($field->getName(), ['title', 'slug'])) {
             throw MultipleValueForTitleOrSlugOccuredException::fromFieldType($field->getName());
+        }
+
+        if (isset($this->fields[$field->getName()]) && $this->fields[$field->getName()]->isInternal()) {
+            throw CannotOverwriteInternalFieldException::fromName($field->getName());
         }
     }
 

@@ -98,10 +98,10 @@
     <div class="page-form-sidebar">
         <div class="accordion">
             <div class="accordion-section">
-                <div class="accordion-section-button " data-bs-toggle="collapse" data-bs-target="#form-collapse-sidebar-category">
+                <div class="accordion-section-button" data-bs-toggle="collapse" data-bs-target="#form-collapse-sidebar-status">
                     {{ 'publicationStatus'|trans }}
                 </div>
-                <div id="form-collapse-sidebar-category" class="accordion-collapse collapse show">
+                <div id="form-collapse-sidebar-status" class="accordion-collapse collapse show">
                     <div class="accordion-section-body">
                         {{ form_row(form.published_at) }}
 
@@ -118,6 +118,13 @@
                             </div>
                         </div>
                         {{ form_row(form.status) }}
+                        {{ form_row(form.author_id) }}
+                        {% if form.flags is defined %}
+                            {{ form_row(form.flags) }}
+                        {% endif %}
+                        {% if form.parent_id is defined %}
+                            {{ form_row(form.parent_id) }}
+                        {% endif %}
                     </div>
                 </div>
             </div>

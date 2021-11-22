@@ -54,7 +54,7 @@ class SymfonyFormBuilder
                     'label' => $field->getLabel() === ''
                         ? false
                         : $field->getLabel()
-                ], $field->getOptions());
+                ], $field->getBuilderOptions());
 
                 $options['constraints'] = $this->constraintsBuilder->build($options['constraints'] ?? []);
 

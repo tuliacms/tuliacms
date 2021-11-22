@@ -27,24 +27,27 @@ class FlagsDecorator implements NodeTypeDecoratorInterface
 
     public function decorate(NodeType $nodeType): void
     {
-        $availableFlags = [];
-
-        foreach ($this->flagRegistry->all() as $type => $flag) {
-            $availableFlags[$this->translator->trans($flag['label'])] = $type;
-        }
-
         $nodeType->addField(new Field([
             'name' => 'flags',
             'type' => 'select',
             'label' => 'flags',
             'multilingual' => false,
             'multiple' => true,
-            'options' => [
-                'choices' => $availableFlags,
-                'help' => 'flagsHelp',
-                'choice_translation_domain' => false,
-                'multiple' => true,
-            ]
+            'internal' => true,
+            'builder_options' => function () {
+                $availableFlags = [];
+
+                foreach ($this->flagRegistry->all() as $type => $flag) {
+                    $availableFlags[$this->translator->trans($flag['label'])] = $type;
+                }
+
+                return [
+                    'choices' => $availableFlags,
+                    'help' => 'flagsHelp',
+                    'choice_translation_domain' => false,
+                    'multiple' => true,
+                ];
+            }
         ]));
     }
 }

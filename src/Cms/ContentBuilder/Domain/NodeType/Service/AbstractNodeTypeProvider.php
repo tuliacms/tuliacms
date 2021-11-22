@@ -52,9 +52,11 @@ abstract class AbstractNodeTypeProvider implements NodeTypeProviderInterface
             'multiple' => $options['multiple'],
             'taxonomy' => $options['taxonomy'],
             'flags' => $this->fieldTypeMappingRegistry->getTypeFlags($options['type']),
-            'options' => [
-                'constraints' => $options['constraints'],
-            ],
+            'builder_options' => function () use ($options) {
+                return [
+                    'constraints' => $options['constraints'],
+                ];
+            }
         ]);
     }
 }

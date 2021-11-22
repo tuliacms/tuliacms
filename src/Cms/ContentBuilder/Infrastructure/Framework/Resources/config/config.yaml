@@ -80,6 +80,9 @@ cms:
                             category:
                                 label: taxonomy
                                 fields: [category, tags]
+                            thumbnail:
+                                label: thumbnail
+                                fields: [thumbnail]
 
         data_types:
             mapping:
