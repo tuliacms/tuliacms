@@ -41,10 +41,15 @@ class Cropper
         $size = $this->imageSize->get($sizeName);
 
         $directory = substr($image->getId(), 0, 2) . '/' . substr($image->getId(), 2, 2) . '/' . substr($image->getId(), 4, 2) . '/' . $image->getId();
-        $name      = pathinfo($image->getFilename(), PATHINFO_FILENAME);
+        $name = pathinfo($image->getFilename(), PATHINFO_FILENAME);
 
         $source = $this->filesDirectory . '/' . $image->getPath() . '/' . $image->getFilename();
         $output = '/uploads/thumbnails/' . $sizeName . '/' . $directory . '/' . $name . '.' . $image->getExtension();
+
+        // Return path, if file already exists.
+        if (is_file($this->filesDirectory . $output)) {
+            return $output;
+        }
 
         if (is_dir(\dirname($this->filesDirectory . $output)) === false) {
             if (!mkdir($concurrentDirectory = \dirname($this->filesDirectory . $output), 0777, true) && !is_dir($concurrentDirectory)) {
