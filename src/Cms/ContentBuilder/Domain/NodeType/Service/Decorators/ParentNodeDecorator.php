@@ -6,7 +6,7 @@ namespace Tulia\Cms\ContentBuilder\Domain\NodeType\Service\Decorators;
 
 use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
-use Tulia\Cms\ContentBuilder\Domain\Field\Model\Field;
+use Tulia\Cms\ContentBuilder\Domain\ContentType\Model\Field;
 use Tulia\Cms\ContentBuilder\Domain\NodeType\Model\NodeType;
 use Tulia\Cms\ContentBuilder\Domain\NodeType\Service\NodeTypeDecoratorInterface;
 use Tulia\Cms\Node\Domain\NodeFlag\NodeFlagRegistryInterface;

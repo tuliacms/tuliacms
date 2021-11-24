@@ -8,8 +8,11 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Tulia\Cms\ContentBuilder\UserInterface\Web\Form\ContentTypeFormDescriptor;
+use Tulia\Cms\ContentBuilder\UserInterface\Web\Service\TaxonomyFormService;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Exception\TermNotFoundException;
+use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Taxonomy;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\ValueObject\TermId;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\TaxonomyRepository;
 use Tulia\Cms\Taxonomy\Ports\Infrastructure\Persistence\Domain\ReadModel\Datatable\TermDatatableFinderInterface;
@@ -18,6 +21,7 @@ use Tulia\Cms\Taxonomy\UserInterface\Web\Backend\Form\TermForm;
 use Tulia\Component\Datatable\DatatableFactory;
 use Tulia\Component\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Component\Templating\ViewInterface;
+use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Term as Model;
 
 /**
  * @author Adam Banaszkiewicz
@@ -31,17 +35,20 @@ class Term extends AbstractController
     private DatatableFactory $factory;
 
     private TermDatatableFinderInterface $finder;
+    private TaxonomyFormService $taxonomyFormService;
 
     public function __construct(
         TermFinderInterface $termFinder,
         TaxonomyRepository $repository,
         DatatableFactory $factory,
-        TermDatatableFinderInterface $finder
+        TermDatatableFinderInterface $finder,
+        TaxonomyFormService $taxonomyFormService
     ) {
         $this->termFinder = $termFinder;
         $this->repository = $repository;
         $this->factory = $factory;
         $this->finder = $finder;
+        $this->taxonomyFormService = $taxonomyFormService;
     }
 
     public function index(string $taxonomyType): RedirectResponse
@@ -83,12 +90,11 @@ class Term extends AbstractController
         $taxonomy = $this->repository->get($taxonomyType);
         $term = $this->repository->createNewTerm($taxonomy);
 
-        $form = $this->createForm(TermForm::class, $term, ['taxonomy_type' => $taxonomy->getType()->getType()]);
-        $form->handleRequest($request);
+        $formDescriptor = $this->produceFormDescriptor($taxonomy, $term, $request);
+        $taxonomyTypeObject = $formDescriptor->getContentType();
 
-        $taxonomyTypeObject = $taxonomy->getType();
-
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($formDescriptor->isFormValid()) {
+            $this->updateModel($formDescriptor, $term);
             $taxonomy->addTerm($term);
             $this->repository->save($taxonomy);
 
@@ -99,7 +105,7 @@ class Term extends AbstractController
         return $this->view('@backend/taxonomy/term/create.tpl', [
             'taxonomyType' => $taxonomyTypeObject,
             'term' => $term,
-            'form' => $form->createView(),
+            'formDescriptor' => $formDescriptor,
         ]);
     }
 
@@ -168,5 +174,31 @@ class Term extends AbstractController
         }
 
         return $this->redirectToRoute('backend.term', [ 'taxonomyType' => $taxonomy->getType()->getType() ]);
+    }
+
+    private function produceFormDescriptor(Taxonomy $taxonomy, Model $term, Request $request): ContentTypeFormDescriptor
+    {
+        return $this->taxonomyFormService->buildFormDescriptor(
+            $taxonomy->getType()->getType(),
+            array_merge(
+                [
+                    'title' => $term->getTitle(),
+                    'slug' => $term->getSlug(),
+                    'parent_id' => $term->getParentId(),
+                ],
+                $term->getAttributes()
+            ),
+            $request
+        );
+    }
+
+    private function updateModel(ContentTypeFormDescriptor $formDescriptor, Model $term): void
+    {
+        $data = $formDescriptor->getData();
+
+        $term->setSlug($data['slug']);
+        $term->setTitle($data['title']);
+        $term->setParentId($data['parent_id']);
+        $term->updateAttributes($data);
     }
 }

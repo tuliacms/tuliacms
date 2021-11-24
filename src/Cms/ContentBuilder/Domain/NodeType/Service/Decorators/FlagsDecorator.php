@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\ContentBuilder\Domain\NodeType\Service\Decorators;
 
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Tulia\Cms\ContentBuilder\Domain\Field\Model\Field;
+use Tulia\Cms\ContentBuilder\Domain\ContentType\Model\Field;
 use Tulia\Cms\ContentBuilder\Domain\NodeType\Model\NodeType;
 use Tulia\Cms\ContentBuilder\Domain\NodeType\Service\NodeTypeDecoratorInterface;
 use Tulia\Cms\Node\Domain\NodeFlag\NodeFlagRegistryInterface;

@@ -19,7 +19,7 @@ cms:
                 is_hierarchical: true
                 routable_taxonomy_field: category
                 translation_domain: pages
-                layout: default
+                layout: node_default
                 fields:
                     introduction:
                         type: textarea
@@ -47,22 +47,10 @@ cms:
                 routing_strategy: simple
                 is_routable: true
                 is_hierarchical: true
-                fields:
-                    name:
-                        type: text
-                        label: name
-                        multilingual: true
-                        constraints:
-                            - { name: required }
-                    slug:
-                        label: slug
-                        type: text
-                        multilingual: true
-                        constraints:
-                            - { name: required }
+                layout: taxonomy_default
 
         layout_types:
-            default:
+            node_default:
                 label: defaultLayout
                 sections:
                     main:
@@ -83,6 +71,16 @@ cms:
                             thumbnail:
                                 label: thumbnail
                                 fields: [thumbnail]
+            taxonomy_default:
+                label: defaultLayout
+                sections:
+                    main:
+                        groups:
+                            introduction:
+                                label: introduction
+                                fields: []
+                    sidebar:
+                        groups: ~
 
         data_types:
             mapping:

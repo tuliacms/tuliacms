@@ -141,7 +141,6 @@ class Node extends AggregateRoot
             $attributes['type'],
             $attributes['status'],
             $attributes['title'],
-            $attributes['status'],
         );
 
         foreach ($attributes as $name => $value) {

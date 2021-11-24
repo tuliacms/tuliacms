@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\ContentBuilder\Domain\Field\Model;
+namespace Tulia\Cms\ContentBuilder\Domain\ContentType\Model;
 
 /**
  * @author Adam Banaszkiewicz

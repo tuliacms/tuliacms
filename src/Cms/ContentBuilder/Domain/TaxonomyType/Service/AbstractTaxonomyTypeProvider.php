@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContentBuilder\Domain\TaxonomyType\Service;
 
-use Tulia\Cms\ContentBuilder\Domain\Field\Model\Field;
+use Tulia\Cms\ContentBuilder\Domain\ContentType\Model\Field;
 use Tulia\Cms\ContentBuilder\Domain\TaxonomyType\Model\TaxonomyType;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\FieldTypeMappingRegistry;
 
 /**
  * @author Adam Banaszkiewicz
  */
-abstract class AbstractTaxonomyTypeProviderProvider implements TaxonomyTypeProviderInterface
+abstract class AbstractTaxonomyTypeProvider implements TaxonomyTypeProviderInterface
 {
     private FieldTypeMappingRegistry $fieldTypeMappingRegistry;
 
@@ -20,9 +20,9 @@ abstract class AbstractTaxonomyTypeProviderProvider implements TaxonomyTypeProvi
         $this->fieldTypeMappingRegistry = $fieldTypeMappingRegistry;
     }
 
-    protected function buildNodeType(string $name, array $options): TaxonomyType
+    protected function buildTaxonomyType(string $name, array $options): TaxonomyType
     {
-        $nodeType = new TaxonomyType($name);
+        $nodeType = new TaxonomyType($name, $options['layout']);
         $nodeType->setController($options['controller']);
         $nodeType->setIsRoutable($options['is_routable']);
         $nodeType->setIsHierarchical($options['is_hierarchical']);

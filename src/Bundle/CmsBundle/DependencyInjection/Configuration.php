@@ -123,7 +123,7 @@ class Configuration implements ConfigurationInterface
                                     // Also those node's paths, will be created with all ascendants.
                                     ->booleanNode('is_hierarchical')->defaultFalse()->end()
                                     // Layout name with defines where each field should be showed on admin page.
-                                    ->scalarNode('layout')->defaultValue('default')->end()
+                                    ->scalarNode('layout')->isRequired()->end()
                                     // Fields for given type
                                     ->arrayNode('fields')
                                         ->useAttributeAsKey('name')
@@ -162,21 +162,6 @@ class Configuration implements ConfigurationInterface
                         ->end()
                         ->arrayNode('taxonomy_types')
                             ->useAttributeAsKey('name')
-                            ->beforeNormalization()
-                                ->always(function ($types) {
-                                    foreach ($types as $name => $type) {
-                                        if (! ($type['is_routable'] ?? false)) {
-                                            continue;
-                                        }
-
-                                        if (isset($type['fields']['slug']) === false) {
-                                            throw new LogicException(sprintf('Routable TaxonomyType (%s) must have "slug" field.', $name));
-                                        }
-                                    }
-
-                                    return $types;
-                                })
-                            ->end()
                             ->arrayPrototype()
                                 ->addDefaultsIfNotSet()
                                 ->children()
@@ -185,6 +170,8 @@ class Configuration implements ConfigurationInterface
                                     ->scalarNode('translation_domain')->defaultValue('page')->end()
                                     ->booleanNode('is_hierarchical')->defaultFalse()->end()
                                     ->scalarNode('routing_strategy')->defaultValue('simple')->end()
+                                    // Layout name with defines where each field should be showed on admin page.
+                                    ->scalarNode('layout')->isRequired()->end()
                                     // Fields for given type
                                     ->arrayNode('fields')
                                         ->useAttributeAsKey('name')

@@ -103,22 +103,28 @@
                 </div>
                 <div id="form-collapse-sidebar-status" class="accordion-collapse collapse show">
                     <div class="accordion-section-body">
-                        {{ form_row(form.published_at) }}
+                        {% if form.published_at is defined %}
+                            {{ form_row(form.published_at) }}
 
-                        {% set publishedToManually = form.published_to.vars.value != '' %}
-                        <div class="node-published-to-selector mb-4">
-                            <div class="published-to-date-selector{{ publishedToManually ? '' : ' d-none' }}">
-                                {{ form_row(form.published_to) }}
-                            </div>
-                            <div class="published-to-checkbox">
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="node-published-to-switch"{{ publishedToManually ? ' checked="checked"' : '' }} />
-                                    <label class="custom-control-label" for="node-published-to-switch">{{ 'setPublicationEndDate'|trans }}</label>
+                            {% set publishedToManually = form.published_to.vars.value != '' %}
+                            <div class="node-published-to-selector mb-4">
+                                <div class="published-to-date-selector{{ publishedToManually ? '' : ' d-none' }}">
+                                    {{ form_row(form.published_to) }}
+                                </div>
+                                <div class="published-to-checkbox">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="node-published-to-switch"{{ publishedToManually ? ' checked="checked"' : '' }} />
+                                        <label class="custom-control-label" for="node-published-to-switch">{{ 'setPublicationEndDate'|trans }}</label>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        {{ form_row(form.status) }}
-                        {{ form_row(form.author_id) }}
+                        {% endif %}
+                        {% if form.status is defined %}
+                            {{ form_row(form.status) }}
+                        {% endif %}
+                        {% if form.author_id is defined %}
+                            {{ form_row(form.author_id) }}
+                        {% endif %}
                         {% if form.flags is defined %}
                             {{ form_row(form.flags) }}
                         {% endif %}

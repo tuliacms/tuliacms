@@ -6,9 +6,10 @@ namespace Tulia\Cms\ContentBuilder\UserInterface\Web\Service;
 
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
-use Tulia\Cms\ContentBuilder\Domain\NodeType\Model\NodeType;
+use Tulia\Cms\ContentBuilder\Domain\ContentType\Model\AbstractContentType;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Exception\ConstraintNotExistsException;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Exception\FieldTypeNotExistsException;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\ConstraintsBuilder;
@@ -21,10 +22,10 @@ use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\SubmitType;
  */
 class SymfonyFormBuilder
 {
-    private FormFactoryInterface $formFactory;
-    private FieldTypeMappingRegistry $mappingRegistry;
-    private ConstraintsBuilder $constraintsBuilder;
-    private LoggerInterface $logger;
+    protected FormFactoryInterface $formFactory;
+    protected FieldTypeMappingRegistry $mappingRegistry;
+    protected ConstraintsBuilder $constraintsBuilder;
+    protected LoggerInterface $logger;
 
     public function __construct(
         FormFactoryInterface $formFactory,
@@ -38,15 +39,27 @@ class SymfonyFormBuilder
         $this->logger = $contentBuilderLogger;
     }
 
-    public function createForm(NodeType $nodeType, array $data): FormInterface
+    public function createForm(AbstractContentType $taxonomyType, array $data): FormInterface
     {
-        $builder = $this->formFactory->createNamedBuilder(
-            sprintf('content_builder_form_%s', $nodeType->getType()),
+        $builder = $this->createFormBuilder($taxonomyType->getType(), $data);
+
+        $this->buildFieldsWithBuilder($taxonomyType->getFields(), $builder);
+
+        return $builder->getForm();
+    }
+
+    protected function createFormBuilder(string $type, array $data): FormBuilderInterface
+    {
+        return $this->formFactory->createNamedBuilder(
+            sprintf('content_builder_form_%s', $type),
             'Symfony\Component\Form\Extension\Core\Type\FormType',
             $data
         );
+    }
 
-        foreach ($nodeType->getFields() as $field) {
+    protected function buildFieldsWithBuilder(array $fields, FormBuilderInterface $builder): void
+    {
+        foreach ($fields as $field) {
             try {
                 $typeBuilder = $this->mappingRegistry->getTypeBuilder($field->getType());
 
@@ -68,9 +81,21 @@ class SymfonyFormBuilder
                     $options
                 );
             } catch (ConstraintNotExistsException $e) {
-                $this->logger->warning(sprintf('Cms\ContentBuilder: Constraint "%s" not exists. Field "%s" wasn\'t created in form.', $e->getName(), $field->getName()));
+                $this->logger->warning(
+                    sprintf(
+                        'Cms\ContentBuilder: Constraint "%s" not exists. Field "%s" wasn\'t created in form.',
+                        $e->getName(),
+                        $field->getName()
+                    )
+                );
             } catch (FieldTypeNotExistsException $e) {
-                $this->logger->warning(sprintf('Cms\ContentBuilder: Mapping for field type "%s" not exists. Field "%s" wasn\'t created in form.', $field->getType(), $field->getName()));
+                $this->logger->warning(
+                    sprintf(
+                        'Cms\ContentBuilder: Mapping for field type "%s" not exists. Field "%s" wasn\'t created in form.',
+                        $field->getType(),
+                        $field->getName()
+                    )
+                );
             }
         }
 
@@ -82,7 +107,5 @@ class SymfonyFormBuilder
                 'route' => 'backend.widget',
             ])
             ->add('save', SubmitType::class);
-
-        return $builder->getForm();
     }
 }

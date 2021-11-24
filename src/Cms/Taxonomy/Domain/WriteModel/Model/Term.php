@@ -4,19 +4,14 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Taxonomy\Domain\WriteModel\Model;
 
-use Tulia\Cms\Metadata\Domain\WriteModel\MagickMetadataTrait;
-use Tulia\Cms\Metadata\Ports\Domain\WriteModel\MetadataAwareInterface;
-use Tulia\Cms\Taxonomy\Domain\WriteModel\Event;
+use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\ValueObject\AttributeInfo;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\ValueObject\TermId;
-use Tulia\Cms\Platform\Domain\WriteModel\Model\AggregateRoot;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class Term extends AggregateRoot implements MetadataAwareInterface
+class Term
 {
-    use MagickMetadataTrait;
-
     public const ROOT_ID = '00000000-0000-0000-0000-000000000000';
     public const ROOT_LEVEL = 0;
 
@@ -34,7 +29,7 @@ class Term extends AggregateRoot implements MetadataAwareInterface
 
     protected string $locale = 'en_US';
 
-    protected ?string $name = null;
+    protected ?string $title = null;
 
     protected ?string $slug = null;
 
@@ -43,6 +38,13 @@ class Term extends AggregateRoot implements MetadataAwareInterface
     protected bool $visibility;
 
     protected bool $translated = false;
+
+    protected array $attributes = [];
+
+    /**
+     * @var AttributeInfo[]
+     */
+    protected array $attributesInfo = [];
 
     protected $changeCallback;
 
@@ -57,7 +59,6 @@ class Term extends AggregateRoot implements MetadataAwareInterface
     public static function createNew(string $id, Taxonomy $taxonomy, string $locale, bool $isRoot = false): self
     {
         $self = new self($id, $taxonomy, $locale, $isRoot);
-        //$self->recordThat(new Event\TermCreated($id, $type, $locale));
 
         return $self;
     }
@@ -65,7 +66,7 @@ class Term extends AggregateRoot implements MetadataAwareInterface
     public static function createRoot(Taxonomy $taxonomy, string $locale): self
     {
         $item = new self(self::ROOT_ID, $taxonomy, $locale, true);
-        $item->name = 'root';
+        $item->title = 'root';
         $item->parentId = null;
         $item->position = 0;
         $item->level = 0;
@@ -87,11 +88,10 @@ class Term extends AggregateRoot implements MetadataAwareInterface
         $self->parentId = $data['parent_id'] ? new TermId($data['parent_id']) : null;
         $self->level = (int) ($data['level'] ?? 0);
         $self->position = (int) ($data['position'] ?? 0);
-        $self->name = $data['name'] ?? null;
+        $self->title = $data['title'] ?? null;
         $self->slug = $data['slug'] ?? null;
         $self->path = $data['path'] ?? null;
         $self->visibility = (bool) ($data['visibility'] ?? true);
-        $self->replaceMetadata($data['metadata'] ?? []);
 
         return $self;
     }
@@ -101,10 +101,64 @@ class Term extends AggregateRoot implements MetadataAwareInterface
         return $this->id;
     }
 
-    public function setId(TermId $id): void
+    public function getAttributeInfo(string $name): AttributeInfo
     {
-        $this->id = $id;
-        $this->recordTermChanged();
+        return $this->attributesInfo[$name];
+    }
+
+    public function addAttributeInfo(string $name, AttributeInfo $info): void
+    {
+        $this->validateAttributeName($name);
+
+        $this->attributesInfo[$name] = $info;
+    }
+
+    public function updateAttributes(array $attributes): void
+    {
+        unset(
+            $attributes['id'],
+            $attributes['title'],
+        );
+
+        foreach ($attributes as $name => $value) {
+            if (isset($this->attributesInfo[$name]) === false) {
+                throw new \Exception(sprintf('Attribute "%s" Must have AttributeInfo for this attribute.', $name));
+            }
+
+            if (isset($this->attributes[$name]) === false || $this->attributes[$name] !== $value) {
+                $this->attributes[$name] = $value;
+                /**
+                 * Calling recordUniqueThat() prevents the system to record multiple changes on the same attribute.
+                 * This may be caused, in example, by SlugGenerator: first time system sets raw value from From,
+                 * and then SlugGenerator sets the validated and normalized slug. For us, the last updated
+                 * attribute's value matters, so we remove all previous events and adds new, at the end of
+                 * collection.
+                 */
+                /*$this->recordUniqueThat(AttributeUpdated::fromNode($this, $name, $value), function ($event) use ($name) {
+                    return $name === $event->getAttribute();
+                });*/
+            }
+        }
+    }
+
+    public function getAttributes(): array
+    {
+        return $this->attributes;
+    }
+
+    public function removeAttribute(string $code): void
+    {
+        unset($this->attributes[$code]);
+    }
+
+    /**
+     * @param string $name
+     * @param mixed $default
+     * @return mixed
+     */
+    public function getAttribute(string $name, $default = null)
+    {
+        return $this->attributes[$name] ?? $default;
     }
 
     public function getParentId(): ?TermId
@@ -156,14 +210,14 @@ class Term extends AggregateRoot implements MetadataAwareInterface
         $this->recordTermChanged();
     }
 
-    public function getName(): ?string
+    public function getTitle(): ?string
     {
-        return $this->name;
+        return $this->title;
     }
 
-    public function setName(?string $name): void
+    public function setTitle(?string $title): void
     {
-        $this->name = $name;
+        $this->title = $title;
         $this->recordTermChanged();
     }
 
@@ -220,6 +274,22 @@ class Term extends AggregateRoot implements MetadataAwareInterface
     {
         if ($this->changeCallback) {
             call_user_func($this->changeCallback, $this);
+        }
+    }
+
+    /**
+     * @param mixed $code
+     */
+    private function validateAttributeName($code): void
+    {
+        if (is_string($code) === false) {
+            throw new \Exception('Must be string.');
+        }
+        if (strlen($code) < 2) {
+            throw new \Exception('Must have more than 2 chars.');
+        }
+        if (! preg_match('/^([a-z0-9_]+)$/m', $code)) {
+            throw new \Exception('Must contains only alphanumericals and underscores.');
         }
     }
 }

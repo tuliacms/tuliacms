@@ -4,90 +4,20 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContentBuilder\Domain\NodeType\Model;
 
-use Tulia\Cms\ContentBuilder\Domain\Field\Model\Field;
-use Tulia\Cms\ContentBuilder\Domain\NodeType\Exception\CannotSetRoutableNodeTypeWithoutSlugField;
-use Tulia\Cms\ContentBuilder\Domain\NodeType\Exception\MissingRoutableFieldException;
-use Tulia\Cms\ContentBuilder\Domain\NodeType\Exception\MultipleValueForTitleOrSlugOccuredException;
+use Tulia\Cms\ContentBuilder\Domain\ContentType\Model\AbstractContentType;
+use Tulia\Cms\ContentBuilder\Domain\ContentType\Model\Field;
+use Tulia\Cms\ContentBuilder\Domain\ContentType\Exception\MissingRoutableFieldException;
 use Tulia\Cms\ContentBuilder\Domain\NodeType\Exception\RoutableFieldIsNotTaxonomyTypeException;
-use Tulia\Cms\ContentBuilder\Domain\TaxonomyType\Exception\CannotOverwriteInternalFieldException;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class NodeType
+class NodeType extends AbstractContentType
 {
-    private string $type;
-    private string $layout;
-    private string $translationDomain = 'messages';
-    private string $controller = 'Tulia\Cms\Node\UserInterface\Web\Frontend\Controller\Node::show';
-    private bool $isRoutable = true;
-    private bool $isHierarchical = false;
-    private string $icon;
-    private ?string $routableTaxonomyField = null;
-
-    /**
-     * @var Field[]
-     */
-    private array $fields = [];
-
-    public function __construct(string $type, string $layout)
-    {
-        $this->type = $type;
-        $this->layout = $layout;
-    }
-
-    public function getType(): string
-    {
-        return $this->type;
-    }
-
-    public function getLayout(): string
-    {
-        return $this->layout;
-    }
-
-    public function getTranslationDomain(): string
-    {
-        return $this->translationDomain;
-    }
-
-    public function setTranslationDomain(string $translationDomain): void
-    {
-        $this->translationDomain = $translationDomain;
-    }
-
-    public function getController(): string
-    {
-        return $this->controller;
-    }
-
-    public function setController(string $controller): void
-    {
-        $this->controller = $controller;
-    }
-
-    public function isRoutable(): bool
-    {
-        return $this->isRoutable;
-    }
-
-    /**
-     * @throws CannotSetRoutableNodeTypeWithoutSlugField
-     */
-    public function setIsRoutable(bool $isRoutable): void
-    {
-        $this->isRoutable = $isRoutable;
-    }
-
-    public function isHierarchical(): bool
-    {
-        return $this->isHierarchical;
-    }
-
-    public function setIsHierarchical(bool $isHierarchical): void
-    {
-        $this->isHierarchical = $isHierarchical;
-    }
+    protected string $controller = 'Tulia\Cms\Node\UserInterface\Web\Frontend\Controller\Node::show';
+    protected string $layout = 'node_default';
+    protected string $icon;
+    protected ?string $routableTaxonomyField = null;
 
     public function getRoutableTaxonomyField(): ?string
     {
@@ -101,42 +31,6 @@ class NodeType
     public function setRoutableTaxonomyField(?string $routableTaxonomyField): void
     {
         $this->routableTaxonomyField = $routableTaxonomyField;
-    }
-
-    /**
-     * @return Field[]
-     */
-    public function getFields(): array
-    {
-        return $this->fields;
-    }
-
-    public function setFields(array $fields): void
-    {
-        $this->fields = $fields;
-    }
-
-    public function getField(string $name): Field
-    {
-        return $this->fields[$name];
-    }
-
-    public function hasField(string $name): bool
-    {
-        return isset($this->fields[$name]);
-    }
-
-    /**
-     * @throws MultipleValueForTitleOrSlugOccuredException
-     * @throws CannotOverwriteInternalFieldException
-     */
-    public function addField(Field $field): Field
-    {
-        $this->validateField($field);
-
-        $this->fields[$field->getName()] = $field;
-
-        return $field;
     }
 
     public function getRutableField(): ?Field
@@ -156,32 +50,12 @@ class NodeType
 
     /**
      * @throws RoutableFieldIsNotTaxonomyTypeException
-     * @throws CannotSetRoutableNodeTypeWithoutSlugField
      * @throws MissingRoutableFieldException
      */
-    public function validate(): void
+    protected function internalValidate(): void
     {
         if ($this->routableTaxonomyField) {
             $this->validateRoutableTaxonomy();
-        }
-
-        if ($this->isRoutable) {
-            $this->validateRoutableNodeType();
-        }
-    }
-
-    /**
-     * @throws MultipleValueForTitleOrSlugOccuredException
-     * @throws CannotOverwriteInternalFieldException
-     */
-    private function validateField(Field $field): void
-    {
-        if ($field->isMultiple() && in_array($field->getName(), ['title', 'slug'])) {
-            throw MultipleValueForTitleOrSlugOccuredException::fromFieldType($field->getName());
-        }
-
-        if (isset($this->fields[$field->getName()]) && $this->fields[$field->getName()]->isInternal()) {
-            throw CannotOverwriteInternalFieldException::fromName($field->getName());
         }
     }
 
@@ -189,7 +63,7 @@ class NodeType
      * @throws MissingRoutableFieldException
      * @throws RoutableFieldIsNotTaxonomyTypeException
      */
-    private function validateRoutableTaxonomy(): void
+    protected function validateRoutableTaxonomy(): void
     {
         if (isset($this->fields[$this->routableTaxonomyField]) === false) {
             throw MissingRoutableFieldException::fromName($this->type, $this->routableTaxonomyField);
@@ -198,13 +72,8 @@ class NodeType
         }
     }
 
-    /**
-     * @throws CannotSetRoutableNodeTypeWithoutSlugField
-     */
-    private function validateRoutableNodeType(): void
+    protected function internalValidateField(Field $field): void
     {
-        if ($this->isRoutable && isset($this->fields['slug']) === false) {
-            throw CannotSetRoutableNodeTypeWithoutSlugField::fromType($this->type);
-        }
+
     }
 }

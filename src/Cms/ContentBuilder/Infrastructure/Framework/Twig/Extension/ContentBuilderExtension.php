@@ -6,7 +6,7 @@ namespace Tulia\Cms\ContentBuilder\Infrastructure\Framework\Twig\Extension;
 
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Exception\LayoutNotExists;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\LayoutBuilder;
-use Tulia\Cms\ContentBuilder\UserInterface\Web\Form\FormDescriptor;
+use Tulia\Cms\ContentBuilder\UserInterface\Web\Form\ContentTypeFormDescriptor;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -25,7 +25,7 @@ class ContentBuilderExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('render_content_builder_form_layout', function (FormDescriptor $formDescriptor) {
+            new TwigFunction('render_content_builder_form_layout', function (ContentTypeFormDescriptor $formDescriptor) {
                 try {
                     return $this->layoutBuilder->build($formDescriptor);
                 } catch (LayoutNotExists $e) {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\ContentBuilder\Domain\NodeType\Exception;
+namespace Tulia\Cms\ContentBuilder\Domain\ContentType\Exception;
 
 /**
  * @author Adam Banaszkiewicz

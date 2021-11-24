@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Taxonomy\UserInterface\Web\Shared\Form\FormType;
 
-use Tulia\Cms\ContentBuilder\Domain\Field\Model\Field;
+use Tulia\Cms\ContentBuilder\Domain\ContentType\Model\Field;
 
 /**
  * @author Adam Banaszkiewicz

@@ -6,12 +6,12 @@ namespace Tulia\Cms\ContentBuilder\UserInterface\Web\Service;
 
 use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\ContentBuilder\Domain\NodeType\Service\NodeTypeRegistry;
-use Tulia\Cms\ContentBuilder\UserInterface\Web\Form\FormDescriptor;
+use Tulia\Cms\ContentBuilder\UserInterface\Web\Form\ContentTypeFormDescriptor;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class FormService
+class NodeFormService
 {
     private NodeTypeRegistry $nodeTypeRegistry;
     private SymfonyFormBuilder $formBuilder;
@@ -24,14 +24,14 @@ class FormService
         $this->formBuilder = $formBuilder;
     }
 
-    public function buildFormDescriptor(string $type, array $nodeData, Request $request): FormDescriptor
+    public function buildFormDescriptor(string $type, array $nodeData, Request $request): ContentTypeFormDescriptor
     {
         $nodeType = $this->nodeTypeRegistry->get($type);
 
         $form = $this->formBuilder->createForm($nodeType, $nodeData);
         $form->handleRequest($request);
 
-        return new FormDescriptor(
+        return new ContentTypeFormDescriptor(
             $nodeType,
             $form
         );

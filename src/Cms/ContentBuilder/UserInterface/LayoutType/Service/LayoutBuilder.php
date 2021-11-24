@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service;
 
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Exception\LayoutNotExists;
-use Tulia\Cms\ContentBuilder\UserInterface\Web\Form\FormDescriptor;
+use Tulia\Cms\ContentBuilder\UserInterface\Web\Form\ContentTypeFormDescriptor;
 
 /**
  * @author Adam Banaszkiewicz
@@ -26,9 +26,9 @@ class LayoutBuilder
     /**
      * @throws LayoutNotExists
      */
-    public function build(FormDescriptor $formDescriptor): string
+    public function build(ContentTypeFormDescriptor $formDescriptor): string
     {
-        $type = $formDescriptor->getNodeType();
+        $type = $formDescriptor->getContentType();
         $layoutName = $type->getLayout();
 
         if ($this->layoutTypeRegistry->has($layoutName) === false) {
@@ -36,7 +36,7 @@ class LayoutBuilder
         }
 
         $layout = $this->layoutTypeRegistry->get($layoutName);
-        $builder = $this->builderRegistry->get($layoutName);
+        $builder = $this->builderRegistry->get($layout->getBuilder());
 
         return $builder->build(
             $type,

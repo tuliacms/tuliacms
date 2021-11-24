@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\ContentBuilder\Infrastructure\Presentation;
 
 use Symfony\Component\Form\FormView;
-use Tulia\Cms\ContentBuilder\Domain\NodeType\Model\NodeType;
+use Tulia\Cms\ContentBuilder\Domain\ContentType\Model\AbstractContentType;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Model\LayoutType;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\LayoutTypeBuilderInterface;
 use Tulia\Component\Templating\EngineInterface;
@@ -28,10 +28,10 @@ class TwigLayoutTypeBuilder implements LayoutTypeBuilderInterface
         return 'default';
     }
 
-    public function build(NodeType $nodeType, LayoutType $layoutType, FormView $formView): string
+    public function build(AbstractContentType $contentType, LayoutType $layoutType, FormView $formView): string
     {
         return $this->engine->render(new View('@backend/contentbuilder/layout/default.tpl', [
-            'type' => $nodeType,
+            'type' => $contentType,
             'layout' => $layoutType,
             'form' => $formView,
         ]));

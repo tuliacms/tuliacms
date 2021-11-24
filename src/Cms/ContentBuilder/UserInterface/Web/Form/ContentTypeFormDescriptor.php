@@ -6,21 +6,26 @@ namespace Tulia\Cms\ContentBuilder\UserInterface\Web\Form;
 
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
-use Tulia\Cms\ContentBuilder\Domain\NodeType\Model\NodeType;
+use Tulia\Cms\ContentBuilder\Domain\ContentType\Model\AbstractContentType;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class FormDescriptor
+class ContentTypeFormDescriptor
 {
-    private FormInterface $form;
-    private NodeType $nodeType;
-    private ?FormView $formView = null;
+    protected AbstractContentType $contentType;
+    protected FormInterface $form;
+    protected ?FormView $formView = null;
 
-    public function __construct(NodeType $nodeType, FormInterface $form)
+    public function __construct(AbstractContentType $contentType, FormInterface $form)
     {
         $this->form = $form;
-        $this->nodeType = $nodeType;
+        $this->contentType = $contentType;
+    }
+
+    protected function getFields(): array
+    {
+        return $this->contentType->getFields();
     }
 
     public function getForm(): FormInterface
@@ -37,18 +42,13 @@ class FormDescriptor
         return $this->formView = $this->form->createView();
     }
 
-    public function getNodeType(): NodeType
-    {
-        return $this->nodeType;
-    }
-
     public function getData(): array
     {
         $rawData = $this->form->getData();
 
         $result['id'] = $rawData['id'];
 
-        foreach ($this->getNodeType()->getFields() as $field) {
+        foreach ($this->getFields() as $field) {
             $result[$field->getName()] = $rawData[$field->getName()];
         }
 
@@ -58,5 +58,10 @@ class FormDescriptor
     public function isFormValid(): bool
     {
         return $this->form->isSubmitted() && $this->form->isValid();
+    }
+
+    public function getContentType(): AbstractContentType
+    {
+        return $this->contentType;
     }
 }

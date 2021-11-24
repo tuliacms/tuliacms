@@ -15,12 +15,12 @@ class TaxonomyTypeRegistry
     /**
      * @var TaxonomyType[]
      */
-    protected array $nodeTypes = [];
+    protected array $taxonomyTypes = [];
 
     /**
      * @var TaxonomyTypeProviderInterface[]
      */
-    protected array $nodeTypeProviders = [];
+    protected array $taxonomyTypeProviders = [];
 
     /**
      * @var TaxonomyTypeDecoratorInterface[]
@@ -32,9 +32,9 @@ class TaxonomyTypeRegistry
         $this->decorators[] = $decorator;
     }
 
-    public function addProvider(TaxonomyTypeProviderInterface $nodeTypeProvider): void
+    public function addProvider(TaxonomyTypeProviderInterface $taxonomyTypeProvider): void
     {
-        $this->nodeTypeProviders[] = $nodeTypeProvider;
+        $this->taxonomyTypeProviders[] = $taxonomyTypeProvider;
     }
 
     /**
@@ -44,25 +44,25 @@ class TaxonomyTypeRegistry
     {
         $this->fetch();
 
-        if (isset($this->nodeTypes[$type]) === false) {
+        if (isset($this->taxonomyTypes[$type]) === false) {
             throw TaxonomyTypeNotExistsException::fromType($type);
         }
 
-        return $this->nodeTypes[$type];
+        return $this->taxonomyTypes[$type];
     }
 
     public function has(string $type): bool
     {
         $this->fetch();
 
-        return isset($this->nodeTypes[$type]);
+        return isset($this->taxonomyTypes[$type]);
     }
 
     public function getTypes(): array
     {
         $this->fetch();
 
-        return array_keys($this->nodeTypes);
+        return array_keys($this->taxonomyTypes);
     }
 
     /**
@@ -70,32 +70,32 @@ class TaxonomyTypeRegistry
      */
     public function all(): array
     {
-        return $this->nodeTypes;
+        return $this->taxonomyTypes;
     }
 
     private function fetch(): void
     {
-        if ($this->nodeTypes !== []) {
+        if ($this->taxonomyTypes !== []) {
             return;
         }
 
         $types = [];
 
-        foreach ($this->nodeTypeProviders as $provider) {
+        foreach ($this->taxonomyTypeProviders as $provider) {
             $types[] = $provider->provide();
         }
 
         /** @var TaxonomyType $type */
         foreach (array_merge(...$types) as $type) {
             $this->decorate($type);
-            $this->nodeTypes[$type->getType()] = $type;
+            $this->taxonomyTypes[$type->getType()] = $type;
         }
     }
 
-    private function decorate(TaxonomyType $nodeType): void
+    private function decorate(TaxonomyType $taxonomyType): void
     {
         foreach ($this->decorators as $decorator) {
-            $decorator->decorate($nodeType);
+            $decorator->decorate($taxonomyType);
         }
     }
 }

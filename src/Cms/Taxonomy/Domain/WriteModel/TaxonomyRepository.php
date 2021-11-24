@@ -182,7 +182,7 @@ class TaxonomyRepository
             'position'   => $term->getPosition(),
             'slug'       => $term->getSlug(),
             'path'       => $term->getPath(),
-            'name'       => $term->getName(),
+            'name'       => $term->getTitle(),
             'visibility' => $term->isVisible(),
             'parent_id'  => $term->getParentId(),
             'locale'     => $term->getLocale(),

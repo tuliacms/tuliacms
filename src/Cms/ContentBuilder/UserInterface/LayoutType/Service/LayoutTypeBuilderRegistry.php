@@ -16,7 +16,7 @@ class LayoutTypeBuilderRegistry
 
     public function addBuilder(LayoutTypeBuilderInterface $builder): void
     {
-        $this->builders[$builder->getName()] = $builder;
+        $this->builders[get_class($builder)] = $builder;
     }
 
     public function has(string $name): bool
