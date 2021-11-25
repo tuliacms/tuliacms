@@ -17,10 +17,10 @@ abstract class AbstractContentType
     protected string $controller;
     protected string $layout;
     protected string $type;
+    protected string $name;
     protected bool $isRoutable = true;
     protected bool $isHierarchical = false;
     protected string $routingStrategy = 'simple';
-    protected string $translationDomain = 'messages';
 
     /**
      * @var Field[]
@@ -36,6 +36,16 @@ abstract class AbstractContentType
         $this->layout = $layout;
     }
 
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): void
+    {
+        $this->name = $name;
+    }
+
     public function getType(): string
     {
         return $this->type;
@@ -44,16 +54,6 @@ abstract class AbstractContentType
     public function getLayout(): string
     {
         return $this->layout;
-    }
-
-    public function getTranslationDomain(): string
-    {
-        return $this->translationDomain;
-    }
-
-    public function setTranslationDomain(string $translationDomain): void
-    {
-        $this->translationDomain = $translationDomain;
     }
 
     public function getController(): string

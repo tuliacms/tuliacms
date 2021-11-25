@@ -23,9 +23,9 @@ abstract class AbstractNodeTypeProvider implements NodeTypeProviderInterface
     protected function buildNodeType(string $name, array $options): NodeType
     {
         $nodeType = new NodeType($name, $options['layout']);
-        $nodeType->setTranslationDomain($options['translation_domain']);
         $nodeType->setController($options['controller']);
         $nodeType->setIcon($options['icon']);
+        $nodeType->setName($options['name']);
         $nodeType->setIsHierarchical($options['is_hierarchical']);
 
         foreach ($options['fields'] as $fieldName => $fieldOptions) {

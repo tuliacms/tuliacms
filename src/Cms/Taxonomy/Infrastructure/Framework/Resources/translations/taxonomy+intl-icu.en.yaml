@@ -1,3 +1,17 @@
 hierarchy: Hierarchy
 changeHierarchy: Change the hierarchy
 changeHierarchyMoveElementOnTheThree: Below you can change the hierarchy of items. Grab an element with the mouse and move it to move it relative to other elements.
+termsListOfTaxonomy: "The {taxonomy} taxonomy"
+editTerm: Edit term
+createTerm: Create term
+termSaved: Term saved
+deleteTerm: Delete category
+deleteSelectedTerms: Delete selected categories
+parentTerm: Parent term
+selectedTermsWereDeleted: Selected terms were deleted.
+cannotAssignSelfTermParent: Cannot assign self taxonomy as parent.
+areYouSureYouWantToDeleteFollowingTerms: >
+    {hierarchical, select,
+        1 {Are You sure You want to delete following terms and their children?}
+        other {Are You sure You want to delete following terms?}
+    }

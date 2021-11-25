@@ -22,18 +22,18 @@ abstract class AbstractTaxonomyTypeProvider implements TaxonomyTypeProviderInter
 
     protected function buildTaxonomyType(string $name, array $options): TaxonomyType
     {
-        $nodeType = new TaxonomyType($name, $options['layout']);
-        $nodeType->setController($options['controller']);
-        $nodeType->setIsRoutable($options['is_routable']);
-        $nodeType->setIsHierarchical($options['is_hierarchical']);
-        $nodeType->setTranslationDomain($options['translation_domain']);
-        $nodeType->setRoutingStrategy($options['routing_strategy']);
+        $taxonomyType = new TaxonomyType($name, $options['layout']);
+        $taxonomyType->setController($options['controller']);
+        $taxonomyType->setIsRoutable($options['is_routable']);
+        $taxonomyType->setName($options['name']);
+        $taxonomyType->setIsHierarchical($options['is_hierarchical']);
+        $taxonomyType->setRoutingStrategy($options['routing_strategy']);
 
         foreach ($options['fields'] as $fieldName => $fieldOptions) {
-            $nodeType->addField($this->buildNodeField($fieldName, $fieldOptions));
+            $taxonomyType->addField($this->buildNodeField($fieldName, $fieldOptions));
         }
 
-        return $nodeType;
+        return $taxonomyType;
     }
 
     protected function buildNodeField(string $name, array $options): Field

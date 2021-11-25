@@ -1,4 +1,5 @@
 {% extends 'backend' %}
+{% trans_default_domain 'node' %}
 
 {% if nodeType.isRoutable %}
     {% set previewLink = node_path(node) %}
@@ -7,12 +8,12 @@
 {% import '@backend/_macros/alerts.tpl' as alerts %}
 
 {% block title %}
-    {{ 'editNode'|trans({}, nodeType.translationDomain) }}
+    {{ 'editNode'|trans }}
 {% endblock %}
 
 {% block breadcrumbs %}
-    <li class="breadcrumb-item"><a href="{{ path('backend.node', { node_type: nodeType.type }) }}">{{ 'nodes'|trans({}, nodeType.translationDomain) }}</a></li>
-    <li class="breadcrumb-item active" aria-current="page">{{ 'edit'|trans }}</li>
+    <li class="breadcrumb-item"><a href="{{ path('backend.node', { node_type: nodeType.type }) }}">{{ 'nodesListOfType'|trans({ type: nodeType.name|trans }) }}</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ 'editNode'|trans }}</li>
 {% endblock %}
 
 {% block content %}

@@ -1,4 +1,5 @@
 {% extends 'backend' %}
+{% trans_default_domain 'taxonomy' %}
 
 {% if taxonomyType.isRoutable %}
     {% set previewLink = term_path(term) %}
@@ -7,12 +8,12 @@
 {% import '@backend/_macros/alerts.tpl' as alerts %}
 
 {% block title %}
-    {{ 'editTerm'|trans({}, taxonomyType.translationDomain) }}
+    {{ 'editTerm'|trans }}
 {% endblock %}
 
 {% block breadcrumbs %}
-    <li class="breadcrumb-item"><a href="{{ path('backend.term', { taxonomyType: taxonomyType.type }) }}">{{ 'terms'|trans({}, taxonomyType.translationDomain) }}</a></li>
-    <li class="breadcrumb-item active" aria-current="page">{{ 'edit'|trans }}</li>
+    <li class="breadcrumb-item"><a href="{{ path('backend.term', { taxonomyType: taxonomyType.type }) }}">{{ 'termsListOfTaxonomy'|trans({ taxonomy: taxonomyType.type }) }}</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ 'editTerm'|trans }}</li>
 {% endblock %}
 
 {% block content %}

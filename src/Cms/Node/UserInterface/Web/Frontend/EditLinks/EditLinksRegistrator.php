@@ -40,7 +40,7 @@ class EditLinksRegistrator implements EditLinksCollectorInterface
             $collection->add('node.edit', [
                 'link'  => $this->router->generate('backend.node.edit', [ 'node_type' => $node->getType(), 'id' => $node->getId() ]),
                 'label' => $this->translator->trans('editNode', [
-                    'node' => mb_strtolower($this->translator->trans('node', [], $type->getTranslationDomain())),
+                    'node' => mb_strtolower($this->translator->trans($type->getName(), [], 'node')),
                 ]),
             ]);
         } catch (\Exception $e) {

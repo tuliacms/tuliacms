@@ -97,7 +97,7 @@ class Node extends AbstractController
         if ($formDescriptor->isFormValid()) {
             $this->updateModel($formDescriptor, $node);
 
-            $this->setFlash('success', $this->trans('nodeSaved', [], $nodeType->getTranslationDomain()));
+            $this->setFlash('success', $this->trans('nodeSaved', [], 'node'));
             return $this->redirectToRoute('backend.node.edit', [ 'id' => $node->getId(), 'node_type' => $nodeType->getType() ]);
         }
 
@@ -135,10 +135,10 @@ class Node extends AbstractController
         if ($formDescriptor->isFormValid()) {
             try {
                 $this->updateModel($formDescriptor, $node);
-                $this->setFlash('success', $this->trans('nodeSaved', [], $nodeType->getTranslationDomain()));
+                $this->setFlash('success', $this->trans('nodeSaved', [], 'node'));
                 return $this->redirectToRoute('backend.node.edit', [ 'id' => $node->getId(), 'node_type' => $nodeType->getType() ]);
             } catch (SingularFlagImposedOnMoreThanOneNodeException $e) {
-                $error = new FormError($this->trans('singularFlagImposedOnMoreThanOneNode', ['flag' => $e->getFlag()], $nodeType->getTranslationDomain()));
+                $error = new FormError($this->trans('singularFlagImposedOnMoreThanOneNode', ['flag' => $e->getFlag()], 'node'));
                 $form->get('flags')->addError($error);
             }
         }
@@ -182,7 +182,7 @@ class Node extends AbstractController
             default         : $message = 'selectedNodesWereUpdated'; break;
         }
 
-        $this->setFlash('success', $this->trans($message, [], $nodeType->getTranslationDomain()));
+        $this->setFlash('success', $this->trans($message, [], 'node'));
         return $this->redirectToRoute('backend.node', [ 'node_type' => $nodeType->getType() ]);
     }
 

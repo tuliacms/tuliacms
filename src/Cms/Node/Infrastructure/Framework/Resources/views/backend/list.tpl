@@ -1,11 +1,12 @@
 {% extends 'backend' %}
+{% trans_default_domain 'node' %}
 
 {% block title %}
-    {{ 'nodesList'|trans({}, nodeType.translationDomain) }}
+    {{ 'nodesList'|trans }}
 {% endblock %}
 
 {% block breadcrumbs %}
-    <li class="breadcrumb-item active" aria-current="page">{{ 'nodes'|trans({}, nodeType.translationDomain) }}</li>
+    <li class="breadcrumb-item active" aria-current="page">{{ 'nodesListOfType'|trans({ type: nodeType.name|trans }) }}</li>
 {% endblock %}
 
 {% import '@backend/_macros/datatable/generator.tpl' as generator %}

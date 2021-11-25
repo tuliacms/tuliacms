@@ -44,16 +44,16 @@ class NodeMenuBuilder implements BuilderInterface
         $root = 'node_' . $type->getType();
 
         $registry->add($root, [
-            'label'    => $this->helper->trans('node', [], $type->getTranslationDomain()),
+            'label'    => $this->helper->trans($type->getName(), [], 'node'),
             'link'     => '#',
             'icon'     => $type->getIcon(),
             'priority' => 3500,
         ]);
 
         $registry->add($root . '_item', [
-            'label'    => $this->helper->trans('node', [], $type->getTranslationDomain()),
-            'link'     => $this->helper->generateUrl('backend.node', [ 'node_type' => $type->getType() ]),
-            'parent'   => $root,
+            'label'  => $this->helper->trans('nodesListOfType', ['type' => $this->helper->trans($type->getName(), [], 'node')], 'node'),
+            'link'   => $this->helper->generateUrl('backend.node', [ 'node_type' => $type->getType() ]),
+            'parent' => $root,
         ]);
 
         foreach ($type->getFields() as $field) {
@@ -64,9 +64,9 @@ class NodeMenuBuilder implements BuilderInterface
             $taxonomy = $this->taxonomyTypeRegistry->get($field->getTaxonomy());
 
             $registry->add($root . '_' . $taxonomy->getType(), [
-                'label'    => $this->helper->trans('taxonomy', [], $taxonomy->getTranslationDomain()),
-                'link'     => $this->helper->generateUrl('backend.term', [ 'taxonomyType' => $taxonomy->getType() ]),
-                'parent'   => $root,
+                'label'  => $this->helper->trans('termsListOfTaxonomy', ['taxonomy' => $taxonomy->getType()], 'taxonomy'),
+                'link'   => $this->helper->generateUrl('backend.term', [ 'taxonomyType' => $taxonomy->getType() ]),
+                'parent' => $root,
             ]);
         }
     }

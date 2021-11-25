@@ -14,11 +14,11 @@
         {% if row.flags is not empty %}
             <br />
             {% for flag in row.flags %}
-                {% set flagName = trans_exists('flagType.' ~ flag)
-                    ? ('flagType.' ~ flag)|trans
+                {% set flagName = trans_exists('flagType.' ~ flag, {}, 'node')
+                    ? ('flagType.' ~ flag)|trans({}, 'node')
                     : flag %}
                 <span class="badge badge-secondary">
-                    {{ 'flagWithName'|trans({ flag: flagName }) }}
+                    {{ 'flagWithName'|trans({ flag: flagName }, 'node') }}
                 </span>
             {% endfor %}
         {% endif %}

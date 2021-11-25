@@ -44,7 +44,7 @@ class ParentTermDecorator implements TaxonomyTypeDecoratorInterface
                         new Callback(function ($value, ExecutionContextInterface $context) use ($taxonomyType) {
                             if (empty($value) === false && $value === $context->getRoot()->get('id')->getData()) {
                                 $context->buildViolation('cannotAssignSelfTermParent')
-                                    ->setTranslationDomain($taxonomyType->getTranslationDomain())
+                                    ->setTranslationDomain('taxonomy')
                                     ->atPath('parent_id')
                                     ->addViolation();
                             }

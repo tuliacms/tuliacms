@@ -1,11 +1,11 @@
 {% extends 'backend' %}
 
 {% block title %}
-    {{ 'terms'|trans({}, taxonomyType.translationDomain) }}
+    {{ 'termsListOfTaxonomy'|trans({ taxonomy: taxonomyType.type }, 'taxonomy') }}
 {% endblock %}
 
 {% block breadcrumbs %}
-    <li class="breadcrumb-item active" aria-current="page">{{ 'terms'|trans({}, taxonomyType.translationDomain) }}</li>
+    <li class="breadcrumb-item active" aria-current="page">{{ block('title') }}</li>
 {% endblock %}
 
 {% import '@backend/_macros/datatable/generator.tpl' as generator %}

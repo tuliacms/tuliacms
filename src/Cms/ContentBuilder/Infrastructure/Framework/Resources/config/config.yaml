@@ -13,6 +13,7 @@ cms:
     content_building:
         node_types:
             page:
+                name: Page
                 icon: 'fas fa-file-powerpoint'
                 controller: 'Tulia\Cms\Node\UserInterface\Web\Frontend\Controller\Node::show'
                 is_routable: true
@@ -42,14 +43,14 @@ cms:
 
         taxonomy_types:
             category:
-                translation_domain: category
+                name: Category
                 controller: 'Tulia\Cms\Taxonomy\UserInterface\Web\Frontend\Controller\Term::show'
                 routing_strategy: simple
                 is_routable: true
                 is_hierarchical: true
                 layout: taxonomy_default
             tag:
-                translation_domain: tag
+                name: Tag
                 controller: 'Tulia\Cms\Taxonomy\UserInterface\Web\Frontend\Controller\Term::show'
                 routing_strategy: simple
                 is_routable: true

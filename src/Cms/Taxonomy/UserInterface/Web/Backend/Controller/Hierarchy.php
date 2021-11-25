@@ -20,7 +20,6 @@ use Tulia\Component\Templating\ViewInterface;
 class Hierarchy extends AbstractController
 {
     private TaxonomyRepository $repository;
-
     private TaxonomyHierarchy $hierarchy;
     private TaxonomyTypeRegistry $typeRegistry;
 

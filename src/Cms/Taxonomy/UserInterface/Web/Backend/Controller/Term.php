@@ -14,14 +14,14 @@ use Tulia\Cms\ContentBuilder\UserInterface\Web\Service\TaxonomyFormService;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Exception\TermNotFoundException;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Taxonomy;
+use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Term as Model;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\ValueObject\TermId;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\TaxonomyRepository;
-use Tulia\Cms\Taxonomy\Ports\Infrastructure\Persistence\Domain\ReadModel\Datatable\TermDatatableFinderInterface;
 use Tulia\Cms\Taxonomy\Ports\Domain\ReadModel\TermFinderInterface;
+use Tulia\Cms\Taxonomy\Ports\Infrastructure\Persistence\Domain\ReadModel\Datatable\TermDatatableFinderInterface;
 use Tulia\Component\Datatable\DatatableFactory;
 use Tulia\Component\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Component\Templating\ViewInterface;
-use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Term as Model;
 
 /**
  * @author Adam Banaszkiewicz
@@ -29,11 +29,8 @@ use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Term as Model;
 class Term extends AbstractController
 {
     private TermFinderInterface $termFinder;
-
     private TaxonomyRepository $repository;
-
     private DatatableFactory $factory;
-
     private TermDatatableFinderInterface $finder;
     private TaxonomyFormService $taxonomyFormService;
     private TaxonomyTypeRegistry $typeRegistry;
@@ -101,7 +98,7 @@ class Term extends AbstractController
             $taxonomy->addTerm($term);
             $this->repository->save($taxonomy);
 
-            $this->setFlash('success', $this->trans('termSaved', [], $taxonomyTypeObject->getTranslationDomain()));
+            $this->setFlash('success', $this->trans('termSaved', [], 'taxonomy'));
             return $this->redirectToRoute('backend.term.edit', [ 'id' => $term->getId(), 'taxonomyType' => $taxonomyTypeObject->getType() ]);
         }
 
@@ -138,7 +135,7 @@ class Term extends AbstractController
             $this->updateModel($formDescriptor, $term);
             $this->repository->save($taxonomy);
 
-            $this->setFlash('success', $this->trans('termSaved', [], $taxonomyTypeObject->getTranslationDomain()));
+            $this->setFlash('success', $this->trans('termSaved', [], 'taxonomy'));
             return $this->redirectToRoute('backend.term.edit', [ 'id' => $term->getId(), 'taxonomyType' => $taxonomyTypeObject->getType() ]);
         }
 
@@ -172,7 +169,7 @@ class Term extends AbstractController
 
         if ($removedNodes) {
             $this->repository->save($taxonomy);
-            $this->setFlash('success', $this->trans('selectedTermsWereDeleted', [], $taxonomy->getType()->getTranslationDomain()));
+            $this->setFlash('success', $this->trans('selectedTermsWereDeleted', [], 'taxonomy'));
         }
 
         return $this->redirectToRoute('backend.term', [ 'taxonomyType' => $taxonomy->getType()->getType() ]);

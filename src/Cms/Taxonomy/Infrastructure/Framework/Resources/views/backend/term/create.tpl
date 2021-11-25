@@ -1,13 +1,14 @@
 {% extends 'backend' %}
+{% trans_default_domain 'taxonomy' %}
 
 {% block title %}
-    {{ 'createTerm'|trans({}, taxonomyType.translationDomain) }}
+    {{ 'createTerm'|trans }}
 {% endblock %}
 
 {% import '@backend/_macros/alerts.tpl' as alerts %}
 
 {% block breadcrumbs %}
-    <li class="breadcrumb-item"><a href="{{ path('backend.term', { taxonomyType: taxonomyType.type }) }}">{{ 'terms'|trans({}, taxonomyType.translationDomain) }}</a></li>
+    <li class="breadcrumb-item"><a href="{{ path('backend.term', { taxonomyType: taxonomyType.type }) }}">{{ 'termsListOfTaxonomy'|trans({ taxonomy: taxonomyType.type }) }}</a></li>
     <li class="breadcrumb-item active" aria-current="page">{{ 'create'|trans }}</li>
 {% endblock %}
 

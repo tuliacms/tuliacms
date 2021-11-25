@@ -38,10 +38,11 @@ class FlagsDecorator implements NodeTypeDecoratorInterface
                 $availableFlags = [];
 
                 foreach ($this->flagRegistry->all() as $type => $flag) {
-                    $availableFlags[$this->translator->trans($flag['label'])] = $type;
+                    $availableFlags[$this->translator->trans($flag['label'], [], 'node')] = $type;
                 }
 
                 return [
+                    'translation_domain' => 'node',
                     'choices' => $availableFlags,
                     'help' => 'flagsHelp',
                     'choice_translation_domain' => false,

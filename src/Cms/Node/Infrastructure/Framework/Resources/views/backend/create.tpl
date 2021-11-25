@@ -1,14 +1,15 @@
 {% extends 'backend' %}
+{% trans_default_domain 'node' %}
 
 {% block title %}
-    {{ 'createNode'|trans({}, nodeType.translationDomain) }}
+    {{ 'createNode'|trans }}
 {% endblock %}
 
 {% import '@backend/_macros/alerts.tpl' as alerts %}
 
 {% block breadcrumbs %}
-    <li class="breadcrumb-item"><a href="{{ path('backend.node', { node_type: nodeType.type }) }}">{{ 'nodes'|trans({}, nodeType.translationDomain) }}</a></li>
-    <li class="breadcrumb-item active" aria-current="page">{{ 'create'|trans }}</li>
+    <li class="breadcrumb-item"><a href="{{ path('backend.node', { node_type: nodeType.type }) }}">{{ 'nodesListOfType'|trans({ type: nodeType.name|trans }) }}</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ 'createNode'|trans }}</li>
 {% endblock %}
 
 {% block content %}

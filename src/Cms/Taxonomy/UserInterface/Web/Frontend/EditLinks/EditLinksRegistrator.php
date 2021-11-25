@@ -40,7 +40,7 @@ class EditLinksRegistrator implements EditLinksCollectorInterface
             $collection->add('term.edit', [
                 'link'  => $this->router->generate('backend.term.edit', [ 'taxonomyType' => $term->getType(), 'id' => $term->getId() ]),
                 'label' => $this->translator->trans('editTerm', [
-                    'term' => mb_strtolower($this->translator->trans('term', [], $type->getTranslationDomain())),
+                    'term' => mb_strtolower($this->translator->trans($type->getName(), [], 'taxonomy')),
                 ]),
             ]);
         } catch (\Exception $e) {

@@ -94,7 +94,6 @@ class Configuration implements ConfigurationInterface
                             ->end()
                         ->end()
                         ->arrayNode('node_types')
-                            ->useAttributeAsKey('name')
                             ->beforeNormalization()
                                 ->always(function ($types) {
                                     foreach ($types as $name => $type) {
@@ -111,6 +110,7 @@ class Configuration implements ConfigurationInterface
                             ->arrayPrototype()
                                 ->addDefaultsIfNotSet()
                                 ->children()
+                                    ->scalarNode('name')->isRequired()->end()
                                     ->variableNode('icon')->defaultValue('fas fa-circle')->end()
                                     ->variableNode('controller')->defaultValue('Tulia\Cms\Node\UserInterface\Web\Frontend\Controller\Node::show')->end()
                                     // Any node of this type can be reached through it's own route (using it's slug)?
@@ -161,10 +161,10 @@ class Configuration implements ConfigurationInterface
                             ->end()
                         ->end()
                         ->arrayNode('taxonomy_types')
-                            ->useAttributeAsKey('name')
                             ->arrayPrototype()
                                 ->addDefaultsIfNotSet()
                                 ->children()
+                                    ->scalarNode('name')->isRequired()->end()
                                     ->variableNode('controller')->defaultValue('Tulia\Cms\Taxonomy\UserInterface\Web\Frontend\Controller\Term::show')->end()
                                     ->booleanNode('is_routable')->defaultTrue()->end()
                                     ->scalarNode('translation_domain')->defaultValue('page')->end()

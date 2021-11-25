@@ -49,7 +49,7 @@ class SettingsGroup extends AbstractSettingsGroup
      */
     public function getTranslationDomain(): string
     {
-        return $this->nodeType->getTranslationDomain();
+        return 'node';
     }
 
     /**

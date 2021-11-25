@@ -203,6 +203,7 @@ class DbalNodeDatatableFinder extends AbstractDatatableFinder implements NodeDat
 
     private function supportsCategoryTaxonomy(): bool
     {
+        // @todo
         return false;
         foreach ($this->nodeType->getTaxonomies() as $taxonomy) {
             if ($taxonomy['taxonomy'] === 'category') {
@@ -215,11 +216,12 @@ class DbalNodeDatatableFinder extends AbstractDatatableFinder implements NodeDat
 
     private function createStatusChoices(): array
     {
+        // @todo
         return [];
         $statuses = [];
 
         foreach ($this->nodeType->getStatuses() as $status) {
-            $statuses[$status] = $this->translator->trans($status, [], $this->nodeType->getTranslationDomain());
+            $statuses[$status] = $this->translator->trans($status, [], 'node');
         }
 
         return $statuses;

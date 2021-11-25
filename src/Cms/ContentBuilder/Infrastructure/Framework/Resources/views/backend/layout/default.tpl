@@ -128,6 +128,9 @@
                         {% if form.flags is defined %}
                             {{ form_row(form.flags) }}
                         {% endif %}
+                        {% if form.visibility is defined %}
+                            {{ form_row(form.visibility) }}
+                        {% endif %}
                         {% if form.parent_id is defined %}
                             {{ form_row(form.parent_id) }}
                         {% endif %}
@@ -135,7 +138,7 @@
                 </div>
             </div>
             {% for id, group in layout.section('sidebar').fieldsGroups %}
-                {{ _self.section(id, group, form, type.translationDomain) }}
+                {{ _self.section(id, group, form) }}
             {% endfor %}
         </div>
     </div>
@@ -158,7 +161,7 @@
             {% for id, group in layout.section('main').fieldsGroups %}
                 {{ _self.tab(id, {
                     active: group.active,
-                    name: group.name|trans({}, type.translationDomain),
+                    name: group.name|trans,
                     fields: group.fields
                 }, form) }}
             {% endfor %}
@@ -174,7 +177,7 @@
                 {{ _self.tab_content(id, group, form) }}
             {% endfor %}
 
-            {{ _self.tab_rest_content('rest', form, type.translationDomain) }}
+            {{ _self.tab_rest_content('rest', form) }}
         </div>
     </div>
 </div>
