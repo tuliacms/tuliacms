@@ -8,13 +8,17 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Tulia\Cms\ContentBuilder\Domain\TaxonomyType\Service\TaxonomyTypeRegistry;
+use Tulia\Cms\ContentBuilder\UserInterface\Web\Form\ContentTypeFormDescriptor;
+use Tulia\Cms\ContentBuilder\UserInterface\Web\Service\TaxonomyFormService;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Exception\TermNotFoundException;
+use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Taxonomy;
+use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Term as Model;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\ValueObject\TermId;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\TaxonomyRepository;
-use Tulia\Cms\Taxonomy\Ports\Infrastructure\Persistence\Domain\ReadModel\Datatable\TermDatatableFinderInterface;
 use Tulia\Cms\Taxonomy\Ports\Domain\ReadModel\TermFinderInterface;
-use Tulia\Cms\Taxonomy\UserInterface\Web\Backend\Form\TermForm;
+use Tulia\Cms\Taxonomy\Ports\Infrastructure\Persistence\Domain\ReadModel\Datatable\TermDatatableFinderInterface;
 use Tulia\Component\Datatable\DatatableFactory;
 use Tulia\Component\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Component\Templating\ViewInterface;
@@ -25,23 +29,26 @@ use Tulia\Component\Templating\ViewInterface;
 class Term extends AbstractController
 {
     private TermFinderInterface $termFinder;
-
     private TaxonomyRepository $repository;
-
     private DatatableFactory $factory;
-
     private TermDatatableFinderInterface $finder;
+    private TaxonomyFormService $taxonomyFormService;
+    private TaxonomyTypeRegistry $typeRegistry;
 
     public function __construct(
         TermFinderInterface $termFinder,
         TaxonomyRepository $repository,
         DatatableFactory $factory,
-        TermDatatableFinderInterface $finder
+        TermDatatableFinderInterface $finder,
+        TaxonomyFormService $taxonomyFormService,
+        TaxonomyTypeRegistry $typeRegistry
     ) {
         $this->termFinder = $termFinder;
         $this->repository = $repository;
         $this->factory = $factory;
         $this->finder = $finder;
+        $this->taxonomyFormService = $taxonomyFormService;
+        $this->typeRegistry = $typeRegistry;
     }
 
     public function index(string $taxonomyType): RedirectResponse
@@ -61,7 +68,7 @@ class Term extends AbstractController
         $this->finder->setTaxonomyType($taxonomyType);
 
         return $this->view('@backend/taxonomy/term/list.tpl', [
-            'taxonomyType' => $taxonomy->getType(),
+            'taxonomyType' => $this->typeRegistry->get($taxonomy->getType()),
             'datatable' => $this->factory->create($this->finder, $request),
         ]);
     }
@@ -76,30 +83,29 @@ class Term extends AbstractController
      * @param Request $request
      * @param string $taxonomyType
      * @return RedirectResponse|ViewInterface
-     * @CsrfToken(id="term_form")
+     * @CsrfToken(id="content_builder_form_category")
      */
     public function create(Request $request, string $taxonomyType)
     {
         $taxonomy = $this->repository->get($taxonomyType);
         $term = $this->repository->createNewTerm($taxonomy);
 
-        $form = $this->createForm(TermForm::class, $term, ['taxonomy_type' => $taxonomy->getType()->getType()]);
-        $form->handleRequest($request);
+        $formDescriptor = $this->produceFormDescriptor($taxonomy, $term, $request);
+        $taxonomyTypeObject = $formDescriptor->getContentType();
 
-        $taxonomyTypeObject = $taxonomy->getType();
-
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($formDescriptor->isFormValid()) {
+            $this->updateModel($formDescriptor, $term);
             $taxonomy->addTerm($term);
             $this->repository->save($taxonomy);
 
-            $this->setFlash('success', $this->trans('termSaved', [], $taxonomyTypeObject->getTranslationDomain()));
+            $this->setFlash('success', $this->trans('termSaved', [], 'taxonomy'));
             return $this->redirectToRoute('backend.term.edit', [ 'id' => $term->getId(), 'taxonomyType' => $taxonomyTypeObject->getType() ]);
         }
 
         return $this->view('@backend/taxonomy/term/create.tpl', [
             'taxonomyType' => $taxonomyTypeObject,
             'term' => $term,
-            'form' => $form->createView(),
+            'formDescriptor' => $formDescriptor,
         ]);
     }
 
@@ -109,7 +115,7 @@ class Term extends AbstractController
      * @param string $id
      * @return RedirectResponse|ViewInterface
      * @throws NotFoundHttpException
-     * @CsrfToken(id="term_form")
+     * @CsrfToken(id="content_builder_form_category")
      */
     public function edit(Request $request, string $taxonomyType, string $id)
     {
@@ -122,22 +128,21 @@ class Term extends AbstractController
             return $this->redirectToRoute('backend.term.list', ['taxonomyType' => $taxonomyType]);
         }
 
-        $form = $this->createForm(TermForm::class, $term, ['taxonomy_type' => $taxonomy->getType()->getType()]);
-        $form->handleRequest($request);
+        $formDescriptor = $this->produceFormDescriptor($taxonomy, $term, $request);
+        $taxonomyTypeObject = $formDescriptor->getContentType();
 
-        $taxonomyTypeObject = $taxonomy->getType();
-
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($formDescriptor->isFormValid()) {
+            $this->updateModel($formDescriptor, $term);
             $this->repository->save($taxonomy);
 
-            $this->setFlash('success', $this->trans('termSaved', [], $taxonomyTypeObject->getTranslationDomain()));
+            $this->setFlash('success', $this->trans('termSaved', [], 'taxonomy'));
             return $this->redirectToRoute('backend.term.edit', [ 'id' => $term->getId(), 'taxonomyType' => $taxonomyTypeObject->getType() ]);
         }
 
         return $this->view('@backend/taxonomy/term/edit.tpl', [
             'taxonomyType' => $taxonomyTypeObject,
             'term' => $term,
-            'form' => $form->createView(),
+            'formDescriptor' => $formDescriptor,
         ]);
     }
 
@@ -164,9 +169,35 @@ class Term extends AbstractController
 
         if ($removedNodes) {
             $this->repository->save($taxonomy);
-            $this->setFlash('success', $this->trans('selectedTermsWereDeleted', [], $taxonomy->getType()->getTranslationDomain()));
+            $this->setFlash('success', $this->trans('selectedTermsWereDeleted', [], 'taxonomy'));
         }
 
         return $this->redirectToRoute('backend.term', [ 'taxonomyType' => $taxonomy->getType()->getType() ]);
+    }
+
+    private function produceFormDescriptor(Taxonomy $taxonomy, Model $term, Request $request): ContentTypeFormDescriptor
+    {
+        return $this->taxonomyFormService->buildFormDescriptor(
+            $taxonomy->getType(),
+            array_merge(
+                [
+                    'title' => $term->getTitle(),
+                    'slug' => $term->getSlug(),
+                    'parent_id' => $term->getParentId(),
+                ],
+                $term->getAttributes()
+            ),
+            $request
+        );
+    }
+
+    private function updateModel(ContentTypeFormDescriptor $formDescriptor, Model $term): void
+    {
+        $data = $formDescriptor->getData();
+
+        $term->setSlug($data['slug']);
+        $term->setTitle($data['title']);
+        $term->setParentId($data['parent_id'] ? new TermId($data['parent_id']) : null);
+        $term->updateAttributes($data);
     }
 }

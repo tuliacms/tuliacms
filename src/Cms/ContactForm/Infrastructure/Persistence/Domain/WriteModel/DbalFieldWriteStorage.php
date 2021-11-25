@@ -27,7 +27,7 @@ class DbalFieldWriteStorage extends AbstractLocalizableStorage
             $translationColumn = '1 AS translated';
         }
 
-        return $this->connection->fetchAll("
+        return $this->connection->fetchAllAssociative("
             SELECT
                 tm.name,
                 tm.type,

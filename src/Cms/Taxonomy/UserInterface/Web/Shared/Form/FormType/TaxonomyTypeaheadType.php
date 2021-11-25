@@ -39,7 +39,7 @@ class TaxonomyTypeaheadType extends AbstractType
             'data_provider_single' => function (array $criteria): ?array {
                 $term = $this->termFinder->findOne(['id' => $criteria['value']], TermFinderScopeEnum::INTERNAL);
 
-                return $term ? ['name' => $term->getName()] : null;
+                return $term ? ['name' => $term->getTitle()] : null;
             },
         ]);
 
@@ -58,7 +58,7 @@ class TaxonomyTypeaheadType extends AbstractType
     {
         $options['search_route_params'] = array_merge(
             $options['search_route_params'],
-            [ 'taxonomyType' => $options['taxonomy_type'] ]
+            [ 'taxonomy_type' => $options['taxonomy_type'] ]
         );
 
         $view->vars['typeahead_url'] = $this->router->generate(

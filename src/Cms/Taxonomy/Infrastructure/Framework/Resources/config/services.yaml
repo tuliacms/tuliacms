@@ -7,21 +7,6 @@ services:
         resource: '../../../../**'
         exclude: '../../../../{Infrastructure/Framework/Resources}'
 
-    Tulia\Cms\Taxonomy\Domain\TaxonomyType\RegistryInterface:
-        class: Tulia\Cms\Taxonomy\Domain\TaxonomyType\Registry
-        bind:
-            $registrators: !tagged_iterator taxonomy.type.registrator
-            $storages: !tagged_iterator taxonomy.type.storage
-
-    Tulia\Cms\Taxonomy\UserInterface\Web\Backend\Form\Extension\DefaultFieldsExtension:
-        tags: [ form_extension ]
-
-    Tulia\Cms\Taxonomy\UserInterface\Web\Backend\Form\Extension\TaxonomyTypeExtensionAggregate:
-        tags: [ form_extension_aggregate ]
-
-    Tulia\Cms\Taxonomy\Domain\Metadata\DefaultMetadataRegistrator:
-        tags: [ metadata.registrator ]
-
     Tulia\Cms\Taxonomy\Infrastructure\Framework\Routing\Router:
         tags: [ routing_chain.router ]
 

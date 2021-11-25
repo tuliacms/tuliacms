@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Tulia\Cms\Taxonomy\Domain\WriteModel\Model;
 
 use Tulia\Cms\Platform\Domain\WriteModel\Model\AggregateRoot;
-use Tulia\Cms\Taxonomy\Domain\TaxonomyType\TaxonomyTypeInterface;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Event\TermCreated;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Event\TermDeleted;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Exception\TermNotFoundException;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Helper\TermsChangelog;
+use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\ValueObject\AttributeInfo;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\ValueObject\TermId;
 
 /**
@@ -17,7 +17,7 @@ use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\ValueObject\TermId;
  */
 class Taxonomy extends AggregateRoot
 {
-    private TaxonomyTypeInterface $type;
+    private string $type;
 
     private string $websiteId;
 
@@ -28,7 +28,12 @@ class Taxonomy extends AggregateRoot
 
     private TermsChangelog $changelog;
 
-    private function __construct(TaxonomyTypeInterface $type, string $websiteId, array $terms = [])
+    /**
+     * @var AttributeInfo[]
+     */
+    protected array $attributesInfo = [];
+
+    private function __construct(string $type, string $websiteId, array $terms = [])
     {
         $this->type = $type;
         $this->websiteId = $websiteId;
@@ -42,12 +47,12 @@ class Taxonomy extends AggregateRoot
         $this->changelog = new TermsChangelog();
     }
 
-    public static function create(TaxonomyTypeInterface $type, string $websiteId, array $terms = []): self
+    public static function create(string $type, string $websiteId, array $terms = []): self
     {
         return new self($type, $websiteId, $terms);
     }
 
-    public function getType(): TaxonomyTypeInterface
+    public function getType(): string
     {
         return $this->type;
     }
@@ -119,6 +124,21 @@ class Taxonomy extends AggregateRoot
     public function clearTermsChangelog(): void
     {
         $this->changelog->clearTermsChangelog();
+    }
+
+    public function hasAttributeInfo(string $name): bool
+    {
+        return isset($this->attributesInfo[$name]);
+    }
+
+    public function getAttributeInfo(string $name): AttributeInfo
+    {
+        return $this->attributesInfo[$name];
+    }
+
+    public function addAttributeInfo(string $name, AttributeInfo $info): void
+    {
+        $this->attributesInfo[$name] = $info;
     }
 
     private function produceTermChangeCallback(): callable

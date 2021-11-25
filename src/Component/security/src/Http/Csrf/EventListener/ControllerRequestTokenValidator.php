@@ -8,6 +8,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
+use Symfony\Component\Security\Csrf\CsrfToken as SymfonyToken;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Tulia\Cms\Shared\Infrastructure\Utils\Annotations\AnnotationsReader;
 use Tulia\Component\Security\Http\Csrf\Annotation\CsrfToken;
@@ -104,9 +105,9 @@ class ControllerRequestTokenValidator implements EventSubscriberInterface
             throw new RequestCsrfTokenException($message);
         }
 
-        $token = $this->csrfManager->getToken($tokenInfo->id);
+        $token = new SymfonyToken($tokenInfo->id, $value);
 
-        if ($token->getValue() === $value) {
+        if ($this->csrfManager->isTokenValid($token)) {
             return;
         }
 

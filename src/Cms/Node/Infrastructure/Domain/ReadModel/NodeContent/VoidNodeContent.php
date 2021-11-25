@@ -13,6 +13,11 @@ class VoidNodeContent implements NodeContentInterface
 {
     private ?string $source = null;
 
+    public function __construct(?string $source)
+    {
+        $this->source = $source;
+    }
+
     public function setSource(?string $source): void
     {
         $this->source = $source;

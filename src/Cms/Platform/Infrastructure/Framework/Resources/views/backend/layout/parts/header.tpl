@@ -19,7 +19,7 @@
                     <div class="action-box language-selector noselect" data-toggle="tooltip" data-placement="left" title="{{ 'switchWebsite'|trans }}">
                         <div class="dropdown">
                             {% set __websiteId = __currentWebsite.id %}
-                            <button class="btn btn-icon-left action-btn" type="button" data-toggle="dropdown">
+                            <button class="btn btn-icon-left action-btn" type="button" data-bs-toggle="dropdown">
                                 <i class="btn-icon fas fa-globe"></i>
                                 {{ __currentWebsite.name }}
                             </button>
@@ -36,7 +36,7 @@
                 <div class="action-box language-selector noselect" data-toggle="tooltip" data-placement="left" title="{{ 'contentLocale'|trans }}">
                     <div class="dropdown">
                         {% set __locale = __currentWebsite.locale.code %}
-                        <button class="btn btn-icon-left action-btn" type="button" data-toggle="dropdown">
+                        <button class="btn btn-icon-left action-btn" type="button" data-bs-toggle="dropdown">
                             <i class="btn-icon fa fa-language"></i>
                             {{ 'languageName'|trans({ code: __locale }, 'languages') }}
                         </button>
@@ -64,7 +64,7 @@
                 </div>
                 <div class="action-box notifications-list" data-toggle="tooltip" data-placement="left" title="{{ 'notifications'|trans }}">
                     <div class="dropdown dropdown-prevent-close">
-                        <button class="btn btn-icon-only action-btn" type="button" data-toggle="dropdown">
+                        <button class="btn btn-icon-only action-btn" type="button" data-bs-toggle="dropdown">
                             <span class="badge badge-primary">12</span>
                             <span class="animate-ring">
                                 <i class="btn-icon fa fa-bell"></i>
@@ -126,7 +126,7 @@
                 </div>
                 <div class="action-box" data-toggle="tooltip" data-placement="left" title="{{ 'myAccount'|trans }}">
                     <div class="dropdown">
-                        <button class="btn btn-icon-only action-btn" type="button" data-toggle="dropdown">
+                        <button class="btn btn-icon-only action-btn" type="button" data-bs-toggle="dropdown">
                             <i class="btn-icon fas fa-user-tie"></i>
                         </button>
                         <div class="dropdown-menu pb-0">

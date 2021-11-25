@@ -1,7 +1,0 @@
-flags: Flags
-flagWithName: "Flag: {flag}"
-flagsHelp: "Flags describes additional functionalities or attributes of any node. You can set here, i.e. if this node should be a Homepage."
-flagType:
-    page:homepage: Homepage
-    page:contact: Contact page
-    page:privacy_policy: Privacy Policy page

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Domain\WriteModel\Model;
 
-use Tulia\Cms\Metadata\Domain\WriteModel\MagickMetadataTrait;
-use Tulia\Cms\Metadata\Ports\Domain\WriteModel\MetadataAwareInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Event;
+use Tulia\Cms\Node\Domain\WriteModel\Event\AttributeUpdated;
+use Tulia\Cms\Node\Domain\WriteModel\Model\ValueObject\AttributeInfo;
 use Tulia\Cms\Node\Domain\WriteModel\Model\ValueObject\NodeId;
 use Tulia\Cms\Platform\Domain\WriteModel\Model\AggregateRoot;
 use Tulia\Cms\Platform\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
@@ -14,15 +14,13 @@ use Tulia\Cms\Platform\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
 /**
  * @author Adam Banaszkiewicz
  */
-class Node extends AggregateRoot implements MetadataAwareInterface
+class Node extends AggregateRoot
 {
-    use MagickMetadataTrait;
-
     protected NodeId $id;
 
     protected string $type;
 
-    protected string $status;
+    protected string $status = 'draft';
 
     protected string $websiteId;
 
@@ -38,25 +36,22 @@ class Node extends AggregateRoot implements MetadataAwareInterface
 
     protected ?string $parentId = null;
 
-    protected int $level;
-
-    protected ?string $category = null;
+    protected int $level = 0;
 
     protected string $locale;
 
-    protected ?string $title = null;
+    protected bool $translated = true;
+
+    protected string $title = '';
 
     protected ?string $slug = null;
 
-    protected ?string $introduction = null;
+    protected array $attributes = [];
 
-    protected ?string $content = null;
-
-    protected ?string $contentCompiled = null;
-
-    protected array $flags = [];
-
-    protected bool $translated = true;
+    /**
+     * @var AttributeInfo[]
+     */
+    protected array $attributesInfo = [];
 
     private function __construct(string $id, string $type, string $websiteId, string $locale)
     {
@@ -64,22 +59,24 @@ class Node extends AggregateRoot implements MetadataAwareInterface
         $this->type = $type;
         $this->websiteId = $websiteId;
         $this->locale = $locale;
-        $this->createdAt = new ImmutableDateTime();
+        $this->createdAt = $this->updatedAt = new ImmutableDateTime();
+        $this->updatedAt = new ImmutableDateTime();
+        $this->publishedAt = new ImmutableDateTime();
     }
 
     public static function createNew(string $id, string $type, string $websiteId, string $locale): self
     {
         $self = new self($id, $type, $websiteId, $locale);
-        $self->recordThat(new Event\NodeCreated($id, $websiteId, $locale, $type));
+        $self->recordThat(new Event\NodeCreated($id, $type, $websiteId, $locale, $type));
 
         return $self;
     }
 
-    public static function buildFromArray(array $data): self
+    public static function buildFromArray(string $nodeType, array $data): self
     {
         $self = new self(
             $data['id'],
-            $data['type'],
+            $nodeType,
             $data['website_id'],
             $data['locale']
         );
@@ -88,18 +85,29 @@ class Node extends AggregateRoot implements MetadataAwareInterface
         $self->updatedAt = $data['updated_at'] ?? null;
         $self->publishedAt = $data['published_at'] ?? new ImmutableDateTime();
         $self->publishedTo = $data['published_to'] ?? null;
-        $self->authorId = $data['authorId'] ?? null;
-        $self->parentId = $data['parentId'] ?? null;
-        $self->level = (int) ($data['level'] ?? 0);
-        $self->category = $data['category'] ?? null;
-        $self->title = $data['title'] ?? null;
+        $self->authorId = $data['author_id'] ?? null;
+        $self->parentId = $data['parent_id'] ?? null;
+        $self->title = $data['title'] ?? '';
         $self->slug = $data['slug'] ?? null;
-        $self->introduction = $data['introduction'] ?? null;
-        $self->content = $data['content'] ?? null;
-        $self->contentCompiled = $data['content_compiled'] ?? null;
+        $self->level = (int) ($data['level'] ?? 0);
         $self->translated = (bool) ($data['translated'] ?? true);
-        $self->flags = $data['flags'] ?? [];
-        $self->replaceMetadata($data['metadata'] ?? []);
+
+        foreach ($data['attributes_mapping'] as $name => $info) {
+            $self->attributesInfo[$name] = new AttributeInfo(
+                $info['is_multilingual'],
+                $info['is_multiple'],
+                $info['is_compilable'],
+                $info['is_taxonomy'],
+            );
+        }
+
+        foreach ($data['attributes'] as $name => $value) {
+            if (isset($self->attributesInfo[$name]) === false) {
+                continue;
+            }
+
+            $self->attributes[$name] = $value;
+        }
 
         return $self;
     }
@@ -109,19 +117,105 @@ class Node extends AggregateRoot implements MetadataAwareInterface
         return $this->id;
     }
 
-    public function setId(NodeId $id): void
-    {
-        $this->id = $id;
-    }
-
     public function getType(): string
     {
         return $this->type;
     }
 
-    public function setType(string $type): void
+    public function getAttributeInfo(string $name): AttributeInfo
     {
-        $this->type = $type;
+        return $this->attributesInfo[$name];
+    }
+
+    public function addAttributeInfo(string $name, AttributeInfo $info): void
+    {
+        $this->validateAttributeName($name);
+
+        $this->attributesInfo[$name] = $info;
+    }
+
+    public function updateAttributes(array $attributes): void
+    {
+        unset(
+            $attributes['id'],
+            $attributes['type'],
+            $attributes['status'],
+            $attributes['title'],
+        );
+
+        foreach ($attributes as $name => $value) {
+            if (isset($this->attributesInfo[$name]) === false) {
+                throw new \Exception(sprintf('Attribute "%s" Must have AttributeInfo for this attribute.', $name));
+            }
+
+            if (isset($this->attributes[$name]) === false || $this->attributes[$name] !== $value) {
+                $this->attributes[$name] = $value;
+                /**
+                 * Calling recordUniqueThat() prevents the system to record multiple changes on the same attribute.
+                 * This may be caused, in example, by SlugGenerator: first time system sets raw value from From,
+                 * and then SlugGenerator sets the validated and normalized slug. For us, the last updated
+                 * attribute's value matters, so we remove all previous events and adds new, at the end of
+                 * collection.
+                 */
+                $this->recordUniqueThat(AttributeUpdated::fromNode($this, $name, $value), function ($event) use ($name) {
+                    return $name === $event->getAttribute();
+                });
+            }
+        }
+
+        $this->markAsUpdated();
+    }
+
+    public function getAttributes(): array
+    {
+        return $this->attributes;
+    }
+
+    public function removeAttribute(string $code): void
+    {
+        unset($this->attributes[$code]);
+
+        $this->markAsUpdated();
+    }
+
+    /**
+     * @param string $name
+     * @param mixed $default
+     * @return mixed
+     */
+    public function getAttribute(string $name, $default = null)
+    {
+        return $this->attributes[$name] ?? $default;
+    }
+
+    public function hasFlag(string $flag): bool
+    {
+        return isset($this->attributes['flags']) && \in_array($flag, $this->attributes['flags'], true);
+    }
+
+    public function getFlags(): array
+    {
+        return $this->attributes['flags'] ?? [];
+    }
+
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
+
+    public function setTitle(string $title): void
+    {
+        $this->title = $title;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(?string $slug): void
+    {
+        $this->slug = $slug;
     }
 
     public function getStatus(): string
@@ -139,11 +233,6 @@ class Node extends AggregateRoot implements MetadataAwareInterface
         return $this->websiteId;
     }
 
-    public function setWebsiteId(string $websiteId): void
-    {
-        $this->websiteId = $websiteId;
-    }
-
     public function getPublishedAt(): ImmutableDateTime
     {
         return $this->publishedAt;
@@ -152,6 +241,8 @@ class Node extends AggregateRoot implements MetadataAwareInterface
     public function setPublishedAt(ImmutableDateTime $publishedAt): void
     {
         $this->publishedAt = $publishedAt;
+
+        $this->markAsUpdated();
     }
 
     public function getPublishedTo(): ?ImmutableDateTime
@@ -162,6 +253,8 @@ class Node extends AggregateRoot implements MetadataAwareInterface
     public function setPublishedTo(?ImmutableDateTime $publishedTo): void
     {
         $this->publishedTo = $publishedTo;
+
+        $this->markAsUpdated();
     }
 
     public function getCreatedAt(): ImmutableDateTime
@@ -169,19 +262,9 @@ class Node extends AggregateRoot implements MetadataAwareInterface
         return $this->createdAt;
     }
 
-    public function setCreatedAt(ImmutableDateTime $createdAt): void
-    {
-        $this->createdAt = $createdAt;
-    }
-
     public function getUpdatedAt(): ?ImmutableDateTime
     {
         return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(?ImmutableDateTime $updatedAt): void
-    {
-        $this->updatedAt = $updatedAt;
     }
 
     public function getAuthorId(): ?string
@@ -192,6 +275,8 @@ class Node extends AggregateRoot implements MetadataAwareInterface
     public function setAuthorId(?string $authorId): void
     {
         $this->authorId = $authorId;
+
+        $this->markAsUpdated();
     }
 
     public function getParentId(): ?string
@@ -202,6 +287,8 @@ class Node extends AggregateRoot implements MetadataAwareInterface
     public function setParentId(?string $parentId): void
     {
         $this->parentId = $parentId;
+
+        $this->markAsUpdated();
     }
 
     public function getLevel(): int
@@ -212,91 +299,18 @@ class Node extends AggregateRoot implements MetadataAwareInterface
     public function setLevel(int $level): void
     {
         $this->level = $level;
+
+        $this->markAsUpdated();
     }
 
-    public function getCategory(): ?string
+    public function getCategoryId(): ?string
     {
-        return $this->category;
-    }
-
-    public function setCategory(?string $category): void
-    {
-        $this->category = $category;
+        return $this->attributes['category'] ?? null;
     }
 
     public function getLocale(): string
     {
         return $this->locale;
-    }
-
-    public function setLocale(string $locale): void
-    {
-        $this->locale = $locale;
-    }
-
-    public function getTitle(): ?string
-    {
-        return $this->title;
-    }
-
-    public function setTitle(?string $title): void
-    {
-        $this->title = $title;
-    }
-
-    public function getSlug(): ?string
-    {
-        return $this->slug;
-    }
-
-    public function setSlug(?string $slug): void
-    {
-        $this->slug = $slug;
-    }
-
-    public function getIntroduction(): ?string
-    {
-        return $this->introduction;
-    }
-
-    public function setIntroduction(?string $introduction): void
-    {
-        $this->introduction = $introduction;
-    }
-
-    public function getContent(): ?string
-    {
-        return $this->content;
-    }
-
-    public function setContent(?string $content): void
-    {
-        $this->content = $content;
-    }
-
-    public function getContentCompiled(): ?string
-    {
-        return $this->contentCompiled;
-    }
-
-    public function setContentCompiled(?string $contentCompiled): void
-    {
-        $this->contentCompiled = $contentCompiled;
-    }
-
-    public function hasFlag(string $name): bool
-    {
-        return \in_array($name, $this->flags, true);
-    }
-
-    public function getFlags(): array
-    {
-        return $this->flags;
-    }
-
-    public function setFlags(array $flags): void
-    {
-        $this->flags = $flags;
     }
 
     public function isTranslated(): bool
@@ -307,5 +321,34 @@ class Node extends AggregateRoot implements MetadataAwareInterface
     public function setTranslated(bool $translated): void
     {
         $this->translated = $translated;
+    }
+
+    private function updateFlags(array $flags): void
+    {
+        $this->attributes['flags'] = $this->attributes['flags'] ?? [];
+
+        /*$oldFlags = array_diff($this->attributes['flags'], $flags);
+        $newFlags = array_diff($flags, $this->attributes['flags']);*/
+    }
+
+    /**
+     * @param mixed $code
+     */
+    private function validateAttributeName($code): void
+    {
+        if (is_string($code) === false) {
+            throw new \Exception('Must be string.');
+        }
+        if (strlen($code) < 2) {
+            throw new \Exception('Must have more than 2 chars.');
+        }
+        if (! preg_match('/^([a-z0-9_]+)$/m', $code)) {
+            throw new \Exception('Must contains only alphanumericals and underscores.');
+        }
+    }
+
+    private function markAsUpdated(): void
+    {
+        $this->updatedAt = new ImmutableDateTime();
     }
 }

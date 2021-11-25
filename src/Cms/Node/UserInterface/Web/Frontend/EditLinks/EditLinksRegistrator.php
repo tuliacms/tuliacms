@@ -6,10 +6,10 @@ namespace Tulia\Cms\Node\UserInterface\Web\Frontend\EditLinks;
 
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Tulia\Cms\ContentBuilder\Domain\NodeType\Service\NodeTypeRegistry;
 use Tulia\Cms\EditLinks\Domain\Collection;
 use Tulia\Cms\EditLinks\Ports\Domain\EditLinksCollectorInterface;
 use Tulia\Cms\Node\Domain\ReadModel\Model\Node;
-use Tulia\Cms\Node\Domain\NodeType\NodeTypeRegistryInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -20,10 +20,13 @@ class EditLinksRegistrator implements EditLinksCollectorInterface
 
     protected RouterInterface $router;
 
-    protected NodeTypeRegistryInterface $registry;
+    protected NodeTypeRegistry $registry;
 
-    public function __construct(TranslatorInterface $translator, RouterInterface $router, NodeTypeRegistryInterface $registry)
-    {
+    public function __construct(
+        TranslatorInterface $translator,
+        RouterInterface $router,
+        NodeTypeRegistry $registry
+    ) {
         $this->translator = $translator;
         $this->router = $router;
         $this->registry = $registry;
@@ -32,12 +35,12 @@ class EditLinksRegistrator implements EditLinksCollectorInterface
     public function collect(Collection $collection, object $node, array $options = []): void
     {
         try {
-            $type = $this->registry->getType($node->getType());
+            $type = $this->registry->get($node->getType());
 
             $collection->add('node.edit', [
                 'link'  => $this->router->generate('backend.node.edit', [ 'node_type' => $node->getType(), 'id' => $node->getId() ]),
                 'label' => $this->translator->trans('editNode', [
-                    'node' => mb_strtolower($this->translator->trans('node', [], $type->getTranslationDomain())),
+                    'node' => mb_strtolower($this->translator->trans($type->getName(), [], 'node')),
                 ]),
             ]);
         } catch (\Exception $e) {

@@ -395,7 +395,7 @@ Tulia.DataTable.View.Pagination = class {
     init () {
         this.pagination = this.root.find('.pagination-box');
         this.pagination.html('<div class="dropdown d-inline-block">\n' +
-            '    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">\n' +
+            '    <button class="btn btn-default dropdown-toggle" type="button" data-bs-toggle="dropdown">\n' +
             '        ' + this.translator.get('perPage') + ': <span class="dtbl-per-page">20</span>\n' +
             '    </button>\n' +
             '    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">\n' +
@@ -698,7 +698,7 @@ Tulia.DataTable.View.Datatable.ColumnTypeDataRenderer = class {
         let actions = $('<div class="actions-box">\
             <div class="btn-group">\
                 <div class="btn-group" role="group">\
-                    <button type="button" class="btn btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown"></button>\
+                    <button type="button" class="btn btn-secondary btn-sm dropdown-toggle" data-bs-toggle="dropdown"></button>\
                     <div class="dropdown-menu dropdown-menu-right">\
                         <h6 class="dropdown-header">' + this.translator.get('moreOptions') + '</h6>\
                         <div class="dropdown-divider"></div>\

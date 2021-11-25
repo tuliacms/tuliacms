@@ -1,0 +1,21 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    Tulia\Cms\ContentBuilder\:
+        resource: '../../../../**'
+        exclude: '../../../../{Infrastructure/Framework/Resources,Domain/NodeType/Model,Domain/NodeType/Exception,Domain/TaxonomyType/Model,Domain/TaxonomyType/Exception,UserInterface/LayoutType/Model}'
+
+    Tulia\Cms\ContentBuilder\Infrastructure\Persistence\NodeTypeProvider\ContainerProvider:
+        bind:
+            $config: '%cms.content_builder.node_types%'
+
+    Tulia\Cms\ContentBuilder\Infrastructure\Persistence\TaxonomyTypeProvider\ContainerProvider:
+        bind:
+            $config: '%cms.content_builder.taxonomy_types%'
+
+    Tulia\Cms\ContentBuilder\Infrastructure\Persistence\LayoutTypeProvider\ContainerProvider:
+        bind:
+            $config: '%cms.content_builder.layout_types%'

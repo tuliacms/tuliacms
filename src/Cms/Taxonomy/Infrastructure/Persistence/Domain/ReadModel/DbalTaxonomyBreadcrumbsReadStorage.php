@@ -32,7 +32,7 @@ WITH RECURSIVE tree_path (
     level,
     count,
     locale,
-    name,
+    title,
     slug,
     visibility,
     generated_path
@@ -47,10 +47,10 @@ WITH RECURSIVE tree_path (
         level,
         count,
         :defaultLocale AS locale,
-        name,
+        title,
         slug,
         visibility,
-        CONCAT(name, '/') as generated_path
+        CONCAT(title, '/') as generated_path
     FROM #__term
     WHERE
         id = :term_id
@@ -66,10 +66,10 @@ UNION ALL
             tm.level,
             tm.count,
             COALESCE(tl.locale, :defaultLocale) AS locale,
-            COALESCE(tl.name, tm.name) AS name,
+            COALESCE(tl.title, tm.title) AS title,
             COALESCE(tl.slug, tm.slug) AS slug,
             COALESCE(tl.visibility, tm.visibility) AS visibility,
-            CONCAT(tp.generated_path, tm.name, '/') AS generated_path
+            CONCAT(tp.generated_path, tm.title, '/') AS generated_path
         FROM tree_path AS tp
         INNER JOIN #__term AS tm
             ON tp.parent_id = tm.id

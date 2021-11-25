@@ -51,7 +51,7 @@ class DateTimeFormatTransformer implements DataTransformerInterface
                 throw new TransformationFailedException(sprintf('Cannot transform simple date from format %s.', $this->format));
             }
 
-            return $formatted;
+            return $formatted->format($this->format);
         }
 
         throw new TransformationFailedException(sprintf('Date must be string or null, given %s.', is_object($date) ? get_class($date) : gettype($date)));

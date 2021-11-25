@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Taxonomy\Domain\WriteModel;
 
+use Tulia\Cms\ContentBuilder\Domain\TaxonomyType\Model\TaxonomyType;
+use Tulia\Cms\ContentBuilder\Domain\TaxonomyType\Service\TaxonomyTypeRegistry;
 use Tulia\Cms\Metadata\Domain\WriteModel\MetadataRepository;
 use Tulia\Cms\Platform\Infrastructure\Bus\Event\EventBusInterface;
 use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
-use Tulia\Cms\Taxonomy\Domain\Metadata\TermMetadataEnum;
-use Tulia\Cms\Taxonomy\Domain\TaxonomyType\RegistryInterface;
-use Tulia\Cms\Taxonomy\Domain\TaxonomyType\TaxonomyTypeInterface;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\ActionsChain\TaxonomyActionsChainInterface;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Exception\TermNotFoundException;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Taxonomy;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Term;
+use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\ValueObject\AttributeInfo;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\ValueObject\TermId;
 use Tulia\Cms\Taxonomy\Ports\Infrastructure\Persistence\Domain\WriteModel\TermWriteStorageInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
@@ -23,7 +23,9 @@ use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
  */
 class TaxonomyRepository
 {
-    private RegistryInterface $taxonomyRegistry;
+    private const RESERVED_NAMES = ['title', 'slug', 'parent_id'];
+
+    private TaxonomyTypeRegistry $taxonomyTypeRegistry;
 
     private TermWriteStorageInterface $storage;
 
@@ -38,21 +40,21 @@ class TaxonomyRepository
     private TaxonomyActionsChainInterface $actionsChain;
 
     public function __construct(
-        RegistryInterface $taxonomyRegistry,
         TermWriteStorageInterface $storage,
         CurrentWebsiteInterface $currentWebsite,
         MetadataRepository $metadataRepository,
         UuidGeneratorInterface $uuidGenerator,
         EventBusInterface $eventBus,
-        TaxonomyActionsChainInterface $actionsChain
+        TaxonomyActionsChainInterface $actionsChain,
+        TaxonomyTypeRegistry $taxonomyTypeRegistry
     ) {
-        $this->taxonomyRegistry = $taxonomyRegistry;
         $this->storage = $storage;
         $this->currentWebsite = $currentWebsite;
         $this->metadataRepository = $metadataRepository;
         $this->uuidGenerator = $uuidGenerator;
         $this->eventBus = $eventBus;
         $this->actionsChain = $actionsChain;
+        $this->taxonomyTypeRegistry = $taxonomyTypeRegistry;
     }
 
     public function createNewTerm(Taxonomy $taxonomy): Term
@@ -64,15 +66,16 @@ class TaxonomyRepository
         );
     }
 
-    public function getTaxonomyType(string $type): TaxonomyTypeInterface
+    public function getTaxonomyType(string $type): TaxonomyType
     {
-        return $this->taxonomyRegistry->getType($type);
+        return $this->taxonomyTypeRegistry->get($type);
     }
 
     public function get(string $type): Taxonomy
     {
+        $taxonomyType = $this->taxonomyTypeRegistry->get($type);
         $taxonomy = Taxonomy::create(
-            $this->getTaxonomyType($type),
+            $type,
             $this->currentWebsite->getId(),
             $this->getTerms($type)
         );
@@ -83,6 +86,15 @@ class TaxonomyRepository
             $taxonomy->addTerm(Term::createRoot(
                 $taxonomy,
                 $this->currentWebsite->getLocale()->getCode()
+            ));
+        }
+
+        foreach ($this->buildAttributesMapping($taxonomyType) as $name => $info) {
+            $taxonomy->addAttributeInfo($name, new AttributeInfo(
+                $info['is_multilingual'],
+                $info['is_multiple'],
+                $info['is_compilable'],
+                $info['is_taxonomy'],
             ));
         }
 
@@ -100,33 +112,35 @@ class TaxonomyRepository
         try {
             foreach ($taxonomy->collectChangedTerms() as $change => $terms) {
                 foreach ($terms as $term) {
+                    $extracted = $this->extractTerm($taxonomy, $term);
+
                     if ($change === 'insert') {
                         $this->storage->insert(
-                            $this->extractTerm($term),
+                            $extracted,
                             $this->currentWebsite->getDefaultLocale()->getCode()
                         );
                         $this->metadataRepository->persist(
-                            TermMetadataEnum::TYPE,
+                            'term',
                             $term->getId()->getId(),
-                            $term->getAllMetadata()
+                            $extracted['attributes']
                         );
                     }
 
                     if ($change === 'update') {
                         $this->storage->update(
-                            $this->extractTerm($term),
+                            $extracted,
                             $this->currentWebsite->getDefaultLocale()->getCode()
                         );
                         $this->metadataRepository->persist(
-                            TermMetadataEnum::TYPE,
+                            'term',
                             $term->getId()->getId(),
-                            $term->getAllMetadata()
+                            $extracted['attributes']
                         );
                     }
 
                     if ($change === 'delete') {
-                        $this->storage->delete($this->extractTerm($term));
-                        $this->metadataRepository->delete(TermMetadataEnum::TYPE, $term->getId()->getId());
+                        $this->storage->delete($extracted);
+                        $this->metadataRepository->delete('term', $term->getId()->getId());
                     }
                 }
             }
@@ -139,7 +153,7 @@ class TaxonomyRepository
 
         $taxonomy->clearTermsChangelog();
 
-        $this->eventBus->dispatchCollection($term->collectDomainEvents());
+        $this->eventBus->dispatchCollection($taxonomy->collectDomainEvents());
     }
 
     private function getTerms(string $type): array
@@ -159,34 +173,68 @@ class TaxonomyRepository
                 'level'      => (int) $term['level'],
                 'position'   => (int) $term['position'],
                 'parent_id'  => $term['parent_id'],
-                'name'       => $term['name'],
+                'title'      => $term['title'],
                 'slug'       => $term['slug'],
                 'path'       => $term['path'],
                 'visibility' => $term['visibility'] === '1',
                 'is_root'    => (bool) $term['is_root'],
-                'metadata'   => $this->metadataRepository->findAll(TermMetadataEnum::TYPE, $term['id']),
-                'translated' => $term['translated'] ?? true,
+                'metadata'   => $this->metadataRepository->findAll('term', $term['id']),
+                'translated' => (bool) ($term['translated'] ?? false),
             ];
         }
 
         return $result;
     }
 
-    private function extractTerm(Term $term): array
+    private function extractTerm(Taxonomy $taxonomy, Term $term): array
     {
+        $attributes = [];
+
+        foreach ($term->getAttributes() as $name => $value) {
+            if (\in_array($name, self::RESERVED_NAMES)) {
+                continue;
+            }
+
+            $info = $taxonomy->getAttributeInfo($name);
+
+            $attributes[$name] = [
+                'value' => $value,
+                'is_multilingual' => $info->isMultilingual(),
+                'is_multiple' => $info->isMultiple(),
+                'is_taxonomy' => $info->isTaxonomy(),
+            ];
+        }
+
         return [
             'id'         => $term->getId()->getId(),
             'website_id' => $term->getTaxonomy()->getWebsiteId(),
-            'type'       => $term->getTaxonomy()->getType()->getType(),
+            'type'       => $term->getTaxonomy()->getType(),
             'level'      => $term->getLevel(),
             'position'   => $term->getPosition(),
             'slug'       => $term->getSlug(),
             'path'       => $term->getPath(),
-            'name'       => $term->getName(),
+            'title'      => $term->getTitle(),
             'visibility' => $term->isVisible(),
             'parent_id'  => $term->getParentId(),
             'locale'     => $term->getLocale(),
             'is_root'    => $term->isRoot(),
+            'attributes' => $attributes,
         ];
+    }
+
+    private function buildAttributesMapping(TaxonomyType $taxonomyType): array
+    {
+        $result = [];
+
+        foreach ($taxonomyType->getFields() as $field) {
+            $result[$field->getName()] = [
+                'is_multilingual' => $field->isMultilingual(),
+                'is_multiple' => $field->isMultiple(),
+                'is_compilable' => $field->hasFlag('compilable'),
+                'is_taxonomy' => $field->getType() === 'taxonomy',
+            ];
+        }
+
+        return $result;
     }
 }

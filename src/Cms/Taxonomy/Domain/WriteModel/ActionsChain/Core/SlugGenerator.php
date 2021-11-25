@@ -49,7 +49,7 @@ class SlugGenerator implements TaxonomyActionInterface
     private function createSlugForTerm(Term $term): void
     {
         $slug = $term->getSlug();
-        $name = $term->getName();
+        $name = $term->getTitle();
 
         if (! $slug && ! $name) {
             $term->setSlug(uniqid('temporary-slug-', true));

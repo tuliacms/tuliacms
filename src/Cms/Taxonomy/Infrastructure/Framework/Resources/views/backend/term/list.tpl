@@ -1,11 +1,11 @@
 {% extends 'backend' %}
 
 {% block title %}
-    {{ 'terms'|trans({}, taxonomyType.translationDomain) }}
+    {{ 'termsListOfTaxonomy'|trans({ taxonomy: taxonomyType.type }, 'taxonomy') }}
 {% endblock %}
 
 {% block breadcrumbs %}
-    <li class="breadcrumb-item active" aria-current="page">{{ 'terms'|trans({}, taxonomyType.translationDomain) }}</li>
+    <li class="breadcrumb-item active" aria-current="page">{{ block('title') }}</li>
 {% endblock %}
 
 {% import '@backend/_macros/datatable/generator.tpl' as generator %}
@@ -15,7 +15,7 @@
         <div class="pane-header">
             <div class="pane-buttons">
                 <div class="dropdown" title="{{ 'moreOptions'|trans }}" data-toggle="tooltip">
-                    <button class="btn btn-secondary btn-icon-only" type="button" data-toggle="dropdown">
+                    <button class="btn btn-secondary btn-icon-only" type="button" data-bs-toggle="dropdown">
                         <i class="btn-icon fas fa-ellipsis-v"></i>
                     </button>
                     <div class="dropdown-menu dropdown-menu-right">

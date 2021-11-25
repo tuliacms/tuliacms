@@ -12,8 +12,9 @@ use Tulia\Component\Templating\ViewInterface;
  */
 class Homepage extends AbstractController
 {
-    public function index(/*DependencyFactory $dependencyFactory*/): ViewInterface
-    {
+    public function index(
+        /*DependencyFactory $dependencyFactory*/
+    ): ViewInterface {
         /*$input = new ArrayInput([]);
 
         $dependencyFactory->getMetadataStorage()->ensureInitialized();

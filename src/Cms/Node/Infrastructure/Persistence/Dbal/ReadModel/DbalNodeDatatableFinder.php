@@ -6,7 +6,7 @@ namespace Tulia\Cms\Node\Infrastructure\Persistence\Dbal\ReadModel;
 
 use PDO;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Tulia\Cms\Node\Domain\NodeType\NodeTypeInterface;
+use Tulia\Cms\ContentBuilder\Domain\NodeType\Model\NodeType;
 use Tulia\Cms\Node\Domain\ReadModel\Datatable\NodeDatatableFinderInterface;
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
@@ -20,7 +20,7 @@ use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
  */
 class DbalNodeDatatableFinder extends AbstractDatatableFinder implements NodeDatatableFinderInterface
 {
-    private NodeTypeInterface $nodeType;
+    private NodeType $nodeType;
 
     private TermFinderInterface $termFinder;
 
@@ -37,7 +37,7 @@ class DbalNodeDatatableFinder extends AbstractDatatableFinder implements NodeDat
         $this->translator = $translator;
     }
 
-    public function setNodeType(NodeTypeInterface $nodeType): void
+    public function setNodeType(NodeType $nodeType): void
     {
         $this->nodeType = $nodeType;
     }
@@ -203,6 +203,8 @@ class DbalNodeDatatableFinder extends AbstractDatatableFinder implements NodeDat
 
     private function supportsCategoryTaxonomy(): bool
     {
+        // @todo
+        return false;
         foreach ($this->nodeType->getTaxonomies() as $taxonomy) {
             if ($taxonomy['taxonomy'] === 'category') {
                 return true;
@@ -214,10 +216,12 @@ class DbalNodeDatatableFinder extends AbstractDatatableFinder implements NodeDat
 
     private function createStatusChoices(): array
     {
+        // @todo
+        return [];
         $statuses = [];
 
         foreach ($this->nodeType->getStatuses() as $status) {
-            $statuses[$status] = $this->translator->trans($status, [], $this->nodeType->getTranslationDomain());
+            $statuses[$status] = $this->translator->trans($status, [], 'node');
         }
 
         return $statuses;

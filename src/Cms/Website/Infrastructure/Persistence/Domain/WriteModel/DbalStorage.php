@@ -24,7 +24,7 @@ class DbalStorage implements WebsiteStorageInterface
      */
     public function find(string $id): ?array
     {
-        $website = $this->connection->fetchAll(
+        $website = $this->connection->fetchAllAssociative(
             'SELECT * FROM #__website AS tm WHERE tm.id = :id LIMIT 1',
             ['id' => $id]
         );
@@ -34,7 +34,7 @@ class DbalStorage implements WebsiteStorageInterface
         }
 
         $website = reset($website);
-        $website['locales'] = $this->connection->fetchAll(
+        $website['locales'] = $this->connection->fetchAllAssociative(
             'SELECT * FROM #__website_locale AS tm WHERE tm.website_id = :id',
             ['id' => $id]
         );
@@ -143,7 +143,7 @@ class DbalStorage implements WebsiteStorageInterface
 
     private function getLocales(string $id): array
     {
-        $result = $this->connection->fetchAll('SELECT * FROM #__website_locale WHERE website_id = :id', ['id' => $id]);
+        $result = $this->connection->fetchAllAssociative('SELECT * FROM #__website_locale WHERE website_id = :id', ['id' => $id]);
 
         foreach ($result as $key => $val) {
             $result[$key]['is_default'] = $result[$key]['is_default'] === '1';

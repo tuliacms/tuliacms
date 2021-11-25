@@ -44,7 +44,7 @@ class DatabaseStorage implements StorageInterface
      */
     public function getActiveChangeset(string $theme): ?ChangesetInterface
     {
-        $result = $this->connection->fetchAll('SELECT *
+        $result = $this->connection->fetchAllAssociative('SELECT *
             FROM #__customizer_changeset AS tm
             INNER JOIN #__customizer_changeset_lang AS tl
                 ON (tm.id = tl.customizer_changeset_id)
@@ -92,7 +92,7 @@ class DatabaseStorage implements StorageInterface
      */
     public function get(string $id): ChangesetInterface
     {
-        $result = $this->connection->fetchAll('SELECT *
+        $result = $this->connection->fetchAllAssociative('SELECT *
             FROM #__customizer_changeset AS tm
             INNER JOIN #__customizer_changeset_lang AS tl
                 ON (tm.id = tl.customizer_changeset_id)
@@ -287,7 +287,7 @@ class DatabaseStorage implements StorageInterface
      */
     private function getRow(string $id): array
     {
-        $result = $this->connection->fetchAll('SELECT id FROM #__customizer_changeset WHERE id = :id LIMIT 1', [
+        $result = $this->connection->fetchAllAssociative('SELECT id FROM #__customizer_changeset WHERE id = :id LIMIT 1', [
             'id' => $id
         ]);
 

@@ -13,7 +13,7 @@
                     {% if locales()|length > 1 %}
                         {% set contentLocale = current_website().locale.code %}
                         <div class="dropdown d-inline" data-toggle="tooltip" data-placement="left" title="{{ 'changeLanguage'|trans }}">
-                            <a class="btn btn-dark btn-sm btn-icon-only" href="#" data-toggle="dropdown">
+                            <a class="btn btn-dark btn-sm btn-icon-only" href="#" data-bs-toggle="dropdown">
                                 <i class="btn-icon fas fa-language"></i>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right">
@@ -26,7 +26,7 @@
                     {% endif %}
                     <a href="#" class="btn btn-primary btn-sm customizer-save disabled">{{ 'publish'|trans({}, 'customizer') }}</a>
                     <div class="dropdown d-inline">
-                        <a class="btn btn-dark btn-sm btn-icon-only btn-customizer-more" href="#" data-toggle="dropdown">
+                        <a class="btn btn-dark btn-sm btn-icon-only btn-customizer-more" href="#" data-bs-toggle="dropdown">
                             <i class="btn-icon fas fa-ellipsis-v"></i>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right">

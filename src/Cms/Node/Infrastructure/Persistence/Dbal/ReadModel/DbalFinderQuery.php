@@ -7,8 +7,8 @@ namespace Tulia\Cms\Node\Infrastructure\Persistence\Dbal\ReadModel;
 use Doctrine\DBAL\Connection;
 use Exception;
 use PDO;
+use Tulia\Cms\ContentBuilder\Domain\NodeType\Service\NodeTypeRegistry;
 use Tulia\Cms\Metadata\Domain\ReadModel\MetadataFinder;
-use Tulia\Cms\Node\Domain\Metadata\NodeMetadataEnum;
 use Tulia\Cms\Node\Domain\ReadModel\Model\Node;
 use Tulia\Cms\Node\Domain\WriteModel\Model\Enum\TermTypeEnum;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Exception\QueryException;
@@ -26,11 +26,17 @@ class DbalFinderQuery extends AbstractDbalQuery
 
     protected array $joinedTables = [];
 
-    public function __construct(QueryBuilder $queryBuilder, MetadataFinder $metadataFinder)
-    {
+    private NodeTypeRegistry $nodeTypeRegistry;
+
+    public function __construct(
+        QueryBuilder $queryBuilder,
+        MetadataFinder $metadataFinder,
+        NodeTypeRegistry $nodeTypeRegistry
+    ) {
         parent::__construct($queryBuilder);
 
         $this->metadataFinder = $metadataFinder;
+        $this->nodeTypeRegistry = $nodeTypeRegistry;
     }
 
     public function getBaseQueryArray(): array
@@ -209,7 +215,7 @@ class DbalFinderQuery extends AbstractDbalQuery
         }
 
         $terms = $this->fetchTerms(array_column($result, 'id'));
-        $metadata = $this->metadataFinder->findAllAggregated(NodeMetadataEnum::TYPE, array_column($result, 'id'));
+        $attributes = $this->metadataFinder->findAllAggregated('node', array_column($result, 'id'));
 
         try {
             foreach ($result as $row) {
@@ -217,8 +223,19 @@ class DbalFinderQuery extends AbstractDbalQuery
                     $row['category'] = $terms[$row['id']][TermTypeEnum::MAIN][0];
                 }
 
-                $row['metadata'] = $metadata[$row['id']] ?? [];
+                $row['attributes'] = $attributes[$row['id']] ?? [];
+                $row['attributes_info'] = [];
                 $row['flags'] = array_filter(explode(',', (string) $row['flags']));
+
+                foreach ($this->nodeTypeRegistry->get($row['type'])->getFields() as $name => $field) {
+                    if ($field->hasFlag('compilable') === false || isset($row['attributes'][$name]) === false) {
+                        continue;
+                    }
+
+                    $row['attributes_info'][$name] = [
+                        'compilable' => true,
+                    ];
+                }
 
                 $collection->append(Node::buildFromArray($row));
             }
@@ -259,8 +276,6 @@ class DbalFinderQuery extends AbstractDbalQuery
                 tm.*,
                 COALESCE(tl.title, tm.title) AS title,
                 COALESCE(tl.slug, tm.slug) AS slug,
-                COALESCE(tl.introduction, tm.introduction) AS introduction,
-                COALESCE(tl.content_compiled, tm.content_compiled) AS content,
                 COALESCE(tl.locale, :tl_locale) AS locale,
                 GROUP_CONCAT(tnhf.flag SEPARATOR \',\') AS flags
             ');

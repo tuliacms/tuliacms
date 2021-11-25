@@ -34,7 +34,7 @@ class DatabaseStorage implements StorageInterface
             return static::$cache['all'];
         }
 
-        return static::$cache['all'] = $this->connection->fetchAll('
+        return static::$cache['all'] = $this->connection->fetchAllAssociative('
             SELECT
                 tm.*,
                 COALESCE(tl.title, tm.title) AS title,
@@ -58,7 +58,7 @@ class DatabaseStorage implements StorageInterface
             return static::$cache[$id];
         }
 
-        $result = $this->connection->fetchAll('
+        $result = $this->connection->fetchAllAssociative('
             SELECT
                 tm.*,
                 COALESCE(tl.title, tm.title) AS title,
@@ -83,7 +83,7 @@ class DatabaseStorage implements StorageInterface
             return static::$cache[$space];
         }
 
-        return static::$cache[$space] = $this->connection->fetchAll('
+        return static::$cache[$space] = $this->connection->fetchAllAssociative('
             SELECT
                 tm.*,
                 COALESCE(tl.title, tm.title) AS title,

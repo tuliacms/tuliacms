@@ -71,7 +71,7 @@ class EditLinksExtension extends AbstractExtension
                 }
 
                 return '<div class="tulia-edit-links"><div class="dropdown">
-                <a class="btn btn-secondary dropdown-toggle" href="#" data-toggle="dropdown">' . $this->translator->trans('editOptions') . '</a>
+                <a class="btn btn-secondary dropdown-toggle" href="#" data-bs-toggle="dropdown">' . $this->translator->trans('editOptions') . '</a>
                 <div class="dropdown-menu">' . implode('', $html) . '</div>
             </div></div>';
             }, [

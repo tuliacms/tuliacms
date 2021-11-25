@@ -28,6 +28,11 @@ class TuliaCmsExtension extends Extension
         $configuration = $this->getConfiguration($configs, $container);
         $config = $this->processConfiguration($configuration, $configs);
 
+        $container->setParameter('cms.content_builder.node_types', $config['content_building']['node_types']);
+        $container->setParameter('cms.content_builder.layout_types', $config['content_building']['layout_types']);
+        $container->setParameter('cms.content_builder.taxonomy_types', $config['content_building']['taxonomy_types']);
+        $container->setParameter('cms.content_builder.data_types.mapping', $config['content_building']['data_types']['mapping']);
+        $container->setParameter('cms.content_builder.constraint_types.mapping', $config['content_building']['constraint_types']['mapping']);
         $container->setParameter('cms.options.definitions', $this->validateOptionsValues($config['options']['definitions'] ?? []));
 
         // BodyClass
@@ -63,16 +68,26 @@ class TuliaCmsExtension extends Extension
             ->addTag('node.action_chain');
         $container->registerForAutoconfiguration(\Tulia\Cms\Node\Domain\NodeFlag\NodeFlagProviderInterface::class)
             ->addTag('node.flag_provider');
-        $container->registerForAutoconfiguration(\Tulia\Cms\Node\Domain\NodeType\NodeTypeStorageInterface::class)
-            ->addTag('node.type.storage');
 
         // Terms
         $container->registerForAutoconfiguration(\Tulia\Cms\Taxonomy\Domain\WriteModel\ActionsChain\TaxonomyActionInterface::class)
             ->addTag('term.action_chain');
         $container->registerForAutoconfiguration(\Tulia\Cms\Taxonomy\Domain\Routing\Strategy\TaxonomyRoutingStrategyInterface::class)
             ->addTag('taxonomy.routing.strategy');
-        $container->registerForAutoconfiguration(\Tulia\Cms\Taxonomy\Domain\TaxonomyType\RegistratorInterface::class)
-            ->addTag('taxonomy.type.registrator');
+
+        // ContentBuilder
+        $container->registerForAutoconfiguration(\Tulia\Cms\ContentBuilder\Domain\NodeType\Service\NodeTypeProviderInterface::class)
+            ->addTag('content_builder.node_type.provider');
+        $container->registerForAutoconfiguration(\Tulia\Cms\ContentBuilder\Domain\NodeType\Service\NodeTypeDecoratorInterface::class)
+            ->addTag('content_builder.node_type.decorator');
+        $container->registerForAutoconfiguration(\Tulia\Cms\ContentBuilder\Domain\TaxonomyType\Service\TaxonomyTypeProviderInterface::class)
+            ->addTag('content_builder.taxonomy_type.provider');
+        $container->registerForAutoconfiguration(\Tulia\Cms\ContentBuilder\Domain\TaxonomyType\Service\TaxonomyTypeDecoratorInterface::class)
+            ->addTag('content_builder.taxonomy_type.decorator');
+        $container->registerForAutoconfiguration(\Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\LayoutTypeProviderInterface::class)
+            ->addTag('content_builder.layout_type.provider');
+        $container->registerForAutoconfiguration(\Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\LayoutTypeBuilderInterface::class)
+            ->addTag('content_builder.layout_type.builder');
     }
 
     protected function validateOptionsValues(array $definitions): array

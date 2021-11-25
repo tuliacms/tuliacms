@@ -8,7 +8,6 @@ use Doctrine\DBAL\Connection;
 use Exception;
 use PDO;
 use Tulia\Cms\Metadata\Domain\ReadModel\MetadataFinder;
-use Tulia\Cms\Node\Domain\Metadata\NodeMetadataEnum;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Exception\QueryException;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
@@ -130,7 +129,7 @@ class DbalQuery extends AbstractDbalQuery
 
         $this->searchById($criteria);
         $this->searchBySlug($criteria);
-        $this->searchByName($criteria);
+        $this->searchByTitle($criteria);
         $this->setDefaults($criteria);
         $this->buildTaxonomyType($criteria);
         $this->buildVisibility($criteria);
@@ -165,7 +164,7 @@ class DbalQuery extends AbstractDbalQuery
             $result = $this->sortHierarchical($result, WriteModelTerm::ROOT_LEVEL + 1);
         }
 
-        $metadata = $this->metadataFinder->findAllAggregated(NodeMetadataEnum::TYPE, array_column($result, 'id'));
+        $metadata = $this->metadataFinder->findAllAggregated('node', array_column($result, 'id'));
 
         try {
             foreach ($result as $row) {
@@ -189,7 +188,7 @@ class DbalQuery extends AbstractDbalQuery
         } else {
             $this->queryBuilder->select('
                 tm.*,
-                COALESCE(tl.name, tm.name) AS name,
+                COALESCE(tl.title, tm.title) AS title,
                 COALESCE(tl.slug, tm.slug) AS slug,
                 COALESCE(tl.visibility, tm.visibility) AS visibility,
                 COALESCE(tl.locale, :tl_locale) AS locale
@@ -260,15 +259,15 @@ class DbalQuery extends AbstractDbalQuery
             ->setMaxResults(1);
     }
 
-    protected function searchByName(array $criteria): void
+    protected function searchByTitle(array $criteria): void
     {
         if (! $criteria['search']) {
             return;
         }
 
         $this->queryBuilder
-            ->andWhere('tl.name LIKE :tl_name OR tm.name LIKE :tl_name')
-            ->setParameter('tl_name', '%' . $criteria['search'] . '%', PDO::PARAM_STR);
+            ->andWhere('tl.title LIKE :tl_title OR tm.title LIKE :tl_title')
+            ->setParameter('tl_title', '%' . $criteria['search'] . '%', PDO::PARAM_STR);
     }
 
     protected function buildTaxonomyType(array $criteria): void

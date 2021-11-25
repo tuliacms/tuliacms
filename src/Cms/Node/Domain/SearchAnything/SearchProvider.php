@@ -6,12 +6,11 @@ namespace Tulia\Cms\Node\Domain\SearchAnything;
 
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Tulia\Cms\ContentBuilder\Domain\NodeType\Service\NodeTypeRegistry;
 use Tulia\Cms\Filemanager\Application\Service\ImageUrlResolver;
 use Tulia\Cms\Filemanager\Ports\Domain\WriteModel\FileTypeEnum;
 use Tulia\Cms\Filemanager\Ports\Domain\ReadModel\FileFinderInterface;
 use Tulia\Cms\Filemanager\Ports\Domain\ReadModel\FileFinderScopeEnum as FilesScopeEnum;
-use Tulia\Cms\Node\Domain\NodeType\Enum\ParametersEnum;
-use Tulia\Cms\Node\Domain\NodeType\NodeTypeRegistryInterface;
 use Tulia\Cms\Node\Domain\ReadModel\Model\Node;
 use Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderInterface;
 use Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderScopeEnum as NodeScopeEnum;
@@ -33,7 +32,7 @@ class SearchProvider extends AbstractProvider
 
     protected TranslatorInterface $translator;
 
-    protected NodeTypeRegistryInterface $typesRegistry;
+    protected NodeTypeRegistry $typesRegistry;
 
     protected ImageUrlResolver $imageUrlResolver;
 
@@ -42,7 +41,7 @@ class SearchProvider extends AbstractProvider
         FileFinderInterface $filesFinder,
         RouterInterface $router,
         TranslatorInterface $translator,
-        NodeTypeRegistryInterface $typesRegistry,
+        NodeTypeRegistry $typesRegistry,
         ImageUrlResolver $imageUrlResolver
     ) {
         $this->nodeFinder  = $nodeFinder;
@@ -67,11 +66,11 @@ class SearchProvider extends AbstractProvider
             $hit = new Hit($node->getTitle(), $this->router->generate('backend.node.edit', ['node_type' => $node->getType(), 'id' => $node->getId() ]));
             $hit->setDescription($node->getIntroduction());
 
-            $nodeType = $this->typesRegistry->getType($node->getType());
-            $hit->addTag(
+            $nodeType = $this->typesRegistry->get($node->getType());
+            /*$hit->addTag(
                 $this->translator->trans('node', [], $nodeType->getTranslationDomain()),
-                $nodeType->getParameter(ParametersEnum::ICON)
-            );
+                'fas fa-file-powerpoint'
+            );*/
 
             $results->add($node->getId(), $hit);
         }

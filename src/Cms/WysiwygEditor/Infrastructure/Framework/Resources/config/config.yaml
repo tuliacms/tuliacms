@@ -1,0 +1,8 @@
+cms:
+    content_building:
+        data_types:
+            mapping:
+                wysiwyg:
+                    label: WYSIWYG editor
+                    classname: 'Tulia\Cms\WysiwygEditor\Infrastructure\Framework\Form\FormType\WysiwygEditorType'
+                    flags: [compilable]

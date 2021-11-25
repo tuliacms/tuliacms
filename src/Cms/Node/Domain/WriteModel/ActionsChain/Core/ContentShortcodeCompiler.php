@@ -6,6 +6,7 @@ namespace Tulia\Cms\Node\Domain\WriteModel\ActionsChain\Core;
 
 use Tulia\Cms\Node\Domain\WriteModel\ActionsChain\NodeActionInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Model\Node;
+use Tulia\Cms\Node\Domain\WriteModel\Model\ValueObject\AttributeInfo;
 use Tulia\Component\Shortcode\ProcessorInterface;
 
 /**
@@ -34,14 +35,29 @@ class ContentShortcodeCompiler implements NodeActionInterface
 
     public function execute(Node $node): void
     {
-        if (! $node->getContent()) {
-            return;
-        }
+        foreach ($node->getAttributes() as $name => $value) {
+            if (! $value) {
+                continue;
+            }
 
-        $node->setContentCompiled(
-            $this->processor->process(
-                $node->getContent()
-            )
-        );
+            $info = $node->getAttributeInfo($name);
+
+            if ($info->isCompilable() === false) {
+                continue;
+            }
+
+            $compiledAttributeName = $name . '__compiled';
+
+            $node->addAttributeInfo($compiledAttributeName, new AttributeInfo(
+                $info->isMultilingual(),
+                $info->isMultiple(),
+                $info->isCompilable(),
+                $info->isTaxonomy()
+            ));
+
+            $node->updateAttributes([
+                $compiledAttributeName => $this->processor->process($value)
+            ]);
+        }
     }
 }

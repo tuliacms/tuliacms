@@ -8,58 +8,54 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Tulia\Cms\Node\Domain\NodeType\NodeTypeInterface;
-use Tulia\Cms\Node\Domain\NodeType\NodeTypeRegistryInterface;
+use Tulia\Cms\ContentBuilder\Domain\NodeType\Exception\NodeTypeNotExistsException;
+use Tulia\Cms\ContentBuilder\Domain\NodeType\Model\NodeType;
+use Tulia\Cms\ContentBuilder\Domain\NodeType\Service\NodeTypeRegistry;
+use Tulia\Cms\ContentBuilder\Domain\TaxonomyType\Service\TaxonomyTypeRegistry;
+use Tulia\Cms\ContentBuilder\UserInterface\Web\Form\ContentTypeFormDescriptor;
+use Tulia\Cms\ContentBuilder\UserInterface\Web\Service\NodeFormService;
 use Tulia\Cms\Node\Domain\WriteModel\Exception\NodeNotFoundException;
 use Tulia\Cms\Node\Domain\WriteModel\Exception\SingularFlagImposedOnMoreThanOneNodeException;
 use Tulia\Cms\Node\Domain\WriteModel\NodeRepository;
 use Tulia\Cms\Node\Domain\ReadModel\Datatable\NodeDatatableFinderInterface;
-use Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderInterface;
-use Tulia\Cms\Node\UserInterface\Web\Backend\Form\NodeForm;
+use Tulia\Cms\Platform\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
-use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
-use Tulia\Cms\Taxonomy\Ports\Domain\ReadModel\TermFinderScopeEnum;
-use Tulia\Cms\Taxonomy\Domain\TaxonomyType\RegistryInterface as TaxonomyRegistry;
-use Tulia\Cms\Taxonomy\Ports\Domain\ReadModel\TermFinderInterface;
 use Tulia\Component\Datatable\DatatableFactory;
 use Tulia\Component\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Component\Templating\ViewInterface;
+use Tulia\Cms\Node\Domain\WriteModel\Model\Node as Model;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class Node extends AbstractController
 {
-    private NodeTypeRegistryInterface $typeRegistry;
+    private NodeTypeRegistry $typeRegistry;
 
     private NodeRepository $repository;
 
-    private NodeFinderInterface $nodeFinder;
-
-    private TaxonomyRegistry $registry;
-
-    private TermFinderInterface $termFinder;
+    private TaxonomyTypeRegistry $taxonomyTypeRegistry;
 
     private DatatableFactory $factory;
 
     private NodeDatatableFinderInterface $finder;
 
+    private NodeFormService $nodeFormService;
+
     public function __construct(
-        NodeTypeRegistryInterface $typeRegistry,
+        NodeTypeRegistry $typeRegistry,
         NodeRepository $repository,
-        NodeFinderInterface $nodeFinder,
-        TaxonomyRegistry $registry,
-        TermFinderInterface $termFinder,
+        TaxonomyTypeRegistry $taxonomyTypeRegistry,
         DatatableFactory $factory,
-        NodeDatatableFinderInterface $finder
+        NodeDatatableFinderInterface $finder,
+        NodeFormService $nodeFormService
     ) {
         $this->typeRegistry = $typeRegistry;
         $this->repository = $repository;
-        $this->nodeFinder = $nodeFinder;
-        $this->registry = $registry;
-        $this->termFinder = $termFinder;
+        $this->taxonomyTypeRegistry = $taxonomyTypeRegistry;
         $this->factory = $factory;
         $this->finder = $finder;
+        $this->nodeFormService = $nodeFormService;
     }
 
     public function index(string $node_type): RedirectResponse
@@ -81,8 +77,7 @@ class Node extends AbstractController
 
     public function datatable(Request $request, string $node_type): JsonResponse
     {
-        $nodeTypeObject = $this->findNodeType($node_type);
-        $this->finder->setNodeType($nodeTypeObject);
+        $this->finder->setNodeType($this->findNodeType($node_type));
         return $this->factory->create($this->finder, $request)->generateResponse();
     }
 
@@ -90,28 +85,26 @@ class Node extends AbstractController
      * @param Request $request
      * @param string $node_type
      * @return RedirectResponse|ViewInterface
-     * @CsrfToken(id="node_form")
+     * @CsrfToken(id="content_builder_form_page")
      */
     public function create(Request $request, string $node_type)
     {
-        $node = $this->repository->createNew(['type' => $node_type]);
+        $node = $this->repository->createNew($node_type);
 
-        $form = $this->createForm(NodeForm::class, $node, ['node_type' => $node_type]);
-        $form->handleRequest($request);
+        $formDescriptor = $this->produceFormDescriptor($node, $request);
+        $nodeType = $formDescriptor->getContentType();
 
-        $nodeType = $this->typeRegistry->getType($node_type);
+        if ($formDescriptor->isFormValid()) {
+            $this->updateModel($formDescriptor, $node);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->repository->insert($form->getData());
-
-            $this->setFlash('success', $this->trans('nodeSaved', [], $nodeType->getTranslationDomain()));
+            $this->setFlash('success', $this->trans('nodeSaved', [], 'node'));
             return $this->redirectToRoute('backend.node.edit', [ 'id' => $node->getId(), 'node_type' => $nodeType->getType() ]);
         }
 
         return $this->view('@backend/node/create.tpl', [
             'nodeType' => $nodeType,
             'node'     => $node,
-            'form'     => $form->createView(),
+            'formDescriptor' => $formDescriptor,
         ]);
     }
 
@@ -120,37 +113,40 @@ class Node extends AbstractController
      * @param string $node_type
      * @param string $id
      * @return RedirectResponse|ViewInterface
-     * @CsrfToken(id="node_form")
+     * @CsrfToken(id="content_builder_form_page")
      */
     public function edit(Request $request, string $node_type, string $id)
     {
         try {
-            $model = $this->repository->find($id);
-        } catch (NodeNotFoundException $e) {
+            $node = $this->repository->find($id);
+
+            if ($node->getType() !== $node_type) {
+                throw new NodeNotFoundException();
+            }
+        } catch (NodeNotFoundException|NodeTypeNotExistsException $e) {
             $this->setFlash('warning', $this->trans('nodeNotFound'));
             return $this->redirectToRoute('backend.node.list');
         }
 
-        $form = $this->createForm(NodeForm::class, $model, ['node_type' => $node_type]);
-        $form->handleRequest($request);
+        $formDescriptor = $this->produceFormDescriptor($node, $request);
+        $form = $formDescriptor->getForm();
+        $nodeType = $formDescriptor->getContentType();
 
-        $nodeType = $this->typeRegistry->getType($node_type);
-
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($formDescriptor->isFormValid()) {
             try {
-                $this->repository->update($form->getData());
-                $this->setFlash('success', $this->trans('nodeSaved', [], $nodeType->getTranslationDomain()));
-                return $this->redirectToRoute('backend.node.edit', [ 'id' => $model->getId(), 'node_type' => $nodeType->getType() ]);
+                $this->updateModel($formDescriptor, $node);
+                $this->setFlash('success', $this->trans('nodeSaved', [], 'node'));
+                return $this->redirectToRoute('backend.node.edit', [ 'id' => $node->getId(), 'node_type' => $nodeType->getType() ]);
             } catch (SingularFlagImposedOnMoreThanOneNodeException $e) {
-                $error = new FormError($this->trans('singularFlagImposedOnMoreThanOneNode', ['flag' => $e->getFlag()], $nodeType->getTranslationDomain()));
+                $error = new FormError($this->trans('singularFlagImposedOnMoreThanOneNode', ['flag' => $e->getFlag()], 'node'));
                 $form->get('flags')->addError($error);
             }
         }
 
         return $this->view('@backend/node/edit.tpl', [
             'nodeType' => $nodeType,
-            'node'     => $model,
-            'form'     => $form->createView(),
+            'node'     => $node,
+            'formDescriptor' => $formDescriptor,
         ]);
     }
 
@@ -186,7 +182,7 @@ class Node extends AbstractController
             default         : $message = 'selectedNodesWereUpdated'; break;
         }
 
-        $this->setFlash('success', $this->trans($message, [], $nodeType->getTranslationDomain()));
+        $this->setFlash('success', $this->trans($message, [], 'node'));
         return $this->redirectToRoute('backend.node', [ 'node_type' => $nodeType->getType() ]);
     }
 
@@ -197,7 +193,6 @@ class Node extends AbstractController
      */
     public function delete(Request $request): RedirectResponse
     {
-        $nodeType = $this->findNodeType($request->query->get('node_type', 'page'));
         $removedNodes = 0;
 
         foreach ($request->request->get('ids') as $id) {
@@ -212,15 +207,15 @@ class Node extends AbstractController
         }
 
         if ($removedNodes) {
-            $this->setFlash('success', $this->trans('selectedNodesWereDeleted', [], $nodeType->getTranslationDomain()));
+            $this->setFlash('success', $this->trans('selectedElementsWereDeleted'));
         }
 
-        return $this->redirectToRoute('backend.node', [ 'node_type' => $nodeType->getType() ]);
+        return $this->redirectToRoute('backend.node', [ 'node_type' => $request->query->get('node_type', 'page') ]);
     }
 
-    protected function findNodeType(string $type): NodeTypeInterface
+    protected function findNodeType(string $type): NodeType
     {
-        $nodeType = $this->typeRegistry->getType($type);
+        $nodeType = $this->typeRegistry->get($type);
 
         if (! $nodeType) {
             throw $this->createNotFoundException('Node type not found.');
@@ -229,41 +224,54 @@ class Node extends AbstractController
         return $nodeType;
     }
 
-    private function collectTaxonomies(NodeTypeInterface $nodeType): array
+    private function collectTaxonomies(NodeType $nodeType): array
     {
         $result = [];
 
-        foreach ($nodeType->getTaxonomies() as $tax) {
-            $result[] = $this->registry->getType($tax['taxonomy']);
+        foreach ($nodeType->getFields() as $field) {
+            if ($field->getType() !== 'taxonomy') {
+                continue;
+            }
+
+            $result[] = $this->taxonomyTypeRegistry->get($field->getTaxonomy());
         }
 
         return $result;
     }
 
-    private function fetchNodesCategories(Collection $nodes): Collection
+    private function produceFormDescriptor(Model $node, Request $request): ContentTypeFormDescriptor
     {
-        $idList = array_map(function ($node) {
-            return $node->getCategory();
-        }, iterator_to_array($nodes));
-        $idList = array_filter($idList);
-        $idList = array_unique($idList);
+        return $this->nodeFormService->buildFormDescriptor(
+            $node->getType(),
+            array_merge(
+                [
+                    'title' => $node->getTitle(),
+                    'slug' => $node->getSlug(),
+                    'published_at' => $node->getPublishedAt(),
+                    'published_to' => $node->getPublishedTo(),
+                    'parent_id' => $node->getParentId(),
+                    'status' => $node->getStatus(),
+                    'author_id' => $node->getAuthorId(),
+                ],
+                $node->getAttributes()
+            ),
+            $request
+        );
+    }
 
-        $terms = $this->termFinder->find([
-            'id__in' => $idList,
-        ], TermFinderScopeEnum::INTERNAL);
+    private function updateModel(ContentTypeFormDescriptor $formDescriptor, Model $node): void
+    {
+        $data = $formDescriptor->getData();
 
-        foreach ($nodes as $node) {
-            if (empty($node->getCategory())) {
-                continue;
-            }
+        $node->setStatus($data['status']);
+        $node->setSlug($data['slug']);
+        $node->setTitle($data['title']);
+        $node->setPublishedAt(new ImmutableDateTime($data['published_at']));
+        $node->setPublishedTo($data['published_to'] ? new ImmutableDateTime($data['published_to']) : null);
+        $node->setParentId($data['parent_id']);
+        $node->setAuthorId($data['author_id']);
+        $node->updateAttributes($data);
 
-            foreach ($terms as $term) {
-                if ($term->getId() === $node->getCategory()) {
-                    $node->setMeta('__category_name', $term->getName());
-                }
-            }
-        }
-
-        return $nodes;
+        $this->repository->update($node);
     }
 }

@@ -40,7 +40,7 @@ class DbalRepository implements RepositoryInterface
      */
     public function find(AggregateId $id): User
     {
-        $user = $this->connection->fetchAll('
+        $user = $this->connection->fetchAllAssociative('
             SELECT *
             FROM #__user AS tm
             WHERE tm.id = :id
@@ -104,7 +104,7 @@ class DbalRepository implements RepositoryInterface
      */
     private function recordExists(string $id): bool
     {
-        $result = $this->connection->fetchAll('SELECT id FROM #__user WHERE id = :id LIMIT 1', ['id' => $id]);
+        $result = $this->connection->fetchAllAssociative('SELECT id FROM #__user WHERE id = :id LIMIT 1', ['id' => $id]);
 
         return isset($result[0]['id']) && $result[0]['id'] === $id;
     }

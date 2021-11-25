@@ -31,10 +31,10 @@ class TypeaheadSearch extends TypeaheadFormTypeSearch
 
         $result = [];
 
-        foreach ($terms as $node) {
+        foreach ($terms as $term) {
             $result[] = [
-                'id' => $node->getId(),
-                'name' => $node->getName(),
+                'id' => $term->getId(),
+                'name' => $term->getTitle(),
             ];
         }
 

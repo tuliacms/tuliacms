@@ -1,4 +1,4 @@
-{% use 'bootstrap_4_layout.html.twig' %}
+{% use 'bootstrap_5_layout.html.twig' %}
 
 {#
     - Prepends text addon
@@ -40,6 +40,10 @@
             </button>
         </div>
     </div>
+
+    {% if value %}
+        {{ image(value, { size: 'thumbnail-md', attributes: { alt: 'Node thumbnail', class: 'img-thumbnail' } }) }}
+    {% endif %}
 
     <script nonce="{{ csp_nonce() }}">
         $(function () {

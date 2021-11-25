@@ -35,6 +35,6 @@ class DbalActivityReadStorage implements ActivityReadStorageInterface
             $where = 'WHERE ' . implode(' AND ', $parts);
         }
 
-        return $this->connection->fetchAll("SELECT * FROM #__activity {$where} ORDER BY created_at DESC LIMIT {$start}, {$limit}", $binds);
+        return $this->connection->fetchAllAssociative("SELECT * FROM #__activity {$where} ORDER BY created_at DESC LIMIT {$start}, {$limit}", $binds);
     }
 }

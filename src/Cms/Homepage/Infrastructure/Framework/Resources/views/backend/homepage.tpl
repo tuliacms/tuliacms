@@ -23,7 +23,7 @@
                                 <div class="pane-header">
                                     <div class="pane-buttons">
                                         <div class="dropdown">
-                                            <button class="btn btn-icon-only" type="button" data-toggle="dropdown">
+                                            <button class="btn btn-icon-only" type="button" data-bs-toggle="dropdown">
                                                 <i class="btn-icon fas fa-ellipsis-v"></i>
                                             </button>
                                             <div class="dropdown-menu dropdown-menu-right">
@@ -59,7 +59,7 @@
                                 <div class="pane-header">
                                     <div class="pane-buttons">
                                         <div class="dropdown">
-                                            <button class="btn btn-icon-only" type="button" data-toggle="dropdown">
+                                            <button class="btn btn-icon-only" type="button" data-bs-toggle="dropdown">
                                                 <i class="btn-icon fas fa-ellipsis-v"></i>
                                             </button>
                                             <div class="dropdown-menu dropdown-menu-right">
@@ -89,7 +89,7 @@
                                 <div class="pane-header">
                                     <div class="pane-buttons">
                                         <div class="dropdown">
-                                            <button class="btn btn-icon-only" type="button" data-toggle="dropdown">
+                                            <button class="btn btn-icon-only" type="button" data-bs-toggle="dropdown">
                                                 <i class="btn-icon fas fa-ellipsis-v"></i>
                                             </button>
                                             <div class="dropdown-menu dropdown-menu-right">
@@ -138,7 +138,7 @@
                                 <div class="pane-header">
                                     <div class="pane-buttons">
                                         <div class="dropdown">
-                                            <button class="btn btn-icon-only" type="button" data-toggle="dropdown">
+                                            <button class="btn btn-icon-only" type="button" data-bs-toggle="dropdown">
                                                 <i class="btn-icon fas fa-ellipsis-v"></i>
                                             </button>
                                             <div class="dropdown-menu dropdown-menu-right">
@@ -194,7 +194,7 @@
                                 <div class="pane-header">
                                     <div class="pane-buttons">
                                         <div class="dropdown">
-                                            <button class="btn btn-icon-only" type="button" data-toggle="dropdown">
+                                            <button class="btn btn-icon-only" type="button" data-bs-toggle="dropdown">
                                                 <i class="btn-icon fas fa-ellipsis-v"></i>
                                             </button>
                                             <div class="dropdown-menu dropdown-menu-right">

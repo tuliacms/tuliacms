@@ -1,0 +1,105 @@
+framework:
+    translator:
+        paths:
+            - '%kernel.project_dir%/src/Cms/ContentBuilder/Infrastructure/Framework/Resources/translations'
+    templating:
+        paths:
+            - { name: backend/contentbuilder, path: '%kernel.project_dir%/src/Cms/ContentBuilder/Infrastructure/Framework/Resources/views/backend' }
+
+monolog:
+    channels: ['contentBuilder']
+
+cms:
+    content_building:
+        node_types:
+            page:
+                name: Page
+                icon: 'fas fa-file-powerpoint'
+                controller: 'Tulia\Cms\Node\UserInterface\Web\Frontend\Controller\Node::show'
+                is_routable: true
+                is_hierarchical: true
+                routable_taxonomy_field: category
+                translation_domain: pages
+                layout: node_default
+                fields:
+                    introduction:
+                        type: textarea
+                        multilingual: true
+                        label: ~
+                    content:
+                        type: wysiwyg
+                        multilingual: true
+                    category:
+                        label: category
+                        type: taxonomy
+                        taxonomy: category
+                    tags:
+                        label: tags
+                        type: taxonomy
+                        taxonomy: tag
+                    thumbnail:
+                        label: thumbnail
+                        type: filepicker
+
+        taxonomy_types:
+            category:
+                name: Category
+                controller: 'Tulia\Cms\Taxonomy\UserInterface\Web\Frontend\Controller\Term::show'
+                routing_strategy: simple
+                is_routable: true
+                is_hierarchical: true
+                layout: taxonomy_default
+            tag:
+                name: Tag
+                controller: 'Tulia\Cms\Taxonomy\UserInterface\Web\Frontend\Controller\Term::show'
+                routing_strategy: simple
+                is_routable: true
+                is_hierarchical: false
+                layout: taxonomy_default
+
+        layout_types:
+            node_default:
+                label: defaultLayout
+                sections:
+                    main:
+                        groups:
+                            introduction:
+                                label: introduction
+                                fields: [introduction]
+                            content:
+                                active: true
+                                interior: full-width
+                                label: content
+                                fields: [content]
+                    sidebar:
+                        groups:
+                            category:
+                                label: taxonomy
+                                fields: [category, tags]
+                            thumbnail:
+                                label: thumbnail
+                                fields: [thumbnail]
+            taxonomy_default:
+                label: defaultLayout
+                sections:
+                    main:
+                        groups: ~
+                    sidebar:
+                        groups: ~
+
+        data_types:
+            mapping:
+                text:
+                    label: Textline
+                    classname: 'Symfony\Component\Form\Extension\Core\Type\TextType'
+                textarea:
+                    label: Textarea
+                    classname: 'Symfony\Component\Form\Extension\Core\Type\TextareaType'
+                select:
+                    label: Select
+                    classname: 'Symfony\Component\Form\Extension\Core\Type\ChoiceType'
+
+        constraint_types:
+            mapping:
+                required:
+                    classname: 'Symfony\Component\Validator\Constraints\NotBlank'

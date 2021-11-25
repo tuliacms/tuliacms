@@ -4,13 +4,16 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Domain\WriteModel;
 
+use Tulia\Cms\ContentBuilder\Domain\NodeType\Exception\NodeTypeNotExistsException;
+use Tulia\Cms\ContentBuilder\Domain\NodeType\Model\NodeType;
+use Tulia\Cms\ContentBuilder\Domain\NodeType\Service\NodeTypeRegistry;
 use Tulia\Cms\Metadata\Domain\WriteModel\MetadataRepository;
 use Tulia\Cms\Node\Domain\WriteModel\ActionsChain\NodeActionsChainInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Event\NodeDeleted;
 use Tulia\Cms\Node\Domain\WriteModel\Event\NodeUpdated;
 use Tulia\Cms\Node\Domain\WriteModel\Exception\NodeNotFoundException;
 use Tulia\Cms\Node\Domain\WriteModel\Model\Node;
-use Tulia\Cms\Node\Domain\Metadata\NodeMetadataEnum;
+use Tulia\Cms\Node\Domain\WriteModel\Model\ValueObject\AttributeInfo;
 use Tulia\Cms\Node\Domain\WriteModel\Ports\NodeWriteStorageInterface;
 use Tulia\Cms\Platform\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
 use Tulia\Cms\Platform\Infrastructure\Bus\Event\EventBusInterface;
@@ -22,6 +25,8 @@ use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
  */
 class NodeRepository
 {
+    private const RESERVED_NAMES = ['title', 'slug', 'parent_id', 'published_at', 'published_to', 'status', 'author_id'];
+
     private NodeWriteStorageInterface $storage;
 
     private CurrentWebsiteInterface $currentWebsite;
@@ -34,13 +39,16 @@ class NodeRepository
 
     private NodeActionsChainInterface $actionsChain;
 
+    private NodeTypeRegistry $nodeTypeRegistry;
+
     public function __construct(
         NodeWriteStorageInterface $storage,
         CurrentWebsiteInterface $currentWebsite,
         MetadataRepository $metadataRepository,
         UuidGeneratorInterface $uuidGenerator,
         EventBusInterface $eventBus,
-        NodeActionsChainInterface $actionsChain
+        NodeActionsChainInterface $actionsChain,
+        NodeTypeRegistry $nodeTypeRegistry
     ) {
         $this->storage = $storage;
         $this->currentWebsite = $currentWebsite;
@@ -48,20 +56,35 @@ class NodeRepository
         $this->uuidGenerator = $uuidGenerator;
         $this->eventBus = $eventBus;
         $this->actionsChain = $actionsChain;
+        $this->nodeTypeRegistry = $nodeTypeRegistry;
     }
 
-    public function createNew(array $data): Node
+    public function createNew(string $nodeType): Node
     {
-        return Node::buildFromArray(array_merge($data, [
-            'id' => $this->uuidGenerator->generate(),
-            'locale' => $this->currentWebsite->getLocale()->getCode(),
-            'node_type' => 'page',
-            'website_id' => $this->currentWebsite->getId(),
-        ]));
+        $type = $this->nodeTypeRegistry->get($nodeType);
+
+        $node = Node::createNew(
+            $this->uuidGenerator->generate(),
+            $nodeType,
+            $this->currentWebsite->getId(),
+            $this->currentWebsite->getLocale()->getCode()
+        );
+
+        foreach ($this->buildAttributesMapping($type) as $name => $info) {
+            $node->addAttributeInfo($name, new AttributeInfo(
+                $info['is_multilingual'],
+                $info['is_multiple'],
+                $info['is_compilable'],
+                $info['is_taxonomy'],
+            ));
+        }
+
+        return $node;
     }
 
     /**
      * @throws NodeNotFoundException
+     * @throws NodeTypeNotExistsException
      * @throws \Exception
      */
     public function find(string $id): Node
@@ -76,28 +99,43 @@ class NodeRepository
             throw new NodeNotFoundException();
         }
 
-        $node = Node::buildFromArray([
+        $nodeType = $this->nodeTypeRegistry->get($node['type']);
+
+        $attributes = $this->metadataRepository->findAll('node', $id);
+
+        foreach ($nodeType->getFields() as $field) {
+            if ($field->isMultiple()) {
+                try {
+                    $value = (array) unserialize(
+                        (string) $attributes[$field->getName()],
+                        ['allowed_classes' => []]
+                    );
+                } catch (\ErrorException $e) {
+                    // If error, than empty or cannot be unserialized from singular value
+                    $value = $attributes[$field->getName()] ?? null;
+                }
+
+                $attributes[$field->getName()] = $value;
+            }
+        }
+
+        $node = Node::buildFromArray($node['type'], [
             'id'            => $node['id'],
-            'type'          => $node['type'] ?? '',
             'website_id'    => $node['website_id'],
             'published_at'  => new ImmutableDateTime($node['published_at']),
             'published_to'  => $node['published_to'] ? new ImmutableDateTime($node['published_to']) : null,
             'created_at'    => new ImmutableDateTime($node['created_at']),
             'updated_at'    => $node['updated_at'] ? new ImmutableDateTime($node['updated_at']) : null,
             'status'        => $node['status'] ?? '',
-            'author_id'     => $node['author_id'] ?? '',
-            'category'      => $node['category'] ?? null,
-            'slug'          => $node['slug'] ?? '',
-            'title'         => $node['title'] ?? '',
-            'content'       => $node['content'] ?? '',
-            'content_source' => $node['content_source'] ?? '',
-            'introduction'  => $node['introduction'] ?? '',
+            'author_id'     => $node['author_id'],
             'level'         => (int) $node['level'],
-            'parent_id'     => $node['parent_id'] ?? '',
+            'parent_id'     => $node['parent_id'] ?? null,
             'locale'        => $node['locale'],
-            'metadata'      => $this->metadataRepository->findAll(NodeMetadataEnum::TYPE, $id),
             'translated'    => $node['translated'] ?? true,
-            'flags'         => array_filter(explode(',', (string) $node['flags'])),
+            'title'         => $node['title'],
+            'slug'          => $node['slug'],
+            'attributes'    => $attributes,
+            'attributes_mapping' => $this->buildAttributesMapping($nodeType),
         ]);
 
         $this->actionsChain->execute('find', $node);
@@ -112,11 +150,13 @@ class NodeRepository
         $this->storage->beginTransaction();
 
         try {
-            $this->storage->insert($this->extract($node), $this->currentWebsite->getDefaultLocale()->getCode());
+            $data = $this->extract($node);
+
+            $this->storage->insert($data, $this->currentWebsite->getDefaultLocale()->getCode());
             $this->metadataRepository->persist(
-                NodeMetadataEnum::TYPE,
+                'node',
                 $node->getId()->getId(),
-                $node->getAllMetadata()
+                $data['attributes']
             );
             $this->storage->commit();
         } catch (\Exception $exception) {
@@ -134,11 +174,13 @@ class NodeRepository
         $this->storage->beginTransaction();
 
         try {
-            $this->storage->update($this->extract($node), $this->currentWebsite->getDefaultLocale()->getCode());
+            $data = $this->extract($node);
+
+            $this->storage->update($data, $this->currentWebsite->getDefaultLocale()->getCode());
             $this->metadataRepository->persist(
-                NodeMetadataEnum::TYPE,
+                'node',
                 $node->getId()->getId(),
-                $node->getAllMetadata()
+                $data['attributes']
             );
             $this->storage->commit();
         } catch (\Exception $exception) {
@@ -157,7 +199,7 @@ class NodeRepository
 
         try {
             $this->storage->delete($this->extract($node));
-            $this->metadataRepository->delete(NodeMetadataEnum::TYPE, $node->getId()->getId());
+            $this->metadataRepository->delete('node', $node->getId()->getId());
             $this->storage->commit();
         } catch (\Exception $exception) {
             $this->storage->rollback();
@@ -169,26 +211,58 @@ class NodeRepository
 
     private function extract(Node $node): array
     {
-        return [
+        $attributes = [];
+
+        foreach ($node->getAttributes() as $name => $value) {
+            if (\in_array($name, self::RESERVED_NAMES)) {
+                continue;
+            }
+
+            $info = $node->getAttributeInfo($name);
+
+            $attributes[$name] = [
+                'value' => $value,
+                'is_multilingual' => $info->isMultilingual(),
+                'is_multiple' => $info->isMultiple(),
+                'is_taxonomy' => $info->isTaxonomy(),
+            ];
+        }
+
+        $result = [
             'id'            => $node->getId()->getId(),
             'type'          => $node->getType(),
             'website_id'    => $node->getWebsiteId(),
-            'published_at'  => $node->getPublishedAt(),
-            'published_to'  => $node->getPublishedTo(),
+            'published_at'  => $node->getPublishedAt()->format('Y-m-d H:i:s'),
+            'published_to'  => $node->getPublishedTo() ? $node->getPublishedTo()->format('Y-m-d H:i:s') : null,
             'created_at'    => $node->getCreatedAt(),
             'updated_at'    => $node->getUpdatedAt(),
             'status'        => $node->getStatus(),
             'author_id'     => $node->getAuthorId(),
-            'category'      => $node->getCategory(),
-            'slug'          => $node->getSlug(),
-            'title'         => $node->getTitle(),
-            'content'       => $node->getContent(),
-            'content_compiled' => $node->getContentCompiled(),
-            'introduction'  => $node->getIntroduction(),
+            'category_id'   => $node->getCategoryId(),
             'level'         => $node->getLevel(),
             'parent_id'     => $node->getParentId(),
             'locale'        => $node->getLocale(),
-            'flags'         => $node->getFlags(),
+            'title'         => $node->getTitle(),
+            'slug'          => $node->getSlug(),
+            'attributes'    => $attributes,
         ];
+
+        return $result;
+    }
+
+    private function buildAttributesMapping(NodeType $nodeType): array
+    {
+        $result = [];
+
+        foreach ($nodeType->getFields() as $field) {
+            $result[$field->getName()] = [
+                'is_multilingual' => $field->isMultilingual(),
+                'is_multiple' => $field->isMultiple(),
+                'is_compilable' => $field->hasFlag('compilable'),
+                'is_taxonomy' => $field->getType() === 'taxonomy',
+            ];
+        }
+
+        return $result;
     }
 }

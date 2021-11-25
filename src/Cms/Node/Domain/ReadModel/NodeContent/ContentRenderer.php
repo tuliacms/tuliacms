@@ -22,18 +22,24 @@ class ContentRenderer
 
     public function render(Node $node): void
     {
-        $content = $node->getContent();
-        $key = md5($content->getSource());
+        foreach ($node->getAttributes() as $name => $value) {
+            if (! $value instanceof NodeContentInterface) {
+                continue;
+            }
 
-        if (isset(static::$cache[$key])) {
-            $node->setContent(static::$cache[$key]);
-            return;
-        }
+            $content = $node[$name . '__compiled'];
+            $cacheKey = md5($content);
 
-        if ($content) {
-            $content = $this->contentFactory->createForNode($node);
-            $node->setContent($content);
-            static::$cache[$key] = $content;
+            if (isset(static::$cache[$cacheKey])) {
+                $node->{$name} = static::$cache[$cacheKey];
+                return;
+            }
+
+            if ($content) {
+                $content = $this->contentFactory->createForNode($node, $content);
+                $node->{$name} = $content;
+                static::$cache[$cacheKey] = $content;
+            }
         }
     }
 }
