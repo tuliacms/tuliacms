@@ -29,7 +29,7 @@ class DbalActivityReadStorage implements ActivityReadStorageInterface
 
             foreach ($criteria as $col => $val) {
                 $parts[] = "{$col} = :{$col}";
-                $binds[":{$col}"] = $val;
+                $binds[$col] = $val;
             }
 
             $where = 'WHERE ' . implode(' AND ', $parts);

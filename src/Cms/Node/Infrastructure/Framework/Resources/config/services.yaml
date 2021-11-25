@@ -42,8 +42,5 @@ services:
         bind:
             $environment: '%kernel.environment%'
 
-    Tulia\Cms\Node\UserInterface\Web\Backend\BackendMenu\NodeMenuBuilder:
-        tags: [ backend_menu.builder ]
-
     Tulia\Cms\Node\Domain\Filemanager\ImageSize\DefaultSizesImagesSizeProvider:
         tags: [ filemanager.image_size.provider ]

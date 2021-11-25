@@ -16,9 +16,6 @@ services:
         bind:
             $configFilename: '%kernel.project_dir%/config/dynamic/themes.php'
 
-    Tulia\Cms\Theme\Infrastructure\Cms\BackendMenu\AppearenceMenuBuilder:
-        tags: [ backend_menu.builder ]
-
     Tulia\Cms\Theme\Infrastructure\Filemanager\ImageSize\ThemeConfigurationImagesSizeProvider:
         tags: [ filemanager.image_size.provider ]
 

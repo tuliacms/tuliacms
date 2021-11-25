@@ -20,6 +20,3 @@ services:
     Tulia\Cms\Settings\UserInterface\Web\Backend\Settings\CmsSettingsGroup:
         tags:
             - { name: settings.group, priority: 1000 }
-
-    Tulia\Cms\Settings\UserInterface\Web\Backend\BackendMenu\SettingsMenuBuilder:
-        tags: [ backend_menu.builder ]

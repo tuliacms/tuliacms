@@ -1,0 +1,3 @@
+backend.content_model.homepage:
+    path: /administrator/content-model
+    controller: Tulia\Cms\Node\UserInterface\Web\Backend\Controller\Node::create

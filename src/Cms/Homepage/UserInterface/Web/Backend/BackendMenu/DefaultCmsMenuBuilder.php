@@ -29,11 +29,10 @@ class DefaultCmsMenuBuilder implements BuilderInterface
      */
     public function build(ItemRegistryInterface $registry): void
     {
-        $registry->add('dashboard', [
-            'label'    => $this->helper->trans('dashboard'),
-            'link'     => $this->helper->generateUrl('backend.homepage'),
+        $registry->add('section_dashboard', [
+            'type'     => 'section',
+            'label'    => null,
             'priority' => 5000,
-            'icon'     => 'fas fa-tachometer-alt',
             'active'   => false,
         ]);
 
@@ -49,11 +48,21 @@ class DefaultCmsMenuBuilder implements BuilderInterface
             'priority' => 2000,
         ]);
 
+        $registry->add('dashboard', [
+            'label'    => $this->helper->trans('dashboard'),
+            'link'     => $this->helper->generateUrl('backend.homepage'),
+            'priority' => 5000,
+            'icon'     => 'fas fa-tachometer-alt',
+            'active'   => false,
+            'parent'   => 'section_dashboard',
+        ]);
+
         $registry->add('appearance', [
             'label'    => $this->helper->trans('appearance'),
             'link'     => '#',
             'priority' => 1900,
             'icon'     => 'fas fa-palette',
+            'parent'   => 'section_administration',
         ]);
 
         $registry->add('tools', [
@@ -61,6 +70,7 @@ class DefaultCmsMenuBuilder implements BuilderInterface
             'link'     => $this->helper->generateUrl('backend.tools'),
             'priority' => 1700,
             'icon'     => 'fas fa-tools',
+            'parent'   => 'section_administration',
         ]);
 
         $registry->add('system', [
@@ -68,6 +78,7 @@ class DefaultCmsMenuBuilder implements BuilderInterface
             'link'     => $this->helper->generateUrl('backend.system'),
             'priority' => 1400,
             'icon'     => 'fas fa-dice-d6',
+            'parent'   => 'section_administration',
         ]);
     }
 }

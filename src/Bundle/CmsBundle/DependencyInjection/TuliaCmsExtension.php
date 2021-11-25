@@ -48,6 +48,8 @@ class TuliaCmsExtension extends Extension
             ->addTag('dashboard.tiles_collector');
         $container->registerForAutoconfiguration(\Tulia\Cms\Dashboard\Ports\Domain\Widgets\DashboardWidgetInterface::class)
             ->addTag('dashboard.widget');
+        $container->registerForAutoconfiguration(\Tulia\Cms\BackendMenu\Ports\Domain\Builder\BuilderInterface::class)
+            ->addTag('backend_menu.builder');
 
         // EditLinks
         $container->registerForAutoconfiguration(\Tulia\Cms\EditLinks\Ports\Domain\EditLinksCollectorInterface::class)

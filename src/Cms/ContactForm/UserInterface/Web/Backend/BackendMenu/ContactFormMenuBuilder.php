@@ -11,7 +11,7 @@ use Tulia\Cms\BackendMenu\Domain\Builder\Registry\ItemRegistryInterface;
 /**
  * @author Adam Banaszkiewicz
  */
-class MenuBuilder implements BuilderInterface
+class ContactFormMenuBuilder implements BuilderInterface
 {
     /**
      * @var BuilderHelperInterface
@@ -33,6 +33,7 @@ class MenuBuilder implements BuilderInterface
             'link'     => '#',
             'icon'     => 'fas fa-window-restore',
             'priority' => 2000,
+            'parent'   => 'section_contents',
         ]);
 
         $registry->add('forms.list', [

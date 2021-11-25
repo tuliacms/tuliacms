@@ -48,6 +48,7 @@ class NodeMenuBuilder implements BuilderInterface
             'link'     => '#',
             'icon'     => $type->getIcon(),
             'priority' => 3500,
+            'parent'   => 'section_contents',
         ]);
 
         $registry->add($root . '_item', [

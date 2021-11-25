@@ -73,6 +73,7 @@ class MenuMenuBuilder implements BuilderInterface, EventSubscriberInterface
             'link'     => '#',
             'icon'     => 'fas fa-bars',
             'priority' => 2000,
+            'parent'   => 'section_contents',
         ]);
 
         $registry->add($root . '_list', [
