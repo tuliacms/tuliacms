@@ -56,10 +56,10 @@ class DbalTermDatatableFinder extends AbstractDatatableFinder implements TermDat
                 'type' => 'uuid',
                 'label' => 'ID',
             ],
-            'name' => [
-                'selector' => 'COALESCE(tl.name, tm.name)',
-                'label' => 'name',
-                'view' => '@backend/taxonomy/term/parts/datatable/name.tpl',
+            'title' => [
+                'selector' => 'COALESCE(tl.title, tm.title)',
+                'label' => 'title',
+                'view' => '@backend/taxonomy/term/parts/datatable/title.tpl',
             ],
             'visibility' => [
                 'selector' => 'COALESCE(tl.visibility, tm.visibility)',
@@ -94,7 +94,7 @@ class DbalTermDatatableFinder extends AbstractDatatableFinder implements TermDat
         ;
 
         if ($this->currentWebsite->getDefaultLocale()->getCode() !== $this->currentWebsite->getLocale()->getCode()) {
-            $queryBuilder->addSelect('IF(ISNULL(tl.name), 0, 1) AS translated');
+            $queryBuilder->addSelect('IF(ISNULL(tl.title), 0, 1) AS translated');
         }
 
         return $queryBuilder;

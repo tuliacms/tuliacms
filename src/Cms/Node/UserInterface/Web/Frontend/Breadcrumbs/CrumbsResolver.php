@@ -8,12 +8,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
 use Tulia\Cms\Breadcrumbs\Ports\Domain\BreadcrumbsResolverInterface;
 use Tulia\Cms\ContentBuilder\Domain\NodeType\Service\NodeTypeRegistry;
+use Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderInterface;
 use Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderScopeEnum;
 use Tulia\Cms\Node\Domain\ReadModel\Model\Node;
-use Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderInterface;
 use Tulia\Cms\Platform\Shared\Breadcrumbs\BreadcrumbsInterface;
-use Tulia\Cms\Taxonomy\Ports\Domain\ReadModel\TermFinderScopeEnum;
 use Tulia\Cms\Taxonomy\Ports\Domain\ReadModel\TermFinderInterface;
+use Tulia\Cms\Taxonomy\Ports\Domain\ReadModel\TermFinderScopeEnum;
 
 /**
  * @author Adam Banaszkiewicz
@@ -59,12 +59,11 @@ class CrumbsResolver implements BreadcrumbsResolverInterface
         if ($this->nodeTypeRegistry->has($node->getType())) {
             $type = $this->nodeTypeRegistry->get($node->getType());
 
-            // @todo
-            /*if ($type->supports('hierarchy') && $node->getParentId()) {
+            if ($type->isHierarchical() && $node->getParentId()) {
                 $this->resolveHierarchyCrumbs($node, $breadcrumbs);
-            } elseif ($type->getRoutableTaxonomy() && $node->getCategory()) {
+            } elseif ($type->getRoutableTaxonomyField() && $node->getCategory()) {
                 return $this->termFinder->findOne(['id' => $node->getCategory()], TermFinderScopeEnum::BREADCRUMBS);
-            }*/
+            }
         }
 
         return null;

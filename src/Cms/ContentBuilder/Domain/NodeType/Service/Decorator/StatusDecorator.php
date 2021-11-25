@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\ContentBuilder\Domain\NodeType\Service\Decorators;
+namespace Tulia\Cms\ContentBuilder\Domain\NodeType\Service\Decorator;
 
 use Symfony\Component\Validator\Constraints as Assert;
 use Tulia\Cms\ContentBuilder\Domain\ContentType\Model\Field;

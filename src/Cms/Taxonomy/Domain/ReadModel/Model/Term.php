@@ -34,7 +34,7 @@ class Term implements MetadataAwareInterface
 
     protected string $locale;
 
-    protected ?string $name = null;
+    protected ?string $title = null;
 
     protected ?string $slug = null;
 
@@ -70,7 +70,7 @@ class Term implements MetadataAwareInterface
         $term->setPosition((int) ($data['position'] ?? 0));
         $term->setCount((int) ($data['count'] ?? 0));
         $term->setLocale($data['locale']);
-        $term->setName($data['name'] ?? '');
+        $term->setTitle($data['title'] ?? '');
         $term->setSlug($data['slug'] ?? '');
         $term->isRoot = (bool) ($data['is_root'] ?? true);
         $term->replaceMetadata($data['metadata'] ?? []);
@@ -158,14 +158,14 @@ class Term implements MetadataAwareInterface
         $this->locale = $locale;
     }
 
-    public function getName(): ?string
+    public function getTitle(): ?string
     {
-        return $this->name;
+        return $this->title;
     }
 
-    public function setName(?string $name): void
+    public function setTitle(?string $title): void
     {
-        $this->name = $name;
+        $this->title = $title;
     }
 
     public function getSlug(): ?string

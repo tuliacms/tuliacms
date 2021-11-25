@@ -48,6 +48,13 @@ cms:
                 is_routable: true
                 is_hierarchical: true
                 layout: taxonomy_default
+            tag:
+                translation_domain: tag
+                controller: 'Tulia\Cms\Taxonomy\UserInterface\Web\Frontend\Controller\Term::show'
+                routing_strategy: simple
+                is_routable: true
+                is_hierarchical: false
+                layout: taxonomy_default
 
         layout_types:
             node_default:
@@ -75,10 +82,7 @@ cms:
                 label: defaultLayout
                 sections:
                     main:
-                        groups:
-                            introduction:
-                                label: introduction
-                                fields: []
+                        groups: ~
                     sidebar:
                         groups: ~
 

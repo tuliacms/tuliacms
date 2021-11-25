@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Taxonomy\Domain\WriteModel\Model;
 
-use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\ValueObject\AttributeInfo;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\ValueObject\TermId;
 
 /**
@@ -16,36 +15,18 @@ class Term
     public const ROOT_LEVEL = 0;
 
     protected TermId $id;
-
     protected Taxonomy $taxonomy;
-
     protected ?TermId $parentId = null;
-
     protected int $position = 0;
-
     protected int $level = 0;
-
     protected bool $isRoot = false;
-
     protected string $locale = 'en_US';
-
     protected ?string $title = null;
-
     protected ?string $slug = null;
-
     protected ?string $path = null;
-
-    protected bool $visibility;
-
+    protected bool $visibility = true;
     protected bool $translated = false;
-
     protected array $attributes = [];
-
-    /**
-     * @var AttributeInfo[]
-     */
-    protected array $attributesInfo = [];
-
     protected $changeCallback;
 
     private function __construct(string $id, Taxonomy $taxonomy, string $locale, bool $isRoot = false)
@@ -92,6 +73,7 @@ class Term
         $self->slug = $data['slug'] ?? null;
         $self->path = $data['path'] ?? null;
         $self->visibility = (bool) ($data['visibility'] ?? true);
+        $self->translated = (bool) ($data['translated'] ?? false);
 
         return $self;
     }
@@ -99,18 +81,6 @@ class Term
     public function getId(): TermId
     {
         return $this->id;
-    }
-
-    public function getAttributeInfo(string $name): AttributeInfo
-    {
-        return $this->attributesInfo[$name];
-    }
-
-    public function addAttributeInfo(string $name, AttributeInfo $info): void
-    {
-        $this->validateAttributeName($name);
-
-        $this->attributesInfo[$name] = $info;
     }
 
     public function updateAttributes(array $attributes): void
@@ -121,7 +91,7 @@ class Term
         );
 
         foreach ($attributes as $name => $value) {
-            if (isset($this->attributesInfo[$name]) === false) {
+            if ($this->taxonomy->hasAttributeInfo($name) === false) {
                 throw new \Exception(sprintf('Attribute "%s" Must have AttributeInfo for this attribute.', $name));
             }
 

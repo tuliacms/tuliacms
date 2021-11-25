@@ -71,7 +71,7 @@ class DbalTermWriteStorage extends AbstractLocalizableStorage implements TermWri
         $mainTable['website_id'] = $data['website_id'];
         $mainTable['type'] = $data['type'];
         $mainTable['parent_id'] = $data['parent_id'];
-        $mainTable['name'] = $data['name'];
+        $mainTable['title'] = $data['title'];
         $mainTable['slug'] = $data['slug'];
         $mainTable['visibility'] = $data['visibility'] ? '1' : '0';
         $mainTable['level'] = $data['level'];
@@ -94,7 +94,7 @@ class DbalTermWriteStorage extends AbstractLocalizableStorage implements TermWri
         $mainTable['position'] = $data['position'];
 
         if ($foreignLocale === false) {
-            $mainTable['name'] = $data['name'];
+            $mainTable['title'] = $data['title'];
             $mainTable['slug'] = $data['slug'];
             $mainTable['visibility'] = $data['visibility'] ? '1' : '0';
         }
@@ -109,7 +109,7 @@ class DbalTermWriteStorage extends AbstractLocalizableStorage implements TermWri
         $langTable = [];
         $langTable['term_id'] = $data['id'];
         $langTable['locale'] = $data['locale'];
-        $langTable['name'] = $data['name'];
+        $langTable['title'] = $data['title'];
         $langTable['slug'] = $data['slug'];
         $langTable['visibility'] = $data['visibility'] ? '1' : '0';
 
@@ -119,7 +119,7 @@ class DbalTermWriteStorage extends AbstractLocalizableStorage implements TermWri
     protected function updateLangRow(array $data): void
     {
         $langTable = [];
-        $langTable['name'] = $data['name'];
+        $langTable['title'] = $data['title'];
         $langTable['slug'] = $data['slug'];
         $langTable['visibility'] = $data['visibility'] ? '1' : '0';
 
@@ -158,7 +158,7 @@ class DbalTermWriteStorage extends AbstractLocalizableStorage implements TermWri
         $where = ['1 = 1'];
 
         if ($defaultLocale !== $locale) {
-            $translationColumn = 'IF(ISNULL(tl.name), 0, 1) AS translated';
+            $translationColumn = 'IF(ISNULL(tl.title), 0, 1) AS translated';
         } else {
             $translationColumn = '1 AS translated';
         }
@@ -176,7 +176,7 @@ WITH RECURSIVE tree_path (
     level,
     count,
     locale,
-    name,
+    title,
     slug,
     visibility,
     translated,
@@ -192,11 +192,11 @@ WITH RECURSIVE tree_path (
             level,
             count,
             :defaultLocale AS locale,
-            name,
+            title,
             slug,
             visibility,
             1 AS translated,
-            CONCAT(name, '/') as generated_path
+            CONCAT(title, '/') as generated_path
         FROM #__term
         WHERE
             is_root = 1
@@ -213,11 +213,11 @@ WITH RECURSIVE tree_path (
             tm.level,
             tm.count,
             COALESCE(tl.locale, :defaultLocale) AS locale,
-            COALESCE(tl.name, tm.name) AS name,
+            COALESCE(tl.title, tm.title) AS title,
             COALESCE(tl.slug, tm.slug) AS slug,
             COALESCE(tl.visibility, tm.visibility) AS visibility,
             {$translationColumn},
-            CONCAT(tp.generated_path, tm.name, '/') AS generated_path
+            CONCAT(tp.generated_path, tm.title, '/') AS generated_path
         FROM tree_path AS tp
         INNER JOIN #__term AS tm
             ON tp.id = tm.parent_id

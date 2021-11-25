@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\ContentBuilder\Domain\NodeType\Service\Decorators;
+namespace Tulia\Cms\ContentBuilder\Domain\TaxonomyType\Service\Decorator;
 
 use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Tulia\Cms\ContentBuilder\Domain\ContentType\Model\Field;
-use Tulia\Cms\ContentBuilder\Domain\NodeType\Model\NodeType;
-use Tulia\Cms\ContentBuilder\Domain\NodeType\Service\NodeTypeDecoratorInterface;
+use Tulia\Cms\ContentBuilder\Domain\TaxonomyType\Model\TaxonomyType;
+use Tulia\Cms\ContentBuilder\Domain\TaxonomyType\Service\TaxonomyTypeDecoratorInterface;
 use Tulia\Cms\Node\Domain\NodeFlag\NodeFlagRegistryInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class ParentNodeDecorator implements NodeTypeDecoratorInterface
+class ParentTermDecorator implements TaxonomyTypeDecoratorInterface
 {
     private NodeFlagRegistryInterface $flagRegistry;
 
@@ -23,27 +23,28 @@ class ParentNodeDecorator implements NodeTypeDecoratorInterface
         $this->flagRegistry = $flagRegistry;
     }
 
-    public function decorate(NodeType $nodeType): void
+    public function decorate(TaxonomyType $taxonomyType): void
     {
-        if ($nodeType->isHierarchical() === false) {
+        if ($taxonomyType->isHierarchical() === false) {
             return;
         }
 
-        $nodeType->addField(new Field([
+        $taxonomyType->addField(new Field([
             'name' => 'parent_id',
-            'type' => 'node_select',
-            'label' => 'parentNode',
+            'type' => 'taxonomy',
+            'taxonomy' => $taxonomyType->getType(),
+            'label' => 'parentTerm',
             'internal' => true,
-            'builder_options' => function () use ($nodeType) {
+            'builder_options' => function () use ($taxonomyType) {
                 return [
                     'search_route_params' => [
-                        'node_type' => $nodeType->getType(),
+                        'taxonomy_type' => $taxonomyType->getType(),
                     ],
                     'constraints' => [
-                        new Callback(function ($value, ExecutionContextInterface $context) use ($nodeType) {
+                        new Callback(function ($value, ExecutionContextInterface $context) use ($taxonomyType) {
                             if (empty($value) === false && $value === $context->getRoot()->get('id')->getData()) {
-                                $context->buildViolation('cannotAssignSelfNodeParent')
-                                    ->setTranslationDomain($nodeType->getTranslationDomain())
+                                $context->buildViolation('cannotAssignSelfTermParent')
+                                    ->setTranslationDomain($taxonomyType->getTranslationDomain())
                                     ->atPath('parent_id')
                                     ->addViolation();
                             }

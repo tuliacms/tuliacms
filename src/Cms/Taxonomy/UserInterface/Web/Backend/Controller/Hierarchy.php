@@ -6,6 +6,7 @@ namespace Tulia\Cms\Taxonomy\UserInterface\Web\Backend\Controller;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Tulia\Cms\ContentBuilder\Domain\TaxonomyType\Service\TaxonomyTypeRegistry;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Taxonomy\Domain\Service\TaxonomyHierarchy;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Term;
@@ -21,11 +22,16 @@ class Hierarchy extends AbstractController
     private TaxonomyRepository $repository;
 
     private TaxonomyHierarchy $hierarchy;
+    private TaxonomyTypeRegistry $typeRegistry;
 
-    public function __construct(TaxonomyRepository $repository, TaxonomyHierarchy $hierarchy)
-    {
+    public function __construct(
+        TaxonomyRepository $repository,
+        TaxonomyHierarchy $hierarchy,
+        TaxonomyTypeRegistry $typeRegistry
+    ) {
         $this->repository = $repository;
         $this->hierarchy = $hierarchy;
+        $this->typeRegistry = $typeRegistry;
     }
 
     public function index(string $taxonomyType): ViewInterface
@@ -36,7 +42,7 @@ class Hierarchy extends AbstractController
 
         return $this->view('@backend/taxonomy/hierarchy/index.tpl', [
             'tree' => $tree,
-            'taxonomyType' => $taxonomy->getType(),
+            'taxonomyType' => $this->typeRegistry->get($taxonomy->getType()),
         ]);
     }
 
@@ -68,7 +74,7 @@ class Hierarchy extends AbstractController
             if ($term->getParentId() && $term->getParentId()->getId() === $parentId) {
                 $leaf = [
                     'id' => $term->getId()->getId(),
-                    'name' => $term->getName(),
+                    'name' => $term->getTitle(),
                     'position' => $term->getPosition(),
                     'children' => $this->buildTree($term->getId()->getId(), $terms),
                 ];

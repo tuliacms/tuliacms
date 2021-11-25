@@ -53,7 +53,7 @@ class CrumbsResolver implements BreadcrumbsResolverInterface
                 continue;
             }
 
-            $breadcrumbs->unshift($this->router->generate('term_' . $crumb->getId()), $crumb->getName());
+            $breadcrumbs->unshift($this->router->generate('term_' . $crumb->getId()), $crumb->getTitle());
         }
 
         return null;

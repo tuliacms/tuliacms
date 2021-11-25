@@ -11,11 +11,15 @@ class AttributeInfo
 {
     private bool $multilingual;
     private bool $multiple;
+    private bool $compilable;
+    private bool $taxonomy;
 
-    public function __construct(bool $multilingual, bool $multiple)
+    public function __construct(bool $multilingual, bool $multiple, bool $compilable, bool $taxonomy)
     {
         $this->multilingual = $multilingual;
         $this->multiple = $multiple;
+        $this->compilable = $compilable;
+        $this->taxonomy = $taxonomy;
     }
 
     public function isMultilingual(): bool
@@ -26,5 +30,15 @@ class AttributeInfo
     public function isMultiple(): bool
     {
         return $this->multiple;
+    }
+
+    public function isCompilable(): bool
+    {
+        return $this->compilable;
+    }
+
+    public function isTaxonomy(): bool
+    {
+        return $this->taxonomy;
     }
 }

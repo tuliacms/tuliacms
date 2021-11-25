@@ -4,6 +4,8 @@
     {% set previewLink = term_path(term) %}
 {% endif %}
 
+{% import '@backend/_macros/alerts.tpl' as alerts %}
+
 {% block title %}
     {{ 'editTerm'|trans({}, taxonomyType.translationDomain) }}
 {% endblock %}
@@ -17,14 +19,15 @@
     <div class="pane pane-lead">
         <div class="pane-header">
             <div class="pane-buttons">
-                {{ form_row(form.cancel) }}
-                {{ form_row(form.save) }}
+                {{ form_row(formDescriptor.formView.cancel) }}
+                {{ form_row(formDescriptor.formView.save) }}
             </div>
             <i class="pane-header-icon fas fa-file-powerpoint"></i>
             <h1 class="pane-title">{{ block('title') }}</h1>
         </div>
         <div class="pane-body p-0">
-            {% include relative(_self, 'parts/form-body.tpl') %}
+            {{ alerts.translation_missing_info(term.translated) }}
+            {{ render_content_builder_form_layout(formDescriptor) }}
         </div>
     </div>
 {% endblock %}

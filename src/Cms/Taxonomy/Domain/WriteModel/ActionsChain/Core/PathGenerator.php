@@ -41,7 +41,7 @@ class PathGenerator implements TaxonomyActionInterface
     public function execute(Taxonomy $taxonomy): void
     {
         $strategy = $this->strategyRegistry->get(
-            $this->registry->getType($taxonomy->getType()->getType())->getRoutingStrategy()
+            $this->registry->getType($taxonomy->getType())->getRoutingStrategy()
         );
 
         foreach ($this->getTerms($taxonomy) as $term) {

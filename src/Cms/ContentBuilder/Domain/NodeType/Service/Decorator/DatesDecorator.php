@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\ContentBuilder\Domain\NodeType\Service\Decorators;
+namespace Tulia\Cms\ContentBuilder\Domain\NodeType\Service\Decorator;
 
 use Tulia\Cms\ContentBuilder\Domain\ContentType\Model\Field;
 use Tulia\Cms\ContentBuilder\Domain\NodeType\Model\NodeType;
