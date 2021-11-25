@@ -15,3 +15,5 @@ areYouSureYouWantToDeleteFollowingTerms: >
         1 {Are You sure You want to delete following terms and their children?}
         other {Are You sure You want to delete following terms?}
     }
+Tag: Tag
+Category: Category

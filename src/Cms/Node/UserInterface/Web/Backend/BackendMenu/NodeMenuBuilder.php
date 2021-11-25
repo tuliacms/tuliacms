@@ -64,7 +64,7 @@ class NodeMenuBuilder implements BuilderInterface
             $taxonomy = $this->taxonomyTypeRegistry->get($field->getTaxonomy());
 
             $registry->add($root . '_' . $taxonomy->getType(), [
-                'label'  => $this->helper->trans('termsListOfTaxonomy', ['taxonomy' => $taxonomy->getType()], 'taxonomy'),
+                'label'  => $this->helper->trans('termsListOfTaxonomy', ['taxonomy' => $this->helper->trans($taxonomy->getName(), [], 'taxonomy')], 'taxonomy'),
                 'link'   => $this->helper->generateUrl('backend.term', [ 'taxonomyType' => $taxonomy->getType() ]),
                 'parent' => $root,
             ]);
