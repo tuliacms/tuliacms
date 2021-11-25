@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Tulia\Cms\Taxonomy\UserInterface\Web\Frontend\Menu;
 
 use Symfony\Component\Form\FormFactoryInterface;
-use Tulia\Cms\Menu\Application\Selector\SelectorInterface;
+use Tulia\Cms\ContentBuilder\Domain\TaxonomyType\Service\TaxonomyTypeRegistry;
 use Tulia\Cms\Menu\Domain\Builder\Type\TypeInterface;
-use Tulia\Cms\Taxonomy\Domain\TaxonomyType\RegistryInterface;
+use Tulia\Cms\Menu\UserInterface\Web\Backend\Selector\SelectorInterface;
 use Tulia\Cms\Taxonomy\UserInterface\Web\Backend\Form\MenuItemSelectorForm;
 use Tulia\Component\Templating\EngineInterface;
 use Tulia\Component\Templating\View;
@@ -17,18 +17,18 @@ use Tulia\Component\Templating\View;
  */
 class Selector implements SelectorInterface
 {
-    protected RegistryInterface $typeRegistry;
+    protected TaxonomyTypeRegistry $taxonomyTypeRegistry;
 
     protected EngineInterface $engine;
 
     protected FormFactoryInterface $formFactory;
 
     public function __construct(
-        RegistryInterface $typeRegistry,
+        TaxonomyTypeRegistry $taxonomyTypeRegistry,
         EngineInterface $engine,
         FormFactoryInterface $formFactory
     ) {
-        $this->typeRegistry = $typeRegistry;
+        $this->taxonomyTypeRegistry = $taxonomyTypeRegistry;
         $this->engine = $engine;
         $this->formFactory = $formFactory;
     }
@@ -36,12 +36,12 @@ class Selector implements SelectorInterface
     /**
      * {@inheritdoc}
      */
-    public function render(TypeInterface $type, string $identity): string
+    public function render(TypeInterface $type, ?string $identity): string
     {
         [, $name] = explode(':', $type->getType());
         $field = 'term_search_' . $name;
 
-        $taxonomyType = $this->typeRegistry->getType($name);
+        $taxonomyType = $this->taxonomyTypeRegistry->get($name);
         $form = $this->formFactory->create(MenuItemSelectorForm::class, [
             $field => $identity,
         ], [

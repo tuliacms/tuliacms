@@ -10,12 +10,12 @@ use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\RouterInterface;
+use Tulia\Cms\ContentBuilder\Domain\TaxonomyType\Model\TaxonomyType;
+use Tulia\Cms\ContentBuilder\Domain\TaxonomyType\Service\TaxonomyTypeRegistry;
 use Tulia\Cms\Platform\Infrastructure\Framework\Routing\FrontendRouteSuffixResolver;
-use Tulia\Cms\Taxonomy\Domain\TaxonomyType\RegistryInterface;
-use Tulia\Cms\Taxonomy\Domain\TaxonomyType\TaxonomyTypeInterface;
-use Tulia\Cms\Taxonomy\Ports\Domain\ReadModel\TermFinderScopeEnum;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Model\Term;
 use Tulia\Cms\Taxonomy\Ports\Domain\ReadModel\TermFinderInterface;
+use Tulia\Cms\Taxonomy\Ports\Domain\ReadModel\TermFinderScopeEnum;
 use Tulia\Cms\Taxonomy\Ports\Infrastructure\Persistence\Domain\ReadModel\TermPathReadStorageInterface;
 
 /**
@@ -25,7 +25,7 @@ class Router implements RouterInterface, RequestMatcherInterface
 {
     private TermPathReadStorageInterface $storage;
 
-    private RegistryInterface $registry;
+    private TaxonomyTypeRegistry $taxonomyTypeRegistry;
 
     private FrontendRouteSuffixResolver $frontendRouteSuffixResolver;
 
@@ -35,12 +35,12 @@ class Router implements RouterInterface, RequestMatcherInterface
 
     public function __construct(
         TermPathReadStorageInterface $storage,
-        RegistryInterface $registry,
+        TaxonomyTypeRegistry $taxonomyTypeRegistry,
         FrontendRouteSuffixResolver $frontendRouteSuffixResolver,
         TermFinderInterface $termFinder
     ) {
         $this->storage = $storage;
-        $this->registry = $registry;
+        $this->taxonomyTypeRegistry = $taxonomyTypeRegistry;
         $this->frontendRouteSuffixResolver = $frontendRouteSuffixResolver;
         $this->termFinder = $termFinder;
     }
@@ -112,13 +112,13 @@ class Router implements RouterInterface, RequestMatcherInterface
         ];
     }
 
-    private function isTermRoutable(?Term $term, ?TaxonomyTypeInterface &$termType): bool
+    private function isTermRoutable(?Term $term, ?TaxonomyType &$termType): bool
     {
         if (! $term instanceof Term) {
             return false;
         }
 
-        $termType = $this->registry->getType($term->getType());
+        $termType = $this->taxonomyTypeRegistry->get($term->getType());
 
         return $termType && $termType->isRoutable();
     }

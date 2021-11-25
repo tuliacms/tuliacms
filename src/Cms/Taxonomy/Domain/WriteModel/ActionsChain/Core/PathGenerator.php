@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Taxonomy\Domain\WriteModel\ActionsChain\Core;
 
+use Tulia\Cms\ContentBuilder\Domain\TaxonomyType\Service\TaxonomyTypeRegistry;
 use Tulia\Cms\Taxonomy\Domain\Routing\Strategy\TaxonomyRoutingStrategyRegistry;
-use Tulia\Cms\Taxonomy\Domain\TaxonomyType\RegistryInterface;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\ActionsChain\TaxonomyActionInterface;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Taxonomy;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Term;
@@ -19,17 +19,17 @@ class PathGenerator implements TaxonomyActionInterface
 {
     private TaxonomyRoutingStrategyRegistry $strategyRegistry;
 
-    private RegistryInterface $registry;
+    private TaxonomyTypeRegistry $taxonomyTypeRegistry;
 
     private CurrentWebsiteInterface $currentWebsite;
 
     public function __construct(
         TaxonomyRoutingStrategyRegistry $strategyRegistry,
-        RegistryInterface $registry,
+        TaxonomyTypeRegistry $taxonomyTypeRegistry,
         CurrentWebsiteInterface $currentWebsite
     ) {
         $this->strategyRegistry = $strategyRegistry;
-        $this->registry = $registry;
+        $this->taxonomyTypeRegistry = $taxonomyTypeRegistry;
         $this->currentWebsite = $currentWebsite;
     }
 
@@ -41,7 +41,7 @@ class PathGenerator implements TaxonomyActionInterface
     public function execute(Taxonomy $taxonomy): void
     {
         $strategy = $this->strategyRegistry->get(
-            $this->registry->getType($taxonomy->getType())->getRoutingStrategy()
+            $this->taxonomyTypeRegistry->get($taxonomy->getType())->getRoutingStrategy()
         );
 
         foreach ($this->getTerms($taxonomy) as $term) {

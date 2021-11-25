@@ -18,7 +18,6 @@ use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\ValueObject\TermId;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\TaxonomyRepository;
 use Tulia\Cms\Taxonomy\Ports\Infrastructure\Persistence\Domain\ReadModel\Datatable\TermDatatableFinderInterface;
 use Tulia\Cms\Taxonomy\Ports\Domain\ReadModel\TermFinderInterface;
-use Tulia\Cms\Taxonomy\UserInterface\Web\Backend\Form\TermForm;
 use Tulia\Component\Datatable\DatatableFactory;
 use Tulia\Component\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Component\Templating\ViewInterface;

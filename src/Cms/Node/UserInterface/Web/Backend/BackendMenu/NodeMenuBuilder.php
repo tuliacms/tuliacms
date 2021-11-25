@@ -9,7 +9,7 @@ use Tulia\Cms\BackendMenu\Domain\Builder\Helper\BuilderHelperInterface;
 use Tulia\Cms\BackendMenu\Domain\Builder\Registry\ItemRegistryInterface;
 use Tulia\Cms\ContentBuilder\Domain\NodeType\Model\NodeType;
 use Tulia\Cms\ContentBuilder\Domain\NodeType\Service\NodeTypeRegistry;
-use Tulia\Cms\Taxonomy\Domain\TaxonomyType\RegistryInterface as TaxonomyRegistry;
+use Tulia\Cms\ContentBuilder\Domain\TaxonomyType\Service\TaxonomyTypeRegistry;
 
 /**
  * @author Adam Banaszkiewicz
@@ -20,16 +20,16 @@ class NodeMenuBuilder implements BuilderInterface
 
     protected NodeTypeRegistry $nodeRegistry;
 
-    protected TaxonomyRegistry $taxonomyRegistry;
+    protected TaxonomyTypeRegistry $taxonomyTypeRegistry;
 
     public function __construct(
         BuilderHelperInterface $helper,
         NodeTypeRegistry $nodeRegistry,
-        TaxonomyRegistry $taxonomyRegistry
+        TaxonomyTypeRegistry $taxonomyTypeRegistry
     ) {
         $this->helper = $helper;
         $this->nodeRegistry = $nodeRegistry;
-        $this->taxonomyRegistry = $taxonomyRegistry;
+        $this->taxonomyTypeRegistry = $taxonomyTypeRegistry;
     }
 
     public function build(ItemRegistryInterface $registry): void
@@ -61,7 +61,7 @@ class NodeMenuBuilder implements BuilderInterface
                 continue;
             }
 
-            $taxonomy = $this->taxonomyRegistry->getType($field->getTaxonomy());
+            $taxonomy = $this->taxonomyTypeRegistry->get($field->getTaxonomy());
 
             $registry->add($root . '_' . $taxonomy->getType(), [
                 'label'    => $this->helper->trans('taxonomy', [], $taxonomy->getTranslationDomain()),

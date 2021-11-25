@@ -5,11 +5,10 @@ declare(strict_types=1);
 namespace Tulia\Cms\Taxonomy\Domain\WriteModel;
 
 use Tulia\Cms\ContentBuilder\Domain\TaxonomyType\Model\TaxonomyType;
+use Tulia\Cms\ContentBuilder\Domain\TaxonomyType\Service\TaxonomyTypeRegistry;
 use Tulia\Cms\Metadata\Domain\WriteModel\MetadataRepository;
 use Tulia\Cms\Platform\Infrastructure\Bus\Event\EventBusInterface;
 use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
-use Tulia\Cms\Taxonomy\Domain\TaxonomyType\RegistryInterface;
-use Tulia\Cms\Taxonomy\Domain\TaxonomyType\TaxonomyTypeInterface;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\ActionsChain\TaxonomyActionsChainInterface;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Exception\TermNotFoundException;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Taxonomy;
@@ -18,7 +17,6 @@ use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\ValueObject\AttributeInfo;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\ValueObject\TermId;
 use Tulia\Cms\Taxonomy\Ports\Infrastructure\Persistence\Domain\WriteModel\TermWriteStorageInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
-use Tulia\Cms\ContentBuilder\Domain\TaxonomyType\Service\TaxonomyTypeRegistry;
 
 /**
  * @author Adam Banaszkiewicz
@@ -27,7 +25,7 @@ class TaxonomyRepository
 {
     private const RESERVED_NAMES = ['title', 'slug', 'parent_id'];
 
-    private RegistryInterface $taxonomyRegistry;
+    private TaxonomyTypeRegistry $taxonomyTypeRegistry;
 
     private TermWriteStorageInterface $storage;
 
@@ -42,23 +40,21 @@ class TaxonomyRepository
     private TaxonomyActionsChainInterface $actionsChain;
 
     public function __construct(
-        RegistryInterface $taxonomyRegistry,
         TermWriteStorageInterface $storage,
         CurrentWebsiteInterface $currentWebsite,
         MetadataRepository $metadataRepository,
         UuidGeneratorInterface $uuidGenerator,
         EventBusInterface $eventBus,
         TaxonomyActionsChainInterface $actionsChain,
-        TaxonomyTypeRegistry $typeRegistry
+        TaxonomyTypeRegistry $taxonomyTypeRegistry
     ) {
-        $this->taxonomyRegistry = $taxonomyRegistry;
         $this->storage = $storage;
         $this->currentWebsite = $currentWebsite;
         $this->metadataRepository = $metadataRepository;
         $this->uuidGenerator = $uuidGenerator;
         $this->eventBus = $eventBus;
         $this->actionsChain = $actionsChain;
-        $this->typeRegistry = $typeRegistry;
+        $this->taxonomyTypeRegistry = $taxonomyTypeRegistry;
     }
 
     public function createNewTerm(Taxonomy $taxonomy): Term
@@ -70,14 +66,14 @@ class TaxonomyRepository
         );
     }
 
-    public function getTaxonomyType(string $type): TaxonomyTypeInterface
+    public function getTaxonomyType(string $type): TaxonomyType
     {
-        return $this->taxonomyRegistry->getType($type);
+        return $this->taxonomyTypeRegistry->get($type);
     }
 
     public function get(string $type): Taxonomy
     {
-        $taxonomyType = $this->typeRegistry->get($type);
+        $taxonomyType = $this->taxonomyTypeRegistry->get($type);
         $taxonomy = Taxonomy::create(
             $type,
             $this->currentWebsite->getId(),

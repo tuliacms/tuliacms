@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\ContentBuilder\Domain\NodeType\Exception\NodeTypeNotExistsException;
 use Tulia\Cms\ContentBuilder\Domain\NodeType\Model\NodeType;
 use Tulia\Cms\ContentBuilder\Domain\NodeType\Service\NodeTypeRegistry;
+use Tulia\Cms\ContentBuilder\Domain\TaxonomyType\Service\TaxonomyTypeRegistry;
 use Tulia\Cms\ContentBuilder\UserInterface\Web\Form\ContentTypeFormDescriptor;
 use Tulia\Cms\ContentBuilder\UserInterface\Web\Service\NodeFormService;
 use Tulia\Cms\Node\Domain\WriteModel\Exception\NodeNotFoundException;
@@ -19,7 +20,6 @@ use Tulia\Cms\Node\Domain\WriteModel\NodeRepository;
 use Tulia\Cms\Node\Domain\ReadModel\Datatable\NodeDatatableFinderInterface;
 use Tulia\Cms\Platform\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
-use Tulia\Cms\Taxonomy\Domain\TaxonomyType\RegistryInterface as TaxonomyRegistry;
 use Tulia\Component\Datatable\DatatableFactory;
 use Tulia\Component\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Component\Templating\ViewInterface;
@@ -34,7 +34,7 @@ class Node extends AbstractController
 
     private NodeRepository $repository;
 
-    private TaxonomyRegistry $registry;
+    private TaxonomyTypeRegistry $taxonomyTypeRegistry;
 
     private DatatableFactory $factory;
 
@@ -45,14 +45,14 @@ class Node extends AbstractController
     public function __construct(
         NodeTypeRegistry $typeRegistry,
         NodeRepository $repository,
-        TaxonomyRegistry $registry,
+        TaxonomyTypeRegistry $taxonomyTypeRegistry,
         DatatableFactory $factory,
         NodeDatatableFinderInterface $finder,
         NodeFormService $nodeFormService
     ) {
         $this->typeRegistry = $typeRegistry;
         $this->repository = $repository;
-        $this->registry = $registry;
+        $this->taxonomyTypeRegistry = $taxonomyTypeRegistry;
         $this->factory = $factory;
         $this->finder = $finder;
         $this->nodeFormService = $nodeFormService;
@@ -233,7 +233,7 @@ class Node extends AbstractController
                 continue;
             }
 
-            $result[] = $this->registry->getType($field->getTaxonomy());
+            $result[] = $this->taxonomyTypeRegistry->get($field->getTaxonomy());
         }
 
         return $result;

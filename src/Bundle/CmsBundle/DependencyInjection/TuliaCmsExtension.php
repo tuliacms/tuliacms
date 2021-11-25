@@ -74,8 +74,6 @@ class TuliaCmsExtension extends Extension
             ->addTag('term.action_chain');
         $container->registerForAutoconfiguration(\Tulia\Cms\Taxonomy\Domain\Routing\Strategy\TaxonomyRoutingStrategyInterface::class)
             ->addTag('taxonomy.routing.strategy');
-        $container->registerForAutoconfiguration(\Tulia\Cms\Taxonomy\Domain\TaxonomyType\RegistratorInterface::class)
-            ->addTag('taxonomy.type.registrator');
 
         // ContentBuilder
         $container->registerForAutoconfiguration(\Tulia\Cms\ContentBuilder\Domain\NodeType\Service\NodeTypeProviderInterface::class)
