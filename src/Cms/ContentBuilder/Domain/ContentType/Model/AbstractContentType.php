@@ -20,6 +20,7 @@ abstract class AbstractContentType
     protected string $name;
     protected bool $isRoutable = true;
     protected bool $isHierarchical = false;
+    protected bool $isInternal = true;
     protected string $routingStrategy = 'simple';
 
     /**
@@ -30,10 +31,11 @@ abstract class AbstractContentType
     abstract protected function internalValidate(): void;
     abstract protected function internalValidateField(Field $field): void;
 
-    public function __construct(string $type, string $layout)
+    public function __construct(string $type, string $layout, bool $isInternal)
     {
         $this->type = $type;
         $this->layout = $layout;
+        $this->isInternal = $isInternal;
     }
 
     public function getName(): string
@@ -84,6 +86,11 @@ abstract class AbstractContentType
     public function setIsHierarchical(bool $isHierarchical): void
     {
         $this->isHierarchical = $isHierarchical;
+    }
+
+    public function isInternal(): bool
+    {
+        return $this->isInternal;
     }
 
     /**

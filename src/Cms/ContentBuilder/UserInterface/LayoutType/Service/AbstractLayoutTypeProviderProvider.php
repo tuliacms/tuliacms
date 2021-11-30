@@ -15,7 +15,7 @@ abstract class AbstractLayoutTypeProviderProvider implements LayoutTypeProviderI
 {
     protected function buildLayoutType(string $name, array $options): LayoutType
     {
-        $layoutType = new LayoutType($name, $options['translation_domain']);
+        $layoutType = new LayoutType($name);
         $layoutType->setLabel($options['label']);
         $layoutType->setBuilder($options['builder']);
 

@@ -118,7 +118,6 @@ class Configuration implements ConfigurationInterface
                                     // Name of the field, where is stored routable taxonomy relation.
                                     // If not provided, slug to this node type will not be generated with taxonomy path.
                                     ->scalarNode('routable_taxonomy_field')->defaultNull()->end()
-                                    ->scalarNode('translation_domain')->defaultValue('page')->end()
                                     // If true, nodes can be created as hierarchical tree, with parents and childs.
                                     // Also those node's paths, will be created with all ascendants.
                                     ->booleanNode('is_hierarchical')->defaultFalse()->end()
@@ -167,7 +166,6 @@ class Configuration implements ConfigurationInterface
                                     ->scalarNode('name')->isRequired()->end()
                                     ->variableNode('controller')->defaultValue('Tulia\Cms\Taxonomy\UserInterface\Web\Frontend\Controller\Term::show')->end()
                                     ->booleanNode('is_routable')->defaultTrue()->end()
-                                    ->scalarNode('translation_domain')->defaultValue('page')->end()
                                     ->booleanNode('is_hierarchical')->defaultFalse()->end()
                                     ->scalarNode('routing_strategy')->defaultValue('simple')->end()
                                     // Layout name with defines where each field should be showed on admin page.
@@ -213,7 +211,6 @@ class Configuration implements ConfigurationInterface
                                 ->addDefaultsIfNotSet()
                                 ->children()
                                     ->scalarNode('label')->defaultNull()->end()
-                                    ->scalarNode('translation_domain')->defaultValue('messages')->end()
                                     // Builder service, which implements LayoutBuilderInterface.
                                     // Builder is responsible for render layout with defined fields and sections for form.
                                     ->scalarNode('builder')

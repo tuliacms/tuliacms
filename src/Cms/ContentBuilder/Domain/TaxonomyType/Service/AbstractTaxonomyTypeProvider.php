@@ -22,7 +22,7 @@ abstract class AbstractTaxonomyTypeProvider implements TaxonomyTypeProviderInter
 
     protected function buildTaxonomyType(string $name, array $options): TaxonomyType
     {
-        $taxonomyType = new TaxonomyType($name, $options['layout']);
+        $taxonomyType = new TaxonomyType($name, $options['layout'], true);
         $taxonomyType->setController($options['controller']);
         $taxonomyType->setIsRoutable($options['is_routable']);
         $taxonomyType->setName($options['name']);

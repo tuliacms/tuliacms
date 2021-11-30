@@ -22,7 +22,7 @@ abstract class AbstractNodeTypeProvider implements NodeTypeProviderInterface
 
     protected function buildNodeType(string $name, array $options): NodeType
     {
-        $nodeType = new NodeType($name, $options['layout']);
+        $nodeType = new NodeType($name, $options['layout'], true);
         $nodeType->setController($options['controller']);
         $nodeType->setIcon($options['icon']);
         $nodeType->setName($options['name']);

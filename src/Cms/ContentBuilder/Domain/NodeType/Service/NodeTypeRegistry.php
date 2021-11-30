@@ -70,6 +70,8 @@ class NodeTypeRegistry
      */
     public function all(): array
     {
+        $this->fetch();
+
         return $this->nodeTypes;
     }
 

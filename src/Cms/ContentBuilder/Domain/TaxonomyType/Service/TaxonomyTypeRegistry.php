@@ -70,6 +70,8 @@ class TaxonomyTypeRegistry
      */
     public function all(): array
     {
+        $this->fetch();
+
         return $this->taxonomyTypes;
     }
 

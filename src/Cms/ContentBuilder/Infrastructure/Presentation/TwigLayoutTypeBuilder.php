@@ -30,7 +30,7 @@ class TwigLayoutTypeBuilder implements LayoutTypeBuilderInterface
 
     public function build(AbstractContentType $contentType, LayoutType $layoutType, FormView $formView): string
     {
-        return $this->engine->render(new View('@backend/contentbuilder/layout/default.tpl', [
+        return $this->engine->render(new View('@backend/content_builder/layout/default.tpl', [
             'type' => $contentType,
             'layout' => $layoutType,
             'form' => $formView,

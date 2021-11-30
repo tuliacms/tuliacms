@@ -4,7 +4,12 @@ framework:
             - '%kernel.project_dir%/src/Cms/ContentBuilder/Infrastructure/Framework/Resources/translations'
     templating:
         paths:
-            - { name: backend/contentbuilder, path: '%kernel.project_dir%/src/Cms/ContentBuilder/Infrastructure/Framework/Resources/views/backend' }
+            - { name: backend/content_builder, path: '%kernel.project_dir%/src/Cms/ContentBuilder/Infrastructure/Framework/Resources/views/backend' }
+    assetter:
+        assets:
+            content_builder.layout_builder:
+                scripts: [ '/assets/core/content-builder-layout-builder/js/build.js' ]
+                require: [ vue ]
 
 monolog:
     channels: ['contentBuilder']
@@ -19,7 +24,6 @@ cms:
                 is_routable: true
                 is_hierarchical: true
                 routable_taxonomy_field: category
-                translation_domain: pages
                 layout: node_default
                 fields:
                     introduction:

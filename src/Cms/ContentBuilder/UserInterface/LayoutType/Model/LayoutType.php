@@ -11,7 +11,6 @@ class LayoutType
 {
     protected string $name;
     protected string $label;
-    protected ?string $translationDomain = null;
     protected string $builder;
 
     /**
@@ -19,10 +18,9 @@ class LayoutType
      */
     protected array $sections = [];
 
-    public function __construct(string $name, string $translationDomain)
+    public function __construct(string $name)
     {
         $this->name = $name;
-        $this->translationDomain = $translationDomain;
     }
 
     public function getName(): string
@@ -38,16 +36,6 @@ class LayoutType
     public function setLabel(string $label): void
     {
         $this->label = $label;
-    }
-
-    public function getTranslationDomain(): ?string
-    {
-        return $this->translationDomain;
-    }
-
-    public function setTranslationDomain(?string $translationDomain): void
-    {
-        $this->translationDomain = $translationDomain;
     }
 
     public function getBuilder(): string
