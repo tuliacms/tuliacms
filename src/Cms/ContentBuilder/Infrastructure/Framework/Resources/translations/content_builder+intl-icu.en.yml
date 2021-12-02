@@ -2,3 +2,7 @@ contentModel: Content model
 createNodeType: Create node type
 addNewSection: Add new section
 addNewField: Add new field
+fieldLabel: Field label
+fieldId: Field ID
+fieldIdHelp: This field is not editable after creating. Please use alphanum and underscores. All other characters will be transformed to alphanum and underscore.
+youCannotCreateTwoFieldsWithTheSameId: Yout cannot create two fields with the same ID.

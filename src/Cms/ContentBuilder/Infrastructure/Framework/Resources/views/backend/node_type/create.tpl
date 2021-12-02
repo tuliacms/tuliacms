@@ -28,70 +28,17 @@
     <script nonce="{{ csp_nonce() }}">
         window.ContentBuilderLayoutBuilder = {
             translations: {
+                cancel: '{{ 'cancel'|trans({}, 'messages') }}',
+                create: '{{ 'create'|trans({}, 'messages') }}',
                 title: '{{ 'title'|trans({}, 'messages') }}',
                 slug: '{{ 'slug'|trans({}, 'messages') }}',
                 addNewSection: '{{ 'addNewSection'|trans }}',
                 addNewField: '{{ 'addNewField'|trans }}',
+                fieldLabel: '{{ 'fieldLabel'|trans }}',
+                fieldId: '{{ 'fieldId'|trans }}',
+                fieldIdHelp: '{{ 'fieldIdHelp'|trans }}',
+                youCannotCreateTwoFieldsWithTheSameId: '{{ 'youCannotCreateTwoFieldsWithTheSameId'|trans }}',
             }
         };
     </script>
-
-    <style>
-        .ctb-sections-container:empty {
-            padding: 30px;
-            border: 3px dashed #ddd;
-            border-radius: 6px;
-            position: relative;
-        }
-        .ctb-sections-container:empty:before {
-            content: attr(data-label);
-            color: rgba(0,0,0,.4);
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-        }
-        .ctb-sortable-fields:empty {
-            padding: 30px;
-            border: 3px dashed #ddd;
-            border-radius: 6px;
-            position: relative;
-        }
-        .ctb-sortable-fields:empty:before {
-            content: attr(data-label);
-            color: rgba(0,0,0,.4);
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-        }
-        .ctb-sortable-fields {
-            display: block;
-            list-style: none;
-            margin: 0;
-        }
-        .ctb-sortable-fields > div {
-            border-radius: 6px;
-            border: 2px dashed #ddd;
-            padding: 5px 9px;
-            margin-bottom: 5px;
-            background-color: #fff;
-        }
-        .ctb-section-main-tabs-contents {
-            border-top: 1px solid #d6dce4;
-        }
-        .ctb-section-label {
-            border-bottom: 1px solid #d6dce4;
-            background-color: #f7f7f7;
-            padding: 11px 15px;
-        }
-        .ctb-section-fields-container {
-            padding: 15px 15px 0 15px;
-        }
-        .ctb-section-footer {
-            padding: 15px;
-            text-align: center;
-            border-bottom: 1px solid #d6dce4;
-        }
-    </style>
 {% endblock %}

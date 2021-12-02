@@ -1,9 +1,9 @@
 <template>
-    <div>{{ name }}</div>
+    <div>{{ field.label }}</div>
 </template>
 
 <script>
 export default {
-    props: ['id', 'name'],
+    props: ['field'],
 }
 </script>

@@ -28,10 +28,16 @@
                 </div>
             </div>
         </div>
+        <FieldCreator
+            @confirm="createFieldUsingCreatorData"
+            :data="creator.field.data"
+            :translations="translations"
+        ></FieldCreator>
     </div>
 </template>
 
 <script>
+import FieldCreator from './components/FieldCreator';
 import SectionsList from './components/SectionsList';
 import Field from './components/Field';
 import draggable from 'vuedraggable';
@@ -56,6 +62,16 @@ export default {
 
         return {
             translations: window.ContentBuilderLayoutBuilder.translations,
+            creator: {
+                field: {
+                    data: {
+                        sectionId: null,
+                        label: null,
+                        id: null,
+                    },
+                    modal: null
+                }
+            },
             layout: {
                 sidebar: {
                     sections: [
@@ -72,10 +88,10 @@ export default {
                             id: 'introduction',
                             label: 'Introduction',
                             fields: [
-                                {id: '1231423', name: '11'},
-                                {id: '1231423', name: '22'},
-                                {id: '1231423', name: '33'},
-                                {id: '1231423', name: '44'},
+                                {id: '1231423', label: '11'},
+                                {id: '1231423', label: '22'},
+                                {id: '1231423', label: '33'},
+                                {id: '1231423', label: '44'},
                             ]
                         }
                     ]
@@ -84,6 +100,7 @@ export default {
         };
     },
     components: {
+        FieldCreator,
         SectionsList,
         Field,
         draggable
@@ -96,7 +113,70 @@ export default {
             deep: true
         }
     },
+    methods: {
+        openCreateFieldModel: function (sectionId) {
+            this.creator.field.data.sectionId = sectionId;
+            this.creator.field.data.label = '';
+            this.creator.field.data.id = '';
+            this.creator.field.data.type = '';
+            this.creator.field.modal.show();
+        },
+        createFieldUsingCreatorData: function () {
+            let data = this.creator.field.data;
+            let section = this._findSection(data.sectionId);
+
+            if (this._findField(data.id)) {
+                Tulia.Info.info({
+                    title: this.translations.youCannotCreateTwoFieldsWithTheSameId,
+                    type: 'warning'
+                });
+                return;
+            }
+
+            section.fields.push({
+                id: data.id,
+                label: data.label,
+            });
+
+            this.creator.field.modal.hide();
+        },
+        _findSection: function (id) {
+            for (let s in this.layout.sidebar.sections) {
+                if (this.layout.sidebar.sections[s].id === id) {
+                    return this.layout.sidebar.sections[s];
+                }
+            }
+
+            for (let s in this.layout.main.sections) {
+                if (this.layout.main.sections[s].id === id) {
+                    return this.layout.main.sections[s];
+                }
+            }
+        },
+        _findField: function (id) {
+            for (let s in this.layout.sidebar.sections) {
+                for (let f in this.layout.sidebar.sections[s].fields) {
+                    if (this.layout.sidebar.sections[s].fields[f].id === id) {
+                        return this.layout.sidebar.sections[s].fields[f];
+                    }
+                }
+            }
+
+            for (let s in this.layout.main.sections) {
+                for (let f in this.layout.main.sections[s].fields) {
+                    if (this.layout.main.sections[s].fields[f].id === id) {
+                        return this.layout.main.sections[s].fields[f];
+                    }
+                }
+            }
+        }
+    },
     mounted: function () {
+        this.creator.field.modal = new bootstrap.Modal(document.getElementById('ctb-create-field-modal'));
+
+        this.$root.$on('field:add', (sectionId) => {
+            this.openCreateFieldModel(sectionId);
+        });
         // Set default width form existing fields.
         /*for (let input of this.$el.querySelectorAll('input.form-control')) {
             this.resizeInput({

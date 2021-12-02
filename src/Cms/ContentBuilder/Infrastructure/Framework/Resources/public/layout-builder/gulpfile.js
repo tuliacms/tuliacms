@@ -16,7 +16,7 @@ gulp.task('sass', () => {
             includeContent: true,
             sourceRoot: 'app/src/sass'
         }))*/
-        .pipe(concat('bundle.min.css'))
+        .pipe(concat('styles.min.css'))
         .pipe(gulp.dest('dist/css'));
 });
 
