@@ -2,26 +2,65 @@
   display: block;
   list-style: none;
   margin: 0; }
-  .ctb-sortable-fields > div {
+  .ctb-sortable-fields .ctb-field {
+    position: relative;
     border-radius: 6px;
-    border: 2px dashed #ddd;
-    padding: 5px 9px;
+    border: 1px solid #ddd;
+    padding: 8px 50px 8px 35px;
     margin-bottom: 5px;
-    background-color: #fff; }
+    background-color: #fff;
+    width: 350px;
+    max-width: 100%; }
+    .ctb-sortable-fields .ctb-field.ctb-draggable-ghost {
+      background-color: #000;
+      color: #fff;
+      opacity: .3; }
+    .ctb-sortable-fields .ctb-field .ctb-sortable-handler {
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 13px;
+      padding: 10px 11px; }
+      .ctb-sortable-fields .ctb-field .ctb-sortable-handler:hover {
+        cursor: move; }
+    .ctb-sortable-fields .ctb-field .ctb-field-options {
+      position: absolute;
+      top: 50%;
+      right: 1px;
+      transform: translateY(-50%);
+      font-size: 0; }
+      .ctb-sortable-fields .ctb-field .ctb-field-options span {
+        display: inline-block;
+        font-size: 14px;
+        border-radius: 5px;
+        border: 1px solid transparent;
+        height: 32px;
+        width: 32px;
+        line-height: 32px;
+        text-align: center; }
+        .ctb-sortable-fields .ctb-field .ctb-field-options span:hover {
+          border: 1px solid #d6dce4;
+          cursor: pointer;
+          background-color: #fff; }
 
-.ctb-sections-container:empty {
+.ctb-sections-container .ctb-sortable-placeholder:empty {
   padding: 30px;
   border: 3px dashed #ddd;
   border-radius: 6px;
-  position: relative; }
+  position: relative;
+  margin: 15px; }
 
-.ctb-sections-container:empty:before {
+.ctb-sections-container .ctb-sortable-placeholder:empty:before {
   content: attr(data-label);
   color: rgba(0, 0, 0, 0.4);
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%); }
+
+.ctb-sections-container .ctb-draggable-ghost {
+  opacity: .2; }
 
 .ctb-sections-container .ctb-section-options {
   position: absolute;
@@ -41,7 +80,7 @@
 .ctb-sections-container .ctb-section-label {
   border-bottom: 1px solid #d6dce4;
   background-color: #f7f7f7;
-  padding: 11px 40px 11px 36px;
+  padding: 8px 40px 8px 36px;
   position: relative; }
   .ctb-sections-container .ctb-section-label .ctb-section-label-input {
     background-color: transparent;
@@ -57,35 +96,68 @@
       outline: none; }
   .ctb-sections-container .ctb-section-label .ctb-section-sortable-handler {
     position: absolute;
-    left: 12px;
+    left: 0;
     top: 50%;
     transform: translateY(-50%);
-    margin-right: 10px;
-    font-size: 18px; }
+    font-size: 18px;
+    padding: 10px 12px; }
     .ctb-sections-container .ctb-section-label .ctb-section-sortable-handler:hover {
       cursor: move; }
+
+.ctb-sections-container .ctb-sortable-fields .ctb-sortable-placeholder:empty {
+  margin: 0; }
 
 .ctb-sections-container .ctb-section-footer {
   padding: 15px;
   text-align: center;
   border-bottom: 1px solid #d6dce4; }
 
-.ctb-sortable-fields:empty {
-  padding: 30px;
-  border: 3px dashed #ddd;
-  border-radius: 6px;
-  position: relative; }
-
-.ctb-sortable-fields:empty:before {
-  content: attr(data-label);
-  color: rgba(0, 0, 0, 0.4);
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%); }
-
 .ctb-section-main-tabs-contents {
   border-top: 1px solid #d6dce4; }
 
 .ctb-section-fields-container {
   padding: 15px 15px 0 15px; }
+
+.ctb-button {
+  background-color: #f1f1f1;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 5px 10px;
+  transition: .12s all; }
+  .ctb-button:hover {
+    background-color: #ddd; }
+
+.ctb-new-section-button {
+  text-align: center;
+  font-size: 13px;
+  padding: 7px 15px;
+  margin: 15px 0;
+  border: 1px solid #ddd;
+  background-color: #f1f1f1;
+  border-radius: 5px;
+  display: inline-block;
+  transition: .12s all; }
+  .ctb-new-section-button:hover {
+    cursor: pointer;
+    background-color: #ddd; }
+  .ctb-new-section-button i {
+    font-size: 16px;
+    display: block; }
+
+.ctb-field-type-selector {
+  margin-left: -5px;
+  margin-right: -5px; }
+  .ctb-field-type-selector > div {
+    margin: 5px;
+    text-align: center;
+    width: 146px;
+    border: 1px solid #ddd;
+    padding: 5px 10px;
+    border-radius: 5px;
+    display: inline-block;
+    transition: .12s all; }
+    .ctb-field-type-selector > div:hover {
+      cursor: pointer;
+      background-color: #ddd; }
+    .ctb-field-type-selector > div.ctb-active {
+      background-color: #d1d1d1; }

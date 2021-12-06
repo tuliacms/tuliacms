@@ -30,6 +30,7 @@
             translations: {
                 cancel: '{{ 'cancel'|trans({}, 'messages') }}',
                 create: '{{ 'create'|trans({}, 'messages') }}',
+                save: '{{ 'save'|trans({}, 'messages') }}',
                 title: '{{ 'title'|trans({}, 'messages') }}',
                 slug: '{{ 'slug'|trans({}, 'messages') }}',
                 addNewSection: '{{ 'addNewSection'|trans }}',
@@ -38,7 +39,19 @@
                 fieldId: '{{ 'fieldId'|trans }}',
                 fieldIdHelp: '{{ 'fieldIdHelp'|trans }}',
                 youCannotCreateTwoFieldsWithTheSameId: '{{ 'youCannotCreateTwoFieldsWithTheSameId'|trans }}',
-            }
+                theseOptionsWillNotBeEditableAfterSave: '{{ 'theseOptionsWillNotBeEditableAfterSave'|trans }}',
+                editField: '{{ 'editField'|trans }}',
+                fieldType: '{{ 'fieldType'|trans }}',
+                removeField: '{{ 'removeField'|trans }}',
+                removeSection: '{{ 'removeSection'|trans }}',
+                multilingualField: '{{ 'multilingualField'|trans }}',
+                multilingualFieldInfo: '{{ 'multilingualFieldInfo'|trans }}',
+                multipleField: '{{ 'multipleField'|trans }}',
+                multipleFieldInfo: '{{ 'multipleFieldInfo'|trans }}',
+                nextStep: '{{ 'nextStep'|trans }}',
+                previousStep: '{{ 'previousStep'|trans }}',
+            },
+            fieldTypes: {{ fieldTypes|json_encode|raw }}
         };
     </script>
 {% endblock %}

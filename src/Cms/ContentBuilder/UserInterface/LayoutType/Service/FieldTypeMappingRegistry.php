@@ -18,6 +18,11 @@ class FieldTypeMappingRegistry
         $this->mapping[$type] = $mapingInfo;
     }
 
+    public function all(): array
+    {
+        return $this->mapping;
+    }
+
     /**
      * @throws FieldTypeNotExistsException
      */

@@ -30,44 +30,52 @@
         </div>
         <FieldCreator
             @confirm="createFieldUsingCreatorData"
-            :data="creator.field.data"
+            :field="creator.field.data"
             :translations="translations"
+            :fieldTypes="fieldTypes"
+            :step="1"
         ></FieldCreator>
+        <FieldEditor
+            @confirm="editFieldUsingCreatorData"
+            :field="editor.field.data"
+            :translations="translations"
+        ></FieldEditor>
     </div>
 </template>
 
 <script>
 import FieldCreator from './components/FieldCreator';
+import FieldEditor from './components/FieldEditor';
 import SectionsList from './components/SectionsList';
 import Field from './components/Field';
 import draggable from 'vuedraggable';
 
 export default {
-    name: "App",
+    name: 'ContentLayoutBuilder',
     data() {
-        /*let availableFields = window.ContactFormBuilder.availableFields;
-
-        for (let t in availableFields) {
-            for (let o in availableFields[t].options) {
-                availableFields[t].options[o].focused = false;
-            }
-        }
-
-        return {
-            fields: window.ContactFormBuilder.fields,
-            availableFields: availableFields,
-            translations: window.ContactFormBuilder.translations,
-            fieldsTemplate: window.ContactFormBuilder.fieldsTemplate,
-        }*/
-
         return {
             translations: window.ContentBuilderLayoutBuilder.translations,
+            fieldTypes: window.ContentBuilderLayoutBuilder.fieldTypes,
             creator: {
                 field: {
                     data: {
                         sectionId: null,
                         label: null,
                         id: null,
+                        multilingual: false,
+                        multiple: false,
+                    },
+                    modal: null,
+                }
+            },
+            editor: {
+                field: {
+                    data: {
+                        fieldId: null,
+                        label: null,
+                        id: null,
+                        multilingual: false,
+                        multiple: false,
                     },
                     modal: null
                 }
@@ -88,10 +96,10 @@ export default {
                             id: 'introduction',
                             label: 'Introduction',
                             fields: [
-                                {id: '1231423', label: '11'},
-                                {id: '1231423', label: '22'},
-                                {id: '1231423', label: '33'},
-                                {id: '1231423', label: '44'},
+                                {id: '11', label: '11'},
+                                {id: '22', label: '22'},
+                                {id: '33', label: '33'},
+                                {id: '44', label: '44'},
                             ]
                         }
                     ]
@@ -101,6 +109,7 @@ export default {
     },
     components: {
         FieldCreator,
+        FieldEditor,
         SectionsList,
         Field,
         draggable
@@ -114,12 +123,54 @@ export default {
         }
     },
     methods: {
+        removeField: function (fieldId) {
+            Tulia.Confirmation.warning().then((result) => {
+                if (! result.value) {
+                    return;
+                }
+
+                for (let s in this.layout.sidebar.sections) {
+                    for (let f in this.layout.sidebar.sections[s].fields) {
+                        if (this.layout.sidebar.sections[s].fields[f].id === fieldId) {
+                            this.layout.sidebar.sections[s].fields.splice(f, 1);
+                            return;
+                        }
+                    }
+                }
+
+                for (let s in this.layout.main.sections) {
+                    for (let f in this.layout.main.sections[s].fields) {
+                        if (this.layout.main.sections[s].fields[f].id === fieldId) {
+                            this.layout.main.sections[s].fields.splice(f, 1);
+                            return;
+                        }
+                    }
+                }
+            });
+        },
         openCreateFieldModel: function (sectionId) {
             this.creator.field.data.sectionId = sectionId;
             this.creator.field.data.label = '';
             this.creator.field.data.id = '';
-            this.creator.field.data.type = '';
+            this.creator.field.data.type = 'text';
+            this.creator.field.data.multilingual = false;
+            this.creator.field.data.multiple = false;
             this.creator.field.modal.show();
+
+            this.$root.$emit('field:create:modal:opened');
+        },
+        openEditFieldModel: function (fieldId) {
+            let field = this._findField(fieldId);
+
+            this.editor.field.data.fieldId = fieldId;
+            this.editor.field.data.label = field.label;
+            this.editor.field.data.id = field.id;
+            this.editor.field.data.type = field.type;
+            this.editor.field.data.multilingual = false;
+            this.editor.field.data.multiple = false;
+            this.editor.field.modal.show();
+
+            this.$root.$emit('field:edit:modal:opened');
         },
         createFieldUsingCreatorData: function () {
             let data = this.creator.field.data;
@@ -139,6 +190,16 @@ export default {
             });
 
             this.creator.field.modal.hide();
+        },
+        editFieldUsingCreatorData: function () {
+            let data = this.editor.field.data;
+            let section = this._findSection(data.sectionId);
+
+            section.fields.push({
+                label: data.label,
+            });
+
+            this.editor.field.modal.hide();
         },
         _findSection: function (id) {
             for (let s in this.layout.sidebar.sections) {
@@ -173,16 +234,17 @@ export default {
     },
     mounted: function () {
         this.creator.field.modal = new bootstrap.Modal(document.getElementById('ctb-create-field-modal'));
+        this.editor.field.modal = new bootstrap.Modal(document.getElementById('ctb-edit-field-modal'));
 
         this.$root.$on('field:add', (sectionId) => {
             this.openCreateFieldModel(sectionId);
         });
-        // Set default width form existing fields.
-        /*for (let input of this.$el.querySelectorAll('input.form-control')) {
-            this.resizeInput({
-                target: input
-            });
-        }*/
+        this.$root.$on('field:edit', (fieldId) => {
+            this.openEditFieldModel(fieldId);
+        });
+        this.$root.$on('field:remove', (fieldId) => {
+            this.removeField(fieldId);
+        });
     }
 };
 </script>

@@ -1,15 +1,22 @@
 <template>
     <div>
-        <draggable group="sections" :list="sections" handle=".ctb-section-sortable-handler" class="ctb-sections-container" :data-label="translations.addNewSection">
-            <Section
-                v-for="section in sections"
-                :key="section.id"
-                v-bind:section="section"
-                v-bind:translations="translations"
-                v-on:section:remove="removeSection"
-            ></Section>
+        <draggable group="sections" :list="sections" v-bind="dragOptions" handle=".ctb-section-sortable-handler" class="ctb-sections-container">
+            <transition-group type="transition" :name="!drag ? 'flip-list' : null" class="ctb-sortable-placeholder" tag="div" :data-label="translations.addNewSection">
+                <Section
+                    v-for="section in sections"
+                    :key="section.id"
+                    v-bind:section="section"
+                    v-bind:translations="translations"
+                    v-on:section:remove="removeSection"
+                ></Section>
+            </transition-group>
         </draggable>
-        <button type="button" class="btn btn-primary" @click="addSection()">{{ translations.addNewSection }}</button>
+        <div class="text-center">
+            <div class="ctb-new-section-button" @click="addSection()">
+                <i class="fa fa-plus"></i>
+                {{ translations.addNewSection }}
+            </div>
+        </div>
     </div>
 </template>
 
@@ -23,6 +30,16 @@ export default {
         Section,
         draggable
     },
+    computed: {
+        dragOptions() {
+            return {
+                animation: 200,
+                group: "sections",
+                disabled: false,
+                ghostClass: "ctb-draggable-ghost"
+            };
+        }
+    },
     methods: {
         addSection: function () {
             this.sections.push({
@@ -32,13 +49,11 @@ export default {
             });
         },
         removeSection: function (id) {
-            let self = this;
-
-            Tulia.Confirmation.warning().then(function (result) {
+            Tulia.Confirmation.warning().then((result) => {
                 if (result.value) {
-                    for (let i in self.sections) {
-                        if (self.sections[i].id === id) {
-                            self.sections.splice(i, 1);
+                    for (let i in this.sections) {
+                        if (this.sections[i].id === id) {
+                            this.sections.splice(i, 1);
                         }
                     }
                 }
