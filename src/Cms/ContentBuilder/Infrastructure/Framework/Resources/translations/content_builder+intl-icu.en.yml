@@ -4,8 +4,9 @@ addNewSection: Add new section
 addNewField: Add new field
 editField: Edit field
 fieldLabel: Field label
+fieldLabelHelp: This label will be showed on the node form for administrators.
 fieldId: Field ID
-fieldIdHelp: Please use alphanum and underscores. All other characters will be transformed to alphanum and underscore.
+fieldIdHelp: Please use lowercased alphanum and underscores.
 youCannotCreateTwoFieldsWithTheSameId: Yout cannot create two fields with the same ID.
 removeField: Remove field
 removeSection: Remove section
@@ -17,3 +18,5 @@ multipleField: This field stores a multiple values
 multipleFieldInfo: Allows set multiple values in one field of the same type.
 nextStep: Next step
 previousStep: Previous step
+pleaseFillThisField: Please fill this field.
+fieldIdMustContainOnlyAlphanumsAndUnderline: Field ID must contain only lowercased alphanums and underline.

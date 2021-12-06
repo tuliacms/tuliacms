@@ -64,6 +64,7 @@ export default {
                         id: null,
                         multilingual: false,
                         multiple: false,
+                        constraints: [],
                     },
                     modal: null,
                 }
@@ -76,6 +77,7 @@ export default {
                         id: null,
                         multilingual: false,
                         multiple: false,
+                        constraints: [],
                     },
                     modal: null
                 }
@@ -155,6 +157,7 @@ export default {
             this.creator.field.data.type = 'text';
             this.creator.field.data.multilingual = false;
             this.creator.field.data.multiple = false;
+            this.creator.field.data.constraints = [];
             this.creator.field.modal.show();
 
             this.$root.$emit('field:create:modal:opened');
@@ -168,6 +171,7 @@ export default {
             this.editor.field.data.type = field.type;
             this.editor.field.data.multilingual = false;
             this.editor.field.data.multiple = false;
+            this.editor.field.data.constraints = [];
             this.editor.field.modal.show();
 
             this.$root.$emit('field:edit:modal:opened');
@@ -233,7 +237,13 @@ export default {
         }
     },
     mounted: function () {
-        this.creator.field.modal = new bootstrap.Modal(document.getElementById('ctb-create-field-modal'));
+        let creationModal = document.getElementById('ctb-create-field-modal');
+        this.creator.field.modal = new bootstrap.Modal(creationModal);
+
+        creationModal.addEventListener('shown.bs.modal', function () {
+            $(creationModal).find('.ctb-autofocus').focus();
+        });
+
         this.editor.field.modal = new bootstrap.Modal(document.getElementById('ctb-edit-field-modal'));
 
         this.$root.$on('field:add', (sectionId) => {

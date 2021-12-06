@@ -36,6 +36,7 @@
                 addNewSection: '{{ 'addNewSection'|trans }}',
                 addNewField: '{{ 'addNewField'|trans }}',
                 fieldLabel: '{{ 'fieldLabel'|trans }}',
+                fieldLabelHelp: '{{ 'fieldLabelHelp'|trans }}',
                 fieldId: '{{ 'fieldId'|trans }}',
                 fieldIdHelp: '{{ 'fieldIdHelp'|trans }}',
                 youCannotCreateTwoFieldsWithTheSameId: '{{ 'youCannotCreateTwoFieldsWithTheSameId'|trans }}',
@@ -50,6 +51,8 @@
                 multipleFieldInfo: '{{ 'multipleFieldInfo'|trans }}',
                 nextStep: '{{ 'nextStep'|trans }}',
                 previousStep: '{{ 'previousStep'|trans }}',
+                pleaseFillThisField: '{{ 'pleaseFillThisField'|trans }}',
+                fieldIdMustContainOnlyAlphanumsAndUnderline: '{{ 'fieldIdMustContainOnlyAlphanumsAndUnderline'|trans }}',
             },
             fieldTypes: {{ fieldTypes|json_encode|raw }}
         };
