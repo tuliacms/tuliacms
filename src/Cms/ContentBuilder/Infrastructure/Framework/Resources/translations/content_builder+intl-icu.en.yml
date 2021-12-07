@@ -1,4 +1,5 @@
 contentModel: Content model
+nodeTypeName: Node type name
 createNodeType: Create node type
 addNewSection: Add new section
 addNewField: Add new field
@@ -20,3 +21,8 @@ nextStep: Next step
 previousStep: Previous step
 pleaseFillThisField: Please fill this field.
 fieldIdMustContainOnlyAlphanumsAndUnderline: Field ID must contain only lowercased alphanums and underline.
+fieldTypeConfiguration: Configuration
+fieldDetails: Field details
+fieldTypeConstraints: Constraints
+thisFieldDoesNotHaveConfiguration: This field does not have configuration.
+editNodeTypeDetails: Edit node type details

@@ -23,6 +23,11 @@ class ConstraintTypeMappingRegistry
         $this->mapping[$type] = $mapingInfo;
     }
 
+    public function get(string $type): array
+    {
+        return $this->mapping[$type];
+    }
+
     /**
      * @throws ConstraintNotExistsException
      */

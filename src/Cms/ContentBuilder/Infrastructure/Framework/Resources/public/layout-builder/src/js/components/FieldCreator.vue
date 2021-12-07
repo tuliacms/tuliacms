@@ -6,10 +6,13 @@
                     <div class="modal-header pb-0">
                         <ul class="nav nav-tabs mb-0">
                             <li class="nav-item">
-                                <button :class="{ 'nav-link': true, 'active': this.step === 1 }" @click="showStep(1)" type="button">Configuration</button>
+                                <button :class="{ 'nav-link': true, 'active': this.step === 1 }" @click="showStep(1)" type="button">{{ translations.fieldDetails }}</button>
                             </li>
                             <li class="nav-item">
-                                <button :class="{ 'nav-link': true, 'active': this.step === 2 }" @click="showStep(2)" type="button">Constraints</button>
+                                <button :class="{ 'nav-link': true, 'active': this.step === 2, 'disabled': field.configuration && field.configuration.length === 0 }" @click="showStep(2)" type="button">{{ translations.fieldTypeConfiguration }}</button>
+                            </li>
+                            <li class="nav-item">
+                                <button :class="{ 'nav-link': true, 'active': this.step === 3 }" @click="showStep(3)" type="button">{{ translations.fieldTypeConstraints }}</button>
                             </li>
                         </ul>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -45,39 +48,46 @@
                                 </label>
                             </div>
                             <div class="form-text mb-3">{{ translations.multilingualFieldInfo }}</div>
-                            <div class="form-check mb-1">
-                                <input class="form-check-input" type="checkbox" v-model="field.multiple" id="ctb-multiple-field">
-                                <label class="form-check-label" for="ctb-multiple-field">
-                                    {{ translations.multipleField }}
-                                </label>
-                            </div>
-                            <div class="form-text mb-3">{{ translations.multipleFieldInfo }}</div>
                             <div class="alert alert-info text-center">{{ translations.theseOptionsWillNotBeEditableAfterSave }}</div>
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-success btn-icon-right" @click="showStep(2)">{{ translations.nextStep }} <i class="btn-icon fas fa-chevron-right"></i></button>
-                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">{{  translations.cancel }}</button>
+                    </div>
+                    <div v-else-if="step === 2">
+                        <div class="modal-body">
+                            <div v-if="field.configuration.length !== 0" class="ctb-field-constraints">
+                                <div v-for="(configuration, id) in field.configuration" :key="id" class="ctb-field-constraint mb-4">
+                                    <label class="form-label" :for="'ctb-field-configuration-' + id">{{ configuration.label }}</label>
+                                    <input type="text" :id="'ctb-field-configuration-' + id" :class="{ 'form-control': true, 'form-control-sm': true }" v-model="configuration.value" />
+                                </div>
+                            </div>
+                            <div v-else>
+                                <div class="alert alert-info">{{ translations.thisFieldDoesNotHaveConfiguration }}</div>
+                            </div>
                         </div>
                     </div>
-                    <div v-else>
+                    <div v-else-if="step === 3">
                         <div class="modal-body">
                             <div class="ctb-field-constraints">
-                                <div v-for="constraint in field.constraints" class="ctb-field-constraint mb-4">
+                                <div v-for="(constraint, id) in field.constraints" :key="id" class="ctb-field-constraint mb-4">
                                     <div class="form-check mb-1">
-                                        <input class="form-check-input" type="checkbox" :id="'ctb-field-constraint-' + constraint.id" v-model="constraint.enabled">
-                                        <label class="form-check-label" :for="'ctb-field-constraint-' + constraint.id">
+                                        <input class="form-check-input" type="checkbox" :disabled="constraint.required" :id="'ctb-field-constraint-' + id" v-model="constraint.enabled">
+                                        <label class="form-check-label" :for="'ctb-field-constraint-' + id">
                                             {{ constraint.label }}
                                         </label>
-                                        <div v-if="constraint.help" class="form-text">{{ constraint.help }}</div>
+                                        <div v-if="constraint.help_text" class="form-text">{{ constraint.help_text }}</div>
+                                    </div>
+                                    <div v-if="constraint.enabled && constraint.modificators.length !== 0" class="ctb-field-constraint-modificators">
+                                        <div v-for="modificator in constraint.modificators" :key="modificator.name" class="ctb-field-constraint-modificator mb-2">
+                                            <label class="form-label">{{ modificator.label }}</label>
+                                            <input type="text" :class="{ 'form-control': true, 'form-control-sm': true }" v-model="modificator.value" />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default btn-icon-left" @click="showStep(1)">{{ translations.previousStep }} <i class="btn-icon fas fa-chevron-left"></i></button>
-                            <button type="button" class="btn btn-success" @click="$emit('confirm')">{{ translations.create }}</button>
-                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">{{  translations.cancel }}</button>
-                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success" @click="saveField()">{{ translations.create }}</button>
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">{{  translations.cancel }}</button>
                     </div>
                 </div>
             </div>
@@ -106,7 +116,15 @@ export default {
     },
     methods: {
         changeFieldType: function (type) {
+            // Do not update if it's the same.
+            if (this.field.type === type.id) {
+                return;
+            }
+
             this.field.type = type.id;
+            this._updateFieldTypeConstraints();
+            this._updateFieldTypeConfiguration();
+
             // For somehow, Vue does not update preview when we change the field type
             // so we need to refresh it manually.
             this.$forceUpdate();
@@ -119,6 +137,20 @@ export default {
             }
 
             this.step = step;
+        },
+        updateFieldId: function () {
+            if (this.idFieldChanged) {
+                return;
+            }
+
+            this.field.id = this.field.label.toLowerCase().replace(/[^a-z0-9_]+/g, '_').replace(/_+/is, '_');
+        },
+        saveField: function () {
+            if (this._validateBasicConfiguration() === false) {
+                return;
+            }
+
+            this.$emit('confirm');
         },
         _validateBasicConfiguration: function () {
             let status = true;
@@ -144,28 +176,44 @@ export default {
                 this.validation.id.message = this.translations.fieldIdMustContainOnlyAlphanumsAndUnderline;
             }
 
-            let constraints = JSON.parse(JSON.stringify(this.fieldTypes[this.field.type].constraints));
-            this.field.constraints = [];
-
-            for (let i in constraints) {
-                let constraint = constraints[i];
-                constraint.enabled = false;
-
-                this.field.constraints.push(constraint);
-            }
-
             return status;
-        },
-        updateFieldId: function () {
-            if (this.idFieldChanged) {
-                return;
-            }
-
-            this.field.id = this.field.label.toLowerCase().replace(/[^a-z0-9_]+/g, '_').replace(/_+/is, '_');
         },
         _initiate: function () {
             this.step = 1;
             this.idFieldChanged = false;
+            this._updateFieldTypeConstraints();
+            this._updateFieldTypeConfiguration();
+        },
+        _updateFieldTypeConstraints: function () {
+            this.field.constraints = [];
+
+            // Not all field types contain custom constraints.
+            if (! this.fieldTypes[this.field.type].constraints) {
+                return;
+            }
+
+            let constraints = JSON.parse(JSON.stringify(this.fieldTypes[this.field.type].constraints));
+
+            for (let i in constraints) {
+                let constraint = constraints[i];
+                constraint.enabled = constraint.required === true;
+
+                this.field.constraints.push(constraint);
+            }
+        },
+        _updateFieldTypeConfiguration: function () {
+            this.field.configuration = [];
+
+            // Not all field types contain configurations
+            if (! this.fieldTypes[this.field.type].configuration) {
+                return;
+            }
+
+            let configuration = JSON.parse(JSON.stringify(this.fieldTypes[this.field.type].configuration));
+
+            for (let i in configuration) {
+                this.field.configuration.push(configuration[i]);
+            }
         }
     },
     mounted: function () {

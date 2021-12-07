@@ -35,31 +35,14 @@ class NodeType extends AbstractController
     private function getFieldTypes(): array
     {
         $types = [];
+        //dump($this->fieldTypeMappingRegistry->all());exit;
 
         foreach ($this->fieldTypeMappingRegistry->all() as $type => $data) {
             $types[$type] = [
                 'id' => $type,
                 'label' => $data['label'],
-                'constraints' => [
-                    [
-                        'id' => 'required',
-                        'label' => 'Required',
-                        'help' => 'Makes this field required.',
-                    ],
-                    [
-                        'id' => 'length',
-                        'label' => 'Text length',
-                        'help' => 'Min and max text length.',
-                        'modificators' => [
-                            'min' => [
-                                'type' => 'integer',
-                            ],
-                            'max' => [
-                                'type' => 'integer',
-                            ],
-                        ],
-                    ],
-                ],
+                'configuration' => $data['configuration'],
+                'constraints' => $data['constraints'],
             ];
         }
 

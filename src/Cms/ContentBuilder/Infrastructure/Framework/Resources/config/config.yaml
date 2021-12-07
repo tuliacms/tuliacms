@@ -97,14 +97,42 @@ cms:
                 text:
                     label: Textline
                     classname: 'Symfony\Component\Form\Extension\Core\Type\TextType'
+                    constraints: [required, length]
                 textarea:
                     label: Textarea
                     classname: 'Symfony\Component\Form\Extension\Core\Type\TextareaType'
+                    constraints: [required, length]
                 select:
                     label: Select
                     classname: 'Symfony\Component\Form\Extension\Core\Type\ChoiceType'
+                    constraints: [required]
+                    configuration:
+                        choices:
+                            label: Enter the available choices for this select
+                            help_text: Separate every choice by semicolon (;).
+                        multiple:
+                            type: yes_no
+                            label: Allows select multiple values at once
+                        placeholder:
+                            label: Placeholder text
+                            help_text: Shows when no value selected.
 
         constraint_types:
             mapping:
                 required:
                     classname: 'Symfony\Component\Validator\Constraints\NotBlank'
+                    label: Required
+                    help_text: Makes this field required.
+                length:
+                    classname: 'Symfony\Component\Validator\Constraints\Length'
+                    label: Text length
+                    help_text: Min and max text length.
+                    modificators:
+                        min:
+                            type: integer
+                            label: Minimal characters length
+                            value: null
+                        max:
+                            type: integer
+                            label: Maximal characters length
+                            value: null

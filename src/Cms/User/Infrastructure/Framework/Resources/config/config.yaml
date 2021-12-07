@@ -14,3 +14,4 @@ cms:
                 user:
                     label: User
                     classname: 'Tulia\Cms\User\Infrastructure\Framework\Form\FormType\UserTypeaheadType'
+                    constraints: [required]

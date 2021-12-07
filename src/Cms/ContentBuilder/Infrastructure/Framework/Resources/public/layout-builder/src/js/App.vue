@@ -10,14 +10,14 @@
                         <div class="row">
                             <div class="col">
                                 <div class="mb-3">
-                                    <label class="form-label required">{{ translations.title }}</label>
-                                    <input type="text" disabled="disabled" class="form-control">
+                                    <label class="form-label" for="ctb-node-type-name">{{ translations.nodeTypeName }}</label>
+                                    <input type="text" class="form-control" id="ctb-node-type-name" v-model="type.name" />
                                 </div>
                             </div>
                             <div class="col">
                                 <div class="mb-3">
-                                    <label class="form-label required">{{ translations.slug }}</label>
-                                    <input type="text" disabled="disabled" class="form-control">
+                                    <label class="d-block form-label">&nbsp;</label>
+                                    <button type="button" class="btn btn-primary btn-icon-left"><i class="btn-icon fas fa-edit"></i> {{ translations.editNodeTypeDetails }}</button>
                                 </div>
                             </div>
                         </div>
@@ -56,6 +56,9 @@ export default {
         return {
             translations: window.ContentBuilderLayoutBuilder.translations,
             fieldTypes: window.ContentBuilderLayoutBuilder.fieldTypes,
+            type: {
+                name: null,
+            },
             creator: {
                 field: {
                     data: {
@@ -63,8 +66,8 @@ export default {
                         label: null,
                         id: null,
                         multilingual: false,
-                        multiple: false,
                         constraints: [],
+                        configuration: [],
                     },
                     modal: null,
                 }
@@ -76,35 +79,18 @@ export default {
                         label: null,
                         id: null,
                         multilingual: false,
-                        multiple: false,
                         constraints: [],
+                        configuration: [],
                     },
                     modal: null
                 }
             },
             layout: {
                 sidebar: {
-                    sections: [
-                        {
-                            id: 'system-status',
-                            label: 'System status',
-                            fields: []
-                        }
-                    ]
+                    sections: []
                 },
                 main: {
-                    sections: [
-                        {
-                            id: 'introduction',
-                            label: 'Introduction',
-                            fields: [
-                                {id: '11', label: '11'},
-                                {id: '22', label: '22'},
-                                {id: '33', label: '33'},
-                                {id: '44', label: '44'},
-                            ]
-                        }
-                    ]
+                    sections: []
                 }
             }
         };
@@ -156,8 +142,8 @@ export default {
             this.creator.field.data.id = '';
             this.creator.field.data.type = 'text';
             this.creator.field.data.multilingual = false;
-            this.creator.field.data.multiple = false;
             this.creator.field.data.constraints = [];
+            this.creator.field.data.configuration = [];
             this.creator.field.modal.show();
 
             this.$root.$emit('field:create:modal:opened');
@@ -170,8 +156,8 @@ export default {
             this.editor.field.data.id = field.id;
             this.editor.field.data.type = field.type;
             this.editor.field.data.multilingual = false;
-            this.editor.field.data.multiple = false;
             this.editor.field.data.constraints = [];
+            this.editor.field.data.configuration = [];
             this.editor.field.modal.show();
 
             this.$root.$emit('field:edit:modal:opened');

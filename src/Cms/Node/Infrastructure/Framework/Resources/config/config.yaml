@@ -14,3 +14,4 @@ cms:
                 node_select:
                     label: Node Typehead
                     classname: 'Tulia\Cms\Node\Infrastructure\Framework\Form\FormType\NodeTypeaheadType'
+                    constraints: [required]
