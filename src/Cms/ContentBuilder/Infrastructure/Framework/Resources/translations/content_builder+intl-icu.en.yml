@@ -35,3 +35,4 @@ routableTypeHelp: Decide, if this node type has own pages in the website.
 hierarchicalType: Hierarchical type
 hierarchicalTypeHelp: Decide, if every node can have children nodes, and created hierarchical tree of elements.
 pleaseSelectValue: Please select value
+internalFields: Internal fields

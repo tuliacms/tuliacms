@@ -37,6 +37,7 @@ class ConstraintTypeMappingRegistry
             throw ConstraintNotExistsException::fromName($type);
         }
 
+        dump($this->mapping[$type]['classname'], $args);
         return new $this->mapping[$type]['classname'](...$args);
     }
 

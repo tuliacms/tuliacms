@@ -31,6 +31,11 @@ cms:
                         type: textarea
                         multilingual: true
                         label: ~
+                        constraints:
+                            -
+                                name: length
+                                modificators:
+                                    - { modificator: max, value: 255 }
                     content:
                         type: wysiwyg
                         multilingual: true

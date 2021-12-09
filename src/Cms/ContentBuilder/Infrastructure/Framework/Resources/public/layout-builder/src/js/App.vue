@@ -15,6 +15,23 @@
                         <textarea name="node_type" id="ctb-form-field-node-type"></textarea>
                         <input type="text" name="_token" :value="csrfToken"/>
                     </form>
+                    <div class="ctb-sections-container">
+                        <div class="ctb-section ctb-section-internal-fields">
+                            <div class="ctb-section-label">
+                                {{ translations.internalFields }}
+                            </div>
+                            <div class="ctb-section-fields-container">
+                                <div class="ctb-sortable-fields mb-3">
+                                    <div class="ctb-field"><span class="ctb-field-label">{{ translations.title }}</span></div>
+                                    <div class="ctb-field"><span class="ctb-field-label">{{ translations.slug }}</span></div>
+                                    <div class="ctb-field"><span class="ctb-field-label">{{ translations.publishedAt }}</span></div>
+                                    <div class="ctb-field"><span class="ctb-field-label">{{ translations.publicationStatus }}</span></div>
+                                    <div class="ctb-field"><span class="ctb-field-label">{{ translations.author }}</span></div>
+                                    <div class="ctb-field"><span class="ctb-field-label">{{ translations.flags }}</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <SectionsList v-bind:translations="translations" v-bind:sections="model.layout.sidebar.sections"></SectionsList>
                 </div>
                 <div class="page-form-content">
@@ -162,14 +179,6 @@ export default {
         Field,
         draggable
     },
-    /*watch: {
-        model: {
-            handler: function (val, oldVal) {
-                console.log('1', JSON.stringify(val));
-            },
-            deep: true
-        }
-    },*/
     methods: {
         save: function () {
             if (this.validate() === false) {
@@ -273,6 +282,7 @@ export default {
             this._detectTaxonomyFieldExistence();
 
             this.view.modal.field_creator.hide();
+            this.openEditFieldModel(data.id);
         },
         editFieldUsingCreatorData: function (data) {
             let field = this._findField(this.view.form.field_editor.id);
