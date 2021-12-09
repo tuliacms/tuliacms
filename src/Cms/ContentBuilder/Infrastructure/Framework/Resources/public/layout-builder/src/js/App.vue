@@ -1,45 +1,93 @@
 <template>
-    <div class="app">
-        <div class="page-form" id="node-form">
-            <div class="page-form-sidebar">
-                <SectionsList v-bind:translations="translations" v-bind:sections="layout.sidebar.sections"></SectionsList>
+    <div class="pane pane-lead">
+        <div class="pane-header">
+            <div class="pane-buttons">
+                <a :href="listingUrl" class="btn btn-secondary btn-icon-left"><i class="btn-icon fas fa-times"></i> Anuluj</a>
+                <button class="btn btn-success btn-icon-left" type="button" @click="save()"><i class="btn-icon fas fa-save"></i> Zapisz</button>
             </div>
-            <div class="page-form-content">
-                <div class="page-form-header">
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col">
-                                <div class="mb-3">
-                                    <label class="form-label" for="ctb-node-type-name">{{ translations.nodeTypeName }}</label>
-                                    <input type="text" class="form-control" id="ctb-node-type-name" v-model="type.name" />
+            <i class="pane-header-icon fas fa-box"></i>
+            <h1 class="pane-title">{{ translations.createNodeType }}</h1>
+        </div>
+        <div class="pane-body p-0">
+            <div class="page-form" id="node-form">
+                <div class="page-form-sidebar">
+                    <form method="POST" id="ctb-form" style="display:none">
+                        <textarea name="node_type" id="ctb-form-field-node-type"></textarea>
+                        <input type="text" name="_token" :value="csrfToken"/>
+                    </form>
+                    <SectionsList v-bind:translations="translations" v-bind:sections="model.layout.sidebar.sections"></SectionsList>
+                </div>
+                <div class="page-form-content">
+                    <div class="page-form-header">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="ctb-node-type-name">{{ translations.nodeTypeName }}</label>
+                                        <input type="text" :class="{ 'form-control': true, 'is-invalid': view.form.type_validation.name.valid === false }" id="ctb-node-type-name" v-model="model.type.name" @keyup="generateTypeCode()" @change="validate()" />
+                                        <div class="form-text">{{ translations.nodeTypeNameInfo }}</div>
+                                        <div v-if="view.form.type_validation.name.valid === false" class="invalid-feedback">{{ view.form.type_validation.name.message }}</div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="ctb-node-type-code">{{ translations.nodeTypeCode }}</label>
+                                        <input type="text" :class="{ 'form-control': true, 'is-invalid': view.form.type_validation.code.valid === false }" id="ctb-node-type-code" v-model="model.type.code" @change="validate()" />
+                                        <div class="form-text">{{ translations.nodeTypeCodeHelp }}</div>
+                                        <div v-if="view.form.type_validation.code.valid === false" class="invalid-feedback">{{ view.form.type_validation.code.message }}</div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col">
-                                <div class="mb-3">
-                                    <label class="d-block form-label">&nbsp;</label>
-                                    <button type="button" class="btn btn-primary btn-icon-left"><i class="btn-icon fas fa-edit"></i> {{ translations.editNodeTypeDetails }}</button>
+                            <div class="row">
+                                <div class="col mb-3">
+                                    <label for="ctb-form-type-icon" class="form-label">{{ translations.icon }}</label>
+                                    <input type="email" class="form-control" id="ctb-form-type-icon" v-model="model.type.icon" />
+                                </div>
+                                <div class="col mb-3">
+                                    <label for="ctb-form-type-routable" class="form-label">{{ translations.routableType }}</label>
+                                    <chosen-select id="ctb-form-type-routable" v-model="model.type.isRoutable">
+                                        <option value="1">{{ translations.yes }}</option>
+                                        <option value="0">{{ translations.no }}</option>
+                                    </chosen-select>
+                                    <div class="form-text">{{ translations.routableTypeHelp }}</div>
+                                </div>
+                            </div>
+                            <div class="row" v-if="view.form.has_taxonomy_field">
+                                <div class="col mb-3">
+                                    <label for="ctb-form-type-hierarchical" class="form-label">{{ translations.hierarchicalType }}</label>
+                                    <chosen-select id="ctb-form-type-hierarchical" v-model="model.type.isHierarchical">
+                                        <option value="1">{{ translations.yes }}</option>
+                                        <option value="0">{{ translations.no }}</option>
+                                    </chosen-select>
+                                    <div class="form-text">{{ translations.hierarchicalTypeHelp }}</div>
+                                </div>
+                                <div class="col mb-3">
+                                    <label for="ctb-form-type-taxonomy-field" class="form-label">{{ translations.taxonomyField }}</label>
+                                    <chosen-select id="ctb-form-type-taxonomy-field" v-model="model.type.taxonomyField">
+                                        <option v-for="field in view.form.taxonomy_fields" :key="field.value" :value="field.value">{{ field.label }}</option>
+                                    </chosen-select>
+                                    <div class="form-text">{{ translations.taxonomyFieldHelp }}</div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="tab-content ctb-section-main-tabs-contents">
-                    <SectionsList v-bind:translations="translations" v-bind:sections="layout.main.sections"></SectionsList>
+                    <div class="tab-content ctb-section-main-tabs-contents">
+                        <SectionsList v-bind:translations="translations" v-bind:sections="model.layout.main.sections"></SectionsList>
+                    </div>
                 </div>
             </div>
+            <FieldCreator
+                @confirm="createFieldUsingCreatorData"
+                :field="view.form.field_creator"
+                :translations="translations"
+                :fieldTypes="fieldTypes"
+            ></FieldCreator>
+            <FieldEditor
+                @confirm="editFieldUsingCreatorData"
+                :field="view.form.field_editor"
+                :translations="translations"
+            ></FieldEditor>
         </div>
-        <FieldCreator
-            @confirm="createFieldUsingCreatorData"
-            :field="creator.field.data"
-            :translations="translations"
-            :fieldTypes="fieldTypes"
-            :step="1"
-        ></FieldCreator>
-        <FieldEditor
-            @confirm="editFieldUsingCreatorData"
-            :field="editor.field.data"
-            :translations="translations"
-        ></FieldEditor>
     </div>
 </template>
 
@@ -53,44 +101,57 @@ import draggable from 'vuedraggable';
 export default {
     name: 'ContentLayoutBuilder',
     data() {
+        let model = window.ContentBuilderLayoutBuilder.model;
+
         return {
             translations: window.ContentBuilderLayoutBuilder.translations,
             fieldTypes: window.ContentBuilderLayoutBuilder.fieldTypes,
-            type: {
-                name: null,
-            },
-            creator: {
-                field: {
-                    data: {
-                        sectionId: null,
-                        label: null,
-                        id: null,
-                        multilingual: false,
-                        constraints: [],
-                        configuration: [],
-                    },
-                    modal: null,
-                }
-            },
-            editor: {
-                field: {
-                    data: {
-                        fieldId: null,
-                        label: null,
-                        id: null,
-                        multilingual: false,
-                        constraints: [],
-                        configuration: [],
-                    },
-                    modal: null
-                }
-            },
-            layout: {
-                sidebar: {
-                    sections: []
+            listingUrl: window.ContentBuilderLayoutBuilder.listingUrl,
+            csrfToken: window.ContentBuilderLayoutBuilder.csrfToken,
+            view: {
+                modal: {
+                    field_creator: null,
+                    field_editor: null,
                 },
-                main: {
-                    sections: []
+                form: {
+                    code_field_changed: false,
+                    has_taxonomy_field: false,
+                    taxonomy_fields: [],
+                    field_creator_section_id: null,
+                    field_editor: {
+                        fieldId: null,
+                        label: { value: null, valid: true, message: null },
+                        id: { value: null, valid: true, message: null },
+                        multilingual: { value: false, valid: true, message: null },
+                        constraints: { value: [], valid: true, message: null },
+                        configuration: { value: [], valid: true, message: null },
+                    },
+                    type_validation: {
+                        name: { valid: true, message: null },
+                        code: { valid: true, message: null },
+                        icon: { valid: true, message: null },
+                        isRoutable: { valid: true, message: null },
+                        isHierarchical: { valid: true, message: null },
+                        taxonomyField: { valid: true, message: null },
+                    }
+                }
+            },
+            model: {
+                type: {
+                    name: model && model.type.name ? model.type.name : null,
+                    code: model && model.type.code ? model.type.code : null,
+                    icon: model && model.type.icon ? model.type.icon : 'fas fa-boxes',
+                    isRoutable: model && model.type.isRoutable ? model.type.isRoutable : '1',
+                    isHierarchical: model && model.type.isHierarchical ? model.type.isHierarchical : '1',
+                    taxonomyField: model && model.type.taxonomyField ? model.type.taxonomyField : null,
+                },
+                layout: {
+                    sidebar: {
+                        sections: model && model.layout.sidebar.sections ? model.layout.sidebar.sections : []
+                    },
+                    main: {
+                        sections: model && model.layout.main.sections ? model.layout.main.sections : []
+                    }
                 }
             }
         };
@@ -102,69 +163,99 @@ export default {
         Field,
         draggable
     },
-    watch: {
-        layout: {
+    /*watch: {
+        model: {
             handler: function (val, oldVal) {
                 console.log('1', JSON.stringify(val));
             },
             deep: true
         }
-    },
+    },*/
     methods: {
+        save: function () {
+            if (this.validate() === false) {
+                return;
+            }
+
+            $('#ctb-form-field-node-type').val(JSON.stringify({
+                layout: this.model.layout,
+                type: this.model.type
+            }));
+            $('#ctb-form').submit();
+        },
+        validate: function () {
+            let status = true;
+
+            this.view.form.type_validation.name.valid = true;
+            this.view.form.type_validation.name.message = null;
+            this.view.form.type_validation.code.valid = true;
+            this.view.form.type_validation.code.message = null;
+
+            if (! this.model.type.name) {
+                status = false;
+                this.view.form.type_validation.name.valid = false;
+                this.view.form.type_validation.name.message = this.translations.pleaseFillThisField;
+            }
+
+            if (! this.model.type.code) {
+                status = false;
+                this.view.form.type_validation.code.valid = false;
+                this.view.form.type_validation.code.message = this.translations.pleaseFillThisField;
+            } else if (! /^[0-9a-z_]+$/g.test(this.model.type.code)) {
+                status = false;
+                this.view.form.type_validation.code.valid = false;
+                this.view.form.type_validation.code.message = this.translations.fieldIdMustContainOnlyAlphanumsAndUnderline;
+            }
+
+            return status;
+        },
         removeField: function (fieldId) {
             Tulia.Confirmation.warning().then((result) => {
                 if (! result.value) {
                     return;
                 }
 
-                for (let s in this.layout.sidebar.sections) {
-                    for (let f in this.layout.sidebar.sections[s].fields) {
-                        if (this.layout.sidebar.sections[s].fields[f].id === fieldId) {
-                            this.layout.sidebar.sections[s].fields.splice(f, 1);
-                            return;
+                for (let s in this.model.layout.sidebar.sections) {
+                    for (let f in this.model.layout.sidebar.sections[s].fields) {
+                        if (this.model.layout.sidebar.sections[s].fields[f].id === fieldId) {
+                            this.model.layout.sidebar.sections[s].fields.splice(f, 1);
                         }
                     }
                 }
 
-                for (let s in this.layout.main.sections) {
-                    for (let f in this.layout.main.sections[s].fields) {
-                        if (this.layout.main.sections[s].fields[f].id === fieldId) {
-                            this.layout.main.sections[s].fields.splice(f, 1);
-                            return;
+                for (let s in this.model.layout.main.sections) {
+                    for (let f in this.model.layout.main.sections[s].fields) {
+                        if (this.model.layout.main.sections[s].fields[f].id === fieldId) {
+                            this.model.layout.main.sections[s].fields.splice(f, 1);
                         }
                     }
                 }
+
+                this._detectTaxonomyFieldExistence();
             });
         },
         openCreateFieldModel: function (sectionId) {
-            this.creator.field.data.sectionId = sectionId;
-            this.creator.field.data.label = '';
-            this.creator.field.data.id = '';
-            this.creator.field.data.type = 'text';
-            this.creator.field.data.multilingual = false;
-            this.creator.field.data.constraints = [];
-            this.creator.field.data.configuration = [];
-            this.creator.field.modal.show();
+            this.view.form.field_creator_section_id = sectionId;
+            this.view.modal.field_creator.show();
 
             this.$root.$emit('field:create:modal:opened');
         },
         openEditFieldModel: function (fieldId) {
             let field = this._findField(fieldId);
 
-            this.editor.field.data.fieldId = fieldId;
-            this.editor.field.data.label = field.label;
-            this.editor.field.data.id = field.id;
-            this.editor.field.data.type = field.type;
-            this.editor.field.data.multilingual = false;
-            this.editor.field.data.constraints = [];
-            this.editor.field.data.configuration = [];
-            this.editor.field.modal.show();
+            this.view.form.field_editor.fieldId = fieldId;
+            this.view.form.field_editor.label = field.label;
+            this.view.form.field_editor.id = field.id;
+            this.view.form.field_editor.type = field.type;
+            this.view.form.field_editor.multilingual = false;
+            this.view.form.field_editor.constraints = [];
+            this.view.form.field_editor.configuration = [];
+            this.view.modal.field_editor.show();
 
             this.$root.$emit('field:edit:modal:opened');
         },
-        createFieldUsingCreatorData: function () {
-            let data = this.creator.field.data;
-            let section = this._findSection(data.sectionId);
+        createFieldUsingCreatorData: function (data) {
+            let section = this._findSection(this.view.form.field_creator_section_id);
 
             if (this._findField(data.id)) {
                 Tulia.Info.info({
@@ -177,60 +268,118 @@ export default {
             section.fields.push({
                 id: data.id,
                 label: data.label,
+                type: data.type,
+                multilingual: data.multilingual,
+                configuration: data.configuration,
             });
 
-            this.creator.field.modal.hide();
+            this._detectTaxonomyFieldExistence();
+
+            this.view.modal.field_creator.hide();
         },
         editFieldUsingCreatorData: function () {
-            let data = this.editor.field.data;
+            /*let data = this.view.form.field_editor;
             let section = this._findSection(data.sectionId);
 
             section.fields.push({
                 label: data.label,
-            });
+            });*/
 
-            this.editor.field.modal.hide();
+            this.view.modal.field_editor.hide();
+        },
+        generateTypeCode: function () {
+            if (this.model.type.code === '') {
+                this.code_field_changed = false;
+            }
+
+            if (this.code_field_changed) {
+                return;
+            }
+
+            this.model.type.code = this.model.type.name.toLowerCase().replace(/[^a-z0-9_]+/g, '_').replace(/_+/is, '_');
         },
         _findSection: function (id) {
-            for (let s in this.layout.sidebar.sections) {
-                if (this.layout.sidebar.sections[s].id === id) {
-                    return this.layout.sidebar.sections[s];
+            for (let s in this.model.layout.sidebar.sections) {
+                if (this.model.layout.sidebar.sections[s].id === id) {
+                    return this.model.layout.sidebar.sections[s];
                 }
             }
 
-            for (let s in this.layout.main.sections) {
-                if (this.layout.main.sections[s].id === id) {
-                    return this.layout.main.sections[s];
+            for (let s in this.model.layout.main.sections) {
+                if (this.model.layout.main.sections[s].id === id) {
+                    return this.model.layout.main.sections[s];
                 }
             }
         },
         _findField: function (id) {
-            for (let s in this.layout.sidebar.sections) {
-                for (let f in this.layout.sidebar.sections[s].fields) {
-                    if (this.layout.sidebar.sections[s].fields[f].id === id) {
-                        return this.layout.sidebar.sections[s].fields[f];
+            for (let s in this.model.layout.sidebar.sections) {
+                for (let f in this.model.layout.sidebar.sections[s].fields) {
+                    if (this.model.layout.sidebar.sections[s].fields[f].id === id) {
+                        return this.model.layout.sidebar.sections[s].fields[f];
                     }
                 }
             }
 
-            for (let s in this.layout.main.sections) {
-                for (let f in this.layout.main.sections[s].fields) {
-                    if (this.layout.main.sections[s].fields[f].id === id) {
-                        return this.layout.main.sections[s].fields[f];
+            for (let s in this.model.layout.main.sections) {
+                for (let f in this.model.layout.main.sections[s].fields) {
+                    if (this.model.layout.main.sections[s].fields[f].id === id) {
+                        return this.model.layout.main.sections[s].fields[f];
                     }
                 }
             }
+        },
+        _detectTaxonomyFieldExistence: function () {
+            this.view.form.has_taxonomy_field = false;
+            this.view.form.taxonomy_fields = [];
+
+            for (let s in this.model.layout.sidebar.sections) {
+                for (let f in this.model.layout.sidebar.sections[s].fields) {
+                    if (this.model.layout.sidebar.sections[s].fields[f].type === 'taxonomy') {
+                        this.view.form.has_taxonomy_field = true;
+                        this.view.form.taxonomy_fields.push({
+                            value: this.model.layout.sidebar.sections[s].fields[f].id,
+                            label: this.model.layout.sidebar.sections[s].fields[f].label
+                        });
+                    }
+                }
+            }
+
+            for (let s in this.model.layout.main.sections) {
+                for (let f in this.model.layout.main.sections[s].fields) {
+                    if (this.model.layout.main.sections[s].fields[f].type === 'taxonomy') {
+                        this.view.form.has_taxonomy_field = true;
+                        this.view.form.taxonomy_fields.push({
+                            value: this.model.layout.sidebar.sections[s].fields[f].id,
+                            label: this.model.layout.sidebar.sections[s].fields[f].label
+                        });
+                    }
+                }
+            }
+
+            // Reset taxonomy field model if field was removed.
+            if (this.view.form.has_taxonomy_field === false) {
+                this.model.type.taxonomyField = null;
+            } else {
+                // Set taxonomy field if model is empty and if any of taxonomy fields are created.
+                if (this.model.type.taxonomyField === null) {
+                    this.model.type.taxonomyField = this.view.form.taxonomy_fields[0].value;
+                }
+            }
+
+            console.log(this.view.form.taxonomy_fields);
         }
     },
     mounted: function () {
         let creationModal = document.getElementById('ctb-create-field-modal');
-        this.creator.field.modal = new bootstrap.Modal(creationModal);
+        this.view.modal.field_creator = new bootstrap.Modal(creationModal);
 
         creationModal.addEventListener('shown.bs.modal', function () {
             $(creationModal).find('.ctb-autofocus').focus();
         });
 
-        this.editor.field.modal = new bootstrap.Modal(document.getElementById('ctb-edit-field-modal'));
+        this.view.modal.field_editor = new bootstrap.Modal(document.getElementById('ctb-edit-field-modal'));
+
+        this._detectTaxonomyFieldExistence();
 
         this.$root.$on('field:add', (sectionId) => {
             this.openCreateFieldModel(sectionId);

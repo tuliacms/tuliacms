@@ -16,3 +16,11 @@ cms:
                     classname: 'Tulia\Cms\Taxonomy\UserInterface\Web\Shared\Form\FormType\TaxonomyTypeaheadType'
                     builder: 'Tulia\Cms\Taxonomy\UserInterface\Web\Shared\Form\FormType\TaxonomyTypeaheadTypeBuilder'
                     constraints: [required]
+                    configuration:
+                        taxonomy:
+                            type: choice
+                            label: Select type of taxonomy
+                            required: true
+                            choices:
+                                - { value: category, label: Category }
+                                - { value: tag, label: Tag }

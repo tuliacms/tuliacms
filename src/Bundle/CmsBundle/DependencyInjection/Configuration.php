@@ -81,12 +81,33 @@ class Configuration implements ConfigurationInterface
                                             ->scalarNode('builder')->defaultNull()->end()
                                             ->arrayNode('constraints')->scalarPrototype()->defaultValue([])->end()->end()
                                             ->arrayNode('configuration')
+                                                ->beforeNormalization()
+                                                    ->always(function ($configs) {
+                                                        /*foreach ($configs as $config) {
+                                                            if ($config['type'] === 'choice' && $config['choices'] === [] ) {
+
+                                                            }
+                                                        }*/
+
+                                                        return $configs;
+                                                    })
+                                                ->end()
                                                 ->arrayPrototype()
                                                     ->addDefaultsIfNotSet()
                                                     ->children()
                                                         ->scalarNode('type')->defaultValue('string')->end()
                                                         ->scalarNode('label')->isRequired()->end()
                                                         ->scalarNode('help_text')->defaultNull()->end()
+                                                        ->scalarNode('required')->defaultFalse()->end()
+                                                        ->scalarNode('choices_provider')->defaultNull()->end()
+                                                        ->arrayNode('choices')
+                                                            ->arrayPrototype()
+                                                                ->children()
+                                                                    ->scalarNode('value')->isRequired()->end()
+                                                                    ->scalarNode('label')->defaultValue('')->end()
+                                                                ->end()
+                                                            ->end()
+                                                        ->end()
                                                     ->end()
                                                 ->end()
                                             ->end()

@@ -108,9 +108,11 @@ cms:
                     constraints: [required]
                     configuration:
                         choices:
+                            required: true
                             label: Enter the available choices for this select
                             help_text: Separate every choice by semicolon (;).
                         multiple:
+                            required: true
                             type: yes_no
                             label: Allows select multiple values at once
                         placeholder:

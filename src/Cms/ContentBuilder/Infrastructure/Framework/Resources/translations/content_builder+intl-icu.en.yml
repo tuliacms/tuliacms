@@ -1,5 +1,6 @@
 contentModel: Content model
 nodeTypeName: Node type name
+nodeTypeNameInfo: Use singular, infinitive, e.g. Post, News, Article, House.
 createNodeType: Create node type
 addNewSection: Add new section
 addNewField: Add new field
@@ -7,7 +8,7 @@ editField: Edit field
 fieldLabel: Field label
 fieldLabelHelp: This label will be showed on the node form for administrators.
 fieldId: Field ID
-fieldIdHelp: Please use lowercased alphanum and underscores.
+fieldIdHelp: Please use lowercased alphanum and underscores. THis field is used in API and in templates.
 youCannotCreateTwoFieldsWithTheSameId: Yout cannot create two fields with the same ID.
 removeField: Remove field
 removeSection: Remove section
@@ -24,5 +25,13 @@ fieldIdMustContainOnlyAlphanumsAndUnderline: Field ID must contain only lowercas
 fieldTypeConfiguration: Configuration
 fieldDetails: Field details
 fieldTypeConstraints: Constraints
-thisFieldDoesNotHaveConfiguration: This field does not have configuration.
 editNodeTypeDetails: Edit node type details
+nodeTypeCode: Node type code
+nodeTypeCodeHelp: Please use lowercased alphanum and underscores.
+taxonomyField: Taxonomy field
+taxonomyFieldHelp: Which taxonomy should be leading taxonomy for this node type. Will be used to build URLs to nodes.
+routableType: Routable type
+routableTypeHelp: Decide, if this node type has own pages in the website.
+hierarchicalType: Hierarchical type
+hierarchicalTypeHelp: Decide, if every node can have children nodes, and created hierarchical tree of elements.
+pleaseSelectValue: Please select value

@@ -12,27 +12,26 @@
 {% endblock %}
 
 {% block content %}
-    <div class="pane pane-lead">
-        <div class="pane-header">
-            <div class="pane-buttons">
-
-            </div>
-            <i class="pane-header-icon fas fa-box"></i>
-            <h1 class="pane-title">{{ block('title') }}</h1>
-        </div>
-        <div class="pane-body p-0">
-            <div id="content-builder-layout-builder"></div>
-        </div>
-    </div>
+    <div id="content-builder-layout-builder"></div>
 
     <script nonce="{{ csp_nonce() }}">
         window.ContentBuilderLayoutBuilder = {
             translations: {
+                createNodeType: '{{ 'createNodeType'|trans }}',
+                yes: '{{ 'yes'|trans({}, 'messages') }}',
+                no: '{{ 'no'|trans({}, 'messages') }}',
+                close: '{{ 'close'|trans({}, 'messages') }}',
                 cancel: '{{ 'cancel'|trans({}, 'messages') }}',
                 create: '{{ 'create'|trans({}, 'messages') }}',
+                icon: '{{ 'icon'|trans({}, 'messages') }}',
                 save: '{{ 'save'|trans({}, 'messages') }}',
                 nodeTypeName: '{{ 'nodeTypeName'|trans }}',
+                nodeTypeNameInfo: '{{ 'nodeTypeNameInfo'|trans }}',
+                nodeTypeCode: '{{ 'nodeTypeCode'|trans }}',
+                nodeTypeCodeHelp: '{{ 'nodeTypeCodeHelp'|trans }}',
                 editNodeTypeDetails: '{{ 'editNodeTypeDetails'|trans }}',
+                taxonomyField: '{{ 'taxonomyField'|trans }}',
+                taxonomyFieldHelp: '{{ 'taxonomyFieldHelp'|trans }}',
                 slug: '{{ 'slug'|trans({}, 'messages') }}',
                 addNewSection: '{{ 'addNewSection'|trans }}',
                 addNewField: '{{ 'addNewField'|trans }}',
@@ -54,9 +53,16 @@
                 fieldTypeConfiguration: '{{ 'fieldTypeConfiguration'|trans }}',
                 fieldDetails: '{{ 'fieldDetails'|trans }}',
                 fieldTypeConstraints: '{{ 'fieldTypeConstraints'|trans }}',
-                thisFieldDoesNotHaveConfiguration: '{{ 'thisFieldDoesNotHaveConfiguration'|trans }}',
+                routableType: '{{ 'routableType'|trans }}',
+                routableTypeHelp: '{{ 'routableTypeHelp'|trans }}',
+                hierarchicalType: '{{ 'hierarchicalType'|trans }}',
+                hierarchicalTypeHelp: '{{ 'hierarchicalTypeHelp'|trans }}',
+                pleaseSelectValue: '{{ 'pleaseSelectValue'|trans }}',
             },
-            fieldTypes: {{ fieldTypes|json_encode|raw }}
+            fieldTypes: {{ fieldTypes|json_encode|raw }},
+            model: {{ model|raw }},
+            listingUrl: '{{ path('backend.content_builder.homepage') }}',
+            csrfToken: '{{ csrf_token('create-node-type') }}',
         };
     </script>
 {% endblock %}
