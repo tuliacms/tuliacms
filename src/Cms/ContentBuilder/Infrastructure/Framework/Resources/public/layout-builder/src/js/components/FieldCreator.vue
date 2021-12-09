@@ -40,25 +40,11 @@
                         <div class="card-body pb-0">
                             <div class="ctb-field-constraints row">
                                 <div v-for="(configuration, id) in model.configuration" :key="id" class="col-6 ctb-field-constraint mb-4">
-                                    <label class="form-label" :for="'ctb-new-field-configuration-' + id">{{ configuration.label }}</label>
-                                    <template v-if="configuration.type === 'string'">
-                                        <input type="text" :id="'ctb-new-field-configuration-' + id" @change="_validateConfiguration()" :class="{ 'form-control': true, 'is-invalid': configuration.valid === false }" v-model="configuration.value" />
-                                    </template>
-                                    <template v-if="configuration.type === 'choice'">
-                                        <chosen-select :id="'ctb-new-field-configuration-' + id" @change="_validateConfiguration()" v-model="configuration.value" :class="{ 'is-invalid': configuration.valid === false }">
-                                            <option value="" disabled>{{ translations.pleaseSelectValue }}</option>
-                                            <option v-for="option in configuration.choices" :key="option.value" :value="option.value">{{ option.label }}</option>
-                                        </chosen-select>
-                                    </template>
-                                    <template v-if="configuration.type === 'yes_no'">
-                                        <chosen-select :id="'ctb-new-field-configuration-' + id" @change="_validateConfiguration()" v-model="configuration.value" :class="{ 'is-invalid': configuration.valid === false }">
-                                            <option value="" disabled>{{ translations.pleaseSelectValue }}</option>
-                                            <option value="1">{{ translations.yes }}</option>
-                                            <option value="0">{{ translations.no }}</option>
-                                        </chosen-select>
-                                    </template>
-                                    <div v-if="configuration.valid === false" class="invalid-feedback">{{ configuration.message }}</div>
-                                    <div v-if="configuration.help_text" class="form-text">{{ configuration.help_text }}</div>
+                                    <FormControl
+                                        :translations="translations"
+                                        :field="configuration"
+                                        :id="'ctb-new-field-configuration-' + id"
+                                    ></FormControl>
                                 </div>
                             </div>
                         </div>
@@ -75,8 +61,13 @@
 </template>
 
 <script>
+import FormControl from './FormControl';
+
 export default {
     props: ['fieldTypes', 'translations'],
+    components: {
+        FormControl
+    },
     data: function () {
         return {
             idFieldChanged: false,

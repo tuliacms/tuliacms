@@ -37,11 +37,13 @@
                                         </label>
                                         <div v-if="constraint.help_text" class="form-text">{{ constraint.help_text }}</div>
                                     </div>
-                                    <div v-if="constraint.enabled && constraint.modificators.length !== 0" class="ctb-field-constraint-modificators">
-                                        <div v-for="modificator in constraint.modificators" :key="modificator.name" class="ctb-field-constraint-modificator mb-2">
-                                            <label class="form-label">{{ modificator.label }}</label>
-                                            <input type="text" :class="{ 'form-control': true, 'is-invalid': modificator.valid === false }" v-model="modificator.value" />
-                                            <div v-if="modificator.valid === false" class="invalid-feedback">{{ modificator.message }}</div>
+                                    <div v-if="constraint.enabled && constraint.modificators.length !== 0" class="ctb-field-constraint-modificators row">
+                                        <div v-for="modificator in constraint.modificators" :key="modificator.id" class="col-6 ctb-field-constraint mb-4">
+                                            <FormControl
+                                                :translations="translations"
+                                                :field="modificator"
+                                                :id="'ctb-edit-field-modificator-' + modificator.id"
+                                            ></FormControl>
                                         </div>
                                     </div>
                                 </div>
@@ -59,8 +61,13 @@
 </template>
 
 <script>
+import FormControl from './FormControl';
+
 export default {
     props: ['field', 'fieldTypes', 'translations'],
+    components: {
+        FormControl
+    },
     data: function () {
         return {
             model: {

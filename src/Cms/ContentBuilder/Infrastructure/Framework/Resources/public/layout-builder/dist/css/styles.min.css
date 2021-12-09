@@ -45,9 +45,7 @@
           background-color: #fff; }
 
 .ctb-field-constraint-modificators {
-  padding: 10px 0 20px 24px;
-  width: 100%;
-  max-width: 300px; }
+  padding: 10px 0 20px 24px; }
 
 .ctb-sections-container .ctb-sortable-placeholder:empty {
   padding: 30px;
