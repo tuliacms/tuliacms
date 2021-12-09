@@ -33,7 +33,8 @@ class NodeType extends AbstractController
     public function create(Request $request): ViewInterface
     {
         if ($request->isMethod('POST')) {
-
+            dump(json_decode($request->request->get('node_type'), true));
+            //exit;
         }
 
         return $this->view('@backend/content_builder/node_type/create.tpl', [

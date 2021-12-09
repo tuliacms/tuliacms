@@ -1,96 +1,73 @@
 <template>
-    <div>
-        <div class="modal fade" id="ctb-create-field-modal" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-lg modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">{{ translations.addNewField }}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <div class="modal fade" id="ctb-create-field-modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">{{ translations.addNewField }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col mb-3">
+                            <label for="ctb-new-field-label" class="form-label">{{ translations.fieldLabel }}</label>
+                            <input type="text" :class="{ 'form-control': true, 'ctb-autofocus': true, 'is-invalid': model.label.valid === false }" id="ctb-new-field-label" v-model="model.label.value" @keyup="generateFieldId()" @change="_validateBasics()" />
+                            <div v-if="model.label.valid === false" class="invalid-feedback">{{ model.label.message }}</div>
+                            <div class="form-text">{{ translations.fieldLabelHelp }}</div>
+                        </div>
+                        <div class="col mb-3">
+                            <label for="ctb-new-field-id" class="form-label">{{ translations.fieldId }}</label>
+                            <input type="text" :class="{ 'form-control': true, 'is-invalid': model.id.valid === false }" id="ctb-new-field-id" v-model="model.id.value" @keyup="idFieldChanged = true" @change="_validateBasics()" />
+                            <div v-if="model.id.valid === false" class="invalid-feedback">{{ model.id.message }}</div>
+                            <div class="form-text">{{ translations.fieldIdHelp }}</div>
+                        </div>
                     </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col mb-3">
-                                <label for="ctb-new-field-label" class="form-label">{{ translations.fieldLabel }}</label>
-                                <input type="text" :class="{ 'form-control': true, 'ctb-autofocus': true, 'is-invalid': model.label.valid === false }" id="ctb-new-field-label" v-model="model.label.value" @keyup="generateFieldId()" @change="_validateBasics()" />
-                                <div v-if="model.label.valid === false" class="invalid-feedback">{{ model.label.message }}</div>
-                                <div class="form-text">{{ translations.fieldLabelHelp }}</div>
-                            </div>
-                            <div class="col mb-3">
-                                <label for="ctb-new-field-id" class="form-label">{{ translations.fieldId }}</label>
-                                <input type="text" :class="{ 'form-control': true, 'is-invalid': model.id.valid === false }" id="ctb-new-field-id" v-model="model.id.value" @keyup="idFieldChanged = true" @change="_validateBasics()" />
-                                <div v-if="model.id.valid === false" class="invalid-feedback">{{ model.id.message }}</div>
-                                <div class="form-text">{{ translations.fieldIdHelp }}</div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" v-model="model.multilingual.value" id="ctb-new-field-multilingual">
+                        <label class="form-check-label" for="ctb-new-field-multilingual">
+                            {{ translations.multilingualField }}
+                        </label>
+                    </div>
+                    <div class="form-text mb-3">{{ translations.multilingualFieldInfo }}</div>
+                    <div class="mb-3">
+                        <label class="form-label">{{ translations.fieldType }}</label>
+                        <div class="ctb-field-type-selector">
+                            <div v-for="type in fieldTypes" :key="type.id" :class="{ 'ctb-active': type.id === model.type.value }" @click="changeFieldType(type)">
+                                {{ type.label }}
                             </div>
                         </div>
-                        <div class="form-check mb-3">
-                            <input class="form-check-input" type="checkbox" v-model="model.multilingual.value" id="ctb-multilingual-field">
-                            <label class="form-check-label" for="ctb-multilingual-field">
-                                {{ translations.multilingualField }}
-                            </label>
-                        </div>
-                        <div class="form-text mb-3">{{ translations.multilingualFieldInfo }}</div>
-                        <div class="mb-3">
-                            <label class="form-label">{{ translations.fieldType }}</label>
-                            <div class="ctb-field-type-selector">
-                                <div v-for="type in fieldTypes" :key="type.id" :class="{ 'ctb-active': type.id === model.type.value }" @click="changeFieldType(type)">
-                                    {{ type.label }}
+                    </div>
+                    <div v-if="model.configuration.length !== 0" class="card mb-3">
+                        <div class="card-body pb-0">
+                            <div class="ctb-field-constraints row">
+                                <div v-for="(configuration, id) in model.configuration" :key="id" class="col-6 ctb-field-constraint mb-4">
+                                    <label class="form-label" :for="'ctb-new-field-configuration-' + id">{{ configuration.label }}</label>
+                                    <template v-if="configuration.type === 'string'">
+                                        <input type="text" :id="'ctb-new-field-configuration-' + id" @change="_validateConfiguration()" :class="{ 'form-control': true, 'is-invalid': configuration.valid === false }" v-model="configuration.value" />
+                                    </template>
+                                    <template v-if="configuration.type === 'choice'">
+                                        <chosen-select :id="'ctb-new-field-configuration-' + id" @change="_validateConfiguration()" v-model="configuration.value" :class="{ 'is-invalid': configuration.valid === false }">
+                                            <option value="" disabled>{{ translations.pleaseSelectValue }}</option>
+                                            <option v-for="option in configuration.choices" :key="option.value" :value="option.value">{{ option.label }}</option>
+                                        </chosen-select>
+                                    </template>
+                                    <template v-if="configuration.type === 'yes_no'">
+                                        <chosen-select :id="'ctb-new-field-configuration-' + id" @change="_validateConfiguration()" v-model="configuration.value" :class="{ 'is-invalid': configuration.valid === false }">
+                                            <option value="" disabled>{{ translations.pleaseSelectValue }}</option>
+                                            <option value="1">{{ translations.yes }}</option>
+                                            <option value="0">{{ translations.no }}</option>
+                                        </chosen-select>
+                                    </template>
+                                    <div v-if="configuration.valid === false" class="invalid-feedback">{{ configuration.message }}</div>
+                                    <div v-if="configuration.help_text" class="form-text">{{ configuration.help_text }}</div>
                                 </div>
                             </div>
                         </div>
-                        <div v-if="model.configuration.length !== 0" class="card mb-3">
-                            <div class="card-body pb-0">
-                                <div class="ctb-field-constraints row">
-                                    <div v-for="(configuration, id) in model.configuration" :key="id" class="col-6 ctb-field-constraint mb-4">
-                                        <label class="form-label" :for="'ctb-field-configuration-' + id">{{ configuration.label }}</label>
-                                        <template v-if="configuration.type === 'string'">
-                                            <input type="text" :id="'ctb-field-configuration-' + id" @change="_validateConfiguration()" :class="{ 'form-control': true, 'is-invalid': configuration.valid === false }" v-model="configuration.value" />
-                                        </template>
-                                        <template v-if="configuration.type === 'choice'">
-                                            <chosen-select :id="'ctb-field-configuration-' + id" @change="_validateConfiguration()" v-model="configuration.value" :class="{ 'is-invalid': configuration.valid === false }">
-                                                <option value="" disabled>{{ translations.pleaseSelectValue }}</option>
-                                                <option v-for="option in configuration.choices" :key="option.value" :value="option.value">{{ option.label }}</option>
-                                            </chosen-select>
-                                        </template>
-                                        <template v-if="configuration.type === 'yes_no'">
-                                            <chosen-select :id="'ctb-field-configuration-' + id" @change="_validateConfiguration()" v-model="configuration.value" :class="{ 'is-invalid': configuration.valid === false }">
-                                                <option value="" disabled>{{ translations.pleaseSelectValue }}</option>
-                                                <option value="1">{{ translations.yes }}</option>
-                                                <option value="0">{{ translations.no }}</option>
-                                            </chosen-select>
-                                        </template>
-                                        <div v-if="configuration.valid === false" class="invalid-feedback">{{ configuration.message }}</div>
-                                        <div v-if="configuration.help_text" class="form-text">{{ configuration.help_text }}</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="alert alert-info text-center mb-0">{{ translations.theseOptionsWillNotBeEditableAfterSave }}</div>
                     </div>
-                    <!--
-                        <div class="modal-body">
-                            <div class="ctb-field-constraints">
-                                <div v-for="(constraint, id) in model.constraints.value" :key="id" class="ctb-field-constraint mb-4">
-                                    <div class="form-check mb-1">
-                                        <input class="form-check-input" type="checkbox" :disabled="constraint.required" :id="'ctb-field-constraint-' + id" v-model="constraint.enabled">
-                                        <label class="form-check-label" :for="'ctb-field-constraint-' + id">
-                                            {{ constraint.label }}
-                                        </label>
-                                        <div v-if="constraint.help_text" class="form-text">{{ constraint.help_text }}</div>
-                                    </div>
-                                    <div v-if="constraint.enabled && constraint.modificators.length !== 0" class="ctb-field-constraint-modificators">
-                                        <div v-for="modificator in constraint.modificators" :key="modificator.name" class="ctb-field-constraint-modificator mb-2">
-                                            <label class="form-label">{{ modificator.label }}</label>
-                                            <input type="text" :class="{ 'form-control': true, 'form-control-sm': true }" v-model="modificator.value" />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    -->
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-success" @click="saveField()">{{ translations.create }}</button>
-                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">{{  translations.cancel }}</button>
-                    </div>
+                    <div class="alert alert-info text-center mb-0">{{ translations.theseOptionsWillNotBeEditableAfterSave }}</div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" @click="saveField()">{{ translations.create }}</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">{{translations.cancel }}</button>
                 </div>
             </div>
         </div>
@@ -120,7 +97,6 @@ export default {
             }
 
             this.model.type.value = type.id;
-            //this._updateFieldTypeConstraints();
             this._updateFieldTypeConfiguration();
 
             // For somehow, Vue does not update preview when we change the field type
@@ -160,23 +136,6 @@ export default {
 
             this.$emit('confirm', model);
         },
-        /*_updateFieldTypeConstraints: function () {
-            this.model.constraints.value = [];
-
-            // Not all field types contain custom constraints.
-            if (! this.fieldTypes[this.model.type.value].constraints) {
-                return;
-            }
-
-            let constraints = JSON.parse(JSON.stringify(this.fieldTypes[this.model.type.value].constraints));
-
-            for (let i in constraints) {
-                let constraint = constraints[i];
-                constraint.enabled = constraint.required === true;
-
-                this.model.constraints.value.push(constraint);
-            }
-        },*/
         _updateFieldTypeConfiguration: function () {
             this.model.configuration = [];
 
@@ -255,7 +214,6 @@ export default {
             this.model.multilingual = { value: null, valid: true, message: null };
             this.model.configuration = [];
 
-            //this._updateFieldTypeConstraints();
             this._updateFieldTypeConfiguration();
         },
     },

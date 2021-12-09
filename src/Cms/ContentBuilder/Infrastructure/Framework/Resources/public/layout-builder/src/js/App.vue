@@ -78,14 +78,14 @@
             </div>
             <FieldCreator
                 @confirm="createFieldUsingCreatorData"
-                :field="view.form.field_creator"
                 :translations="translations"
                 :fieldTypes="fieldTypes"
             ></FieldCreator>
             <FieldEditor
                 @confirm="editFieldUsingCreatorData"
-                :field="view.form.field_editor"
                 :translations="translations"
+                :field="view.form.field_editor"
+                :fieldTypes="fieldTypes"
             ></FieldEditor>
         </div>
     </div>
@@ -119,12 +119,11 @@ export default {
                     taxonomy_fields: [],
                     field_creator_section_id: null,
                     field_editor: {
-                        fieldId: null,
-                        label: { value: null, valid: true, message: null },
-                        id: { value: null, valid: true, message: null },
-                        multilingual: { value: false, valid: true, message: null },
-                        constraints: { value: [], valid: true, message: null },
-                        configuration: { value: [], valid: true, message: null },
+                        id: null,
+                        type: null,
+                        label: null,
+                        multilingual: null,
+                        constraints: [],
                     },
                     type_validation: {
                         name: { valid: true, message: null },
@@ -243,13 +242,11 @@ export default {
         openEditFieldModel: function (fieldId) {
             let field = this._findField(fieldId);
 
-            this.view.form.field_editor.fieldId = fieldId;
-            this.view.form.field_editor.label = field.label;
             this.view.form.field_editor.id = field.id;
             this.view.form.field_editor.type = field.type;
-            this.view.form.field_editor.multilingual = false;
-            this.view.form.field_editor.constraints = [];
-            this.view.form.field_editor.configuration = [];
+            this.view.form.field_editor.label = field.label;
+            this.view.form.field_editor.multilingual = field.multilingual;
+            this.view.form.field_editor.constraints = field.constraints;
             this.view.modal.field_editor.show();
 
             this.$root.$emit('field:edit:modal:opened');
@@ -277,13 +274,12 @@ export default {
 
             this.view.modal.field_creator.hide();
         },
-        editFieldUsingCreatorData: function () {
-            /*let data = this.view.form.field_editor;
-            let section = this._findSection(data.sectionId);
+        editFieldUsingCreatorData: function (data) {
+            let field = this._findField(this.view.form.field_editor.id);
 
-            section.fields.push({
-                label: data.label,
-            });*/
+            field.label = data.label;
+            field.multilingual = data.multilingual;
+            field.constraints = data.constraints;
 
             this.view.modal.field_editor.hide();
         },
@@ -365,8 +361,6 @@ export default {
                     this.model.type.taxonomyField = this.view.form.taxonomy_fields[0].value;
                 }
             }
-
-            console.log(this.view.form.taxonomy_fields);
         }
     },
     mounted: function () {
