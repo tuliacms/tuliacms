@@ -22,12 +22,15 @@ nextStep: Next step
 previousStep: Previous step
 pleaseFillThisField: Please fill this field.
 fieldIdMustContainOnlyAlphanumsAndUnderline: Field ID must contain only lowercased alphanums and underline.
+sectionIdCodeMustContainOnlyAlphanumsAndUnderline: Section ID must contain only lowercased alphanums and underline.
 fieldTypeConfiguration: Configuration
 fieldDetails: Field details
 fieldTypeConstraints: Constraints
 editNodeTypeDetails: Edit node type details
 nodeTypeCode: Node type code
 nodeTypeCodeHelp: Please use lowercased alphanum and underscores.
+nodeTypeCodeMustContainOnlyAlphanumsAndUnderline: Node Type code must contain only lowercased alphanums and underline.
+pleaseSelectTaxonomyFieldForRoutableNodeType: Please select the taxonomy field for the routable node type.
 taxonomyField: Taxonomy field
 taxonomyFieldHelp: Which taxonomy should be leading taxonomy for this node type. Will be used to build URLs to nodes.
 routableType: Routable type
@@ -36,3 +39,5 @@ hierarchicalType: Hierarchical type
 hierarchicalTypeHelp: Decide, if every node can have children nodes, and created hierarchical tree of elements.
 pleaseSelectValue: Please select value
 internalFields: Internal fields
+fieldTypeNotExists: 'Field type "{type}" not exists.'
+selectedTaxonomyFieldIsNotATaxonomyField: Selected field is not a taxonomy type field.

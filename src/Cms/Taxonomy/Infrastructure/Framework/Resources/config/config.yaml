@@ -21,6 +21,7 @@ cms:
                             type: choice
                             label: Select type of taxonomy
                             required: true
+                            # Todo Create dynamic builder for choices.
                             choices:
                                 - { value: category, label: Category }
                                 - { value: tag, label: Tag }

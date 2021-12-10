@@ -53,6 +53,13 @@ class FieldTypeMappingRegistry
         return $this->mapping[$type]['builder'] ?? null;
     }
 
+    public function get(string $type): array
+    {
+        $this->resolveMapping();
+
+        return $this->mapping[$type];
+    }
+
     public function getTypeFlags(string $type): array
     {
         $this->resolveMapping();

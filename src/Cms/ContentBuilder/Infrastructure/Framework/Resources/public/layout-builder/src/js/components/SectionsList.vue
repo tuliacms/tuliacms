@@ -43,7 +43,7 @@ export default {
     methods: {
         addSection: function () {
             this.sections.push({
-                id: _.uniqueId('section-'),
+                id: _.uniqueId('section_'),
                 label: 'New section...',
                 fields: []
             });
