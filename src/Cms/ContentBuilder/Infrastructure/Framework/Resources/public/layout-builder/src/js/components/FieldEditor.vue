@@ -26,7 +26,20 @@
                         </label>
                     </div>
                     <div class="form-text mb-3">{{ translations.multilingualFieldInfo }}</div>
-                    <div v-if="model.constraints.length !== 0" class="card mb-3">
+                    <div v-if="model.configuration.length !== 0" class="card mb-3">
+                        <div class="card-body pb-0">
+                            <div class="ctb-field-constraints row">
+                                <div v-for="(configuration, id) in model.configuration" :key="id" class="col-6 ctb-field-constraint mb-4">
+                                    <FormControl
+                                        :translations="translations"
+                                        :field="configuration"
+                                        :id="'ctb-new-field-configuration-' + id"
+                                    ></FormControl>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div v-if="model.constraints.length !== 0" class="card">
                         <div class="card-body pb-0">
                             <div class="ctb-field-constraints">
                                 <div v-for="(constraint, id) in model.constraints" :key="id" class="ctb-field-constraint mb-3">
@@ -75,6 +88,7 @@ export default {
                 label: { value: null, valid: true, message: null },
                 multilingual: { value: false, valid: true, message: null },
                 constraints: [],
+                configuration: [],
             }
         };
     },
@@ -88,6 +102,7 @@ export default {
                 label: this.model.label.value,
                 multilingual: !!this.model.multilingual.value,
                 constraints: [],
+                configuration: [],
             };
 
             for (let c in this.model.constraints) {
@@ -104,6 +119,13 @@ export default {
                     id: this.model.constraints[c].id,
                     enabled: this.model.constraints[c].enabled,
                     modificators: modificators,
+                });
+            }
+
+            for (let c in this.model.configuration) {
+                model.configuration.push({
+                    id: this.model.configuration[c].id,
+                    value: this.model.configuration[c].value,
                 });
             }
 
@@ -136,6 +158,20 @@ export default {
                         this.model.constraints[c].modificators[m].message = this.translations.pleaseFillThisField;
                         status = false;
                     }
+                }
+            }
+
+            for (let c in this.model.configuration) {
+                this.model.configuration[c].valid = true;
+                this.model.configuration[c].message = null;
+
+                if (this.model.configuration[c].required && (
+                    this.model.configuration[c].value === null
+                    || this.model.configuration[c].value === ''
+                )) {
+                    this.model.configuration[c].valid = false;
+                    this.model.configuration[c].message = this.translations.pleaseFillThisField;
+                    status = false;
                 }
             }
 
@@ -183,13 +219,34 @@ export default {
                 this.model.constraints.push(newConstraint);
             }
         },
+        _updateFieldTypeConfiguration: function () {
+            this.model.configuration = [];
+
+            // Not all field types contain configurations
+            if (! this.fieldTypes[this.model.type.value].configuration) {
+                return;
+            }
+
+            let configuration = JSON.parse(JSON.stringify(this.fieldTypes[this.model.type.value].configuration));
+
+            for (let i in configuration) {
+                configuration[i].id = i;
+                configuration[i].value = null;
+                configuration[i].valid = null;
+                configuration[i].message = null;
+                this.model.configuration.push(configuration[i]);
+            }
+        },
         _initiate: function () {
+            let labelError = this.$get(this.field, 'errors.label.0');
+
             this.model.id = { value: this.field.id, valid: true, message: null };
-            this.model.label = { value: this.field.label, valid: true, message: null };
+            this.model.label = { value: this.field.label, valid: !labelError, message: labelError };
             this.model.multilingual = { value: this.field.multilingual, valid: true, message: null };
             this.model.type = { value: this.field.type };
 
             this._updateFieldTypeConstraints();
+            this._updateFieldTypeConfiguration();
         },
     },
     mounted: function () {

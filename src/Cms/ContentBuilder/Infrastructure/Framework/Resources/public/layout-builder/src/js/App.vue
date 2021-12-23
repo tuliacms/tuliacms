@@ -32,7 +32,11 @@
                             </div>
                         </div>
                     </div>
-                    <SectionsList v-bind:translations="translations" v-bind:sections="model.layout.sidebar.sections"></SectionsList>
+                    <SectionsList
+                        :translations="translations"
+                        :sections="model.layout.sidebar.sections"
+                        :errors="$get(view.errors, 'layout.sidebar.sections', [])"
+                    ></SectionsList>
                 </div>
                 <div class="page-form-content">
                     <div class="page-form-header">
@@ -89,7 +93,11 @@
                         </div>
                     </div>
                     <div class="tab-content ctb-section-main-tabs-contents">
-                        <SectionsList v-bind:translations="translations" v-bind:sections="model.layout.main.sections"></SectionsList>
+                        <SectionsList
+                            :translations="translations"
+                            :sections="model.layout.main.sections"
+                            :errors="$get(view.errors, 'layout.main.sections', [])"
+                        ></SectionsList>
                     </div>
                 </div>
             </div>
@@ -115,10 +123,33 @@ import SectionsList from './components/SectionsList';
 import Field from './components/Field';
 import draggable from 'vuedraggable';
 
+const getFrom = function (object, path, defaultValue = null) {
+    let result = object;
+
+    for (let piece of path.split('.')) {
+        result = result[piece];
+
+        if (! result) {
+            break;
+        }
+    }
+
+    return result || defaultValue;
+};
+
 export default {
     name: 'ContentLayoutBuilder',
     data() {
         let model = window.ContentBuilderLayoutBuilder.model;
+        let errors = window.ContentBuilderLayoutBuilder.errors;
+        let typeValidation = {
+            name: { valid: !getFrom(errors, 'type.name.0'), message: getFrom(errors, 'type.name.0') },
+            code: { valid: !getFrom(errors, 'type.code.0'), message: getFrom(errors, 'type.code.0') },
+            icon: { valid: !getFrom(errors, 'type.icon.0'), message: getFrom(errors, 'type.icon.0') },
+            isRoutable: { valid: !getFrom(errors, 'type.isRoutable.0'), message: getFrom(errors, 'type.isRoutable.0') },
+            isHierarchical: { valid: !getFrom(errors, 'type.isHierarchical.0'), message: getFrom(errors, 'type.isHierarchical.0') },
+            taxonomyField: { valid: !getFrom(errors, 'type.taxonomyField.0'), message: getFrom(errors, 'type.taxonomyField.0') },
+        };
 
         return {
             translations: window.ContentBuilderLayoutBuilder.translations,
@@ -130,6 +161,7 @@ export default {
                     field_creator: null,
                     field_editor: null,
                 },
+                errors: errors,
                 form: {
                     code_field_changed: false,
                     has_taxonomy_field: false,
@@ -141,32 +173,26 @@ export default {
                         label: null,
                         multilingual: null,
                         constraints: [],
+                        configuration: [],
                     },
-                    type_validation: {
-                        name: { valid: true, message: null },
-                        code: { valid: true, message: null },
-                        icon: { valid: true, message: null },
-                        isRoutable: { valid: true, message: null },
-                        isHierarchical: { valid: true, message: null },
-                        taxonomyField: { valid: true, message: null },
-                    }
+                    type_validation: typeValidation
                 }
             },
             model: {
                 type: {
-                    name: model && model.type.name ? model.type.name : null,
-                    code: model && model.type.code ? model.type.code : null,
-                    icon: model && model.type.icon ? model.type.icon : 'fas fa-boxes',
-                    isRoutable: model && model.type.isRoutable ? model.type.isRoutable : '1',
-                    isHierarchical: model && model.type.isHierarchical ? model.type.isHierarchical : '1',
-                    taxonomyField: model && model.type.taxonomyField ? model.type.taxonomyField : null,
+                    name: getFrom(model, 'type.name'),
+                    code: getFrom(model, 'type.code'),
+                    icon: getFrom(model, 'type.icon', 'fas fa-boxes'),
+                    isRoutable: getFrom(model, 'type.isRoutable', '1'),
+                    isHierarchical: getFrom(model, 'type.isHierarchical', '1'),
+                    taxonomyField: getFrom(model, 'type.taxonomyField'),
                 },
                 layout: {
                     sidebar: {
-                        sections: model && model.layout.sidebar.sections ? model.layout.sidebar.sections : []
+                        sections: getFrom(model, 'layout.sidebar.sections', [])
                     },
                     main: {
-                        sections: model && model.layout.main.sections ? model.layout.main.sections : []
+                        sections: getFrom(model, 'layout.main.sections', [])
                     }
                 }
             }
@@ -256,6 +282,8 @@ export default {
             this.view.form.field_editor.label = field.label;
             this.view.form.field_editor.multilingual = field.multilingual;
             this.view.form.field_editor.constraints = field.constraints;
+            this.view.form.field_editor.configuration = field.configuration;
+            this.view.form.field_editor.errors = field.errors;
             this.view.modal.field_editor.show();
 
             this.$root.$emit('field:edit:modal:opened');
@@ -289,6 +317,7 @@ export default {
 
             field.label = data.label;
             field.multilingual = data.multilingual;
+            field.configuration = data.configuration;
             field.constraints = data.constraints;
 
             this.view.modal.field_editor.hide();
@@ -321,7 +350,9 @@ export default {
             for (let s in this.model.layout.sidebar.sections) {
                 for (let f in this.model.layout.sidebar.sections[s].fields) {
                     if (this.model.layout.sidebar.sections[s].fields[f].id === id) {
-                        return this.model.layout.sidebar.sections[s].fields[f];
+                        let field = this.model.layout.sidebar.sections[s].fields[f];
+                        field.errors = this.$get(this.view.errors, `layout.sidebar.sections.${s}.fields.${f}`);
+                        return field;
                     }
                 }
             }
@@ -329,7 +360,9 @@ export default {
             for (let s in this.model.layout.main.sections) {
                 for (let f in this.model.layout.main.sections[s].fields) {
                     if (this.model.layout.main.sections[s].fields[f].id === id) {
-                        return this.model.layout.main.sections[s].fields[f];
+                        let field = this.model.layout.main.sections[s].fields[f];
+                        field.errors = this.$get(this.view.errors, `layout.main.sections.${s}.fields.${f}`);
+                        return field;
                     }
                 }
             }

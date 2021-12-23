@@ -15,6 +15,10 @@
       background-color: #000;
       color: #fff;
       opacity: .3; }
+    .ctb-sortable-fields .ctb-field.ctb-field-has-error {
+      border-color: red; }
+      .ctb-sortable-fields .ctb-field.ctb-field-has-error .ctb-field-label {
+        color: red; }
     .ctb-sortable-fields .ctb-field .ctb-sortable-handler {
       position: absolute;
       left: 0;

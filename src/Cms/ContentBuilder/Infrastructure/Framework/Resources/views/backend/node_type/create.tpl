@@ -66,7 +66,8 @@
                 internalFields: '{{ 'internalFields'|trans }}',
             },
             fieldTypes: {{ fieldTypes|json_encode|raw }},
-            model: {{ model|raw }},
+            model: {{ model|json_encode|raw }},
+            errors: {{ errors|json_encode|raw }},
             listingUrl: '{{ path('backend.content_builder.homepage') }}',
             csrfToken: '{{ csrf_token('create-node-type') }}',
         };

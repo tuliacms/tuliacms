@@ -10,6 +10,8 @@ use Tulia\Cms\ContentBuilder\Domain\NodeType\Service\NodeTypeRegistry;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\FieldTypeMappingRegistry;
 use Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\NodeType\LayoutSectionType;
 use Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\NodeType\NodeTypeForm;
+use Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\RequestManipulator\NodeTypeRequestManipulator;
+use Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\Validator\CodenameValidator;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Component\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Component\Templating\ViewInterface;
@@ -36,48 +38,19 @@ class NodeType extends AbstractController
     public function create(Request $request): ViewInterface
     {
         $errors = [];
+        $data = [];
+        $cleaningResult = [];
 
         if ($request->isMethod('POST')) {
             $data = json_decode($request->request->get('node_type'), true);
 
-            /*$data['layout']['sidebar']['sections'][0]['fields'][0]['configuration'][] = [
-                'id' => 'asdasd',
-                'value' => null,
-            ];
-            $data['layout']['sidebar']['sections'][] = [
-                'id' => '45f34563&^%b',
-                'label' => 'test section',
-                'fields' => [
-                    [
-                        'id' => 'o8&TH(N876T',
-                        'label' => 'test field',
-                        'type' => 'not existent type',
-                        'multilingual' => true,
-                        'configuration' => [],
-                    ],
-                ],
-            ];
-            $data['layout']['sidebar']['sections'][] = [
-                'id' => 'asd',
-                'label' => 'asd',
-                'fields' => [
-                    [
-                        'id' => 'qwe',
-                        'label' => 'qwe',
-                        'type' => 'select',
-                        'multilingual' => true,
-                        'configuration' => [],
-                        'constraints' => [
-                            [
-                                'id' => 'length',
-                                'modificators' => [
-                                    ['id' => 'asdasd', 'value' => '132434']
-                                ]
-                            ]
-                        ]
-                    ],
-                ],
-            ];*/
+            $dataManipulator = new NodeTypeRequestManipulator(
+                $data,
+                $this->fieldTypeMappingRegistry,
+                new CodenameValidator()
+            );
+            $data = $dataManipulator->cleanForSulprusData();
+            $cleaningResult = $dataManipulator->getCleaningResult();
 
             $formsAreValid = true;
 
@@ -123,14 +96,15 @@ class NodeType extends AbstractController
 
             if ($formsAreValid) {
                 dump('valid!');
-                exit;
+                //exit;
             }
         }
 
         return $this->view('@backend/content_builder/node_type/create.tpl', [
             'fieldTypes' => $this->getFieldTypes(),
-            'model' => $request->request->get('node_type'),
+            'model' => $data,
             'errors' => $errors,
+            'cleaningResult' => $cleaningResult,
         ]);
     }
 

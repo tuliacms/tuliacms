@@ -41,3 +41,4 @@ pleaseSelectValue: Please select value
 internalFields: Internal fields
 fieldTypeNotExists: 'Field type "{type}" not exists.'
 selectedTaxonomyFieldIsNotATaxonomyField: Selected field is not a taxonomy type field.
+thisNodeTypeIsAlreadyRegistered: This node type is already registered in system.

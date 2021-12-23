@@ -19,6 +19,14 @@
             opacity: .3;
         }
 
+        &.ctb-field-has-error {
+            border-color: red;
+
+            .ctb-field-label {
+                color: red;
+            }
+        }
+
         .ctb-sortable-handler {
             position: absolute;
             left: 0;

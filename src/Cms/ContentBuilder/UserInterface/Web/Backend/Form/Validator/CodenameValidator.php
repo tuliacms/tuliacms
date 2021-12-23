@@ -13,6 +13,11 @@ class CodenameValidator
 {
     protected const PATTERN = '/^[0-9a-z_]+$/';
 
+    public function isCodenameValid(?string $code): bool
+    {
+        return !($code && !preg_match(self::PATTERN, $code));
+    }
+
     public function validateNodeType(?string $code, ExecutionContextInterface $context): void
     {
         if ($code && ! preg_match(self::PATTERN, $code)) {

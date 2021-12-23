@@ -3,11 +3,12 @@
         <draggable group="sections" :list="sections" v-bind="dragOptions" handle=".ctb-section-sortable-handler" class="ctb-sections-container">
             <transition-group type="transition" :name="!drag ? 'flip-list' : null" class="ctb-sortable-placeholder" tag="div" :data-label="translations.addNewSection">
                 <Section
-                    v-for="section in sections"
+                    v-for="(section, id) in sections"
                     :key="section.id"
-                    v-bind:section="section"
-                    v-bind:translations="translations"
-                    v-on:section:remove="removeSection"
+                    :section="section"
+                    :translations="translations"
+                    :errors="$get(errors, id, {})"
+                    @section:remove="removeSection"
                 ></Section>
             </transition-group>
         </draggable>
@@ -25,7 +26,7 @@ import Section from './Section';
 import draggable from 'vuedraggable';
 
 export default {
-    props: ['sections', 'translations'],
+    props: ['sections', 'errors', 'translations'],
     components: {
         Section,
         draggable

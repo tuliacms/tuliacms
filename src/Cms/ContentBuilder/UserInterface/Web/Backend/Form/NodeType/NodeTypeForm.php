@@ -13,6 +13,7 @@ use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Constraints\Choice;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use Tulia\Cms\ContentBuilder\Domain\NodeType\Service\NodeTypeRegistry;
 use Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\Validator\CodenameValidator;
 
 /**
@@ -20,6 +21,13 @@ use Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\Validator\CodenameVa
  */
 class NodeTypeForm extends AbstractType
 {
+    private NodeTypeRegistry $nodeTypeRegistry;
+
+    public function __construct(NodeTypeRegistry $nodeTypeRegistry)
+    {
+        $this->nodeTypeRegistry = $nodeTypeRegistry;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -35,6 +43,7 @@ class NodeTypeForm extends AbstractType
                 'constraints' => [
                     new NotBlank(),
                     new Callback([new CodenameValidator(), 'validateNodeType']),
+                    new Callback([$this, 'validateNodeTypeDuplicate']),
                 ],
             ])
             ->add('icon', TextType::class, [
@@ -66,6 +75,15 @@ class NodeTypeForm extends AbstractType
     {
         $resolver->setDefault('csrf_protection', false);
         $resolver->setRequired('fields');
+    }
+
+    public function validateNodeTypeDuplicate(?string $nodeType, ExecutionContextInterface $context): void
+    {
+        if ($this->nodeTypeRegistry->has($nodeType)) {
+            $context->buildViolation('thisNodeTypeIsAlreadyRegistered')
+                ->setTranslationDomain('content_builder')
+                ->addViolation();
+        }
     }
 
     public function validateTaxonomyField(?string $taxonomyFieldName, ExecutionContextInterface $context, array $payload): void
