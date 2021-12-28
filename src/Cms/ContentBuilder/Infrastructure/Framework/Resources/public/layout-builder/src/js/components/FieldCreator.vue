@@ -84,7 +84,7 @@ export default {
         changeFieldType: function (type) {
             // Do not update if it's the same.
             if (this.model.type.value === type.id) {
-                return;
+                //return;
             }
 
             this.model.type.value = type.id;
@@ -107,7 +107,7 @@ export default {
         },
         saveField: function () {
             if (this._validate() === false) {
-                return;
+                //return;
             }
 
             let model = {

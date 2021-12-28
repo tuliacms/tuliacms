@@ -11,7 +11,7 @@
         <div class="pane-body p-0">
             <div class="page-form" id="node-form">
                 <div class="page-form-sidebar">
-                    <form method="POST" id="ctb-form" style="display:none">
+                    <form method="POST" id="ctb-form" style="display:block">
                         <textarea name="node_type" id="ctb-form-field-node-type"></textarea>
                         <input type="text" name="_token" :value="csrfToken"/>
                     </form>
@@ -123,32 +123,18 @@ import SectionsList from './components/SectionsList';
 import Field from './components/Field';
 import draggable from 'vuedraggable';
 
-const getFrom = function (object, path, defaultValue = null) {
-    let result = object;
-
-    for (let piece of path.split('.')) {
-        result = result[piece];
-
-        if (! result) {
-            break;
-        }
-    }
-
-    return result || defaultValue;
-};
-
 export default {
     name: 'ContentLayoutBuilder',
     data() {
         let model = window.ContentBuilderLayoutBuilder.model;
         let errors = window.ContentBuilderLayoutBuilder.errors;
         let typeValidation = {
-            name: { valid: !getFrom(errors, 'type.name.0'), message: getFrom(errors, 'type.name.0') },
-            code: { valid: !getFrom(errors, 'type.code.0'), message: getFrom(errors, 'type.code.0') },
-            icon: { valid: !getFrom(errors, 'type.icon.0'), message: getFrom(errors, 'type.icon.0') },
-            isRoutable: { valid: !getFrom(errors, 'type.isRoutable.0'), message: getFrom(errors, 'type.isRoutable.0') },
-            isHierarchical: { valid: !getFrom(errors, 'type.isHierarchical.0'), message: getFrom(errors, 'type.isHierarchical.0') },
-            taxonomyField: { valid: !getFrom(errors, 'type.taxonomyField.0'), message: getFrom(errors, 'type.taxonomyField.0') },
+            name: { valid: !this.$get(errors, 'type.name.0'), message: this.$get(errors, 'type.name.0') },
+            code: { valid: !this.$get(errors, 'type.code.0'), message: this.$get(errors, 'type.code.0') },
+            icon: { valid: !this.$get(errors, 'type.icon.0'), message: this.$get(errors, 'type.icon.0') },
+            isRoutable: { valid: !this.$get(errors, 'type.isRoutable.0'), message: this.$get(errors, 'type.isRoutable.0') },
+            isHierarchical: { valid: !this.$get(errors, 'type.isHierarchical.0'), message: this.$get(errors, 'type.isHierarchical.0') },
+            taxonomyField: { valid: !this.$get(errors, 'type.taxonomyField.0'), message: this.$get(errors, 'type.taxonomyField.0') },
         };
 
         return {
@@ -168,10 +154,10 @@ export default {
                     taxonomy_fields: [],
                     field_creator_section_id: null,
                     field_editor: {
-                        id: null,
-                        type: null,
-                        label: null,
-                        multilingual: null,
+                        id: {value: null, valid: true, message: null},
+                        type: {value: null, valid: true, message: null},
+                        label: {value: null, valid: true, message: null},
+                        multilingual: {value: null, valid: true, message: null},
                         constraints: [],
                         configuration: [],
                     },
@@ -180,19 +166,19 @@ export default {
             },
             model: {
                 type: {
-                    name: getFrom(model, 'type.name'),
-                    code: getFrom(model, 'type.code'),
-                    icon: getFrom(model, 'type.icon', 'fas fa-boxes'),
-                    isRoutable: getFrom(model, 'type.isRoutable', '1'),
-                    isHierarchical: getFrom(model, 'type.isHierarchical', '1'),
-                    taxonomyField: getFrom(model, 'type.taxonomyField'),
+                    name: this.$get(model, 'type.name'),
+                    code: this.$get(model, 'type.code'),
+                    icon: this.$get(model, 'type.icon', 'fas fa-boxes'),
+                    isRoutable: this.$get(model, 'type.isRoutable', '1'),
+                    isHierarchical: this.$get(model, 'type.isHierarchical', '1'),
+                    taxonomyField: this.$get(model, 'type.taxonomyField'),
                 },
                 layout: {
                     sidebar: {
-                        sections: getFrom(model, 'layout.sidebar.sections', [])
+                        sections: this.$get(model, 'layout.sidebar.sections', [])
                     },
                     main: {
-                        sections: getFrom(model, 'layout.main.sections', [])
+                        sections: this.$get(model, 'layout.main.sections', [])
                     }
                 }
             }
@@ -211,8 +197,75 @@ export default {
                 return;
             }
 
+            let prepareDataToSubmit = function (sections) {
+                let newSections = [];
+
+                for (let s in sections) {
+                    let newFields = [];
+
+                    for (let f in sections[s].fields) {
+                        let field = sections[s].fields[f];
+                        let newConfiguration = [];
+                        let newConstratints = [];
+
+                        for (let c in field.configuration) {
+                            let conf = field.configuration[c];
+
+                            newConfiguration[c] = {
+                                id: conf.id,
+                                value: conf.value,
+                            };
+                        }
+
+                        for (let c in field.constraints) {
+                            let constr = field.constraints[c];
+                            let newModificators = [];
+
+                            for (let m in constr.modificators) {
+                                newModificators[m] = {
+                                    id: constr.modificators[m].id,
+                                    value: constr.modificators[m].value,
+                                };
+                            }
+
+                            newConstratints[c] = {
+                                id: constr.id,
+                                enabled: constr.enabled,
+                                modificators: newModificators,
+                            };
+                        }
+
+                        newFields[f] = {
+                            id: field.id.value,
+                            label: field.label.value,
+                            multilingual: field.multilingual.value,
+                            type: field.type.value,
+                            configuration: newConfiguration,
+                            constraints: newConstratints,
+                        }
+                    }
+
+                    newSections[s] = {
+                        id: sections[s].id,
+                        label: sections[s].label,
+                        fields: newFields,
+                    }
+                }
+
+                return newSections;
+            };
+
+            let layout = {
+                sidebar: {
+                    sections: prepareDataToSubmit(this.$get(this.model.layout, 'sidebar.sections'))
+                },
+                main: {
+                    sections: prepareDataToSubmit(this.$get(this.model.layout, 'main.sections'))
+                },
+            };
+
             $('#ctb-form-field-node-type').val(JSON.stringify({
-                layout: this.model.layout,
+                layout: layout,
                 type: this.model.type
             }));
             $('#ctb-form').submit();
@@ -283,7 +336,6 @@ export default {
             this.view.form.field_editor.multilingual = field.multilingual;
             this.view.form.field_editor.constraints = field.constraints;
             this.view.form.field_editor.configuration = field.configuration;
-            this.view.form.field_editor.errors = field.errors;
             this.view.modal.field_editor.show();
 
             this.$root.$emit('field:edit:modal:opened');
@@ -300,10 +352,11 @@ export default {
             }
 
             section.fields.push({
-                id: data.id,
-                label: data.label,
-                type: data.type,
-                multilingual: data.multilingual,
+                metadata: { has_errors: false },
+                id: { value: data.id, valid: true, message: null },
+                label: { value: data.label, valid: true, message: null },
+                type: { value: data.type, valid: true, message: null },
+                multilingual: { value: data.multilingual, valid: true, message: null },
                 configuration: data.configuration,
             });
 
@@ -311,16 +364,25 @@ export default {
 
             this.view.modal.field_creator.hide();
             this.openEditFieldModel(data.id);
+            this.$forceUpdate();
         },
         editFieldUsingCreatorData: function (data) {
-            let field = this._findField(this.view.form.field_editor.id);
+            let field = this._findField(this.view.form.field_editor.id.value);
 
-            field.label = data.label;
-            field.multilingual = data.multilingual;
+            field.metadata.has_errors = false;
+            field.id.message = null;
+            field.id.valid = true;
+            field.label.value = data.label;
+            field.label.message = null;
+            field.label.valid = true;
+            field.multilingual.value = data.multilingual;
+            field.multilingual.message = null;
+            field.multilingual.valid = true;
             field.configuration = data.configuration;
             field.constraints = data.constraints;
 
             this.view.modal.field_editor.hide();
+            this.$forceUpdate();
         },
         generateTypeCode: function () {
             if (this.model.type.code === '') {
@@ -349,20 +411,16 @@ export default {
         _findField: function (id) {
             for (let s in this.model.layout.sidebar.sections) {
                 for (let f in this.model.layout.sidebar.sections[s].fields) {
-                    if (this.model.layout.sidebar.sections[s].fields[f].id === id) {
-                        let field = this.model.layout.sidebar.sections[s].fields[f];
-                        field.errors = this.$get(this.view.errors, `layout.sidebar.sections.${s}.fields.${f}`);
-                        return field;
+                    if (this.model.layout.sidebar.sections[s].fields[f].id.value === id) {
+                        return this.model.layout.sidebar.sections[s].fields[f];
                     }
                 }
             }
 
             for (let s in this.model.layout.main.sections) {
                 for (let f in this.model.layout.main.sections[s].fields) {
-                    if (this.model.layout.main.sections[s].fields[f].id === id) {
-                        let field = this.model.layout.main.sections[s].fields[f];
-                        field.errors = this.$get(this.view.errors, `layout.main.sections.${s}.fields.${f}`);
-                        return field;
+                    if (this.model.layout.main.sections[s].fields[f].id.value === id) {
+                        return this.model.layout.main.sections[s].fields[f];
                     }
                 }
             }
@@ -373,11 +431,11 @@ export default {
 
             for (let s in this.model.layout.sidebar.sections) {
                 for (let f in this.model.layout.sidebar.sections[s].fields) {
-                    if (this.model.layout.sidebar.sections[s].fields[f].type === 'taxonomy') {
+                    if (this.model.layout.sidebar.sections[s].fields[f].type.value === 'taxonomy') {
                         this.view.form.has_taxonomy_field = true;
                         this.view.form.taxonomy_fields.push({
-                            value: this.model.layout.sidebar.sections[s].fields[f].id,
-                            label: this.model.layout.sidebar.sections[s].fields[f].label
+                            value: this.model.layout.sidebar.sections[s].fields[f].id.value,
+                            label: this.model.layout.sidebar.sections[s].fields[f].label.value
                         });
                     }
                 }
@@ -385,11 +443,11 @@ export default {
 
             for (let s in this.model.layout.main.sections) {
                 for (let f in this.model.layout.main.sections[s].fields) {
-                    if (this.model.layout.main.sections[s].fields[f].type === 'taxonomy') {
+                    if (this.model.layout.main.sections[s].fields[f].type.value === 'taxonomy') {
                         this.view.form.has_taxonomy_field = true;
                         this.view.form.taxonomy_fields.push({
-                            value: this.model.layout.sidebar.sections[s].fields[f].id,
-                            label: this.model.layout.sidebar.sections[s].fields[f].label
+                            value: this.model.layout.sidebar.sections[s].fields[f].id.value,
+                            label: this.model.layout.sidebar.sections[s].fields[f].label.value
                         });
                     }
                 }

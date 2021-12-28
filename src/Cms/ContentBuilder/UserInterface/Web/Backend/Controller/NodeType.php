@@ -41,8 +41,141 @@ class NodeType extends AbstractController
         $data = [];
         $cleaningResult = [];
 
+        /*$data = [
+            'layout' => [
+                'sidebar' => [
+                    'sections' => [
+                        0 => [
+                            'id' => 'sdfgdfgdfg',
+                            'label' => 'Sample section with errors',
+                            'fields' => [
+                                0 => [
+                                    'metadata' => [
+                                        'has_errors' => true,
+                                    ],
+                                    'id' => [
+                                        'value' => 'adsfgsdfghdfgh',
+                                        'valid' => false,
+                                        'message' => 'INVALID ID',
+                                    ],
+                                    'label' => [
+                                        'value' => 'select field',
+                                        'valid' => false,
+                                        'message' => 'INVALID LABEL',
+                                    ],
+                                    'type' => [
+                                        'value' => 'select',
+                                        'valid' => true,
+                                        'message' => null,
+                                    ],
+                                    'multilingual' => [
+                                        'value' => 'true',
+                                        'valid' => true,
+                                        'message' => null,
+                                    ],
+                                    'constraints' => [
+                                        0 => [
+                                            'id' => 'required',
+                                            'enabled' => true,
+                                            'valid' => true,
+                                            'message' => null,
+                                            'modificators' => [],
+                                        ],
+                                    ],
+                                    'configuration' => [
+                                        ['id' => 'placeholder', 'value' => '132434'],
+                                        ['id' => 'choices', 'value' => null, 'valid' => false, 'message' => 'This field is required'],
+                                    ],
+                                ],
+                                1 => [
+                                    'metadata' => [
+                                        'has_errors' => true,
+                                    ],
+                                    'id' => [
+                                        'value' => 'dthtyjtjy',
+                                        'valid' => false,
+                                        'message' => 'INVALID ID',
+                                    ],
+                                    'label' => [
+                                        'value' => 'text field',
+                                        'valid' => false,
+                                        'message' => 'INVALID LABEL',
+                                    ],
+                                    'type' => [
+                                        'value' => 'textarea',
+                                        'valid' => true,
+                                        'message' => null,
+                                    ],
+                                    'multilingual' => [
+                                        'value' => 'true',
+                                        'valid' => true,
+                                        'message' => null,
+                                    ],
+                                    'constraints' => [
+                                        0 => [
+                                            'id' => 'length',
+                                            'enabled' => true,
+                                            'valid' => true,
+                                            'message' => null,
+                                            'modificators' => [
+                                                ['id' => 'max', 'value' => '255'],
+                                                ['id' => 'min', 'value' => null, 'valid' => false, 'message' => 'This field is required'],
+                                            ],
+                                        ],
+                                    ],
+                                    'configuration' => [],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];*/
+
         if ($request->isMethod('POST')) {
             $data = json_decode($request->request->get('node_type'), true);
+
+            if (0) {
+                $data['type']['code'] = 'page';
+                $data['layout']['sidebar']['sections'][0]['fields'][0]['configuration'][] = [
+                    'id' => 'asdasd',
+                    'value' => null,
+                ];
+                $data['layout']['sidebar']['sections'][] = [
+                    'id' => '45f34563&^%b',
+                    'label' => 'test section',
+                    'fields' => [
+                        [
+                            'id' => 'o8&TH(N876T',
+                            'label' => 'test field',
+                            'type' => 'not existent type',
+                            'multilingual' => true,
+                            'configuration' => [],
+                        ],
+                    ],
+                ];
+                $data['layout']['sidebar']['sections'][] = [
+                    'id' => 'asd',
+                    'label' => 'asd',
+                    'fields' => [
+                        [
+                            'id' => 'qwe',
+                            'label' => 'qwe',
+                            'type' => 'select',
+                            'multilingual' => true,
+                            'configuration' => [],
+                            'constraints' => [
+                                [
+                                    'id' => 'length',
+                                    'modificators' => [
+                                        ['id' => 'asdasd', 'value' => '132434'],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ];
+            }
 
             $dataManipulator = new NodeTypeRequestManipulator(
                 $data,
@@ -99,6 +232,8 @@ class NodeType extends AbstractController
                 //exit;
             }
         }
+
+        dump($cleaningResult, $errors);
 
         return $this->view('@backend/content_builder/node_type/create.tpl', [
             'fieldTypes' => $this->getFieldTypes(),

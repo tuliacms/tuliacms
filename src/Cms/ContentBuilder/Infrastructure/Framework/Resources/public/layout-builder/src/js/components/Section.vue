@@ -16,7 +16,6 @@
                             :key="field.id"
                             :field="field"
                             :translations="translations"
-                            :errors="$get(errors, `fields.${key}`, {})"
                         ></Field>
                     </transition-group>
                 </draggable>
@@ -33,7 +32,7 @@ import draggable from 'vuedraggable';
 import Field from './Field';
 
 export default {
-    props: ['section', 'errors', 'translations'],
+    props: ['section', 'translations'],
     components: {
         draggable,
         Field

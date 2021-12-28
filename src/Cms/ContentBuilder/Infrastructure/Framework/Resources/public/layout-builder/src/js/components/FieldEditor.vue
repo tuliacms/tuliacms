@@ -16,7 +16,8 @@
                         </div>
                         <div class="col mb-3">
                             <label for="ctb-edit-field-id" class="form-label">{{ translations.fieldId }}</label>
-                            <input type="text" class="form-control" id="ctb-edit-field-id" v-model="model.id.value" disabled />
+                            <input type="text" :class="{ 'form-control': true, 'is-invalid': model.id.valid === false }" id="ctb-edit-field-id" v-model="model.id.value" disabled />
+                            <div v-if="model.id.valid === false" class="invalid-feedback">{{ model.id.message }}</div>
                         </div>
                     </div>
                     <div class="form-check">
@@ -84,9 +85,10 @@ export default {
     data: function () {
         return {
             model: {
-                id: { value: '' },
+                id: { value: '', valid: true, message: null },
                 label: { value: null, valid: true, message: null },
                 multilingual: { value: false, valid: true, message: null },
+                type: { value: false, valid: true, message: null },
                 constraints: [],
                 configuration: [],
             }
@@ -95,7 +97,7 @@ export default {
     methods: {
         updateField: function () {
             if (this._validate() === false) {
-                return;
+                //return;
             }
 
             let model = {
@@ -210,6 +212,8 @@ export default {
 
                                 if (oldModificator.id === nm) {
                                     newModificator.value = oldModificator.value;
+                                    newModificator.valid = oldModificator.valid;
+                                    newModificator.message = oldModificator.message;
                                 }
                             }
                         }
@@ -229,21 +233,38 @@ export default {
 
             let configuration = JSON.parse(JSON.stringify(this.fieldTypes[this.model.type.value].configuration));
 
-            for (let i in configuration) {
-                configuration[i].id = i;
-                configuration[i].value = null;
-                configuration[i].valid = null;
-                configuration[i].message = null;
-                this.model.configuration.push(configuration[i]);
+            for (let nc in configuration) {
+                configuration[nc].id = nc;
+                configuration[nc].value = null;
+                configuration[nc].valid = null;
+                configuration[nc].message = null;
+
+                for (let cc in this.field.configuration) {
+                    let oldConfiguration = this.field.configuration[cc];
+
+                    if (oldConfiguration.id === configuration[nc].id) {
+                        configuration[nc].value = oldConfiguration.value;
+                        configuration[nc].valid = oldConfiguration.valid;
+                        configuration[nc].message = oldConfiguration.message;
+                    }
+                }
+
+                this.model.configuration.push(configuration[nc]);
             }
         },
         _initiate: function () {
-            let labelError = this.$get(this.field, 'errors.label.0');
-
-            this.model.id = { value: this.field.id, valid: true, message: null };
-            this.model.label = { value: this.field.label, valid: !labelError, message: labelError };
-            this.model.multilingual = { value: this.field.multilingual, valid: true, message: null };
-            this.model.type = { value: this.field.type };
+            this.model.id.value = this.field.id.value;
+            this.model.id.valid = this.field.id.valid;
+            this.model.id.message = this.field.id.message;
+            this.model.label.value = this.field.label.value;
+            this.model.label.valid = this.field.label.valid;
+            this.model.label.message = this.field.label.message;
+            this.model.multilingual.value = this.field.multilingual.value;
+            this.model.multilingual.valid = this.field.multilingual.valid;
+            this.model.multilingual.message = this.field.multilingual.message;
+            this.model.type.value = this.field.type.value;
+            this.model.type.valid = this.field.type.valid;
+            this.model.type.message = this.field.type.message;
 
             this._updateFieldTypeConstraints();
             this._updateFieldTypeConfiguration();
