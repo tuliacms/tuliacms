@@ -25,7 +25,7 @@ class SettingsGroup extends AbstractSettingsGroup
      */
     public function getId(): string
     {
-        return 'node.' . $this->nodeType->getType();
+        return 'node.' . $this->nodeType->getCode();
     }
 
     /**
@@ -58,7 +58,7 @@ class SettingsGroup extends AbstractSettingsGroup
     public function buildForm(): FormInterface
     {
         $data = [
-            'per_page' => $this->getOption('node.' . $this->nodeType->getType() . '.per_page', 15),
+            'per_page' => $this->getOption('node.' . $this->nodeType->getCode() . '.per_page', 15),
         ];
 
         return $this->createForm(SettingsForm::class, $data);
@@ -77,7 +77,7 @@ class SettingsGroup extends AbstractSettingsGroup
      */
     public function saveAction(array $data): bool
     {
-        $this->setOption('node.' . $this->nodeType->getType() . '.per_page', (int) $data['per_page']);
+        $this->setOption('node.' . $this->nodeType->getCode() . '.per_page', (int) $data['per_page']);
 
         return true;
     }

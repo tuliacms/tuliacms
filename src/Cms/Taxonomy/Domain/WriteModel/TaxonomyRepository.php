@@ -227,7 +227,7 @@ class TaxonomyRepository
         $result = [];
 
         foreach ($taxonomyType->getFields() as $field) {
-            $result[$field->getName()] = [
+            $result[$field->getCode()] = [
                 'is_multilingual' => $field->isMultilingual(),
                 'is_multiple' => $field->isMultiple(),
                 'is_compilable' => $field->hasFlag('compilable'),

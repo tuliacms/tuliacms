@@ -66,9 +66,9 @@ class NodeType extends AbstractContentType
     protected function validateRoutableTaxonomy(): void
     {
         if (isset($this->fields[$this->routableTaxonomyField]) === false) {
-            throw MissingRoutableFieldException::fromName($this->type, $this->routableTaxonomyField);
+            throw MissingRoutableFieldException::fromName($this->code, $this->routableTaxonomyField);
         } elseif ($this->fields[$this->routableTaxonomyField]->getType() !== 'taxonomy') {
-            throw RoutableFieldIsNotTaxonomyTypeException::fromName($this->type, $this->routableTaxonomyField);
+            throw RoutableFieldIsNotTaxonomyTypeException::fromName($this->code, $this->routableTaxonomyField);
         }
     }
 

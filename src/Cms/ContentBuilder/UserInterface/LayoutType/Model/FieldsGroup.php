@@ -9,29 +9,29 @@ namespace Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Model;
  */
 class FieldsGroup
 {
+    private string $code;
     private string $name;
-    private string $label;
     private bool $active;
     private string $interior;
     private array $fields;
 
-    public function __construct(string $name, string $label, bool $active, string $interior, array $fields)
+    public function __construct(string $code, string $name, bool $active, string $interior, array $fields)
     {
+        $this->code = $code;
         $this->name = $name;
-        $this->label = $label;
         $this->active = $active;
         $this->interior = $interior;
         $this->fields = $fields;
     }
 
-    public function getName(): string
+    public function getCode(): string
     {
-        return $this->name;
+        return $this->code;
     }
 
-    public function setName(string $name): void
+    public function setCode(string $code): void
     {
-        $this->name = $name;
+        $this->code = $code;
     }
 
     public function getFields(): array
@@ -44,14 +44,14 @@ class FieldsGroup
         $this->fields = $fields;
     }
 
-    public function getLabel(): string
+    public function getName(): string
     {
-        return $this->label;
+        return $this->name;
     }
 
-    public function setLabel(string $label): void
+    public function setName(string $name): void
     {
-        $this->label = $label;
+        $this->name = $name;
     }
 
     public function isActive(): bool

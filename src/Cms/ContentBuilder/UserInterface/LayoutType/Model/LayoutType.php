@@ -9,8 +9,8 @@ namespace Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Model;
  */
 class LayoutType
 {
+    protected string $code;
     protected string $name;
-    protected string $label;
     protected string $builder;
 
     /**
@@ -18,9 +18,14 @@ class LayoutType
      */
     protected array $sections = [];
 
-    public function __construct(string $name)
+    public function __construct(string $code)
     {
-        $this->name = $name;
+        $this->code = $code;
+    }
+
+    public function getCode(): string
+    {
+        return $this->code;
     }
 
     public function getName(): string
@@ -28,14 +33,9 @@ class LayoutType
         return $this->name;
     }
 
-    public function getLabel(): string
+    public function setName(string $name): void
     {
-        return $this->label;
-    }
-
-    public function setLabel(string $label): void
-    {
-        $this->label = $label;
+        $this->name = $name;
     }
 
     public function getBuilder(): string

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service;
 
+use Tulia\Cms\ContentBuilder\Infrastructure\Presentation\TwigLayoutTypeBuilder;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Model\FieldsGroup;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Model\LayoutType;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Model\Section;
@@ -13,11 +14,11 @@ use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Model\Section;
  */
 abstract class AbstractLayoutTypeProvider implements LayoutTypeProviderInterface
 {
-    protected function buildLayoutType(string $name, array $options): LayoutType
+    protected function buildLayoutType(string $code, array $options): LayoutType
     {
-        $layoutType = new LayoutType($name);
-        $layoutType->setLabel($options['label']);
-        $layoutType->setBuilder($options['builder']);
+        $layoutType = new LayoutType($code);
+        $layoutType->setName($options['name']);
+        $layoutType->setBuilder($options['builder'] ?? TwigLayoutTypeBuilder::class);
 
         foreach ($options['sections'] as $sectionName => $sectionInfo) {
             $layoutType->addSection($this->buildLayoutSection($sectionName, $sectionInfo));
@@ -35,12 +36,12 @@ abstract class AbstractLayoutTypeProvider implements LayoutTypeProviderInterface
     {
         $result = [];
 
-        foreach ($groups as $name => $info) {
-            $result[$name] = new FieldsGroup(
-                $name,
-                $info['label'],
-                $info['active'],
-                $info['interior'],
+        foreach ($groups as $code => $info) {
+            $result[$code] = new FieldsGroup(
+                $code,
+                $info['name'],
+                (bool) $info['active'],
+                (string) $info['interior'],
                 $info['fields']
             );
         }

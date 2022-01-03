@@ -32,7 +32,7 @@ class LayoutBuilder
         $layoutName = $type->getLayout();
 
         if ($this->layoutTypeRegistry->has($layoutName) === false) {
-            throw LayoutNotExists::fromName($layoutName, $type->getType());
+            throw LayoutNotExists::fromName($layoutName, $type->getCode());
         }
 
         $layout = $this->layoutTypeRegistry->get($layoutName);

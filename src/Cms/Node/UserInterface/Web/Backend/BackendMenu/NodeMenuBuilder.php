@@ -41,7 +41,7 @@ class NodeMenuBuilder implements BuilderInterface
 
     private function registerNodeType(ItemRegistryInterface $registry, NodeType $type): void
     {
-        $root = 'node_' . $type->getType();
+        $root = 'node_' . $type->getCode();
 
         $registry->add($root, [
             'label'    => $this->helper->trans($type->getName(), [], 'node'),
@@ -53,7 +53,7 @@ class NodeMenuBuilder implements BuilderInterface
 
         $registry->add($root . '_item', [
             'label'  => $this->helper->trans('nodesListOfType', ['type' => $this->helper->trans($type->getName(), [], 'node')], 'node'),
-            'link'   => $this->helper->generateUrl('backend.node', [ 'node_type' => $type->getType() ]),
+            'link'   => $this->helper->generateUrl('backend.node', [ 'node_type' => $type->getCode() ]),
             'parent' => $root,
         ]);
 
@@ -64,9 +64,9 @@ class NodeMenuBuilder implements BuilderInterface
 
             $taxonomy = $this->taxonomyTypeRegistry->get($field->getTaxonomy());
 
-            $registry->add($root . '_' . $taxonomy->getType(), [
+            $registry->add($root . '_' . $taxonomy->getCode(), [
                 'label'  => $this->helper->trans('termsListOfTaxonomy', ['taxonomy' => $this->helper->trans($taxonomy->getName(), [], 'taxonomy')], 'taxonomy'),
-                'link'   => $this->helper->generateUrl('backend.term', [ 'taxonomyType' => $taxonomy->getType() ]),
+                'link'   => $this->helper->generateUrl('backend.term', [ 'taxonomyType' => $taxonomy->getCode() ]),
                 'parent' => $root,
             ]);
         }

@@ -3,12 +3,12 @@
 {% assets ['content_builder.layout_builder'] %}
 
 {% block title %}
-    {{ 'createNodeType'|trans({}, 'content_builder') }}
+    {{ 'editNodeType'|trans({}, 'content_builder') }}
 {% endblock %}
 
 {% block breadcrumbs %}
     <li class="breadcrumb-item"><a href="{{ path('backend.content_builder.homepage') }}">{{ 'contentModel'|trans }}</a></li>
-    <li class="breadcrumb-item active" aria-current="page">{{ 'createNodeType'|trans({}, 'content_builder') }}</li>
+    <li class="breadcrumb-item active" aria-current="page">{{ 'editNodeType'|trans({}, 'content_builder') }}</li>
 {% endblock %}
 
 {% block content %}

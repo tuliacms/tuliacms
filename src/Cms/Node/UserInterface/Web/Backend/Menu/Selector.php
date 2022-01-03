@@ -50,7 +50,7 @@ class Selector implements SelectorInterface
 
         return $this->engine->render(new View('@backend/node/menu/selector.tpl', [
             'form' => $form->createView(),
-            'type' => $nodeType->getType(),
+            'type' => $nodeType->getCode(),
             'field' => $field,
             'identityType' => $type,
         ]));

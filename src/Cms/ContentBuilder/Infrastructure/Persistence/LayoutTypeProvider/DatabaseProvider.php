@@ -13,6 +13,8 @@ use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 class DatabaseProvider extends AbstractLayoutTypeProvider
 {
     private ConnectionInterface $connection;
+    private array $groupsSource = [];
+    private array $fieldsSource = [];
 
     public function __construct(ConnectionInterface $connection)
     {
@@ -21,6 +23,50 @@ class DatabaseProvider extends AbstractLayoutTypeProvider
 
     public function provide(): array
     {
-        return [];
+        $result = [];
+
+        foreach ($this->connection->fetchAllAssociative('SELECT * FROM #__node_type_layout') as $type) {
+            $type['sections']['main']['groups'] = $this->getGroups($type['code'], 'main');
+            $type['sections']['sidebar']['groups'] = $this->getGroups($type['code'], 'sidebar');
+
+            $result[] = $this->buildLayoutType($type['code'], $type);
+        }
+
+        return $result;
+    }
+
+    private function getGroups(string $layoutCode, string $section): array
+    {
+        if ($this->groupsSource === []) {
+            $this->groupsSource = $this->connection->fetchAllAssociative('SELECT * FROM #__node_type_layout_group');
+        }
+
+        $result = [];
+
+        foreach ($this->groupsSource as $group) {
+            if ($group['section'] === $section && $group['layout_type'] === $layoutCode) {
+                $result[$group['code']] = $group;
+                $result[$group['code']]['fields'] = $this->getFields($group['id']);
+            }
+        }
+
+        return $result;
+    }
+
+    private function getFields(string $groupId): array
+    {
+        if ($this->fieldsSource === []) {
+            $this->fieldsSource = $this->connection->fetchAllAssociative('SELECT * FROM #__node_type_layout_group_field');
+        }
+
+        $result = [];
+
+        foreach ($this->fieldsSource as $field) {
+            if ($field['group_id'] === $groupId) {
+                $result[] = $field['code'];
+            }
+        }
+
+        return $result;
     }
 }

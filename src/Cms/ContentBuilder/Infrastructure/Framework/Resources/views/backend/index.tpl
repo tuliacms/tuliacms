@@ -34,11 +34,11 @@
                                 {% if type.isInternal %}
                                     <h4 class="card-title"><i class="{{ type.icon }}"></i> &nbsp; {{ type.name|trans({}, 'node') }}</h4>
                                 {% else %}
-                                    <a href="">
+                                    <a href="{{ path('backend.content_builder.node_type.edit', { code: type.code }) }}">
                                         <h4 class="card-title"><i class="{{ type.icon }}"></i> &nbsp; {{ type.name|trans({}, 'node') }}</h4>
                                     </a>
                                 {% endif %}
-                                <small class="text-muted">Code: {{ type.type }}</small>
+                                <small class="text-muted">Code: {{ type.code }}</small>
                             </div>
                             <ul class="list-group list-group-flush">
                                 {% if type.isInternal %}
@@ -50,14 +50,14 @@
                             </ul>
                             {% if type.isInternal == false %}
                                 <div class="card-footer py-0 pr-0">
-                                    <a href="" class="card-link py-3 d-inline-block" title="{{ 'edit'|trans({}, 'messages') }}">{{ 'edit'|trans({}, 'messages') }}</a>
+                                    <a href="{{ path('backend.content_builder.node_type.edit', { code: type.code }) }}" class="card-link py-3 d-inline-block" title="{{ 'edit'|trans({}, 'messages') }}">{{ 'edit'|trans({}, 'messages') }}</a>
                                     <a href="#" class="card-link"></a>
                                     <div class="dropup d-inline-block float-right">
                                         <a href="#" class="card-link d-inline-block px-4 py-3 text-dark" data-bs-toggle="dropdown">
                                             <i class="fas fa-ellipsis-v"></i>
                                         </a>
                                         <div class="dropdown-menu">
-                                            <a href="#" class="dropdown-item dropdown-item-danger dropdown-item-with-icon website-delete-trigger" title="{{ 'delete'|trans({}, 'messages') }}" data-id="{{ type.type }}"><i class="dropdown-icon fas fa-times"></i>{{ 'delete'|trans({}, 'messages') }}</a>
+                                            <a href="#" class="dropdown-item dropdown-item-danger dropdown-item-with-icon website-delete-trigger" title="{{ 'delete'|trans({}, 'messages') }}" data-id="{{ type.code }}"><i class="dropdown-icon fas fa-times"></i>{{ 'delete'|trans({}, 'messages') }}</a>
                                         </div>
                                     </div>
                                 </div>
@@ -93,7 +93,7 @@
                                         <h4 class="card-title">{{ type.name|trans({}, 'node') }}</h4>
                                     </a>
                                 {% endif %}
-                                <small class="text-muted">Code: {{ type.type }}</small>
+                                <small class="text-muted">Code: {{ type.code }}</small>
                             </div>
                             <ul class="list-group list-group-flush">
                                 {% if type.isInternal %}
@@ -112,7 +112,7 @@
                                             <i class="fas fa-ellipsis-v"></i>
                                         </a>
                                         <div class="dropdown-menu">
-                                            <a href="#" class="dropdown-item dropdown-item-danger dropdown-item-with-icon website-delete-trigger" title="{{ 'delete'|trans({}, 'messages') }}" data-id="{{ type.type }}"><i class="dropdown-icon fas fa-times"></i>{{ 'delete'|trans({}, 'messages') }}</a>
+                                            <a href="#" class="dropdown-item dropdown-item-danger dropdown-item-with-icon website-delete-trigger" title="{{ 'delete'|trans({}, 'messages') }}" data-id="{{ type.code }}"><i class="dropdown-icon fas fa-times"></i>{{ 'delete'|trans({}, 'messages') }}</a>
                                         </div>
                                     </div>
                                 </div>

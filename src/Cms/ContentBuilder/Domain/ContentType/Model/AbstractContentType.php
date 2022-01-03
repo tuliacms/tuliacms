@@ -16,7 +16,7 @@ abstract class AbstractContentType
 {
     protected string $controller;
     protected string $layout;
-    protected string $type;
+    protected string $code;
     protected string $name;
     protected bool $isRoutable = true;
     protected bool $isHierarchical = false;
@@ -31,9 +31,9 @@ abstract class AbstractContentType
     abstract protected function internalValidate(): void;
     abstract protected function internalValidateField(Field $field): void;
 
-    public function __construct(string $type, string $layout, bool $isInternal)
+    public function __construct(string $code, string $layout, bool $isInternal)
     {
-        $this->type = $type;
+        $this->code = $code;
         $this->layout = $layout;
         $this->isInternal = $isInternal;
     }
@@ -48,9 +48,9 @@ abstract class AbstractContentType
         $this->name = $name;
     }
 
-    public function getType(): string
+    public function getCode(): string
     {
-        return $this->type;
+        return $this->code;
     }
 
     public function getLayout(): string
@@ -124,7 +124,7 @@ abstract class AbstractContentType
     {
         $this->validateField($field);
 
-        $this->fields[$field->getName()] = $field;
+        $this->fields[$field->getCode()] = $field;
 
         return $field;
     }
@@ -156,12 +156,12 @@ abstract class AbstractContentType
      */
     protected function validateField(Field $field): void
     {
-        if ($field->isMultiple() && in_array($field->getName(), ['title', 'slug'])) {
-            throw MultipleValueForTitleOrSlugOccuredException::fromFieldType($field->getName());
+        if ($field->isMultiple() && in_array($field->getCode(), ['title', 'slug'])) {
+            throw MultipleValueForTitleOrSlugOccuredException::fromFieldType($field->getCode());
         }
 
-        if (isset($this->fields[$field->getName()]) && $this->fields[$field->getName()]->isInternal()) {
-            throw CannotOverwriteInternalFieldException::fromName($field->getName());
+        if (isset($this->fields[$field->getCode()]) && $this->fields[$field->getCode()]->isInternal()) {
+            throw CannotOverwriteInternalFieldException::fromName($field->getCode());
         }
 
         $this->internalValidateField($field);
@@ -173,7 +173,7 @@ abstract class AbstractContentType
     protected function validateRoutableContentType(): void
     {
         if ($this->isRoutable && isset($this->fields['slug']) === false) {
-            throw CannotSetRoutableNodeTypeWithoutSlugField::fromType($this->type);
+            throw CannotSetRoutableNodeTypeWithoutSlugField::fromType($this->code);
         }
     }
 }

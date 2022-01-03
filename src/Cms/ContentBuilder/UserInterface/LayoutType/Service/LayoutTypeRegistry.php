@@ -33,6 +33,13 @@ class LayoutTypeRegistry
         return $this->layoutTypes[$type];
     }
 
+    public function all(): array
+    {
+        $this->fetch();
+
+        return $this->layoutTypes;
+    }
+
     public function has(string $type): bool
     {
         $this->fetch();
@@ -60,7 +67,7 @@ class LayoutTypeRegistry
         }
 
         foreach (array_merge(...$types) as $type) {
-            $this->layoutTypes[$type->getName()] = $type;
+            $this->layoutTypes[$type->getCode()] = $type;
         }
     }
 }

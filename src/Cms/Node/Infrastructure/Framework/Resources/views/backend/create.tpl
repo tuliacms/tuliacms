@@ -8,7 +8,7 @@
 {% import '@backend/_macros/alerts.tpl' as alerts %}
 
 {% block breadcrumbs %}
-    <li class="breadcrumb-item"><a href="{{ path('backend.node', { node_type: nodeType.type }) }}">{{ 'nodesListOfType'|trans({ type: nodeType.name|trans }) }}</a></li>
+    <li class="breadcrumb-item"><a href="{{ path('backend.node', { node_type: nodeType.code }) }}">{{ 'nodesListOfType'|trans({ type: nodeType.name|trans }) }}</a></li>
     <li class="breadcrumb-item active" aria-current="page">{{ 'createNode'|trans }}</li>
 {% endblock %}
 

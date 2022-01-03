@@ -98,7 +98,7 @@ class Node extends AbstractController
             $this->updateModel($formDescriptor, $node);
 
             $this->setFlash('success', $this->trans('nodeSaved', [], 'node'));
-            return $this->redirectToRoute('backend.node.edit', [ 'id' => $node->getId(), 'node_type' => $nodeType->getType() ]);
+            return $this->redirectToRoute('backend.node.edit', [ 'id' => $node->getId(), 'node_type' => $nodeType->getCode() ]);
         }
 
         return $this->view('@backend/node/create.tpl', [
@@ -136,7 +136,7 @@ class Node extends AbstractController
             try {
                 $this->updateModel($formDescriptor, $node);
                 $this->setFlash('success', $this->trans('nodeSaved', [], 'node'));
-                return $this->redirectToRoute('backend.node.edit', [ 'id' => $node->getId(), 'node_type' => $nodeType->getType() ]);
+                return $this->redirectToRoute('backend.node.edit', [ 'id' => $node->getId(), 'node_type' => $nodeType->getCode() ]);
             } catch (SingularFlagImposedOnMoreThanOneNodeException $e) {
                 $error = new FormError($this->trans('singularFlagImposedOnMoreThanOneNode', ['flag' => $e->getFlag()], 'node'));
                 $form->get('flags')->addError($error);
@@ -170,7 +170,7 @@ class Node extends AbstractController
             switch ($status) {
                 case 'trashed'  : $node->setStatus('trashed'); break;
                 case 'published': $node->setStatus('published'); break;
-                default         : return $this->redirectToRoute('backend.node', [ 'node_type' => $nodeType->getType() ]);
+                default         : return $this->redirectToRoute('backend.node', [ 'node_type' => $nodeType->getCode() ]);
             }
 
             $this->repository->update($node);
@@ -183,7 +183,7 @@ class Node extends AbstractController
         }
 
         $this->setFlash('success', $this->trans($message, [], 'node'));
-        return $this->redirectToRoute('backend.node', [ 'node_type' => $nodeType->getType() ]);
+        return $this->redirectToRoute('backend.node', [ 'node_type' => $nodeType->getCode() ]);
     }
 
     /**

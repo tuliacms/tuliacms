@@ -6,3 +6,10 @@ backend.content_builder.node_type.create:
     path: /administrator/content-builder/node-type/create
     controller: Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Controller\NodeType::create
     methods: [GET, POST]
+
+backend.content_builder.node_type.edit:
+    path: /administrator/content-builder/node-type/edit/{code}
+    controller: Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Controller\NodeType::edit
+    methods: [GET, POST]
+    requirements:
+        code: '[a-z0-9_]+'

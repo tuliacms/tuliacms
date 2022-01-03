@@ -90,7 +90,7 @@ class TaxonomyTypeRegistry
         /** @var TaxonomyType $type */
         foreach (array_merge(...$types) as $type) {
             $this->decorate($type);
-            $this->taxonomyTypes[$type->getType()] = $type;
+            $this->taxonomyTypes[$type->getCode()] = $type;
         }
     }
 

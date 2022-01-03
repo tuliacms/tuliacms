@@ -30,26 +30,25 @@ cms:
                     fields:
                         introduction:
                             type: textarea
-                            multilingual: true
-                            label: ~
+                            is_multilingual: true
+                            name: ~
                             constraints:
-                                -
-                                    name: length
+                                length:
                                     modificators:
                                         - { modificator: max, value: 255 }
                         content:
                             type: wysiwyg
-                            multilingual: true
+                            is_multilingual: true
                         category:
-                            label: category
+                            name: category
                             type: taxonomy
                             taxonomy: category
                         tags:
-                            label: tags
+                            name: tags
                             type: taxonomy
                             taxonomy: tag
                         thumbnail:
-                            label: thumbnail
+                            name: thumbnail
                             type: filepicker
 
         taxonomy_type:
@@ -70,28 +69,28 @@ cms:
 
         layout_types:
             node_default:
-                label: defaultLayout
+                name: defaultLayout
                 sections:
                     main:
                         groups:
                             introduction:
-                                label: introduction
+                                name: introduction
                                 fields: [introduction]
                             content:
                                 active: true
                                 interior: full-width
-                                label: content
+                                name: content
                                 fields: [content]
                     sidebar:
                         groups:
                             category:
-                                label: taxonomy
+                                name: taxonomy
                                 fields: [category, tags]
                             thumbnail:
-                                label: thumbnail
+                                name: thumbnail
                                 fields: [thumbnail]
             taxonomy_default:
-                label: defaultLayout
+                name: defaultLayout
                 sections:
                     main:
                         groups: ~

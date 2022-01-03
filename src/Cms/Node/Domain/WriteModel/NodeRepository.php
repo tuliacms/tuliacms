@@ -107,15 +107,15 @@ class NodeRepository
             if ($field->isMultiple()) {
                 try {
                     $value = (array) unserialize(
-                        (string) $attributes[$field->getName()],
+                        (string) $attributes[$field->getCode()],
                         ['allowed_classes' => []]
                     );
                 } catch (\ErrorException $e) {
                     // If error, than empty or cannot be unserialized from singular value
-                    $value = $attributes[$field->getName()] ?? null;
+                    $value = $attributes[$field->getCode()] ?? null;
                 }
 
-                $attributes[$field->getName()] = $value;
+                $attributes[$field->getCode()] = $value;
             }
         }
 
@@ -255,7 +255,7 @@ class NodeRepository
         $result = [];
 
         foreach ($nodeType->getFields() as $field) {
-            $result[$field->getName()] = [
+            $result[$field->getCode()] = [
                 'is_multilingual' => $field->isMultilingual(),
                 'is_multiple' => $field->isMultiple(),
                 'is_compilable' => $field->hasFlag('compilable'),

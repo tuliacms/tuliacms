@@ -10,6 +10,8 @@ fieldLabelHelp: This label will be showed on the node form for administrators.
 fieldId: Field ID
 fieldIdHelp: Please use lowercased alphanum and underscores. THis field is used in API and in templates.
 youCannotCreateTwoFieldsWithTheSameId: Yout cannot create two fields with the same ID.
+nodeTypeNotExists: This node type not exists.
+cannotEditInternalNodeType: Internal Node Types are not editable.
 removeField: Remove field
 removeSection: Remove section
 fieldType: Field type

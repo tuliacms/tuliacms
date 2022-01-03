@@ -24,7 +24,7 @@ class VisibilityDecorator implements TaxonomyTypeDecoratorInterface
             'builder_options' => function () {
                 return [
                     'constraints' => [
-                        ['name' => 'required'],
+                        'required' => [],
                     ],
                 ];
             }

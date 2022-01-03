@@ -17,12 +17,12 @@ class StatusDecorator implements NodeTypeDecoratorInterface
     public function decorate(NodeType $nodeType): void
     {
         $nodeType->addField(new Field([
-            'name' => 'status',
+            'code' => 'status',
             'type' => 'select',
-            'label' => 'publicationStatus',
+            'name' => 'publicationStatus',
             'internal' => true,
             'constraints' => [
-                ['name' => 'required'],
+                'required' => [],
             ],
             'builder_options' => function () {
                 return [

@@ -25,16 +25,16 @@
                         {% for tax in taxonomies %}
                             <a class="dropdown-item dropdown-item-with-icon" href="{{ path('backend.term', { taxonomyType: tax.type }) }}"><i class="dropdown-icon fas fa-tags"></i> {{ tax.name|trans({}, 'taxonomy') }}</a>
                         {% endfor %}
-                        <a class="dropdown-item dropdown-item-with-icon" href="{{ path('backend.settings', { group: 'node.' ~ nodeType.type }) }}"><i class="dropdown-icon fas fa-cogs"></i> {{ 'settings'|trans({}, 'messages') }}</a>
+                        <a class="dropdown-item dropdown-item-with-icon" href="{{ path('backend.settings', { group: 'node.' ~ nodeType.code }) }}"><i class="dropdown-icon fas fa-cogs"></i> {{ 'settings'|trans({}, 'messages') }}</a>
                     </div>
                 </div>
-                <a href="{{ path('backend.node.create', { node_type: nodeType.type }) }}" class="btn btn-success btn-icon-left"><i class="btn-icon fas fa-plus"></i> {{ 'create'|trans({}, 'messages') }}</a>
+                <a href="{{ path('backend.node.create', { node_type: nodeType.code }) }}" class="btn btn-success btn-icon-left"><i class="btn-icon fas fa-plus"></i> {{ 'create'|trans({}, 'messages') }}</a>
             </div>
             <i class="pane-header-icon fas {{ nodeType.icon }}"></i>
             <h1 class="pane-title">{{ block('title') }}</h1>
         </div>
         {{ generator.generate(datatable, {
-            data_endpoint: path('backend.node.datatable', { node_type: nodeType.type }),
+            data_endpoint: path('backend.node.datatable', { node_type: nodeType.code }),
             pagination: false
         }) }}
     </div>

@@ -92,7 +92,7 @@ class NodeTypeRegistry
             $this->decorate($type);
             $type->validate();
 
-            $this->nodeTypes[$type->getType()] = $type;
+            $this->nodeTypes[$type->getCode()] = $type;
         }
     }
 

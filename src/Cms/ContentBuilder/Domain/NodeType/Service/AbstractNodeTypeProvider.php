@@ -34,8 +34,8 @@ abstract class AbstractNodeTypeProvider implements NodeTypeProviderInterface
         $nodeType->setName($options['name']);
         $nodeType->setIsHierarchical((bool) $options['is_hierarchical']);
 
-        foreach ($options['fields'] as $fieldName => $fieldOptions) {
-            $nodeType->addField($this->buildNodeField($fieldName, $fieldOptions));
+        foreach ($options['fields'] as $fieldCode => $fieldOptions) {
+            $nodeType->addField($this->buildNodeField($fieldCode, $fieldOptions));
         }
 
         /**
@@ -48,15 +48,17 @@ abstract class AbstractNodeTypeProvider implements NodeTypeProviderInterface
         return $nodeType;
     }
 
-    protected function buildNodeField(string $name, array $options): Field
+    protected function buildNodeField(string $code, array $options): Field
     {
         return new Field([
-            'name' => $name,
+            'code' => $code,
             'type' => $options['type'],
-            'label' => (string) $options['label'],
-            'multilingual' => $options['multilingual'],
-            'multiple' => $options['multiple'],
+            'name' => (string) $options['name'],
+            'is_multilingual' => (bool) $options['is_multilingual'],
+            'is_multiple' => (bool) $options['is_multiple'],
             'taxonomy' => $options['taxonomy'],
+            'configuration' => $options['configuration'],
+            'constraints' => $options['constraints'],
             'flags' => $this->fieldTypeMappingRegistry->getTypeFlags($options['type']),
             'builder_options' => function () use ($options) {
                 return [

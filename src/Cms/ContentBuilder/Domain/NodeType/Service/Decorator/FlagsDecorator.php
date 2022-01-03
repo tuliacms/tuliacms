@@ -28,9 +28,9 @@ class FlagsDecorator implements NodeTypeDecoratorInterface
     public function decorate(NodeType $nodeType): void
     {
         $nodeType->addField(new Field([
-            'name' => 'flags',
+            'code' => 'flags',
             'type' => 'select',
-            'label' => 'flags',
+            'name' => 'flags',
             'multilingual' => false,
             'multiple' => true,
             'internal' => true,

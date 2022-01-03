@@ -23,8 +23,22 @@ class ContainerProvider extends AbstractNodeTypeProvider
     {
         $types = [];
 
-        foreach ($this->config as $name => $options) {
-            $types[] = $this->buildNodeType($name, $options, true);
+        foreach ($this->config as $code => $nodeType) {
+            foreach ($nodeType['fields'] as $fieldKey => $field) {
+                foreach ($field['constraints'] as $constraintKey => $constraint) {
+                    if (isset($constraint['modificators'])) {
+                        $modificators = [];
+
+                        foreach ($constraint['modificators'] as $modificator) {
+                            $modificators[$modificator['modificator']] = $modificator['value'];
+                        }
+
+                        $nodeType['fields'][$fieldKey]['constraints'][$constraintKey]['modificators'] = $modificators;
+                    }
+                }
+            }
+
+            $types[] = $this->buildNodeType($code, $nodeType, true);
         }
 
         return $types;

@@ -32,13 +32,13 @@ class ParentTermDecorator implements TaxonomyTypeDecoratorInterface
         $taxonomyType->addField(new Field([
             'name' => 'parent_id',
             'type' => 'taxonomy',
-            'taxonomy' => $taxonomyType->getType(),
+            'taxonomy' => $taxonomyType->getCode(),
             'label' => 'parentTerm',
             'internal' => true,
             'builder_options' => function () use ($taxonomyType) {
                 return [
                     'search_route_params' => [
-                        'taxonomy_type' => $taxonomyType->getType(),
+                        'taxonomy_type' => $taxonomyType->getCode(),
                     ],
                     'constraints' => [
                         new Callback(function ($value, ExecutionContextInterface $context) use ($taxonomyType) {

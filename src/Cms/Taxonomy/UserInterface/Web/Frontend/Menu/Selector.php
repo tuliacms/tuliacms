@@ -50,7 +50,7 @@ class Selector implements SelectorInterface
 
         return $this->engine->render(new View('@backend/taxonomy/menu/selector.tpl', [
             'form' => $form->createView(),
-            'type' => $taxonomyType->getType(),
+            'type' => $taxonomyType->getCode(),
             'field' => $field,
             'identityType' => $type,
         ]));

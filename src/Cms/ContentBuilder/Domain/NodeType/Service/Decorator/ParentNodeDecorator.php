@@ -30,14 +30,14 @@ class ParentNodeDecorator implements NodeTypeDecoratorInterface
         }
 
         $nodeType->addField(new Field([
-            'name' => 'parent_id',
+            'code' => 'parent_id',
             'type' => 'node_select',
-            'label' => 'parentNode',
+            'name' => 'parentNode',
             'internal' => true,
             'builder_options' => function () use ($nodeType) {
                 return [
                     'search_route_params' => [
-                        'node_type' => $nodeType->getType(),
+                        'node_type' => $nodeType->getCode(),
                     ],
                     'constraints' => [
                         new Callback(function ($value, ExecutionContextInterface $context) use ($nodeType) {

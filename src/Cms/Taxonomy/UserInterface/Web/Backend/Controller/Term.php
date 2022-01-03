@@ -99,7 +99,7 @@ class Term extends AbstractController
             $this->repository->save($taxonomy);
 
             $this->setFlash('success', $this->trans('termSaved', [], 'taxonomy'));
-            return $this->redirectToRoute('backend.term.edit', [ 'id' => $term->getId(), 'taxonomyType' => $taxonomyTypeObject->getType() ]);
+            return $this->redirectToRoute('backend.term.edit', [ 'id' => $term->getId(), 'taxonomyType' => $taxonomyTypeObject->getCode() ]);
         }
 
         return $this->view('@backend/taxonomy/term/create.tpl', [
@@ -136,7 +136,7 @@ class Term extends AbstractController
             $this->repository->save($taxonomy);
 
             $this->setFlash('success', $this->trans('termSaved', [], 'taxonomy'));
-            return $this->redirectToRoute('backend.term.edit', [ 'id' => $term->getId(), 'taxonomyType' => $taxonomyTypeObject->getType() ]);
+            return $this->redirectToRoute('backend.term.edit', [ 'id' => $term->getId(), 'taxonomyType' => $taxonomyTypeObject->getCode() ]);
         }
 
         return $this->view('@backend/taxonomy/term/edit.tpl', [

@@ -26,9 +26,9 @@ abstract class AbstractTaxonomyTypeProvider implements TaxonomyTypeProviderInter
         $this->fieldTypeMappingRegistry = $fieldTypeMappingRegistry;
     }
 
-    protected function buildTaxonomyType(string $name, array $options, bool $isInternal): TaxonomyType
+    protected function buildTaxonomyType(string $code, array $options, bool $isInternal): TaxonomyType
     {
-        $taxonomyType = new TaxonomyType($name, $options['layout'], $isInternal);
+        $taxonomyType = new TaxonomyType($code, $options['layout'], $isInternal);
         $taxonomyType->setController($options['controller'] ?? $this->defaultController);
         $taxonomyType->setIsRoutable((bool) $options['is_routable']);
         $taxonomyType->setName($options['name']);

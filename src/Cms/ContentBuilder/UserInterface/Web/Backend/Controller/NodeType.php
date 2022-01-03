@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Controller;
 
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\ContentBuilder\Domain\NodeType\Service\NodeTypeRegistry;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\FieldTypeMappingRegistry;
+use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\LayoutTypeRegistry;
 use Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\NodeType\LayoutSectionType;
 use Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\NodeType\NodeTypeForm;
 use Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\RequestManipulator\NodeTypeRequestManipulator;
@@ -23,13 +25,16 @@ use Tulia\Component\Templating\ViewInterface;
 class NodeType extends AbstractController
 {
     private NodeTypeRegistry $nodeTypeRegistry;
+    private LayoutTypeRegistry $layoutTypeRegistry;
     private FieldTypeMappingRegistry $fieldTypeMappingRegistry;
 
     public function __construct(
         NodeTypeRegistry $nodeTypeRegistry,
+        LayoutTypeRegistry $layoutTypeRegistry,
         FieldTypeMappingRegistry $fieldTypeMappingRegistry
     ) {
         $this->nodeTypeRegistry = $nodeTypeRegistry;
+        $this->layoutTypeRegistry = $layoutTypeRegistry;
         $this->fieldTypeMappingRegistry = $fieldTypeMappingRegistry;
     }
 
@@ -247,6 +252,36 @@ class NodeType extends AbstractController
             'model' => $data,
             'errors' => $errors,
             'cleaningResult' => $cleaningResult,
+        ]);
+    }
+
+    /**
+     * @CsrfToken(id="create-node-type")
+     * @return ViewInterface|RedirectResponse
+     */
+    public function edit(string $code, Request $request)
+    {
+        if ($this->nodeTypeRegistry->has($code) === false) {
+            $this->setFlash('danger', $this->trans('nodeTypeNotExists', [], 'content_builder'));
+            return $this->redirectToRoute('backend.content_builder.homepage');
+        }
+
+        $type = $this->nodeTypeRegistry->get($code);
+
+        if ($type->isInternal()) {
+            $this->setFlash('danger', $this->trans('cannotEditInternalNodeType', [], 'content_builder'));
+            return $this->redirectToRoute('backend.content_builder.homepage');
+        }
+
+        $layout = $this->layoutTypeRegistry->get($type->getLayout());
+
+        dump($type, $layout);exit;
+
+        return $this->view('@backend/content_builder/node_type/edit.tpl', [
+            'fieldTypes' => $this->getFieldTypes(),
+            'model' => [],
+            'errors' => [],
+            'cleaningResult' => [],
         ]);
     }
 

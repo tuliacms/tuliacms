@@ -16,22 +16,22 @@ class DatesDecorator implements NodeTypeDecoratorInterface
     public function decorate(NodeType $nodeType): void
     {
         $nodeType->addField(new Field([
-            'name' => 'published_at',
+            'code' => 'published_at',
             'type' => 'datetime',
-            'label' => 'publishedAt',
+            'name' => 'publishedAt',
             'internal' => true,
             'builder_options' => function () {
                 return [
                     'constraints' => [
-                        ['name' => 'required'],
+                        'required' => [],
                     ],
                 ];
             }
         ]));
         $nodeType->addField(new Field([
-            'name' => 'published_to',
+            'code' => 'published_to',
             'type' => 'datetime',
-            'label' => 'publicationEndsAt',
+            'name' => 'publicationEndsAt',
             'internal' => true,
         ]));
     }
