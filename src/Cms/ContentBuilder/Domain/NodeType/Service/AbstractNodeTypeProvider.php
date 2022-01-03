@@ -14,19 +14,25 @@ use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\FieldTypeMappingRe
 abstract class AbstractNodeTypeProvider implements NodeTypeProviderInterface
 {
     private FieldTypeMappingRegistry $fieldTypeMappingRegistry;
+    protected string $defaultController = '';
 
-    public function __construct(FieldTypeMappingRegistry $fieldTypeMappingRegistry)
+    public function setDefaultController(string $defaultController): void
+    {
+        $this->defaultController = $defaultController;
+    }
+
+    public function setFieldTypeMappingRegistry(FieldTypeMappingRegistry $fieldTypeMappingRegistry): void
     {
         $this->fieldTypeMappingRegistry = $fieldTypeMappingRegistry;
     }
 
-    protected function buildNodeType(string $name, array $options): NodeType
+    protected function buildNodeType(string $name, array $options, bool $isInternal): NodeType
     {
-        $nodeType = new NodeType($name, $options['layout'], true);
-        $nodeType->setController($options['controller']);
-        $nodeType->setIcon($options['icon']);
+        $nodeType = new NodeType($name, $options['layout'], $isInternal);
+        $nodeType->setController($options['controller'] ?? $this->defaultController);
+        $nodeType->setIcon($options['icon'] ?? 'fa fa-box');
         $nodeType->setName($options['name']);
-        $nodeType->setIsHierarchical($options['is_hierarchical']);
+        $nodeType->setIsHierarchical((bool) $options['is_hierarchical']);
 
         foreach ($options['fields'] as $fieldName => $fieldOptions) {
             $nodeType->addField($this->buildNodeField($fieldName, $fieldOptions));
@@ -36,7 +42,7 @@ abstract class AbstractNodeTypeProvider implements NodeTypeProviderInterface
          * Those following options needs fields to be set, so first we add fields,
          * and then those options.
          */
-        $nodeType->setIsRoutable($options['is_routable']);
+        $nodeType->setIsRoutable((bool) $options['is_routable']);
         $nodeType->setRoutableTaxonomyField($options['routable_taxonomy_field']);
 
         return $nodeType;

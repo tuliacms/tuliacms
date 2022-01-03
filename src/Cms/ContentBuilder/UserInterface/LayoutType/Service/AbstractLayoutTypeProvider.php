@@ -11,7 +11,7 @@ use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Model\Section;
 /**
  * @author Adam Banaszkiewicz
  */
-abstract class AbstractLayoutTypeProviderProvider implements LayoutTypeProviderInterface
+abstract class AbstractLayoutTypeProvider implements LayoutTypeProviderInterface
 {
     protected function buildLayoutType(string $name, array $options): LayoutType
     {

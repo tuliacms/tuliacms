@@ -14,19 +14,25 @@ use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\FieldTypeMappingRe
 abstract class AbstractTaxonomyTypeProvider implements TaxonomyTypeProviderInterface
 {
     private FieldTypeMappingRegistry $fieldTypeMappingRegistry;
+    protected string $defaultController = '';
 
-    public function __construct(FieldTypeMappingRegistry $fieldTypeMappingRegistry)
+    public function setDefaultController(string $defaultController): void
+    {
+        $this->defaultController = $defaultController;
+    }
+
+    public function setFieldTypeMappingRegistry(FieldTypeMappingRegistry $fieldTypeMappingRegistry): void
     {
         $this->fieldTypeMappingRegistry = $fieldTypeMappingRegistry;
     }
 
-    protected function buildTaxonomyType(string $name, array $options): TaxonomyType
+    protected function buildTaxonomyType(string $name, array $options, bool $isInternal): TaxonomyType
     {
-        $taxonomyType = new TaxonomyType($name, $options['layout'], true);
-        $taxonomyType->setController($options['controller']);
-        $taxonomyType->setIsRoutable($options['is_routable']);
+        $taxonomyType = new TaxonomyType($name, $options['layout'], $isInternal);
+        $taxonomyType->setController($options['controller'] ?? $this->defaultController);
+        $taxonomyType->setIsRoutable((bool) $options['is_routable']);
         $taxonomyType->setName($options['name']);
-        $taxonomyType->setIsHierarchical($options['is_hierarchical']);
+        $taxonomyType->setIsHierarchical((bool) $options['is_hierarchical']);
         $taxonomyType->setRoutingStrategy($options['routing_strategy']);
 
         foreach ($options['fields'] as $fieldName => $fieldOptions) {

@@ -24,42 +24,75 @@ class ContentBuilderPass implements CompilerPassInterface
         $registry = $container->getDefinition(NodeTypeRegistry::class);
 
         foreach ($container->findTaggedServiceIds('content_builder.node_type.provider') as $id => $options) {
+            if ($container->getDefinition($id)->isAbstract()) {
+                continue;
+            }
+
             $registry->addMethodCall('addProvider', [new Reference($id)]);
         }
+
         foreach ($container->findTaggedServiceIds('content_builder.node_type.decorator') as $id => $options) {
+            if ($container->getDefinition($id)->isAbstract()) {
+                continue;
+            }
+
             $registry->addMethodCall('addDecorator', [new Reference($id)]);
         }
 
         $registry = $container->getDefinition(TaxonomyTypeRegistry::class);
 
         foreach ($container->findTaggedServiceIds('content_builder.taxonomy_type.provider') as $id => $options) {
+            if ($container->getDefinition($id)->isAbstract()) {
+                continue;
+            }
+
             $registry->addMethodCall('addProvider', [new Reference($id)]);
         }
         foreach ($container->findTaggedServiceIds('content_builder.taxonomy_type.decorator') as $id => $options) {
+            if ($container->getDefinition($id)->isAbstract()) {
+                continue;
+            }
+
             $registry->addMethodCall('addDecorator', [new Reference($id)]);
         }
 
         $registry = $container->getDefinition(LayoutTypeRegistry::class);
 
         foreach ($container->findTaggedServiceIds('content_builder.layout_type.provider') as $id => $options) {
+            if ($container->getDefinition($id)->isAbstract()) {
+                continue;
+            }
+
             $registry->addMethodCall('addProvider', [new Reference($id)]);
         }
 
         $registry = $container->getDefinition(LayoutTypeBuilderRegistry::class);
 
         foreach ($container->findTaggedServiceIds('content_builder.layout_type.builder') as $id => $options) {
+            if ($container->getDefinition($id)->isAbstract()) {
+                continue;
+            }
+
             $registry->addMethodCall('addBuilder', [new Reference($id)]);
         }
 
         $registry = $container->getDefinition(FieldTypeMappingRegistry::class);
 
         foreach ($container->getParameter('cms.content_builder.data_types.mapping') as $type => $info) {
+            if ($container->getDefinition($id)->isAbstract()) {
+                continue;
+            }
+
             $registry->addMethodCall('addMapping', [$type, $info]);
         }
 
         $registry = $container->getDefinition(ConstraintTypeMappingRegistry::class);
 
         foreach ($container->getParameter('cms.content_builder.constraint_types.mapping') as $type => $info) {
+            if ($container->getDefinition($id)->isAbstract()) {
+                continue;
+            }
+
             $registry->addMethodCall('addMapping', [$type, $info]);
         }
     }

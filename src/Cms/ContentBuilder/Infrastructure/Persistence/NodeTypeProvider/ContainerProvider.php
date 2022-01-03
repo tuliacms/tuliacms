@@ -14,9 +14,8 @@ class ContainerProvider extends AbstractNodeTypeProvider
 {
     private array $config;
 
-    public function __construct(FieldTypeMappingRegistry $fieldTypeMappingRegistry, array $config)
+    public function __construct(array $config)
     {
-        parent::__construct($fieldTypeMappingRegistry);
         $this->config = $config;
     }
 
@@ -25,7 +24,7 @@ class ContainerProvider extends AbstractNodeTypeProvider
         $types = [];
 
         foreach ($this->config as $name => $options) {
-            $types[] = $this->buildNodeType($name, $options);
+            $types[] = $this->buildNodeType($name, $options, true);
         }
 
         return $types;

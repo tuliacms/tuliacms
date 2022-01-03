@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Tulia\Cms\ContentBuilder\Infrastructure\Persistence\TaxonomyTypeProvider;
 
 use Tulia\Cms\ContentBuilder\Domain\TaxonomyType\Service\AbstractTaxonomyTypeProvider;
-use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\FieldTypeMappingRegistry;
 
 /**
  * @author Adam Banaszkiewicz
@@ -14,9 +13,8 @@ class ContainerProvider extends AbstractTaxonomyTypeProvider
 {
     private array $config;
 
-    public function __construct(FieldTypeMappingRegistry $fieldTypeMappingRegistry, array $config)
+    public function __construct(array $config)
     {
-        parent::__construct($fieldTypeMappingRegistry);
         $this->config = $config;
     }
 
@@ -25,7 +23,7 @@ class ContainerProvider extends AbstractTaxonomyTypeProvider
         $types = [];
 
         foreach ($this->config as $name => $options) {
-            $types[] = $this->buildTaxonomyType($name, $options);
+            $types[] = $this->buildTaxonomyType($name, $options, true);
         }
 
         return $types;

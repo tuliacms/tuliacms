@@ -118,67 +118,72 @@ class Configuration implements ConfigurationInterface
                                 ->end()
                             ->end()
                         ->end()
-                        ->arrayNode('node_types')
-                            ->beforeNormalization()
-                                ->always(function ($types) {
-                                    foreach ($types as $name => $type) {
-                                        foreach ($type['fields'] as $fieldName => $field) {
-                                            if (isset($field['taxonomy']) && $field['type'] !== 'taxonomy') {
-                                                throw new LogicException(sprintf('Field "%s" cannot have "taxonomy" option set, if field is not a "taxonomy" type.', $fieldName));
+                        ->arrayNode('node_type')
+                            ->children()
+                                ->scalarNode('default_controller')->isRequired()->end()
+                                ->arrayNode('mapping')
+                                    ->beforeNormalization()
+                                        ->always(function ($types) {
+                                            foreach ($types as $name => $type) {
+                                                foreach ($type['fields'] as $fieldName => $field) {
+                                                    if (isset($field['taxonomy']) && $field['type'] !== 'taxonomy') {
+                                                        throw new LogicException(sprintf('Field "%s" cannot have "taxonomy" option set, if field is not a "taxonomy" type.', $fieldName));
+                                                    }
+                                                }
                                             }
-                                        }
-                                    }
 
-                                    return $types;
-                                })
-                            ->end()
-                            ->arrayPrototype()
-                                ->addDefaultsIfNotSet()
-                                ->children()
-                                    ->scalarNode('name')->isRequired()->end()
-                                    ->variableNode('icon')->defaultValue('fas fa-circle')->end()
-                                    ->variableNode('controller')->defaultValue('Tulia\Cms\Node\UserInterface\Web\Frontend\Controller\Node::show')->end()
-                                    // Any node of this type can be reached through it's own route (using it's slug)?
-                                    ->booleanNode('is_routable')->defaultTrue()->end()
-                                    // Name of the field, where is stored routable taxonomy relation.
-                                    // If not provided, slug to this node type will not be generated with taxonomy path.
-                                    ->scalarNode('routable_taxonomy_field')->defaultNull()->end()
-                                    // If true, nodes can be created as hierarchical tree, with parents and childs.
-                                    // Also those node's paths, will be created with all ascendants.
-                                    ->booleanNode('is_hierarchical')->defaultFalse()->end()
-                                    // Layout name with defines where each field should be showed on admin page.
-                                    ->scalarNode('layout')->isRequired()->end()
-                                    // Fields for given type
-                                    ->arrayNode('fields')
-                                        ->useAttributeAsKey('name')
-                                        ->arrayPrototype()
-                                            ->addDefaultsIfNotSet()
-                                            ->children()
-                                                ->scalarNode('label')
-                                                    ->defaultNull()
-                                                    ->beforeNormalization()
-                                                        ->always(function ($v) {
-                                                            if ($v === false) {
-                                                                return '';
-                                                            }
+                                            return $types;
+                                        })
+                                    ->end()
+                                    ->arrayPrototype()
+                                        ->addDefaultsIfNotSet()
+                                        ->children()
+                                            ->scalarNode('name')->isRequired()->end()
+                                            ->variableNode('icon')->defaultValue('fas fa-circle')->end()
+                                            ->variableNode('controller')->defaultValue('Tulia\Cms\Node\UserInterface\Web\Frontend\Controller\Node::show')->end()
+                                            // Any node of this type can be reached through it's own route (using it's slug)?
+                                            ->booleanNode('is_routable')->defaultTrue()->end()
+                                            // Name of the field, where is stored routable taxonomy relation.
+                                            // If not provided, slug to this node type will not be generated with taxonomy path.
+                                            ->scalarNode('routable_taxonomy_field')->defaultNull()->end()
+                                            // If true, nodes can be created as hierarchical tree, with parents and childs.
+                                            // Also those node's paths, will be created with all ascendants.
+                                            ->booleanNode('is_hierarchical')->defaultFalse()->end()
+                                            // Layout name with defines where each field should be showed on admin page.
+                                            ->scalarNode('layout')->isRequired()->end()
+                                            // Fields for given type
+                                            ->arrayNode('fields')
+                                                ->useAttributeAsKey('name')
+                                                ->arrayPrototype()
+                                                    ->addDefaultsIfNotSet()
+                                                    ->children()
+                                                        ->scalarNode('label')
+                                                            ->defaultNull()
+                                                            ->beforeNormalization()
+                                                                ->always(function ($v) {
+                                                                    if ($v === false) {
+                                                                        return '';
+                                                                    }
 
-                                                            return $v;
-                                                        })
-                                                    ->end()
-                                                ->end()
-                                                ->scalarNode('type')->defaultNull()->end()
-                                                ->booleanNode('multilingual')->defaultFalse()->end()
-                                                ->booleanNode('multiple')->defaultFalse()->end()
-                                                ->scalarNode('taxonomy')->defaultNull()->end()
-                                                ->arrayNode('constraints')
-                                                    ->arrayPrototype()
-                                                        ->children()
-                                                            ->scalarNode('name')->isRequired()->end()
-                                                            ->arrayNode('modificators')
-                                                                ->arrayPrototype()
-                                                                    ->children()
-                                                                        ->scalarNode('modificator')->isRequired()->end()
-                                                                        ->scalarNode('value')->isRequired()->end()
+                                                                    return $v;
+                                                                })
+                                                            ->end()
+                                                        ->end()
+                                                        ->scalarNode('type')->defaultNull()->end()
+                                                        ->booleanNode('multilingual')->defaultFalse()->end()
+                                                        ->booleanNode('multiple')->defaultFalse()->end()
+                                                        ->scalarNode('taxonomy')->defaultNull()->end()
+                                                        ->arrayNode('constraints')
+                                                            ->arrayPrototype()
+                                                                ->children()
+                                                                    ->scalarNode('name')->isRequired()->end()
+                                                                    ->arrayNode('modificators')
+                                                                        ->arrayPrototype()
+                                                                            ->children()
+                                                                                ->scalarNode('modificator')->isRequired()->end()
+                                                                                ->scalarNode('value')->isRequired()->end()
+                                                                            ->end()
+                                                                        ->end()
                                                                     ->end()
                                                                 ->end()
                                                             ->end()
@@ -191,47 +196,52 @@ class Configuration implements ConfigurationInterface
                                 ->end()
                             ->end()
                         ->end()
-                        ->arrayNode('taxonomy_types')
-                            ->arrayPrototype()
-                                ->addDefaultsIfNotSet()
-                                ->children()
-                                    ->scalarNode('name')->isRequired()->end()
-                                    ->variableNode('controller')->defaultValue('Tulia\Cms\Taxonomy\UserInterface\Web\Frontend\Controller\Term::show')->end()
-                                    ->booleanNode('is_routable')->defaultTrue()->end()
-                                    ->booleanNode('is_hierarchical')->defaultFalse()->end()
-                                    ->scalarNode('routing_strategy')->defaultValue('simple')->end()
-                                    // Layout name with defines where each field should be showed on admin page.
-                                    ->scalarNode('layout')->isRequired()->end()
-                                    // Fields for given type
-                                    ->arrayNode('fields')
-                                        ->useAttributeAsKey('name')
-                                        ->arrayPrototype()
-                                            ->addDefaultsIfNotSet()
-                                            ->children()
-                                                ->scalarNode('label')
-                                                    ->defaultNull()
-                                                    ->beforeNormalization()
-                                                        ->always(function ($v) {
-                                                            if ($v === false) {
-                                                                return '';
-                                                            }
+                        ->arrayNode('taxonomy_type')
+                            ->children()
+                                ->scalarNode('default_controller')->isRequired()->end()
+                                ->arrayNode('mapping')
+                                    ->arrayPrototype()
+                                        ->addDefaultsIfNotSet()
+                                        ->children()
+                                            ->scalarNode('name')->isRequired()->end()
+                                            ->variableNode('controller')->defaultValue('Tulia\Cms\Taxonomy\UserInterface\Web\Frontend\Controller\Term::show')->end()
+                                            ->booleanNode('is_routable')->defaultTrue()->end()
+                                            ->booleanNode('is_hierarchical')->defaultFalse()->end()
+                                            ->scalarNode('routing_strategy')->defaultValue('simple')->end()
+                                            // Layout name with defines where each field should be showed on admin page.
+                                            ->scalarNode('layout')->isRequired()->end()
+                                            // Fields for given type
+                                            ->arrayNode('fields')
+                                                ->useAttributeAsKey('name')
+                                                ->arrayPrototype()
+                                                    ->addDefaultsIfNotSet()
+                                                    ->children()
+                                                        ->scalarNode('label')
+                                                            ->defaultNull()
+                                                            ->beforeNormalization()
+                                                                ->always(function ($v) {
+                                                                    if ($v === false) {
+                                                                        return '';
+                                                                    }
 
-                                                            return $v;
-                                                        })
-                                                    ->end()
-                                                ->end()
-                                                ->scalarNode('type')->defaultNull()->end()
-                                                ->booleanNode('multilingual')->defaultFalse()->end()
-                                                ->booleanNode('multiple')->defaultFalse()->end()
-                                                ->arrayNode('constraints')
-                                                    ->arrayPrototype()
-                                                        ->children()
-                                                            ->scalarNode('name')->isRequired()->end()
-                                                            ->arrayNode('modificators')
-                                                                ->arrayPrototype()
-                                                                    ->children()
-                                                                        ->scalarNode('modificator')->isRequired()->end()
-                                                                        ->scalarNode('value')->isRequired()->end()
+                                                                    return $v;
+                                                                })
+                                                            ->end()
+                                                        ->end()
+                                                        ->scalarNode('type')->defaultNull()->end()
+                                                        ->booleanNode('multilingual')->defaultFalse()->end()
+                                                        ->booleanNode('multiple')->defaultFalse()->end()
+                                                        ->arrayNode('constraints')
+                                                            ->arrayPrototype()
+                                                                ->children()
+                                                                    ->scalarNode('name')->isRequired()->end()
+                                                                    ->arrayNode('modificators')
+                                                                        ->arrayPrototype()
+                                                                            ->children()
+                                                                                ->scalarNode('modificator')->isRequired()->end()
+                                                                                ->scalarNode('value')->isRequired()->end()
+                                                                            ->end()
+                                                                        ->end()
                                                                     ->end()
                                                                 ->end()
                                                             ->end()
