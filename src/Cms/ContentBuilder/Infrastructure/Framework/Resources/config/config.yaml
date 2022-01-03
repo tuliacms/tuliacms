@@ -102,11 +102,11 @@ cms:
                 text:
                     label: Textline
                     classname: 'Symfony\Component\Form\Extension\Core\Type\TextType'
-                    constraints: [required, length]
+                    constraints: [required, pattern, length]
                 textarea:
                     label: Textarea
                     classname: 'Symfony\Component\Form\Extension\Core\Type\TextareaType'
-                    constraints: [required, length]
+                    constraints: [required, pattern, length]
                 select:
                     label: Select
                     classname: 'Symfony\Component\Form\Extension\Core\Type\ChoiceType'
@@ -134,6 +134,14 @@ cms:
                     classname: 'Symfony\Component\Validator\Constraints\NotBlank'
                     label: Required
                     help_text: Makes this field required.
+                pattern:
+                    classname: 'Symfony\Component\Validator\Constraints\Regex'
+                    label: Text pattern
+                    help_text: Regular expression pattern.
+                    modificators:
+                        pattern:
+                            type: string
+                            label: Regular expression pattern
                 length:
                     classname: 'Symfony\Component\Validator\Constraints\Length'
                     label: Text length
