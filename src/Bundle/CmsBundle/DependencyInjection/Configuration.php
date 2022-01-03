@@ -98,6 +98,7 @@ class Configuration implements ConfigurationInterface
                                                         ->scalarNode('type')->defaultValue('string')->end()
                                                         ->scalarNode('label')->isRequired()->end()
                                                         ->scalarNode('help_text')->defaultNull()->end()
+                                                        ->scalarNode('placeholder')->defaultNull()->end()
                                                         ->scalarNode('required')->defaultFalse()->end()
                                                         ->scalarNode('choices_provider')->defaultNull()->end()
                                                         ->arrayNode('choices')

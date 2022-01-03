@@ -64,6 +64,7 @@
                 hierarchicalTypeHelp: '{{ 'hierarchicalTypeHelp'|trans }}',
                 pleaseSelectValue: '{{ 'pleaseSelectValue'|trans }}',
                 internalFields: '{{ 'internalFields'|trans }}',
+                fieldHasErrors: '{{ 'fieldHasErrors'|trans }}',
             },
             fieldTypes: {{ fieldTypes|json_encode|raw }},
             model: {{ model|json_encode|raw }},

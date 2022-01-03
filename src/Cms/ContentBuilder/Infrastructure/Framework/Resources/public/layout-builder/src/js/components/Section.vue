@@ -3,7 +3,13 @@
         <div class="ctb-section">
             <div class="ctb-section-label">
                 <span class="ctb-section-sortable-handler"><i class="fas fa-arrows-alt"></i></span>
-                <input type="text" v-model="section.label" class="ctb-section-label-input" />
+                <input
+                    type="text"
+                    v-model="section.label.value"
+                    :class="{ 'ctb-section-label-input': true, 'ctb-section-label-input-has-error': ! section.label.valid }"
+                    v-bs-tooltip
+                    :title="section.label.message"
+                />
                 <div class="ctb-section-options">
                     <span @click="$emit('section:remove', section.id)" v-bs-tooltip :title="translations.removeSection"><i class="fas fa-trash"></i></span>
                 </div>

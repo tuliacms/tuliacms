@@ -11,6 +11,7 @@ use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\FieldTypeMappingRe
 use Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\NodeType\LayoutSectionType;
 use Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\NodeType\NodeTypeForm;
 use Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\RequestManipulator\NodeTypeRequestManipulator;
+use Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\RequestManipulator\NodeTypeValidationRequestManipulator;
 use Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\Validator\CodenameValidator;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Component\Security\Http\Csrf\Annotation\CsrfToken;
@@ -177,21 +178,25 @@ class NodeType extends AbstractController
                 ];
             }
 
+            $validationDataManipulator = new NodeTypeValidationRequestManipulator();
+
+            $formData = $validationDataManipulator->cleanFromValidationData($data);
+
             $dataManipulator = new NodeTypeRequestManipulator(
-                $data,
+                $formData,
                 $this->fieldTypeMappingRegistry,
                 new CodenameValidator()
             );
-            $data = $dataManipulator->cleanForSulprusData();
+            $formData = $dataManipulator->cleanForSulprusData();
             $cleaningResult = $dataManipulator->getCleaningResult();
 
             $formsAreValid = true;
 
             // Node type form
             $request = Request::create('/', 'POST');
-            $request->request->set('node_type_form', $data['type']);
+            $request->request->set('node_type_form', $formData['type']);
             $form = $this->createForm(NodeTypeForm::class, null, [
-                'fields' => $this->collectFieldsFromSections($data['layout'])
+                'fields' => $this->collectFieldsFromSections($formData['layout'])
             ]);
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
@@ -204,7 +209,7 @@ class NodeType extends AbstractController
 
             // Layout sidebar section form
             $request = Request::create('/', 'POST');
-            $request->request->set('layout_section', $data['layout']['sidebar']);
+            $request->request->set('layout_section', $formData['layout']['sidebar']);
             $form = $this->createForm(LayoutSectionType::class);
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
@@ -217,7 +222,7 @@ class NodeType extends AbstractController
 
             // Layout main section form
             $request = Request::create('/', 'POST');
-            $request->request->set('layout_section', $data['layout']['main']);
+            $request->request->set('layout_section', $formData['layout']['main']);
             $form = $this->createForm(LayoutSectionType::class);
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
@@ -231,6 +236,8 @@ class NodeType extends AbstractController
                 dump('valid!');
                 //exit;
             }
+
+            $data = $validationDataManipulator->joinErrorsWithData($formData, $errors);
         }
 
         dump($cleaningResult, $errors);

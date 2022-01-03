@@ -45,7 +45,11 @@ export default {
         addSection: function () {
             this.sections.push({
                 id: _.uniqueId('section_'),
-                label: 'New section...',
+                label: {
+                    value: 'New section...',
+                    valid: true,
+                    message: null
+                },
                 fields: []
             });
         },

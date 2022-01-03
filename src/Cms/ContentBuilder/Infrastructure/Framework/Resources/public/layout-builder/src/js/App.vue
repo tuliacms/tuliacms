@@ -197,75 +197,8 @@ export default {
                 return;
             }
 
-            let prepareDataToSubmit = function (sections) {
-                let newSections = [];
-
-                for (let s in sections) {
-                    let newFields = [];
-
-                    for (let f in sections[s].fields) {
-                        let field = sections[s].fields[f];
-                        let newConfiguration = [];
-                        let newConstratints = [];
-
-                        for (let c in field.configuration) {
-                            let conf = field.configuration[c];
-
-                            newConfiguration[c] = {
-                                id: conf.id,
-                                value: conf.value,
-                            };
-                        }
-
-                        for (let c in field.constraints) {
-                            let constr = field.constraints[c];
-                            let newModificators = [];
-
-                            for (let m in constr.modificators) {
-                                newModificators[m] = {
-                                    id: constr.modificators[m].id,
-                                    value: constr.modificators[m].value,
-                                };
-                            }
-
-                            newConstratints[c] = {
-                                id: constr.id,
-                                enabled: constr.enabled,
-                                modificators: newModificators,
-                            };
-                        }
-
-                        newFields[f] = {
-                            id: field.id.value,
-                            label: field.label.value,
-                            multilingual: field.multilingual.value,
-                            type: field.type.value,
-                            configuration: newConfiguration,
-                            constraints: newConstratints,
-                        }
-                    }
-
-                    newSections[s] = {
-                        id: sections[s].id,
-                        label: sections[s].label,
-                        fields: newFields,
-                    }
-                }
-
-                return newSections;
-            };
-
-            let layout = {
-                sidebar: {
-                    sections: prepareDataToSubmit(this.$get(this.model.layout, 'sidebar.sections'))
-                },
-                main: {
-                    sections: prepareDataToSubmit(this.$get(this.model.layout, 'main.sections'))
-                },
-            };
-
             $('#ctb-form-field-node-type').val(JSON.stringify({
-                layout: layout,
+                layout: this.model.layout,
                 type: this.model.type
             }));
             $('#ctb-form').submit();

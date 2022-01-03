@@ -114,8 +114,12 @@ cms:
                     configuration:
                         choices:
                             required: true
+                            type: textarea
                             label: Enter the available choices for this select
-                            help_text: Separate every choice by semicolon (;).
+                            help_text: "Every entry in new line. Format: \"value: Option label\""
+                            placeholder: |
+                                value-1: Option label 1
+                                value-2: Option label 2
                         multiple:
                             required: true
                             type: yes_no

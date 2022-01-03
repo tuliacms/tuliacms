@@ -128,6 +128,9 @@
                 outline: none;
             }
         }
+        .ctb-section-label-input-has-error {
+            border: 1px solid red;
+        }
         .ctb-section-sortable-handler {
             position: absolute;
             left: 0;

@@ -1,5 +1,7 @@
 <template>
-    <div :class="{ 'ctb-field': true, 'ctb-field-has-error': field.metadata.has_errors }">
+    <div
+        :class="{ 'ctb-field': true, 'ctb-field-has-error': field.metadata.has_errors }"
+    >
         <span class="ctb-sortable-handler"><i class="fas fa-arrows-alt"></i></span>
         <span class="ctb-field-label">
             {{ field.label.value }}
