@@ -20,7 +20,7 @@ class StatusDecorator implements NodeTypeDecoratorInterface
             'code' => 'status',
             'type' => 'select',
             'name' => 'publicationStatus',
-            'internal' => true,
+            'is_internal' => true,
             'constraints' => [
                 'required' => [],
             ],

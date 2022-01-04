@@ -161,7 +161,7 @@ abstract class AbstractContentType
         }
 
         if (isset($this->fields[$field->getCode()]) && $this->fields[$field->getCode()]->isInternal()) {
-            throw CannotOverwriteInternalFieldException::fromName($field->getCode());
+            throw CannotOverwriteInternalFieldException::fromCodeNadName($field->getCode(), $field->getName());
         }
 
         $this->internalValidateField($field);

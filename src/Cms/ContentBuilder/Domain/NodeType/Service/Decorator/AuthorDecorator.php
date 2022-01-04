@@ -28,7 +28,7 @@ class AuthorDecorator implements NodeTypeDecoratorInterface
             'code' => 'author_id',
             'type' => 'user',
             'name' => 'author',
-            'internal' => true,
+            'is_internal' => true,
             'builder_options' => function () {
                 /** @var User $author */
                 $author = $this->authenticatedUserProvider->getUser();

@@ -19,7 +19,7 @@ class DatesDecorator implements NodeTypeDecoratorInterface
             'code' => 'published_at',
             'type' => 'datetime',
             'name' => 'publishedAt',
-            'internal' => true,
+            'is_internal' => true,
             'builder_options' => function () {
                 return [
                     'constraints' => [
@@ -32,7 +32,7 @@ class DatesDecorator implements NodeTypeDecoratorInterface
             'code' => 'published_to',
             'type' => 'datetime',
             'name' => 'publicationEndsAt',
-            'internal' => true,
+            'is_internal' => true,
         ]));
     }
 }

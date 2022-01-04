@@ -33,7 +33,7 @@ class ParentNodeDecorator implements NodeTypeDecoratorInterface
             'code' => 'parent_id',
             'type' => 'node_select',
             'name' => 'parentNode',
-            'internal' => true,
+            'is_internal' => true,
             'builder_options' => function () use ($nodeType) {
                 return [
                     'search_route_params' => [

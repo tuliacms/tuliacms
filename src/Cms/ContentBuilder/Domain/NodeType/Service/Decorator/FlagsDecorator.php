@@ -31,9 +31,9 @@ class FlagsDecorator implements NodeTypeDecoratorInterface
             'code' => 'flags',
             'type' => 'select',
             'name' => 'flags',
-            'multilingual' => false,
-            'multiple' => true,
-            'internal' => true,
+            'is_multilingual' => false,
+            'is_multiple' => true,
+            'is_internal' => true,
             'builder_options' => function () {
                 $availableFlags = [];
 

@@ -19,7 +19,7 @@ class NameSlugDecorator implements TaxonomyTypeDecoratorInterface
             'name' => 'title',
             'type' => 'text',
             'label' => 'title',
-            'multilingual' => true,
+            'is_multilingual' => true,
             'internal' => true,
             'builder_options' => function () {
                 return [
@@ -35,7 +35,7 @@ class NameSlugDecorator implements TaxonomyTypeDecoratorInterface
                     'name' => 'slug',
                     'type' => 'text',
                     'label' => 'slug',
-                    'multilingual' => true,
+                    'is_multilingual' => true,
                     'internal' => true,
                     // @todo Create constraint for globally uniqueness of the slug
                     /*'constraints' => [

@@ -71,7 +71,7 @@
                 data-bs-toggle="collapse"
                 data-bs-target="#form-collapse-sidebar-{{ id }}"
         >
-            {{ group.label|trans({}, translationDomain) }}
+            {{ group.name|trans({}, translationDomain) }}
             {{ badge.errors_count(form, group.fields|default([])) }}
         </div>
         <div

@@ -19,8 +19,8 @@ class NameSlugDecorator implements NodeTypeDecoratorInterface
             'code' => 'title',
             'type' => 'text',
             'name' => 'title',
-            'multilingual' => true,
-            'internal' => true,
+            'is_multilingual' => true,
+            'is_internal' => true,
             'builder_options' => function () {
                 return [
                     'constraints' => [
@@ -29,14 +29,15 @@ class NameSlugDecorator implements NodeTypeDecoratorInterface
                 ];
             }
         ]));
+
         if ($nodeType->isRoutable()) {
             $nodeType->addField(
                 new Field([
                     'code' => 'slug',
                     'type' => 'text',
                     'name' => 'slug',
-                    'multilingual' => true,
-                    'internal' => true,
+                    'is_multilingual' => true,
+                    'is_internal' => true,
                     // @todo Create constraint for globally uniqueness of the slug
                     /*'constraints' => [
                         ['name' => 'unique', 'flags' => 'globally'],

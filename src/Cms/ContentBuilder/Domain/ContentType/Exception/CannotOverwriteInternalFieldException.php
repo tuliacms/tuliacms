@@ -9,18 +9,18 @@ namespace Tulia\Cms\ContentBuilder\Domain\ContentType\Exception;
  */
 class CannotOverwriteInternalFieldException extends \Exception
 {
-    private string $fieldName;
+    private string $fieldCode;
 
-    public static function fromName(string $fieldName): self
+    public static function fromCodeNadName(string $fieldCode, string $fieldName): self
     {
-        $self = new self(sprintf('Cannot overwrite the internal field, named "%s".', $fieldName));
-        $self->fieldName = $fieldName;
+        $self = new self(sprintf('Cannot overwrite the internal field "%s", named "%s".', $fieldCode, $fieldName));
+        $self->fieldCode = $fieldCode;
 
         return $self;
     }
 
-    public function getFieldName(): string
+    public function getFieldCode(): string
     {
-        return $this->fieldName;
+        return $this->fieldCode;
     }
 }
