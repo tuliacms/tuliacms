@@ -106,14 +106,14 @@ abstract class AbstractContentType
         $this->fields = $fields;
     }
 
-    public function getField(string $name): Field
+    public function getField(string $code): Field
     {
-        return $this->fields[$name];
+        return $this->fields[$code];
     }
 
-    public function hasField(string $name): bool
+    public function hasField(string $code): bool
     {
-        return isset($this->fields[$name]);
+        return isset($this->fields[$code]);
     }
 
     /**

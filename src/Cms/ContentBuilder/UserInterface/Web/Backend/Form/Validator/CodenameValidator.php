@@ -27,7 +27,7 @@ class CodenameValidator
         }
     }
 
-    public function validateSectionId(?string $code, ExecutionContextInterface $context): void
+    public function validateSectionCode(?string $code, ExecutionContextInterface $context): void
     {
         if ($code && ! preg_match(self::PATTERN, $code)) {
             $context->buildViolation('sectionIdCodeMustContainOnlyAlphanumsAndUnderline')
@@ -36,7 +36,7 @@ class CodenameValidator
         }
     }
 
-    public function validateFieldId(?string $code, ExecutionContextInterface $context): void
+    public function validateFieldCode(?string $code, ExecutionContextInterface $context): void
     {
         if ($code && ! preg_match(self::PATTERN, $code)) {
             $context->buildViolation('fieldIdMustContainOnlyAlphanumsAndUnderline')

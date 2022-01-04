@@ -48,141 +48,8 @@ class NodeType extends AbstractController
         $data = [];
         $cleaningResult = [];
 
-        /*$data = [
-            'layout' => [
-                'sidebar' => [
-                    'sections' => [
-                        0 => [
-                            'id' => 'sdfgdfgdfg',
-                            'label' => 'Sample section with errors',
-                            'fields' => [
-                                0 => [
-                                    'metadata' => [
-                                        'has_errors' => true,
-                                    ],
-                                    'code' => [
-                                        'value' => 'adsfgsdfghdfgh',
-                                        'valid' => false,
-                                        'message' => 'INVALID ID',
-                                    ],
-                                    'name' => [
-                                        'value' => 'select field',
-                                        'valid' => false,
-                                        'message' => 'INVALID LABEL',
-                                    ],
-                                    'type' => [
-                                        'value' => 'select',
-                                        'valid' => true,
-                                        'message' => null,
-                                    ],
-                                    'multilingual' => [
-                                        'value' => 'true',
-                                        'valid' => true,
-                                        'message' => null,
-                                    ],
-                                    'constraints' => [
-                                        0 => [
-                                            'id' => 'required',
-                                            'enabled' => true,
-                                            'valid' => true,
-                                            'message' => null,
-                                            'modificators' => [],
-                                        ],
-                                    ],
-                                    'configuration' => [
-                                        ['id' => 'placeholder', 'value' => '132434'],
-                                        ['id' => 'choices', 'value' => null, 'valid' => false, 'message' => 'This field is required'],
-                                    ],
-                                ],
-                                1 => [
-                                    'metadata' => [
-                                        'has_errors' => true,
-                                    ],
-                                    'code' => [
-                                        'value' => 'dthtyjtjy',
-                                        'valid' => false,
-                                        'message' => 'INVALID ID',
-                                    ],
-                                    'name' => [
-                                        'value' => 'text field',
-                                        'valid' => false,
-                                        'message' => 'INVALID LABEL',
-                                    ],
-                                    'type' => [
-                                        'value' => 'textarea',
-                                        'valid' => true,
-                                        'message' => null,
-                                    ],
-                                    'multilingual' => [
-                                        'value' => 'true',
-                                        'valid' => true,
-                                        'message' => null,
-                                    ],
-                                    'constraints' => [
-                                        0 => [
-                                            'id' => 'length',
-                                            'enabled' => true,
-                                            'valid' => true,
-                                            'message' => null,
-                                            'modificators' => [
-                                                ['id' => 'max', 'value' => '255'],
-                                                ['id' => 'min', 'value' => null, 'valid' => false, 'message' => 'This field is required'],
-                                            ],
-                                        ],
-                                    ],
-                                    'configuration' => [],
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-        ];*/
-
         if ($request->isMethod('POST')) {
             $data = json_decode($request->request->get('node_type'), true);
-
-            if (0) {
-                $data['type']['code'] = 'page';
-                $data['layout']['sidebar']['sections'][0]['fields'][0]['configuration'][] = [
-                    'id' => 'asdasd',
-                    'value' => null,
-                ];
-                $data['layout']['sidebar']['sections'][] = [
-                    'code' => '45f34563&^%b',
-                    'name' => 'test section',
-                    'fields' => [
-                        [
-                            'id' => 'o8&TH(N876T',
-                            'name' => 'test field',
-                            'type' => 'not existent type',
-                            'multilingual' => true,
-                            'configuration' => [],
-                        ],
-                    ],
-                ];
-                $data['layout']['sidebar']['sections'][] = [
-                    'code' => 'asd',
-                    'name' => 'asd',
-                    'fields' => [
-                        [
-                            'code' => 'qwe',
-                            'name' => 'qwe',
-                            'type' => 'select',
-                            'multilingual' => true,
-                            'configuration' => [],
-                            'constraints' => [
-                                [
-                                    'id' => 'length',
-                                    'modificators' => [
-                                        ['id' => 'asdasd', 'value' => '132434'],
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                ];
-            }
 
             $validationDataManipulator = new NodeTypeValidationRequestManipulator();
 
@@ -246,8 +113,6 @@ class NodeType extends AbstractController
             $data = $validationDataManipulator->joinErrorsWithData($formData, $errors);
         }
 
-        dump($cleaningResult, $errors);
-
         return $this->view('@backend/content_builder/node_type/create.tpl', [
             'fieldTypes' => $this->getFieldTypes(),
             'model' => $data,
@@ -274,16 +139,84 @@ class NodeType extends AbstractController
             return $this->redirectToRoute('backend.content_builder.homepage');
         }
 
+        $errors = [];
+        $data = [];
+        $cleaningResult = [];
+
         $layout = $this->layoutTypeRegistry->get($type->getLayout());
         $data = (new NodeTypeModelToFormDataTransformer())->transform($type, $layout);
 
-        dump($data);exit;
+        if ($request->isMethod('POST')) {
+            $data = json_decode($request->request->get('node_type'), true);
+
+            $validationDataManipulator = new NodeTypeValidationRequestManipulator();
+
+            $formData = $validationDataManipulator->cleanFromValidationData($data);
+
+            $dataManipulator = new NodeTypeRequestManipulator(
+                $formData,
+                $this->fieldTypeMappingRegistry,
+                new CodenameValidator()
+            );
+            $formData = $dataManipulator->cleanForSulprusData();
+            $cleaningResult = $dataManipulator->getCleaningResult();
+
+            $formsAreValid = true;
+
+            // Node type form
+            $request = Request::create('/', 'POST');
+            $request->request->set('node_type_form', $formData['type']);
+            $form = $this->createForm(NodeTypeForm::class, null, [
+                'fields' => $this->collectFieldsFromSections($formData['layout']),
+                'edit_form' => true,
+            ]);
+            $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid()) {
+
+            } else {
+                $formsAreValid = false;
+                $errors['type'] = $this->getErrorMessages($form);
+            }
+
+
+            // Layout sidebar section form
+            $request = Request::create('/', 'POST');
+            $request->request->set('layout_section', $formData['layout']['sidebar']);
+            $form = $this->createForm(LayoutSectionType::class);
+            $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid()) {
+
+            } else {
+                $formsAreValid = false;
+                $errors['layout']['sidebar'] = $this->getErrorMessages($form);
+            }
+
+
+            // Layout main section form
+            $request = Request::create('/', 'POST');
+            $request->request->set('layout_section', $formData['layout']['main']);
+            $form = $this->createForm(LayoutSectionType::class);
+            $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid()) {
+
+            } else {
+                $formsAreValid = false;
+                $errors['layout']['main'] = $this->getErrorMessages($form);
+            }
+
+            if ($formsAreValid) {
+                dump('valid!');
+                //exit;
+            }
+
+            $data = $validationDataManipulator->joinErrorsWithData($formData, $errors);
+        }
 
         return $this->view('@backend/content_builder/node_type/edit.tpl', [
             'fieldTypes' => $this->getFieldTypes(),
-            'model' => [],
-            'errors' => [],
-            'cleaningResult' => [],
+            'model' => $data,
+            'errors' => $errors,
+            'cleaningResult' => $cleaningResult,
         ]);
     }
 

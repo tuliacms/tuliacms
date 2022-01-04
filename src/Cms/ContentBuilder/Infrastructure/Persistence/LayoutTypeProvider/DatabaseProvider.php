@@ -38,7 +38,7 @@ class DatabaseProvider extends AbstractLayoutTypeProvider
     private function getGroups(string $layoutCode, string $section): array
     {
         if ($this->groupsSource === []) {
-            $this->groupsSource = $this->connection->fetchAllAssociative('SELECT * FROM #__node_type_layout_group');
+            $this->groupsSource = $this->connection->fetchAllAssociative('SELECT * FROM #__node_type_layout_group ORDER BY `order` ASC');
         }
 
         $result = [];
@@ -56,7 +56,7 @@ class DatabaseProvider extends AbstractLayoutTypeProvider
     private function getFields(string $groupId): array
     {
         if ($this->fieldsSource === []) {
-            $this->fieldsSource = $this->connection->fetchAllAssociative('SELECT * FROM #__node_type_layout_group_field');
+            $this->fieldsSource = $this->connection->fetchAllAssociative('SELECT * FROM #__node_type_layout_group_field ORDER BY `order` ASC');
         }
 
         $result = [];

@@ -23,13 +23,13 @@ class Section extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('id', TextType::class, [
+            ->add('code', TextType::class, [
                 'constraints' => [
                     new NotBlank(),
-                    new Callback([new CodenameValidator(), 'validateSectionId']),
+                    new Callback([new CodenameValidator(), 'validateSectionCode']),
                 ],
             ])
-            ->add('label', TextType::class, [
+            ->add('name', TextType::class, [
                 'constraints' => [
                     new NotBlank(),
                 ],

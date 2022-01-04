@@ -51,9 +51,9 @@ class NodeTypeRequestManipulator
     private function removeInvalidSections(array $sections): array
     {
         foreach ($sections as $sectionKey => $section) {
-            if ($this->codenameValidator->isCodenameValid($section['id']) === false) {
+            if ($this->codenameValidator->isCodenameValid($section['code']) === false) {
                 unset($sections[$sectionKey]);
-                $this->log('Section {section_name} removed, cause: section ID must contain only lowercased alphanums and underlines.', [
+                $this->log('Section {section_name} removed, cause: section Code must contain only lowercased alphanums and underlines.', [
                     'section_name' => $section['label'],
                 ]);
                 continue;

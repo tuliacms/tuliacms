@@ -163,6 +163,7 @@ class NodeTypeValidationRequestManipulator
                         'message' => $errors[$sk]['fields'][$fk]['type'][0] ?? null,
                     ],
                     'configuration' => $configuration,
+                    'constraints' => $constraints,
                 ];
             }
         }

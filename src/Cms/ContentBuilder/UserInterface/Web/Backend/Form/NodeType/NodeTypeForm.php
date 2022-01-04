@@ -43,7 +43,7 @@ class NodeTypeForm extends AbstractType
                 'constraints' => [
                     new NotBlank(),
                     new Callback([new CodenameValidator(), 'validateNodeType']),
-                    new Callback([$this, 'validateNodeTypeDuplicate']),
+                    new Callback([$this, 'validateNodeTypeDuplicate'], null, ['edit_form' => $options['edit_form']]),
                 ],
             ])
             ->add('icon', TextType::class, [
@@ -74,12 +74,13 @@ class NodeTypeForm extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefault('csrf_protection', false);
+        $resolver->setDefault('edit_form', false);
         $resolver->setRequired('fields');
     }
 
-    public function validateNodeTypeDuplicate(?string $nodeType, ExecutionContextInterface $context): void
+    public function validateNodeTypeDuplicate(?string $nodeType, ExecutionContextInterface $context, array $payload): void
     {
-        if ($this->nodeTypeRegistry->has($nodeType)) {
+        if ($payload['edit_form'] === false && $this->nodeTypeRegistry->has($nodeType)) {
             $context->buildViolation('thisNodeTypeIsAlreadyRegistered')
                 ->setTranslationDomain('content_builder')
                 ->addViolation();
@@ -104,7 +105,7 @@ class NodeTypeForm extends AbstractType
         $found = false;
 
         foreach ($payload['fields'] as $field) {
-            if ($field['id'] === $taxonomyFieldName && $field['type'] === 'taxonomy') {
+            if ($field['code'] === $taxonomyFieldName && $field['type'] === 'taxonomy') {
                 $found = true;
             }
         }

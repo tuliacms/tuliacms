@@ -38,10 +38,10 @@ class Field extends AbstractType
         $choices = ['Yes' => true, 'No' => false];
 
         $builder
-            ->add('id', TextType::class, [
+            ->add('code', TextType::class, [
                 'constraints' => [
                     new NotBlank(),
-                    new Callback([new CodenameValidator(), 'validateFieldId']),
+                    new Callback([new CodenameValidator(), 'validateFieldCode']),
                 ],
             ])
             ->add('type', TextType::class, [
@@ -67,7 +67,7 @@ class Field extends AbstractType
         $form = $event->getForm();
 
         $form
-            ->add('label', TextType::class, [
+            ->add('name', TextType::class, [
                 'constraints' => [
                     new NotBlank(),
                     new Callback(

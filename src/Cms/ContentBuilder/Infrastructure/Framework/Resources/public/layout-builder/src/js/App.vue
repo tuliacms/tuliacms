@@ -169,8 +169,8 @@ export default {
                     name: this.$get(model, 'type.name'),
                     code: this.$get(model, 'type.code'),
                     icon: this.$get(model, 'type.icon', 'fas fa-boxes'),
-                    isRoutable: this.$get(model, 'type.isRoutable', '1'),
-                    isHierarchical: this.$get(model, 'type.isHierarchical', '1'),
+                    isRoutable: this.$get(model, 'type.isRoutable', false) ? '1' : '0',
+                    isHierarchical: this.$get(model, 'type.isHierarchical', false) ? '1' : '0',
                     taxonomyField: this.$get(model, 'type.taxonomyField'),
                 },
                 layout: {
@@ -295,6 +295,7 @@ export default {
                 type: { value: data.type, valid: true, message: null },
                 multilingual: { value: data.multilingual, valid: true, message: null },
                 configuration: data.configuration,
+                constraints: [],
             });
 
             this._detectTaxonomyFieldExistence();
