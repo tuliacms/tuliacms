@@ -10,14 +10,14 @@
                     <div class="row">
                         <div class="col mb-3">
                             <label for="ctb-new-field-label" class="form-label">{{ translations.fieldLabel }}</label>
-                            <input type="text" :class="{ 'form-control': true, 'ctb-autofocus': true, 'is-invalid': model.label.valid === false }" id="ctb-new-field-label" v-model="model.label.value" @keyup="generateFieldId()" @change="_validateBasics()" />
-                            <div v-if="model.label.valid === false" class="invalid-feedback">{{ model.label.message }}</div>
+                            <input type="text" :class="{ 'form-control': true, 'ctb-autofocus': true, 'is-invalid': model.name.valid === false }" id="ctb-new-field-label" v-model="model.name.value" @keyup="generateFieldId()" @change="_validateBasics()" />
+                            <div v-if="model.name.valid === false" class="invalid-feedback">{{ model.name.message }}</div>
                             <div class="form-text">{{ translations.fieldLabelHelp }}</div>
                         </div>
                         <div class="col mb-3">
                             <label for="ctb-new-field-id" class="form-label">{{ translations.fieldId }}</label>
-                            <input type="text" :class="{ 'form-control': true, 'is-invalid': model.id.valid === false }" id="ctb-new-field-id" v-model="model.id.value" @keyup="idFieldChanged = true" @change="_validateBasics()" />
-                            <div v-if="model.id.valid === false" class="invalid-feedback">{{ model.id.message }}</div>
+                            <input type="text" :class="{ 'form-control': true, 'is-invalid': model.code.valid === false }" id="ctb-new-field-id" v-model="model.code.value" @keyup="idFieldChanged = true" @change="_validateBasics()" />
+                            <div v-if="model.code.valid === false" class="invalid-feedback">{{ model.code.message }}</div>
                             <div class="form-text">{{ translations.fieldIdHelp }}</div>
                         </div>
                     </div>
@@ -72,9 +72,9 @@ export default {
         return {
             idFieldChanged: false,
             model: {
-                id: { value: '', valid: true, message: null },
+                code: { value: '', valid: true, message: null },
                 type: { value: 'text', valid: true, message: null },
-                label: { value: null, valid: true, message: null },
+                name: { value: null, valid: true, message: null },
                 multilingual: { value: false, valid: true, message: null },
                 configuration: [],
             }
@@ -95,7 +95,7 @@ export default {
             this.$forceUpdate();
         },
         generateFieldId: function () {
-            if (this.model.id.value === '') {
+            if (this.model.code.value === '') {
                 this.idFieldChanged = false;
             }
 
@@ -103,7 +103,7 @@ export default {
                 return;
             }
 
-            this.model.id.value = this.model.label.value.toLowerCase().replace(/[^a-z0-9_]+/g, '_').replace(/_+/is, '_');
+            this.model.code.value = this.model.name.value.toLowerCase().replace(/[^a-z0-9_]+/g, '_').replace(/_+/is, '_');
         },
         saveField: function () {
             if (this._validate() === false) {
@@ -111,9 +111,9 @@ export default {
             }
 
             let model = {
-                id: this.model.id.value,
+                code: this.model.code.value,
                 type: this.model.type.value,
-                label: this.model.label.value,
+                name: this.model.name.value,
                 multilingual: !!this.model.multilingual.value,
                 configuration: [],
             };
@@ -154,25 +154,25 @@ export default {
         _validateBasics: function () {
             let status = true;
 
-            this.model.label.valid = true;
-            this.model.label.message = null;
-            this.model.id.valid = true;
-            this.model.id.message = null;
+            this.model.name.valid = true;
+            this.model.name.message = null;
+            this.model.code.valid = true;
+            this.model.code.message = null;
 
-            if (! this.model.label.value) {
+            if (! this.model.name.value) {
                 status = false;
-                this.model.label.valid = false;
-                this.model.label.message = this.translations.pleaseFillThisField;
+                this.model.name.valid = false;
+                this.model.name.message = this.translations.pleaseFillThisField;
             }
 
-            if (! this.model.id.value) {
+            if (! this.model.code.value) {
                 status = false;
-                this.model.id.valid = false;
-                this.model.id.message = this.translations.pleaseFillThisField;
-            } else if (! /^[0-9a-z_]+$/g.test(this.model.id.value)) {
+                this.model.code.valid = false;
+                this.model.code.message = this.translations.pleaseFillThisField;
+            } else if (! /^[0-9a-z_]+$/g.test(this.model.code.value)) {
                 status = false;
-                this.model.id.valid = false;
-                this.model.id.message = this.translations.fieldIdMustContainOnlyAlphanumsAndUnderline;
+                this.model.code.valid = false;
+                this.model.code.message = this.translations.fieldIdMustContainOnlyAlphanumsAndUnderline;
             }
 
             return status;
@@ -199,9 +199,9 @@ export default {
         _initiate: function () {
             this.idFieldChanged = false;
 
-            this.model.id = { value: '', valid: true, message: null };
+            this.model.code = { value: '', valid: true, message: null };
             this.model.type = { value: 'text', valid: true, message: null };
-            this.model.label = { value: null, valid: true, message: null };
+            this.model.name = { value: null, valid: true, message: null };
             this.model.multilingual = { value: null, valid: true, message: null };
             this.model.configuration = [];
 

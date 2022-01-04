@@ -4,7 +4,7 @@
             <transition-group type="transition" :name="!drag ? 'flip-list' : null" class="ctb-sortable-placeholder" tag="div" :data-label="translations.addNewSection">
                 <Section
                     v-for="(section, id) in sections"
-                    :key="section.id"
+                    :key="section.code"
                     :section="section"
                     :translations="translations"
                     :errors="$get(errors, id, {})"
@@ -35,17 +35,17 @@ export default {
         dragOptions() {
             return {
                 animation: 200,
-                group: "sections",
+                group: 'sections',
                 disabled: false,
-                ghostClass: "ctb-draggable-ghost"
+                ghostClass: 'ctb-draggable-ghost'
             };
         }
     },
     methods: {
         addSection: function () {
             this.sections.push({
-                id: _.uniqueId('section_'),
-                label: {
+                code: _.uniqueId('section_'),
+                name: {
                     value: 'New section...',
                     valid: true,
                     message: null
@@ -53,11 +53,11 @@ export default {
                 fields: []
             });
         },
-        removeSection: function (id) {
+        removeSection: function (code) {
             Tulia.Confirmation.warning().then((result) => {
                 if (result.value) {
                     for (let i in this.sections) {
-                        if (this.sections[i].id === id) {
+                        if (this.sections[i].code === code) {
                             this.sections.splice(i, 1);
                         }
                     }

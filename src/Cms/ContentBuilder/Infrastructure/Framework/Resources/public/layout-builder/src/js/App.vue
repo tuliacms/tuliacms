@@ -152,11 +152,11 @@ export default {
                     code_field_changed: false,
                     has_taxonomy_field: false,
                     taxonomy_fields: [],
-                    field_creator_section_id: null,
+                    field_creator_section_code: null,
                     field_editor: {
-                        id: {value: null, valid: true, message: null},
+                        code: {value: null, valid: true, message: null},
                         type: {value: null, valid: true, message: null},
-                        label: {value: null, valid: true, message: null},
+                        name: {value: null, valid: true, message: null},
                         multilingual: {value: null, valid: true, message: null},
                         constraints: [],
                         configuration: [],
@@ -229,7 +229,7 @@ export default {
 
             return status;
         },
-        removeField: function (fieldId) {
+        removeField: function (fieldCode) {
             Tulia.Confirmation.warning().then((result) => {
                 if (! result.value) {
                     return;
@@ -237,7 +237,7 @@ export default {
 
                 for (let s in this.model.layout.sidebar.sections) {
                     for (let f in this.model.layout.sidebar.sections[s].fields) {
-                        if (this.model.layout.sidebar.sections[s].fields[f].id === fieldId) {
+                        if (this.model.layout.sidebar.sections[s].fields[f].code === fieldCode) {
                             this.model.layout.sidebar.sections[s].fields.splice(f, 1);
                         }
                     }
@@ -245,7 +245,7 @@ export default {
 
                 for (let s in this.model.layout.main.sections) {
                     for (let f in this.model.layout.main.sections[s].fields) {
-                        if (this.model.layout.main.sections[s].fields[f].id === fieldId) {
+                        if (this.model.layout.main.sections[s].fields[f].code === fieldCode) {
                             this.model.layout.main.sections[s].fields.splice(f, 1);
                         }
                     }
@@ -254,18 +254,22 @@ export default {
                 this._detectTaxonomyFieldExistence();
             });
         },
-        openCreateFieldModel: function (sectionId) {
-            this.view.form.field_creator_section_id = sectionId;
+        openCreateFieldModel: function (sectionCode) {
+            this.view.form.field_creator_section_code = sectionCode;
             this.view.modal.field_creator.show();
 
             this.$root.$emit('field:create:modal:opened');
         },
-        openEditFieldModel: function (fieldId) {
-            let field = this._findField(fieldId);
+        openEditFieldModel: function (fieldCode) {
+            let field = this._findField(fieldCode);
 
-            this.view.form.field_editor.id = field.id;
+            if (! field) {
+                throw new Error('Cannot open edit modal, field not exists.');
+            }
+
+            this.view.form.field_editor.code = field.code;
             this.view.form.field_editor.type = field.type;
-            this.view.form.field_editor.label = field.label;
+            this.view.form.field_editor.name = field.name;
             this.view.form.field_editor.multilingual = field.multilingual;
             this.view.form.field_editor.constraints = field.constraints;
             this.view.form.field_editor.configuration = field.configuration;
@@ -274,7 +278,7 @@ export default {
             this.$root.$emit('field:edit:modal:opened');
         },
         createFieldUsingCreatorData: function (data) {
-            let section = this._findSection(this.view.form.field_creator_section_id);
+            let section = this._findSection(this.view.form.field_creator_section_code);
 
             if (this._findField(data.id)) {
                 Tulia.Info.info({
@@ -286,8 +290,8 @@ export default {
 
             section.fields.push({
                 metadata: { has_errors: false },
-                id: { value: data.id, valid: true, message: null },
-                label: { value: data.label, valid: true, message: null },
+                code: { value: data.code, valid: true, message: null },
+                name: { value: data.name, valid: true, message: null },
                 type: { value: data.type, valid: true, message: null },
                 multilingual: { value: data.multilingual, valid: true, message: null },
                 configuration: data.configuration,
@@ -296,18 +300,22 @@ export default {
             this._detectTaxonomyFieldExistence();
 
             this.view.modal.field_creator.hide();
-            this.openEditFieldModel(data.id);
+            this.openEditFieldModel(data.code);
             this.$forceUpdate();
         },
         editFieldUsingCreatorData: function (data) {
-            let field = this._findField(this.view.form.field_editor.id.value);
+            let field = this._findField(this.view.form.field_editor.code.value);
+
+            if (! field) {
+                return;
+            }
 
             field.metadata.has_errors = false;
-            field.id.message = null;
-            field.id.valid = true;
-            field.label.value = data.label;
-            field.label.message = null;
-            field.label.valid = true;
+            field.code.message = null;
+            field.code.valid = true;
+            field.name.value = data.name;
+            field.name.message = null;
+            field.name.valid = true;
             field.multilingual.value = data.multilingual;
             field.multilingual.message = null;
             field.multilingual.valid = true;
@@ -328,23 +336,23 @@ export default {
 
             this.model.type.code = this.model.type.name.toLowerCase().replace(/[^a-z0-9_]+/g, '_').replace(/_+/is, '_');
         },
-        _findSection: function (id) {
+        _findSection: function (code) {
             for (let s in this.model.layout.sidebar.sections) {
-                if (this.model.layout.sidebar.sections[s].id === id) {
+                if (this.model.layout.sidebar.sections[s].code === code) {
                     return this.model.layout.sidebar.sections[s];
                 }
             }
 
             for (let s in this.model.layout.main.sections) {
-                if (this.model.layout.main.sections[s].id === id) {
+                if (this.model.layout.main.sections[s].code === code) {
                     return this.model.layout.main.sections[s];
                 }
             }
         },
-        _findField: function (id) {
+        _findField: function (code) {
             for (let s in this.model.layout.sidebar.sections) {
                 for (let f in this.model.layout.sidebar.sections[s].fields) {
-                    if (this.model.layout.sidebar.sections[s].fields[f].id.value === id) {
+                    if (this.model.layout.sidebar.sections[s].fields[f].code.value === code) {
                         return this.model.layout.sidebar.sections[s].fields[f];
                     }
                 }
@@ -352,7 +360,7 @@ export default {
 
             for (let s in this.model.layout.main.sections) {
                 for (let f in this.model.layout.main.sections[s].fields) {
-                    if (this.model.layout.main.sections[s].fields[f].id.value === id) {
+                    if (this.model.layout.main.sections[s].fields[f].code.value === code) {
                         return this.model.layout.main.sections[s].fields[f];
                     }
                 }
@@ -367,8 +375,8 @@ export default {
                     if (this.model.layout.sidebar.sections[s].fields[f].type.value === 'taxonomy') {
                         this.view.form.has_taxonomy_field = true;
                         this.view.form.taxonomy_fields.push({
-                            value: this.model.layout.sidebar.sections[s].fields[f].id.value,
-                            label: this.model.layout.sidebar.sections[s].fields[f].label.value
+                            value: this.model.layout.sidebar.sections[s].fields[f].code.value,
+                            label: this.model.layout.sidebar.sections[s].fields[f].name.value
                         });
                     }
                 }
@@ -379,8 +387,8 @@ export default {
                     if (this.model.layout.main.sections[s].fields[f].type.value === 'taxonomy') {
                         this.view.form.has_taxonomy_field = true;
                         this.view.form.taxonomy_fields.push({
-                            value: this.model.layout.sidebar.sections[s].fields[f].id.value,
-                            label: this.model.layout.sidebar.sections[s].fields[f].label.value
+                            value: this.model.layout.sidebar.sections[s].fields[f].code.value,
+                            label: this.model.layout.sidebar.sections[s].fields[f].name.value
                         });
                     }
                 }
@@ -409,14 +417,14 @@ export default {
 
         this._detectTaxonomyFieldExistence();
 
-        this.$root.$on('field:add', (sectionId) => {
-            this.openCreateFieldModel(sectionId);
+        this.$root.$on('field:add', (sectionCode) => {
+            this.openCreateFieldModel(sectionCode);
         });
-        this.$root.$on('field:edit', (fieldId) => {
-            this.openEditFieldModel(fieldId);
+        this.$root.$on('field:edit', (fieldCode) => {
+            this.openEditFieldModel(fieldCode);
         });
-        this.$root.$on('field:remove', (fieldId) => {
-            this.removeField(fieldId);
+        this.$root.$on('field:remove', (fieldCode) => {
+            this.removeField(fieldCode);
         });
     }
 };

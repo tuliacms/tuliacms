@@ -14,6 +14,7 @@ use Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\NodeType\LayoutSecti
 use Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\NodeType\NodeTypeForm;
 use Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\RequestManipulator\NodeTypeRequestManipulator;
 use Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\RequestManipulator\NodeTypeValidationRequestManipulator;
+use Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\Transformer\NodeTypeModelToFormDataTransformer;
 use Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\Validator\CodenameValidator;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Component\Security\Http\Csrf\Annotation\CsrfToken;
@@ -59,12 +60,12 @@ class NodeType extends AbstractController
                                     'metadata' => [
                                         'has_errors' => true,
                                     ],
-                                    'id' => [
+                                    'code' => [
                                         'value' => 'adsfgsdfghdfgh',
                                         'valid' => false,
                                         'message' => 'INVALID ID',
                                     ],
-                                    'label' => [
+                                    'name' => [
                                         'value' => 'select field',
                                         'valid' => false,
                                         'message' => 'INVALID LABEL',
@@ -97,12 +98,12 @@ class NodeType extends AbstractController
                                     'metadata' => [
                                         'has_errors' => true,
                                     ],
-                                    'id' => [
+                                    'code' => [
                                         'value' => 'dthtyjtjy',
                                         'valid' => false,
                                         'message' => 'INVALID ID',
                                     ],
-                                    'label' => [
+                                    'name' => [
                                         'value' => 'text field',
                                         'valid' => false,
                                         'message' => 'INVALID LABEL',
@@ -148,12 +149,12 @@ class NodeType extends AbstractController
                     'value' => null,
                 ];
                 $data['layout']['sidebar']['sections'][] = [
-                    'id' => '45f34563&^%b',
-                    'label' => 'test section',
+                    'code' => '45f34563&^%b',
+                    'name' => 'test section',
                     'fields' => [
                         [
                             'id' => 'o8&TH(N876T',
-                            'label' => 'test field',
+                            'name' => 'test field',
                             'type' => 'not existent type',
                             'multilingual' => true,
                             'configuration' => [],
@@ -161,12 +162,12 @@ class NodeType extends AbstractController
                     ],
                 ];
                 $data['layout']['sidebar']['sections'][] = [
-                    'id' => 'asd',
-                    'label' => 'asd',
+                    'code' => 'asd',
+                    'name' => 'asd',
                     'fields' => [
                         [
-                            'id' => 'qwe',
-                            'label' => 'qwe',
+                            'code' => 'qwe',
+                            'name' => 'qwe',
                             'type' => 'select',
                             'multilingual' => true,
                             'configuration' => [],
@@ -274,8 +275,9 @@ class NodeType extends AbstractController
         }
 
         $layout = $this->layoutTypeRegistry->get($type->getLayout());
+        $data = (new NodeTypeModelToFormDataTransformer())->transform($type, $layout);
 
-        dump($type, $layout);exit;
+        dump($data);exit;
 
         return $this->view('@backend/content_builder/node_type/edit.tpl', [
             'fieldTypes' => $this->getFieldTypes(),

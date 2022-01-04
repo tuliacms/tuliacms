@@ -74,8 +74,8 @@ class NodeTypeValidationRequestManipulator
                 }
 
                 $newFields[$fk] = [
-                    'id' => $field['id']['value'],
-                    'label' => $field['label']['value'],
+                    'code' => $field['code']['value'],
+                    'name' => $field['name']['value'],
                     'multilingual' => $field['multilingual']['value'],
                     'type' => $field['type']['value'],
                     'configuration' => $newConfiguration,
@@ -84,8 +84,8 @@ class NodeTypeValidationRequestManipulator
             }
 
             $newSections[$sk] = [
-                'id' => $section['id'],
-                'label' => $section['label']['value'],
+                'code' => $section['code'],
+                'name' => $section['name']['value'],
                 'fields' => $newFields,
             ];
         }
@@ -96,10 +96,10 @@ class NodeTypeValidationRequestManipulator
     private function joinSectionErrorsWithData(array $sections, array $errors): array
     {
         foreach ($sections as $sk => $section) {
-            $sections[$sk]['label'] = [
-                'value' => $section['label'],
-                'valid' => empty($errors[$sk]['label']),
-                'message' => $errors[$sk]['label'][0] ?? null,
+            $sections[$sk]['name'] = [
+                'value' => $section['name'],
+                'valid' => empty($errors[$sk]['name']),
+                'message' => $errors[$sk]['name'][0] ?? null,
             ];
 
             foreach ($section['fields'] as $fk => $field) {
@@ -130,8 +130,8 @@ class NodeTypeValidationRequestManipulator
                 }
 
                 if (
-                    ! empty($errors[$sk]['fields'][$fk]['id'])
-                    || ! empty($errors[$sk]['fields'][$fk]['label'])
+                    ! empty($errors[$sk]['fields'][$fk]['code'])
+                    || ! empty($errors[$sk]['fields'][$fk]['name'])
                     || ! empty($errors[$sk]['fields'][$fk]['multilingual'])
                     || ! empty($errors[$sk]['fields'][$fk]['type'])
                 ) {
@@ -142,15 +142,15 @@ class NodeTypeValidationRequestManipulator
                     'metadata' => [
                         'has_errors' => $fieldHasErrors,
                     ],
-                    'id' => [
-                        'value' => $field['id'],
-                        'valid' => empty($errors[$sk]['fields'][$fk]['id']),
-                        'message' => $errors[$sk]['fields'][$fk]['id'][0] ?? null,
+                    'code' => [
+                        'value' => $field['code'],
+                        'valid' => empty($errors[$sk]['fields'][$fk]['code']),
+                        'message' => $errors[$sk]['fields'][$fk]['code'][0] ?? null,
                     ],
-                    'label' => [
-                        'value' => $field['label'],
-                        'valid' => empty($errors[$sk]['fields'][$fk]['label']),
-                        'message' => $errors[$sk]['fields'][$fk]['label'][0] ?? null,
+                    'name' => [
+                        'value' => $field['name'],
+                        'valid' => empty($errors[$sk]['fields'][$fk]['name']),
+                        'message' => $errors[$sk]['fields'][$fk]['name'][0] ?? null,
                     ],
                     'multilingual' => [
                         'value' => $field['multilingual'],

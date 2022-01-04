@@ -10,14 +10,14 @@
                     <div class="row">
                         <div class="col mb-3">
                             <label for="ctb-edit-field-label" class="form-label">{{ translations.fieldLabel }}</label>
-                            <input type="text" :class="{ 'form-control': true, 'ctb-autofocus': true, 'is-invalid': model.label.valid === false }" id="ctb-edit-field-label" v-model="model.label.value" @change="_validate()" />
-                            <div v-if="model.label.valid === false" class="invalid-feedback">{{ model.label.message }}</div>
+                            <input type="text" :class="{ 'form-control': true, 'ctb-autofocus': true, 'is-invalid': model.name.valid === false }" id="ctb-edit-field-label" v-model="model.name.value" @change="_validate()" />
+                            <div v-if="model.name.valid === false" class="invalid-feedback">{{ model.name.message }}</div>
                             <div class="form-text">{{ translations.fieldLabelHelp }}</div>
                         </div>
                         <div class="col mb-3">
                             <label for="ctb-edit-field-id" class="form-label">{{ translations.fieldId }}</label>
-                            <input type="text" :class="{ 'form-control': true, 'is-invalid': model.id.valid === false }" id="ctb-edit-field-id" v-model="model.id.value" disabled />
-                            <div v-if="model.id.valid === false" class="invalid-feedback">{{ model.id.message }}</div>
+                            <input type="text" :class="{ 'form-control': true, 'is-invalid': model.code.valid === false }" id="ctb-edit-field-id" v-model="model.code.value" disabled />
+                            <div v-if="model.code.valid === false" class="invalid-feedback">{{ model.code.message }}</div>
                         </div>
                     </div>
                     <div class="form-check">
@@ -85,8 +85,8 @@ export default {
     data: function () {
         return {
             model: {
-                id: { value: '', valid: true, message: null },
-                label: { value: null, valid: true, message: null },
+                code: { value: '', valid: true, message: null },
+                name: { value: null, valid: true, message: null },
                 multilingual: { value: false, valid: true, message: null },
                 type: { value: false, valid: true, message: null },
                 constraints: [],
@@ -101,7 +101,7 @@ export default {
             }
 
             let model = {
-                label: this.model.label.value,
+                name: this.model.name.value,
                 multilingual: !!this.model.multilingual.value,
                 constraints: [],
                 configuration: [],
@@ -136,15 +136,15 @@ export default {
         _validate: function () {
             let status = true;
 
-            this.model.label.valid = true;
-            this.model.label.message = null;
-            this.model.id.valid = true;
-            this.model.id.message = null;
+            this.model.name.valid = true;
+            this.model.name.message = null;
+            this.model.code.valid = true;
+            this.model.code.message = null;
 
-            if (! this.model.label.value) {
+            if (! this.model.name.value) {
                 status = false;
-                this.model.label.valid = false;
-                this.model.label.message = this.translations.pleaseFillThisField;
+                this.model.name.valid = false;
+                this.model.name.message = this.translations.pleaseFillThisField;
             }
 
             for (let c in this.model.constraints) {
@@ -253,12 +253,12 @@ export default {
             }
         },
         _initiate: function () {
-            this.model.id.value = this.field.id.value;
-            this.model.id.valid = this.field.id.valid;
-            this.model.id.message = this.field.id.message;
-            this.model.label.value = this.field.label.value;
-            this.model.label.valid = this.field.label.valid;
-            this.model.label.message = this.field.label.message;
+            this.model.code.value = this.field.code.value;
+            this.model.code.valid = this.field.code.valid;
+            this.model.code.message = this.field.code.message;
+            this.model.name.value = this.field.name.value;
+            this.model.name.valid = this.field.name.valid;
+            this.model.name.message = this.field.name.message;
             this.model.multilingual.value = this.field.multilingual.value;
             this.model.multilingual.valid = this.field.multilingual.valid;
             this.model.multilingual.message = this.field.multilingual.message;
