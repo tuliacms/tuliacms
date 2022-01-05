@@ -99,7 +99,7 @@ class DatabaseProvider extends AbstractNodeTypeProvider
                 continue;
             }
 
-            $configs[$constraint['code']] = $this->getConstraintModificators($constraint['id']);
+            $configs[$constraint['code']]['modificators'] = $this->getConstraintModificators($constraint['id']);
         }
 
         return $configs;

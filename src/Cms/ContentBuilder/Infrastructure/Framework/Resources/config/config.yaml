@@ -110,6 +110,7 @@ cms:
                 select:
                     label: Select
                     classname: 'Symfony\Component\Form\Extension\Core\Type\ChoiceType'
+                    builder: 'Tulia\Cms\ContentBuilder\UserInterface\Web\Shared\Form\FormType\ChoiceTypeBuilder'
                     constraints: [required]
                     configuration:
                         choices:

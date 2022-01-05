@@ -22,8 +22,10 @@ use Tulia\Cms\Platform\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Component\Datatable\DatatableFactory;
 use Tulia\Component\Security\Http\Csrf\Annotation\CsrfToken;
+use Tulia\Component\Security\Http\Csrf\Annotation\IgnoreCsrfToken;
 use Tulia\Component\Templating\ViewInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Model\Node as Model;
+use Tulia\Framework\Security\Http\Csrf\Exception\RequestCsrfTokenException;
 
 /**
  * @author Adam Banaszkiewicz
@@ -85,17 +87,20 @@ class Node extends AbstractController
      * @param Request $request
      * @param string $node_type
      * @return RedirectResponse|ViewInterface
-     * @CsrfToken(id="content_builder_form_page")
+     * @throws RequestCsrfTokenException
+     * @IgnoreCsrfToken()
      */
     public function create(Request $request, string $node_type)
     {
+        $this->validateCsrfToken($request, $node_type);
+
         $node = $this->repository->createNew($node_type);
 
         $formDescriptor = $this->produceFormDescriptor($node, $request);
         $nodeType = $formDescriptor->getContentType();
 
         if ($formDescriptor->isFormValid()) {
-            $this->updateModel($formDescriptor, $node);
+            $this->updateModel($formDescriptor, $node, 'create');
 
             $this->setFlash('success', $this->trans('nodeSaved', [], 'node'));
             return $this->redirectToRoute('backend.node.edit', [ 'id' => $node->getId(), 'node_type' => $nodeType->getCode() ]);
@@ -113,10 +118,13 @@ class Node extends AbstractController
      * @param string $node_type
      * @param string $id
      * @return RedirectResponse|ViewInterface
-     * @CsrfToken(id="content_builder_form_page")
+     * @throws RequestCsrfTokenException
+     * @IgnoreCsrfToken()
      */
     public function edit(Request $request, string $node_type, string $id)
     {
+        $this->validateCsrfToken($request, $node_type);
+
         try {
             $node = $this->repository->find($id);
 
@@ -134,7 +142,7 @@ class Node extends AbstractController
 
         if ($formDescriptor->isFormValid()) {
             try {
-                $this->updateModel($formDescriptor, $node);
+                $this->updateModel($formDescriptor, $node, 'update');
                 $this->setFlash('success', $this->trans('nodeSaved', [], 'node'));
                 return $this->redirectToRoute('backend.node.edit', [ 'id' => $node->getId(), 'node_type' => $nodeType->getCode() ]);
             } catch (SingularFlagImposedOnMoreThanOneNodeException $e) {
@@ -259,19 +267,41 @@ class Node extends AbstractController
         );
     }
 
-    private function updateModel(ContentTypeFormDescriptor $formDescriptor, Model $node): void
+    private function updateModel(ContentTypeFormDescriptor $formDescriptor, Model $node, string $strategy): void
     {
         $data = $formDescriptor->getData();
 
         $node->setStatus($data['status']);
-        $node->setSlug($data['slug']);
+        $node->setSlug($data['slug'] ?? null);
         $node->setTitle($data['title']);
         $node->setPublishedAt(new ImmutableDateTime($data['published_at']));
         $node->setPublishedTo($data['published_to'] ? new ImmutableDateTime($data['published_to']) : null);
-        $node->setParentId($data['parent_id']);
+        $node->setParentId($data['parent_id'] ?? null);
         $node->setAuthorId($data['author_id']);
         $node->updateAttributes($data);
 
-        $this->repository->update($node);
+        if ($strategy === 'create') {
+            $this->repository->insert($node);
+        } else {
+            $this->repository->update($node);
+        }
+    }
+
+    /**
+     * @throws RequestCsrfTokenException
+     */
+    private function validateCsrfToken(Request $request, string $node_type): void
+    {
+        /**
+         * We must detect token validness manually, cause form name changes for every node type.
+         */
+        if ($request->isMethod('POST')) {
+            $tokenId = 'content_builder_form_' . $node_type;
+            $csrfToken = $request->request->all()[$tokenId]['_token'] ?? '';
+
+            if ($this->isCsrfTokenValid($tokenId, $csrfToken) === false) {
+                throw new RequestCsrfTokenException('CSRF token is invalid. Operation stopped.');
+            }
+        }
     }
 }

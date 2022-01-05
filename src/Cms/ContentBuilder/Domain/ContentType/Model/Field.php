@@ -93,6 +93,11 @@ class Field
         return $this->options['configuration'];
     }
 
+    public function getConfig(string $name, $default = null)
+    {
+        return $this->options['configuration'][$name] ?? $default;
+    }
+
     public function getConstraints(): array
     {
         return $this->options['constraints'];
