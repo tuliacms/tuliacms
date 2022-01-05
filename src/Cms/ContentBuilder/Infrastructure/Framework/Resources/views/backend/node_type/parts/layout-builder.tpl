@@ -42,7 +42,7 @@
             multilingualFieldInfo: '{{ 'multilingualFieldInfo'|trans }}',
             nextStep: '{{ 'nextStep'|trans }}',
             pleaseFillThisField: '{{ 'pleaseFillThisField'|trans }}',
-            fieldIdMustContainOnlyAlphanumsAndUnderline: '{{ 'fieldIdMustContainOnlyAlphanumsAndUnderline'|trans }}',
+            fieldCodeMustContainOnlyAlphanumsAndUnderline: '{{ 'fieldCodeMustContainOnlyAlphanumsAndUnderline'|trans }}',
             fieldTypeConfiguration: '{{ 'fieldTypeConfiguration'|trans }}',
             fieldDetails: '{{ 'fieldDetails'|trans }}',
             fieldTypeConstraints: '{{ 'fieldTypeConstraints'|trans }}',

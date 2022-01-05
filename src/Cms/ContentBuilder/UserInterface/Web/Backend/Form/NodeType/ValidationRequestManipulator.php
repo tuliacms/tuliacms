@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\RequestManipulator;
+namespace Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\NodeType;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class NodeTypeValidationRequestManipulator
+class ValidationRequestManipulator
 {
     public function cleanFromValidationData(array $data): array
     {

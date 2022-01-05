@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\RequestManipulator;
+namespace Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\NodeType;
 
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\FieldTypeMappingRegistry;
 use Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\Validator\CodenameValidator;
@@ -10,7 +10,7 @@ use Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\Validator\CodenameVa
 /**
  * @author Adam Banaszkiewicz
  */
-class NodeTypeRequestManipulator
+class RequestDataValidator
 {
     private FieldTypeMappingRegistry $fieldTypeMappingRegistry;
     private CodenameValidator $codenameValidator;
@@ -24,7 +24,7 @@ class NodeTypeRequestManipulator
         $this->codenameValidator = $codenameValidator;
     }
 
-    public function cleanForSulprusData(): array
+    public function cleanForInvalidElements(): array
     {
         // Cleaning data must be started from top to bottom. To first remove example invalid field type,
         // before checking the modificators for constraints.

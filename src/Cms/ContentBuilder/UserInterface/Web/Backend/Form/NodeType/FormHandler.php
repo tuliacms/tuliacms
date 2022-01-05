@@ -2,27 +2,25 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\FormHandler;
+namespace Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\NodeType;
 
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\FieldTypeMappingRegistry;
-use Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\NodeType\LayoutSectionType;
-use Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\NodeType\NodeTypeForm;
-use Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\RequestManipulator\NodeTypeRequestManipulator;
-use Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\RequestManipulator\NodeTypeValidationRequestManipulator;
+use Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\NodeType\FormType\LayoutSectionType;
+use Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\NodeType\FormType\NodeTypeForm;
 use Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\Validator\CodenameValidator;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class NodeTypeFormHandler
+class FormHandler
 {
-    private array $cleaningResult = [];
-    private array $errors = [];
     private FieldTypeMappingRegistry $fieldTypeMappingRegistry;
     private FormFactoryInterface $formFactory;
+    private array $cleaningResult = [];
+    private array $errors = [];
 
     public function __construct(
         FieldTypeMappingRegistry $fieldTypeMappingRegistry,
@@ -41,16 +39,14 @@ class NodeTypeFormHandler
         $errors = [];
         $data = json_decode($request->request->get('node_type'), true);
 
-        $validationDataManipulator = new NodeTypeValidationRequestManipulator();
+        $formData = (new ValidationRequestManipulator())->cleanFromValidationData($data);
 
-        $formData = $validationDataManipulator->cleanFromValidationData($data);
-
-        $dataManipulator = new NodeTypeRequestManipulator(
+        $dataManipulator = new RequestDataValidator(
             $formData,
             $this->fieldTypeMappingRegistry,
             new CodenameValidator()
         );
-        $formData = $dataManipulator->cleanForSulprusData();
+        $formData = $dataManipulator->cleanForInvalidElements();
         $this->cleaningResult = $dataManipulator->getCleaningResult();
 
         $formsAreValid = true;

@@ -84,7 +84,7 @@ export default {
         changeFieldType: function (type) {
             // Do not update if it's the same.
             if (this.model.type.value === type.id) {
-                //return;
+                return;
             }
 
             this.model.type.value = type.id;
@@ -172,7 +172,7 @@ export default {
             } else if (! /^[0-9a-z_]+$/g.test(this.model.code.value)) {
                 status = false;
                 this.model.code.valid = false;
-                this.model.code.message = this.translations.fieldIdMustContainOnlyAlphanumsAndUnderline;
+                this.model.code.message = this.translations.fieldCodeMustContainOnlyAlphanumsAndUnderline;
             }
 
             return status;

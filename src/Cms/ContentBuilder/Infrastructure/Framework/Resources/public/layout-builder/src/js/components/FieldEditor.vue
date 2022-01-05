@@ -97,7 +97,7 @@ export default {
     methods: {
         updateField: function () {
             if (this._validate() === false) {
-                //return;
+                return;
             }
 
             let model = {

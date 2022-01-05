@@ -1,0 +1,228 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" datatype="plaintext" original="file.ext">
+        <body>
+            <trans-unit id="1">
+                <source>contentModel</source>
+                <target>Content model</target>
+            </trans-unit>
+            <trans-unit id="2">
+                <source>nodeTypeName</source>
+                <target>Node type name</target>
+            </trans-unit>
+            <trans-unit id="3">
+                <source>nodeTypeNameInfo</source>
+                <target>Use singular, infinitive, e.g. Post, News, Article, House.</target>
+                <note>Describe how user should create Node Type name</note>
+            </trans-unit>
+            <trans-unit id="4">
+                <source>createNodeType</source>
+                <target>Create node type</target>
+            </trans-unit>
+            <trans-unit id="5">
+                <source>editNodeType</source>
+                <target>Edit node type</target>
+            </trans-unit>
+            <trans-unit id="6">
+                <source>nodeTypesList</source>
+                <target>Node types list</target>
+            </trans-unit>
+            <trans-unit id="7">
+                <source>addNewSection</source>
+                <target>Add new section</target>
+            </trans-unit>
+            <trans-unit id="8">
+                <source>addNewField</source>
+                <target>Add new field</target>
+            </trans-unit>
+            <trans-unit id="9">
+                <source>editField</source>
+                <target>Edit field</target>
+            </trans-unit>
+            <trans-unit id="10">
+                <source>fieldLabel</source>
+                <target>Field label</target>
+            </trans-unit>
+            <trans-unit id="11">
+                <source>fieldLabelHelp</source>
+                <target>This label will be showed on the node form for administrators.</target>
+            </trans-unit>
+            <trans-unit id="12">
+                <source>fieldId</source>
+                <target>Field ID</target>
+            </trans-unit>
+            <trans-unit id="13">
+                <source>fieldIdHelp</source>
+                <target>Please use lowercased alphanum and underscores. THis field is used in API and in templates.</target>
+            </trans-unit>
+            <trans-unit id="14">
+                <source>youCannotCreateTwoFieldsWithTheSameId</source>
+                <target>Yout cannot create two fields with the same ID.</target>
+            </trans-unit>
+            <trans-unit id="15">
+                <source>nodeTypeNotExists</source>
+                <target>This node type not exists.</target>
+            </trans-unit>
+            <trans-unit id="16">
+                <source>cannotEditInternalNodeType</source>
+                <target>Internal Node Types are not editable.</target>
+            </trans-unit>
+            <trans-unit id="17">
+                <source>removeField</source>
+                <target>Remove field</target>
+            </trans-unit>
+            <trans-unit id="18">
+                <source>removeSection</source>
+                <target>Remove section</target>
+            </trans-unit>
+            <trans-unit id="19">
+                <source>fieldType</source>
+                <target>Field type</target>
+            </trans-unit>
+            <trans-unit id="20">
+                <source>theseOptionsWillNotBeEditableAfterSave</source>
+                <target>This options (except Field label) will not be editable after save.</target>
+            </trans-unit>
+            <trans-unit id="21">
+                <source>multilingualField</source>
+                <target>This field is multilingual</target>
+            </trans-unit>
+            <trans-unit id="22">
+                <source>multilingualFieldInfo</source>
+                <target>Allows to translate this field across all defined locales in the website.</target>
+            </trans-unit>
+            <trans-unit id="23">
+                <source>multipleField</source>
+                <target>This field stores a multiple values</target>
+            </trans-unit>
+            <trans-unit id="24">
+                <source>multipleFieldInfo</source>
+                <target>Allows set multiple values in one field of the same type.</target>
+            </trans-unit>
+            <trans-unit id="25">
+                <source>nextStep</source>
+                <target>Next step</target>
+            </trans-unit>
+            <trans-unit id="26">
+                <source>previousStep</source>
+                <target>Previous step</target>
+            </trans-unit>
+            <trans-unit id="27">
+                <source>pleaseFillThisField</source>
+                <target>Please fill this field.</target>
+            </trans-unit>
+            <trans-unit id="28">
+                <source>fieldIdMustContainOnlyAlphanumsAndUnderline</source>
+                <target>Field ID must contain only lowercased alphanums and underline.</target>
+            </trans-unit>
+            <trans-unit id="29">
+                <source>sectionIdCodeMustContainOnlyAlphanumsAndUnderline</source>
+                <target>Section ID must contain only lowercased alphanums and underline.</target>
+            </trans-unit>
+            <trans-unit id="30">
+                <source>fieldTypeConfiguration</source>
+                <target>Configuration</target>
+            </trans-unit>
+            <trans-unit id="31">
+                <source>fieldDetails</source>
+                <target>Field details</target>
+            </trans-unit>
+            <trans-unit id="32">
+                <source>fieldTypeConstraints</source>
+                <target>Constraints</target>
+            </trans-unit>
+            <trans-unit id="33">
+                <source>editNodeTypeDetails</source>
+                <target>Edit node type details</target>
+            </trans-unit>
+            <trans-unit id="34">
+                <source>nodeTypeCode</source>
+                <target>Node type code</target>
+            </trans-unit>
+            <trans-unit id="35">
+                <source>nodeTypeCodeHelp</source>
+                <target>Please use lowercased alphanum and underscores.</target>
+            </trans-unit>
+            <trans-unit id="36">
+                <source>nodeTypeCodeMustContainOnlyAlphanumsAndUnderline</source>
+                <target>Node Type code must contain only lowercased alphanums and underline.</target>
+            </trans-unit>
+            <trans-unit id="37">
+                <source>pleaseSelectTaxonomyFieldForRoutableNodeType</source>
+                <target>Please select the taxonomy field for the routable node type.</target>
+            </trans-unit>
+            <trans-unit id="38">
+                <source>taxonomyField</source>
+                <target>Taxonomy field</target>
+            </trans-unit>
+            <trans-unit id="39">
+                <source>taxonomyFieldHelp</source>
+                <target>Which taxonomy should be leading taxonomy for this node type. Will be used to build URLs to nodes.</target>
+            </trans-unit>
+            <trans-unit id="40">
+                <source>routableType</source>
+                <target>Routable type</target>
+            </trans-unit>
+            <trans-unit id="41">
+                <source>routableTypeHelp</source>
+                <target>Decide, if this node type has own pages in the website.</target>
+            </trans-unit>
+            <trans-unit id="42">
+                <source>hierarchicalType</source>
+                <target>Hierarchical type</target>
+            </trans-unit>
+            <trans-unit id="43">
+                <source>hierarchicalTypeHelp</source>
+                <target>Decide, if every node can have children nodes, and created hierarchical tree of elements.</target>
+            </trans-unit>
+            <trans-unit id="44">
+                <source>pleaseSelectValue</source>
+                <target>Please select value</target>
+            </trans-unit>
+            <trans-unit id="45">
+                <source>internalFields</source>
+                <target>Internal fields</target>
+            </trans-unit>
+            <trans-unit id="46">
+                <source>fieldTypeNotExists</source>
+                <target>Field type "{type}" not exists.</target>
+            </trans-unit>
+            <trans-unit id="47">
+                <source>selectedTaxonomyFieldIsNotATaxonomyField</source>
+                <target>Selected field is not a taxonomy type field.</target>
+            </trans-unit>
+            <trans-unit id="48">
+                <source>thisNodeTypeIsAlreadyRegistered</source>
+                <target>This node type is already registered in system.</target>
+            </trans-unit>
+            <trans-unit id="49">
+                <source>fieldHasErrors</source>
+                <target>Field has errors.</target>
+            </trans-unit>
+            <trans-unit id="50">
+                <source>internalContentType</source>
+                <target>Internal content type</target>
+            </trans-unit>
+            <trans-unit id="51">
+                <source>isRoutable</source>
+                <target>Routable</target>
+            </trans-unit>
+            <trans-unit id="52">
+                <source>isHierarchical</source>
+                <target>Hierarchical</target>
+            </trans-unit>
+            <trans-unit id="53">
+                <source>numberOfFields</source>
+                <target>Number of fields</target>
+            </trans-unit>
+            <trans-unit id="54">
+                <source>taxonomyTypesList</source>
+                <target>Taxonomy types list</target>
+            </trans-unit>
+            <trans-unit id="55">
+                <source>taxonomyTypeCode</source>
+                <target>Taxonomy type code</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

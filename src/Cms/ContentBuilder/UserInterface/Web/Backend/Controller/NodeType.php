@@ -9,8 +9,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\ContentBuilder\Domain\NodeType\Service\NodeTypeRegistry;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\FieldTypeMappingRegistry;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\LayoutTypeRegistry;
-use Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\FormHandler\NodeTypeFormHandler;
-use Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\Transformer\NodeTypeModelToFormDataTransformer;
+use Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\NodeType\FormHandler;
+use Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\NodeType\ModelToFormDataTransformer;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Component\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Component\Templating\ViewInterface;
@@ -37,7 +37,7 @@ class NodeType extends AbstractController
     /**
      * @CsrfToken(id="create-node-type")
      */
-    public function create(Request $request, NodeTypeFormHandler $nodeTypeFormHandler): ViewInterface
+    public function create(Request $request, FormHandler $nodeTypeFormHandler): ViewInterface
     {
         if ($request->isMethod('POST')) {
             $data = json_decode($request->request->get('node_type'), true);
@@ -59,7 +59,7 @@ class NodeType extends AbstractController
      * @CsrfToken(id="create-node-type")
      * @return ViewInterface|RedirectResponse
      */
-    public function edit(string $code, Request $request, NodeTypeFormHandler $nodeTypeFormHandler)
+    public function edit(string $code, Request $request, FormHandler $nodeTypeFormHandler)
     {
         if ($this->nodeTypeRegistry->has($code) === false) {
             $this->setFlash('danger', $this->trans('nodeTypeNotExists', [], 'content_builder'));
@@ -75,7 +75,7 @@ class NodeType extends AbstractController
 
         $layout = $this->layoutTypeRegistry->get($type->getLayout());
 
-        $data = (new NodeTypeModelToFormDataTransformer())->transform($type, $layout);
+        $data = (new ModelToFormDataTransformer())->transform($type, $layout);
         $data = $nodeTypeFormHandler->handle($request, $data, true);
 
         return $this->view('@backend/content_builder/node_type/edit.tpl', [

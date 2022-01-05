@@ -30,7 +30,7 @@ class CodenameValidator
     public function validateSectionCode(?string $code, ExecutionContextInterface $context): void
     {
         if ($code && ! preg_match(self::PATTERN, $code)) {
-            $context->buildViolation('sectionIdCodeMustContainOnlyAlphanumsAndUnderline')
+            $context->buildViolation('sectionCodeCodeMustContainOnlyAlphanumsAndUnderline')
                 ->setTranslationDomain('content_builder')
                 ->addViolation();
         }
@@ -39,7 +39,7 @@ class CodenameValidator
     public function validateFieldCode(?string $code, ExecutionContextInterface $context): void
     {
         if ($code && ! preg_match(self::PATTERN, $code)) {
-            $context->buildViolation('fieldIdMustContainOnlyAlphanumsAndUnderline')
+            $context->buildViolation('fieldCodeMustContainOnlyAlphanumsAndUnderline')
                 ->setTranslationDomain('content_builder')
                 ->addViolation();
         }

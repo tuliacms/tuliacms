@@ -224,7 +224,7 @@ export default {
             } else if (! /^[0-9a-z_]+$/g.test(this.model.type.code)) {
                 status = false;
                 this.view.form.type_validation.code.valid = false;
-                this.view.form.type_validation.code.message = this.translations.fieldIdMustContainOnlyAlphanumsAndUnderline;
+                this.view.form.type_validation.code.message = this.translations.fieldCodeMustContainOnlyAlphanumsAndUnderline;
             }
 
             return status;

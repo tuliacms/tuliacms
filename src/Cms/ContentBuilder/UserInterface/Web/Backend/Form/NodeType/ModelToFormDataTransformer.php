@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\Transformer;
+namespace Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\NodeType;
 
 use Tulia\Cms\ContentBuilder\Domain\NodeType\Model\NodeType;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Model\LayoutType;
@@ -10,7 +10,7 @@ use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Model\LayoutType;
 /**
  * @author Adam Banaszkiewicz
  */
-class NodeTypeModelToFormDataTransformer
+class ModelToFormDataTransformer
 {
     public function transform(NodeType $nodeType, LayoutType $layoutType): array
     {
@@ -32,8 +32,6 @@ class NodeTypeModelToFormDataTransformer
                 ],
             ],
         ];
-
-        //dump($nodeType, $layoutType, $data);exit;
 
         return $data;
     }
@@ -131,7 +129,7 @@ class NodeTypeModelToFormDataTransformer
         foreach ($constraints as $name => $modificatorsSource) {
             $modificators = [];
 
-            foreach ($modificatorsSource as $id => $value) {
+            foreach ($modificatorsSource['modificators'] as $id => $value) {
                 $modificators[] = [
                     'id' => $id,
                     'value' => $value,
