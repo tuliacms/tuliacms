@@ -41,3 +41,6 @@ services:
         parent: Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\AbstractLayoutTypeProvider
         bind:
             $config: '%cms.content_builder.layout_types%'
+
+    Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\FormHandler\NodeTypeFormHandler:
+        shared: false

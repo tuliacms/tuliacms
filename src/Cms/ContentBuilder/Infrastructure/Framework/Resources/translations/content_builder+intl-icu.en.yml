@@ -2,6 +2,8 @@ contentModel: Content model
 nodeTypeName: Node type name
 nodeTypeNameInfo: Use singular, infinitive, e.g. Post, News, Article, House.
 createNodeType: Create node type
+editNodeType: Edit node type
+nodeTypesList: Node types list
 addNewSection: Add new section
 addNewField: Add new field
 editField: Edit field
@@ -45,3 +47,15 @@ fieldTypeNotExists: 'Field type "{type}" not exists.'
 selectedTaxonomyFieldIsNotATaxonomyField: Selected field is not a taxonomy type field.
 thisNodeTypeIsAlreadyRegistered: This node type is already registered in system.
 fieldHasErrors: Field has errors.
+internalContentType: Internal content type
+isRoutable: Routable
+isHierarchical: Hierarchical
+numberOfFields: Number of fields
+
+# Node Type translations
+
+# Taxonomy type translations
+taxonomyTypesList: Taxonomy types list
+taxonomyTypeCode: Taxonomy type code
+
+# Shared translations

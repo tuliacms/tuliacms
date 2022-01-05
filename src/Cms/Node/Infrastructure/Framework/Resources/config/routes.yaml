@@ -35,5 +35,3 @@ backend.node.datatable:
 backend.node:
     path: /administrator/node/{node_type}
     controller: Tulia\Cms\Node\UserInterface\Web\Backend\Controller\Node::index
-    defaults:
-        node_type: page

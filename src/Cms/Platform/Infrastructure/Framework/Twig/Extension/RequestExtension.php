@@ -63,7 +63,7 @@ class RequestExtension extends AbstractExtension
                             $htmlClass[] = 'alert-dismissible fade show';
                         }
 
-                        $result .= '<div class="' . implode(' ', $htmlClass) . '">' . $message . ($options['dismissable'] ? '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' : '' ) . '</div>';
+                        $result .= '<div class="' . implode(' ', $htmlClass) . '">' . $message . ($options['dismissable'] ? '<button type="button" class="close" data-bs-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' : '' ) . '</div>';
                     }
                 }
 

@@ -6,12 +6,12 @@
                 <button class="btn btn-success btn-icon-left" type="button" @click="save()"><i class="btn-icon fas fa-save"></i> Zapisz</button>
             </div>
             <i class="pane-header-icon fas fa-box"></i>
-            <h1 class="pane-title">{{ translations.createNodeType }}</h1>
+            <h1 class="pane-title">{{ translations.pageTitle }}</h1>
         </div>
         <div class="pane-body p-0">
             <div class="page-form" id="node-form">
                 <div class="page-form-sidebar">
-                    <form method="POST" id="ctb-form" style="display:block">
+                    <form method="POST" id="ctb-form" style="display:none">
                         <textarea name="node_type" id="ctb-form-field-node-type"></textarea>
                         <input type="text" name="_token" :value="csrfToken"/>
                     </form>

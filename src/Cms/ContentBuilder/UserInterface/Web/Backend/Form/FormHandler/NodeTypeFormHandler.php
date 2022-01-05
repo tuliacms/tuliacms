@@ -21,28 +21,25 @@ class NodeTypeFormHandler
 {
     private array $cleaningResult = [];
     private array $errors = [];
-    private Request $request;
     private FieldTypeMappingRegistry $fieldTypeMappingRegistry;
     private FormFactoryInterface $formFactory;
 
     public function __construct(
-        Request $request,
         FieldTypeMappingRegistry $fieldTypeMappingRegistry,
         FormFactoryInterface $formFactory
     ) {
-        $this->request = $request;
         $this->fieldTypeMappingRegistry = $fieldTypeMappingRegistry;
         $this->formFactory = $formFactory;
     }
 
-    public function handle(array $data, bool $editForm = false): array
+    public function handle(Request $request, array $data, bool $editForm = false): array
     {
-        if ($this->request->isMethod('POST') === false) {
+        if ($request->isMethod('POST') === false) {
             return $data;
         }
 
         $errors = [];
-        $data = json_decode($this->request->request->get('node_type'), true);
+        $data = json_decode($request->request->get('node_type'), true);
 
         $validationDataManipulator = new NodeTypeValidationRequestManipulator();
 
@@ -59,13 +56,13 @@ class NodeTypeFormHandler
         $formsAreValid = true;
 
         // Node type form
-        $this->request = Request::create('/', 'POST');
-        $this->request->request->set('node_type_form', $formData['type']);
+        $request = Request::create('/', 'POST');
+        $request->request->set('node_type_form', $formData['type']);
         $form = $this->formFactory->create(NodeTypeForm::class, null, [
             'fields' => $this->collectFieldsFromSections($formData['layout']),
             'edit_form' => $editForm,
         ]);
-        $form->handleRequest($this->request);
+        $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
 
         } else {
@@ -75,10 +72,10 @@ class NodeTypeFormHandler
 
 
         // Layout sidebar section form
-        $this->request = Request::create('/', 'POST');
-        $this->request->request->set('layout_section', $formData['layout']['sidebar']);
+        $request = Request::create('/', 'POST');
+        $request->request->set('layout_section', $formData['layout']['sidebar']);
         $form = $this->formFactory->create(LayoutSectionType::class);
-        $form->handleRequest($this->request);
+        $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
 
         } else {
@@ -88,10 +85,10 @@ class NodeTypeFormHandler
 
 
         // Layout main section form
-        $this->request = Request::create('/', 'POST');
-        $this->request->request->set('layout_section', $formData['layout']['main']);
+        $request = Request::create('/', 'POST');
+        $request->request->set('layout_section', $formData['layout']['main']);
         $form = $this->formFactory->create(LayoutSectionType::class);
-        $form->handleRequest($this->request);
+        $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
 
         } else {

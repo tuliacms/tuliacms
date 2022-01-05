@@ -47,6 +47,7 @@ class DatabaseProvider extends AbstractLayoutTypeProvider
             if ($group['section'] === $section && $group['layout_type'] === $layoutCode) {
                 $result[$group['code']] = $group;
                 $result[$group['code']]['fields'] = $this->getFields($group['id']);
+                $result[$group['code']]['interior'] = 'default';
             }
         }
 

@@ -4,7 +4,7 @@
 {% for messages in get_flashes(['cms.form.submit_success']) %}
     {% for message in messages %}
         <div class="alert alert-success alert-dismissible fade show">
-            <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+            <button type="button" class="close" data-bs-dismiss="alert"><span>&times;</span></button>
             {{ message|raw }}
         </div>
     {% endfor %}
@@ -12,7 +12,7 @@
 {% for messages in get_flashes(['cms.form.submit_failed']) %}
     {% for message in messages %}
         <div class="alert alert-warning alert-dismissible fade show">
-            <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+            <button type="button" class="close" data-bs-dismiss="alert"><span>&times;</span></button>
             {{ message|raw }}
         </div>
     {% endfor %}

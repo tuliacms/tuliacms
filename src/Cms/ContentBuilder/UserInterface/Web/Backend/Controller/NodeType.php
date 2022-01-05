@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Controller;
 
-use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\ContentBuilder\Domain\NodeType\Service\NodeTypeRegistry;
@@ -24,24 +23,21 @@ class NodeType extends AbstractController
     private NodeTypeRegistry $nodeTypeRegistry;
     private LayoutTypeRegistry $layoutTypeRegistry;
     private FieldTypeMappingRegistry $fieldTypeMappingRegistry;
-    private FormFactoryInterface $formFactory;
 
     public function __construct(
         NodeTypeRegistry $nodeTypeRegistry,
         LayoutTypeRegistry $layoutTypeRegistry,
-        FieldTypeMappingRegistry $fieldTypeMappingRegistry,
-        FormFactoryInterface $formFactory
+        FieldTypeMappingRegistry $fieldTypeMappingRegistry
     ) {
         $this->nodeTypeRegistry = $nodeTypeRegistry;
         $this->layoutTypeRegistry = $layoutTypeRegistry;
         $this->fieldTypeMappingRegistry = $fieldTypeMappingRegistry;
-        $this->formFactory = $formFactory;
     }
 
     /**
      * @CsrfToken(id="create-node-type")
      */
-    public function create(Request $request): ViewInterface
+    public function create(Request $request, NodeTypeFormHandler $nodeTypeFormHandler): ViewInterface
     {
         if ($request->isMethod('POST')) {
             $data = json_decode($request->request->get('node_type'), true);
@@ -49,14 +45,13 @@ class NodeType extends AbstractController
             $data = [];
         }
 
-        $handler = new NodeTypeFormHandler($request, $this->fieldTypeMappingRegistry, $this->formFactory);
-        $data = $handler->handle($data);
+        $data = $nodeTypeFormHandler->handle($request, $data);
 
         return $this->view('@backend/content_builder/node_type/create.tpl', [
             'fieldTypes' => $this->getFieldTypes(),
             'model' => $data,
-            'errors' => $handler->getErrors(),
-            'cleaningResult' => $handler->getCleaningResult(),
+            'errors' => $nodeTypeFormHandler->getErrors(),
+            'cleaningResult' => $nodeTypeFormHandler->getCleaningResult(),
         ]);
     }
 
@@ -64,7 +59,7 @@ class NodeType extends AbstractController
      * @CsrfToken(id="create-node-type")
      * @return ViewInterface|RedirectResponse
      */
-    public function edit(string $code, Request $request)
+    public function edit(string $code, Request $request, NodeTypeFormHandler $nodeTypeFormHandler)
     {
         if ($this->nodeTypeRegistry->has($code) === false) {
             $this->setFlash('danger', $this->trans('nodeTypeNotExists', [], 'content_builder'));
@@ -81,15 +76,13 @@ class NodeType extends AbstractController
         $layout = $this->layoutTypeRegistry->get($type->getLayout());
 
         $data = (new NodeTypeModelToFormDataTransformer())->transform($type, $layout);
-
-        $handler = new NodeTypeFormHandler($request, $this->fieldTypeMappingRegistry, $this->formFactory);
-        $data = $handler->handle($data, true);
+        $data = $nodeTypeFormHandler->handle($request, $data, true);
 
         return $this->view('@backend/content_builder/node_type/edit.tpl', [
             'fieldTypes' => $this->getFieldTypes(),
             'model' => $data,
-            'errors' => $handler->getErrors(),
-            'cleaningResult' => $handler->getCleaningResult(),
+            'errors' => $nodeTypeFormHandler->getErrors(),
+            'cleaningResult' => $nodeTypeFormHandler->getCleaningResult(),
         ]);
     }
 
