@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Model;
+namespace Tulia\Cms\ContentBuilder\Domain\LayoutType\Model;
 
 /**
  * @author Adam Banaszkiewicz

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\NodeType;
 
+use Tulia\Cms\ContentBuilder\Domain\LayoutType\Model\LayoutType;
 use Tulia\Cms\ContentBuilder\Domain\NodeType\Model\NodeType;
-use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Model\LayoutType;
 
 /**
  * @author Adam Banaszkiewicz
@@ -41,7 +41,7 @@ class ModelToFormDataTransformer
         $groups = [];
 
         foreach ($layoutType->getSections() as $code => $section) {
-            if ($section->getName() !== $sectionName) {
+            if ($section->getCode() !== $sectionName) {
                 continue;
             }
 

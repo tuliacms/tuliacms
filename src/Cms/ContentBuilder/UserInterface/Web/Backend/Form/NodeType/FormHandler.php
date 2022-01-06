@@ -21,6 +21,7 @@ class FormHandler
     private FormFactoryInterface $formFactory;
     private array $cleaningResult = [];
     private array $errors = [];
+    private bool $isRequestValid = false;
 
     public function __construct(
         FieldTypeMappingRegistry $fieldTypeMappingRegistry,
@@ -30,8 +31,15 @@ class FormHandler
         $this->formFactory = $formFactory;
     }
 
+    public function isRequestValid(): bool
+    {
+        return $this->isRequestValid;
+    }
+
     public function handle(Request $request, array $data, bool $editForm = false): array
     {
+        $this->isRequestValid = false;
+
         if ($request->isMethod('POST') === false) {
             return $data;
         }
@@ -39,7 +47,8 @@ class FormHandler
         $errors = [];
         $data = json_decode($request->request->get('node_type'), true);
 
-        $formData = (new ValidationRequestManipulator())->cleanFromValidationData($data);
+        $validationDataManipulator = new ValidationRequestManipulator();
+        $formData = $validationDataManipulator->cleanFromValidationData($data);
 
         $dataManipulator = new RequestDataValidator(
             $formData,
@@ -93,8 +102,7 @@ class FormHandler
         }
 
         if ($formsAreValid) {
-            dump('valid!');
-            //exit;
+            $this->isRequestValid = true;
         }
 
         return $validationDataManipulator->joinErrorsWithData($formData, $errors);

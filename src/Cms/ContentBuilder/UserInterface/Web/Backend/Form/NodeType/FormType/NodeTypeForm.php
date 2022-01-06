@@ -89,17 +89,8 @@ class NodeTypeForm extends AbstractType
 
     public function validateTaxonomyField(?string $taxonomyFieldName, ExecutionContextInterface $context, array $payload): void
     {
-        $isRoutable = $context->getRoot()->get('isRoutable')->getData();
-
-        if (! $isRoutable) {
-            return;
-        }
-
         if (! $taxonomyFieldName) {
-            $context->buildViolation('pleaseSelectTaxonomyFieldForRoutableNodeType')
-                ->setTranslationDomain('content_builder')
-                ->atPath('taxonomyField')
-                ->addViolation();
+            return;
         }
 
         $found = false;

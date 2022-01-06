@@ -30,7 +30,8 @@ class TuliaCmsExtension extends Extension
 
         $container->setParameter('cms.content_builder.node_type.mapping', $config['content_building']['node_type']['mapping']);
         $container->setParameter('cms.content_builder.node_type.default_controller', $config['content_building']['node_type']['default_controller']);
-        $container->setParameter('cms.content_builder.layout_types', $config['content_building']['layout_types']);
+        $container->setParameter('cms.content_builder.layout_types.mapping', $config['content_building']['layout_types']['mapping']);
+        $container->setParameter('cms.content_builder.layout_types.default_builder', $config['content_building']['layout_types']['default_builder']);
         $container->setParameter('cms.content_builder.taxonomy_type.mapping', $config['content_building']['taxonomy_type']['mapping']);
         $container->setParameter('cms.content_builder.taxonomy_type.default_controller', $config['content_building']['taxonomy_type']['default_controller']);
         $container->setParameter('cms.content_builder.data_types.mapping', $config['content_building']['data_types']['mapping']);
@@ -88,7 +89,8 @@ class TuliaCmsExtension extends Extension
             ->addTag('content_builder.taxonomy_type.provider');
         $container->registerForAutoconfiguration(\Tulia\Cms\ContentBuilder\Domain\TaxonomyType\Service\TaxonomyTypeDecoratorInterface::class)
             ->addTag('content_builder.taxonomy_type.decorator');
-        $container->registerForAutoconfiguration(\Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\LayoutTypeProviderInterface::class)
+        $container->registerForAutoconfiguration(
+            \Tulia\Cms\ContentBuilder\Domain\LayoutType\Service\LayoutTypeProviderInterface::class)
             ->addTag('content_builder.layout_type.provider');
         $container->registerForAutoconfiguration(\Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\LayoutTypeBuilderInterface::class)
             ->addTag('content_builder.layout_type.builder');

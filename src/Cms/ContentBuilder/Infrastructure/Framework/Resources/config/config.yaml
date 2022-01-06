@@ -68,34 +68,36 @@ cms:
                     layout: taxonomy_default
 
         layout_types:
-            node_default:
-                name: defaultLayout
-                sections:
-                    main:
-                        groups:
-                            introduction:
-                                name: introduction
-                                fields: [introduction]
-                            content:
-                                active: true
-                                interior: full-width
-                                name: content
-                                fields: [content]
-                    sidebar:
-                        groups:
-                            category:
-                                name: taxonomy
-                                fields: [category, tags]
-                            thumbnail:
-                                name: thumbnail
-                                fields: [thumbnail]
-            taxonomy_default:
-                name: defaultLayout
-                sections:
-                    main:
-                        groups: ~
-                    sidebar:
-                        groups: ~
+            default_builder: 'Tulia\Cms\ContentBuilder\Infrastructure\Presentation\TwigLayoutTypeBuilder'
+            mapping:
+                node_default:
+                    name: defaultLayout
+                    sections:
+                        main:
+                            groups:
+                                introduction:
+                                    name: introduction
+                                    fields: [introduction]
+                                content:
+                                    active: true
+                                    interior: full-width
+                                    name: content
+                                    fields: [content]
+                        sidebar:
+                            groups:
+                                category:
+                                    name: taxonomy
+                                    fields: [category, tags]
+                                thumbnail:
+                                    name: thumbnail
+                                    fields: [thumbnail]
+                taxonomy_default:
+                    name: defaultLayout
+                    sections:
+                        main:
+                            groups: ~
+                        sidebar:
+                            groups: ~
 
         data_types:
             mapping:

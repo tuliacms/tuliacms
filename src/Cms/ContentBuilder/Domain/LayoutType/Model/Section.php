@@ -2,34 +2,34 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Model;
+namespace Tulia\Cms\ContentBuilder\Domain\LayoutType\Model;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class Section
 {
-    private string $name;
+    private string $code;
 
     /**
      * @var FieldsGroup[]
      */
     private array $fieldsGroups = [];
 
-    public function __construct(string $name, array $fieldsGroups = [])
+    public function __construct(string $code, array $fieldsGroups = [])
     {
-        $this->name = $name;
+        $this->code = $code;
         $this->fieldsGroups = $fieldsGroups;
     }
 
-    public function getName(): string
+    public function getCode(): string
     {
-        return $this->name;
+        return $this->code;
     }
 
-    public function setName(string $name): void
+    public function setCode(string $code): void
     {
-        $this->name = $name;
+        $this->code = $code;
     }
 
     public function getFieldsGroups(): array
@@ -37,9 +37,9 @@ class Section
         return $this->fieldsGroups;
     }
 
-    public function getFieldsGroup(string $name): FieldsGroup
+    public function getFieldsGroup(string $code): FieldsGroup
     {
-        return $this->fieldsGroups[$name];
+        return $this->fieldsGroups[$code];
     }
 
     public function setFieldsGroups(array $fieldsGroups): void

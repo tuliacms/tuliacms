@@ -6,7 +6,7 @@ namespace Tulia\Cms\ContentBuilder\Infrastructure\Presentation;
 
 use Symfony\Component\Form\FormView;
 use Tulia\Cms\ContentBuilder\Domain\ContentType\Model\AbstractContentType;
-use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Model\LayoutType;
+use Tulia\Cms\ContentBuilder\Domain\LayoutType\Model\LayoutType;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\LayoutTypeBuilderInterface;
 use Tulia\Component\Templating\EngineInterface;
 use Tulia\Component\Templating\View;

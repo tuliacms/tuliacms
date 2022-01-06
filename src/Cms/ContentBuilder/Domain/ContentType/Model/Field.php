@@ -51,10 +51,17 @@ class Field
                 foreach ($constraint['modificators'] as $name => $value) {
                     \assert(
                         \is_string($value) || is_numeric($value) || $value === null,
-                        sprintf('Value of modificator %s of constraint "%s" of field "%s" must be a simple, non array value.', $name, $constraintName, $this->options['code'])
+                        sprintf('Value of modificator "%s" of constraint "%s" of field "%s" must be a scalar value.', $name, $constraintName, $this->options['code'])
                     );
                 }
             }
+        }
+
+        foreach ($this->options['configuration'] as $configName => $configValue) {
+            \assert(
+                \is_scalar($configValue),
+                sprintf('Value of configuration "%s" of field "%s" must be a scalar value.', $configName, $this->options['code'])
+            );
         }
     }
 

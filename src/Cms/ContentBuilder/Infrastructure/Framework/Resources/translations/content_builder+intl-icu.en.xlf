@@ -148,80 +148,86 @@
                 <target>Node Type code must contain only lowercased alphanums and underline.</target>
             </trans-unit>
             <trans-unit id="37">
-                <source>pleaseSelectTaxonomyFieldForRoutableNodeType</source>
-                <target>Please select the taxonomy field for the routable node type.</target>
-            </trans-unit>
-            <trans-unit id="38">
                 <source>taxonomyField</source>
                 <target>Taxonomy field</target>
             </trans-unit>
-            <trans-unit id="39">
+            <trans-unit id="38">
                 <source>taxonomyFieldHelp</source>
                 <target>Which taxonomy should be leading taxonomy for this node type. Will be used to build URLs to nodes.</target>
             </trans-unit>
-            <trans-unit id="40">
+            <trans-unit id="39">
                 <source>routableType</source>
                 <target>Routable type</target>
             </trans-unit>
-            <trans-unit id="41">
+            <trans-unit id="40">
                 <source>routableTypeHelp</source>
                 <target>Decide, if this node type has own pages in the website.</target>
             </trans-unit>
-            <trans-unit id="42">
+            <trans-unit id="41">
                 <source>hierarchicalType</source>
                 <target>Hierarchical type</target>
             </trans-unit>
-            <trans-unit id="43">
+            <trans-unit id="42">
                 <source>hierarchicalTypeHelp</source>
                 <target>Decide, if every node can have children nodes, and created hierarchical tree of elements.</target>
             </trans-unit>
-            <trans-unit id="44">
+            <trans-unit id="43">
                 <source>pleaseSelectValue</source>
                 <target>Please select value</target>
             </trans-unit>
-            <trans-unit id="45">
+            <trans-unit id="44">
                 <source>internalFields</source>
                 <target>Internal fields</target>
             </trans-unit>
-            <trans-unit id="46">
+            <trans-unit id="45">
                 <source>fieldTypeNotExists</source>
                 <target>Field type "{type}" not exists.</target>
             </trans-unit>
-            <trans-unit id="47">
+            <trans-unit id="46">
                 <source>selectedTaxonomyFieldIsNotATaxonomyField</source>
                 <target>Selected field is not a taxonomy type field.</target>
             </trans-unit>
-            <trans-unit id="48">
+            <trans-unit id="47">
                 <source>thisNodeTypeIsAlreadyRegistered</source>
                 <target>This node type is already registered in system.</target>
             </trans-unit>
-            <trans-unit id="49">
+            <trans-unit id="48">
                 <source>fieldHasErrors</source>
                 <target>Field has errors.</target>
             </trans-unit>
-            <trans-unit id="50">
+            <trans-unit id="49">
                 <source>internalContentType</source>
                 <target>Internal content type</target>
             </trans-unit>
-            <trans-unit id="51">
+            <trans-unit id="50">
                 <source>isRoutable</source>
                 <target>Routable</target>
             </trans-unit>
-            <trans-unit id="52">
+            <trans-unit id="51">
                 <source>isHierarchical</source>
                 <target>Hierarchical</target>
             </trans-unit>
-            <trans-unit id="53">
+            <trans-unit id="52">
                 <source>numberOfFields</source>
                 <target>Number of fields</target>
             </trans-unit>
-            <trans-unit id="54">
+            <trans-unit id="53">
                 <source>taxonomyTypesList</source>
                 <target>Taxonomy types list</target>
             </trans-unit>
-            <trans-unit id="55">
+            <trans-unit id="54">
                 <source>taxonomyTypeCode</source>
                 <target>Taxonomy type code</target>
+            </trans-unit>
+            <trans-unit id="55">
+                <source>nodeTypeUpdatedSuccessfully</source>
+                <target>Node Type updated successfully.</target>
+                <note>Flash message</note>
+            </trans-unit>
+            <trans-unit id="55">
+                <source>nodeTypeCreatedSuccessfully</source>
+                <target>Node Type created successfully.</target>
+                <note>Flash message</note>
             </trans-unit>
         </body>
     </file>

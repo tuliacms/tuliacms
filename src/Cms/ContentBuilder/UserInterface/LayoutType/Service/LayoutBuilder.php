@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service;
 
+use Tulia\Cms\ContentBuilder\Domain\LayoutType\Service\LayoutTypeRegistry;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Exception\LayoutNotExists;
 use Tulia\Cms\ContentBuilder\UserInterface\Web\Form\ContentTypeFormDescriptor;
 

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Model;
+namespace Tulia\Cms\ContentBuilder\Domain\LayoutType\Model;
 
 /**
  * @author Adam Banaszkiewicz
@@ -58,13 +58,13 @@ class LayoutType
         return $this->sections[$name];
     }
 
-    public function setSections(array $sections): void
+    public function clearSections(): void
     {
-        $this->sections = $sections;
+        $this->sections = [];
     }
 
     public function addSection(Section $section): void
     {
-        $this->sections[$section->getName()] = $section;
+        $this->sections[$section->getCode()] = $section;
     }
 }

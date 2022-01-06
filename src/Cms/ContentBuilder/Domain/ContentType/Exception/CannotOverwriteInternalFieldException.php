@@ -11,7 +11,7 @@ class CannotOverwriteInternalFieldException extends \Exception
 {
     private string $fieldCode;
 
-    public static function fromCodeNadName(string $fieldCode, string $fieldName): self
+    public static function fromCodeAndName(string $fieldCode, string $fieldName): self
     {
         $self = new self(sprintf('Cannot overwrite the internal field "%s", named "%s".', $fieldCode, $fieldName));
         $self->fieldCode = $fieldCode;

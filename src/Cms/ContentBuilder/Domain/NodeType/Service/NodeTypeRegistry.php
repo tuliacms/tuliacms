@@ -22,14 +22,11 @@ class NodeTypeRegistry
      */
     protected array $nodeTypeProviders = [];
 
-    /**
-     * @var NodeTypeDecoratorInterface[]
-     */
-    protected array $decorators = [];
+    private NodeTypeDecorator $decorator;
 
-    public function addDecorator(NodeTypeDecoratorInterface $decorator): void
+    public function __construct(NodeTypeDecorator $decorator)
     {
-        $this->decorators[] = $decorator;
+        $this->decorator = $decorator;
     }
 
     public function addProvider(NodeTypeProviderInterface $nodeTypeProvider): void
@@ -89,17 +86,10 @@ class NodeTypeRegistry
 
         /** @var NodeType $type */
         foreach (array_merge(...$types) as $type) {
-            $this->decorate($type);
+            $this->decorator->decorate($type);
             $type->validate();
 
             $this->nodeTypes[$type->getCode()] = $type;
-        }
-    }
-
-    private function decorate(NodeType $nodeType): void
-    {
-        foreach ($this->decorators as $decorator) {
-            $decorator->decorate($nodeType);
         }
     }
 }

@@ -2,23 +2,29 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service;
+namespace Tulia\Cms\ContentBuilder\Domain\LayoutType\Service;
 
-use Tulia\Cms\ContentBuilder\Infrastructure\Presentation\TwigLayoutTypeBuilder;
-use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Model\FieldsGroup;
-use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Model\LayoutType;
-use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Model\Section;
+use Tulia\Cms\ContentBuilder\Domain\LayoutType\Model\FieldsGroup;
+use Tulia\Cms\ContentBuilder\Domain\LayoutType\Model\LayoutType;
+use Tulia\Cms\ContentBuilder\Domain\LayoutType\Model\Section;
 
 /**
  * @author Adam Banaszkiewicz
  */
 abstract class AbstractLayoutTypeProvider implements LayoutTypeProviderInterface
 {
+    protected string $defaultBuilder = '';
+
+    public function setDefaultBuilder(string $defaultBuilder): void
+    {
+        $this->defaultBuilder = $defaultBuilder;
+    }
+
     protected function buildLayoutType(string $code, array $options): LayoutType
     {
         $layoutType = new LayoutType($code);
         $layoutType->setName($options['name']);
-        $layoutType->setBuilder($options['builder'] ?? TwigLayoutTypeBuilder::class);
+        $layoutType->setBuilder($options['builder'] ?? $this->defaultBuilder);
 
         foreach ($options['sections'] as $sectionName => $sectionInfo) {
             $layoutType->addSection($this->buildLayoutSection($sectionName, $sectionInfo));
