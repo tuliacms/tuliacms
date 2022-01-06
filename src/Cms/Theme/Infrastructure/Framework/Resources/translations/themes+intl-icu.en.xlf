@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" target-language="en" datatype="plaintext" original="themes+intl-icu.en.xlf">
+        <body>
+            <trans-unit id="tuliacms.themes.1">
+                <source>themeActivated</source>
+                <target>Theme activated.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.themes.2">
+                <source>childOfTheme</source>
+                <target>Child of theme {name}.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.themes.3">
+                <source>activeTheme</source>
+                <target>Active theme</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.themes.4">
+                <source>customize</source>
+                <target>Customize</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.themes.5">
+                <source>activate</source>
+                <target>Activate</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.themes.6">
+                <source>defaultThemeInUse</source>
+                <target>Default Theme in use.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.themes.7">
+                <source>youUseDefaultThemeInfo</source>
+                <target>You use Default Theme now, which is not customizable. Select one of the available themes to configure Your website for Your needs. You may also install new themes using installator or extensions directory. Make You website Beautiful!</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

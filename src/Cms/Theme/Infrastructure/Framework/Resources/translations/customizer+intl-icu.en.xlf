@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" target-language="en" datatype="plaintext" original="customizer+intl-icu.en.xlf">
+        <body>
+            <trans-unit id="tuliacms.customizer.1">
+                <source>website</source>
+                <target>Website</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.customizer.2">
+                <source>websiteName</source>
+                <target>Website name</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.customizer.3">
+                <source>websiteFavicon</source>
+                <target>Website favicon</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.customizer.4">
+                <source>publish</source>
+                <target>Publish</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.customizer.5">
+                <source>themeCustomize</source>
+                <target>Theme customizing</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.customizer.6">
+                <source>cancelChangesQuestion</source>
+                <target>Cancel changes?</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.customizer.7">
+                <source>areYouSureToCancelChanges</source>
+                <target>Are You sure You want to cancel these changes?</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.customizer.8">
+                <source>saveChangesQuestion</source>
+                <target>Save changes?</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.customizer.9">
+                <source>areYouSureToSaveChanges</source>
+                <target>Are You sure? This operation cannot be undone!</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.customizer.10">
+                <source>tools</source>
+                <target>Tools</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.customizer.11">
+                <source>copySettingsFromParentTheme</source>
+                <target>Copy settings</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.customizer.12">
+                <source>copySettings</source>
+                <target>Copy settings</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.customizer.13">
+                <source>resetCustomizerSettings</source>
+                <target>Reset settings</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.customizer.14">
+                <source>resetSettings</source>
+                <target>Reset settings</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.customizer.15">
+                <source>layouts</source>
+                <target>Layouts</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.customizer.16">
+                <source>browseLayouts</source>
+                <target>Browse layouts</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.customizer.17">
+                <source>saveCurrentLayout</source>
+                <target>Save current layout</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.customizer.18">
+                <source>multilingualDescription</source>
+                <target>Fields with this badge will be saved only for current language. Rest of fields are saved for all langauges, even if You edit any of defined languages.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.customizer.19">
+                <source>switchWebsite</source>
+                <target>Switch Website</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

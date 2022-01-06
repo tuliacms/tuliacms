@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" target-language="en" datatype="plaintext" original="taxonomy+intl-icu.en.xlf">
+        <body>
+            <trans-unit id="tuliacms.taxonomy.1">
+                <source>hierarchy</source>
+                <target>Hierarchy</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.taxonomy.2">
+                <source>changeHierarchy</source>
+                <target>Change the hierarchy</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.taxonomy.3">
+                <source>changeHierarchyMoveElementOnTheThree</source>
+                <target>Below you can change the hierarchy of items. Grab an element with the mouse and move it to move it relative to other elements.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.taxonomy.4">
+                <source>termsListOfTaxonomy</source>
+                <target>"The {taxonomy} taxonomy"</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.taxonomy.5">
+                <source>editTerm</source>
+                <target>Edit term</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.taxonomy.6">
+                <source>createTerm</source>
+                <target>Create term</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.taxonomy.7">
+                <source>termSaved</source>
+                <target>Term saved</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.taxonomy.8">
+                <source>deleteTerm</source>
+                <target>Delete category</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.taxonomy.9">
+                <source>deleteSelectedTerms</source>
+                <target>Delete selected categories</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.taxonomy.10">
+                <source>parentTerm</source>
+                <target>Parent term</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.taxonomy.11">
+                <source>selectedTermsWereDeleted</source>
+                <target>Selected terms were deleted.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.taxonomy.12">
+                <source>cannotAssignSelfTermParent</source>
+                <target>Cannot assign self taxonomy as parent.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.taxonomy.13">
+                <source>Tag</source>
+                <target>Tag</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.taxonomy.14">
+                <source>Category</source>
+                <target>Category</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.taxonomy.15">
+                <source>areYouSureYouWantToDeleteFollowingTerms</source>
+                <target>{hierarchical, select,
+                    1 {Are You sure You want to delete following terms and their children?}
+                    other {Are You sure You want to delete following terms?}
+                }</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>
