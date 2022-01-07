@@ -224,7 +224,7 @@
                 <target>Node Type updated successfully.</target>
                 <note>Flash message</note>
             </trans-unit>
-            <trans-unit id="tuliacms.content_builder.55">
+            <trans-unit id="tuliacms.content_builder.56">
                 <source>nodeTypeCreatedSuccessfully</source>
                 <target>Node Type created successfully.</target>
                 <note>Flash message</note>

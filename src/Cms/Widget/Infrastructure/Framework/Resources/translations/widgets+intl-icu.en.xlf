@@ -1,0 +1,119 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" target-language="en" datatype="plaintext" original="widgets+intl-icu.en.xlf">
+        <body>
+            <trans-unit id="tuliacms.widgets.1">
+                <source>widgets</source>
+                <target>Widgets</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.widgets.2">
+                <source>createdWidgets</source>
+                <target>Created widgets</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.widgets.3">
+                <source>availableWidgets</source>
+                <target>Available widgets</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.widgets.4">
+                <source>addWidget</source>
+                <target>Add widget</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.widgets.5">
+                <source>space</source>
+                <target>Space</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.widgets.6">
+                <source>allSpaces</source>
+                <target>All spaces</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.widgets.7">
+                <source>editWidget</source>
+                <target>Edit widget</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.widgets.8">
+                <source>widgetNotFound</source>
+                <target>Widget not found.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.widgets.9">
+                <source>widgetSaved</source>
+                <target>Widget saved.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.widgets.10">
+                <source>status</source>
+                <target>Status</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.widgets.11">
+                <source>look</source>
+                <target>Look</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.widgets.12">
+                <source>styles</source>
+                <target>Styles</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.widgets.13">
+                <source>stylesDescription</source>
+                <target>Styles are predefined looks of widget, provided by theme.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.widgets.14">
+                <source>widgetOptions</source>
+                <target>Widget options</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.widgets.15">
+                <source>title</source>
+                <target>Title</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.widgets.16">
+                <source>titleDescription</source>
+                <target>Title of the widget, showed in front. Leave empty to hide title.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.widgets.17">
+                <source>deleteWidget</source>
+                <target>Delete widget</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.widgets.18">
+                <source>widgetType</source>
+                <target>Widget type</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.widgets.19">
+                <source>deleteSelectedWidgets</source>
+                <target>Delete selected widgets</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.widgets.20">
+                <source>areYouSureYouWantToDeleteFollowingWidgets</source>
+                <target>Are You sure You want to delete following widgets?</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.widgets.21">
+                <source>selectedWidgetsWereDeleted</source>
+                <target>Selected widgets were deleted.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.widgets.22">
+                <source>widgetSpaceIs</source>
+                <target>"Space: {space}"</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.widgets.23">
+                <source>widget.menu.name</source>
+                <target>Menu</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.widgets.24">
+                <source>widget.menu.description</source>
+                <target>Created horizontal or vertical menu.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.widgets.25">
+                <source>widget.text.name</source>
+                <target>Text</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.widgets.26">
+                <source>widget.text,description</source>
+                <target>Shows WYSIWYG editor to place any text content.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.widgets.27">
+                <source>widget.features.name</source>
+                <target>Features</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.widgets.28">
+                <source>widget.features.description</source>
+                <target>List of features with texts and icons.</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

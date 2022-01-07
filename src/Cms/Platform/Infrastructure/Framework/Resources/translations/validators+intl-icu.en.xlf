@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" target-language="en" datatype="plaintext" original="validators+intl-icu.en.xlf">
+        <body>
+            <trans-unit id="tuliacms.validators.1">
+                <source>passwordMustContainMinimumLength</source>
+                <target>Password must contain minimum {length} characters.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.validators.2">
+                <source>passwordMustContainMinimumDigits</source>
+                <target>{length, plural,
+                    =0    {Password must not contain any digits.}
+                    one   {Password must contain at least one digit.}
+                    other {Password must contain minimum # digits.}
+                }</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.validators.3">
+                <source>passwordMustContainMinimumSpecialChars</source>
+                <target>Password must contain minimum {length} special characters.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.validators.4">
+                <source>passwordMustContainMinimumBigLetters</source>
+                <target>Password must contain minimum {length} big letters.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.validators.5">
+                <source>passwordMustContainMinimumSmallLetters</source>
+                <target>Password must contain minimum {length} small letters.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.validators.6">
+                <source>repeadedPasswordMustBeTheSameAsPassword</source>
+                <target>Repeated password must be the same as given password.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.validators.7">
+                <source>usernameMustContainMinimumLength</source>
+                <target>Username must contain minimum {length} characters.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.validators.8">
+                <source>usernameAlreadyUsedPleaseTypeAnother</source>
+                <target>Given username is already used. Please type another one.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.validators.9">
+                <source>emailAlreadyUsedPleaseTypeAnother</source>
+                <target>Given e-mail addres is already used. Please type another one.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.validators.10">
+                <source>usernameContainsNotAllowedCharactersAllowedAre</source>
+                <target>Username contains not allowed characters, allowed are: {allowed_characters}.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.validators.11">
+                <source>cannotDeleteDueToContainingChildren</source>
+                <target><![CDATA[The item <b>{name}</b> cannot be deleted because it contains subitems. Delete all child items to delete this item.]]></target>
+            </trans-unit>
+
+        </body>
+    </file>
+</xliff>
