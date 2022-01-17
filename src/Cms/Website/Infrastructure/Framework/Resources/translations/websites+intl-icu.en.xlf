@@ -176,11 +176,11 @@
             </trans-unit>
             <trans-unit id="tuliacms.websites.44">
                 <source>localeCode</source>
-                <target>"Locale code: {code}"</target>
+                <target>Locale code: {code}</target>
             </trans-unit>
             <trans-unit id="tuliacms.websites.45">
                 <source>removeWebsiteDataLossInformation</source>
-                <target>"When You remove a whole website, You also remove all data attached to this website, like nodes, categories, tags, settings and other contents. Please be sure that You really want to do this!"</target>
+                <target>When You remove a whole website, You also remove all data attached to this website, like nodes, categories, tags, settings and other contents. Please be sure that You really want to do this!</target>
             </trans-unit>
             <trans-unit id="tuliacms.websites.46">
                 <source>domainDevelopment</source>

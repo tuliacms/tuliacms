@@ -14,10 +14,10 @@ class LayoutTypeRepository
 {
     private LayoutTypeStorageInterface $layoutTypeStorage;
 
-    public function __construct(LayoutTypeStorageInterface $layoutTypeStorage)
+    /*public function __construct(LayoutTypeStorageInterface $layoutTypeStorage)
     {
         $this->layoutTypeStorage = $layoutTypeStorage;
-    }
+    }*/
 
     public function insert(LayoutType $layoutType): void
     {

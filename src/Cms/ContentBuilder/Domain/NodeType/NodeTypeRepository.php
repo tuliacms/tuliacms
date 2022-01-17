@@ -14,10 +14,10 @@ class NodeTypeRepository
 {
     private NodeTypeStorageInterface $nodeTypeStorage;
 
-    public function __construct(NodeTypeStorageInterface $nodeTypeStorage)
+    /*public function __construct(NodeTypeStorageInterface $nodeTypeStorage)
     {
         $this->nodeTypeStorage = $nodeTypeStorage;
-    }
+    }*/
 
     public function insert(NodeType $nodeType): void
     {

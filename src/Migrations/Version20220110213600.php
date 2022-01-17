@@ -15,16 +15,19 @@ final class Version20220110213600 extends AbstractMigration
 {
     public function up(Schema $schema) : void
     {
-        $this->addSql('INSERT INTO #__node_type (`code`, `name`, `icon`, `is_routable`, `is_hierarchical`, `layout`) VALUES (:code, :name, :icon, :is_routable, :is_hierarchical, :layout)', [
+        $this->addSql('INSERT INTO #__content_type (`code`, `type`, `name`, `icon`, `is_routable`, `is_hierarchical`, `layout`, `internal`, `routing_strategy`) VALUES (:code, :type, :name, :icon, :is_routable, :is_hierarchical, :layout, :internal, :routing_strategy)', [
             'code' => 'page',
+            'type' => 'node',
             'name' => 'Page',
             'icon' => 'fas fa-file-powerpoint',
             'is_routable' => '1',
             'is_hierarchical' => '1',
+            'internal' => '1',
             'layout' => 'page_layout',
+            'routing_strategy' => 'full_path',
         ]);
 
-        $this->addSql('INSERT INTO #__node_type_layout (`code`, `name`) VALUES (:code, :name)', [
+        $this->addSql('INSERT INTO #__content_type_layout (`code`, `name`) VALUES (:code, :name)', [
             'code' => 'page_layout',
             'name' => 'Page layout',
         ]);
@@ -57,7 +60,7 @@ final class Version20220110213600 extends AbstractMigration
             'layout_type' => 'page_layout',
             'active' => '0',
             'order' => '0',
-            'fields' => ['category', 'tags'],
+            'fields' => ['category'],
         ]);
 
         $this->addGroup([
@@ -105,14 +108,6 @@ final class Version20220110213600 extends AbstractMigration
             'is_multilingual' => '0',
         ]);
         $this->addField([
-            'code' => 'tags',
-            'node_type' => 'page',
-            'type' => 'taxonomy',
-            'name' => 'Introduction',
-            'taxonomy' => 'tags',
-            'is_multilingual' => '0',
-        ]);
-        $this->addField([
             'code' => 'thumbnail',
             'node_type' => 'page',
             'type' => 'filepicker',
@@ -123,15 +118,15 @@ final class Version20220110213600 extends AbstractMigration
 
     public function down(Schema $schema) : void
     {
-        $this->addSql("DELETE FROM #__node_type WHERE `code` = 'page'");
-        $this->addSql("DELETE FROM #__node_type_layout WHERE `code` = 'page_layout'");
+        $this->addSql("DELETE FROM #__content_type WHERE `code` = 'page'");
+        $this->addSql("DELETE FROM #__content_type_layout WHERE `code` = 'page_layout'");
     }
 
     private function addField(array $field): void
     {
         $fieldId = Uuid::uuid4()->toString();
 
-        $this->addSql('INSERT INTO #__node_type_field (`id`, `code`, `node_type`, `type`, `name`, `taxonomy`, `is_multilingual`, `is_multiple`) VALUES (:id, :code, :node_type, :type, :name, :taxonomy, :is_multilingual, :is_multiple)', [
+        $this->addSql('INSERT INTO #__content_type_field (`id`, `code`, `node_type`, `type`, `name`, `taxonomy`, `is_multilingual`, `is_multiple`) VALUES (:id, :code, :node_type, :type, :name, :taxonomy, :is_multilingual, :is_multiple)', [
             'id' => $fieldId,
             'code' => $field['code'],
             'node_type' => $field['node_type'],
@@ -145,14 +140,14 @@ final class Version20220110213600 extends AbstractMigration
         foreach ($field['constraints'] ?? [] as $constraint) {
             $constraintId = Uuid::uuid4()->toString();
 
-            $this->addSql('INSERT INTO #__node_type_field_constraint (`id`, `field_id`, `code`) VALUES (:id, :field_id, :code)', [
+            $this->addSql('INSERT INTO #__content_type_field_constraint (`id`, `field_id`, `code`) VALUES (:id, :field_id, :code)', [
                 'id' => $constraintId,
                 'code' => $constraint['code'],
                 'field_id' => $fieldId,
             ]);
 
             foreach ($constraint['modificators'] ?? [] as $modificator) {
-                $this->addSql('INSERT INTO #__node_type_field_constraint_modificator (`constraint_id`, `modificator`, `value`) VALUES (:constraint_id, :modificator, :value)', [
+                $this->addSql('INSERT INTO #__content_type_field_constraint_modificator (`constraint_id`, `modificator`, `value`) VALUES (:constraint_id, :modificator, :value)', [
                     'constraint_id' => $constraintId,
                     'modificator' => $modificator['modificator'],
                     'value' => $modificator['value'],
@@ -166,10 +161,10 @@ final class Version20220110213600 extends AbstractMigration
         $fields = $group['fields'];
         unset($group['fields']);
 
-        $this->addSql('INSERT INTO #__node_type_layout_group (`id`, `code`, `name`, `section`, `layout_type`, `active`, `order`) VALUES (:id, :code, :name, :section, :layout_type, :active, :order)', $group);
+        $this->addSql('INSERT INTO #__content_type_layout_group (`id`, `code`, `name`, `section`, `layout_type`, `active`, `order`) VALUES (:id, :code, :name, :section, :layout_type, :active, :order)', $group);
 
         foreach ($fields as $field) {
-            $this->addSql('INSERT INTO #__node_type_layout_group_field (`group_id`, `code`) VALUES (:group_id, :code)', [
+            $this->addSql('INSERT INTO #__content_type_layout_group_field (`group_id`, `code`) VALUES (:group_id, :code)', [
                 'group_id' => $group['id'],
                 'code' => $field,
             ]);

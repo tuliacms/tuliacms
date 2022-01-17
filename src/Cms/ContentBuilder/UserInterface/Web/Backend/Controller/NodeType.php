@@ -7,7 +7,6 @@ namespace Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\ContentBuilder\Domain\LayoutType\LayoutTypeRepository;
-use Tulia\Cms\ContentBuilder\Domain\LayoutType\Service\LayoutTypeRegistry;
 use Tulia\Cms\ContentBuilder\Domain\NodeType\NodeTypeRepository;
 use Tulia\Cms\ContentBuilder\Domain\NodeType\Service\NodeTypeRegistry;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\FieldTypeMappingRegistry;
@@ -24,7 +23,6 @@ use Tulia\Component\Templating\ViewInterface;
 class NodeType extends AbstractController
 {
     private NodeTypeRegistry $nodeTypeRegistry;
-    private LayoutTypeRegistry $layoutTypeRegistry;
     private FieldTypeMappingRegistry $fieldTypeMappingRegistry;
     private FormDataToModelTransformer $formDataToModelTransformer;
     private NodeTypeRepository $nodeTypeRepository;
@@ -32,14 +30,12 @@ class NodeType extends AbstractController
 
     public function __construct(
         NodeTypeRegistry $nodeTypeRegistry,
-        LayoutTypeRegistry $layoutTypeRegistry,
         FieldTypeMappingRegistry $fieldTypeMappingRegistry,
         FormDataToModelTransformer $formDataToModelTransformer,
         NodeTypeRepository $nodeTypeRepository,
         LayoutTypeRepository $layoutTypeRepository
     ) {
         $this->nodeTypeRegistry = $nodeTypeRegistry;
-        $this->layoutTypeRegistry = $layoutTypeRegistry;
         $this->fieldTypeMappingRegistry = $fieldTypeMappingRegistry;
         $this->formDataToModelTransformer = $formDataToModelTransformer;
         $this->nodeTypeRepository = $nodeTypeRepository;
@@ -61,8 +57,8 @@ class NodeType extends AbstractController
         $data = $nodeTypeFormHandler->handle($request, $data);
 
         if ($nodeTypeFormHandler->isRequestValid()) {
-            $nodeType = $this->formDataToModelTransformer->produceNodeType($data);
             $layoutType = $this->formDataToModelTransformer->produceLayoutType($data);
+            $nodeType = $this->formDataToModelTransformer->produceNodeType($data, $layoutType);
 
             try {
                 $this->nodeTypeRepository->insert($nodeType);
@@ -106,14 +102,14 @@ class NodeType extends AbstractController
             return $this->redirectToRoute('backend.content_builder.homepage');
         }
 
-        $layout = $this->layoutTypeRegistry->get($type->getLayout());
+        $layout = $type->getLayout();
 
         $data = (new ModelToFormDataTransformer())->transform($type, $layout);
         $data = $nodeTypeFormHandler->handle($request, $data, true);
 
         if ($nodeTypeFormHandler->isRequestValid()) {
-            $nodeType = $this->formDataToModelTransformer->produceNodeType($data);
             $layoutType = $this->formDataToModelTransformer->produceLayoutType($data);
+            $nodeType = $this->formDataToModelTransformer->produceNodeType($data, $layoutType);
 
             try {
                 $this->nodeTypeRepository->update($nodeType);

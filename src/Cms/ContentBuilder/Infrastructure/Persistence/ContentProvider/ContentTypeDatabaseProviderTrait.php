@@ -2,15 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\ContentBuilder\Infrastructure\Persistence\NodeTypeProvider;
+namespace Tulia\Cms\ContentBuilder\Infrastructure\Persistence\ContentProvider;
 
-use Tulia\Cms\ContentBuilder\Domain\NodeType\Service\AbstractNodeTypeProvider;
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class DatabaseProvider extends AbstractNodeTypeProvider
+trait ContentTypeDatabaseProviderTrait
 {
     private ConnectionInterface $connection;
     private array $fieldsSource = [];
@@ -18,25 +17,9 @@ class DatabaseProvider extends AbstractNodeTypeProvider
     private array $constraintsSource = [];
     private array $modificatorsSource = [];
 
-    public function __construct(ConnectionInterface $connection)
+    private function getTypes(string $type): array
     {
-        $this->connection = $connection;
-    }
-
-    public function provide(): array
-    {
-        $result = [];
-
-        foreach ($this->getTypes() as $type) {
-            $result[] = $this->buildNodeType($type['code'], $type, false);
-        }
-
-        return $result;
-    }
-
-    private function getTypes(): array
-    {
-        $types = $this->connection->fetchAllAssociative('SELECT * FROM #__node_type');
+        $types = $this->connection->fetchAllAssociative('SELECT * FROM #__content_type WHERE `type` = :type', ['type' => $type]);
 
         foreach ($types as $key => $type) {
             $types[$key]['layout'] = $type['code'] . '_layout';
@@ -49,7 +32,7 @@ class DatabaseProvider extends AbstractNodeTypeProvider
     private function getFields(string $nodeType): array
     {
         if ($this->fieldsSource === []) {
-            $this->fieldsSource = $this->connection->fetchAllAssociative('SELECT * FROM #__node_type_field');
+            $this->fieldsSource = $this->connection->fetchAllAssociative('SELECT * FROM #__content_type_field');
         }
 
         $fields = [];
@@ -70,7 +53,7 @@ class DatabaseProvider extends AbstractNodeTypeProvider
     private function getConfiguration(string $fieldId): array
     {
         if ($this->configurationsSource === []) {
-            $this->configurationsSource = $this->connection->fetchAllAssociative('SELECT * FROM #__node_type_field_configuration');
+            $this->configurationsSource = $this->connection->fetchAllAssociative('SELECT * FROM #__content_type_field_configuration');
         }
 
         $configs = [];
@@ -89,7 +72,7 @@ class DatabaseProvider extends AbstractNodeTypeProvider
     private function getConstraints(string $fieldId): array
     {
         if ($this->constraintsSource === []) {
-            $this->constraintsSource = $this->connection->fetchAllAssociative('SELECT * FROM #__node_type_field_constraint');
+            $this->constraintsSource = $this->connection->fetchAllAssociative('SELECT * FROM #__content_type_field_constraint');
         }
 
         $configs = [];
@@ -108,7 +91,7 @@ class DatabaseProvider extends AbstractNodeTypeProvider
     private function getConstraintModificators(string $constraintId): array
     {
         if ($this->modificatorsSource === []) {
-            $this->modificatorsSource = $this->connection->fetchAllAssociative('SELECT * FROM #__node_type_field_constraint_modificator');
+            $this->modificatorsSource = $this->connection->fetchAllAssociative('SELECT * FROM #__content_type_field_constraint_modificator');
         }
 
         $modificators = [];

@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Tulia\Cms\ContentBuilder\Domain\TaxonomyType\Service;
 
 use Tulia\Cms\ContentBuilder\Domain\ContentType\Model\Field;
+use Tulia\Cms\ContentBuilder\Domain\LayoutType\Model\LayoutType;
+use Tulia\Cms\ContentBuilder\Domain\LayoutType\Service\LayoutTypeBuilderTrait;
 use Tulia\Cms\ContentBuilder\Domain\TaxonomyType\Model\TaxonomyType;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\FieldTypeMappingRegistry;
 
@@ -13,8 +15,16 @@ use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\FieldTypeMappingRe
  */
 abstract class AbstractTaxonomyTypeProvider implements TaxonomyTypeProviderInterface
 {
+    use LayoutTypeBuilderTrait;
+
     private FieldTypeMappingRegistry $fieldTypeMappingRegistry;
+    protected string $defaultLayoutBuilder = '';
     protected string $defaultController = '';
+
+    public function setDefaultLayoutBuilder(string $defaultLayoutBuilder): void
+    {
+        $this->defaultLayoutBuilder = $defaultLayoutBuilder;
+    }
 
     public function setDefaultController(string $defaultController): void
     {
@@ -26,9 +36,9 @@ abstract class AbstractTaxonomyTypeProvider implements TaxonomyTypeProviderInter
         $this->fieldTypeMappingRegistry = $fieldTypeMappingRegistry;
     }
 
-    protected function buildTaxonomyType(string $code, array $options, bool $isInternal): TaxonomyType
+    protected function buildTaxonomyType(string $code, array $options, LayoutType $layoutType): TaxonomyType
     {
-        $taxonomyType = new TaxonomyType($code, $options['layout'], $isInternal);
+        $taxonomyType = new TaxonomyType($code, $layoutType, (bool) $options['internal']);
         $taxonomyType->setController($options['controller'] ?? $this->defaultController);
         $taxonomyType->setIsRoutable((bool) $options['is_routable']);
         $taxonomyType->setName($options['name']);

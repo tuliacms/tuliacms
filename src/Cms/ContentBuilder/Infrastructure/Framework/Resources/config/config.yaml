@@ -17,87 +17,12 @@ monolog:
 
 cms:
     content_building:
+        layout_type:
+            default_builder: 'Tulia\Cms\ContentBuilder\Infrastructure\Presentation\TwigLayoutTypeBuilder'
         node_type:
             default_controller: 'Tulia\Cms\Node\UserInterface\Web\Frontend\Controller\Node::show'
-            mapping:
-                page:
-                    name: Page
-                    icon: 'fas fa-file-powerpoint'
-                    is_routable: true
-                    is_hierarchical: true
-                    routable_taxonomy_field: category
-                    layout: node_default
-                    fields:
-                        introduction:
-                            type: textarea
-                            is_multilingual: true
-                            name: ~
-                            constraints:
-                                length:
-                                    modificators:
-                                        - { modificator: max, value: 255 }
-                        content:
-                            type: wysiwyg
-                            is_multilingual: true
-                        category:
-                            name: category
-                            type: taxonomy
-                            taxonomy: category
-                        tags:
-                            name: tags
-                            type: taxonomy
-                            taxonomy: tag
-                        thumbnail:
-                            name: thumbnail
-                            type: filepicker
-
         taxonomy_type:
             default_controller: 'Tulia\Cms\Taxonomy\UserInterface\Web\Frontend\Controller\Term::show'
-            mapping:
-                category:
-                    name: Category
-                    routing_strategy: simple
-                    is_routable: true
-                    is_hierarchical: true
-                    layout: taxonomy_default
-                tag:
-                    name: Tag
-                    routing_strategy: simple
-                    is_routable: true
-                    is_hierarchical: false
-                    layout: taxonomy_default
-
-        layout_types:
-            default_builder: 'Tulia\Cms\ContentBuilder\Infrastructure\Presentation\TwigLayoutTypeBuilder'
-            mapping:
-                node_default:
-                    name: defaultLayout
-                    sections:
-                        main:
-                            groups:
-                                introduction:
-                                    name: introduction
-                                    fields: [introduction]
-                                content:
-                                    active: true
-                                    interior: full-width
-                                    name: content
-                                    fields: [content]
-                        sidebar:
-                            groups:
-                                category:
-                                    name: taxonomy
-                                    fields: [category, tags]
-                                thumbnail:
-                                    name: thumbnail
-                                    fields: [thumbnail]
-                taxonomy_default:
-                    name: defaultLayout
-                    sections:
-                        main:
-                            groups: ~
-                        sidebar:
-                            groups: ~
 
         data_types:
             mapping:

@@ -13,7 +13,6 @@ use Tulia\Cms\ContentBuilder\Domain\ContentType\Model\Field;
 class TaxonomyType extends AbstractContentType
 {
     protected string $controller = 'Tulia\Cms\Node\UserInterface\Web\Frontend\Controller\Node::show';
-    protected string $layout = 'taxonomy_default';
 
     protected function internalValidate(): void
     {

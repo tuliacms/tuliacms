@@ -80,7 +80,7 @@
             </trans-unit>
             <trans-unit id="tuliacms.messages.20">
                 <source>slugValue</source>
-                <target>"Slug: {slug}"</target>
+                <target>Slug: {slug}</target>
             </trans-unit>
             <trans-unit id="tuliacms.messages.21">
                 <source>date</source>
@@ -88,7 +88,7 @@
             </trans-unit>
             <trans-unit id="tuliacms.messages.22">
                 <source>plannedOnDate</source>
-                <target>"Planned on {date}"</target>
+                <target>Planned on {date}</target>
             </trans-unit>
             <trans-unit id="tuliacms.messages.23">
                 <source>close</source>
@@ -332,7 +332,7 @@
             </trans-unit>
             <trans-unit id="tuliacms.messages.83">
                 <source>publishedAtDate</source>
-                <target>"Published at {date}"</target>
+                <target>Published at {date}</target>
             </trans-unit>
             <trans-unit id="tuliacms.messages.84">
                 <source>submit</source>
@@ -344,11 +344,11 @@
             </trans-unit>
             <trans-unit id="tuliacms.messages.86">
                 <source>editTerm</source>
-                <target>"Edit {term}"</target>
+                <target>Edit {term}</target>
             </trans-unit>
             <trans-unit id="tuliacms.messages.87">
                 <source>editNode</source>
-                <target>"Edit {node}"</target>
+                <target>Edit {node}</target>
             </trans-unit>
             <trans-unit id="tuliacms.messages.88">
                 <source>themes</source>
@@ -376,7 +376,7 @@
             </trans-unit>
             <trans-unit id="tuliacms.messages.94">
                 <source>showOfType</source>
-                <target>"Show: {type}"</target>
+                <target>Show: {type}</target>
             </trans-unit>
             <trans-unit id="tuliacms.messages.95">
                 <source>showAll</source>
@@ -552,7 +552,7 @@
             </trans-unit>
             <trans-unit id="tuliacms.messages.138">
                 <source>myAccountUsername</source>
-                <target>"My profile - {username}"</target>
+                <target>My profile - {username}</target>
             </trans-unit>
             <trans-unit id="tuliacms.messages.139">
                 <source>emptyTableListAddSomethingToStart</source>
@@ -640,7 +640,7 @@
             </trans-unit>
             <trans-unit id="tuliacms.messages.160">
                 <source>searchResultsForQuery</source>
-                <target>"Search results: {query}"</target>
+                <target>Search results: {query}</target>
             </trans-unit>
             <trans-unit id="tuliacms.messages.161">
                 <source>searchingInProgress</source>

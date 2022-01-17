@@ -15,7 +15,6 @@ use Tulia\Cms\ContentBuilder\Domain\NodeType\Exception\RoutableFieldIsNotTaxonom
 class NodeType extends AbstractContentType
 {
     protected string $controller = 'Tulia\Cms\Node\UserInterface\Web\Frontend\Controller\Node::show';
-    protected string $layout = 'node_default';
     protected string $icon;
     protected ?string $routableTaxonomyField = null;
 

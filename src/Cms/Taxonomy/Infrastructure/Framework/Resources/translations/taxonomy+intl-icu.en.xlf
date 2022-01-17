@@ -16,7 +16,7 @@
             </trans-unit>
             <trans-unit id="tuliacms.taxonomy.4">
                 <source>termsListOfTaxonomy</source>
-                <target>"The {taxonomy} taxonomy"</target>
+                <target>The {taxonomy} taxonomy</target>
             </trans-unit>
             <trans-unit id="tuliacms.taxonomy.5">
                 <source>editTerm</source>

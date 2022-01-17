@@ -7,7 +7,6 @@ namespace Tulia\Bundle\CmsBundle\DependencyInjection\CompilerPass;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
-use Tulia\Cms\ContentBuilder\Domain\LayoutType\Service\LayoutTypeRegistry;
 use Tulia\Cms\ContentBuilder\Domain\NodeType\Service\NodeTypeDecorator;
 use Tulia\Cms\ContentBuilder\Domain\NodeType\Service\NodeTypeRegistry;
 use Tulia\Cms\ContentBuilder\Domain\TaxonomyType\Service\TaxonomyTypeRegistry;
@@ -57,16 +56,6 @@ class ContentBuilderPass implements CompilerPassInterface
             }
 
             $registry->addMethodCall('addDecorator', [new Reference($id)]);
-        }
-
-        $registry = $container->getDefinition(LayoutTypeRegistry::class);
-
-        foreach ($container->findTaggedServiceIds('content_builder.layout_type.provider') as $id => $options) {
-            if ($container->getDefinition($id)->isAbstract()) {
-                continue;
-            }
-
-            $registry->addMethodCall('addProvider', [new Reference($id)]);
         }
 
         $registry = $container->getDefinition(LayoutTypeBuilderRegistry::class);

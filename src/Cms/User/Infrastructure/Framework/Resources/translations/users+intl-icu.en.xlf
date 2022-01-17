@@ -100,7 +100,7 @@
             </trans-unit>
             <trans-unit id="tuliacms.users.25">
                 <source>emailAddress</source>
-                <target>"Email address: {email}"</target>
+                <target>Email address: {email}</target>
             </trans-unit>
             <trans-unit id="tuliacms.users.26">
                 <source>cannotDeleteSelfUser</source>

@@ -23,9 +23,9 @@ class FormDataToModelTransformer
         $this->decorator = $decorator;
     }
 
-    public function produceNodeType(array $data): NodeType
+    public function produceNodeType(array $data, LayoutType $layout): NodeType
     {
-        $nodeType = new NodeType($data['type']['code'], $data['type']['code'] . '_layout', false);
+        $nodeType = new NodeType($data['type']['code'], $layout, false);
         $nodeType->setName($data['type']['name']);
         $nodeType->setIcon($data['type']['icon']);
         $nodeType->setIsHierarchical((bool) $data['type']['icon']);

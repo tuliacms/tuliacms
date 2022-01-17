@@ -8,6 +8,7 @@ use Tulia\Cms\ContentBuilder\Domain\ContentType\Exception\CannotSetRoutableNodeT
 use Tulia\Cms\ContentBuilder\Domain\ContentType\Exception\MissingRoutableFieldException;
 use Tulia\Cms\ContentBuilder\Domain\ContentType\Exception\MultipleValueForTitleOrSlugOccuredException;
 use Tulia\Cms\ContentBuilder\Domain\ContentType\Exception\CannotOverwriteInternalFieldException;
+use Tulia\Cms\ContentBuilder\Domain\LayoutType\Model\LayoutType;
 
 /**
  * @author Adam Banaszkiewicz
@@ -15,7 +16,7 @@ use Tulia\Cms\ContentBuilder\Domain\ContentType\Exception\CannotOverwriteInterna
 abstract class AbstractContentType
 {
     protected string $controller;
-    protected string $layout;
+    protected LayoutType $layout;
     protected string $code;
     protected string $name;
     protected bool $isRoutable = true;
@@ -31,7 +32,7 @@ abstract class AbstractContentType
     abstract protected function internalValidate(): void;
     abstract protected function internalValidateField(Field $field): void;
 
-    public function __construct(string $code, string $layout, bool $isInternal)
+    public function __construct(string $code, LayoutType $layout, bool $isInternal)
     {
         $this->code = $code;
         $this->layout = $layout;
@@ -53,7 +54,7 @@ abstract class AbstractContentType
         return $this->code;
     }
 
-    public function getLayout(): string
+    public function getLayout(): LayoutType
     {
         return $this->layout;
     }

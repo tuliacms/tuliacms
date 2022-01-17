@@ -18,39 +18,21 @@ services:
         abstract: true
         calls:
             - setDefaultController: [ '%cms.content_builder.node_type.default_controller%' ]
+            - setDefaultLayoutBuilder: [ '%cms.content_builder.layout_type.default_builder%' ]
             - setFieldTypeMappingRegistry: [ '@Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\FieldTypeMappingRegistry' ]
 
-    Tulia\Cms\ContentBuilder\Infrastructure\Persistence\NodeTypeProvider\DatabaseProvider:
+    Tulia\Cms\ContentBuilder\Infrastructure\Persistence\ContentProvider\NodeTypeDatabaseProvider:
         parent: Tulia\Cms\ContentBuilder\Domain\NodeType\Service\AbstractNodeTypeProvider
-
-    Tulia\Cms\ContentBuilder\Infrastructure\Persistence\NodeTypeProvider\ContainerProvider:
-        parent: Tulia\Cms\ContentBuilder\Domain\NodeType\Service\AbstractNodeTypeProvider
-        bind:
-            $config: '%cms.content_builder.node_type.mapping%'
 
     Tulia\Cms\ContentBuilder\Domain\TaxonomyType\Service\AbstractTaxonomyTypeProvider:
         abstract: true
         calls:
-            - setDefaultController: [ '%cms.content_builder.node_type.default_controller%' ]
+            - setDefaultController: [ '%cms.content_builder.taxonomy_type.default_controller%' ]
+            - setDefaultLayoutBuilder: [ '%cms.content_builder.layout_type.default_builder%' ]
             - setFieldTypeMappingRegistry: [ '@Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\FieldTypeMappingRegistry' ]
 
-    Tulia\Cms\ContentBuilder\Infrastructure\Persistence\TaxonomyTypeProvider\ContainerProvider:
+    Tulia\Cms\ContentBuilder\Infrastructure\Persistence\ContentProvider\TaxonomyTypeDatabaseProvider:
         parent: Tulia\Cms\ContentBuilder\Domain\TaxonomyType\Service\AbstractTaxonomyTypeProvider
-        bind:
-            $config: '%cms.content_builder.taxonomy_type.mapping%'
-
-    Tulia\Cms\ContentBuilder\Domain\LayoutType\Service\AbstractLayoutTypeProvider:
-        abstract: true
-        calls:
-            - setDefaultBuilder: [ '%cms.content_builder.layout_types.default_builder%' ]
-
-    Tulia\Cms\ContentBuilder\Infrastructure\Persistence\LayoutTypeProvider\ContainerProvider:
-        parent: Tulia\Cms\ContentBuilder\Domain\LayoutType\Service\AbstractLayoutTypeProvider
-        bind:
-            $config: '%cms.content_builder.layout_types.mapping%'
-
-    Tulia\Cms\ContentBuilder\Infrastructure\Persistence\LayoutTypeProvider\DatabaseProvider:
-        parent: Tulia\Cms\ContentBuilder\Domain\LayoutType\Service\AbstractLayoutTypeProvider
 
     Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\NodeType\FormHandler:
         shared: false

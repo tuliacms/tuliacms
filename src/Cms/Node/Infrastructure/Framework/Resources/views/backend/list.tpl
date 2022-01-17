@@ -23,7 +23,7 @@
                         <h6 class="dropdown-header">{{ 'goTo'|trans({}, 'messages') }}</h6>
                         <div class="dropdown-divider"></div>
                         {% for tax in taxonomies %}
-                            <a class="dropdown-item dropdown-item-with-icon" href="{{ path('backend.term', { taxonomyType: tax.type }) }}"><i class="dropdown-icon fas fa-tags"></i> {{ tax.name|trans({}, 'taxonomy') }}</a>
+                            <a class="dropdown-item dropdown-item-with-icon" href="{{ path('backend.term', { taxonomyType: tax.code }) }}"><i class="dropdown-icon fas fa-tags"></i> {{ tax.name|trans({}, 'taxonomy') }}</a>
                         {% endfor %}
                         <a class="dropdown-item dropdown-item-with-icon" href="{{ path('backend.settings', { group: 'node.' ~ nodeType.code }) }}"><i class="dropdown-icon fas fa-cogs"></i> {{ 'settings'|trans({}, 'messages') }}</a>
                     </div>

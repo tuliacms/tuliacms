@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Tulia\Cms\ContentBuilder\Domain\NodeType\Service;
 
 use Tulia\Cms\ContentBuilder\Domain\ContentType\Model\Field;
+use Tulia\Cms\ContentBuilder\Domain\LayoutType\Model\LayoutType;
+use Tulia\Cms\ContentBuilder\Domain\LayoutType\Service\LayoutTypeBuilderTrait;
 use Tulia\Cms\ContentBuilder\Domain\NodeType\Model\NodeType;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\FieldTypeMappingRegistry;
 
@@ -13,8 +15,16 @@ use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\FieldTypeMappingRe
  */
 abstract class AbstractNodeTypeProvider implements NodeTypeProviderInterface
 {
+    use LayoutTypeBuilderTrait;
+
     private FieldTypeMappingRegistry $fieldTypeMappingRegistry;
     protected string $defaultController = '';
+    protected string $defaultLayoutBuilder = '';
+
+    public function setDefaultLayoutBuilder(string $defaultLayoutBuilder): void
+    {
+        $this->defaultLayoutBuilder = $defaultLayoutBuilder;
+    }
 
     public function setDefaultController(string $defaultController): void
     {
@@ -26,9 +36,9 @@ abstract class AbstractNodeTypeProvider implements NodeTypeProviderInterface
         $this->fieldTypeMappingRegistry = $fieldTypeMappingRegistry;
     }
 
-    protected function buildNodeType(string $name, array $options, bool $isInternal): NodeType
+    protected function buildNodeType(string $name, array $options, LayoutType $layoutType): NodeType
     {
-        $nodeType = new NodeType($name, $options['layout'], $isInternal);
+        $nodeType = new NodeType($name, $layoutType, (bool) $options['internal']);
         $nodeType->setController($options['controller'] ?? $this->defaultController);
         $nodeType->setIcon($options['icon'] ?? 'fa fa-box');
         $nodeType->setName($options['name']);

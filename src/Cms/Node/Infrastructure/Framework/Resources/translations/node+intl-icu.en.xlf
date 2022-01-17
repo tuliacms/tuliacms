@@ -100,7 +100,7 @@
             </trans-unit>
             <trans-unit id="tuliacms.node.25">
                 <source>activityUserDeletedNode</source>
-                <target>"User {username} deleted node."</target>
+                <target>User {username} deleted node.</target>
             </trans-unit>
             <trans-unit id="tuliacms.node.26">
                 <source>sketch</source>
@@ -120,7 +120,7 @@
             </trans-unit>
             <trans-unit id="tuliacms.node.30">
                 <source>nodesListOfType</source>
-                <target>"Nodes of {type}"</target>
+                <target>Nodes of {type}</target>
             </trans-unit>
             <trans-unit id="tuliacms.node.31">
                 <source>flags</source>
@@ -128,7 +128,7 @@
             </trans-unit>
             <trans-unit id="tuliacms.node.32">
                 <source>flagWithName</source>
-                <target>"Flag: {flag}"</target>
+                <target>Flag: {flag}</target>
             </trans-unit>
             <trans-unit id="tuliacms.node.33">
                 <source>flagsHelp</source>
