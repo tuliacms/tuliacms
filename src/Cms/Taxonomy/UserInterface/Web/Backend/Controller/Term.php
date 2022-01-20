@@ -8,9 +8,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Tulia\Cms\ContentBuilder\Domain\TaxonomyType\Service\TaxonomyTypeRegistry;
+use Tulia\Cms\ContentBuilder\Domain\ContentType\Service\ContentTypeRegistry;
 use Tulia\Cms\ContentBuilder\UserInterface\Web\Form\ContentTypeFormDescriptor;
-use Tulia\Cms\ContentBuilder\UserInterface\Web\Service\TaxonomyFormService;
+use Tulia\Cms\ContentBuilder\UserInterface\Web\Service\ContentFormService;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Exception\TermNotFoundException;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Taxonomy;
@@ -32,22 +32,22 @@ class Term extends AbstractController
     private TaxonomyRepository $repository;
     private DatatableFactory $factory;
     private TermDatatableFinderInterface $finder;
-    private TaxonomyFormService $taxonomyFormService;
-    private TaxonomyTypeRegistry $typeRegistry;
+    private ContentFormService $contentFormService;
+    private ContentTypeRegistry $typeRegistry;
 
     public function __construct(
         TermFinderInterface $termFinder,
         TaxonomyRepository $repository,
         DatatableFactory $factory,
         TermDatatableFinderInterface $finder,
-        TaxonomyFormService $taxonomyFormService,
-        TaxonomyTypeRegistry $typeRegistry
+        ContentFormService $contentFormService,
+        ContentTypeRegistry $typeRegistry
     ) {
         $this->termFinder = $termFinder;
         $this->repository = $repository;
         $this->factory = $factory;
         $this->finder = $finder;
-        $this->taxonomyFormService = $taxonomyFormService;
+        $this->contentFormService = $contentFormService;
         $this->typeRegistry = $typeRegistry;
     }
 
@@ -177,7 +177,7 @@ class Term extends AbstractController
 
     private function produceFormDescriptor(Taxonomy $taxonomy, Model $term, Request $request): ContentTypeFormDescriptor
     {
-        return $this->taxonomyFormService->buildFormDescriptor(
+        return $this->contentFormService->buildFormDescriptor(
             $taxonomy->getType(),
             array_merge(
                 [

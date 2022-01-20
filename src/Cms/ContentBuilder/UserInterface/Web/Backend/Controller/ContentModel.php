@@ -6,14 +6,12 @@ namespace Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Controller;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Tulia\Cms\ContentBuilder\Domain\LayoutType\LayoutTypeRepository;
-use Tulia\Cms\ContentBuilder\Domain\NodeType\NodeTypeRepository;
-use Tulia\Cms\ContentBuilder\Domain\NodeType\Service\NodeTypeRegistry;
-use Tulia\Cms\ContentBuilder\Domain\TaxonomyType\Service\TaxonomyTypeRegistry;
+use Tulia\Cms\ContentBuilder\Domain\ContentType\ContentTypeRepository;
+use Tulia\Cms\ContentBuilder\Domain\ContentType\Service\ContentTypeRegistry;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\FieldTypeMappingRegistry;
-use Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\NodeType\FormDataToModelTransformer;
-use Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\NodeType\FormHandler;
-use Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\NodeType\ModelToFormDataTransformer;
+use Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\ContentType\FormDataToModelTransformer;
+use Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\ContentType\FormHandler;
+use Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\ContentType\ModelToFormDataTransformer;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Component\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Component\Templating\ViewInterface;
@@ -23,34 +21,35 @@ use Tulia\Component\Templating\ViewInterface;
  */
 class ContentModel extends AbstractController
 {
-    private NodeTypeRegistry $nodeTypeRegistry;
-    private TaxonomyTypeRegistry $taxonomyTypeRegistry;
     private FieldTypeMappingRegistry $fieldTypeMappingRegistry;
     private FormDataToModelTransformer $formDataToModelTransformer;
-    private NodeTypeRepository $nodeTypeRepository;
-    private LayoutTypeRepository $layoutTypeRepository;
+    private ContentTypeRepository $contentTypeRepository;
+    private ContentTypeRegistry $contentTypeRegistry;
 
     public function __construct(
-        NodeTypeRegistry $nodeTypeRegistry,
-        TaxonomyTypeRegistry $taxonomyTypeRegistry,
         FieldTypeMappingRegistry $fieldTypeMappingRegistry,
         FormDataToModelTransformer $formDataToModelTransformer,
-        NodeTypeRepository $nodeTypeRepository,
-        LayoutTypeRepository $layoutTypeRepository
+        ContentTypeRepository $contentTypeRepository,
+        ContentTypeRegistry $contentTypeRegistry
     ) {
-        $this->nodeTypeRegistry = $nodeTypeRegistry;
-        $this->taxonomyTypeRegistry = $taxonomyTypeRegistry;
         $this->fieldTypeMappingRegistry = $fieldTypeMappingRegistry;
         $this->formDataToModelTransformer = $formDataToModelTransformer;
-        $this->nodeTypeRepository = $nodeTypeRepository;
-        $this->layoutTypeRepository = $layoutTypeRepository;
+        $this->contentTypeRepository = $contentTypeRepository;
+        $this->contentTypeRegistry = $contentTypeRegistry;
     }
 
     public function index(): ViewInterface
     {
+        $contentTypeList = $this->contentTypeRegistry->all();
+        $contentTypeCodes = [];
+
+        foreach ($contentTypeList as $type) {
+            $contentTypeCodes[] = $type->getType();
+        }
+
         return $this->view('@backend/content_builder/index.tpl', [
-            'nodeTypeList' => $this->nodeTypeRegistry->all(),
-            'taxonomyTypeList' => $this->taxonomyTypeRegistry->all(),
+            'contentTypeList' => $contentTypeList,
+            'contentTypeCodes' => array_unique($contentTypeCodes),
         ]);
     }
 
@@ -70,16 +69,10 @@ class ContentModel extends AbstractController
 
         if ($nodeTypeFormHandler->isRequestValid()) {
             $layoutType = $this->formDataToModelTransformer->produceLayoutType($data);
-            $nodeType = $this->formDataToModelTransformer->produceNodeType($data, $layoutType);
+            $nodeType = $this->formDataToModelTransformer->produceContentType($data, $contentType, $layoutType);
 
             try {
-                $this->nodeTypeRepository->insert($nodeType);
-            } catch (\Exception $e) {
-
-            }
-
-            try {
-                $this->layoutTypeRepository->insert($layoutType);
+                $this->contentTypeRepository->insert($nodeType);
             } catch (\Exception $e) {
 
             }
@@ -88,7 +81,7 @@ class ContentModel extends AbstractController
             return $this->redirectToRoute('backend.content_builder.homepage');
         }
 
-        return $this->view('@backend/content_builder/node_type/create.tpl', [
+        return $this->view('@backend/content_builder/content_type/create.tpl', [
             'fieldTypes' => $this->getFieldTypes(),
             'routingStrategies' => $this->getRoutingStrategies($contentType),
             'model' => $data,
@@ -103,12 +96,12 @@ class ContentModel extends AbstractController
      */
     public function edit(string $code, string $contentType, Request $request, FormHandler $nodeTypeFormHandler)
     {
-        if ($this->nodeTypeRegistry->has($code) === false) {
+        if ($this->contentTypeRegistry->has($code) === false) {
             $this->setFlash('danger', $this->trans('nodeTypeNotExists', [], 'content_builder'));
             return $this->redirectToRoute('backend.content_builder.homepage');
         }
 
-        $type = $this->nodeTypeRegistry->get($code);
+        $type = $this->contentTypeRegistry->get($code);
 
         if ($type->isInternal()) {
             $this->setFlash('danger', $this->trans('cannotEditInternalNodeType', [], 'content_builder'));
@@ -122,16 +115,10 @@ class ContentModel extends AbstractController
 
         if ($nodeTypeFormHandler->isRequestValid()) {
             $layoutType = $this->formDataToModelTransformer->produceLayoutType($data);
-            $nodeType = $this->formDataToModelTransformer->produceNodeType($data, $layoutType);
+            $nodeType = $this->formDataToModelTransformer->produceContentType($data, $contentType, $layoutType);
 
             try {
-                $this->nodeTypeRepository->update($nodeType);
-            } catch (\Exception $e) {
-
-            }
-
-            try {
-                $this->layoutTypeRepository->update($layoutType);
+                $this->contentTypeRepository->update($nodeType);
             } catch (\Exception $e) {
 
             }
@@ -140,7 +127,7 @@ class ContentModel extends AbstractController
             return $this->redirectToRoute('backend.content_builder.homepage');
         }
 
-        return $this->view('@backend/content_builder/node_type/edit.tpl', [
+        return $this->view('@backend/content_builder/content_type/edit.tpl', [
             'fieldTypes' => $this->getFieldTypes(),
             'routingStrategies' => $this->getRoutingStrategies($contentType),
             'model' => $data,

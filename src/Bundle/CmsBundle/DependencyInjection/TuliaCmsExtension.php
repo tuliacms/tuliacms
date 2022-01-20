@@ -28,9 +28,9 @@ class TuliaCmsExtension extends Extension
         $configuration = $this->getConfiguration($configs, $container);
         $config = $this->processConfiguration($configuration, $configs);
 
-        $container->setParameter('cms.content_builder.node_type.default_controller', $config['content_building']['node_type']['default_controller']);
+        $container->setParameter('cms.content_builder.content_type.node.default_controller', $config['content_building']['content_type']['node']['default_controller']);
+        $container->setParameter('cms.content_builder.content_type.taxonomy.default_controller', $config['content_building']['content_type']['taxonomy']['default_controller']);
         $container->setParameter('cms.content_builder.layout_type.default_builder', $config['content_building']['layout_type']['default_builder']);
-        $container->setParameter('cms.content_builder.taxonomy_type.default_controller', $config['content_building']['taxonomy_type']['default_controller']);
         $container->setParameter('cms.content_builder.data_types.mapping', $config['content_building']['data_types']['mapping']);
         $container->setParameter('cms.content_builder.constraint_types.mapping', $config['content_building']['constraint_types']['mapping']);
         $container->setParameter('cms.options.definitions', $this->validateOptionsValues($config['options']['definitions'] ?? []));
@@ -78,14 +78,10 @@ class TuliaCmsExtension extends Extension
             ->addTag('taxonomy.routing.strategy');
 
         // ContentBuilder
-        $container->registerForAutoconfiguration(\Tulia\Cms\ContentBuilder\Domain\NodeType\Service\NodeTypeProviderInterface::class)
-            ->addTag('content_builder.node_type.provider');
-        $container->registerForAutoconfiguration(\Tulia\Cms\ContentBuilder\Domain\NodeType\Service\NodeTypeDecoratorInterface::class)
-            ->addTag('content_builder.node_type.decorator');
-        $container->registerForAutoconfiguration(\Tulia\Cms\ContentBuilder\Domain\TaxonomyType\Service\TaxonomyTypeProviderInterface::class)
-            ->addTag('content_builder.taxonomy_type.provider');
-        $container->registerForAutoconfiguration(\Tulia\Cms\ContentBuilder\Domain\TaxonomyType\Service\TaxonomyTypeDecoratorInterface::class)
-            ->addTag('content_builder.taxonomy_type.decorator');
+        $container->registerForAutoconfiguration(\Tulia\Cms\ContentBuilder\Domain\ContentType\Service\ContentTypeDecoratorInterface::class)
+            ->addTag('content_builder.content_type.decorator');
+        $container->registerForAutoconfiguration(\Tulia\Cms\ContentBuilder\Domain\ContentType\Service\ContentTypeProviderInterface::class)
+            ->addTag('content_builder.content_type.provider');
         $container->registerForAutoconfiguration(\Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\LayoutTypeBuilderInterface::class)
             ->addTag('content_builder.layout_type.builder');
     }

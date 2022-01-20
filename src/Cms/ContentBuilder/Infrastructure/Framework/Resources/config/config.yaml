@@ -17,13 +17,13 @@ monolog:
 
 cms:
     content_building:
+        content_type:
+            node:
+                default_controller: 'Tulia\Cms\Node\UserInterface\Web\Frontend\Controller\Node::show'
+            taxonomy:
+                default_controller: 'Tulia\Cms\Taxonomy\UserInterface\Web\Frontend\Controller\Term::show'
         layout_type:
             default_builder: 'Tulia\Cms\ContentBuilder\Infrastructure\Presentation\TwigLayoutTypeBuilder'
-        node_type:
-            default_controller: 'Tulia\Cms\Node\UserInterface\Web\Frontend\Controller\Node::show'
-        taxonomy_type:
-            default_controller: 'Tulia\Cms\Taxonomy\UserInterface\Web\Frontend\Controller\Term::show'
-
         data_types:
             mapping:
                 text:

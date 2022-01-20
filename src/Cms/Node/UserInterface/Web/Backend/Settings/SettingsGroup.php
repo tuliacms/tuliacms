@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Node\UserInterface\Web\Backend\Settings;
 
 use Symfony\Component\Form\FormInterface;
-use Tulia\Cms\ContentBuilder\Domain\NodeType\Model\NodeType;
+use Tulia\Cms\ContentBuilder\Domain\ContentType\Model\ContentType;
 use Tulia\Cms\Settings\Ports\Domain\Group\AbstractSettingsGroup;
 
 /**
@@ -13,11 +13,11 @@ use Tulia\Cms\Settings\Ports\Domain\Group\AbstractSettingsGroup;
  */
 class SettingsGroup extends AbstractSettingsGroup
 {
-    protected NodeType $nodeType;
+    protected ContentType $contentType;
 
-    public function __construct(NodeType $nodeType)
+    public function __construct(ContentType $contentType)
     {
-        $this->nodeType = $nodeType;
+        $this->contentType = $contentType;
     }
 
     /**
@@ -25,7 +25,7 @@ class SettingsGroup extends AbstractSettingsGroup
      */
     public function getId(): string
     {
-        return 'node.' . $this->nodeType->getCode();
+        return 'node.' . $this->contentType->getCode();
     }
 
     /**
@@ -58,7 +58,7 @@ class SettingsGroup extends AbstractSettingsGroup
     public function buildForm(): FormInterface
     {
         $data = [
-            'per_page' => $this->getOption('node.' . $this->nodeType->getCode() . '.per_page', 15),
+            'per_page' => $this->getOption('node.' . $this->contentType->getCode() . '.per_page', 15),
         ];
 
         return $this->createForm(SettingsForm::class, $data);
@@ -77,7 +77,7 @@ class SettingsGroup extends AbstractSettingsGroup
      */
     public function saveAction(array $data): bool
     {
-        $this->setOption('node.' . $this->nodeType->getCode() . '.per_page', (int) $data['per_page']);
+        $this->setOption('node.' . $this->contentType->getCode() . '.per_page', (int) $data['per_page']);
 
         return true;
     }

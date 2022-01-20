@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Node\Application\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Tulia\Cms\ContentBuilder\Domain\NodeType\Service\NodeTypeRegistry;
+use Tulia\Cms\ContentBuilder\Domain\ContentType\Service\ContentTypeRegistry;
 use Tulia\Cms\Node\Domain\ReadModel\Persistence\CategoriesPersistenceInterface;
 use Tulia\Cms\Node\Domain\ReadModel\Persistence\FlagsPersistenceInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Event\AttributeUpdated;
@@ -15,16 +15,16 @@ use Tulia\Cms\Node\Domain\WriteModel\Event\AttributeUpdated;
  */
 class AttributeUpdatedListener implements EventSubscriberInterface
 {
-    private NodeTypeRegistry $nodeTypeRegistry;
+    private ContentTypeRegistry $contentTypeRegistry;
     private FlagsPersistenceInterface $flagsPersistence;
     private CategoriesPersistenceInterface $categoriesPersistence;
 
     public function __construct(
-        NodeTypeRegistry $nodeTypeRegistry,
+        ContentTypeRegistry $contentTypeRegistry,
         FlagsPersistenceInterface $flagsPersistence,
         CategoriesPersistenceInterface $categoriesPersistence
     ) {
-        $this->nodeTypeRegistry = $nodeTypeRegistry;
+        $this->contentTypeRegistry = $contentTypeRegistry;
         $this->flagsPersistence = $flagsPersistence;
         $this->categoriesPersistence = $categoriesPersistence;
     }
@@ -43,7 +43,7 @@ class AttributeUpdatedListener implements EventSubscriberInterface
             return;
         }
 
-        $type = $this->nodeTypeRegistry->get($event->getNodeType());
+        $type = $this->contentTypeRegistry->get($event->getNodeType());
 
         if ($type->hasField($event->getAttribute())) {
             $field = $type->getField($event->getAttribute());

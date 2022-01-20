@@ -6,7 +6,7 @@ namespace Tulia\Cms\Node\Infrastructure\Persistence\Dbal\ReadModel;
 
 use PDO;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Tulia\Cms\ContentBuilder\Domain\NodeType\Model\NodeType;
+use Tulia\Cms\ContentBuilder\Domain\ContentType\Model\ContentType;
 use Tulia\Cms\Node\Domain\ReadModel\Datatable\NodeDatatableFinderInterface;
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
@@ -20,7 +20,7 @@ use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
  */
 class DbalNodeDatatableFinder extends AbstractDatatableFinder implements NodeDatatableFinderInterface
 {
-    private NodeType $nodeType;
+    private ContentType $contentType;
 
     private TermFinderInterface $termFinder;
 
@@ -37,9 +37,9 @@ class DbalNodeDatatableFinder extends AbstractDatatableFinder implements NodeDat
         $this->translator = $translator;
     }
 
-    public function setNodeType(NodeType $nodeType): void
+    public function setContentType(ContentType $contentType): void
     {
-        $this->nodeType = $nodeType;
+        $this->contentType = $contentType;
     }
 
     /**
@@ -56,7 +56,7 @@ class DbalNodeDatatableFinder extends AbstractDatatableFinder implements NodeDat
     public function getColumns(): array
     {
         $context = [
-            'nodeType' => $this->nodeType,
+            'contentType' => $this->contentType,
         ];
 
         $columns = [
@@ -130,7 +130,7 @@ class DbalNodeDatatableFinder extends AbstractDatatableFinder implements NodeDat
             ->leftJoin('tm', '#__node_lang', 'tl', 'tm.id = tl.node_id AND tl.locale = :locale')
             ->leftJoin('tm', '#__node_has_flag', 'tnhf', 'tm.id = tnhf.node_id')
             ->where('tm.type = :type AND tm.website_id = :website_id')
-            ->setParameter('type', $this->nodeType->getCode(), PDO::PARAM_STR)
+            ->setParameter('type', $this->contentType->getCode(), PDO::PARAM_STR)
             ->setParameter('locale', $this->currentWebsite->getLocale()->getCode(), PDO::PARAM_STR)
             ->setParameter('website_id', $this->currentWebsite->getId(), PDO::PARAM_STR)
             ->addOrderBy('tm.level', 'ASC')
@@ -167,7 +167,7 @@ class DbalNodeDatatableFinder extends AbstractDatatableFinder implements NodeDat
     public function buildActions(array $row): array
     {
         $context = [
-            'nodeType' => $this->nodeType,
+            'contentType' => $this->contentType,
         ];
 
         return [
@@ -205,7 +205,7 @@ class DbalNodeDatatableFinder extends AbstractDatatableFinder implements NodeDat
     {
         // @todo
         return false;
-        foreach ($this->nodeType->getTaxonomies() as $taxonomy) {
+        foreach ($this->contentType->getTaxonomies() as $taxonomy) {
             if ($taxonomy['taxonomy'] === 'category') {
                 return true;
             }
@@ -220,7 +220,7 @@ class DbalNodeDatatableFinder extends AbstractDatatableFinder implements NodeDat
         return [];
         $statuses = [];
 
-        foreach ($this->nodeType->getStatuses() as $status) {
+        foreach ($this->contentType->getStatuses() as $status) {
             $statuses[$status] = $this->translator->trans($status, [], 'node');
         }
 

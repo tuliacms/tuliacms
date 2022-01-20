@@ -6,7 +6,7 @@ namespace Tulia\Cms\Taxonomy\UserInterface\Web\Backend\Controller;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Tulia\Cms\ContentBuilder\Domain\TaxonomyType\Service\TaxonomyTypeRegistry;
+use Tulia\Cms\ContentBuilder\Domain\ContentType\Service\ContentTypeRegistry;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Taxonomy\Domain\Service\TaxonomyHierarchy;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Term;
@@ -21,12 +21,12 @@ class Hierarchy extends AbstractController
 {
     private TaxonomyRepository $repository;
     private TaxonomyHierarchy $hierarchy;
-    private TaxonomyTypeRegistry $typeRegistry;
+    private ContentTypeRegistry $typeRegistry;
 
     public function __construct(
         TaxonomyRepository $repository,
         TaxonomyHierarchy $hierarchy,
-        TaxonomyTypeRegistry $typeRegistry
+        ContentTypeRegistry $typeRegistry
     ) {
         $this->repository = $repository;
         $this->hierarchy = $hierarchy;

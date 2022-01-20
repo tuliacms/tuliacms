@@ -17,9 +17,9 @@ trait ContentTypeDatabaseProviderTrait
     private array $constraintsSource = [];
     private array $modificatorsSource = [];
 
-    private function getTypes(string $type): array
+    private function getTypes(): array
     {
-        $types = $this->connection->fetchAllAssociative('SELECT * FROM #__content_type WHERE `type` = :type', ['type' => $type]);
+        $types = $this->connection->fetchAllAssociative('SELECT * FROM #__content_type');
 
         foreach ($types as $key => $type) {
             $types[$key]['layout'] = $type['code'] . '_layout';

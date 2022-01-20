@@ -9,7 +9,7 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
-use Tulia\Cms\ContentBuilder\Domain\ContentType\Model\AbstractContentType;
+use Tulia\Cms\ContentBuilder\Domain\ContentType\Model\ContentType;
 use Tulia\Cms\ContentBuilder\Domain\ContentType\Model\Field;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Exception\ConstraintNotExistsException;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Exception\FieldTypeNotExistsException;
@@ -40,7 +40,7 @@ class SymfonyFormBuilder
         $this->logger = $contentBuilderLogger;
     }
 
-    public function createForm(AbstractContentType $taxonomyType, array $data): FormInterface
+    public function createForm(ContentType $taxonomyType, array $data): FormInterface
     {
         $builder = $this->createFormBuilder($taxonomyType->getCode(), $data);
 

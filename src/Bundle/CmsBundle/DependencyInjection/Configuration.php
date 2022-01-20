@@ -81,17 +81,6 @@ class Configuration implements ConfigurationInterface
                                             ->scalarNode('builder')->defaultNull()->end()
                                             ->arrayNode('constraints')->scalarPrototype()->defaultValue([])->end()->end()
                                             ->arrayNode('configuration')
-                                                ->beforeNormalization()
-                                                    ->always(function ($configs) {
-                                                        /*foreach ($configs as $config) {
-                                                            if ($config['type'] === 'choice' && $config['choices'] === [] ) {
-
-                                                            }
-                                                        }*/
-
-                                                        return $configs;
-                                                    })
-                                                ->end()
                                                 ->arrayPrototype()
                                                     ->addDefaultsIfNotSet()
                                                     ->children()
@@ -118,19 +107,17 @@ class Configuration implements ConfigurationInterface
                                 ->end()
                             ->end()
                         ->end()
+                        ->arrayNode('content_type')
+                            ->arrayPrototype()
+                                ->addDefaultsIfNotSet()
+                                ->children()
+                                    ->scalarNode('default_controller')->isRequired()->end()
+                                ->end()
+                            ->end()
+                        ->end()
                         ->arrayNode('layout_type')
                             ->children()
                                 ->scalarNode('default_builder')->isRequired()->end()
-                            ->end()
-                        ->end()
-                        ->arrayNode('node_type')
-                            ->children()
-                                ->scalarNode('default_controller')->isRequired()->end()
-                            ->end()
-                        ->end()
-                        ->arrayNode('taxonomy_type')
-                            ->children()
-                                ->scalarNode('default_controller')->isRequired()->end()
                             ->end()
                         ->end()
                     ->end()

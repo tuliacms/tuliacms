@@ -8,31 +8,20 @@ services:
         resource: '../../../../**'
         exclude:
             - '../../../../Infrastructure/Framework/Resources/**'
-            - '../../../../Domain/NodeType/Model/**'
-            - '../../../../Domain/NodeType/Exception/**'
-            - '../../../../Domain/TaxonomyType/Model/**'
-            - '../../../../Domain/TaxonomyType/Exception/**'
+            - '../../../../Domain/ContentType/Model/**'
+            - '../../../../Domain/ContentType/Exception/**'
             - '../../../../UserInterface/LayoutType/Model/**'
 
-    Tulia\Cms\ContentBuilder\Domain\NodeType\Service\AbstractNodeTypeProvider:
+    Tulia\Cms\ContentBuilder\Domain\ContentType\Service\AbstractContentTypeProvider:
         abstract: true
         calls:
-            - setDefaultController: [ '%cms.content_builder.node_type.default_controller%' ]
+            - setDefaultController: [ 'node', '%cms.content_builder.content_type.node.default_controller%' ]
+            - setDefaultController: [ 'taxonomy', '%cms.content_builder.content_type.taxonomy.default_controller%' ]
             - setDefaultLayoutBuilder: [ '%cms.content_builder.layout_type.default_builder%' ]
             - setFieldTypeMappingRegistry: [ '@Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\FieldTypeMappingRegistry' ]
 
-    Tulia\Cms\ContentBuilder\Infrastructure\Persistence\ContentProvider\NodeTypeDatabaseProvider:
-        parent: Tulia\Cms\ContentBuilder\Domain\NodeType\Service\AbstractNodeTypeProvider
+    Tulia\Cms\ContentBuilder\Infrastructure\Persistence\ContentProvider\ContentTypeDatabaseProvider:
+        parent: Tulia\Cms\ContentBuilder\Domain\ContentType\Service\AbstractContentTypeProvider
 
-    Tulia\Cms\ContentBuilder\Domain\TaxonomyType\Service\AbstractTaxonomyTypeProvider:
-        abstract: true
-        calls:
-            - setDefaultController: [ '%cms.content_builder.taxonomy_type.default_controller%' ]
-            - setDefaultLayoutBuilder: [ '%cms.content_builder.layout_type.default_builder%' ]
-            - setFieldTypeMappingRegistry: [ '@Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\FieldTypeMappingRegistry' ]
-
-    Tulia\Cms\ContentBuilder\Infrastructure\Persistence\ContentProvider\TaxonomyTypeDatabaseProvider:
-        parent: Tulia\Cms\ContentBuilder\Domain\TaxonomyType\Service\AbstractTaxonomyTypeProvider
-
-    Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\NodeType\FormHandler:
+    Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\ContentType\FormHandler:
         shared: false

@@ -7,9 +7,8 @@ namespace Tulia\Cms\Node\UserInterface\Web\Backend\BackendMenu;
 use Tulia\Cms\BackendMenu\Ports\Domain\Builder\BuilderInterface;
 use Tulia\Cms\BackendMenu\Domain\Builder\Helper\BuilderHelperInterface;
 use Tulia\Cms\BackendMenu\Domain\Builder\Registry\ItemRegistryInterface;
-use Tulia\Cms\ContentBuilder\Domain\NodeType\Model\NodeType;
-use Tulia\Cms\ContentBuilder\Domain\NodeType\Service\NodeTypeRegistry;
-use Tulia\Cms\ContentBuilder\Domain\TaxonomyType\Service\TaxonomyTypeRegistry;
+use Tulia\Cms\ContentBuilder\Domain\ContentType\Model\ContentType;
+use Tulia\Cms\ContentBuilder\Domain\ContentType\Service\ContentTypeRegistry;
 
 /**
  * @author Adam Banaszkiewicz
@@ -18,28 +17,26 @@ class NodeMenuBuilder implements BuilderInterface
 {
     protected BuilderHelperInterface $helper;
 
-    protected NodeTypeRegistry $nodeRegistry;
-
-    protected TaxonomyTypeRegistry $taxonomyTypeRegistry;
+    protected ContentTypeRegistry $contentTypeRegistry;
 
     public function __construct(
         BuilderHelperInterface $helper,
-        NodeTypeRegistry $nodeRegistry,
-        TaxonomyTypeRegistry $taxonomyTypeRegistry
+        ContentTypeRegistry $contentTypeRegistry
     ) {
         $this->helper = $helper;
-        $this->nodeRegistry = $nodeRegistry;
-        $this->taxonomyTypeRegistry = $taxonomyTypeRegistry;
+        $this->contentTypeRegistry = $contentTypeRegistry;
     }
 
     public function build(ItemRegistryInterface $registry): void
     {
-        foreach ($this->nodeRegistry->getTypes() as $type) {
-            $this->registerNodeType($registry, $this->nodeRegistry->get($type));
+        foreach ($this->contentTypeRegistry->all() as $type) {
+            if ($type->isType('node')) {
+                $this->registerContentType($registry, $type);
+            }
         }
     }
 
-    private function registerNodeType(ItemRegistryInterface $registry, NodeType $type): void
+    private function registerContentType(ItemRegistryInterface $registry, ContentType $type): void
     {
         $root = 'node_' . $type->getCode();
 
@@ -62,7 +59,7 @@ class NodeMenuBuilder implements BuilderInterface
                 continue;
             }
 
-            $taxonomy = $this->taxonomyTypeRegistry->get($field->getTaxonomy());
+            $taxonomy = $this->contentTypeRegistry->get($field->getTaxonomy());
 
             $registry->add($root . '_' . $taxonomy->getCode(), [
                 'label'  => $this->helper->trans('termsListOfTaxonomy', ['taxonomy' => $this->helper->trans($taxonomy->getName(), [], 'taxonomy')], 'taxonomy'),

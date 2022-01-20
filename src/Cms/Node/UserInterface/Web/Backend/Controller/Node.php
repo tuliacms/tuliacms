@@ -8,12 +8,10 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Tulia\Cms\ContentBuilder\Domain\NodeType\Exception\NodeTypeNotExistsException;
-use Tulia\Cms\ContentBuilder\Domain\NodeType\Model\NodeType;
-use Tulia\Cms\ContentBuilder\Domain\NodeType\Service\NodeTypeRegistry;
-use Tulia\Cms\ContentBuilder\Domain\TaxonomyType\Service\TaxonomyTypeRegistry;
+use Tulia\Cms\ContentBuilder\Domain\ContentType\Model\ContentType;
+use Tulia\Cms\ContentBuilder\Domain\ContentType\Service\ContentTypeRegistry;
 use Tulia\Cms\ContentBuilder\UserInterface\Web\Form\ContentTypeFormDescriptor;
-use Tulia\Cms\ContentBuilder\UserInterface\Web\Service\NodeFormService;
+use Tulia\Cms\ContentBuilder\UserInterface\Web\Service\ContentFormService;
 use Tulia\Cms\Node\Domain\WriteModel\Exception\NodeNotFoundException;
 use Tulia\Cms\Node\Domain\WriteModel\Exception\SingularFlagImposedOnMoreThanOneNodeException;
 use Tulia\Cms\Node\Domain\WriteModel\NodeRepository;
@@ -23,38 +21,34 @@ use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Component\Datatable\DatatableFactory;
 use Tulia\Component\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Component\Security\Http\Csrf\Annotation\IgnoreCsrfToken;
+use Tulia\Component\Security\Http\Csrf\Exception\RequestCsrfTokenException;
 use Tulia\Component\Templating\ViewInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Model\Node as Model;
-use Tulia\Framework\Security\Http\Csrf\Exception\RequestCsrfTokenException;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class Node extends AbstractController
 {
-    private NodeTypeRegistry $typeRegistry;
+    private ContentTypeRegistry $typeRegistry;
 
     private NodeRepository $repository;
-
-    private TaxonomyTypeRegistry $taxonomyTypeRegistry;
 
     private DatatableFactory $factory;
 
     private NodeDatatableFinderInterface $finder;
 
-    private NodeFormService $nodeFormService;
+    private ContentFormService $nodeFormService;
 
     public function __construct(
-        NodeTypeRegistry $typeRegistry,
+        ContentTypeRegistry $typeRegistry,
         NodeRepository $repository,
-        TaxonomyTypeRegistry $taxonomyTypeRegistry,
         DatatableFactory $factory,
         NodeDatatableFinderInterface $finder,
-        NodeFormService $nodeFormService
+        ContentFormService $nodeFormService
     ) {
         $this->typeRegistry = $typeRegistry;
         $this->repository = $repository;
-        $this->taxonomyTypeRegistry = $taxonomyTypeRegistry;
         $this->factory = $factory;
         $this->finder = $finder;
         $this->nodeFormService = $nodeFormService;
@@ -68,7 +62,7 @@ class Node extends AbstractController
     public function list(Request $request, string $node_type): ViewInterface
     {
         $nodeTypeObject = $this->findNodeType($node_type);
-        $this->finder->setNodeType($nodeTypeObject);
+        $this->finder->setContentType($nodeTypeObject);
 
         return $this->view('@backend/node/list.tpl', [
             'nodeType'   => $nodeTypeObject,
@@ -79,7 +73,7 @@ class Node extends AbstractController
 
     public function datatable(Request $request, string $node_type): JsonResponse
     {
-        $this->finder->setNodeType($this->findNodeType($node_type));
+        $this->finder->setContentType($this->findNodeType($node_type));
         return $this->factory->create($this->finder, $request)->generateResponse();
     }
 
@@ -221,18 +215,18 @@ class Node extends AbstractController
         return $this->redirectToRoute('backend.node', [ 'node_type' => $request->query->get('node_type', 'page') ]);
     }
 
-    protected function findNodeType(string $type): NodeType
+    protected function findNodeType(string $type): ContentType
     {
-        $nodeType = $this->typeRegistry->get($type);
+        $contentType = $this->typeRegistry->get($type);
 
-        if (! $nodeType) {
+        if (! $contentType || $contentType->isType('node') === false) {
             throw $this->createNotFoundException('Node type not found.');
         }
 
-        return $nodeType;
+        return $contentType;
     }
 
-    private function collectTaxonomies(NodeType $nodeType): array
+    private function collectTaxonomies(ContentType $nodeType): array
     {
         $result = [];
 
@@ -241,7 +235,7 @@ class Node extends AbstractController
                 continue;
             }
 
-            $result[] = $this->taxonomyTypeRegistry->get($field->getTaxonomy());
+            $result[] = $this->typeRegistry->get($field->getTaxonomy());
         }
 
         return $result;

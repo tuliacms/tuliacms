@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Domain\WriteModel;
 
-use Tulia\Cms\ContentBuilder\Domain\NodeType\Exception\NodeTypeNotExistsException;
-use Tulia\Cms\ContentBuilder\Domain\NodeType\Model\NodeType;
-use Tulia\Cms\ContentBuilder\Domain\NodeType\Service\NodeTypeRegistry;
+use Tulia\Cms\ContentBuilder\Domain\ContentType\Exception\ContentTypeNotExistsException;
+use Tulia\Cms\ContentBuilder\Domain\ContentType\Model\ContentType;
+use Tulia\Cms\ContentBuilder\Domain\ContentType\Service\ContentTypeRegistry;
 use Tulia\Cms\Metadata\Domain\WriteModel\MetadataRepository;
 use Tulia\Cms\Node\Domain\WriteModel\ActionsChain\NodeActionsChainInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Event\NodeDeleted;
@@ -28,18 +28,12 @@ class NodeRepository
     private const RESERVED_NAMES = ['title', 'slug', 'parent_id', 'published_at', 'published_to', 'status', 'author_id'];
 
     private NodeWriteStorageInterface $storage;
-
     private CurrentWebsiteInterface $currentWebsite;
-
     private MetadataRepository $metadataRepository;
-
     private UuidGeneratorInterface $uuidGenerator;
-
     private EventBusInterface $eventBus;
-
     private NodeActionsChainInterface $actionsChain;
-
-    private NodeTypeRegistry $nodeTypeRegistry;
+    private ContentTypeRegistry $contentTypeRegistry;
 
     public function __construct(
         NodeWriteStorageInterface $storage,
@@ -48,7 +42,7 @@ class NodeRepository
         UuidGeneratorInterface $uuidGenerator,
         EventBusInterface $eventBus,
         NodeActionsChainInterface $actionsChain,
-        NodeTypeRegistry $nodeTypeRegistry
+        ContentTypeRegistry $contentTypeRegistry
     ) {
         $this->storage = $storage;
         $this->currentWebsite = $currentWebsite;
@@ -56,12 +50,12 @@ class NodeRepository
         $this->uuidGenerator = $uuidGenerator;
         $this->eventBus = $eventBus;
         $this->actionsChain = $actionsChain;
-        $this->nodeTypeRegistry = $nodeTypeRegistry;
+        $this->contentTypeRegistry = $contentTypeRegistry;
     }
 
     public function createNew(string $nodeType): Node
     {
-        $type = $this->nodeTypeRegistry->get($nodeType);
+        $type = $this->contentTypeRegistry->get($nodeType);
 
         $node = Node::createNew(
             $this->uuidGenerator->generate(),
@@ -84,7 +78,7 @@ class NodeRepository
 
     /**
      * @throws NodeNotFoundException
-     * @throws NodeTypeNotExistsException
+     * @throws ContentTypeNotExistsException
      * @throws \Exception
      */
     public function find(string $id): Node
@@ -99,7 +93,7 @@ class NodeRepository
             throw new NodeNotFoundException();
         }
 
-        $nodeType = $this->nodeTypeRegistry->get($node['type']);
+        $nodeType = $this->contentTypeRegistry->get($node['type']);
 
         $attributes = $this->metadataRepository->findAll('node', $id);
 
@@ -250,11 +244,11 @@ class NodeRepository
         return $result;
     }
 
-    private function buildAttributesMapping(NodeType $nodeType): array
+    private function buildAttributesMapping(ContentType $contentType): array
     {
         $result = [];
 
-        foreach ($nodeType->getFields() as $field) {
+        foreach ($contentType->getFields() as $field) {
             $result[$field->getCode()] = [
                 'is_multilingual' => $field->isMultilingual(),
                 'is_multiple' => $field->isMultiple(),

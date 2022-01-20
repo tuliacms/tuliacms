@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Domain\Menu;
 
-use Tulia\Cms\ContentBuilder\Domain\NodeType\Service\NodeTypeRegistry;
+use Tulia\Cms\ContentBuilder\Domain\ContentType\Service\ContentTypeRegistry;
 use Tulia\Cms\Menu\Domain\Builder\Type\RegistratorInterface;
 use Tulia\Cms\Menu\Domain\Builder\Type\RegistryInterface;
 use Tulia\Cms\Node\UserInterface\Web\Backend\Menu\Selector;
@@ -14,13 +14,13 @@ use Tulia\Cms\Node\UserInterface\Web\Backend\Menu\Selector;
  */
 class NodeMenuItemTypeRegistrator implements RegistratorInterface
 {
-    private NodeTypeRegistry $nodeTypeRegistry;
+    private ContentTypeRegistry $contentTypeRegistry;
 
     private Selector $selector;
 
-    public function __construct(NodeTypeRegistry $nodeTypeRegistry, Selector $selector)
+    public function __construct(ContentTypeRegistry $contentTypeRegistry, Selector $selector)
     {
-        $this->nodeTypeRegistry = $nodeTypeRegistry;
+        $this->contentTypeRegistry = $contentTypeRegistry;
         $this->selector = $selector;
     }
 
@@ -29,11 +29,13 @@ class NodeMenuItemTypeRegistrator implements RegistratorInterface
      */
     public function register(RegistryInterface $registry): void
     {
-        foreach ($this->nodeTypeRegistry->all() as $nodeType) {
-            $type = $registry->registerType('node:' . $nodeType->getCode());
-            $type->setLabel('node');
-            $type->setTranslationDomain('node');
-            $type->setSelectorService($this->selector);
+        foreach ($this->contentTypeRegistry->all() as $nodeType) {
+            if ($nodeType->isType('node')) {
+                $type = $registry->registerType('node:' . $nodeType->getCode());
+                $type->setLabel('node');
+                $type->setTranslationDomain('node');
+                $type->setSelectorService($this->selector);
+            }
         }
     }
 }

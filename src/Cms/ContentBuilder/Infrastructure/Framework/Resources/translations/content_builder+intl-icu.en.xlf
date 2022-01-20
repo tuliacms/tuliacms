@@ -16,16 +16,16 @@
                 <note>Describe how user should create Node Type name</note>
             </trans-unit>
             <trans-unit id="tuliacms.content_builder.4">
-                <source>createNodeType</source>
-                <target>Create node type</target>
+                <source>createContentTypeOf</source>
+                <target>Create content type of {name}</target>
             </trans-unit>
             <trans-unit id="tuliacms.content_builder.5">
                 <source>editNodeType</source>
                 <target>Edit node type</target>
             </trans-unit>
             <trans-unit id="tuliacms.content_builder.6">
-                <source>nodeTypesList</source>
-                <target>Node types list</target>
+                <source>contentTypesListOf</source>
+                <target>Content types list of {name}</target>
             </trans-unit>
             <trans-unit id="tuliacms.content_builder.7">
                 <source>addNewSection</source>
@@ -136,8 +136,8 @@
                 <target>Edit node type details</target>
             </trans-unit>
             <trans-unit id="tuliacms.content_builder.34">
-                <source>nodeTypeCode</source>
-                <target>Node type code</target>
+                <source>contentTypeCode</source>
+                <target>Content type code</target>
             </trans-unit>
             <trans-unit id="tuliacms.content_builder.35">
                 <source>nodeTypeCodeHelp</source>
@@ -174,10 +174,6 @@
             <trans-unit id="tuliacms.content_builder.45">
                 <source>fieldTypeNotExists</source>
                 <target>Field type "{type}" not exists.</target>
-            </trans-unit>
-            <trans-unit id="tuliacms.content_builder.46">
-                <source>selectedTaxonomyFieldIsNotATaxonomyField</source>
-                <target>Selected field is not a taxonomy type field.</target>
             </trans-unit>
             <trans-unit id="tuliacms.content_builder.47">
                 <source>thisNodeTypeIsAlreadyRegistered</source>
@@ -228,6 +224,14 @@
             <trans-unit id="tuliacms.content_builder.58">
                 <source>routingStrategyHelp</source>
                 <target>Decide how URLs to this element should be builded.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.59">
+                <source>node</source>
+                <target>Node</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.60">
+                <source>taxonomy</source>
+                <target>Taxonomy</target>
             </trans-unit>
         </body>
     </file>

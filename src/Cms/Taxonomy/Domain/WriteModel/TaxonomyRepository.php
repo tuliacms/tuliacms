@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Taxonomy\Domain\WriteModel;
 
-use Tulia\Cms\ContentBuilder\Domain\TaxonomyType\Model\TaxonomyType;
-use Tulia\Cms\ContentBuilder\Domain\TaxonomyType\Service\TaxonomyTypeRegistry;
+use Tulia\Cms\ContentBuilder\Domain\ContentType\Model\ContentType;
+use Tulia\Cms\ContentBuilder\Domain\ContentType\Service\ContentTypeRegistry;
 use Tulia\Cms\Metadata\Domain\WriteModel\MetadataRepository;
 use Tulia\Cms\Platform\Infrastructure\Bus\Event\EventBusInterface;
 use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
@@ -25,7 +25,7 @@ class TaxonomyRepository
 {
     private const RESERVED_NAMES = ['title', 'slug', 'parent_id'];
 
-    private TaxonomyTypeRegistry $taxonomyTypeRegistry;
+    private ContentTypeRegistry $contentTypeRegistry;
 
     private TermWriteStorageInterface $storage;
 
@@ -46,7 +46,7 @@ class TaxonomyRepository
         UuidGeneratorInterface $uuidGenerator,
         EventBusInterface $eventBus,
         TaxonomyActionsChainInterface $actionsChain,
-        TaxonomyTypeRegistry $taxonomyTypeRegistry
+        ContentTypeRegistry $contentTypeRegistry
     ) {
         $this->storage = $storage;
         $this->currentWebsite = $currentWebsite;
@@ -54,7 +54,7 @@ class TaxonomyRepository
         $this->uuidGenerator = $uuidGenerator;
         $this->eventBus = $eventBus;
         $this->actionsChain = $actionsChain;
-        $this->taxonomyTypeRegistry = $taxonomyTypeRegistry;
+        $this->contentTypeRegistry = $contentTypeRegistry;
     }
 
     public function createNewTerm(Taxonomy $taxonomy): Term
@@ -66,14 +66,14 @@ class TaxonomyRepository
         );
     }
 
-    public function getTaxonomyType(string $type): TaxonomyType
+    public function getTaxonomyType(string $type): ContentType
     {
-        return $this->taxonomyTypeRegistry->get($type);
+        return $this->contentTypeRegistry->get($type);
     }
 
     public function get(string $type): Taxonomy
     {
-        $taxonomyType = $this->taxonomyTypeRegistry->get($type);
+        $taxonomyType = $this->contentTypeRegistry->get($type);
         $taxonomy = Taxonomy::create(
             $type,
             $this->currentWebsite->getId(),
@@ -222,11 +222,11 @@ class TaxonomyRepository
         ];
     }
 
-    private function buildAttributesMapping(TaxonomyType $taxonomyType): array
+    private function buildAttributesMapping(ContentType $contentType): array
     {
         $result = [];
 
-        foreach ($taxonomyType->getFields() as $field) {
+        foreach ($contentType->getFields() as $field) {
             $result[$field->getCode()] = [
                 'is_multilingual' => $field->isMultilingual(),
                 'is_multiple' => $field->isMultiple(),
