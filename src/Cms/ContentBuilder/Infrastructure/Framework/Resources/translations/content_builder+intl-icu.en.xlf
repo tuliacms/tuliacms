@@ -112,7 +112,7 @@
                 <target>Please fill this field.</target>
             </trans-unit>
             <trans-unit id="tuliacms.content_builder.28">
-                <source>fieldIdMustContainOnlyAlphanumsAndUnderline</source>
+                <source>fieldCodeMustContainOnlyAlphanumsAndUnderline</source>
                 <target>Field ID must contain only lowercased alphanums and underline.</target>
             </trans-unit>
             <trans-unit id="tuliacms.content_builder.29">
@@ -147,21 +147,13 @@
                 <source>nodeTypeCodeMustContainOnlyAlphanumsAndUnderline</source>
                 <target>Node Type code must contain only lowercased alphanums and underline.</target>
             </trans-unit>
-            <trans-unit id="tuliacms.content_builder.37">
-                <source>taxonomyField</source>
-                <target>Taxonomy field</target>
-            </trans-unit>
-            <trans-unit id="tuliacms.content_builder.38">
-                <source>taxonomyFieldHelp</source>
-                <target>Which taxonomy should be leading taxonomy for this node type. Will be used to build URLs to nodes.</target>
-            </trans-unit>
             <trans-unit id="tuliacms.content_builder.39">
                 <source>routableType</source>
                 <target>Routable type</target>
             </trans-unit>
             <trans-unit id="tuliacms.content_builder.40">
                 <source>routableTypeHelp</source>
-                <target>Decide, if this node type has own pages in the website.</target>
+                <target>Decide, if this content type has own pages (URLs) in the website.</target>
             </trans-unit>
             <trans-unit id="tuliacms.content_builder.41">
                 <source>hierarchicalType</source>
@@ -169,7 +161,7 @@
             </trans-unit>
             <trans-unit id="tuliacms.content_builder.42">
                 <source>hierarchicalTypeHelp</source>
-                <target>Decide, if every node can have children nodes, and created hierarchical tree of elements.</target>
+                <target>Decide, if every element can have children elements, and created hierarchical tree of elements.</target>
             </trans-unit>
             <trans-unit id="tuliacms.content_builder.43">
                 <source>pleaseSelectValue</source>
@@ -228,6 +220,14 @@
                 <source>nodeTypeCreatedSuccessfully</source>
                 <target>Node Type created successfully.</target>
                 <note>Flash message</note>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.57">
+                <source>routingStrategy</source>
+                <target>Routing strategy</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.58">
+                <source>routingStrategyHelp</source>
+                <target>Decide how URLs to this element should be builded.</target>
             </trans-unit>
         </body>
     </file>

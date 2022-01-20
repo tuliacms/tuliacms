@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContentBuilder\Domain\ContentType\Model;
 
-use Tulia\Cms\ContentBuilder\Domain\ContentType\Exception\CannotSetRoutableNodeTypeWithoutSlugField;
-use Tulia\Cms\ContentBuilder\Domain\ContentType\Exception\MissingRoutableFieldException;
+use Tulia\Cms\ContentBuilder\Domain\ContentType\Exception\RoutableContentTypeWithoutSlugField;
 use Tulia\Cms\ContentBuilder\Domain\ContentType\Exception\MultipleValueForTitleOrSlugOccuredException;
 use Tulia\Cms\ContentBuilder\Domain\ContentType\Exception\CannotOverwriteInternalFieldException;
 use Tulia\Cms\ContentBuilder\Domain\LayoutType\Model\LayoutType;
@@ -15,10 +14,12 @@ use Tulia\Cms\ContentBuilder\Domain\LayoutType\Model\LayoutType;
  */
 abstract class AbstractContentType
 {
+    protected string $type;
     protected string $controller;
     protected LayoutType $layout;
     protected string $code;
     protected string $name;
+    protected string $icon;
     protected bool $isRoutable = true;
     protected bool $isHierarchical = false;
     protected bool $isInternal = true;
@@ -32,9 +33,10 @@ abstract class AbstractContentType
     abstract protected function internalValidate(): void;
     abstract protected function internalValidateField(Field $field): void;
 
-    public function __construct(string $code, LayoutType $layout, bool $isInternal)
+    public function __construct(string $code, string $type, LayoutType $layout, bool $isInternal)
     {
         $this->code = $code;
+        $this->type = $type;
         $this->layout = $layout;
         $this->isInternal = $isInternal;
     }
@@ -49,9 +51,24 @@ abstract class AbstractContentType
         $this->name = $name;
     }
 
+    public function getIcon(): string
+    {
+        return $this->icon;
+    }
+
+    public function setIcon(string $icon): void
+    {
+        $this->icon = $icon;
+    }
+
     public function getCode(): string
     {
         return $this->code;
+    }
+
+    public function getType(): string
+    {
+        return $this->type;
     }
 
     public function getLayout(): LayoutType
@@ -141,8 +158,7 @@ abstract class AbstractContentType
     }
 
     /**
-     * @throws CannotSetRoutableNodeTypeWithoutSlugField
-     * @throws MissingRoutableFieldException
+     * @throws RoutableContentTypeWithoutSlugField
      */
     public function validate(): void
     {
@@ -169,12 +185,12 @@ abstract class AbstractContentType
     }
 
     /**
-     * @throws CannotSetRoutableNodeTypeWithoutSlugField
+     * @throws RoutableContentTypeWithoutSlugField
      */
     protected function validateRoutableContentType(): void
     {
         if ($this->isRoutable && isset($this->fields['slug']) === false) {
-            throw CannotSetRoutableNodeTypeWithoutSlugField::fromType($this->code);
+            throw RoutableContentTypeWithoutSlugField::fromType($this->code);
         }
     }
 }

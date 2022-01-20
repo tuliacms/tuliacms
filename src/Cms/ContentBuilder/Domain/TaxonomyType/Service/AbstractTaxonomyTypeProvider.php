@@ -38,7 +38,7 @@ abstract class AbstractTaxonomyTypeProvider implements TaxonomyTypeProviderInter
 
     protected function buildTaxonomyType(string $code, array $options, LayoutType $layoutType): TaxonomyType
     {
-        $taxonomyType = new TaxonomyType($code, $layoutType, (bool) $options['internal']);
+        $taxonomyType = new TaxonomyType($code, 'taxonomy', $layoutType, (bool) $options['internal']);
         $taxonomyType->setController($options['controller'] ?? $this->defaultController);
         $taxonomyType->setIsRoutable((bool) $options['is_routable']);
         $taxonomyType->setName($options['name']);

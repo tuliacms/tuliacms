@@ -21,7 +21,7 @@ class ModelToFormDataTransformer
                 'icon' => $nodeType->getIcon(),
                 'isRoutable' => $nodeType->isRoutable(),
                 'isHierarchical' => $nodeType->isHierarchical(),
-                'taxonomyField' => $nodeType->getRoutableTaxonomyField(),
+                'routingStrategy' => $nodeType->getRoutingStrategy(),
             ],
             'layout' => [
                 'sidebar' => [

@@ -42,7 +42,7 @@
                     <div class="page-form-header">
                         <div class="container-fluid">
                             <div class="row">
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="mb-3">
                                         <label class="form-label" for="ctb-node-type-name">{{ translations.nodeTypeName }}</label>
                                         <input type="text" :class="{ 'form-control': true, 'is-invalid': view.form.type_validation.name.valid === false }" id="ctb-node-type-name" v-model="model.type.name" @keyup="generateTypeCode()" @change="validate()" />
@@ -50,7 +50,7 @@
                                         <div v-if="view.form.type_validation.name.valid === false" class="invalid-feedback">{{ view.form.type_validation.name.message }}</div>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
                                     <div class="mb-3">
                                         <label class="form-label" for="ctb-node-type-code">{{ translations.nodeTypeCode }}</label>
                                         <input type="text" :class="{ 'form-control': true, 'is-invalid': view.form.type_validation.code.valid === false }" id="ctb-node-type-code" v-model="model.type.code" @change="validate()" />
@@ -60,11 +60,11 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col mb-3">
+                                <div class="col-6 mb-3">
                                     <label for="ctb-form-type-icon" class="form-label">{{ translations.icon }}</label>
                                     <input type="email" class="form-control" id="ctb-form-type-icon" v-model="model.type.icon" />
                                 </div>
-                                <div class="col mb-3">
+                                <div class="col-6 mb-3">
                                     <label for="ctb-form-type-routable" class="form-label">{{ translations.routableType }}</label>
                                     <chosen-select id="ctb-form-type-routable" v-model="model.type.isRoutable">
                                         <option value="1">{{ translations.yes }}</option>
@@ -73,8 +73,8 @@
                                     <div class="form-text">{{ translations.routableTypeHelp }}</div>
                                 </div>
                             </div>
-                            <div class="row" v-if="view.form.has_taxonomy_field">
-                                <div class="col mb-3">
+                            <div class="row">
+                                <div class="col-6 mb-3">
                                     <label for="ctb-form-type-hierarchical" class="form-label">{{ translations.hierarchicalType }}</label>
                                     <chosen-select id="ctb-form-type-hierarchical" v-model="model.type.isHierarchical">
                                         <option value="1">{{ translations.yes }}</option>
@@ -82,12 +82,12 @@
                                     </chosen-select>
                                     <div class="form-text">{{ translations.hierarchicalTypeHelp }}</div>
                                 </div>
-                                <div class="col mb-3">
-                                    <label for="ctb-form-type-taxonomy-field" class="form-label">{{ translations.taxonomyField }}</label>
-                                    <chosen-select id="ctb-form-type-taxonomy-field" v-model="model.type.taxonomyField">
-                                        <option v-for="field in view.form.taxonomy_fields" :key="field.value" :value="field.value">{{ field.label }}</option>
+                                <div class="col-6 mb-3" v-if="model.type.isHierarchical === '1'">
+                                    <label for="ctb-form-type-routing-strategy" class="form-label">{{ translations.routingStrategy }}</label>
+                                    <chosen-select id="ctb-form-type-routing-strategy" v-model="model.type.routingStrategy">
+                                        <option v-for="strategy in routingStrategies" :id="strategy.id" :value="strategy.id">{{ strategy.label }}</option>
                                     </chosen-select>
-                                    <div class="form-text">{{ translations.taxonomyFieldHelp }}</div>
+                                    <div class="form-text">{{ translations.routingStrategyHelp }}</div>
                                 </div>
                             </div>
                         </div>
@@ -133,13 +133,13 @@ export default {
             code: { valid: !this.$get(errors, 'type.code.0'), message: this.$get(errors, 'type.code.0') },
             icon: { valid: !this.$get(errors, 'type.icon.0'), message: this.$get(errors, 'type.icon.0') },
             isRoutable: { valid: !this.$get(errors, 'type.isRoutable.0'), message: this.$get(errors, 'type.isRoutable.0') },
-            isHierarchical: { valid: !this.$get(errors, 'type.isHierarchical.0'), message: this.$get(errors, 'type.isHierarchical.0') },
-            taxonomyField: { valid: !this.$get(errors, 'type.taxonomyField.0'), message: this.$get(errors, 'type.taxonomyField.0') },
+            isHierarchical: { valid: !this.$get(errors, 'type.isHierarchical.0'), message: this.$get(errors, 'type.isHierarchical.0') }
         };
 
         return {
             translations: window.ContentBuilderLayoutBuilder.translations,
             fieldTypes: window.ContentBuilderLayoutBuilder.fieldTypes,
+            routingStrategies: window.ContentBuilderLayoutBuilder.routingStrategies,
             listingUrl: window.ContentBuilderLayoutBuilder.listingUrl,
             csrfToken: window.ContentBuilderLayoutBuilder.csrfToken,
             view: {
@@ -150,8 +150,6 @@ export default {
                 errors: errors,
                 form: {
                     code_field_changed: false,
-                    has_taxonomy_field: false,
-                    taxonomy_fields: [],
                     field_creator_section_code: null,
                     field_editor: {
                         code: {value: null, valid: true, message: null},
@@ -171,7 +169,7 @@ export default {
                     icon: this.$get(model, 'type.icon', 'fas fa-boxes'),
                     isRoutable: this.$get(model, 'type.isRoutable', false) ? '1' : '0',
                     isHierarchical: this.$get(model, 'type.isHierarchical', false) ? '1' : '0',
-                    taxonomyField: this.$get(model, 'type.taxonomyField'),
+                    routingStrategy: this.$get(model, 'type.routingStrategy', null),
                 },
                 layout: {
                     sidebar: {
@@ -250,8 +248,6 @@ export default {
                         }
                     }
                 }
-
-                this._detectTaxonomyFieldExistence();
             });
         },
         openCreateFieldModel: function (sectionCode) {
@@ -297,8 +293,6 @@ export default {
                 configuration: data.configuration,
                 constraints: [],
             });
-
-            this._detectTaxonomyFieldExistence();
 
             this.view.modal.field_creator.hide();
             this.openEditFieldModel(data.code);
@@ -366,44 +360,6 @@ export default {
                     }
                 }
             }
-        },
-        _detectTaxonomyFieldExistence: function () {
-            this.view.form.has_taxonomy_field = false;
-            this.view.form.taxonomy_fields = [];
-
-            for (let s in this.model.layout.sidebar.sections) {
-                for (let f in this.model.layout.sidebar.sections[s].fields) {
-                    if (this.model.layout.sidebar.sections[s].fields[f].type.value === 'taxonomy') {
-                        this.view.form.has_taxonomy_field = true;
-                        this.view.form.taxonomy_fields.push({
-                            value: this.model.layout.sidebar.sections[s].fields[f].code.value,
-                            label: this.model.layout.sidebar.sections[s].fields[f].name.value
-                        });
-                    }
-                }
-            }
-
-            for (let s in this.model.layout.main.sections) {
-                for (let f in this.model.layout.main.sections[s].fields) {
-                    if (this.model.layout.main.sections[s].fields[f].type.value === 'taxonomy') {
-                        this.view.form.has_taxonomy_field = true;
-                        this.view.form.taxonomy_fields.push({
-                            value: this.model.layout.sidebar.sections[s].fields[f].code.value,
-                            label: this.model.layout.sidebar.sections[s].fields[f].name.value
-                        });
-                    }
-                }
-            }
-
-            // Reset taxonomy field model if field was removed.
-            if (this.view.form.has_taxonomy_field === false) {
-                this.model.type.taxonomyField = null;
-            } else {
-                // Set taxonomy field if model is empty and if any of taxonomy fields are created.
-                if (this.model.type.taxonomyField === null) {
-                    this.model.type.taxonomyField = this.view.form.taxonomy_fields[0].value;
-                }
-            }
         }
     },
     mounted: function () {
@@ -415,8 +371,6 @@ export default {
         });
 
         this.view.modal.field_editor = new bootstrap.Modal(document.getElementById('ctb-edit-field-modal'));
-
-        this._detectTaxonomyFieldExistence();
 
         this.$root.$on('field:add', (sectionCode) => {
             this.openCreateFieldModel(sectionCode);

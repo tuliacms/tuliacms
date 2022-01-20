@@ -38,11 +38,12 @@ abstract class AbstractNodeTypeProvider implements NodeTypeProviderInterface
 
     protected function buildNodeType(string $name, array $options, LayoutType $layoutType): NodeType
     {
-        $nodeType = new NodeType($name, $layoutType, (bool) $options['internal']);
+        $nodeType = new NodeType($name, 'node', $layoutType, (bool) $options['internal']);
         $nodeType->setController($options['controller'] ?? $this->defaultController);
         $nodeType->setIcon($options['icon'] ?? 'fa fa-box');
         $nodeType->setName($options['name']);
         $nodeType->setIsHierarchical((bool) $options['is_hierarchical']);
+        $nodeType->setRoutingStrategy($options['routing_strategy']);
 
         foreach ($options['fields'] as $fieldCode => $fieldOptions) {
             $nodeType->addField($this->buildNodeField($fieldCode, $fieldOptions));
@@ -53,7 +54,6 @@ abstract class AbstractNodeTypeProvider implements NodeTypeProviderInterface
          * and then those options.
          */
         $nodeType->setIsRoutable((bool) $options['is_routable']);
-        $nodeType->setRoutableTaxonomyField($options['routable_taxonomy_field']);
 
         return $nodeType;
     }

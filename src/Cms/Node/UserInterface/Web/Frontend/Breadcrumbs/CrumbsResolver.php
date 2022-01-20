@@ -61,9 +61,9 @@ class CrumbsResolver implements BreadcrumbsResolverInterface
 
             if ($type->isHierarchical() && $node->getParentId()) {
                 $this->resolveHierarchyCrumbs($node, $breadcrumbs);
-            } elseif ($type->getRoutableTaxonomyField() && $node->getCategory()) {
+            }/* elseif ($type->getRoutableTaxonomyField() && $node->getCategory()) {
                 return $this->termFinder->findOne(['id' => $node->getCategory()], TermFinderScopeEnum::BREADCRUMBS);
-            }
+            }*/
         }
 
         return null;

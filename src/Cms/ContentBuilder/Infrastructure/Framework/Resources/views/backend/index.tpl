@@ -35,7 +35,7 @@
                                 {% if type.isInternal %}
                                     <h4 class="card-title"><i class="{{ type.icon }}"></i> &nbsp; {{ type.name|trans({}, 'node') }}</h4>
                                 {% else %}
-                                    <a href="{{ path('backend.content_builder.node_type.edit', { code: type.code }) }}">
+                                    <a href="{{ path('backend.content_builder.content_type.edit', { code: type.code, contentType: 'node' }) }}">
                                         <h4 class="card-title"><i class="{{ type.icon }}"></i> &nbsp; {{ type.name|trans({}, 'node') }}</h4>
                                     </a>
                                 {% endif %}
@@ -59,7 +59,7 @@
                             </ul>
                             {% if type.isInternal == false %}
                                 <div class="card-footer py-0 pr-0">
-                                    <a href="{{ path('backend.content_builder.node_type.edit', { code: type.code }) }}" class="card-link py-3 d-inline-block" title="{{ 'edit'|trans({}, 'messages') }}">{{ 'edit'|trans({}, 'messages') }}</a>
+                                    <a href="{{ path('backend.content_builder.content_type.edit', { code: type.code, contentType: 'node' }) }}" class="card-link py-3 d-inline-block" title="{{ 'edit'|trans({}, 'messages') }}">{{ 'edit'|trans({}, 'messages') }}</a>
                                     <a href="#" class="card-link"></a>
                                     <div class="dropup d-inline-block float-right">
                                         <a href="#" class="card-link d-inline-block px-4 py-3 text-dark" data-bs-toggle="dropdown">
@@ -76,7 +76,7 @@
                 {% endfor %}
                 <div class="col mb-4">
                     <div class="card">
-                        <a href="{{ path('backend.content_builder.node_type.create') }}">
+                        <a href="{{ path('backend.content_builder.content_type.create', { contentType: 'node' }) }}">
                             {{ 'createNodeType'|trans({}, 'content_builder') }}
                         </a>
                     </div>

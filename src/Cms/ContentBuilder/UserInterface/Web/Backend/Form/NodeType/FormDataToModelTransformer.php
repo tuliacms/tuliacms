@@ -30,7 +30,7 @@ class FormDataToModelTransformer
         $nodeType->setIcon($data['type']['icon']);
         $nodeType->setIsHierarchical((bool) $data['type']['icon']);
         $nodeType->setIsRoutable((bool) $data['type']['isRoutable']);
-        $nodeType->setRoutableTaxonomyField($data['type']['taxonomyField']);
+        $nodeType->setRoutingStrategy($data['type']['routingStrategy']);
 
         foreach ($this->collectFields($data['layout']) as $field) {
             $nodeType->addField($field);
