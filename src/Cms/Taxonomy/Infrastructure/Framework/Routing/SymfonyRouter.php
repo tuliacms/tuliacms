@@ -12,6 +12,7 @@ use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\RouterInterface;
 use Tulia\Cms\ContentBuilder\Domain\ContentType\Model\ContentType;
 use Tulia\Cms\ContentBuilder\Domain\ContentType\Service\ContentTypeRegistry;
+use Tulia\Cms\ContentBuilder\Domain\ContentType\Service\Router;
 use Tulia\Cms\Platform\Infrastructure\Framework\Routing\FrontendRouteSuffixResolver;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Model\Term;
 use Tulia\Cms\Taxonomy\Ports\Domain\ReadModel\TermFinderInterface;
@@ -21,7 +22,7 @@ use Tulia\Cms\Taxonomy\Ports\Infrastructure\Persistence\Domain\ReadModel\TermPat
 /**
  * @author Adam Banaszkiewicz
  */
-class Router implements RouterInterface, RequestMatcherInterface
+class SymfonyRouter implements RouterInterface, RequestMatcherInterface
 {
     private TermPathReadStorageInterface $storage;
 
@@ -31,18 +32,22 @@ class Router implements RouterInterface, RequestMatcherInterface
 
     private ContentTypeRegistry $contentTypeRegistry;
 
+    private Router $contentTypeRouter;
+
     private ?RequestContext $context = null;
 
     public function __construct(
         TermPathReadStorageInterface $storage,
         FrontendRouteSuffixResolver $frontendRouteSuffixResolver,
         TermFinderInterface $termFinder,
-        ContentTypeRegistry $contentTypeRegistry
+        ContentTypeRegistry $contentTypeRegistry,
+        Router $contentTypeRouter
     ) {
         $this->storage = $storage;
         $this->frontendRouteSuffixResolver = $frontendRouteSuffixResolver;
         $this->termFinder = $termFinder;
         $this->contentTypeRegistry = $contentTypeRegistry;
+        $this->contentTypeRouter = $contentTypeRouter;
     }
 
     public function setContext(RequestContext $context): void
@@ -66,14 +71,15 @@ class Router implements RouterInterface, RequestMatcherInterface
      */
     public function generate(string $name, array $parameters = [], int $referenceType = self::ABSOLUTE_PATH): ?string
     {
-        if (strncmp($name, 'term_', 5) !== 0) {
+        if (strncmp($name, 'term.', 5) !== 0) {
             return '';
         }
 
         // @todo Fix routing locales
-        $locale = 'en_US';//$context->getContentLocale();
+        $locale = 'en_US';//$this->getContext()->getParameter('_content_locale'),
+        [, $type, $identity] = explode('.', $name);
 
-        $path = $this->storage->find(substr($name, 5), $locale)['path'] ?? null;
+        $path = $this->storage->findPathByTermId($identity, $locale)['path'] ?? null;
 
         return $path ? $this->frontendRouteSuffixResolver->appendSuffix($path) : '';
     }
@@ -88,9 +94,10 @@ class Router implements RouterInterface, RequestMatcherInterface
      */
     public function match(string $pathinfo): array
     {
-        // @todo Fix routing locales
-        $locale = 'en_US';//$context->getContentLocale()
+        $pathinfo = urldecode($pathinfo);
         $pathinfo = $this->frontendRouteSuffixResolver->removeSuffix($pathinfo);
+        // @todo Fix routing locales
+        $locale = 'en_US';//$this->getContext()->getParameter('_content_locale'),
         $termId = $this->storage->findTermIdByPath($pathinfo, $locale);
 
         if ($termId === null) {
@@ -107,7 +114,7 @@ class Router implements RouterInterface, RequestMatcherInterface
         return [
             'term' => $term,
             'slug' => $term->getSlug(),
-            '_route' => 'term_' . $term->getId(),
+            '_route' => sprintf('term.%s.%s', $term->getType(), $term->getId()),
             '_controller' => $termType->getController(),
         ];
     }

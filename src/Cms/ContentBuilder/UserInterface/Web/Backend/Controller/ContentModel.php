@@ -7,6 +7,7 @@ namespace Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\ContentBuilder\Domain\ContentType\ContentTypeRepository;
+use Tulia\Cms\ContentBuilder\Domain\ContentType\Routing\Strategy\ContentTypeRoutingStrategyRegistry;
 use Tulia\Cms\ContentBuilder\Domain\ContentType\Service\ContentTypeRegistry;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\FieldTypeMappingRegistry;
 use Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\ContentType\FormDataToModelTransformer;
@@ -25,17 +26,20 @@ class ContentModel extends AbstractController
     private FormDataToModelTransformer $formDataToModelTransformer;
     private ContentTypeRepository $contentTypeRepository;
     private ContentTypeRegistry $contentTypeRegistry;
+    private ContentTypeRoutingStrategyRegistry $strategyRegistry;
 
     public function __construct(
         FieldTypeMappingRegistry $fieldTypeMappingRegistry,
         FormDataToModelTransformer $formDataToModelTransformer,
         ContentTypeRepository $contentTypeRepository,
-        ContentTypeRegistry $contentTypeRegistry
+        ContentTypeRegistry $contentTypeRegistry,
+        ContentTypeRoutingStrategyRegistry $strategyRegistry
     ) {
         $this->fieldTypeMappingRegistry = $fieldTypeMappingRegistry;
         $this->formDataToModelTransformer = $formDataToModelTransformer;
         $this->contentTypeRepository = $contentTypeRepository;
         $this->contentTypeRegistry = $contentTypeRegistry;
+        $this->strategyRegistry = $strategyRegistry;
     }
 
     public function index(): ViewInterface
@@ -54,7 +58,7 @@ class ContentModel extends AbstractController
     }
 
     /**
-     * @CsrfToken(id="create-node-type")
+     * @CsrfToken(id="create-content-type")
      * @return ViewInterface|RedirectResponse
      */
     public function create(string $contentType, Request $request, FormHandler $nodeTypeFormHandler)
@@ -91,7 +95,7 @@ class ContentModel extends AbstractController
     }
 
     /**
-     * @CsrfToken(id="create-node-type")
+     * @CsrfToken(id="create-content-type")
      * @return ViewInterface|RedirectResponse
      */
     public function edit(string $code, string $contentType, Request $request, FormHandler $nodeTypeFormHandler)
@@ -154,15 +158,19 @@ class ContentModel extends AbstractController
 
     private function getRoutingStrategies(string $contentType): array
     {
-        return [
-            [
-                'id' => 'full_path',
-                'label' => 'Full path - All hierarchical parent elements are used to create URL',
-            ],
-            [
-                'id' => 'simple',
-                'label' => 'Simple - URL is created only from itself\'s name',
-            ],
-        ];
+        $strategies = [];
+
+        foreach ($this->strategyRegistry->all() as $strategy) {
+            if ($strategy->supports($contentType) === false) {
+                continue;
+            }
+
+            $strategies[] = [
+                'id' => $strategy->getId(),
+                'label' => $this->trans(sprintf('contentTypeStrategy_%s', $strategy->getId()), [], 'content_builder'),
+            ];
+        }
+
+        return $strategies;
     }
 }

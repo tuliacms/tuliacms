@@ -33,7 +33,7 @@ class CrumbsResolver implements BreadcrumbsResolverInterface
         $route = $request->attributes->get('_route');
         $term  = $request->attributes->get('term');
 
-        return strncmp($route, 'term_', 5) === 0
+        return strncmp($route, 'term.', 5) === 0
             && $this->supports($term)
             ? $term
             : null;
@@ -53,7 +53,15 @@ class CrumbsResolver implements BreadcrumbsResolverInterface
                 continue;
             }
 
-            $breadcrumbs->unshift($this->router->generate('term_' . $crumb->getId()), $crumb->getTitle());
+            $breadcrumbs->unshift(
+                $this->router->generate(
+                    sprintf('term.%s.%s', $crumb->getType(), $crumb->getId()),
+                    [
+                        '_term_instance' => $crumb,
+                    ]
+                ),
+                $crumb->getTitle()
+            );
         }
 
         return null;

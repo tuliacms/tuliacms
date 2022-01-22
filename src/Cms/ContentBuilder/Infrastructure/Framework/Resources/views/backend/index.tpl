@@ -69,7 +69,7 @@
 
 {% block content %}
     {% for type in contentTypeCodes %}
-        <div class="pane pane-lead">
+        <div class="pane pane-lead mb-4">
             <div class="pane-header">
                 <i class="pane-header-icon fas fa-box"></i>
                 <h1 class="pane-title">{{ 'contentTypesListOf'|trans({ name: type|trans }) }}</h1>

@@ -20,7 +20,7 @@ services:
         bind:
             $providers: !tagged_iterator node.flag_provider
 
-    Tulia\Cms\Node\Infrastructure\Framework\Routing\Router:
+    Tulia\Cms\Node\Infrastructure\Framework\Routing\SymfonyRouter:
         tags: [ routing_chain.router ]
 
     Tulia\Cms\Node\Domain\Menu\IdentityProvider:

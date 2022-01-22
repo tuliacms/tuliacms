@@ -38,20 +38,20 @@ class Node extends AbstractController
 
     private NodeDatatableFinderInterface $finder;
 
-    private ContentFormService $nodeFormService;
+    private ContentFormService $contentFormService;
 
     public function __construct(
         ContentTypeRegistry $typeRegistry,
         NodeRepository $repository,
         DatatableFactory $factory,
         NodeDatatableFinderInterface $finder,
-        ContentFormService $nodeFormService
+        ContentFormService $contentFormService
     ) {
         $this->typeRegistry = $typeRegistry;
         $this->repository = $repository;
         $this->factory = $factory;
         $this->finder = $finder;
-        $this->nodeFormService = $nodeFormService;
+        $this->contentFormService = $contentFormService;
     }
 
     public function index(string $node_type): RedirectResponse
@@ -243,7 +243,7 @@ class Node extends AbstractController
 
     private function produceFormDescriptor(Model $node, Request $request): ContentTypeFormDescriptor
     {
-        return $this->nodeFormService->buildFormDescriptor(
+        return $this->contentFormService->buildFormDescriptor(
             $node->getType(),
             array_merge(
                 [

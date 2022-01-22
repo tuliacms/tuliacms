@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Breadcrumbs\Domain;
 
-use Tulia\Cms\Breadcrumbs\Domain\Homepage;
-use Tulia\Cms\Breadcrumbs\Domain\BreadcrumbsResolverRegistryInterface;
 use Tulia\Cms\Platform\Shared\Breadcrumbs\Breadcrumbs;
 use Tulia\Cms\Platform\Shared\Breadcrumbs\BreadcrumbsInterface;
 use Symfony\Component\HttpFoundation\Request;

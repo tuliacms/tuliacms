@@ -65,16 +65,6 @@
                                     <input type="email" class="form-control" id="ctb-form-type-icon" v-model="model.type.icon" />
                                 </div>
                                 <div class="col-6 mb-3">
-                                    <label for="ctb-form-type-routable" class="form-label">{{ translations.routableType }}</label>
-                                    <chosen-select id="ctb-form-type-routable" v-model="model.type.isRoutable">
-                                        <option value="1">{{ translations.yes }}</option>
-                                        <option value="0">{{ translations.no }}</option>
-                                    </chosen-select>
-                                    <div class="form-text">{{ translations.routableTypeHelp }}</div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-6 mb-3">
                                     <label for="ctb-form-type-hierarchical" class="form-label">{{ translations.hierarchicalType }}</label>
                                     <chosen-select id="ctb-form-type-hierarchical" v-model="model.type.isHierarchical">
                                         <option value="1">{{ translations.yes }}</option>
@@ -82,7 +72,17 @@
                                     </chosen-select>
                                     <div class="form-text">{{ translations.hierarchicalTypeHelp }}</div>
                                 </div>
-                                <div class="col-6 mb-3" v-if="model.type.isHierarchical === '1'">
+                            </div>
+                            <div class="row">
+                                <div class="col-6 mb-3">
+                                    <label for="ctb-form-type-routable" class="form-label">{{ translations.routableType }}</label>
+                                    <chosen-select id="ctb-form-type-routable" v-model="model.type.isRoutable">
+                                        <option value="1">{{ translations.yes }}</option>
+                                        <option value="0">{{ translations.no }}</option>
+                                    </chosen-select>
+                                    <div class="form-text">{{ translations.routableTypeHelp }}</div>
+                                </div>
+                                <div class="col-6 mb-3" v-if="model.type.isRoutable === '1'">
                                     <label for="ctb-form-type-routing-strategy" class="form-label">{{ translations.routingStrategy }}</label>
                                     <chosen-select id="ctb-form-type-routing-strategy" v-model="model.type.routingStrategy">
                                         <option v-for="strategy in routingStrategies" :id="strategy.id" :value="strategy.id">{{ strategy.label }}</option>

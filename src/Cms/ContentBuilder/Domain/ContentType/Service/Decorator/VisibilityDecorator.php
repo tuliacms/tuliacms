@@ -20,9 +20,9 @@ class VisibilityDecorator implements ContentTypeDecoratorInterface
         }
 
         $contentType->addField(new Field([
+            'code' => 'visibility',
             'name' => 'visibility',
             'type' => 'yes_no',
-            'label' => 'visibility',
             'multilingual' => true,
             'internal' => true,
             'builder_options' => function () {

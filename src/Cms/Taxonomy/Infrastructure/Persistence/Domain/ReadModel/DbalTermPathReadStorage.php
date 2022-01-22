@@ -19,12 +19,32 @@ class DbalTermPathReadStorage implements TermPathReadStorageInterface
         $this->connection = $connection;
     }
 
-    public function find(string $termId, string $locale): array
+    public function findTermToPathGeneration(string $termId, string $locale): array
     {
         $result = $this->connection->fetchAllAssociative('
-            SELECT *
-            FROM #__term_path
-            WHERE term_id = :term_id AND locale = :locale
+            SELECT
+                t.type,
+                t.parent_id,
+                COALESCE(tl.slug, t.slug) AS slug
+            FROM #__term AS t
+            LEFT JOIN #__term_lang AS tl
+                ON tl.locale = :locale
+            WHERE t.id = :term_id
+            LIMIT 1
+        ', [
+            'term_id' => $termId,
+            'locale'  => $locale,
+        ]);
+
+        return $result[0] ?? [];
+    }
+
+    public function findPathByTermId(string $termId, string $locale): array
+    {
+        $result = $this->connection->fetchAllAssociative('
+            SELECT tp.*
+            FROM #__term_path AS tp
+            WHERE tp.term_id = :term_id AND tp.locale = :locale
             LIMIT 1
         ', [
             'term_id' => $termId,

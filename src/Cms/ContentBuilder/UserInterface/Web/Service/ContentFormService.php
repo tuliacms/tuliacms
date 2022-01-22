@@ -24,15 +24,15 @@ class ContentFormService
         $this->formBuilder = $formBuilder;
     }
 
-    public function buildFormDescriptor(string $type, array $nodeData, Request $request): ContentTypeFormDescriptor
+    public function buildFormDescriptor(string $type, array $data, Request $request): ContentTypeFormDescriptor
     {
-        $nodeType = $this->contentTypeRegistry->get($type);
+        $contentType = $this->contentTypeRegistry->get($type);
 
-        $form = $this->formBuilder->createForm($nodeType, $nodeData);
+        $form = $this->formBuilder->createForm($contentType, $data);
         $form->handleRequest($request);
 
         return new ContentTypeFormDescriptor(
-            $nodeType,
+            $contentType,
             $form
         );
     }

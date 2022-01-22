@@ -34,10 +34,10 @@ class ParentTermDecorator implements ContentTypeDecoratorInterface
         }
 
         $contentType->addField(new Field([
-            'name' => 'parent_id',
+            'code' => 'parent_id',
             'type' => 'taxonomy',
             'taxonomy' => $contentType->getCode(),
-            'label' => 'parentTerm',
+            'name' => 'parentTerm',
             'internal' => true,
             'builder_options' => function () use ($contentType) {
                 return [

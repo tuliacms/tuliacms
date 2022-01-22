@@ -2,7 +2,7 @@
 {% trans_default_domain 'node' %}
 
 {% if nodeType.isRoutable %}
-    {% set previewLink = node_path(node) %}
+    {% set previewLink = node_path_from_id(node.id) %}
 {% endif %}
 
 {% import '@backend/_macros/alerts.tpl' as alerts %}

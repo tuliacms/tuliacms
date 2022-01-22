@@ -233,6 +233,14 @@
                 <source>taxonomy</source>
                 <target>Taxonomy</target>
             </trans-unit>
+            <trans-unit id="tuliacms.content_builder.61">
+                <source>contentTypeStrategy_simple</source>
+                <target>Simple - URL is created only from slug field</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.62">
+                <source>contentTypeStrategy_full_path</source>
+                <target>Full path - All hierarchical parent elements are used to create URL</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

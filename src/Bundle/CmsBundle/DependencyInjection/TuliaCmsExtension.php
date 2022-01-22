@@ -74,14 +74,14 @@ class TuliaCmsExtension extends Extension
         // Terms
         $container->registerForAutoconfiguration(\Tulia\Cms\Taxonomy\Domain\WriteModel\ActionsChain\TaxonomyActionInterface::class)
             ->addTag('term.action_chain');
-        $container->registerForAutoconfiguration(\Tulia\Cms\Taxonomy\Domain\Routing\Strategy\TaxonomyRoutingStrategyInterface::class)
-            ->addTag('taxonomy.routing.strategy');
 
         // ContentBuilder
         $container->registerForAutoconfiguration(\Tulia\Cms\ContentBuilder\Domain\ContentType\Service\ContentTypeDecoratorInterface::class)
             ->addTag('content_builder.content_type.decorator');
         $container->registerForAutoconfiguration(\Tulia\Cms\ContentBuilder\Domain\ContentType\Service\ContentTypeProviderInterface::class)
             ->addTag('content_builder.content_type.provider');
+        $container->registerForAutoconfiguration(\Tulia\Cms\ContentBuilder\Domain\ContentType\Routing\Strategy\ContentTypeRoutingStrategyInterface::class)
+            ->addTag('content_builder.content_type.routing_strategy');
         $container->registerForAutoconfiguration(\Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\LayoutTypeBuilderInterface::class)
             ->addTag('content_builder.layout_type.builder');
     }

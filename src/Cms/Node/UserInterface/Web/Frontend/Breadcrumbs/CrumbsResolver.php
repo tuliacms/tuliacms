@@ -44,7 +44,7 @@ class CrumbsResolver implements BreadcrumbsResolverInterface
         $route = $request->attributes->get('_route');
         $node  = $request->attributes->get('node');
 
-        return strncmp($route, 'node_', 5) === 0
+        return strncmp($route, 'node.', 5) === 0
             && $this->supports($node)
             ? $node
             : null;
@@ -90,8 +90,14 @@ class CrumbsResolver implements BreadcrumbsResolverInterface
             }
         }
 
+        /** @var Node $parent */
         foreach ($nodes as $parent) {
-            $breadcrumbs->unshift($this->router->generate('node_' . $parent->getId()), $parent->getTitle());
+            $breadcrumbs->unshift(
+                $this->router->generate(
+                    sprintf('node.%s.%s', $parent->getType(), $parent->getId())
+                ),
+                $parent->getTitle()
+            );
         }
     }
 }
