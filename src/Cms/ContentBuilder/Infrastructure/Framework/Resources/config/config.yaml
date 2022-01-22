@@ -7,7 +7,7 @@ framework:
             - { name: backend/content_builder, path: '%kernel.project_dir%/src/Cms/ContentBuilder/Infrastructure/Framework/Resources/views/backend' }
     assetter:
         assets:
-            content_builder.layout_builder:
+            content_builder.layout_builder.routable_content_type:
                 scripts: [ '/assets/core/content-builder-layout-builder/js/build.js' ]
                 styles: [ '/assets/core/content-builder-layout-builder/css/styles.min.css' ]
                 require: [ vue, lodash ]

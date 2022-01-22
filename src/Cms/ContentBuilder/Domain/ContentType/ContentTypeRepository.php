@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContentBuilder\Domain\ContentType;
 
-
 use Tulia\Cms\ContentBuilder\Domain\ContentType\Model\ContentType;
 
 /**

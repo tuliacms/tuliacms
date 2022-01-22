@@ -1,3 +1,5 @@
+{% assets ['content_builder.layout_builder.routable_content_type'] %}
+
 {% trans_default_domain 'content_builder' %}
 
 <div id="content-builder-layout-builder"></div>

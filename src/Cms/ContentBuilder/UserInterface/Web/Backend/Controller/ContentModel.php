@@ -7,10 +7,9 @@ namespace Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\ContentBuilder\Domain\ContentType\ContentTypeRepository;
-use Tulia\Cms\ContentBuilder\Domain\ContentType\Routing\Strategy\ContentTypeRoutingStrategyRegistry;
 use Tulia\Cms\ContentBuilder\Domain\ContentType\Service\Configuration;
 use Tulia\Cms\ContentBuilder\Domain\ContentType\Service\ContentTypeRegistry;
-use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\FieldTypeMappingRegistry;
+use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\LayoutTypeBuilderRegistry;
 use Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\ContentType\FormDataToModelTransformer;
 use Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\ContentType\FormHandler;
 use Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\ContentType\ModelToFormDataTransformer;
@@ -23,27 +22,24 @@ use Tulia\Component\Templating\ViewInterface;
  */
 class ContentModel extends AbstractController
 {
-    private FieldTypeMappingRegistry $fieldTypeMappingRegistry;
     private FormDataToModelTransformer $formDataToModelTransformer;
     private ContentTypeRepository $contentTypeRepository;
     private ContentTypeRegistry $contentTypeRegistry;
-    private ContentTypeRoutingStrategyRegistry $strategyRegistry;
     private Configuration $configuration;
+    private LayoutTypeBuilderRegistry $layoutTypeBuilderRegistry;
 
     public function __construct(
-        FieldTypeMappingRegistry $fieldTypeMappingRegistry,
         FormDataToModelTransformer $formDataToModelTransformer,
         ContentTypeRepository $contentTypeRepository,
         ContentTypeRegistry $contentTypeRegistry,
-        ContentTypeRoutingStrategyRegistry $strategyRegistry,
-        Configuration $configuration
+        Configuration $configuration,
+        LayoutTypeBuilderRegistry $layoutTypeBuilderRegistry
     ) {
-        $this->fieldTypeMappingRegistry = $fieldTypeMappingRegistry;
         $this->formDataToModelTransformer = $formDataToModelTransformer;
         $this->contentTypeRepository = $contentTypeRepository;
         $this->contentTypeRegistry = $contentTypeRegistry;
-        $this->strategyRegistry = $strategyRegistry;
         $this->configuration = $configuration;
+        $this->layoutTypeBuilderRegistry = $layoutTypeBuilderRegistry;
     }
 
     public function index(): ViewInterface
@@ -82,11 +78,11 @@ class ContentModel extends AbstractController
             return $this->redirectToRoute('backend.content_builder.homepage');
         }
 
+        $layoutBuilder = $this->layoutTypeBuilderRegistry->get($this->configuration->getLayoutBuilder($contentType));
+
         return $this->view('@backend/content_builder/content_type/create.tpl', [
-            'fieldTypes' => $this->getFieldTypes(),
-            'routingStrategies' => $this->getRoutingStrategies($contentType),
-            'model' => $data,
-            'errors' => $nodeTypeFormHandler->getErrors(),
+            'type' => $contentType,
+            'builderView' => $layoutBuilder->builderView($contentType, $data, $nodeTypeFormHandler->getErrors()),
             'cleaningResult' => $nodeTypeFormHandler->getCleaningResult(),
         ]);
     }
@@ -128,46 +124,12 @@ class ContentModel extends AbstractController
             return $this->redirectToRoute('backend.content_builder.homepage');
         }
 
+        $layoutBuilder = $this->layoutTypeBuilderRegistry->get($this->configuration->getLayoutBuilder($contentType));
+
         return $this->view('@backend/content_builder/content_type/edit.tpl', [
-            'fieldTypes' => $this->getFieldTypes(),
-            'routingStrategies' => $this->getRoutingStrategies($contentType),
-            'model' => $data,
-            'errors' => $nodeTypeFormHandler->getErrors(),
+            'type' => $contentType,
+            'builderView' => $layoutBuilder->builderView($contentType, $data, $nodeTypeFormHandler->getErrors()),
             'cleaningResult' => $nodeTypeFormHandler->getCleaningResult(),
         ]);
-    }
-
-    private function getFieldTypes(): array
-    {
-        $types = [];
-
-        foreach ($this->fieldTypeMappingRegistry->all() as $type => $data) {
-            $types[$type] = [
-                'id' => $type,
-                'label' => $data['label'],
-                'configuration' => $data['configuration'],
-                'constraints' => $data['constraints'],
-            ];
-        }
-
-        return $types;
-    }
-
-    private function getRoutingStrategies(string $contentType): array
-    {
-        $strategies = [];
-
-        foreach ($this->strategyRegistry->all() as $strategy) {
-            if ($strategy->supports($contentType) === false) {
-                continue;
-            }
-
-            $strategies[] = [
-                'id' => $strategy->getId(),
-                'label' => $this->trans(sprintf('contentTypeStrategy_%s', $strategy->getId()), [], 'content_builder'),
-            ];
-        }
-
-        return $strategies;
     }
 }

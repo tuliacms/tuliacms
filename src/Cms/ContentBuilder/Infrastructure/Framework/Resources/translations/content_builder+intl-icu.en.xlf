@@ -20,8 +20,8 @@
                 <target>Create content type of {name}</target>
             </trans-unit>
             <trans-unit id="tuliacms.content_builder.5">
-                <source>editNodeType</source>
-                <target>Edit node type</target>
+                <source>editContentTypeOf</source>
+                <target>Edit content type of {name}</target>
             </trans-unit>
             <trans-unit id="tuliacms.content_builder.6">
                 <source>contentTypesListOf</source>

@@ -1,0 +1,15 @@
+framework:
+    translator:
+        paths:
+            - '%kernel.project_dir%/src/Cms/ContentBlock/Infrastructure/Framework/Resources/translations'
+    templating:
+        paths:
+            - { name: backend/content_block, path: '%kernel.project_dir%/src/Cms/ContentBlock/Infrastructure/Framework/Resources/views/backend' }
+            - { name: cms/content_block, path: '%kernel.project_dir%/src/Cms/ContentBlock/Infrastructure/Framework/Resources/views/frontend' }
+
+cms:
+    content_building:
+        content_type:
+            content_block:
+                controller: ''
+                layout_builder: 'Tulia\Cms\ContentBuilder\Infrastructure\Presentation\TwigContentBlockTypeLayoutBuilder'
