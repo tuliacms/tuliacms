@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Node\Infrastructure\Framework\Routing\ContentTypeRoutingStrategy;
+namespace Tulia\Cms\Node\Domain\ReadModel\Routing\Strategy;
 
 use Tulia\Cms\ContentBuilder\Domain\ContentType\Routing\Strategy\ContentTypeRoutingStrategyInterface;
 use Tulia\Cms\ContentBuilder\Domain\ContentType\Service\ContentTypeRegistry;
@@ -10,7 +10,6 @@ use Tulia\Cms\ContentBuilder\Domain\ContentType\Service\Router;
 use Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderInterface;
 use Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderScopeEnum;
 use Tulia\Cms\Node\Domain\ReadModel\Model\Node;
-use Tulia\Cms\Platform\Infrastructure\Framework\Routing\FrontendRouteSuffixResolver;
 
 /**
  * @author Adam Banaszkiewicz
@@ -21,19 +20,15 @@ class SimpleStrategy implements ContentTypeRoutingStrategyInterface
 
     private ContentTypeRegistry $contentTypeRegistry;
 
-    private FrontendRouteSuffixResolver $frontendRouteSuffixResolver;
-
     private Router $contentTypeRouter;
 
     public function __construct(
         NodeFinderInterface $nodeFinder,
         ContentTypeRegistry $contentTypeRegistry,
-        FrontendRouteSuffixResolver $frontendRouteSuffixResolver,
         Router $contentTypeRouter
     ) {
         $this->nodeFinder = $nodeFinder;
         $this->contentTypeRegistry = $contentTypeRegistry;
-        $this->frontendRouteSuffixResolver = $frontendRouteSuffixResolver;
         $this->contentTypeRouter = $contentTypeRouter;
     }
 

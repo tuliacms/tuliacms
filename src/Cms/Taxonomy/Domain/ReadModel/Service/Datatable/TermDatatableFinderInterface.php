@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Taxonomy\Ports\Infrastructure\Persistence\Domain\ReadModel\Datatable;
+namespace Tulia\Cms\Taxonomy\Domain\ReadModel\Service\Datatable;
 
 use Tulia\Component\Datatable\Finder\FinderInterface;
 

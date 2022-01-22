@@ -15,7 +15,7 @@ use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Taxonomy;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Term;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\ValueObject\AttributeInfo;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\ValueObject\TermId;
-use Tulia\Cms\Taxonomy\Ports\Infrastructure\Persistence\Domain\WriteModel\TermWriteStorageInterface;
+use Tulia\Cms\Taxonomy\Domain\WriteModel\Service\TermWriteStorageInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 
 /**

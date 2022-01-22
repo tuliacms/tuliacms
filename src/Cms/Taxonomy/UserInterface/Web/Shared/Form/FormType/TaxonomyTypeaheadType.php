@@ -10,8 +10,8 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\RouterInterface;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\TypeaheadType;
-use Tulia\Cms\Taxonomy\Ports\Domain\ReadModel\TermFinderScopeEnum;
-use Tulia\Cms\Taxonomy\Ports\Domain\ReadModel\TermFinderInterface;
+use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\TermFinderInterface;
+use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\TermFinderScopeEnum;
 
 /**
  * @author Adam Banaszkiewicz

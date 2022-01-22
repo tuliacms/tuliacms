@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Taxonomy\Infrastructure\Framework\Routing\ContentTypeRoutingStrategy;
+namespace Tulia\Cms\Taxonomy\Domain\ReadModel\Routing\Strategy;
 
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Psr\Log\LoggerInterface;
 use Tulia\Cms\ContentBuilder\Domain\ContentType\Model\ContentType;
 use Tulia\Cms\ContentBuilder\Domain\ContentType\Routing\Strategy\ContentTypeRoutingStrategyInterface;
 use Tulia\Cms\ContentBuilder\Domain\ContentType\Service\ContentTypeRegistry;
+use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\TermFinderInterface;
+use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\TermFinderScopeEnum;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Model\Term;
-use Tulia\Cms\Taxonomy\Ports\Domain\ReadModel\TermFinderInterface;
-use Tulia\Cms\Taxonomy\Ports\Domain\ReadModel\TermFinderScopeEnum;
-use Tulia\Cms\Taxonomy\Ports\Infrastructure\Persistence\Domain\ReadModel\TermPathReadStorageInterface;
+use Tulia\Cms\Taxonomy\Domain\ReadModel\Service\TermPathReadStorageInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -24,14 +24,18 @@ abstract class AbstractRoutingStrategy implements ContentTypeRoutingStrategyInte
 
     protected ContentTypeRegistry $contentTypeRegistry;
 
+    protected LoggerInterface $logger;
+
     public function __construct(
         TermPathReadStorageInterface $storage,
         TermFinderInterface $termFinder,
-        ContentTypeRegistry $contentTypeRegistry
+        ContentTypeRegistry $contentTypeRegistry,
+        LoggerInterface $logger
     ) {
         $this->storage = $storage;
         $this->termFinder = $termFinder;
         $this->contentTypeRegistry = $contentTypeRegistry;
+        $this->logger = $logger;
     }
 
     /**
@@ -60,7 +64,8 @@ abstract class AbstractRoutingStrategy implements ContentTypeRoutingStrategyInte
         $term = $this->getTerm($termId);
 
         if ($this->isTermRoutable($term, $termType) === false) {
-            throw new ResourceNotFoundException('Taxonomy type not exists or is not routable.');
+            $this->logger->info('Taxonomy type not exists or is not routable.');
+            return [];
         }
 
         return [

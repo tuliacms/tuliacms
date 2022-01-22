@@ -14,10 +14,10 @@ use Tulia\Cms\ContentBuilder\Domain\ContentType\Model\ContentType;
 use Tulia\Cms\ContentBuilder\Domain\ContentType\Service\ContentTypeRegistry;
 use Tulia\Cms\ContentBuilder\Domain\ContentType\Service\Router;
 use Tulia\Cms\Platform\Infrastructure\Framework\Routing\FrontendRouteSuffixResolver;
+use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\TermFinderInterface;
+use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\TermFinderScopeEnum;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Model\Term;
-use Tulia\Cms\Taxonomy\Ports\Domain\ReadModel\TermFinderInterface;
-use Tulia\Cms\Taxonomy\Ports\Domain\ReadModel\TermFinderScopeEnum;
-use Tulia\Cms\Taxonomy\Ports\Infrastructure\Persistence\Domain\ReadModel\TermPathReadStorageInterface;
+use Tulia\Cms\Taxonomy\Domain\ReadModel\Service\TermPathReadStorageInterface;
 
 /**
  * @author Adam Banaszkiewicz

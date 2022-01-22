@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Taxonomy\Ports\Domain\ReadModel;
+namespace Tulia\Cms\Taxonomy\Domain\ReadModel\Finder;
 
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Model\Term;

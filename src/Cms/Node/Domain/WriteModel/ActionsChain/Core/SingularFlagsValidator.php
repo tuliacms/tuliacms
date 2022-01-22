@@ -9,7 +9,7 @@ use Tulia\Cms\Node\Domain\NodeFlag\NodeFlagRegistryInterface;
 use Tulia\Cms\Node\Domain\WriteModel\ActionsChain\NodeActionInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Exception\SingularFlagImposedOnMoreThanOneNodeException;
 use Tulia\Cms\Node\Domain\WriteModel\Model\Node;
-use Tulia\Cms\Node\Domain\WriteModel\Ports\NodeByFlagFinderInterface;
+use Tulia\Cms\Node\Domain\WriteModel\Service\NodeByFlagFinderInterface;
 
 /**
  * @author Adam Banaszkiewicz

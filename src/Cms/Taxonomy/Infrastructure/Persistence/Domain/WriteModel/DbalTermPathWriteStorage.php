@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Taxonomy\Infrastructure\Persistence\Domain\WriteModel;
 
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
-use Tulia\Cms\Taxonomy\Ports\Infrastructure\Persistence\Domain\WriteModel\TermPathWriteStorageInterface;
+use Tulia\Cms\Taxonomy\Domain\WriteModel\Service\TermPathWriteStorageInterface;
 
 /**
  * @author Adam Banaszkiewicz

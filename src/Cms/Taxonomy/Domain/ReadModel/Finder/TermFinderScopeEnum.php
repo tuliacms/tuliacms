@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Taxonomy\Ports\Domain\ReadModel;
+namespace Tulia\Cms\Taxonomy\Domain\ReadModel\Finder;
 
 /**
  * @author Adam Banaszkiewicz

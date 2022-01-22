@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Taxonomy\Ports\Infrastructure\Persistence\Domain\ReadModel;
+namespace Tulia\Cms\Taxonomy\Domain\ReadModel\Service;
 
 /**
  * @author Adam Banaszkiewicz

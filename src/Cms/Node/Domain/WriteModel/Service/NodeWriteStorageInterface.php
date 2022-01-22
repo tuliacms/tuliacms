@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Node\Domain\WriteModel\Ports;
+namespace Tulia\Cms\Node\Domain\WriteModel\Service;
 
 /**
  * @author Adam Banaszkiewicz

@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\UserInterface\Web\Frontend\Controller;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\Node\Domain\NodeFlag\Enum\NodeFlagEnum;
-use Tulia\Cms\Node\Domain\ReadModel\Model\Node AS Model;
+use Tulia\Cms\Node\Domain\ReadModel\Model\Node as Model;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
-use Tulia\Cms\Taxonomy\Ports\Domain\ReadModel\TermFinderScopeEnum;
-use Tulia\Cms\Taxonomy\Ports\Domain\ReadModel\TermFinderInterface;
+use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\TermFinderInterface;
+use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\TermFinderScopeEnum;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Model\Term;
 use Tulia\Component\Templating\ViewInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * @author Adam Banaszkiewicz
