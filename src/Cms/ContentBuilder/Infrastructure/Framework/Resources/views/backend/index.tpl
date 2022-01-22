@@ -85,8 +85,11 @@
                     {% endfor %}
                     <div class="col mb-4">
                         <div class="card">
-                            <a href="{{ path('backend.content_builder.content_type.create', { contentType: type }) }}">
-                                {{ 'createContentTypeOf'|trans({ name: type|trans }) }}
+                            <a href="{{ path('backend.content_builder.content_type.create', { contentType: type }) }}" class="content-type-create-button">
+                                <div class="content-type-create-button-inner">
+                                    <i class="fas fa-plus"></i>
+                                    {{ 'createContentTypeOf'|trans({ name: type|trans }) }}
+                                </div>
                             </a>
                         </div>
                     </div>
@@ -105,6 +108,30 @@
             top: 50%;
             transform: translateY(-50%);
             max-width: 16px;
+        }
+        .content-type-create-button {
+            min-height: 210px;
+            display: flex;
+            align-items: center;
+            align-content: center;
+        }
+        .content-type-create-button .content-type-create-button-inner {
+            text-align: center;
+            font-size: 15px;
+            flex: 1 1 100%;
+        }
+        .content-type-create-button .fas {
+            display: block;
+            font-size: 60px;
+            color: #ccc;
+            margin-bottom: 20px;
+            transition: .12s all;
+        }
+        .content-type-create-button:hover {
+            text-decoration: none;
+        }
+        .content-type-create-button:hover .fas {
+            color: #aaa;
         }
     </style>
 {% endblock %}
