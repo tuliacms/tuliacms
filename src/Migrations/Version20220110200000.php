@@ -25,7 +25,6 @@ CREATE TABLE `#__content_type` (
   `is_routable` tinyint(1) NOT NULL DEFAULT '0',
   `is_hierarchical` tinyint(1) NOT NULL DEFAULT '0',
   `routing_strategy` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
-  `routable_taxonomy_field` varchar(36) COLLATE utf8_unicode_ci DEFAULT NULL,
   `layout` varchar(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
   `internal` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'This column is temporary, please do not use it in any production code.'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
@@ -33,7 +32,7 @@ EOF);
 
         $this->addSql(<<<EOF
 CREATE TABLE `#__content_type_field` (
-    `id` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
+  `id` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
   `code` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
   `node_type` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
   `type` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
@@ -46,7 +45,7 @@ EOF);
 
         $this->addSql(<<<EOF
 CREATE TABLE `#__content_type_field_configuration` (
-    `field_id` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
+  `field_id` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
   `code` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
   `value` varchar(255) COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
@@ -54,7 +53,7 @@ EOF);
 
         $this->addSql(<<<EOF
 CREATE TABLE `#__content_type_field_constraint` (
-    `id` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
+  `id` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
   `field_id` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
   `code` varchar(36) COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
@@ -62,7 +61,7 @@ EOF);
 
         $this->addSql(<<<EOF
 CREATE TABLE `#__content_type_field_constraint_modificator` (
-    `constraint_id` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
+  `constraint_id` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
   `modificator` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
   `value` varchar(255) COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
@@ -70,14 +69,14 @@ EOF);
 
         $this->addSql(<<<EOF
 CREATE TABLE `#__content_type_layout` (
-    `code` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
+  `code` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
   `name` varchar(36) COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
 EOF);
 
         $this->addSql(<<<EOF
 CREATE TABLE `#__content_type_layout_group` (
-    `id` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
+  `id` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
   `code` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `section` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
@@ -90,7 +89,7 @@ EOF);
 
         $this->addSql(<<<EOF
 CREATE TABLE `#__content_type_layout_group_field` (
-    `group_id` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
+  `group_id` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
   `code` varchar(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `order` smallint UNSIGNED NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
