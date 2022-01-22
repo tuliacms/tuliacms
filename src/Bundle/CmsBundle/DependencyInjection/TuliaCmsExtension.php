@@ -28,9 +28,7 @@ class TuliaCmsExtension extends Extension
         $configuration = $this->getConfiguration($configs, $container);
         $config = $this->processConfiguration($configuration, $configs);
 
-        $container->setParameter('cms.content_builder.content_type.node.default_controller', $config['content_building']['content_type']['node']['default_controller']);
-        $container->setParameter('cms.content_builder.content_type.taxonomy.default_controller', $config['content_building']['content_type']['taxonomy']['default_controller']);
-        $container->setParameter('cms.content_builder.layout_type.default_builder', $config['content_building']['layout_type']['default_builder']);
+        $container->setParameter('cms.content_builder.content_type.config', $config['content_building']['content_type']);
         $container->setParameter('cms.content_builder.data_types.mapping', $config['content_building']['data_types']['mapping']);
         $container->setParameter('cms.content_builder.constraint_types.mapping', $config['content_building']['constraint_types']['mapping']);
         $container->setParameter('cms.options.definitions', $this->validateOptionsValues($config['options']['definitions'] ?? []));

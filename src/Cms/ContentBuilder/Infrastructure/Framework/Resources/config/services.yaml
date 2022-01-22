@@ -8,6 +8,7 @@ services:
         resource: '../../../../**'
         exclude:
             - '../../../../Infrastructure/Framework/Resources/**'
+            - '../../../../Domain/LayoutType/Model/**'
             - '../../../../Domain/ContentType/Model/**'
             - '../../../../Domain/ContentType/Exception/**'
             - '../../../../UserInterface/LayoutType/Model/**'
@@ -15,13 +16,15 @@ services:
     Tulia\Cms\ContentBuilder\Domain\ContentType\Service\AbstractContentTypeProvider:
         abstract: true
         calls:
-            - setDefaultController: [ 'node', '%cms.content_builder.content_type.node.default_controller%' ]
-            - setDefaultController: [ 'taxonomy', '%cms.content_builder.content_type.taxonomy.default_controller%' ]
-            - setDefaultLayoutBuilder: [ '%cms.content_builder.layout_type.default_builder%' ]
             - setFieldTypeMappingRegistry: [ '@Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\FieldTypeMappingRegistry' ]
+            - setConfiguration: [ '@Tulia\Cms\ContentBuilder\Domain\ContentType\Service\Configuration' ]
 
     Tulia\Cms\ContentBuilder\Infrastructure\Persistence\ContentProvider\ContentTypeDatabaseProvider:
         parent: Tulia\Cms\ContentBuilder\Domain\ContentType\Service\AbstractContentTypeProvider
 
     Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\ContentType\FormHandler:
         shared: false
+
+    Tulia\Cms\ContentBuilder\Domain\ContentType\Service\Configuration:
+        arguments:
+            $configuration: '%cms.content_builder.content_type.config%'

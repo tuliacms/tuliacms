@@ -25,14 +25,9 @@ class LayoutBuilder
     public function build(ContentTypeFormDescriptor $formDescriptor): string
     {
         $type = $formDescriptor->getContentType();
-        $layout = $type->getLayout();
 
-        $builder = $this->builderRegistry->get($layout->getBuilder());
-
-        return $builder->build(
-            $type,
-            $layout,
-            $formDescriptor->getFormView()
-        );
+        return $this->builderRegistry
+            ->get($type->getLayout()->getBuilder())
+            ->build($type, $formDescriptor->getFormView());
     }
 }

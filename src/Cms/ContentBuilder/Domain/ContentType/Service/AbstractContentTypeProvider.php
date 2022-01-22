@@ -18,28 +18,22 @@ abstract class AbstractContentTypeProvider implements ContentTypeProviderInterfa
     use LayoutTypeBuilderTrait;
 
     private FieldTypeMappingRegistry $fieldTypeMappingRegistry;
-    protected array $defaultController = [];
-    protected string $defaultLayoutBuilder = '';
-
-    public function setDefaultLayoutBuilder(string $defaultLayoutBuilder): void
-    {
-        $this->defaultLayoutBuilder = $defaultLayoutBuilder;
-    }
-
-    public function setDefaultController(string $nodeType, string $defaultController): void
-    {
-        $this->defaultController[$nodeType] = $defaultController;
-    }
+    protected Configuration $config;
 
     public function setFieldTypeMappingRegistry(FieldTypeMappingRegistry $fieldTypeMappingRegistry): void
     {
         $this->fieldTypeMappingRegistry = $fieldTypeMappingRegistry;
     }
 
+    public function setConfiguration(Configuration $config): void
+    {
+        $this->config = $config;
+    }
+
     protected function buildContentType(string $name, array $options, LayoutType $layoutType): ContentType
     {
         $nodeType = new ContentType($name, $options['type'], $layoutType, (bool) $options['internal']);
-        $nodeType->setController($options['controller'] ?? $this->defaultController[$options['type']]);
+        $nodeType->setController($options['controller'] ?? $this->config->getController($options['type']));
         $nodeType->setIcon($options['icon'] ?? 'fa fa-box');
         $nodeType->setName($options['name']);
         $nodeType->setIsHierarchical((bool) $options['is_hierarchical']);

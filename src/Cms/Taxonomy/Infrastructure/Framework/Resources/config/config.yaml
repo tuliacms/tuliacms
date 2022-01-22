@@ -9,6 +9,10 @@ framework:
 
 cms:
     content_building:
+        content_type:
+            taxonomy:
+                controller: 'Tulia\Cms\Taxonomy\UserInterface\Web\Frontend\Controller\Term::show'
+                layout_builder: 'Tulia\Cms\ContentBuilder\Infrastructure\Presentation\TwigRoutableContentTypeLayoutBuilder'
         data_types:
             mapping:
                 taxonomy:

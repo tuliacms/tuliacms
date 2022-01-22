@@ -6,7 +6,6 @@ namespace Tulia\Cms\ContentBuilder\Infrastructure\Presentation;
 
 use Symfony\Component\Form\FormView;
 use Tulia\Cms\ContentBuilder\Domain\ContentType\Model\ContentType;
-use Tulia\Cms\ContentBuilder\Domain\LayoutType\Model\LayoutType;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\LayoutTypeBuilderInterface;
 use Tulia\Component\Templating\EngineInterface;
 use Tulia\Component\Templating\View;
@@ -14,7 +13,7 @@ use Tulia\Component\Templating\View;
 /**
  * @author Adam Banaszkiewicz
  */
-class TwigLayoutTypeBuilder implements LayoutTypeBuilderInterface
+class TwigRoutableContentTypeLayoutBuilder implements LayoutTypeBuilderInterface
 {
     private EngineInterface $engine;
 
@@ -23,16 +22,11 @@ class TwigLayoutTypeBuilder implements LayoutTypeBuilderInterface
         $this->engine = $engine;
     }
 
-    public function getName(): string
+    public function build(ContentType $contentType, FormView $formView): string
     {
-        return 'default';
-    }
-
-    public function build(ContentType $contentType, LayoutType $layoutType, FormView $formView): string
-    {
-        return $this->engine->render(new View('@backend/content_builder/layout/default.tpl', [
+        return $this->engine->render(new View('@backend/content_builder/layout/routable_content_type.tpl', [
             'type' => $contentType,
-            'layout' => $layoutType,
+            'layout' => $contentType->getLayout(),
             'form' => $formView,
         ]));
     }

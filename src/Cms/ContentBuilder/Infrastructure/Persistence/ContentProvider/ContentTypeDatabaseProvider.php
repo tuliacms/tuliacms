@@ -30,7 +30,7 @@ class ContentTypeDatabaseProvider extends AbstractContentTypeProvider
             $result[] = $this->buildContentType(
                 $type['code'],
                 $type,
-                $this->buildLayoutType($this->getLayoutType($type['layout']))
+                $this->buildLayoutType($type['type'], $this->getLayoutType($type['layout']))
             );
         }
 

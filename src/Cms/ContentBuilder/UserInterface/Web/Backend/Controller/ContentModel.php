@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\ContentBuilder\Domain\ContentType\ContentTypeRepository;
 use Tulia\Cms\ContentBuilder\Domain\ContentType\Routing\Strategy\ContentTypeRoutingStrategyRegistry;
+use Tulia\Cms\ContentBuilder\Domain\ContentType\Service\Configuration;
 use Tulia\Cms\ContentBuilder\Domain\ContentType\Service\ContentTypeRegistry;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\FieldTypeMappingRegistry;
 use Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\ContentType\FormDataToModelTransformer;
@@ -27,33 +28,29 @@ class ContentModel extends AbstractController
     private ContentTypeRepository $contentTypeRepository;
     private ContentTypeRegistry $contentTypeRegistry;
     private ContentTypeRoutingStrategyRegistry $strategyRegistry;
+    private Configuration $configuration;
 
     public function __construct(
         FieldTypeMappingRegistry $fieldTypeMappingRegistry,
         FormDataToModelTransformer $formDataToModelTransformer,
         ContentTypeRepository $contentTypeRepository,
         ContentTypeRegistry $contentTypeRegistry,
-        ContentTypeRoutingStrategyRegistry $strategyRegistry
+        ContentTypeRoutingStrategyRegistry $strategyRegistry,
+        Configuration $configuration
     ) {
         $this->fieldTypeMappingRegistry = $fieldTypeMappingRegistry;
         $this->formDataToModelTransformer = $formDataToModelTransformer;
         $this->contentTypeRepository = $contentTypeRepository;
         $this->contentTypeRegistry = $contentTypeRegistry;
         $this->strategyRegistry = $strategyRegistry;
+        $this->configuration = $configuration;
     }
 
     public function index(): ViewInterface
     {
-        $contentTypeList = $this->contentTypeRegistry->all();
-        $contentTypeCodes = [];
-
-        foreach ($contentTypeList as $type) {
-            $contentTypeCodes[] = $type->getType();
-        }
-
         return $this->view('@backend/content_builder/index.tpl', [
-            'contentTypeList' => $contentTypeList,
-            'contentTypeCodes' => array_unique($contentTypeCodes),
+            'contentTypeList' => $this->contentTypeRegistry->all(),
+            'contentTypeCodes' => $this->configuration->getTypes(),
         ]);
     }
 

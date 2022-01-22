@@ -13,11 +13,11 @@ use Tulia\Cms\ContentBuilder\Domain\LayoutType\Model\Section;
  */
 trait LayoutTypeBuilderTrait
 {
-    protected function buildLayoutType(array $options): LayoutType
+    protected function buildLayoutType(string $contentType, array $options): LayoutType
     {
         $layoutType = new LayoutType($options['code']);
         $layoutType->setName($options['name']);
-        $layoutType->setBuilder($options['builder'] ?? $this->defaultLayoutBuilder);
+        $layoutType->setBuilder($options['builder'] ?? $this->config->getLayoutBuilder($contentType));
 
         foreach ($options['sections'] as $sectionName => $sectionInfo) {
             $layoutType->addSection($this->buildLayoutSection($sectionName, $sectionInfo));
