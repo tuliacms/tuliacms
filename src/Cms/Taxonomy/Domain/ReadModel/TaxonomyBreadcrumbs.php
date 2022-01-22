@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Taxonomy\Domain\ReadModel;
 
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Model\Term;
-use Tulia\Cms\Taxonomy\Ports\Infrastructure\Persistence\Domain\ReadModel\TaxonomyBreadcrumbsReadStorageInterface;
+use Tulia\Cms\Taxonomy\Domain\ReadModel\Service\TaxonomyBreadcrumbsReadStorageInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 
 /**

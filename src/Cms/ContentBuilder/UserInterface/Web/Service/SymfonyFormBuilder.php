@@ -9,7 +9,8 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
-use Tulia\Cms\ContentBuilder\Domain\ContentType\Model\AbstractContentType;
+use Tulia\Cms\ContentBuilder\Domain\ContentType\Model\ContentType;
+use Tulia\Cms\ContentBuilder\Domain\ContentType\Model\Field;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Exception\ConstraintNotExistsException;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Exception\FieldTypeNotExistsException;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\ConstraintsBuilder;
@@ -39,9 +40,9 @@ class SymfonyFormBuilder
         $this->logger = $contentBuilderLogger;
     }
 
-    public function createForm(AbstractContentType $taxonomyType, array $data): FormInterface
+    public function createForm(ContentType $taxonomyType, array $data): FormInterface
     {
-        $builder = $this->createFormBuilder($taxonomyType->getType(), $data);
+        $builder = $this->createFormBuilder($taxonomyType->getCode(), $data);
 
         $this->buildFieldsWithBuilder($taxonomyType->getFields(), $builder);
 
@@ -59,14 +60,15 @@ class SymfonyFormBuilder
 
     protected function buildFieldsWithBuilder(array $fields, FormBuilderInterface $builder): void
     {
+        /** @var Field $field */
         foreach ($fields as $field) {
             try {
                 $typeBuilder = $this->mappingRegistry->getTypeBuilder($field->getType());
 
                 $options = array_merge([
-                    'label' => $field->getLabel() === ''
+                    'label' => $field->getName() === ''
                         ? false
-                        : $field->getLabel()
+                        : $field->getName()
                 ], $field->getBuilderOptions());
 
                 $options['constraints'] = $this->constraintsBuilder->build($options['constraints'] ?? []);
@@ -76,7 +78,7 @@ class SymfonyFormBuilder
                 }
 
                 $builder->add(
-                    $field->getName(),
+                    $field->getCode(),
                     $this->mappingRegistry->getTypeClassname($field->getType()),
                     $options
                 );
@@ -85,7 +87,7 @@ class SymfonyFormBuilder
                     sprintf(
                         'Cms\ContentBuilder: Constraint "%s" not exists. Field "%s" wasn\'t created in form.',
                         $e->getName(),
-                        $field->getName()
+                        $field->getCode()
                     )
                 );
             } catch (FieldTypeNotExistsException $e) {
@@ -93,7 +95,7 @@ class SymfonyFormBuilder
                     sprintf(
                         'Cms\ContentBuilder: Mapping for field type "%s" not exists. Field "%s" wasn\'t created in form.',
                         $field->getType(),
-                        $field->getName()
+                        $field->getCode()
                     )
                 );
             }

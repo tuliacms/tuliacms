@@ -6,3 +6,4 @@ cms:
                     label: WYSIWYG editor
                     classname: 'Tulia\Cms\WysiwygEditor\Infrastructure\Framework\Form\FormType\WysiwygEditorType'
                     flags: [compilable]
+                    constraints: [required]

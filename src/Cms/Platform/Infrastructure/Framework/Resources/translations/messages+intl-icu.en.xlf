@@ -1,0 +1,807 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" target-language="en" datatype="plaintext" original="messages+intl-icu.en.xlf">
+        <body>
+            <trans-unit id="tuliacms.messages.1">
+                <source>title</source>
+                <target>Title</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.2">
+                <source>slug</source>
+                <target>Slug</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.3">
+                <source>content</source>
+                <target>Content</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.4">
+                <source>introduction</source>
+                <target>Introduction</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.5">
+                <source>description</source>
+                <target>Description</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.6">
+                <source>thumbnail</source>
+                <target>Thumbnail</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.7">
+                <source>status</source>
+                <target>Status</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.8">
+                <source>publicationStatus</source>
+                <target>Publication status</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.9">
+                <source>node</source>
+                <target>Node</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.10">
+                <source>sketch</source>
+                <target>Sketch</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.11">
+                <source>published</source>
+                <target>Published</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.12">
+                <source>trashed</source>
+                <target>Trashed</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.13">
+                <source>trash</source>
+                <target>Trash</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.14">
+                <source>publishedAt</source>
+                <target>Published at</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.15">
+                <source>publishedTo</source>
+                <target>Published to</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.16">
+                <source>category</source>
+                <target>Category</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.17">
+                <source>categories</source>
+                <target>Categories</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.18">
+                <source>breadcrumbsHome</source>
+                <target>Tulia CMS</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.19">
+                <source>actions</source>
+                <target>Actions</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.20">
+                <source>slugValue</source>
+                <target>Slug: {slug}</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.21">
+                <source>date</source>
+                <target>Date</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.22">
+                <source>plannedOnDate</source>
+                <target>Planned on {date}</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.23">
+                <source>close</source>
+                <target>Close</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.24">
+                <source>ok</source>
+                <target>Ok</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.25">
+                <source>save</source>
+                <target>Save</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.26">
+                <source>cancel</source>
+                <target>Cancel</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.27">
+                <source>yes</source>
+                <target>Yes</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.28">
+                <source>no</source>
+                <target>No</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.29">
+                <source>visibility</source>
+                <target>Visibility</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.30">
+                <source>options</source>
+                <target>Options</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.31">
+                <source>pages</source>
+                <target>Pages</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.32">
+                <source>publicationEndsAt</source>
+                <target>Publication ends at</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.33">
+                <source>user</source>
+                <target>User</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.34">
+                <source>users</source>
+                <target>Users</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.35">
+                <source>email</source>
+                <target>E-mail</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.36">
+                <source>username</source>
+                <target>Username</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.37">
+                <source>password</source>
+                <target>Password</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.38">
+                <source>passwordRepeat</source>
+                <target>Repeat password</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.39">
+                <source>accountIsDisabled</source>
+                <target>Account is disabled</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.40">
+                <source>accountIsEnabled</source>
+                <target>Account is enabled</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.41">
+                <source>basics</source>
+                <target>Basics</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.42">
+                <source>security</source>
+                <target>Security</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.43">
+                <source>disabled</source>
+                <target>Disabled</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.44">
+                <source>enabled</source>
+                <target>Enabled</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.45">
+                <source>avatar</source>
+                <target>Avatar</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.46">
+                <source>selected</source>
+                <target>Selected</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.47">
+                <source>login</source>
+                <target>Login</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.48">
+                <source>create</source>
+                <target>Create</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.49">
+                <source>edit</source>
+                <target>Edit</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.50">
+                <source>add</source>
+                <target>Add</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.51">
+                <source>name</source>
+                <target>Name</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.52">
+                <source>tags</source>
+                <target>Tags</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.53">
+                <source>tag</source>
+                <target>Tag</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.54">
+                <source>updateTaxonomyObjectsCount</source>
+                <target>Update objects count</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.55">
+                <source>count</source>
+                <target>Count</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.56">
+                <source>homepage</source>
+                <target>Homepage</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.57">
+                <source>loginPage</source>
+                <target>Login page</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.58">
+                <source>doLogin</source>
+                <target>Login</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.59">
+                <source>oopsError</source>
+                <target>Oops! Error occurred!</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.60">
+                <source>pageNotFound</source>
+                <target>Page not found</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.61">
+                <source>author</source>
+                <target>Author</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.62">
+                <source>settings</source>
+                <target>Settings</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.63">
+                <source>maintenance</source>
+                <target>Maintenance</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.64">
+                <source>january</source>
+                <target>January</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.65">
+                <source>february</source>
+                <target>February</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.66">
+                <source>march</source>
+                <target>March</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.67">
+                <source>april</source>
+                <target>April</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.68">
+                <source>may</source>
+                <target>May</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.69">
+                <source>june</source>
+                <target>June</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.70">
+                <source>july</source>
+                <target>July</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.71">
+                <source>august</source>
+                <target>August</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.72">
+                <source>september</source>
+                <target>September</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.73">
+                <source>october</source>
+                <target>October</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.74">
+                <source>november</source>
+                <target>November</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.75">
+                <source>december</source>
+                <target>December</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.76">
+                <source>monday</source>
+                <target>Monday</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.77">
+                <source>tuesday</source>
+                <target>Tuesday</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.78">
+                <source>wednestday</source>
+                <target>Wednestday</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.79">
+                <source>thursday</source>
+                <target>Thursday</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.80">
+                <source>friday</source>
+                <target>Friday</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.81">
+                <source>saturday</source>
+                <target>Saturday</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.82">
+                <source>sunday</source>
+                <target>Sunday</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.83">
+                <source>publishedAtDate</source>
+                <target>Published at {date}</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.84">
+                <source>submit</source>
+                <target>Submit</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.85">
+                <source>editOptions</source>
+                <target>Edit options</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.86">
+                <source>editTerm</source>
+                <target>Edit {term}</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.87">
+                <source>editNode</source>
+                <target>Edit {node}</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.88">
+                <source>themes</source>
+                <target>Themes</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.89">
+                <source>theme</source>
+                <target>Theme</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.90">
+                <source>language</source>
+                <target>Language</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.91">
+                <source>changeLanguage</source>
+                <target>Change language</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.92">
+                <source>hide</source>
+                <target>Hide</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.93">
+                <source>show</source>
+                <target>Show</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.94">
+                <source>showOfType</source>
+                <target>Show: {type}</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.95">
+                <source>showAll</source>
+                <target>Show all</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.96">
+                <source>all</source>
+                <target>All</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.97">
+                <source>desktop</source>
+                <target>Desktop</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.98">
+                <source>tablet</source>
+                <target>Tablet</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.99">
+                <source>smartphone</source>
+                <target>Smartphone</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.100">
+                <source>menu</source>
+                <target>Menu</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.101">
+                <source>menuList</source>
+                <target>Menu list</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.102">
+                <source>home</source>
+                <target>Home</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.103">
+                <source>contents</source>
+                <target>Contents</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.104">
+                <source>administration</source>
+                <target>Administration</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.105">
+                <source>administrationPanel</source>
+                <target>Administration Panel</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.106">
+                <source>dashboard</source>
+                <target>Dashboard</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.107">
+                <source>goTo</source>
+                <target>Go to</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.108">
+                <source>moreOptions</source>
+                <target>More options</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.109">
+                <source>searchPlaceholder</source>
+                <target>Search...</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.110">
+                <source>advancedSearch</source>
+                <target>Advanced search</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.111">
+                <source>fullscreen</source>
+                <target>Fullscreen</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.112">
+                <source>pagePreview</source>
+                <target>Page preview</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.113">
+                <source>myAccount</source>
+                <target>My account</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.114">
+                <source>personalization</source>
+                <target>Personalization</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.115">
+                <source>logout</source>
+                <target>Logout</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.116">
+                <source>multilingual</source>
+                <target>Multilingual</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.117">
+                <source>areYouSure</source>
+                <target>Are You sure?</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.118">
+                <source>thisOperationCannotBeUndone</source>
+                <target>This operation cannot be undone!</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.119">
+                <source>deleteSelected</source>
+                <target>Delete selected</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.120">
+                <source>trashSelected</source>
+                <target>Trash selected</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.121">
+                <source>publishSelected</source>
+                <target>Publish selected</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.122">
+                <source>anErrorOccured</source>
+                <target>An error occured</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.123">
+                <source>noThumbnailAvailable</source>
+                <target>No thumbnail available</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.124">
+                <source>selectBlankValue</source>
+                <target>-- not selected --</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.125">
+                <source>signIn</source>
+                <target>Sign in</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.126">
+                <source>signUp</source>
+                <target>Sign up</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.127">
+                <source>appearance</source>
+                <target>Appearance</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.128">
+                <source>customize</source>
+                <target>Customize</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.129">
+                <source>widgets</source>
+                <target>Widgets</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.130">
+                <source>statusAndAvailability</source>
+                <target>Status and availability</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.131">
+                <source>leadImage</source>
+                <target>Lead image</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.132">
+                <source>noResultsForQuery</source>
+                <target>No results for {query}.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.133">
+                <source>allowComments</source>
+                <target>Allow comments</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.134">
+                <source>typeToSearchElement</source>
+                <target>Type to search for element.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.135">
+                <source>tools</source>
+                <target>Tools</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.136">
+                <source>system</source>
+                <target>System</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.137">
+                <source>otherSettings</source>
+                <target>Other settings</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.138">
+                <source>myAccountUsername</source>
+                <target>My profile - {username}</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.139">
+                <source>emptyTableListAddSomethingToStart</source>
+                <target>There is no element added right now. Add something to start.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.140">
+                <source>clearSearch</source>
+                <target>Clear search</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.141">
+                <source>missingTranslationInThisLocale</source>
+                <target>Missing translation in this locale</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.142">
+                <source>missingTranslationInThisLocaleSaveToSaveInThisLocale</source>
+                <target>Missing translation of this element in current locale. Now You can see it's content in default locale (the same content is available in front). Translate the content and save it to make sure this item has own, translated content in this locale.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.143">
+                <source>apply</source>
+                <target>Apply</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.144">
+                <source>thereAreNoOtherSettings</source>
+                <target>There are no other settings right now.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.145">
+                <source>locale</source>
+                <target>Locale</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.146">
+                <source>contentLocale</source>
+                <target>Content locale</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.147">
+                <source>notifications</source>
+                <target>Notifications</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.148">
+                <source>website</source>
+                <target>Website</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.149">
+                <source>switchWebsite</source>
+                <target>Switch website</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.150">
+                <source>websites</source>
+                <target>Websites</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.151">
+                <source>startTyping</source>
+                <target>Start typing...</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.152">
+                <source>searchAnything</source>
+                <target>Search anything...</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.153">
+                <source>searchInWholeAdmin</source>
+                <target>Search anything in Your website!</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.154">
+                <source>searchInContents</source>
+                <target>In contents (pages, news, products etc.)</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.155">
+                <source>searchInTaxonomies</source>
+                <target>In taxonomies (categories, tags etc.)</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.156">
+                <source>searchInSettings</source>
+                <target>In settings</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.157">
+                <source>searchInTools</source>
+                <target>In tools</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.158">
+                <source>searchInSystem</source>
+                <target>In system</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.159">
+                <source>searchInHelp</source>
+                <target>In help</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.160">
+                <source>searchResultsForQuery</source>
+                <target>Search results: {query}</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.161">
+                <source>searchingInProgress</source>
+                <target><![CDATA[Searching for {query} &hellip;]]></target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.162">
+                <source>languages</source>
+                <target>Languages</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.163">
+                <source>backend</source>
+                <target>Backend</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.164">
+                <source>frontend</source>
+                <target>Frontend</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.165">
+                <source>csrfTokenNotValidPleaseRedoOperation</source>
+                <target>CSRF token is invalid (security token). Please redo the operation.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.166">
+                <source>delete</source>
+                <target>Delete</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.167">
+                <source>lastActivity</source>
+                <target>Last activity</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.168">
+                <source>hideThisWidget</source>
+                <target>Hide this widget</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.169">
+                <source>readMore</source>
+                <target>Read more</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.170">
+                <source>editLinks</source>
+                <target>Edit links</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.171">
+                <source>turnOn</source>
+                <target>Turn On</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.172">
+                <source>turnOff</source>
+                <target>Turn Off</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.173">
+                <source>marker</source>
+                <target>Marker</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.174">
+                <source>move</source>
+                <target>Move</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.175">
+                <source>remove</source>
+                <target>Remove</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.176">
+                <source>select</source>
+                <target>Select</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.177">
+                <source>foreignLocaleElementCreationNotificationMessage</source>
+                <target>You create an item in a language other than the default language. After saving, be sure to switch to the default language and translate the item.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.178">
+                <source>previous</source>
+                <target>Previous</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.179">
+                <source>next</source>
+                <target>Next</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.180">
+                <source>perPage</source>
+                <target>Per page</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.181">
+                <source>filter</source>
+                <target>Filter</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.182">
+                <source>doFilter</source>
+                <target>Filter</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.183">
+                <source>translated</source>
+                <target>Translated</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.184">
+                <source>loadingDataInProgress</source>
+                <target>Loading data...</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.185">
+                <source>visible</source>
+                <target>Visible</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.186">
+                <source>invisible</source>
+                <target>Invisible</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.187">
+                <source>default</source>
+                <target>Default</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.188">
+                <source>hierarchy</source>
+                <target>Hierarchy</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.189">
+                <source>changeHierarchy</source>
+                <target>Change hierarchy</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.190">
+                <source>changeHierarchyMoveElementOnTheThree</source>
+                <target>Below you can change the hierarchy of items. Grab an element with the mouse and move it relative to other elements.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.191">
+                <source>hierarchyUpdated</source>
+                <target>Hierarchy updated.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.192">
+                <source>shortcode</source>
+                <target>Shortcode</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.193">
+                <source>shortcodeToInsertOnPage</source>
+                <target>Shortcode to insert on page.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.194">
+                <source>required</source>
+                <target>Required</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.195">
+                <source>type</source>
+                <target>Type</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.196">
+                <source>selectedElementsWereDeleted</source>
+                <target>Selected elements were deleted.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.197">
+                <source>setPublicationEndDate</source>
+                <target>Set publication end date</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.198">
+                <source>parentTerm</source>
+                <target>Parent term</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.199">
+                <source>icon</source>
+                <target>Icon</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.messages.200">
+                <source>errors</source>
+                <target>Errors</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

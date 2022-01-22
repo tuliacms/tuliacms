@@ -6,7 +6,7 @@ namespace Tulia\Cms\Node\Domain\SearchAnything;
 
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Tulia\Cms\ContentBuilder\Domain\NodeType\Service\NodeTypeRegistry;
+use Tulia\Cms\ContentBuilder\Domain\ContentType\Service\ContentTypeRegistry;
 use Tulia\Cms\Filemanager\Application\Service\ImageUrlResolver;
 use Tulia\Cms\Filemanager\Ports\Domain\WriteModel\FileTypeEnum;
 use Tulia\Cms\Filemanager\Ports\Domain\ReadModel\FileFinderInterface;
@@ -32,7 +32,7 @@ class SearchProvider extends AbstractProvider
 
     protected TranslatorInterface $translator;
 
-    protected NodeTypeRegistry $typesRegistry;
+    protected ContentTypeRegistry $contentTypeRegistry;
 
     protected ImageUrlResolver $imageUrlResolver;
 
@@ -41,14 +41,14 @@ class SearchProvider extends AbstractProvider
         FileFinderInterface $filesFinder,
         RouterInterface $router,
         TranslatorInterface $translator,
-        NodeTypeRegistry $typesRegistry,
+        ContentTypeRegistry $contentTypeRegistry,
         ImageUrlResolver $imageUrlResolver
     ) {
         $this->nodeFinder  = $nodeFinder;
         $this->filesFinder = $filesFinder;
         $this->router = $router;
         $this->translator = $translator;
-        $this->typesRegistry = $typesRegistry;
+        $this->contentTypeRegistry = $contentTypeRegistry;
         $this->imageUrlResolver = $imageUrlResolver;
     }
 
@@ -66,7 +66,7 @@ class SearchProvider extends AbstractProvider
             $hit = new Hit($node->getTitle(), $this->router->generate('backend.node.edit', ['node_type' => $node->getType(), 'id' => $node->getId() ]));
             $hit->setDescription($node->getIntroduction());
 
-            $nodeType = $this->typesRegistry->get($node->getType());
+            $nodeType = $this->contentTypeRegistry->get($node->getType());
             /*$hit->addTag(
                 $this->translator->trans('node', [], $nodeType->getTranslationDomain()),
                 'fas fa-file-powerpoint'

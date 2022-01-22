@@ -4,102 +4,82 @@ framework:
             - '%kernel.project_dir%/src/Cms/ContentBuilder/Infrastructure/Framework/Resources/translations'
     templating:
         paths:
-            - { name: backend/contentbuilder, path: '%kernel.project_dir%/src/Cms/ContentBuilder/Infrastructure/Framework/Resources/views/backend' }
+            - { name: backend/content_builder, path: '%kernel.project_dir%/src/Cms/ContentBuilder/Infrastructure/Framework/Resources/views/backend' }
+    assetter:
+        assets:
+            content_builder.layout_builder:
+                scripts: [ '/assets/core/content-builder-layout-builder/js/build.js' ]
+                styles: [ '/assets/core/content-builder-layout-builder/css/styles.min.css' ]
+                require: [ vue, lodash ]
 
 monolog:
     channels: ['contentBuilder']
 
 cms:
     content_building:
-        node_types:
-            page:
-                name: Page
-                icon: 'fas fa-file-powerpoint'
-                controller: 'Tulia\Cms\Node\UserInterface\Web\Frontend\Controller\Node::show'
-                is_routable: true
-                is_hierarchical: true
-                routable_taxonomy_field: category
-                translation_domain: pages
-                layout: node_default
-                fields:
-                    introduction:
-                        type: textarea
-                        multilingual: true
-                        label: ~
-                    content:
-                        type: wysiwyg
-                        multilingual: true
-                    category:
-                        label: category
-                        type: taxonomy
-                        taxonomy: category
-                    tags:
-                        label: tags
-                        type: taxonomy
-                        taxonomy: tag
-                    thumbnail:
-                        label: thumbnail
-                        type: filepicker
-
-        taxonomy_types:
-            category:
-                name: Category
-                controller: 'Tulia\Cms\Taxonomy\UserInterface\Web\Frontend\Controller\Term::show'
-                routing_strategy: simple
-                is_routable: true
-                is_hierarchical: true
-                layout: taxonomy_default
-            tag:
-                name: Tag
-                controller: 'Tulia\Cms\Taxonomy\UserInterface\Web\Frontend\Controller\Term::show'
-                routing_strategy: simple
-                is_routable: true
-                is_hierarchical: false
-                layout: taxonomy_default
-
-        layout_types:
-            node_default:
-                label: defaultLayout
-                sections:
-                    main:
-                        groups:
-                            introduction:
-                                label: introduction
-                                fields: [introduction]
-                            content:
-                                active: true
-                                interior: full-width
-                                label: content
-                                fields: [content]
-                    sidebar:
-                        groups:
-                            category:
-                                label: taxonomy
-                                fields: [category, tags]
-                            thumbnail:
-                                label: thumbnail
-                                fields: [thumbnail]
-            taxonomy_default:
-                label: defaultLayout
-                sections:
-                    main:
-                        groups: ~
-                    sidebar:
-                        groups: ~
-
+        content_type:
+            node:
+                default_controller: 'Tulia\Cms\Node\UserInterface\Web\Frontend\Controller\Node::show'
+            taxonomy:
+                default_controller: 'Tulia\Cms\Taxonomy\UserInterface\Web\Frontend\Controller\Term::show'
+        layout_type:
+            default_builder: 'Tulia\Cms\ContentBuilder\Infrastructure\Presentation\TwigLayoutTypeBuilder'
         data_types:
             mapping:
                 text:
                     label: Textline
                     classname: 'Symfony\Component\Form\Extension\Core\Type\TextType'
+                    constraints: [required, pattern, length]
                 textarea:
                     label: Textarea
                     classname: 'Symfony\Component\Form\Extension\Core\Type\TextareaType'
+                    constraints: [required, pattern, length]
                 select:
                     label: Select
                     classname: 'Symfony\Component\Form\Extension\Core\Type\ChoiceType'
+                    builder: 'Tulia\Cms\ContentBuilder\UserInterface\Web\Shared\Form\FormType\ChoiceTypeBuilder'
+                    constraints: [required]
+                    configuration:
+                        choices:
+                            required: true
+                            type: textarea
+                            label: Enter the available choices for this select
+                            help_text: "Every entry in new line. Format: \"value: Option label\""
+                            placeholder: |
+                                value-1: Option label 1
+                                value-2: Option label 2
+                        multiple:
+                            required: true
+                            type: yes_no
+                            label: Allows select multiple values at once
+                        placeholder:
+                            label: Placeholder text
+                            help_text: Shows when no value selected.
 
         constraint_types:
             mapping:
                 required:
                     classname: 'Symfony\Component\Validator\Constraints\NotBlank'
+                    label: Required
+                    help_text: Makes this field required.
+                pattern:
+                    classname: 'Symfony\Component\Validator\Constraints\Regex'
+                    label: Text pattern
+                    help_text: Regular expression pattern.
+                    modificators:
+                        pattern:
+                            type: string
+                            label: Regular expression pattern
+                length:
+                    classname: 'Symfony\Component\Validator\Constraints\Length'
+                    label: Text length
+                    help_text: Min and max text length.
+                    modificators:
+                        min:
+                            type: integer
+                            label: Minimal characters length
+                            value: null
+                        max:
+                            type: integer
+                            label: Maximal characters length
+                            value: null

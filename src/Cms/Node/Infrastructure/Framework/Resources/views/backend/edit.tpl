@@ -2,7 +2,7 @@
 {% trans_default_domain 'node' %}
 
 {% if nodeType.isRoutable %}
-    {% set previewLink = node_path(node) %}
+    {% set previewLink = node_path_from_id(node.id) %}
 {% endif %}
 
 {% import '@backend/_macros/alerts.tpl' as alerts %}
@@ -12,7 +12,7 @@
 {% endblock %}
 
 {% block breadcrumbs %}
-    <li class="breadcrumb-item"><a href="{{ path('backend.node', { node_type: nodeType.type }) }}">{{ 'nodesListOfType'|trans({ type: nodeType.name|trans }) }}</a></li>
+    <li class="breadcrumb-item"><a href="{{ path('backend.node', { node_type: nodeType.code }) }}">{{ 'nodesListOfType'|trans({ type: nodeType.name|trans }) }}</a></li>
     <li class="breadcrumb-item active" aria-current="page">{{ 'editNode'|trans }}</li>
 {% endblock %}
 

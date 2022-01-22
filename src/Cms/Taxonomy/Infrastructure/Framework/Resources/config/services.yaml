@@ -7,12 +7,8 @@ services:
         resource: '../../../../**'
         exclude: '../../../../{Infrastructure/Framework/Resources}'
 
-    Tulia\Cms\Taxonomy\Infrastructure\Framework\Routing\Router:
+    Tulia\Cms\Taxonomy\Infrastructure\Framework\Routing\SymfonyRouter:
         tags: [ routing_chain.router ]
-
-    Tulia\Cms\Taxonomy\Domain\Routing\Strategy\TaxonomyRoutingStrategyRegistry:
-        bind:
-            $strategies: !tagged_iterator taxonomy.routing.strategy
 
     Tulia\Cms\Taxonomy\Domain\Menu\IdentityProvider:
         tags: [ menu.identity_provider ]

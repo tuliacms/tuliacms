@@ -30,6 +30,7 @@ class SettingsMenuBuilder implements BuilderInterface
             'link'     => $this->helper->generateUrl('backend.settings'),
             'priority' => 500,
             'icon'     => 'fas fa-cogs',
+            'parent'   => 'section_administration',
         ]);
     }
 }

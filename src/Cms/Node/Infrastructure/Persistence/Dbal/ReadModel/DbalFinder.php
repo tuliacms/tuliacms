@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Infrastructure\Persistence\Dbal\ReadModel;
 
-use Tulia\Cms\ContentBuilder\Domain\NodeType\Service\NodeTypeRegistry;
+use Tulia\Cms\ContentBuilder\Domain\ContentType\Service\ContentTypeRegistry;
 use Tulia\Cms\Metadata\Domain\ReadModel\MetadataFinder;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\AbstractFinder;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Query\QueryInterface;
@@ -17,18 +17,17 @@ use Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderInterface;
 class DbalFinder extends AbstractFinder implements NodeFinderInterface
 {
     private ConnectionInterface $connection;
-
     private MetadataFinder $metadataFinder;
-    private NodeTypeRegistry $nodeTypeRegistry;
+    private ContentTypeRegistry $contentTypeRegistry;
 
     public function __construct(
         ConnectionInterface $connection,
         MetadataFinder $metadataFinder,
-        NodeTypeRegistry $nodeTypeRegistry
+        ContentTypeRegistry $contentTypeRegistry
     ) {
         $this->connection = $connection;
         $this->metadataFinder = $metadataFinder;
-        $this->nodeTypeRegistry = $nodeTypeRegistry;
+        $this->contentTypeRegistry = $contentTypeRegistry;
     }
 
     public function getAlias(): string
@@ -38,6 +37,6 @@ class DbalFinder extends AbstractFinder implements NodeFinderInterface
 
     public function createQuery(): QueryInterface
     {
-        return new DbalFinderQuery($this->connection->createQueryBuilder(), $this->metadataFinder, $this->nodeTypeRegistry);
+        return new DbalFinderQuery($this->connection->createQueryBuilder(), $this->metadataFinder, $this->contentTypeRegistry);
     }
 }

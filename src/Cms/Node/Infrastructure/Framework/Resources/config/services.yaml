@@ -20,7 +20,7 @@ services:
         bind:
             $providers: !tagged_iterator node.flag_provider
 
-    Tulia\Cms\Node\Infrastructure\Framework\Routing\Router:
+    Tulia\Cms\Node\Infrastructure\Framework\Routing\SymfonyRouter:
         tags: [ routing_chain.router ]
 
     Tulia\Cms\Node\Domain\Menu\IdentityProvider:
@@ -41,9 +41,6 @@ services:
         class: Tulia\Cms\Node\Infrastructure\Domain\ReadModel\NodeContent\TwigRenderingNodeContentFactory
         bind:
             $environment: '%kernel.environment%'
-
-    Tulia\Cms\Node\UserInterface\Web\Backend\BackendMenu\NodeMenuBuilder:
-        tags: [ backend_menu.builder ]
 
     Tulia\Cms\Node\Domain\Filemanager\ImageSize\DefaultSizesImagesSizeProvider:
         tags: [ filemanager.image_size.provider ]

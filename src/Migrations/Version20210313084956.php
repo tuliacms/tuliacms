@@ -73,7 +73,7 @@ CREATE TABLE `#__node_term_relationship` (
 EOL
 );
         $this->addSql(<<<EOL
-CREATE TABLE `#__node_type` (
+CREATE TABLE `#__content_type` (
   `type` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
   `active` tinyint(3) UNSIGNED NOT NULL DEFAULT '1',
   `supports` text COLLATE utf8_unicode_ci,
@@ -129,7 +129,7 @@ ALTER TABLE `#__node_term_relationship`
 EOL
 );
         $this->addSql(<<<EOL
-ALTER TABLE `#__node_type`
+ALTER TABLE `#__content_type`
   ADD PRIMARY KEY (`type`),
   ADD KEY `active` (`active`);
 EOL
@@ -177,7 +177,7 @@ EOL
 
     public function down(Schema $schema) : void
     {
-        $this->addSql('DROP TABLE `#__node_type`');
+        $this->addSql('DROP TABLE `#__content_type`');
         $this->addSql('DROP TABLE `#__node_term_relationship`');
         $this->addSql('DROP TABLE `#__node_metadata_lang`');
         $this->addSql('DROP TABLE `#__node_metadata`');

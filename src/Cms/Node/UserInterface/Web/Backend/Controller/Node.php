@@ -8,12 +8,10 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Tulia\Cms\ContentBuilder\Domain\NodeType\Exception\NodeTypeNotExistsException;
-use Tulia\Cms\ContentBuilder\Domain\NodeType\Model\NodeType;
-use Tulia\Cms\ContentBuilder\Domain\NodeType\Service\NodeTypeRegistry;
-use Tulia\Cms\ContentBuilder\Domain\TaxonomyType\Service\TaxonomyTypeRegistry;
+use Tulia\Cms\ContentBuilder\Domain\ContentType\Model\ContentType;
+use Tulia\Cms\ContentBuilder\Domain\ContentType\Service\ContentTypeRegistry;
 use Tulia\Cms\ContentBuilder\UserInterface\Web\Form\ContentTypeFormDescriptor;
-use Tulia\Cms\ContentBuilder\UserInterface\Web\Service\NodeFormService;
+use Tulia\Cms\ContentBuilder\UserInterface\Web\Service\ContentFormService;
 use Tulia\Cms\Node\Domain\WriteModel\Exception\NodeNotFoundException;
 use Tulia\Cms\Node\Domain\WriteModel\Exception\SingularFlagImposedOnMoreThanOneNodeException;
 use Tulia\Cms\Node\Domain\WriteModel\NodeRepository;
@@ -22,6 +20,8 @@ use Tulia\Cms\Platform\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Component\Datatable\DatatableFactory;
 use Tulia\Component\Security\Http\Csrf\Annotation\CsrfToken;
+use Tulia\Component\Security\Http\Csrf\Annotation\IgnoreCsrfToken;
+use Tulia\Component\Security\Http\Csrf\Exception\RequestCsrfTokenException;
 use Tulia\Component\Templating\ViewInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Model\Node as Model;
 
@@ -30,32 +30,28 @@ use Tulia\Cms\Node\Domain\WriteModel\Model\Node as Model;
  */
 class Node extends AbstractController
 {
-    private NodeTypeRegistry $typeRegistry;
+    private ContentTypeRegistry $typeRegistry;
 
     private NodeRepository $repository;
-
-    private TaxonomyTypeRegistry $taxonomyTypeRegistry;
 
     private DatatableFactory $factory;
 
     private NodeDatatableFinderInterface $finder;
 
-    private NodeFormService $nodeFormService;
+    private ContentFormService $contentFormService;
 
     public function __construct(
-        NodeTypeRegistry $typeRegistry,
+        ContentTypeRegistry $typeRegistry,
         NodeRepository $repository,
-        TaxonomyTypeRegistry $taxonomyTypeRegistry,
         DatatableFactory $factory,
         NodeDatatableFinderInterface $finder,
-        NodeFormService $nodeFormService
+        ContentFormService $contentFormService
     ) {
         $this->typeRegistry = $typeRegistry;
         $this->repository = $repository;
-        $this->taxonomyTypeRegistry = $taxonomyTypeRegistry;
         $this->factory = $factory;
         $this->finder = $finder;
-        $this->nodeFormService = $nodeFormService;
+        $this->contentFormService = $contentFormService;
     }
 
     public function index(string $node_type): RedirectResponse
@@ -66,7 +62,7 @@ class Node extends AbstractController
     public function list(Request $request, string $node_type): ViewInterface
     {
         $nodeTypeObject = $this->findNodeType($node_type);
-        $this->finder->setNodeType($nodeTypeObject);
+        $this->finder->setContentType($nodeTypeObject);
 
         return $this->view('@backend/node/list.tpl', [
             'nodeType'   => $nodeTypeObject,
@@ -77,7 +73,7 @@ class Node extends AbstractController
 
     public function datatable(Request $request, string $node_type): JsonResponse
     {
-        $this->finder->setNodeType($this->findNodeType($node_type));
+        $this->finder->setContentType($this->findNodeType($node_type));
         return $this->factory->create($this->finder, $request)->generateResponse();
     }
 
@@ -85,20 +81,23 @@ class Node extends AbstractController
      * @param Request $request
      * @param string $node_type
      * @return RedirectResponse|ViewInterface
-     * @CsrfToken(id="content_builder_form_page")
+     * @throws RequestCsrfTokenException
+     * @IgnoreCsrfToken()
      */
     public function create(Request $request, string $node_type)
     {
+        $this->validateCsrfToken($request, $node_type);
+
         $node = $this->repository->createNew($node_type);
 
         $formDescriptor = $this->produceFormDescriptor($node, $request);
         $nodeType = $formDescriptor->getContentType();
 
         if ($formDescriptor->isFormValid()) {
-            $this->updateModel($formDescriptor, $node);
+            $this->updateModel($formDescriptor, $node, 'create');
 
             $this->setFlash('success', $this->trans('nodeSaved', [], 'node'));
-            return $this->redirectToRoute('backend.node.edit', [ 'id' => $node->getId(), 'node_type' => $nodeType->getType() ]);
+            return $this->redirectToRoute('backend.node.edit', [ 'id' => $node->getId(), 'node_type' => $nodeType->getCode() ]);
         }
 
         return $this->view('@backend/node/create.tpl', [
@@ -113,10 +112,13 @@ class Node extends AbstractController
      * @param string $node_type
      * @param string $id
      * @return RedirectResponse|ViewInterface
-     * @CsrfToken(id="content_builder_form_page")
+     * @throws RequestCsrfTokenException
+     * @IgnoreCsrfToken()
      */
     public function edit(Request $request, string $node_type, string $id)
     {
+        $this->validateCsrfToken($request, $node_type);
+
         try {
             $node = $this->repository->find($id);
 
@@ -134,9 +136,9 @@ class Node extends AbstractController
 
         if ($formDescriptor->isFormValid()) {
             try {
-                $this->updateModel($formDescriptor, $node);
+                $this->updateModel($formDescriptor, $node, 'update');
                 $this->setFlash('success', $this->trans('nodeSaved', [], 'node'));
-                return $this->redirectToRoute('backend.node.edit', [ 'id' => $node->getId(), 'node_type' => $nodeType->getType() ]);
+                return $this->redirectToRoute('backend.node.edit', [ 'id' => $node->getId(), 'node_type' => $nodeType->getCode() ]);
             } catch (SingularFlagImposedOnMoreThanOneNodeException $e) {
                 $error = new FormError($this->trans('singularFlagImposedOnMoreThanOneNode', ['flag' => $e->getFlag()], 'node'));
                 $form->get('flags')->addError($error);
@@ -170,7 +172,7 @@ class Node extends AbstractController
             switch ($status) {
                 case 'trashed'  : $node->setStatus('trashed'); break;
                 case 'published': $node->setStatus('published'); break;
-                default         : return $this->redirectToRoute('backend.node', [ 'node_type' => $nodeType->getType() ]);
+                default         : return $this->redirectToRoute('backend.node', [ 'node_type' => $nodeType->getCode() ]);
             }
 
             $this->repository->update($node);
@@ -183,7 +185,7 @@ class Node extends AbstractController
         }
 
         $this->setFlash('success', $this->trans($message, [], 'node'));
-        return $this->redirectToRoute('backend.node', [ 'node_type' => $nodeType->getType() ]);
+        return $this->redirectToRoute('backend.node', [ 'node_type' => $nodeType->getCode() ]);
     }
 
     /**
@@ -213,18 +215,18 @@ class Node extends AbstractController
         return $this->redirectToRoute('backend.node', [ 'node_type' => $request->query->get('node_type', 'page') ]);
     }
 
-    protected function findNodeType(string $type): NodeType
+    protected function findNodeType(string $type): ContentType
     {
-        $nodeType = $this->typeRegistry->get($type);
+        $contentType = $this->typeRegistry->get($type);
 
-        if (! $nodeType) {
+        if (! $contentType || $contentType->isType('node') === false) {
             throw $this->createNotFoundException('Node type not found.');
         }
 
-        return $nodeType;
+        return $contentType;
     }
 
-    private function collectTaxonomies(NodeType $nodeType): array
+    private function collectTaxonomies(ContentType $nodeType): array
     {
         $result = [];
 
@@ -233,7 +235,7 @@ class Node extends AbstractController
                 continue;
             }
 
-            $result[] = $this->taxonomyTypeRegistry->get($field->getTaxonomy());
+            $result[] = $this->typeRegistry->get($field->getTaxonomy());
         }
 
         return $result;
@@ -241,7 +243,7 @@ class Node extends AbstractController
 
     private function produceFormDescriptor(Model $node, Request $request): ContentTypeFormDescriptor
     {
-        return $this->nodeFormService->buildFormDescriptor(
+        return $this->contentFormService->buildFormDescriptor(
             $node->getType(),
             array_merge(
                 [
@@ -259,19 +261,41 @@ class Node extends AbstractController
         );
     }
 
-    private function updateModel(ContentTypeFormDescriptor $formDescriptor, Model $node): void
+    private function updateModel(ContentTypeFormDescriptor $formDescriptor, Model $node, string $strategy): void
     {
         $data = $formDescriptor->getData();
 
         $node->setStatus($data['status']);
-        $node->setSlug($data['slug']);
+        $node->setSlug($data['slug'] ?? null);
         $node->setTitle($data['title']);
         $node->setPublishedAt(new ImmutableDateTime($data['published_at']));
         $node->setPublishedTo($data['published_to'] ? new ImmutableDateTime($data['published_to']) : null);
-        $node->setParentId($data['parent_id']);
+        $node->setParentId($data['parent_id'] ?? null);
         $node->setAuthorId($data['author_id']);
         $node->updateAttributes($data);
 
-        $this->repository->update($node);
+        if ($strategy === 'create') {
+            $this->repository->insert($node);
+        } else {
+            $this->repository->update($node);
+        }
+    }
+
+    /**
+     * @throws RequestCsrfTokenException
+     */
+    private function validateCsrfToken(Request $request, string $node_type): void
+    {
+        /**
+         * We must detect token validness manually, cause form name changes for every node type.
+         */
+        if ($request->isMethod('POST')) {
+            $tokenId = 'content_builder_form_' . $node_type;
+            $csrfToken = $request->request->all()[$tokenId]['_token'] ?? '';
+
+            if ($this->isCsrfTokenValid($tokenId, $csrfToken) === false) {
+                throw new RequestCsrfTokenException('CSRF token is invalid. Operation stopped.');
+            }
+        }
     }
 }

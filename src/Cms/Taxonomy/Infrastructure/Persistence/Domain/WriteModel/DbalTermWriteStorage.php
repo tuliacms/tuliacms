@@ -5,10 +5,9 @@ declare(strict_types=1);
 namespace Tulia\Cms\Taxonomy\Infrastructure\Persistence\Domain\WriteModel;
 
 use Tulia\Cms\Platform\Infrastructure\Persistence\Domain\AbstractLocalizableStorage;
-use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
-use Tulia\Cms\Taxonomy\Ports\Infrastructure\Persistence\Domain\WriteModel\TermPathWriteStorageInterface;
-use Tulia\Cms\Taxonomy\Ports\Infrastructure\Persistence\Domain\WriteModel\TermWriteStorageInterface;
+use Tulia\Cms\Taxonomy\Domain\WriteModel\Service\TermPathWriteStorageInterface;
+use Tulia\Cms\Taxonomy\Domain\WriteModel\Service\TermWriteStorageInterface;
 
 /**
  * @author Adam Banaszkiewicz

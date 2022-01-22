@@ -1,0 +1,143 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" target-language="pl" datatype="plaintext" original="installator+intl-icu.pl.xlf">
+        <body>
+            <trans-unit id="tuliacms.installator.1">
+                <source>tuliaCmsInstallator</source>
+                <target>Instalator systemu Tulia CMS</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.installator.2">
+                <source>continueInstallation</source>
+                <target>Kontynuuj</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.installator.3">
+                <source>database</source>
+                <target>Baza danych</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.installator.4">
+                <source>host</source>
+                <target>Host</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.installator.5">
+                <source>databaseName</source>
+                <target>Nazwa bazy danych</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.installator.6">
+                <source>port</source>
+                <target>Port</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.installator.7">
+                <source>username</source>
+                <target>Nazwa użytkownika</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.installator.8">
+                <source>tablePrefix</source>
+                <target>Prefix tabel</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.installator.9">
+                <source>tablePrefixInfo</source>
+                <target>Prefix zostanie dodany do każdej nazwy tabeli.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.installator.10">
+                <source>requirements</source>
+                <target>Wymagania</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.installator.11">
+                <source>requirementsMetInfo</source>
+                <target>Wymagania do działania systemu są spełnione. Możesz kontynuować instalację.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.installator.12">
+                <source>requirementsNotMetInfo</source>
+                <target>Wymagania do działania systemu nie zostały spełnione. Proszę naprawić widoczne błędy a następnie odświeżyć stronę.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.installator.13">
+                <source>databaseConnectionError</source>
+                <target>Nie można nawiązać połączenia z bazą danych. Proszę zweryfikować podane dane.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.installator.14">
+                <source>databaseConnectionErrorInvalidHost</source>
+                <target>Nie można nawiązać połączenia z bazą danych. Proszę zweryfikować podany host.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.installator.15">
+                <source>installatorIntroWelcome</source>
+                <target>Witaj w instalatorze systemu Tulia CMS. Przeprowadzi Cię on bezboleśnie przez proces instalacji :)</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.installator.16">
+                <source>letsStart</source>
+                <target>Rozpoczynamy</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.installator.17">
+                <source>goBack</source>
+                <target>Wróć</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.installator.18">
+                <source>released</source>
+                <target>wydany</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.installator.19">
+                <source>website</source>
+                <target>Strona</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.installator.20">
+                <source>administrator</source>
+                <target>Administrator</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.installator.21">
+                <source>install</source>
+                <target>Instaluj</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.installator.22">
+                <source>readyToInstall</source>
+                <target>Gotowy do instalacji</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.installator.23">
+                <source>installation</source>
+                <target>Instalacja systemu</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.installator.24">
+                <source>pleaseWaitUntilEnd</source>
+                <target>Proszę czekać aż instalacja dobiegnie końca.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.installator.25">
+                <source>installationFinished</source>
+                <target>Instalacja zakończona</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.installator.26">
+                <source>installationStep.prepare</source>
+                <target>Przygotowywanie danych...</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.installator.27">
+                <source>installationStep.creatingAdminAccount</source>
+                <target>Tworzenie konta użytkownika...</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.installator.28">
+                <source>installationStep.creatingWebsite</source>
+                <target>Tworzenie konfiguracji witryny...</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.installator.29">
+                <source>installationStep.publishingAssets</source>
+                <target>Instalacja zasobów...</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.installator.30">
+                <source>installationStep.finishingInstallation</source>
+                <target>Finalizowanie instalacji...</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.installator.31">
+                <source>installationComplete</source>
+                <target>Instalacja zakończona</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.installator.32">
+                <source>installationCompleteInformations</source>
+                <target>Instalacja dobiegła końca. Możesz już zalogować się do Panelu Administracyjnego i rozpocząć tworzenie swojej strony.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.installator.33">
+                <source>administrationPanel</source>
+                <target>Panel Administracyjny</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.installator.34">
+                <source>frontend</source>
+                <target>Strona główna</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

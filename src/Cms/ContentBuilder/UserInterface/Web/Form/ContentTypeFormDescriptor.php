@@ -6,23 +6,27 @@ namespace Tulia\Cms\ContentBuilder\UserInterface\Web\Form;
 
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
-use Tulia\Cms\ContentBuilder\Domain\ContentType\Model\AbstractContentType;
+use Tulia\Cms\ContentBuilder\Domain\ContentType\Model\ContentType;
+use Tulia\Cms\ContentBuilder\Domain\ContentType\Model\Field;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class ContentTypeFormDescriptor
 {
-    protected AbstractContentType $contentType;
+    protected ContentType $contentType;
     protected FormInterface $form;
     protected ?FormView $formView = null;
 
-    public function __construct(AbstractContentType $contentType, FormInterface $form)
+    public function __construct(ContentType $contentType, FormInterface $form)
     {
         $this->form = $form;
         $this->contentType = $contentType;
     }
 
+    /**
+     * @return Field[]
+     */
     protected function getFields(): array
     {
         return $this->contentType->getFields();
@@ -49,7 +53,7 @@ class ContentTypeFormDescriptor
         $result['id'] = $rawData['id'];
 
         foreach ($this->getFields() as $field) {
-            $result[$field->getName()] = $rawData[$field->getName()];
+            $result[$field->getCode()] = $rawData[$field->getCode()];
         }
 
         return $result;
@@ -60,7 +64,7 @@ class ContentTypeFormDescriptor
         return $this->form->isSubmitted() && $this->form->isValid();
     }
 
-    public function getContentType(): AbstractContentType
+    public function getContentType(): ContentType
     {
         return $this->contentType;
     }

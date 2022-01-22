@@ -30,11 +30,11 @@ class ConstraintsBuilder
 
         $result = [];
 
-        foreach ($constraints as $constraint) {
+        foreach ($constraints as $code => $constraint) {
             if ($constraint instanceof Constraint) {
                 $result[] = $constraint;
             } else {
-                $result[] = $this->mapping->getConstraint($constraint['name']);
+                $result[] = $this->mapping->getConstraint($code, [$constraint['modificators'] ?? []]);
             }
         }
 

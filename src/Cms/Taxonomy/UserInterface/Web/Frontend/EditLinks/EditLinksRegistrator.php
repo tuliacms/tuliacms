@@ -6,7 +6,7 @@ namespace Tulia\Cms\Taxonomy\UserInterface\Web\Frontend\EditLinks;
 
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Tulia\Cms\ContentBuilder\Domain\TaxonomyType\Service\TaxonomyTypeRegistry;
+use Tulia\Cms\ContentBuilder\Domain\ContentType\Service\ContentTypeRegistry;
 use Tulia\Cms\EditLinks\Domain\Collection;
 use Tulia\Cms\EditLinks\Ports\Domain\EditLinksCollectorInterface;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Model\Term;
@@ -20,12 +20,12 @@ class EditLinksRegistrator implements EditLinksCollectorInterface
 
     protected RouterInterface $router;
 
-    protected TaxonomyTypeRegistry $registry;
+    protected ContentTypeRegistry $registry;
 
     public function __construct(
         TranslatorInterface $translator,
         RouterInterface $router,
-        TaxonomyTypeRegistry $registry
+        ContentTypeRegistry $registry
     ) {
         $this->translator = $translator;
         $this->router = $router;

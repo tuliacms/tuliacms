@@ -138,7 +138,20 @@ class HtmlBuilder implements HtmlBuilderInterface
         }
 
         if ($element['type'] === 'section') {
-            return '<li class="separator"></li><li data-priority="' . $element['priority'] . '" class="headline">' . $element['label'] . '</li>';
+            $children = $this->findChildren($element['id'], $elements);
+            $result = '<li class="separator"></li><li data-priority="' . $element['priority'] . '" class="headline">' . $element['label'] . '</li>';
+
+            if ($children !== []) {
+                $result .= '<ul class="dropdown">';
+
+                foreach ($children as $child) {
+                    $result .= $this->buildElement($child, $elements);
+                }
+
+                $result .= '</ul>';
+            }
+
+            return $result;
         }
 
         return '';

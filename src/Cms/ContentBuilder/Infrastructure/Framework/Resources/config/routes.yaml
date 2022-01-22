@@ -1,0 +1,18 @@
+backend.content_builder.homepage:
+    path: /administrator/content-builder
+    controller: Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Controller\ContentModel::index
+
+backend.content_builder.content_type.create:
+    path: /administrator/content-builder/{contentType}/create
+    controller: Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Controller\ContentModel::create
+    methods: [GET, POST]
+    requirements:
+        contentType: '(taxonomy|node)'
+
+backend.content_builder.content_type.edit:
+    path: /administrator/content-builder/{contentType}/edit/{code}
+    controller: Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Controller\ContentModel::edit
+    methods: [GET, POST]
+    requirements:
+        code: '[a-z0-9_]+'
+        contentType: '(taxonomy|node)'

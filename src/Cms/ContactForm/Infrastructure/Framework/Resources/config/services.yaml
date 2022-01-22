@@ -18,9 +18,6 @@ services:
             $sourceTypes: !tagged_iterator cms.form.field_type
             $sourceParsers: !tagged_iterator cms.form.field_parser
 
-    Tulia\Cms\ContactForm\UserInterface\Web\Backend\BackendMenu\MenuBuilder:
-        tags: [ backend_menu.builder ]
-
     Tulia\Cms\ContactForm\Domain\Shortcode\ContactForm:
         tags: [ shortcode.compiler ]
 

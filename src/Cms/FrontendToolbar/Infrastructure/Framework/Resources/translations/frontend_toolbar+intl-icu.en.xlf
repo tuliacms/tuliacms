@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" target-language="en" datatype="plaintext" original="frontend_toolbar+intl-icu.en.xlf">
+        <body>
+            <trans-unit id="tuliacms.frontend_toolbar.1">
+                <source>frontendToolbar</source>
+                <target>Frontend Toolbar</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

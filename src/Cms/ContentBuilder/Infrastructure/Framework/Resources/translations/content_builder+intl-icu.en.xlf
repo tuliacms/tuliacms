@@ -1,0 +1,246 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" target-language="en" datatype="plaintext" original="content_builder+intl-icu.en.xlf">
+        <body>
+            <trans-unit id="tuliacms.content_builder.1">
+                <source>contentModel</source>
+                <target>Content model</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.2">
+                <source>nodeTypeName</source>
+                <target>Node type name</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.3">
+                <source>nodeTypeNameInfo</source>
+                <target>Use singular, infinitive, e.g. Post, News, Article, House.</target>
+                <note>Describe how user should create Node Type name</note>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.4">
+                <source>createContentTypeOf</source>
+                <target>Create content type of {name}</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.5">
+                <source>editNodeType</source>
+                <target>Edit node type</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.6">
+                <source>contentTypesListOf</source>
+                <target>Content types list of {name}</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.7">
+                <source>addNewSection</source>
+                <target>Add new section</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.8">
+                <source>addNewField</source>
+                <target>Add new field</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.9">
+                <source>editField</source>
+                <target>Edit field</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.10">
+                <source>fieldLabel</source>
+                <target>Field label</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.11">
+                <source>fieldLabelHelp</source>
+                <target>This label will be showed on the node form for administrators.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.12">
+                <source>fieldId</source>
+                <target>Field ID</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.13">
+                <source>fieldIdHelp</source>
+                <target>Please use lowercased alphanum and underscores. THis field is used in API and in templates.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.14">
+                <source>youCannotCreateTwoFieldsWithTheSameId</source>
+                <target>Yout cannot create two fields with the same ID.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.15">
+                <source>nodeTypeNotExists</source>
+                <target>This node type not exists.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.16">
+                <source>cannotEditInternalNodeType</source>
+                <target>Internal Node Types are not editable.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.17">
+                <source>removeField</source>
+                <target>Remove field</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.18">
+                <source>removeSection</source>
+                <target>Remove section</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.19">
+                <source>fieldType</source>
+                <target>Field type</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.20">
+                <source>theseOptionsWillNotBeEditableAfterSave</source>
+                <target>This options (except Field label) will not be editable after save.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.21">
+                <source>multilingualField</source>
+                <target>This field is multilingual</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.22">
+                <source>multilingualFieldInfo</source>
+                <target>Allows to translate this field across all defined locales in the website.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.23">
+                <source>multipleField</source>
+                <target>This field stores a multiple values</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.24">
+                <source>multipleFieldInfo</source>
+                <target>Allows set multiple values in one field of the same type.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.25">
+                <source>nextStep</source>
+                <target>Next step</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.26">
+                <source>previousStep</source>
+                <target>Previous step</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.27">
+                <source>pleaseFillThisField</source>
+                <target>Please fill this field.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.28">
+                <source>fieldCodeMustContainOnlyAlphanumsAndUnderline</source>
+                <target>Field ID must contain only lowercased alphanums and underline.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.29">
+                <source>sectionIdCodeMustContainOnlyAlphanumsAndUnderline</source>
+                <target>Section ID must contain only lowercased alphanums and underline.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.30">
+                <source>fieldTypeConfiguration</source>
+                <target>Configuration</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.31">
+                <source>fieldDetails</source>
+                <target>Field details</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.32">
+                <source>fieldTypeConstraints</source>
+                <target>Constraints</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.33">
+                <source>editNodeTypeDetails</source>
+                <target>Edit node type details</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.34">
+                <source>contentTypeCode</source>
+                <target>Content type code</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.35">
+                <source>nodeTypeCodeHelp</source>
+                <target>Please use lowercased alphanum and underscores.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.36">
+                <source>nodeTypeCodeMustContainOnlyAlphanumsAndUnderline</source>
+                <target>Node Type code must contain only lowercased alphanums and underline.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.39">
+                <source>routableType</source>
+                <target>Routable type</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.40">
+                <source>routableTypeHelp</source>
+                <target>Decide, if this content type has own pages (URLs) in the website.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.41">
+                <source>hierarchicalType</source>
+                <target>Hierarchical type</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.42">
+                <source>hierarchicalTypeHelp</source>
+                <target>Decide, if every element can have children elements, and created hierarchical tree of elements.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.43">
+                <source>pleaseSelectValue</source>
+                <target>Please select value</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.44">
+                <source>internalFields</source>
+                <target>Internal fields</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.45">
+                <source>fieldTypeNotExists</source>
+                <target>Field type "{type}" not exists.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.47">
+                <source>thisNodeTypeIsAlreadyRegistered</source>
+                <target>This node type is already registered in system.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.48">
+                <source>fieldHasErrors</source>
+                <target>Field has errors.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.49">
+                <source>internalContentType</source>
+                <target>Internal content type</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.50">
+                <source>isRoutable</source>
+                <target>Routable</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.51">
+                <source>isHierarchical</source>
+                <target>Hierarchical</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.52">
+                <source>numberOfFields</source>
+                <target>Number of fields</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.53">
+                <source>taxonomyTypesList</source>
+                <target>Taxonomy types list</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.54">
+                <source>taxonomyTypeCode</source>
+                <target>Taxonomy type code</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.55">
+                <source>nodeTypeUpdatedSuccessfully</source>
+                <target>Node Type updated successfully.</target>
+                <note>Flash message</note>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.56">
+                <source>nodeTypeCreatedSuccessfully</source>
+                <target>Node Type created successfully.</target>
+                <note>Flash message</note>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.57">
+                <source>routingStrategy</source>
+                <target>Routing strategy</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.58">
+                <source>routingStrategyHelp</source>
+                <target>Decide how URLs to this element should be builded.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.59">
+                <source>node</source>
+                <target>Node</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.60">
+                <source>taxonomy</source>
+                <target>Taxonomy</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.61">
+                <source>contentTypeStrategy_simple</source>
+                <target>Simple - URL is created only from slug field</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.62">
+                <source>contentTypeStrategy_full_path</source>
+                <target>Full path - All hierarchical parent elements are used to create URL</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

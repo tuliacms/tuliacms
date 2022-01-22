@@ -8,6 +8,6 @@ backend.settings:
     controller: Tulia\Cms\Settings\UserInterface\Web\Backend\Controller\Settings::show
     methods: GET|POST
     requirements:
-        group: '[a-z0-9\.]+'
+        group: '[a-z0-9\._]+'
     defaults:
         group: null

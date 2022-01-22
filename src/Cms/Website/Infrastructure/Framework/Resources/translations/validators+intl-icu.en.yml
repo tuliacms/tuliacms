@@ -1,5 +1,0 @@
-websites:
-    pleaseProvideValidPathWithPrecededSlash: "Please provide a valid path. Must contain following signs: [a-z, 0-9, -, _], and must be preceded by slash (one slash at the beginning only)."
-    pleaseSelectDefaultLocale: Please select the default locale for this website.
-    thereCanBeOnlyOneDefaultLocaleButSelected: "There can be only one default locale, already selected {count}."
-    detectedDoubledLocale: "You have created multiple times the same locale (locale code: {code}) for this website. Please make sure there is only one locale of one code."

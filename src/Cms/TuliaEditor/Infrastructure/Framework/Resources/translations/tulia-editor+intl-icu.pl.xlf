@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" target-language="pl" datatype="plaintext" original="tulia-editor+intl-icu.en.xlf">
+        <body>
+            <trans-unit id="tuliacms.tulia-editor.1">
+                <source>contentNotSupportedByEditorCopyToNotLoss</source>
+                <target>Wygląda na to, że ta treść nie została edytowana za pomocą Tulia Editora, dlatego nie może ona zostać wyświetlona. Poniżej znajduje się oryginalna treść, której nie można pokazać w edytorze. Skopiuj ją jeśli potrzebujesz, ponieważ gdy zapiszesz treść edytowaną za pomocą Tulia Edytora - ta przepadnie.</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

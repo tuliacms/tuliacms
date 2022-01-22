@@ -7,7 +7,7 @@ namespace Tulia\Cms\Node\Infrastructure\Persistence\Dbal\ReadModel;
 use Doctrine\DBAL\Connection;
 use Exception;
 use PDO;
-use Tulia\Cms\ContentBuilder\Domain\NodeType\Service\NodeTypeRegistry;
+use Tulia\Cms\ContentBuilder\Domain\ContentType\Service\ContentTypeRegistry;
 use Tulia\Cms\Metadata\Domain\ReadModel\MetadataFinder;
 use Tulia\Cms\Node\Domain\ReadModel\Model\Node;
 use Tulia\Cms\Node\Domain\WriteModel\Model\Enum\TermTypeEnum;
@@ -26,17 +26,17 @@ class DbalFinderQuery extends AbstractDbalQuery
 
     protected array $joinedTables = [];
 
-    private NodeTypeRegistry $nodeTypeRegistry;
+    private ContentTypeRegistry $contentTypeRegistry;
 
     public function __construct(
         QueryBuilder $queryBuilder,
         MetadataFinder $metadataFinder,
-        NodeTypeRegistry $nodeTypeRegistry
+        ContentTypeRegistry $contentTypeRegistry
     ) {
         parent::__construct($queryBuilder);
 
         $this->metadataFinder = $metadataFinder;
-        $this->nodeTypeRegistry = $nodeTypeRegistry;
+        $this->contentTypeRegistry = $contentTypeRegistry;
     }
 
     public function getBaseQueryArray(): array
@@ -227,7 +227,7 @@ class DbalFinderQuery extends AbstractDbalQuery
                 $row['attributes_info'] = [];
                 $row['flags'] = array_filter(explode(',', (string) $row['flags']));
 
-                foreach ($this->nodeTypeRegistry->get($row['type'])->getFields() as $name => $field) {
+                foreach ($this->contentTypeRegistry->get($row['type'])->getFields() as $name => $field) {
                     if ($field->hasFlag('compilable') === false || isset($row['attributes'][$name]) === false) {
                         continue;
                     }

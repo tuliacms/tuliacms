@@ -1,20 +1,20 @@
 {% if row.status == 'trashed' %}
-    {{ _self.publish(row, nodeType) }}
-    {{ _self.delete(row, nodeType) }}
+    {{ _self.publish(row, contentType) }}
+    {{ _self.delete(row, contentType) }}
 {% endif %}
 
 {% if row.status == 'published' %}
-    {{ _self.delete(row, nodeType) }}
+    {{ _self.delete(row, contentType) }}
 {% endif %}
 
 {% if row.status == 'sketch' %}
-    {{ _self.publish(row, nodeType) }}
-    {{ _self.trash(row, nodeType) }}
+    {{ _self.publish(row, contentType) }}
+    {{ _self.trash(row, contentType) }}
 {% endif %}
 
 
 
-{% macro publish(row, nodeType) %}
+{% macro publish(row, contentType) %}
     <a
         href="#"
         class="dropdown-item dropdown-item-with-icon"
@@ -33,7 +33,7 @@
     ><i class="dropdown-icon fas fa-check"></i> {{ 'publishNode'|trans({}, 'node') }}</a>
 {% endmacro %}
 
-{% macro trash(row, nodeType) %}
+{% macro trash(row, contentType) %}
     <a
         href="#"
         class="dropdown-item dropdown-item-with-icon"
@@ -52,7 +52,7 @@
     ><i class="dropdown-icon fas fa-trash"></i> {{ 'trashNode'|trans({}, 'node') }}</a>
 {% endmacro %}
 
-{% macro delete(row, nodeType) %}
+{% macro delete(row, contentType) %}
     <a
         href="#"
         class="dropdown-item dropdown-item-with-icon dropdown-item-danger"

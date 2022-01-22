@@ -4,33 +4,21 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Taxonomy\Domain\WriteModel\ActionsChain\Core;
 
-use Tulia\Cms\ContentBuilder\Domain\TaxonomyType\Service\TaxonomyTypeRegistry;
-use Tulia\Cms\Taxonomy\Domain\Routing\Strategy\TaxonomyRoutingStrategyRegistry;
+use Tulia\Cms\ContentBuilder\Domain\ContentType\Service\Router;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\ActionsChain\TaxonomyActionInterface;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Taxonomy;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Term;
-use Tulia\Cms\Taxonomy\Domain\Routing\Strategy\TaxonomyRoutingStrategyInterface;
-use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class PathGenerator implements TaxonomyActionInterface
 {
-    private TaxonomyRoutingStrategyRegistry $strategyRegistry;
+    private Router $router;
 
-    private TaxonomyTypeRegistry $taxonomyTypeRegistry;
-
-    private CurrentWebsiteInterface $currentWebsite;
-
-    public function __construct(
-        TaxonomyRoutingStrategyRegistry $strategyRegistry,
-        TaxonomyTypeRegistry $taxonomyTypeRegistry,
-        CurrentWebsiteInterface $currentWebsite
-    ) {
-        $this->strategyRegistry = $strategyRegistry;
-        $this->taxonomyTypeRegistry = $taxonomyTypeRegistry;
-        $this->currentWebsite = $currentWebsite;
+    public function __construct(Router $router)
+    {
+        $this->router = $router;
     }
 
     public static function supports(): array
@@ -40,30 +28,18 @@ class PathGenerator implements TaxonomyActionInterface
 
     public function execute(Taxonomy $taxonomy): void
     {
-        $strategy = $this->strategyRegistry->get(
-            $this->taxonomyTypeRegistry->get($taxonomy->getType())->getRoutingStrategy()
-        );
-
         foreach ($this->getTerms($taxonomy) as $term) {
-            $this->createPathForTerm($taxonomy, $term, $strategy);
+            $this->createPathForTerm($taxonomy, $term);
         }
     }
 
-    private function createPathForTerm(Taxonomy $taxonomy, Term $term, TaxonomyRoutingStrategyInterface $strategy): void
+    private function createPathForTerm(Taxonomy $taxonomy, Term $term): void
     {
-        if ($term->isRoot()) {
-            return;
-        }
-
-        $path = $strategy->generateFromTaxonomy(
-            $taxonomy,
-            $term->getId()->getId()
+        $path = $this->router->generate(
+            $taxonomy->getType(),
+            $term->getId()->getId(),
+            ['_locale' => $term->getLocale(), '_term_instance' => $term]
         );
-
-        // Remove path for non visible terms
-        if ($this->isTermVisible($taxonomy, $term) === false) {
-            $path = null;
-        }
 
         if ($term->getPath() === $path) {
             return;
@@ -77,20 +53,19 @@ class PathGenerator implements TaxonomyActionInterface
      */
     private function getTerms(Taxonomy $taxonomy): array
     {
-        $changedTerms = array_merge(...array_values($taxonomy->collectChangedTerms()));
-        $existingTerms = iterator_to_array($taxonomy->terms());
         $terms = [];
 
-        foreach ($existingTerms as $existingTerm) {
-            foreach ($changedTerms as $changedTerm) {
-                if ($changedTerm->isRoot() || $existingTerm->isRoot()) {
-                    continue;
-                }
-
-                if ($existingTerm->getId()->equals($changedTerm->getId())) {
-                    $terms[] = $changedTerm;
-                }
+        foreach ($taxonomy->terms() as $term) {
+            if ($term->isRoot()) {
+                continue;
             }
+
+            // Remove path for non visible terms
+            if ($this->isTermVisible($taxonomy, $term) === false) {
+                continue;
+            }
+
+            $terms[] = $term;
         }
 
         return $terms;

@@ -158,7 +158,9 @@ class Node extends AggregateRoot
                  * collection.
                  */
                 $this->recordUniqueThat(AttributeUpdated::fromNode($this, $name, $value), function ($event) use ($name) {
-                    return $name === $event->getAttribute();
+                    if ($event instanceof AttributeUpdated) {
+                        return $name === $event->getAttribute();
+                    }
                 });
             }
         }
