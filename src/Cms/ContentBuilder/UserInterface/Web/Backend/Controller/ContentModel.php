@@ -56,6 +56,11 @@ class ContentModel extends AbstractController
      */
     public function create(string $contentType, Request $request, FormHandler $nodeTypeFormHandler)
     {
+        if ($this->configuration->typeExists($contentType) === false) {
+            $this->addFlash('danger', $this->trans('contentTypeOfNotExists', ['name' => $contentType], 'content_builder'));
+            return $this->redirectToRoute('backend.content_builder.homepage');
+        }
+
         if ($request->isMethod('POST')) {
             $data = json_decode($request->request->get('node_type'), true);
         } else {
@@ -74,7 +79,7 @@ class ContentModel extends AbstractController
 
             }
 
-            $this->setFlash('success', $this->trans('nodeTypeCreatedSuccessfully', [], 'content_builder'));
+            $this->setFlash('success', $this->trans('contentTypeCreatedSuccessfully', [], 'content_builder'));
             return $this->redirectToRoute('backend.content_builder.homepage');
         }
 
@@ -93,15 +98,20 @@ class ContentModel extends AbstractController
      */
     public function edit(string $code, string $contentType, Request $request, FormHandler $nodeTypeFormHandler)
     {
+        if ($this->configuration->typeExists($contentType) === false) {
+            $this->addFlash('danger', $this->trans('contentTypeOfNotExists', ['name' => $contentType], 'content_builder'));
+            return $this->redirectToRoute('backend.content_builder.homepage');
+        }
+
         if ($this->contentTypeRegistry->has($code) === false) {
-            $this->setFlash('danger', $this->trans('nodeTypeNotExists', [], 'content_builder'));
+            $this->setFlash('danger', $this->trans('contentTypeNotExists', [], 'content_builder'));
             return $this->redirectToRoute('backend.content_builder.homepage');
         }
 
         $type = $this->contentTypeRegistry->get($code);
 
         if ($type->isInternal()) {
-            $this->setFlash('danger', $this->trans('cannotEditInternalNodeType', [], 'content_builder'));
+            $this->setFlash('danger', $this->trans('cannotEditInternalContentType', [], 'content_builder'));
             return $this->redirectToRoute('backend.content_builder.homepage');
         }
 
@@ -120,7 +130,7 @@ class ContentModel extends AbstractController
 
             }
 
-            $this->setFlash('success', $this->trans('nodeTypeUpdatedSuccessfully', [], 'content_builder'));
+            $this->setFlash('success', $this->trans('contentTypeUpdatedSuccessfully', [], 'content_builder'));
             return $this->redirectToRoute('backend.content_builder.homepage');
         }
 

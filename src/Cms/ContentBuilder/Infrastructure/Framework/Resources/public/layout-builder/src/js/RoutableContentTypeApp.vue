@@ -44,17 +44,17 @@
                             <div class="row">
                                 <div class="col-6">
                                     <div class="mb-3">
-                                        <label class="form-label" for="ctb-node-type-name">{{ translations.nodeTypeName }}</label>
+                                        <label class="form-label" for="ctb-node-type-name">{{ translations.contentTypeName }}</label>
                                         <input type="text" :class="{ 'form-control': true, 'is-invalid': view.form.type_validation.name.valid === false }" id="ctb-node-type-name" v-model="model.type.name" @keyup="generateTypeCode()" @change="validate()" />
-                                        <div class="form-text">{{ translations.nodeTypeNameInfo }}</div>
+                                        <div class="form-text">{{ translations.contentTypeNameInfo }}</div>
                                         <div v-if="view.form.type_validation.name.valid === false" class="invalid-feedback">{{ view.form.type_validation.name.message }}</div>
                                     </div>
                                 </div>
                                 <div class="col-6">
                                     <div class="mb-3">
-                                        <label class="form-label" for="ctb-node-type-code">{{ translations.nodeTypeCode }}</label>
+                                        <label class="form-label" for="ctb-node-type-code">{{ translations.contentTypeCode }}</label>
                                         <input type="text" :class="{ 'form-control': true, 'is-invalid': view.form.type_validation.code.valid === false }" id="ctb-node-type-code" v-model="model.type.code" @change="validate()" />
-                                        <div class="form-text">{{ translations.nodeTypeCodeHelp }}</div>
+                                        <div class="form-text">{{ translations.contentTypeCodeHelp }}</div>
                                         <div v-if="view.form.type_validation.code.valid === false" class="invalid-feedback">{{ view.form.type_validation.code.message }}</div>
                                     </div>
                                 </div>

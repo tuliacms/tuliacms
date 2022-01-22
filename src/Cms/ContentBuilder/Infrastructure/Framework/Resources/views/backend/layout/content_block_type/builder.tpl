@@ -2,7 +2,7 @@
 
 {% trans_default_domain 'content_builder' %}
 
-<div id="content-builder-routable-content-type-builder"></div>
+<div id="content-builder-content-block-builder"></div>
 
 <script nonce="{{ csp_nonce() }}">
     window.ContentBuilderLayoutBuilder = {

@@ -76,7 +76,7 @@ class ContentTypeForm extends AbstractType
     public function validateNodeTypeDuplicate(?string $nodeType, ExecutionContextInterface $context, array $payload): void
     {
         if ($payload['edit_form'] === false && $this->contentTypeRegistry->has($nodeType)) {
-            $context->buildViolation('thisNodeTypeIsAlreadyRegistered')
+            $context->buildViolation('thisContentTypeIsAlreadyRegistered')
                 ->setTranslationDomain('content_builder')
                 ->addViolation();
         }

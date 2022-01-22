@@ -7,13 +7,13 @@
                 <target>Content model</target>
             </trans-unit>
             <trans-unit id="tuliacms.content_builder.2">
-                <source>nodeTypeName</source>
-                <target>Node type name</target>
+                <source>contentTypeName</source>
+                <target>Content type name</target>
             </trans-unit>
             <trans-unit id="tuliacms.content_builder.3">
-                <source>nodeTypeNameInfo</source>
+                <source>contentTypeNameInfo</source>
                 <target>Use singular, infinitive, e.g. Post, News, Article, House.</target>
-                <note>Describe how user should create Node Type name</note>
+                <note>Describe how user should create Content Type name</note>
             </trans-unit>
             <trans-unit id="tuliacms.content_builder.4">
                 <source>createContentTypeOf</source>
@@ -45,7 +45,7 @@
             </trans-unit>
             <trans-unit id="tuliacms.content_builder.11">
                 <source>fieldLabelHelp</source>
-                <target>This label will be showed on the node form for administrators.</target>
+                <target>This label will be showed on the content form for administrators.</target>
             </trans-unit>
             <trans-unit id="tuliacms.content_builder.12">
                 <source>fieldId</source>
@@ -60,12 +60,12 @@
                 <target>Yout cannot create two fields with the same ID.</target>
             </trans-unit>
             <trans-unit id="tuliacms.content_builder.15">
-                <source>nodeTypeNotExists</source>
-                <target>This node type not exists.</target>
+                <source>contentTypeNotExists</source>
+                <target>This content type not exists.</target>
             </trans-unit>
             <trans-unit id="tuliacms.content_builder.16">
-                <source>cannotEditInternalNodeType</source>
-                <target>Internal Node Types are not editable.</target>
+                <source>cannotEditInternalContentType</source>
+                <target>Internal Content Types are not editable.</target>
             </trans-unit>
             <trans-unit id="tuliacms.content_builder.17">
                 <source>removeField</source>
@@ -132,20 +132,20 @@
                 <target>Constraints</target>
             </trans-unit>
             <trans-unit id="tuliacms.content_builder.33">
-                <source>editNodeTypeDetails</source>
-                <target>Edit node type details</target>
+                <source>editContentTypeDetails</source>
+                <target>Edit content type details</target>
             </trans-unit>
             <trans-unit id="tuliacms.content_builder.34">
                 <source>contentTypeCode</source>
                 <target>Content type code</target>
             </trans-unit>
             <trans-unit id="tuliacms.content_builder.35">
-                <source>nodeTypeCodeHelp</source>
+                <source>contentTypeCodeHelp</source>
                 <target>Please use lowercased alphanum and underscores.</target>
             </trans-unit>
             <trans-unit id="tuliacms.content_builder.36">
-                <source>nodeTypeCodeMustContainOnlyAlphanumsAndUnderline</source>
-                <target>Node Type code must contain only lowercased alphanums and underline.</target>
+                <source>contentTypeCodeMustContainOnlyAlphanumsAndUnderline</source>
+                <target>Content Type code must contain only lowercased alphanums and underline.</target>
             </trans-unit>
             <trans-unit id="tuliacms.content_builder.39">
                 <source>routableType</source>
@@ -176,8 +176,8 @@
                 <target>Field type "{type}" not exists.</target>
             </trans-unit>
             <trans-unit id="tuliacms.content_builder.47">
-                <source>thisNodeTypeIsAlreadyRegistered</source>
-                <target>This node type is already registered in system.</target>
+                <source>thisContentTypeIsAlreadyRegistered</source>
+                <target>This content type is already registered in system.</target>
             </trans-unit>
             <trans-unit id="tuliacms.content_builder.48">
                 <source>fieldHasErrors</source>
@@ -208,13 +208,13 @@
                 <target>Taxonomy type code</target>
             </trans-unit>
             <trans-unit id="tuliacms.content_builder.55">
-                <source>nodeTypeUpdatedSuccessfully</source>
-                <target>Node Type updated successfully.</target>
+                <source>contentTypeUpdatedSuccessfully</source>
+                <target>Content Type updated successfully.</target>
                 <note>Flash message</note>
             </trans-unit>
             <trans-unit id="tuliacms.content_builder.56">
-                <source>nodeTypeCreatedSuccessfully</source>
-                <target>Node Type created successfully.</target>
+                <source>contentTypeCreatedSuccessfully</source>
+                <target>Content Type created successfully.</target>
                 <note>Flash message</note>
             </trans-unit>
             <trans-unit id="tuliacms.content_builder.57">
@@ -240,6 +240,11 @@
             <trans-unit id="tuliacms.content_builder.62">
                 <source>contentTypeStrategy_full_path</source>
                 <target>Full path - All hierarchical parent elements are used to create URL</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.63">
+                <source>contentTypeOfNotExists</source>
+                <target>Content Type {name} not exists.</target>
+                <note>Flash message</note>
             </trans-unit>
         </body>
     </file>

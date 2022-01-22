@@ -1,5 +1,6 @@
-import App from './App.vue'
-import draggable from 'vuedraggable'
+import RoutableContentTypeApp from './RoutableContentTypeApp.vue';
+import ContentBlockApp from './ContentBlockApp.vue';
+import draggable from 'vuedraggable';
 
 Vue.config.devtools = true;
 
@@ -69,6 +70,15 @@ Vue.mixin({
     }
 });
 
-new Vue({
-    render: h => h(App)
-}).$mount('#content-builder-layout-builder');
+$(function () {
+    if (document.querySelector('#content-builder-routable-content-type-builder')) {
+        new Vue({
+            render: h => h(RoutableContentTypeApp)
+        }).$mount('#content-builder-routable-content-type-builder');
+    }
+    if (document.querySelector('#content-builder-content-block-builder')) {
+        new Vue({
+            render: h => h(ContentBlockApp)
+        }).$mount('#content-builder-content-block-builder');
+    }
+});

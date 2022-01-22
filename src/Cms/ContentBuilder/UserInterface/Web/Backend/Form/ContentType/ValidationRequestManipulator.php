@@ -15,10 +15,10 @@ class ValidationRequestManipulator
             'type' => $data['type'],
             'layout' => [
                 'sidebar' => [
-                    'sections' => $this->cleanSectionsFromValidationData($data['layout']['sidebar']['sections'])
+                    'sections' => $this->cleanSectionsFromValidationData($data['layout']['sidebar']['sections'] ?? [])
                 ],
                 'main' => [
-                    'sections' => $this->cleanSectionsFromValidationData($data['layout']['main']['sections'])
+                    'sections' => $this->cleanSectionsFromValidationData($data['layout']['main']['sections'] ?? [])
                 ],
             ],
         ];

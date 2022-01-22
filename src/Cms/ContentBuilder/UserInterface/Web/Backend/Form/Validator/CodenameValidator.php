@@ -21,7 +21,7 @@ class CodenameValidator
     public function validateNodeType(?string $code, ExecutionContextInterface $context): void
     {
         if ($code && ! preg_match(self::PATTERN, $code)) {
-            $context->buildViolation('nodeTypeCodeMustContainOnlyAlphanumsAndUnderline')
+            $context->buildViolation('contentTypeCodeMustContainOnlyAlphanumsAndUnderline')
                 ->setTranslationDomain('content_builder')
                 ->addViolation();
         }

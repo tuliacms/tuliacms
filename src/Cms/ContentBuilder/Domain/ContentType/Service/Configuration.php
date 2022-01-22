@@ -16,6 +16,11 @@ class Configuration
         $this->configuration = $configuration;
     }
 
+    public function typeExists(string $type): bool
+    {
+        return isset($this->configuration[$type]);
+    }
+
     public function getTypes(): array
     {
         return array_keys($this->configuration);
