@@ -102,7 +102,7 @@ class ContentTypeRepository
             foreach ($field->getConstraints() as $code => $info) {
                 $constraints[] = [
                     'code' => $code,
-                    'modificators' => $info['modificators'],
+                    'modificators' => $info['modificators'] ?? [],
                 ];
             }
 

@@ -53,7 +53,7 @@
                                 <div class="col-6">
                                     <div class="mb-3">
                                         <label class="form-label" for="ctb-node-type-code">{{ translations.contentTypeCode }}</label>
-                                        <input type="text" :class="{ 'form-control': true, 'is-invalid': view.form.type_validation.code.valid === false }" id="ctb-node-type-code" v-model="model.type.code" @change="validate()" />
+                                        <input type="text" :disabled="view.creation_mode !== true" :class="{ 'form-control': true, 'is-invalid': view.form.type_validation.code.valid === false }" id="ctb-node-type-code" v-model="model.type.code" @change="validate()" />
                                         <div class="form-text">{{ translations.contentTypeCodeHelp }}</div>
                                         <div v-if="view.form.type_validation.code.valid === false" class="invalid-feedback">{{ view.form.type_validation.code.message }}</div>
                                     </div>
@@ -162,7 +162,9 @@ export default {
                         configuration: [],
                     },
                     type_validation: typeValidation
-                }
+                },
+                creation_mode: window.ContentBuilderLayoutBuilder.creationMode,
+                is_multilingual: window.ContentBuilderLayoutBuilder.multilingual,
             },
             model: {
                 type: {
@@ -323,6 +325,10 @@ export default {
             this.$forceUpdate();
         },
         generateTypeCode: function () {
+            if (this.view.creation_mode === false) {
+                return;
+            }
+
             if (this.model.type.code === '') {
                 this.code_field_changed = false;
             }

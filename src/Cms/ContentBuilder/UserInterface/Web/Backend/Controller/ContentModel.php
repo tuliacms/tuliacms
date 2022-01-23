@@ -131,7 +131,7 @@ class ContentModel extends AbstractController
             try {
                 $this->contentTypeRepository->update($nodeType);
             } catch (\Exception $e) {
-
+                dump($e);exit;
             }
 
             $this->setFlash('success', $this->trans('contentTypeUpdatedSuccessfully', [], 'content_builder'));

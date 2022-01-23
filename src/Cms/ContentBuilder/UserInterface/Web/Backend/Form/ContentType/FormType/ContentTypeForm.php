@@ -61,6 +61,7 @@ class ContentTypeForm extends AbstractType
                     new Choice(['choices' => $choices]),
                 ],
             ])
+            ->add('routingStrategy', TextType::class)
         ;
     }
 

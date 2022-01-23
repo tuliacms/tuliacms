@@ -32,6 +32,23 @@ class FieldTypeMappingRegistry
         return $this->mapping;
     }
 
+    public function allForContentType(string $contentTypeType): array
+    {
+        $this->resolveMapping();
+
+        $result = [];
+
+        foreach ($this->mapping as $type => $map) {
+            if (in_array($contentTypeType, $map['exclude_for_types'])) {
+                continue;
+            }
+
+            $result[$type] = $map;
+        }
+
+        return $result;
+    }
+
     /**
      * @throws FieldTypeNotExistsException
      */

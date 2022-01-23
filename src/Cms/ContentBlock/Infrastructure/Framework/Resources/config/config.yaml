@@ -6,6 +6,16 @@ framework:
         paths:
             - { name: backend/content_block, path: '%kernel.project_dir%/src/Cms/ContentBlock/Infrastructure/Framework/Resources/views/backend' }
             - { name: cms/content_block, path: '%kernel.project_dir%/src/Cms/ContentBlock/Infrastructure/Framework/Resources/views/frontend' }
+    assetter:
+        assets:
+            content_block_builder:
+                scripts: [ '/assets/core/content-block-builder/js/build.js' ]
+                styles: [ '/assets/core/content-block-builder/css/styles.min.css' ]
+                require: [ vue, lodash ]
+
+twig:
+    form_themes:
+        - '@backend/content_block/form_layout/content_block_builder_form_layout.tpl'
 
 cms:
     content_building:
@@ -14,3 +24,11 @@ cms:
                 controller: ''
                 layout_builder: 'Tulia\Cms\ContentBuilder\Infrastructure\Presentation\TwigContentBlockTypeLayoutBuilder'
                 multilingual: false
+        data_types:
+            mapping:
+                content_blocks:
+                    label: Content Blocks builder
+                    classname: 'Tulia\Cms\ContentBlock\Infrastructure\Framework\Form\FormType\ContentBlockBuilderType'
+                    #builder: 'Tulia\Cms\Taxonomy\UserInterface\Web\Shared\Form\FormType\TaxonomyTypeaheadTypeBuilder'
+                    exclude_for_types: [ content_block ]
+                    constraints: [ required ]

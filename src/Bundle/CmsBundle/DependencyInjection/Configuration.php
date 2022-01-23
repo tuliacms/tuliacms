@@ -80,6 +80,7 @@ class Configuration implements ConfigurationInterface
                                             ->scalarNode('classname')->isRequired()->end()
                                             ->scalarNode('builder')->defaultNull()->end()
                                             ->arrayNode('constraints')->scalarPrototype()->defaultValue([])->end()->end()
+                                            ->arrayNode('exclude_for_types')->scalarPrototype()->defaultValue([])->end()->end()
                                             ->arrayNode('configuration')
                                                 ->arrayPrototype()
                                                     ->addDefaultsIfNotSet()

@@ -47,7 +47,7 @@ class TwigContentBlockTypeLayoutBuilder implements LayoutTypeBuilderInterface
     public function builderView(string $contentType, array $data, array $errors, bool $creationMode): View
     {
         return new View('@backend/content_builder/layout/content_block_type/builder.tpl', [
-            'fieldTypes' => $this->getFieldTypes(),
+            'fieldTypes' => $this->getFieldTypes($contentType),
             'routingStrategies' => $this->getRoutingStrategies($contentType),
             'model' => $data,
             'errors' => $errors,
@@ -56,11 +56,11 @@ class TwigContentBlockTypeLayoutBuilder implements LayoutTypeBuilderInterface
         ]);
     }
 
-    private function getFieldTypes(): array
+    private function getFieldTypes(string $contentType): array
     {
         $types = [];
 
-        foreach ($this->fieldTypeMappingRegistry->all() as $type => $data) {
+        foreach ($this->fieldTypeMappingRegistry->allForContentType($contentType) as $type => $data) {
             $types[$type] = [
                 'id' => $type,
                 'label' => $data['label'],
