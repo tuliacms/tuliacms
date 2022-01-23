@@ -11,11 +11,11 @@ interface ContentTypeStorageInterface
 {
     public function find(string $id): array;
 
-    public function insert(array $nodeType): void;
+    public function insert(array $contentType): void;
 
-    public function update(array $nodeType): void;
+    public function update(array $contentType): void;
 
-    public function delete(array $nodeType): void;
+    public function delete(array $contentType): void;
 
     public function beginTransaction(): void;
 

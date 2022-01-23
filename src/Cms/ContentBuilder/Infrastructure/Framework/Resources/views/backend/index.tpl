@@ -17,7 +17,7 @@
             {% if type.isInternal %}
                 <h4 class="card-title"><i class="{{ type.icon }}"></i> &nbsp; {{ type.name|trans({}, 'node') }}</h4>
             {% else %}
-                <a href="{{ path('backend.content_builder.content_type.edit', { code: type.code, contentType: type.type }) }}">
+                <a href="{{ path('backend.content_builder.content_type.edit', { id: type.id, contentType: type.type }) }}">
                     <h4 class="card-title"><i class="{{ type.icon }}"></i> &nbsp; {{ type.name|trans({}, 'node') }}</h4>
                 </a>
             {% endif %}
@@ -41,14 +41,14 @@
         </ul>
         {% if type.isInternal == false %}
             <div class="card-footer py-0 pr-0">
-                <a href="{{ path('backend.content_builder.content_type.edit', { code: type.code, contentType: type.type }) }}" class="card-link py-3 d-inline-block" title="{{ 'edit'|trans({}, 'messages') }}">{{ 'edit'|trans({}, 'messages') }}</a>
+                <a href="{{ path('backend.content_builder.content_type.edit', { id: type.id, contentType: type.type }) }}" class="card-link py-3 d-inline-block" title="{{ 'edit'|trans({}, 'messages') }}">{{ 'edit'|trans({}, 'messages') }}</a>
                 <a href="#" class="card-link"></a>
                 <div class="dropup d-inline-block float-right">
                     <a href="#" class="card-link d-inline-block px-4 py-3 text-dark" data-bs-toggle="dropdown">
                         <i class="fas fa-ellipsis-v"></i>
                     </a>
                     <div class="dropdown-menu">
-                        <a href="#" class="dropdown-item dropdown-item-danger dropdown-item-with-icon website-delete-trigger" title="{{ 'delete'|trans({}, 'messages') }}" data-id="{{ type.code }}"><i class="dropdown-icon fas fa-times"></i>{{ 'delete'|trans({}, 'messages') }}</a>
+                        <a href="#" data-href="{{ path('backend.content_builder.content_type.delete', { id: type.id, contentType: type.type }) }}" class="dropdown-item dropdown-item-danger dropdown-item-with-icon content-type-delete-trigger" title="{{ 'delete'|trans({}, 'messages') }}" data-id="{{ type.code }}"><i class="dropdown-icon fas fa-times"></i>{{ 'delete'|trans({}, 'messages') }}</a>
                     </div>
                 </div>
             </div>
@@ -97,18 +97,11 @@
             </div>
         </div>
     {% endfor %}
+    <form method="POST" id="content-type-remove-form" style="display:none">
+        <input type="text" name="_token" value="{{ csrf_token('delete-content-type') }}" />
+    </form>
 
     <style>
-        .content-type-list .list-group-item {
-            position: relative;
-        }
-        .content-type-list .list-group-item .website-locale-flag-icon {
-            position: absolute;
-            left: 11px;
-            top: 50%;
-            transform: translateY(-50%);
-            max-width: 16px;
-        }
         .content-type-create-button {
             min-height: 210px;
             display: flex;
@@ -134,4 +127,26 @@
             color: #aaa;
         }
     </style>
+    <script>
+        $(function () {
+            $('.content-type-delete-trigger').click(function (e) {
+                e.preventDefault();
+                let action = $(this).attr('data-href');
+
+                Tulia.Confirmation
+                    .warning({
+                        title: 'You want to remove this Content Type?',
+                        text: 'Removeing Content type won\'t remove contents, first remove all the contents from this type.',
+                    })
+                    .then(function (v) {
+                        if (! v.value) {
+                            return;
+                        }
+
+                        Tulia.PageLoader.show();
+                        $('#content-type-remove-form').attr('action', action).submit();
+                    });
+            });
+        });
+    </script>
 {% endblock %}

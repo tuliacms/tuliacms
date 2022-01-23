@@ -4,12 +4,17 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\ContentType;
 
+use Tulia\Cms\ContentBuilder\Domain\ContentType\Exception\CannotOverwriteInternalFieldException;
+use Tulia\Cms\ContentBuilder\Domain\ContentType\Exception\EmptyRoutingStrategyForRoutableContentTypeException;
+use Tulia\Cms\ContentBuilder\Domain\ContentType\Exception\MultipleValueForTitleOrSlugOccuredException;
+use Tulia\Cms\ContentBuilder\Domain\ContentType\Exception\RoutableContentTypeWithoutSlugField;
 use Tulia\Cms\ContentBuilder\Domain\ContentType\Model\ContentType;
 use Tulia\Cms\ContentBuilder\Domain\ContentType\Model\Field;
 use Tulia\Cms\ContentBuilder\Domain\ContentType\Service\ContentTypeDecorator;
 use Tulia\Cms\ContentBuilder\Domain\LayoutType\Model\FieldsGroup;
 use Tulia\Cms\ContentBuilder\Domain\LayoutType\Model\LayoutType;
 use Tulia\Cms\ContentBuilder\Domain\LayoutType\Model\Section;
+use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -17,20 +22,28 @@ use Tulia\Cms\ContentBuilder\Domain\LayoutType\Model\Section;
 class FormDataToModelTransformer
 {
     private ContentTypeDecorator $decorator;
+    private UuidGeneratorInterface $uuidGenerator;
 
-    public function __construct(ContentTypeDecorator $decorator)
+    public function __construct(ContentTypeDecorator $decorator, UuidGeneratorInterface $uuidGenerator)
     {
         $this->decorator = $decorator;
+        $this->uuidGenerator = $uuidGenerator;
     }
 
+    /**
+     * @throws MultipleValueForTitleOrSlugOccuredException
+     * @throws RoutableContentTypeWithoutSlugField
+     * @throws CannotOverwriteInternalFieldException
+     * @throws EmptyRoutingStrategyForRoutableContentTypeException
+     */
     public function produceContentType(array $data, string $type, LayoutType $layout): ContentType
     {
-        $nodeType = new ContentType($data['type']['code'], $type, $layout, false);
+        $nodeType = new ContentType($this->uuidGenerator->generate(), $data['type']['code'], $type, $layout, false);
         $nodeType->setName($data['type']['name']);
         $nodeType->setIcon($data['type']['icon']);
         $nodeType->setIsHierarchical((bool) $data['type']['icon']);
         $nodeType->setIsRoutable((bool) $data['type']['isRoutable']);
-        $nodeType->setRoutingStrategy($data['type']['routingStrategy']);
+        $nodeType->setRoutingStrategy($data['type']['routingStrategy'] ?? '');
 
         foreach ($this->collectFields($data['layout']) as $field) {
             $nodeType->addField($field);

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContentBuilder\Domain\ContentType\Model;
 
+use Tulia\Cms\ContentBuilder\Domain\ContentType\Exception\EmptyRoutingStrategyForRoutableContentTypeException;
 use Tulia\Cms\ContentBuilder\Domain\ContentType\Exception\RoutableContentTypeWithoutSlugField;
 use Tulia\Cms\ContentBuilder\Domain\ContentType\Exception\MultipleValueForTitleOrSlugOccuredException;
 use Tulia\Cms\ContentBuilder\Domain\ContentType\Exception\CannotOverwriteInternalFieldException;
@@ -14,38 +15,35 @@ use Tulia\Cms\ContentBuilder\Domain\LayoutType\Model\LayoutType;
  */
 class ContentType
 {
+    protected string $id;
     protected string $type;
-    protected string $controller;
+    protected ?string $controller = null;
     protected LayoutType $layout;
     protected string $code;
     protected string $name;
     protected string $icon;
-    protected bool $isRoutable = true;
+    protected bool $isRoutable = false;
     protected bool $isHierarchical = false;
-    protected bool $isInternal = true;
-    protected string $routingStrategy = 'simple';
+    protected bool $isInternal = false;
+    protected ?string $routingStrategy = null;
 
     /**
      * @var Field[]
      */
     protected array $fields = [];
 
-    protected function internalValidate(): void
+    public function __construct(string $id, string $code, string $type, LayoutType $layout, bool $isInternal)
     {
-
-    }
-
-    protected function internalValidateField(Field $field): void
-    {
-
-    }
-
-    public function __construct(string $code, string $type, LayoutType $layout, bool $isInternal)
-    {
+        $this->id = $id;
         $this->code = $code;
         $this->type = $type;
         $this->layout = $layout;
         $this->isInternal = $isInternal;
+    }
+
+    public function getId(): string
+    {
+        return $this->id;
     }
 
     public function getName(): string
@@ -92,12 +90,12 @@ class ContentType
         return $this->layout;
     }
 
-    public function getController(): string
+    public function getController(): ?string
     {
         return $this->controller;
     }
 
-    public function setController(string $controller): void
+    public function setController(?string $controller): void
     {
         $this->controller = $controller;
     }
@@ -107,8 +105,15 @@ class ContentType
         return $this->isRoutable;
     }
 
+    /**
+     * @throws EmptyRoutingStrategyForRoutableContentTypeException
+     */
     public function setIsRoutable(bool $isRoutable): void
     {
+        if ($isRoutable && ! $this->routingStrategy) {
+            throw EmptyRoutingStrategyForRoutableContentTypeException::fromType($this->type);
+        }
+
         $this->isRoutable = $isRoutable;
     }
 
@@ -163,13 +168,20 @@ class ContentType
         return $field;
     }
 
-    public function getRoutingStrategy(): string
+    public function getRoutingStrategy(): ?string
     {
         return $this->routingStrategy;
     }
 
-    public function setRoutingStrategy(string $routingStrategy): void
+    /**
+     * @throws EmptyRoutingStrategyForRoutableContentTypeException
+     */
+    public function setRoutingStrategy(?string $routingStrategy): void
     {
+        if ($this->isRoutable && ! $routingStrategy) {
+            throw EmptyRoutingStrategyForRoutableContentTypeException::fromType($this->type);
+        }
+
         $this->routingStrategy = $routingStrategy;
     }
 
@@ -179,8 +191,6 @@ class ContentType
     public function validate(): void
     {
         $this->validateRoutableContentType();
-
-        $this->internalValidate();
     }
 
     /**
@@ -196,8 +206,6 @@ class ContentType
         if (isset($this->fields[$field->getCode()]) && $this->fields[$field->getCode()]->isInternal()) {
             throw CannotOverwriteInternalFieldException::fromCodeAndName($field->getCode(), $field->getName());
         }
-
-        $this->internalValidateField($field);
     }
 
     /**

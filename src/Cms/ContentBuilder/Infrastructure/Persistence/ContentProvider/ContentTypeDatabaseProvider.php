@@ -28,6 +28,7 @@ class ContentTypeDatabaseProvider extends AbstractContentTypeProvider
 
         foreach ($this->getTypes() as $type) {
             $result[] = $this->buildContentType(
+                $type['id'],
                 $type['code'],
                 $type,
                 $this->buildLayoutType($type['type'], $this->getLayoutType($type['layout']))

@@ -62,7 +62,7 @@ class FormHandler
 
         // Node type form
         $request = Request::create('/', 'POST');
-        $request->request->set('node_type_form', $formData['type']);
+        $request->request->set('content_type_form', $formData['type']);
         $form = $this->formFactory->create(ContentTypeForm::class, null, [
             'fields' => $this->collectFieldsFromSections($formData['layout']),
             'edit_form' => $editForm,

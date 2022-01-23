@@ -10,9 +10,15 @@ backend.content_builder.content_type.create:
         contentType: '[a-zA-Z0-9_]+'
 
 backend.content_builder.content_type.edit:
-    path: /administrator/content-builder/{contentType}/edit/{code}
+    path: /administrator/content-builder/{contentType}/edit/{id}
     controller: Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Controller\ContentModel::edit
     methods: [GET, POST]
     requirements:
-        code: '[a-z0-9_]+'
+        contentType: '[a-zA-Z0-9_]+'
+
+backend.content_builder.content_type.delete:
+    path: /administrator/content-builder/{contentType}/delete/{id}
+    controller: Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Controller\ContentModel::delete
+    methods: [GET, POST]
+    requirements:
         contentType: '[a-zA-Z0-9_]+'

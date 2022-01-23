@@ -21,13 +21,15 @@
                             <div class="form-text">{{ translations.fieldIdHelp }}</div>
                         </div>
                     </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" v-model="model.multilingual.value" id="ctb-new-field-multilingual">
-                        <label class="form-check-label" for="ctb-new-field-multilingual">
-                            {{ translations.multilingualField }}
-                        </label>
+                    <div v-if="showMultilingualOption">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" v-model="model.multilingual.value" id="ctb-new-field-multilingual">
+                            <label class="form-check-label" for="ctb-new-field-multilingual">
+                                {{ translations.multilingualField }}
+                            </label>
+                        </div>
+                        <div class="form-text mb-3">{{ translations.multilingualFieldInfo }}</div>
                     </div>
-                    <div class="form-text mb-3">{{ translations.multilingualFieldInfo }}</div>
                     <div class="mb-3">
                         <label class="form-label">{{ translations.fieldType }}</label>
                         <div class="ctb-field-type-selector">
@@ -64,7 +66,7 @@
 import FormControl from './FormControl';
 
 export default {
-    props: ['fieldTypes', 'translations'],
+    props: ['fieldTypes', 'translations', 'defaultMultilingualValue', 'showMultilingualOption'],
     components: {
         FormControl
     },

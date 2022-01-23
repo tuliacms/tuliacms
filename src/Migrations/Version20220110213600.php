@@ -15,7 +15,10 @@ final class Version20220110213600 extends AbstractMigration
 {
     public function up(Schema $schema) : void
     {
+        $contentTypeId = Uuid::uuid4()->toString();
+
         $this->addSql('INSERT INTO #__content_type (`code`, `type`, `name`, `icon`, `is_routable`, `is_hierarchical`, `layout`, `internal`, `routing_strategy`) VALUES (:code, :type, :name, :icon, :is_routable, :is_hierarchical, :layout, :internal, :routing_strategy)', [
+            'id' => $contentTypeId,
             'code' => 'page',
             'type' => 'node',
             'name' => 'Page',
@@ -76,7 +79,7 @@ final class Version20220110213600 extends AbstractMigration
 
         $this->addField([
             'code' => 'introduction',
-            'node_type' => 'page',
+            'content_type_id' => $contentTypeId,
             'type' => 'textarea',
             'name' => 'Introduction',
             'is_multilingual' => '1',
@@ -94,14 +97,14 @@ final class Version20220110213600 extends AbstractMigration
         ]);
         $this->addField([
             'code' => 'content',
-            'node_type' => 'page',
+            'node_type' => $contentTypeId,
             'type' => 'wysiwyg',
             'name' => 'Content',
             'is_multilingual' => '1',
         ]);
         $this->addField([
             'code' => 'category',
-            'node_type' => 'page',
+            'node_type' => $contentTypeId,
             'type' => 'taxonomy',
             'name' => 'Introduction',
             'taxonomy' => 'category',
@@ -109,7 +112,7 @@ final class Version20220110213600 extends AbstractMigration
         ]);
         $this->addField([
             'code' => 'thumbnail',
-            'node_type' => 'page',
+            'node_type' => $contentTypeId,
             'type' => 'filepicker',
             'name' => 'Thumbnail',
             'is_multilingual' => '0',

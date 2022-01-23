@@ -23,13 +23,13 @@ trait ContentTypeDatabaseProviderTrait
 
         foreach ($types as $key => $type) {
             $types[$key]['layout'] = $type['code'] . '_layout';
-            $types[$key]['fields'] = $this->getFields($type['code']);
+            $types[$key]['fields'] = $this->getFields($type['id']);
         }
 
         return $types;
     }
 
-    private function getFields(string $nodeType): array
+    private function getFields(string $contentTypeId): array
     {
         if ($this->fieldsSource === []) {
             $this->fieldsSource = $this->connection->fetchAllAssociative('SELECT * FROM #__content_type_field');
@@ -38,7 +38,7 @@ trait ContentTypeDatabaseProviderTrait
         $fields = [];
 
         foreach ($this->fieldsSource as $field) {
-            if ($field['node_type'] !== $nodeType) {
+            if ($field['content_type_id'] !== $contentTypeId) {
                 continue;
             }
 

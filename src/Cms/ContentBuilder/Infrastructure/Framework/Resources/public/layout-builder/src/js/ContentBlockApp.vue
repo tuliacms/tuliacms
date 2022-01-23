@@ -1,5 +1,9 @@
 <template>
-    <div class="pane pane-lead">
+    <div class="pane pane-lead content-builder-content-block-type">
+        <form method="POST" id="ctb-form" style="display:none">
+            <textarea name="node_type" id="ctb-form-field-node-type"></textarea>
+            <input type="text" name="_token" :value="csrfToken"/>
+        </form>
         <div class="pane-header">
             <div class="pane-buttons">
                 <a :href="listingUrl" class="btn btn-secondary btn-icon-left"><i class="btn-icon fas fa-times"></i> Anuluj</a>
@@ -9,13 +13,7 @@
             <h1 class="pane-title">{{ translations.pageTitle }}</h1>
         </div>
         <div class="pane-body p-0">
-            <div class="page-form" id="node-form">
-                <div class="page-form-sidebar">
-                    <form method="POST" id="ctb-form" style="display:none">
-                        <textarea name="node_type" id="ctb-form-field-node-type"></textarea>
-                        <input type="text" name="_token" :value="csrfToken"/>
-                    </form>
-                </div>
+            <div class="page-form">
                 <div class="page-form-content">
                     <div class="page-form-header">
                         <div class="container-fluid">
@@ -31,7 +29,7 @@
                                 <div class="col-6">
                                     <div class="mb-3">
                                         <label class="form-label" for="ctb-node-type-code">{{ translations.contentTypeCode }}</label>
-                                        <input type="text" :class="{ 'form-control': true, 'is-invalid': view.form.type_validation.code.valid === false }" id="ctb-node-type-code" v-model="model.type.code" @change="validate()" />
+                                        <input type="text" :disabled="view.creation_mode !== true" :class="{ 'form-control': true, 'is-invalid': view.form.type_validation.code.valid === false }" id="ctb-node-type-code" v-model="model.type.code" @change="validate()" />
                                         <div class="form-text">{{ translations.contentTypeCodeHelp }}</div>
                                         <div v-if="view.form.type_validation.code.valid === false" class="invalid-feedback">{{ view.form.type_validation.code.message }}</div>
                                     </div>
@@ -60,12 +58,14 @@
                 @confirm="createFieldUsingCreatorData"
                 :translations="translations"
                 :fieldTypes="fieldTypes"
+                :showMultilingualOption="view.is_multilingual"
             ></FieldCreator>
             <FieldEditor
                 @confirm="editFieldUsingCreatorData"
                 :translations="translations"
                 :field="view.form.field_editor"
                 :fieldTypes="fieldTypes"
+                :showMultilingualOption="view.is_multilingual"
             ></FieldEditor>
         </div>
     </div>
@@ -87,9 +87,6 @@ export default {
         let typeValidation = {
             name: { valid: !this.$get(errors, 'type.name.0'), message: this.$get(errors, 'type.name.0') },
             code: { valid: !this.$get(errors, 'type.code.0'), message: this.$get(errors, 'type.code.0') },
-            icon: { valid: !this.$get(errors, 'type.icon.0'), message: this.$get(errors, 'type.icon.0') },
-            isRoutable: { valid: !this.$get(errors, 'type.isRoutable.0'), message: this.$get(errors, 'type.isRoutable.0') },
-            isHierarchical: { valid: !this.$get(errors, 'type.isHierarchical.0'), message: this.$get(errors, 'type.isHierarchical.0') }
         };
 
         /**
@@ -131,7 +128,9 @@ export default {
                         configuration: [],
                     },
                     type_validation: typeValidation
-                }
+                },
+                creation_mode: window.ContentBuilderLayoutBuilder.creationMode,
+                is_multilingual: window.ContentBuilderLayoutBuilder.multilingual,
             },
             model: {
                 type: {
@@ -169,10 +168,16 @@ export default {
                 return;
             }
 
-            $('#ctb-form-field-node-type').val(JSON.stringify({
+            let data = {
                 layout: this.model.layout,
                 type: this.model.type
-            }));
+            };
+
+            data.type.icon = '';
+            data.type.isRoutable = '0';
+            data.type.isHierarchical = '0';
+
+            $('#ctb-form-field-node-type').val(JSON.stringify(data));
             $('#ctb-form').submit();
         },
         validate: function () {
@@ -209,7 +214,7 @@ export default {
 
                 for (let s in this.model.layout.main.sections) {
                     for (let f in this.model.layout.main.sections[s].fields) {
-                        if (this.model.layout.main.sections[s].fields[f].code === fieldCode) {
+                        if (this.model.layout.main.sections[s].fields[f].code.value === fieldCode) {
                             this.model.layout.main.sections[s].fields.splice(f, 1);
                         }
                     }
@@ -287,6 +292,10 @@ export default {
             this.$forceUpdate();
         },
         generateTypeCode: function () {
+            if (this.view.creation_mode === false) {
+                return;
+            }
+
             if (this.model.type.code === '') {
                 this.code_field_changed = false;
             }

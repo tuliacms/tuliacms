@@ -113,6 +113,7 @@ class Configuration implements ConfigurationInterface
                                 ->children()
                                     ->scalarNode('controller')->isRequired()->end()
                                     ->scalarNode('layout_builder')->isRequired()->end()
+                                    ->scalarNode('multilingual')->defaultTrue()->end()
                                 ->end()
                             ->end()
                         ->end()

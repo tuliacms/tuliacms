@@ -76,7 +76,7 @@ class ContentModel extends AbstractController
             try {
                 $this->contentTypeRepository->insert($nodeType);
             } catch (\Exception $e) {
-
+                dump($e);exit;
             }
 
             $this->setFlash('success', $this->trans('contentTypeCreatedSuccessfully', [], 'content_builder'));
@@ -87,7 +87,7 @@ class ContentModel extends AbstractController
 
         return $this->view('@backend/content_builder/content_type/create.tpl', [
             'type' => $contentType,
-            'builderView' => $layoutBuilder->builderView($contentType, $data, $nodeTypeFormHandler->getErrors()),
+            'builderView' => $layoutBuilder->builderView($contentType, $data, $nodeTypeFormHandler->getErrors(), true),
             'cleaningResult' => $nodeTypeFormHandler->getCleaningResult(),
         ]);
     }
@@ -96,33 +96,37 @@ class ContentModel extends AbstractController
      * @CsrfToken(id="create-content-type")
      * @return ViewInterface|RedirectResponse
      */
-    public function edit(string $code, string $contentType, Request $request, FormHandler $nodeTypeFormHandler)
-    {
+    public function edit(
+        string $id,
+        string $contentType,
+        Request $request,
+        FormHandler $nodeTypeFormHandler
+    ) {
         if ($this->configuration->typeExists($contentType) === false) {
             $this->addFlash('danger', $this->trans('contentTypeOfNotExists', ['name' => $contentType], 'content_builder'));
             return $this->redirectToRoute('backend.content_builder.homepage');
         }
 
-        if ($this->contentTypeRegistry->has($code) === false) {
+        $contentType = $this->contentTypeRepository->find($id);
+
+        if ($contentType === null) {
             $this->setFlash('danger', $this->trans('contentTypeNotExists', [], 'content_builder'));
             return $this->redirectToRoute('backend.content_builder.homepage');
         }
 
-        $type = $this->contentTypeRegistry->get($code);
-
-        if ($type->isInternal()) {
+        if ($contentType->isInternal()) {
             $this->setFlash('danger', $this->trans('cannotEditInternalContentType', [], 'content_builder'));
             return $this->redirectToRoute('backend.content_builder.homepage');
         }
 
-        $layout = $type->getLayout();
+        $layout = $contentType->getLayout();
 
-        $data = (new ModelToFormDataTransformer())->transform($type, $layout);
+        $data = (new ModelToFormDataTransformer())->transform($contentType, $layout);
         $data = $nodeTypeFormHandler->handle($request, $data, true);
 
         if ($nodeTypeFormHandler->isRequestValid()) {
             $layoutType = $this->formDataToModelTransformer->produceLayoutType($data);
-            $nodeType = $this->formDataToModelTransformer->produceContentType($data, $contentType, $layoutType);
+            $nodeType = $this->formDataToModelTransformer->produceContentType($data, $contentType->getType(), $layoutType);
 
             try {
                 $this->contentTypeRepository->update($nodeType);
@@ -134,12 +138,35 @@ class ContentModel extends AbstractController
             return $this->redirectToRoute('backend.content_builder.homepage');
         }
 
-        $layoutBuilder = $this->layoutTypeBuilderRegistry->get($this->configuration->getLayoutBuilder($contentType));
+        $layoutBuilder = $this->layoutTypeBuilderRegistry->get($this->configuration->getLayoutBuilder($contentType->getType()));
 
         return $this->view('@backend/content_builder/content_type/edit.tpl', [
-            'type' => $contentType,
-            'builderView' => $layoutBuilder->builderView($contentType, $data, $nodeTypeFormHandler->getErrors()),
+            'type' => $contentType->getType(),
+            'builderView' => $layoutBuilder->builderView($contentType->getType(), $data, $nodeTypeFormHandler->getErrors(), false),
             'cleaningResult' => $nodeTypeFormHandler->getCleaningResult(),
         ]);
+    }
+
+    /**
+     * @CsrfToken(id="delete-content-type")
+     */
+    public function delete(string $id): RedirectResponse
+    {
+        $contentType = $this->contentTypeRepository->find($id);
+
+        if ($contentType === null) {
+            $this->setFlash('danger', $this->trans('contentTypeNotExists', [], 'content_builder'));
+            return $this->redirectToRoute('backend.content_builder.homepage');
+        }
+
+        if ($contentType->isInternal()) {
+            $this->setFlash('danger', $this->trans('cannotRemoveInternalContentType', [], 'content_builder'));
+            return $this->redirectToRoute('backend.content_builder.homepage');
+        }
+
+        $this->contentTypeRepository->delete($contentType);
+
+        $this->setFlash('success', $this->trans('contentTypeWasRemoved', [], 'content_builder'));
+        return $this->redirectToRoute('backend.content_builder.homepage');
     }
 }

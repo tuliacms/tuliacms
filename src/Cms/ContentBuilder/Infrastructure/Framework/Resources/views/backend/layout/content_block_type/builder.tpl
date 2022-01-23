@@ -60,6 +60,8 @@
         routingStrategies: {{ routingStrategies|json_encode|raw }},
         model: {{ model|json_encode|raw }},
         errors: {{ errors|json_encode|raw }},
+        multilingual: {{ multilingual ? 'true' : 'false' }},
+        creationMode: {{ creationMode ? 'true' : 'false' }},
         listingUrl: '{{ path('backend.content_builder.homepage') }}',
         csrfToken: '{{ csrf_token('create-content-type') }}',
     };

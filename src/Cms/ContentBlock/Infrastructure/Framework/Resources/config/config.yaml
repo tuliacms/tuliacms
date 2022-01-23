@@ -13,3 +13,4 @@ cms:
             content_block:
                 controller: ''
                 layout_builder: 'Tulia\Cms\ContentBuilder\Infrastructure\Presentation\TwigContentBlockTypeLayoutBuilder'
+                multilingual: false

@@ -46,9 +46,7 @@ class ContentTypeForm extends AbstractType
                     new Callback([$this, 'validateNodeTypeDuplicate'], null, ['edit_form' => $options['edit_form']]),
                 ],
             ])
-            ->add('icon', TextType::class, [
-                'constraints' => [new NotBlank()],
-            ])
+            ->add('icon', TextType::class)
             ->add('isRoutable', ChoiceType::class, [
                 'choices' => $choices,
                 'constraints' => [

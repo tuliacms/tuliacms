@@ -17,6 +17,7 @@ final class Version20220110200000 extends AbstractMigration
     {
         $this->addSql(<<<EOF
 CREATE TABLE `#__content_type` (
+  `id` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
   `code` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
   `type` varchar(8) COLLATE utf8_unicode_ci NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
@@ -34,7 +35,7 @@ EOF);
 CREATE TABLE `#__content_type_field` (
   `id` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
   `code` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
-  `node_type` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
+  `content_type_id` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
   `type` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
   `name` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
   `is_multilingual` tinyint(1) NOT NULL DEFAULT '0',
@@ -63,7 +64,7 @@ EOF);
 CREATE TABLE `#__content_type_field_constraint_modificator` (
   `constraint_id` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
   `modificator` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
-  `value` varchar(255) COLLATE utf8_unicode_ci NOT NULL
+  `value` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
 EOF);
 
@@ -105,7 +106,7 @@ EOF);
 ALTER TABLE `#__content_type_field`
   ADD PRIMARY KEY (`id`),
   ADD KEY `code` (`code`),
-  ADD KEY `fk_node_type_field_node_type` (`node_type`);
+  ADD KEY `fk_content_type_field_content_type_id` (`content_type_id`);
 EOF);
 
         $this->addSql(<<<EOF
@@ -142,7 +143,7 @@ EOF);
 
         $this->addSql(<<<EOF
 ALTER TABLE `#__content_type_field`
-  ADD CONSTRAINT `fk_node_type_field_node_type` FOREIGN KEY (`node_type`) REFERENCES `#__content_type` (`code`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `fk_content_type_field_content_type_id` FOREIGN KEY (`content_type_id`) REFERENCES `#__content_type` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 EOF);
 
         $this->addSql(<<<EOF

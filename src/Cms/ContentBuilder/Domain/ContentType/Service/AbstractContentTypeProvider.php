@@ -30,9 +30,9 @@ abstract class AbstractContentTypeProvider implements ContentTypeProviderInterfa
         $this->config = $config;
     }
 
-    protected function buildContentType(string $name, array $options, LayoutType $layoutType): ContentType
+    protected function buildContentType(string $id, string $name, array $options, LayoutType $layoutType): ContentType
     {
-        $nodeType = new ContentType($name, $options['type'], $layoutType, (bool) $options['internal']);
+        $nodeType = new ContentType($id, $name, $options['type'], $layoutType, (bool) $options['internal']);
         $nodeType->setController($options['controller'] ?? $this->config->getController($options['type']));
         $nodeType->setIcon($options['icon'] ?? 'fa fa-box');
         $nodeType->setName($options['name']);

@@ -200,3 +200,12 @@
       .ctb-field-type-selector > div.ctb-active:before {
         content: "\f00c";
         background-color: #088170; }
+
+.content-builder-content-block-type .page-form .page-form-content {
+  max-width: 100%; }
+
+.content-builder-content-block-type .ctb-sortable-fields {
+  margin: 20px 0; }
+
+.content-builder-content-block-type .ctb-sortable-fields .ctb-field {
+  margin: 0 auto; }

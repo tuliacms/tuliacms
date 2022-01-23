@@ -40,13 +40,14 @@ class TwigRoutableContentTypeLayoutBuilder implements LayoutTypeBuilderInterface
         ]);
     }
 
-    public function builderView(string $contentType, array $data, array $errors): View
+    public function builderView(string $contentType, array $data, array $errors, bool $creationMode): View
     {
         return new View('@backend/content_builder/layout/routable_content_type/builder.tpl', [
             'fieldTypes' => $this->getFieldTypes(),
             'routingStrategies' => $this->getRoutingStrategies($contentType),
             'model' => $data,
             'errors' => $errors,
+            'creationMode' => $creationMode,
         ]);
     }
 

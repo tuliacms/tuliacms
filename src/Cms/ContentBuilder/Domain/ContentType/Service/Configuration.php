@@ -35,4 +35,9 @@ class Configuration
     {
         return $this->configuration[$type]['layout_builder'];
     }
+
+    public function isMultilingual(string $type): bool
+    {
+        return $this->configuration[$type]['multilingual'];
+    }
 }

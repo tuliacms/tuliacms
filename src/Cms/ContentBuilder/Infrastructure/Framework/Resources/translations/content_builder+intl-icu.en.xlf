@@ -246,6 +246,16 @@
                 <target>Content Type {name} not exists.</target>
                 <note>Flash message</note>
             </trans-unit>
+            <trans-unit id="tuliacms.content_builder.64">
+                <source>contentTypeWasRemoved</source>
+                <target>Content Type was removed.</target>
+                <note>Flash message</note>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.65">
+                <source>cannotRemoveInternalContentType</source>
+                <target>You cannot remove internal Content Type.</target>
+                <note>Flash message</note>
+            </trans-unit>
         </body>
     </file>
 </xliff>

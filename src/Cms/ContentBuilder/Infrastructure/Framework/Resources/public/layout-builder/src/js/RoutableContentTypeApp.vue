@@ -105,12 +105,14 @@
                 @confirm="createFieldUsingCreatorData"
                 :translations="translations"
                 :fieldTypes="fieldTypes"
+                :showMultilingualOption="true"
             ></FieldCreator>
             <FieldEditor
                 @confirm="editFieldUsingCreatorData"
                 :translations="translations"
                 :field="view.form.field_editor"
                 :fieldTypes="fieldTypes"
+                :showMultilingualOption="true"
             ></FieldEditor>
         </div>
     </div>
