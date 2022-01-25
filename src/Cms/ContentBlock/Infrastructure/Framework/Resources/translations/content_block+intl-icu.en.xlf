@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" target-language="en" datatype="plaintext" original="content_block+intl-icu.en.xlf">
+        <body>
+            <trans-unit id="tuliacms.content_block.1">
+                <source>removeBlock</source>
+                <target>Remove Block</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_block.2">
+                <source>addBlock</source>
+                <target>Add Block</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_block.3">
+                <source>blockName</source>
+                <target>Block name</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_block.4">
+                <source>createAndConfigure</source>
+                <target>Create and configure</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_block.5">
+                <source>pleaseFillThisField</source>
+                <target>Please fill this field.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_block.6">
+                <source>pleaseSelectBlockType</source>
+                <target>Please select Block type.</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

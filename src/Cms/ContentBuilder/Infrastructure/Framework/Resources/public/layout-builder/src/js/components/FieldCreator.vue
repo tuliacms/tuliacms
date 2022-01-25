@@ -55,7 +55,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-success" @click="saveField()">{{ translations.create }}</button>
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">{{translations.cancel }}</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">{{ translations.cancel }}</button>
                 </div>
             </div>
         </div>

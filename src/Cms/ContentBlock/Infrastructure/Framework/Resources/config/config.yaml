@@ -32,3 +32,11 @@ cms:
                     #builder: 'Tulia\Cms\Taxonomy\UserInterface\Web\Shared\Form\FormType\TaxonomyTypeaheadTypeBuilder'
                     exclude_for_types: [ content_block ]
                     constraints: [ required ]
+                ___content_block_icon:
+                    label: Content Block::Icon
+                    classname: 'Symfony\Component\Form\Extension\Core\Type\TextType'
+                    only_for_types: [ content_block ]
+                    configuration:
+                        icon:
+                            required: false
+                            label: Define icon of this block

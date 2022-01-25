@@ -39,7 +39,11 @@ class FieldTypeMappingRegistry
         $result = [];
 
         foreach ($this->mapping as $type => $map) {
-            if (in_array($contentTypeType, $map['exclude_for_types'])) {
+            if (\in_array($contentTypeType, $map['exclude_for_types'], true)) {
+                continue;
+            }
+
+            if ($map['only_for_types'] !== [] && \in_array($contentTypeType, $map['only_for_types'], true) === false) {
                 continue;
             }
 

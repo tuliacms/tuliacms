@@ -8301,7 +8301,7 @@ textarea.form-control {
 
 .page-form .page-form-content {
   position: relative;
-  z-index: 5;
+  /*z-index: 5;*/
   flex: 1 1 auto;
   max-width: calc(100% - 310px); }
 
