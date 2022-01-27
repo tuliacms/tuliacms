@@ -17,7 +17,7 @@ abstract class AbstractContentTypeProvider implements ContentTypeProviderInterfa
 {
     use LayoutTypeBuilderTrait;
 
-    private FieldTypeMappingRegistry $fieldTypeMappingRegistry;
+    protected FieldTypeMappingRegistry $fieldTypeMappingRegistry;
     protected Configuration $config;
 
     public function setFieldTypeMappingRegistry(FieldTypeMappingRegistry $fieldTypeMappingRegistry): void

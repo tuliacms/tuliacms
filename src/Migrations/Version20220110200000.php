@@ -18,8 +18,8 @@ final class Version20220110200000 extends AbstractMigration
         $this->addSql(<<<EOF
 CREATE TABLE `#__content_type` (
   `id` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
-  `code` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
-  `type` varchar(8) COLLATE utf8_unicode_ci NOT NULL,
+  `code` varchar(127) COLLATE utf8_unicode_ci NOT NULL,
+  `type` varchar(127) COLLATE utf8_unicode_ci NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `icon` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `controller` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -34,10 +34,10 @@ EOF);
         $this->addSql(<<<EOF
 CREATE TABLE `#__content_type_field` (
   `id` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
-  `code` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
-  `content_type_id` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
-  `type` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
-  `name` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
+  `code` varchar(127) COLLATE utf8_unicode_ci NOT NULL,
+  `content_type_id` varchar(127) COLLATE utf8_unicode_ci NOT NULL,
+  `type` varchar(127) COLLATE utf8_unicode_ci NOT NULL,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `is_multilingual` tinyint(1) NOT NULL DEFAULT '0',
   `is_multiple` tinyint(1) NOT NULL DEFAULT '0',
   `taxonomy` varchar(36) COLLATE utf8_unicode_ci DEFAULT NULL
@@ -71,17 +71,17 @@ EOF);
         $this->addSql(<<<EOF
 CREATE TABLE `#__content_type_layout` (
   `code` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
-  `name` varchar(36) COLLATE utf8_unicode_ci NOT NULL
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
 EOF);
 
         $this->addSql(<<<EOF
 CREATE TABLE `#__content_type_layout_group` (
   `id` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
-  `code` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
+  `code` varchar(127) COLLATE utf8_unicode_ci NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `section` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
-  `layout_type` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
+  `section` varchar(127) COLLATE utf8_unicode_ci NOT NULL,
+  `layout_type` varchar(127) COLLATE utf8_unicode_ci NOT NULL,
   `interior` varchar(36) COLLATE utf8_unicode_ci DEFAULT NULL,
   `active` tinyint(1) NOT NULL DEFAULT '0',
   `order` smallint UNSIGNED NOT NULL DEFAULT '0'
@@ -91,7 +91,7 @@ EOF);
         $this->addSql(<<<EOF
 CREATE TABLE `#__content_type_layout_group_field` (
   `group_id` varchar(36) COLLATE utf8_unicode_ci NOT NULL,
-  `code` varchar(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `code` varchar(127) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `order` smallint UNSIGNED NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
 EOF);

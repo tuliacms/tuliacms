@@ -32,10 +32,26 @@ class ContentTypeRepository
         $this->contentTypeRegistry = $contentTypeRegistry;
     }
 
+    public function generateId(): string
+    {
+        return $this->uuidGenerator->generate();
+    }
+
     public function find(string $id): ?ContentType
     {
         foreach ($this->contentTypeRegistry->all() as $contentType) {
             if ($contentType->getId() === $id) {
+                return $contentType;
+            }
+        }
+
+        return null;
+    }
+
+    public function findByCode(string $code): ?ContentType
+    {
+        foreach ($this->contentTypeRegistry->all() as $contentType) {
+            if ($contentType->getCode() === $code) {
                 return $contentType;
             }
         }

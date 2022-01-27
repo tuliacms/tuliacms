@@ -71,6 +71,11 @@
     {% for type in contentTypeCodes %}
         <div class="pane pane-lead mb-4">
             <div class="pane-header">
+                {% if loop.index0 == 0 %}
+                    <div class="pane-buttons">
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#content-model-import-modal" class="btn btn-primary btn-icon-left"><i class="btn-icon fas fa-cloud-upload-alt"></i> {{ 'import'|trans({}, 'messages') }}</a>
+                    </div>
+                {% endif %}
                 <i class="pane-header-icon fas fa-box"></i>
                 <h1 class="pane-title">{{ 'contentTypesListOf'|trans({ name: type|trans }) }}</h1>
             </div>
@@ -97,6 +102,34 @@
             </div>
         </div>
     {% endfor %}
+
+    <div class="modal fade" id="content-model-import-modal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">{{ 'import'|trans({}, 'messages') }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ path('backend.content_builder.import.file') }}" method="POST" enctype="multipart/form-data" id="submit-content-types-import">
+                        <input type="hidden" name="_token" value="{{ csrf_token('content-builder-import-file') }}" />
+                        <div class="alert alert-info">
+                            {{ 'importingOverwriteNotification'|trans }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="importing-file" class="form-label">Select field</label>
+                            <input class="form-control" name="file" type="file" id="importing-file" />
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ 'close'|trans({}, 'messages') }}</button>
+                    <button type="button" class="btn btn-success" data-submit-form="submit-content-types-import">{{ 'doImport'|trans({}, 'messages') }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <form method="POST" id="content-type-remove-form" style="display:none">
         <input type="text" name="_token" value="{{ csrf_token('delete-content-type') }}" />
     </form>

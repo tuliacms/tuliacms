@@ -22,3 +22,8 @@ backend.content_builder.content_type.delete:
     methods: [GET, POST]
     requirements:
         contentType: '[a-zA-Z0-9_]+'
+
+backend.content_builder.import.file:
+    path: /administrator/content-builder/import/file
+    controller: Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Controller\Import::importFile
+    methods: [POST]
