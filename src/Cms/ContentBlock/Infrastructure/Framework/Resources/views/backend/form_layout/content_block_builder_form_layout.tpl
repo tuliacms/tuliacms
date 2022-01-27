@@ -11,16 +11,21 @@
                 close: '{{ 'close'|trans({}, 'messages') }}',
                 cancel: '{{ 'cancel'|trans({}, 'messages') }}',
                 create: '{{ 'create'|trans({}, 'messages') }}',
+                save: '{{ 'save'|trans({}, 'messages') }}',
                 pleaseFillThisField: '{{ 'pleaseFillThisField'|trans({}, 'content_block') }}',
                 pleaseSelectBlockType: '{{ 'pleaseSelectBlockType'|trans({}, 'content_block') }}',
                 addBlock: '{{ 'addBlock'|trans({}, 'content_block') }}',
                 removeBlock: '{{ 'removeBlock'|trans({}, 'content_block') }}',
+                editBlock: '{{ 'editBlock'|trans({}, 'content_block') }}',
                 blockName: '{{ 'blockName'|trans({}, 'content_block') }}',
                 createAndConfigure: '{{ 'createAndConfigure'|trans({}, 'content_block') }}',
+                loading: '{{ 'loading'|trans({}, 'content_block') }}',
             },
             block_types: {{ block_types|json_encode|raw }},
             field_name: '{{ full_name }}',
-            field_value: {{ value ? value|raw : {} }}
+            field_value: '{{ value|raw }}',
+            field_name_pattern: 'content_builder_form_%block_type%[%field%]',
+            cors_domain: '{{ app.request.schemeAndHttpHost }}',
         };
     </script>
 {%- endblock content_block_builder_widget %}

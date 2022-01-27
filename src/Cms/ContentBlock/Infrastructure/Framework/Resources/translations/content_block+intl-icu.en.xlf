@@ -26,6 +26,14 @@
                 <source>pleaseSelectBlockType</source>
                 <target>Please select Block type.</target>
             </trans-unit>
+            <trans-unit id="tuliacms.content_block.7">
+                <source>editBlock</source>
+                <target>Edit block</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_block.8">
+                <source>loading</source>
+                <target>Loading...</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

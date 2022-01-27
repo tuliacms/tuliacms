@@ -40,21 +40,24 @@ class SymfonyFormBuilder
         $this->logger = $contentBuilderLogger;
     }
 
-    public function createForm(ContentType $taxonomyType, array $data): FormInterface
+    public function createForm(ContentType $taxonomyType, array $data, bool $expectCqrsToken = true): FormInterface
     {
-        $builder = $this->createFormBuilder($taxonomyType->getCode(), $data);
+        $builder = $this->createFormBuilder($taxonomyType->getCode(), $data, $expectCqrsToken);
 
         $this->buildFieldsWithBuilder($taxonomyType->getFields(), $builder);
 
         return $builder->getForm();
     }
 
-    protected function createFormBuilder(string $type, array $data): FormBuilderInterface
+    protected function createFormBuilder(string $type, array $data, bool $expectCqrsToken = true): FormBuilderInterface
     {
         return $this->formFactory->createNamedBuilder(
             sprintf('content_builder_form_%s', $type),
             'Symfony\Component\Form\Extension\Core\Type\FormType',
-            $data
+            $data,
+            [
+                'csrf_protection' => $expectCqrsToken,
+            ]
         );
     }
 

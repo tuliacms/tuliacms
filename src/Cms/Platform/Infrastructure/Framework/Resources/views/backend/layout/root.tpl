@@ -1,4 +1,5 @@
 {% block beforeall %}{% endblock %}
+{% assets ['backend'] %}
 
 <!doctype html>
 <html lang="{{ current_website().locale.language }}">
@@ -6,7 +7,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <script nonce="{{ csp_nonce() }}">
-            let Tulia = {};{% assets ['backend'] %}
+            window.Tulia = {};
             Tulia.Globals = {
                 search_anything: {
                     endpoint: '{{ path('backend.search.root') }}'

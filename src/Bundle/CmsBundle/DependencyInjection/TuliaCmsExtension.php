@@ -82,6 +82,10 @@ class TuliaCmsExtension extends Extension
             ->addTag('content_builder.content_type.routing_strategy');
         $container->registerForAutoconfiguration(\Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\LayoutTypeBuilderInterface::class)
             ->addTag('content_builder.layout_type.builder');
+
+        // Shortcode
+        $container->registerForAutoconfiguration(\Tulia\Component\Shortcode\Compiler\ShortcodeCompilerInterface::class)
+            ->addTag('shortcode.compiler');
     }
 
     protected function validateOptionsValues(array $definitions): array

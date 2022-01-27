@@ -28,6 +28,11 @@ class ContentRenderer
             }
 
             $content = $node[$name . '__compiled'];
+
+            if (! $content) {
+                continue;
+            }
+
             $cacheKey = md5($content);
 
             if (isset(static::$cache[$cacheKey])) {

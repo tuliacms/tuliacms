@@ -288,7 +288,11 @@ class Node implements \ArrayAccess
 
     public function offsetGet($offset)
     {
-        return $this->attributes[$offset];
+        if (isset($this->attributes[$offset])) {
+            return $this->attributes[$offset];
+        }
+
+        return null;
     }
 
     public function offsetSet($offset, $value)

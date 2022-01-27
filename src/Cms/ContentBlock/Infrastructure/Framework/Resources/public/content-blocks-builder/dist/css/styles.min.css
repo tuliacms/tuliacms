@@ -51,6 +51,36 @@
       .content-block-builder .cbb-blocks-list .cbb-block .cbb-block-header:hover {
         background-color: #e2e2e2;
         border-bottom: 1px solid #999b9f; }
+  .content-block-builder .cbb-block-editor-panel {
+    position: relative;
+    /* .cbb-block-editor-panel-loader {
+            display: none;
+            position: absolute;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #fff;
+            text-align: center;
+
+            span {
+                display: block;
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                font-size: 16px;
+                opacity: .6;
+            }
+        }*/
+    /*&.cbb-block-editor-panel-loading {
+            .cbb-block-editor-panel-loader {
+                display: block;
+            }
+        }*/ }
+    .content-block-builder .cbb-block-editor-panel iframe {
+      height: 400px;
+      width: 100%; }
 
 .cbb-block-type-list {
   display: flex;

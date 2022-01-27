@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tulia\Component\Shortcode;
 
-use Symfony\Component\Process\Process;
 use Thunder\Shortcode\HandlerContainer\HandlerContainer;
 use Thunder\Shortcode\Parser\RegularParser;
 use Thunder\Shortcode\Processor\Processor as BaseProcessor;
@@ -103,7 +102,7 @@ class Processor implements ProcessorInterface
                 $length = mb_strlen($replacement->getText(), 'utf-8') + $before + $after;
                 $textLength = mb_strlen($result, 'utf-8');
 
-                $result = mb_substr($result, 0, $offset, 'utf-8').$replacement->getReplacement().mb_substr($result, $offset + $length, $textLength, 'utf-8');
+                $result = mb_substr($result, 0, $offset, 'utf-8') . $replacement->getReplacement() . mb_substr($result, $offset + $length, $textLength, 'utf-8');
             }
 
             $event->setResult($result);

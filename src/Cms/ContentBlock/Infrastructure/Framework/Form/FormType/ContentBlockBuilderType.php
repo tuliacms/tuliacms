@@ -8,6 +8,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Validator\Constraints\Json;
 use Tulia\Cms\ContentBuilder\Domain\ContentType\Service\ContentTypeRegistry;
 
@@ -17,10 +18,14 @@ use Tulia\Cms\ContentBuilder\Domain\ContentType\Service\ContentTypeRegistry;
 class ContentBlockBuilderType extends AbstractType
 {
     private ContentTypeRegistry $contentTypeRegistry;
+    private RouterInterface $router;
 
-    public function __construct(ContentTypeRegistry $contentTypeRegistry)
-    {
+    public function __construct(
+        ContentTypeRegistry $contentTypeRegistry,
+        RouterInterface $router
+    ) {
         $this->contentTypeRegistry = $contentTypeRegistry;
+        $this->router = $router;
     }
 
     public function configureOptions(OptionsResolver $resolver)
@@ -52,13 +57,13 @@ class ContentBlockBuilderType extends AbstractType
                     'code' => $type->getCode(),
                     'name' => $type->getName(),
                     'icon' => $icon,
+                    'block_panel_url' => $this->router->generate('backend.content_block.block_panel.builder', [ 'type' => $type->getCode() ]),
                 ];
             }
         }
 
         $view->vars['label'] = null;
         $view->vars['block_types'] = $types;
-        dump($view->vars);
     }
 
     /**

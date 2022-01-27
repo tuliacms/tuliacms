@@ -22,8 +22,14 @@
             :translations="translations"
             @confirm="createBlockFromModal"
         ></BlockCreator>
-        <hr />
-        <textarea :name="field_name" v-model="model_result"></textarea>
+        <BlockEditor
+            :block="view.form.block_editor"
+            :block_types="block_types"
+            :translations="translations"
+            :settings="settings"
+            @confirm="updateBlockFromModal"
+        ></BlockEditor>
+        <textarea :name="field_name" v-model="model_result" style="display:none;"></textarea>
     </div>
 </template>
 
@@ -31,56 +37,46 @@
 import draggable from 'vuedraggable';
 import Block from './components/Block';
 import BlockCreator from './components/BlockCreator';
+import BlockEditor from './components/BlockEditor';
 
 export default {
     name: 'ContentBlockBuilder',
     data() {
-        let model = window.ContentBlockBuilder.field_value;
-        model = null;
+        let model = {};
+        let source = window.ContentBlockBuilder.field_value;
 
-        if (! model) {
-            model = {
-                blocks: [
-                    {
-                        id: 'waertvsertyv',
-                        type: 'text',
-                        name: 'Wprowadzenie',
-                        visible: true,
-                        fields: {
-                            tytul: ['Tytuł'],
-                            tresc: ['<p><b>Moja</b> treść!</p>'],
-                        }
-                    },
-                    {
-                        id: 'dsfgsghdfgh',
-                        type: 'image',
-                        name: 'Zdjęcie w nagłówku',
-                        visible: false,
-                        fields: {
-                            image: ['/path/to/image.jpg'],
-                        }
-                    },
-                    {
-                        id: 'sdfgsdfg',
-                        type: 'text',
-                        name: 'Treść główna',
-                        visible: true,
-                        fields: {
-                            image: ['<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris sollicitudin, mi ultrices vestibulum placerat, massa metus condimentum ipsum, tempus lacinia velit justo nec libero.</p>'],
-                        }
-                    },
-                ]
-            };
+        if (source && source.indexOf('[content_block_render ') === 0) {
+            let matches = source.match(/source="([^"]+)"/);
+
+            if (matches[1]) {
+                model = JSON.parse(decodeURIComponent(escape(atob(matches[1]))));
+            }
+        }
+
+        if (! model.blocks) {
+            model.blocks = [];
         }
 
         return {
             translations: window.ContentBlockBuilder.translations,
             block_types: window.ContentBlockBuilder.block_types,
             field_name: window.ContentBlockBuilder.field_name,
+            settings: {
+                field_name_pattern: window.ContentBlockBuilder.field_name_pattern,
+                cors_domain: window.ContentBlockBuilder.cors_domain,
+            },
             model_result: JSON.stringify(model),
             view: {
                 modal: {
                     block_creator: null,
+                    block_editor: null,
+                },
+                form: {
+                    block_editor: {
+                        name: null,
+                        block_panel_url: null,
+                        fields: {},
+                    },
                 },
             },
             model: model,
@@ -99,15 +95,16 @@ export default {
     components: {
         draggable,
         Block,
-        BlockCreator
+        BlockCreator,
+        BlockEditor,
     },
     methods: {
         save: function () {
-            this.model_result = JSON.stringify(this.model);
+            this.model_result = '[content_block_render source="' + btoa(unescape(encodeURIComponent(JSON.stringify(this.model)))) + '"]';
         },
         removeBlock: function (blockId) {
             Tulia.Confirmation.warning().then((result) => {
-                if (!result.value) {
+                if (! result.value) {
                     return;
                 }
 
@@ -123,6 +120,19 @@ export default {
 
             this.$root.$emit('block:create:modal:opened');
         },
+        openEditBlockModel: function (blockId) {
+            let block = this._findBlock(blockId);
+            let type = this._findType(block.type);
+
+            this.view.form.block_editor.id = block.id;
+            this.view.form.block_editor.name = block.name;
+            this.view.form.block_editor.type = block.type;
+            this.view.form.block_editor.fields = block.fields;
+            this.view.form.block_editor.block_panel_url = type.block_panel_url;
+            this.view.modal.block_editor.show();
+
+            this.$root.$emit('block:edit:modal:opened');
+        },
         createBlockFromModal: function (block) {
             this.model.blocks.push({
                 id: _.uniq(),
@@ -134,7 +144,28 @@ export default {
 
             this.view.modal.block_creator.hide();
             this.$forceUpdate();
-        }
+        },
+        updateBlockFromModal: function (blockId, blockData) {
+            let block = this._findBlock(blockId);
+
+            for (let i in blockData.fields) {
+                block.fields[i] = blockData.fields[i];
+            }
+            block.name = blockData.name;
+
+            this.view.modal.block_editor.hide();
+            this.$forceUpdate();
+        },
+        _findBlock: function (blockId) {
+            for (let i in this.model.blocks) {
+                if (this.model.blocks[i].id === blockId) {
+                    return this.model.blocks[i];
+                }
+            }
+        },
+        _findType: function (typeCode) {
+            return this.block_types[typeCode];
+        },
     },
     mounted: function () {
         let self = this;
@@ -153,8 +184,18 @@ export default {
             $(creationModal).find('.cbb-autofocus').focus();
         });
 
+        let EditionModal = document.getElementById('cbb-edit-block-modal');
+        this.view.modal.block_editor = new bootstrap.Modal(EditionModal);
+
+        EditionModal.addEventListener('shown.bs.modal', function () {
+            $(EditionModal).find('.cbb-autofocus').focus();
+        });
+
         this.$root.$on('block:create', () => {
             this.openCreateBlockModel();
+        });
+        this.$root.$on('block:edit', (blockId) => {
+            this.openEditBlockModel(blockId);
         });
         this.$root.$on('block:remove', (blockId) => {
             this.removeBlock(blockId);
