@@ -6,7 +6,6 @@
     border-bottom: 1px solid #d6dce4;
     border-radius: 5px; }
     .content-block-builder .cbb-blocks-list .cbb-block .cbb-block-header {
-      padding: 5px;
       border-radius: 5px;
       border: 1px solid #d6dce4;
       background-color: #f7f7f7;
@@ -14,7 +13,7 @@
       display: flex; }
       .content-block-builder .cbb-blocks-list .cbb-block .cbb-block-header .cbb-sortable-handler {
         font-size: 18px;
-        padding: 5px 5px 5px 10px;
+        padding: 10px 10px 10px 15px;
         flex: 0 0 35px; }
         .content-block-builder .cbb-blocks-list .cbb-block .cbb-block-header .cbb-sortable-handler:hover {
           cursor: move; }
@@ -23,7 +22,7 @@
         max-width: 100%;
         line-height: 1.4;
         font-size: 15px;
-        padding: 0 5px; }
+        padding: 5px 5px; }
         .content-block-builder .cbb-blocks-list .cbb-block .cbb-block-header .cbb-block-name .cbb-name {
           display: block; }
         .content-block-builder .cbb-blocks-list .cbb-block .cbb-block-header .cbb-block-name .cbb-type {
@@ -36,7 +35,7 @@
       .content-block-builder .cbb-blocks-list .cbb-block .cbb-block-header .cbb-block-options {
         flex: 0 0 100px;
         text-align: right;
-        padding: 5px 0; }
+        padding: 10px 5px; }
         .content-block-builder .cbb-blocks-list .cbb-block .cbb-block-header .cbb-block-options span {
           font-size: 18px;
           padding: 6px 10px;
@@ -51,6 +50,8 @@
       .content-block-builder .cbb-blocks-list .cbb-block .cbb-block-header:hover {
         background-color: #e2e2e2;
         border-bottom: 1px solid #999b9f; }
+    .content-block-builder .cbb-blocks-list .cbb-block.cbb-block-type-not-found {
+      opacity: 0.6; }
   .content-block-builder .cbb-block-editor-panel {
     position: relative;
     /* .cbb-block-editor-panel-loader {
@@ -90,14 +91,14 @@
   .cbb-block-type-list .invalid-feedback {
     padding-left: 5px; }
   .cbb-block-type-list .cbb-block-type {
-    flex: 0 0 200px;
+    flex: 0 0 224px;
     padding: 5px; }
     .cbb-block-type-list .cbb-block-type .cbb-block-type-inner {
       border: 1px solid #ddd;
       border-radius: 5px;
       transition: .12s all; }
       .cbb-block-type-list .cbb-block-type .cbb-block-type-inner .cbb-block-type-icon {
-        height: 80px;
+        height: 93px;
         background-repeat: no-repeat;
         background-size: cover;
         background-position: center center;

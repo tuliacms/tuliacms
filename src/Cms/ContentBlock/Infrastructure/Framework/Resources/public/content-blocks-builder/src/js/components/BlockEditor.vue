@@ -85,7 +85,7 @@ export default {
                     .replace('%field%', i)
                     .replace('%block_type%', this.block.type);
 
-                let value = this.block.fields[i][0] ? this._htmlEscape(this.block.fields[i][0]) : null;
+                let value = this.block.fields[i][0] ? this._htmlEscape(this.block.fields[i][0]) : '';
 
                 form.push(`<input type="text" name="${name}" value="${value}" />`);
             }

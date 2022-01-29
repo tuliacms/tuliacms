@@ -7,6 +7,7 @@ namespace Tulia\Cms\ContentBlock\Infrastructure\Framework\Form\FormType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Validator\Constraints\Json;
@@ -19,13 +20,16 @@ class ContentBlockBuilderType extends AbstractType
 {
     private ContentTypeRegistry $contentTypeRegistry;
     private RouterInterface $router;
+    private RequestStack $requestStack;
 
     public function __construct(
         ContentTypeRegistry $contentTypeRegistry,
-        RouterInterface $router
+        RouterInterface $router,
+        RequestStack $requestStack
     ) {
         $this->contentTypeRegistry = $contentTypeRegistry;
         $this->router = $router;
+        $this->requestStack = $requestStack;
     }
 
     public function configureOptions(OptionsResolver $resolver)
@@ -56,7 +60,7 @@ class ContentBlockBuilderType extends AbstractType
                 $types[$type->getCode()] = [
                     'code' => $type->getCode(),
                     'name' => $type->getName(),
-                    'icon' => $icon,
+                    'icon' => $this->requestStack->getCurrentRequest()->getUriForPath($icon),
                     'block_panel_url' => $this->router->generate('backend.content_block.block_panel.builder', [ 'type' => $type->getCode() ]),
                 ];
             }

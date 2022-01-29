@@ -9,7 +9,6 @@
             border-radius: 5px;
 
             .cbb-block-header {
-                padding: 5px;
                 border-radius: 5px;
                 border: 1px solid #d6dce4;
                 background-color: #f7f7f7;
@@ -18,7 +17,7 @@
 
                 .cbb-sortable-handler {
                     font-size: 18px;
-                    padding: 5px 5px 5px 10px;
+                    padding: 10px 10px 10px 15px;
                     flex: 0 0 35px;
                     &:hover {
                         cursor: move;
@@ -30,7 +29,7 @@
                     max-width: 100%;
                     line-height: 1.4;
                     font-size: 15px;
-                    padding: 0 5px;
+                    padding: 5px 5px;
 
                     .cbb-name {
                         display: block;
@@ -51,7 +50,7 @@
                 .cbb-block-options {
                     flex: 0 0 100px;
                     text-align: right;
-                    padding: 5px 0;
+                    padding: 10px 5px;
 
                     span {
                         font-size: 18px;
@@ -72,6 +71,10 @@
                     background-color: #e2e2e2;
                     border-bottom: 1px solid #999b9f;
                 }
+            }
+
+            &.cbb-block-type-not-found {
+                opacity: 0.6;
             }
         }
     }
@@ -123,7 +126,7 @@
     }
 
     .cbb-block-type {
-        flex: 0 0 200px;
+        flex: 0 0 224px;
         padding: 5px;
 
         .cbb-block-type-inner {
@@ -132,7 +135,7 @@
             transition: .12s all;
 
             .cbb-block-type-icon {
-                height: 80px;
+                height: 93px;
                 background-repeat: no-repeat;
                 background-size: cover;
                 background-position: center center;

@@ -34,6 +34,19 @@
                 <source>loading</source>
                 <target>Loading...</target>
             </trans-unit>
+            <trans-unit id="tuliacms.content_block.9">
+                <source>missingBlockType</source>
+                <target>Missing Content Type. Cannot edit this block.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_block.10">
+                <source>cannotEditBlockWhenContentTypeNotExists</source>
+                <target>Cannot edit type block, because it's Content Type not exists.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_block.11">
+                <source>cannotEditThisBlock</source>
+                <target>Cannot edit this block</target>
+                <note>Message headline in alertbox</note>
+            </trans-unit>
         </body>
     </file>
 </xliff>

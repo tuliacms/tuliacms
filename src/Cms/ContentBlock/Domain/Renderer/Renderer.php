@@ -15,13 +15,16 @@ class Renderer
 {
     private ContentTypeRegistry $contentTypeRegistry;
     private EngineInterface $engine;
+    private string $environment;
 
     public function __construct(
         ContentTypeRegistry $contentTypeRegistry,
-        EngineInterface $engine
+        EngineInterface $engine,
+        string $environment
     ) {
         $this->contentTypeRegistry = $contentTypeRegistry;
         $this->engine = $engine;
+        $this->environment = $environment;
     }
 
     public function render(array $model): string
@@ -37,10 +40,16 @@ class Renderer
 
     private function renderBlock(array $block): string
     {
-        $fields = [];
+        $fields = ['__block' => $block];
 
         foreach ($block['fields'] as $name => $values) {
             $fields[$name] = new FieldValue($values);
+        }
+
+        if ($this->environment === 'dev') {
+            $fallbackView = '@cms/content_block/empty-block.debug.tpl';
+        } else {
+            $fallbackView = '@cms/content_block/empty-block.tpl';
         }
 
         return $this->engine->render(
@@ -53,7 +62,9 @@ class Renderer
                  *       The best solution will be when we can configure those modules in
                  *       in YAML.
                  */
-                '@theme/content-block/' . $block['type'] . '.tpl'
+                '@theme/content-block/' . $block['type'] . '.tpl',
+                // At the end, we have to add empty view, in case of any previous views are not defined.
+                $fallbackView
             ], $fields)
         );
     }

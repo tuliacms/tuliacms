@@ -1,6 +1,6 @@
 <template>
     <div class="modal fade" id="cbb-create-block-modal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">{{ translations.addBlock }}</h5>
@@ -10,7 +10,7 @@
                     <div class="row">
                         <div class="col mb-3">
                             <label for="cbb-new-field-label" class="form-label">{{ translations.blockName }}</label>
-                            <input type="text" :class="{ 'form-control': true, 'cbb-autofocus': true, 'is-invalid': model.name.valid === false }" id="cbb-new-field-label" v-model="model.name.value" />
+                            <input type="text" :class="{ 'form-control': true, 'cbb-autofocus': true, 'is-invalid': model.name.valid === false }" id="cbb-new-field-label" v-model="model.name.value" autocomplete="off" />
                             <div v-if="model.name.valid === false" class="invalid-feedback">{{ model.name.message }}</div>
                         </div>
                     </div>

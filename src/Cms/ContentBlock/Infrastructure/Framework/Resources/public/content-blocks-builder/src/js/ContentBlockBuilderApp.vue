@@ -57,6 +57,16 @@ export default {
             model.blocks = [];
         }
 
+        function decodeHTMLEntities (text) {
+            return $("<textarea/>").html(text).text();
+        }
+
+        for (let i in window.ContentBlockBuilder.translations) {
+            window.ContentBlockBuilder.translations[i] = decodeHTMLEntities(window.ContentBlockBuilder.translations[i]);
+        }
+
+        console.log(window.ContentBlockBuilder.translations['cannotEditBlockWhenContentTypeNotExists']);
+
         return {
             translations: window.ContentBlockBuilder.translations,
             block_types: window.ContentBlockBuilder.block_types,
