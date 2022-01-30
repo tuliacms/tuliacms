@@ -65,8 +65,6 @@ export default {
             window.ContentBlockBuilder.translations[i] = decodeHTMLEntities(window.ContentBlockBuilder.translations[i]);
         }
 
-        console.log(window.ContentBlockBuilder.translations['cannotEditBlockWhenContentTypeNotExists']);
-
         return {
             translations: window.ContentBlockBuilder.translations,
             block_types: window.ContentBlockBuilder.block_types,

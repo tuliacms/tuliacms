@@ -25,6 +25,25 @@
                     fields: {{ data|json_encode|raw }}
                 }, "{{ app.request.schemeAndHttpHost }}");
             }
+
+            let lastBodyHeight = 0;
+            let body = document.body,
+                html = document.documentElement;
+            let bodyHeightUpdater = function () {
+                let height = Math.max( body.scrollHeight, body.offsetHeight,
+                    html.clientHeight, html.scrollHeight, html.offsetHeight );
+
+                if (height !== lastBodyHeight) {
+                    lastBodyHeight = height;
+
+                    window.parent.postMessage({
+                        action: 'height-changed',
+                        height: height
+                    }, "{{ app.request.schemeAndHttpHost }}");
+                }
+            };
+
+            setInterval(bodyHeightUpdater, 300);
         });
     </script>
 {% endblock %}

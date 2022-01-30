@@ -15,7 +15,7 @@
                         </div>
                     </div>
                     <div :class="{ 'cbb-block-editor-panel': true, 'cbb-block-editor-panel-loading' : view.block_panel_loading }">
-                        <iframe src="about:blank" id="cbb-block-editor-panel-iframe"></iframe>
+                        <iframe src="about:blank" id="cbb-block-editor-panel-iframe" :style="{ 'height': view.iframe_height + 'px' }"></iframe>
                         <div class="cbb-block-editor-panel-loader"><span>{{ translations.loading }}</span></div>
                     </div>
                 </div>
@@ -42,6 +42,7 @@ export default {
             view: {
                 block_panel_loading: true,
                 iframe: null,
+                iframe_height: 60,
             },
         };
     },
@@ -66,7 +67,7 @@ export default {
             this.model.block_type.message = null;
         },
         _initiate: function () {
-            this.view.block_panel_loading = false;
+            this.view.iframe_height = 60;
 
             for (let i in this.model) {
                 this.model[i].value = null;
@@ -119,6 +120,10 @@ export default {
 
             if (event.data.action === 'form-valid') {
                 this.updateModel(event.data.fields);
+            }
+
+            if (event.data.action === 'height-changed') {
+                this.view.iframe_height = event.data.height;
             }
         }, false);
     }

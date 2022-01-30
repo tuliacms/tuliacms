@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Platform\Infrastructure\Utilities\DateTime;
 
 use DateTime;
+use Tulia\Cms\Platform\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
 
 /**
  * @author Adam Banaszkiewicz
@@ -40,7 +41,7 @@ class DateFormatter implements DateFormatterInterface
             return date($format, $date);
         }
 
-        if ($date instanceof DateTime) {
+        if ($date instanceof DateTime || $date instanceof ImmutableDateTime) {
             return $date->format($format);
         } else {
             return (new DateTime($date))->format($format);
