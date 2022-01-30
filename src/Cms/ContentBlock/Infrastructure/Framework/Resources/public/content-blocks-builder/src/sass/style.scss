@@ -86,7 +86,7 @@
             height: 400px;
             width: 100%;
         }
-       /* .cbb-block-editor-panel-loader {
+        .cbb-block-editor-panel-loader {
             display: none;
             position: absolute;
             left: 0;
@@ -105,13 +105,13 @@
                 font-size: 16px;
                 opacity: .6;
             }
-        }*/
+        }
 
-        /*&.cbb-block-editor-panel-loading {
+        &.cbb-block-editor-panel-loading {
             .cbb-block-editor-panel-loader {
                 display: block;
             }
-        }*/
+        }
     }
 }
 
