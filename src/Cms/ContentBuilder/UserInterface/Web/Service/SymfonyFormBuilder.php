@@ -71,7 +71,8 @@ class SymfonyFormBuilder
                 $options = array_merge([
                     'label' => $field->getName() === ''
                         ? false
-                        : $field->getName()
+                        : $field->getName(),
+                    'translation_domain' => 'content_builder.field',
                 ], $field->getBuilderOptions());
 
                 $options['constraints'] = $this->constraintsBuilder->build($options['constraints'] ?? []);
@@ -109,6 +110,7 @@ class SymfonyFormBuilder
                 'required' => true,
             ])
             ->add('cancel', CancelType::class, [
+                // @todo Configure back button URL
                 'route' => 'backend.widget',
             ])
             ->add('save', SubmitType::class);
