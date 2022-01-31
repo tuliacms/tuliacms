@@ -9,17 +9,7 @@ namespace Tulia\Cms\Menu\Domain\Builder\Identity;
  */
 interface IdentityProviderInterface
 {
-    /**
-     * @param string $type
-     *
-     * @return bool
-     */
     public function supports(string $type): bool;
 
-    /**
-     * @param string $identity
-     *
-     * @return IdentityInterface|null
-     */
-    public function provide(string $identity): ?IdentityInterface;
+    public function provide(string $type, string $identity): ?IdentityInterface;
 }

@@ -23,6 +23,7 @@
                 missingBlockType: '{{ 'missingBlockType'|trans({}, 'content_block') }}',
                 cannotEditBlockWhenContentTypeNotExists: '{{ 'cannotEditBlockWhenContentTypeNotExists'|trans({}, 'content_block') }}',
                 cannotEditThisBlock: '{{ 'cannotEditThisBlock'|trans({}, 'content_block') }}',
+                duplicateBlock: '{{ 'duplicateBlock'|trans({}, 'content_block') }}',
             },
             block_types: {{ block_types|json_encode|raw }},
             field_name: '{{ full_name }}',

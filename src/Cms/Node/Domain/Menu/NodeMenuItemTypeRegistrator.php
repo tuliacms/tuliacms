@@ -32,8 +32,7 @@ class NodeMenuItemTypeRegistrator implements RegistratorInterface
         foreach ($this->contentTypeRegistry->all() as $nodeType) {
             if ($nodeType->isType('node')) {
                 $type = $registry->registerType('node:' . $nodeType->getCode());
-                $type->setLabel('node');
-                $type->setTranslationDomain('node');
+                $type->setLabel($nodeType->getName());
                 $type->setSelectorService($this->selector);
             }
         }

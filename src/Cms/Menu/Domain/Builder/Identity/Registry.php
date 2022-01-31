@@ -10,7 +10,7 @@ namespace Tulia\Cms\Menu\Domain\Builder\Identity;
 class Registry implements RegistryInterface
 {
     /**
-     * @var iterable
+     * @var iterable<IdentityProviderInterface>
      */
     protected $providers = [];
 
@@ -45,7 +45,7 @@ class Registry implements RegistryInterface
     {
         foreach ($this->providers as $provider) {
             if ($provider->supports($type)) {
-                $id = $provider->provide($identity);
+                $id = $provider->provide($type, $identity);
 
                 if ($id instanceof IdentityInterface) {
                     $id->setId($identity);

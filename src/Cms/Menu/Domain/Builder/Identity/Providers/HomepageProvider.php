@@ -14,20 +14,10 @@ use Symfony\Component\Routing\RouterInterface;
  */
 class HomepageProvider implements IdentityProviderInterface
 {
-    /**
-     * @var RouterInterface
-     */
-    protected $router;
+    protected RouterInterface $router;
 
-    /**
-     * @var string
-     */
-    protected $homepage;
+    protected string $homepage;
 
-    /**
-     * @param RouterInterface $router
-     * @param string $homepage
-     */
     public function __construct(RouterInterface $router, string $homepage = 'homepage')
     {
         $this->router   = $router;
@@ -45,7 +35,7 @@ class HomepageProvider implements IdentityProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function provide(string $identity): ?IdentityInterface
+    public function provide(string $type, string $identity): ?IdentityInterface
     {
         return new Identity($this->router->generate($this->homepage));
     }

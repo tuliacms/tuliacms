@@ -19,11 +19,10 @@ class MenuItemSelectorForm extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('node_search_' . $options['node_type']->getType(), NodeTypeaheadType::class, [
+        $builder->add('node_search_' . $options['node_type']->getCode(), NodeTypeaheadType::class, [
             'label' => 'node',
-            'translation_domain' => $options['node_type']->getTranslationDomain(),
             'search_route_params' => [
-                'node_type' => $options['node_type']->getType(),
+                'node_type' => $options['node_type']->getCode(),
             ],
         ]);
     }

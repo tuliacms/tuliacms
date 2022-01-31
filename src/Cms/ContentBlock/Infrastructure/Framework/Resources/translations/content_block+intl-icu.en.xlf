@@ -47,6 +47,10 @@
                 <target>Cannot edit this block</target>
                 <note>Message headline in alertbox</note>
             </trans-unit>
+            <trans-unit id="tuliacms.content_block.12">
+                <source>duplicateBlock</source>
+                <target>Duplicate block</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

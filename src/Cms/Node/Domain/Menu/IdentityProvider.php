@@ -32,8 +32,10 @@ class IdentityProvider implements IdentityProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function provide(string $identity): ?IdentityInterface
+    public function provide(string $type, string $identity): ?IdentityInterface
     {
-        return new Identity($this->router->generate('node_' . $identity), [ 'node-' . $identity ]);
+        [, $id] = explode(':', $type);
+
+        return new Identity($this->router->generate(sprintf('node.%s.%s', $id, $identity)), [ 'node-' . $identity ]);
     }
 }

@@ -58,7 +58,7 @@ export default {
         }
 
         function decodeHTMLEntities (text) {
-            return $("<textarea/>").html(text).text();
+            return $('<textarea/>').html(text).text();
         }
 
         for (let i in window.ContentBlockBuilder.translations) {
@@ -123,6 +123,18 @@ export default {
                 }
             });
         },
+        duplicateBlock: function (blockId) {
+            let block = this._findBlock(blockId);
+            let newBlock = JSON.parse(JSON.stringify(block));
+            newBlock.id = this.uniqueId();
+
+            for (let i in this.model.blocks) {
+                if (this.model.blocks[i].id === blockId) {
+                    this.model.blocks.splice(i, 0, newBlock);
+                    break;
+                }
+            }
+        },
         openCreateBlockModel: function () {
             this.view.modal.block_creator.show();
 
@@ -143,7 +155,7 @@ export default {
         },
         createBlockFromModal: function (block) {
             this.model.blocks.push({
-                id: _.uniq(),
+                id: this.uniqueId(),
                 type: block.type,
                 name: block.name,
                 visible: true,
@@ -174,6 +186,25 @@ export default {
         _findType: function (typeCode) {
             return this.block_types[typeCode];
         },
+        uniqueId: function () {
+            const idExists = (id) => {
+                for (let i in this.model.blocks) {
+                    if (this.model.blocks[i].id === id) {
+                        return true;
+                    }
+                }
+
+                return false;
+            };
+
+            let id;
+
+            do {
+                id = _.uniqueId('block_')
+            } while (idExists(id));
+
+            return id;
+        }
     },
     mounted: function () {
         let self = this;
@@ -204,6 +235,9 @@ export default {
         });
         this.$root.$on('block:edit', (blockId) => {
             this.openEditBlockModel(blockId);
+        });
+        this.$root.$on('block:duplicate', (blockId) => {
+            this.duplicateBlock(blockId);
         });
         this.$root.$on('block:remove', (blockId) => {
             this.removeBlock(blockId);

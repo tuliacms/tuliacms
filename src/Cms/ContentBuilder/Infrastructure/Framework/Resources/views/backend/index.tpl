@@ -113,12 +113,12 @@
                 <div class="modal-body">
                     <form action="{{ path('backend.content_builder.import.file') }}" method="POST" enctype="multipart/form-data" id="submit-content-types-import">
                         <input type="hidden" name="_token" value="{{ csrf_token('content-builder-import-file') }}" />
-                        <div class="alert alert-info">
-                            {{ 'importingOverwriteNotification'|trans }}
-                        </div>
                         <div class="mb-3">
                             <label for="importing-file" class="form-label">Select field</label>
                             <input class="form-control" name="file" type="file" id="importing-file" />
+                        </div>
+                        <div class="alert alert-info">
+                            {{ 'importingOverwriteNotification'|trans }}
                         </div>
                     </form>
                 </div>
