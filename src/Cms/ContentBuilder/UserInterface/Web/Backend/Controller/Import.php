@@ -6,7 +6,7 @@ namespace Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Tulia\Cms\ContentBuilder\Domain\ContentType\Service\Importer;
+use Tulia\Cms\ContentBuilder\Domain\WriteModel\ContentType\Service\Importer;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Component\Security\Http\Csrf\Annotation\CsrfToken;
 

@@ -6,9 +6,9 @@ namespace Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Controller;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Tulia\Cms\ContentBuilder\Domain\ContentType\ContentTypeRepository;
-use Tulia\Cms\ContentBuilder\Domain\ContentType\Service\Configuration;
-use Tulia\Cms\ContentBuilder\Domain\ContentType\Service\ContentTypeRegistry;
+use Tulia\Cms\ContentBuilder\Domain\WriteModel\ContentType\Service\Configuration;
+use Tulia\Cms\ContentBuilder\Domain\WriteModel\ContentType\Service\ContentTypeRegistry;
+use Tulia\Cms\ContentBuilder\Domain\WriteModel\ContentTypeRepository;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\LayoutTypeBuilderRegistry;
 use Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\ContentType\FormDataToModelTransformer;
 use Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\ContentType\FormHandler;

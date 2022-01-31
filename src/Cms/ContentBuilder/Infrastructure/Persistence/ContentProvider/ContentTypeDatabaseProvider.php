@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContentBuilder\Infrastructure\Persistence\ContentProvider;
 
-use Tulia\Cms\ContentBuilder\Domain\ContentType\Service\AbstractContentTypeProvider;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\AbstractContentTypeProvider;
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 
 /**
@@ -25,14 +25,10 @@ class ContentTypeDatabaseProvider extends AbstractContentTypeProvider
     public function provide(): array
     {
         $result = [];
+        dump($this->getTypes());
 
         foreach ($this->getTypes() as $type) {
-            $result[] = $this->buildContentType(
-                $type['id'],
-                $type['code'],
-                $type,
-                $this->buildLayoutType($type['type'], $this->getLayoutType($type['layout']))
-            );
+            $result[] = $this->buildFromArray($type);
         }
 
         return $result;

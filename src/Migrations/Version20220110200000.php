@@ -26,8 +26,7 @@ CREATE TABLE `#__content_type` (
   `is_routable` tinyint(1) NOT NULL DEFAULT '0',
   `is_hierarchical` tinyint(1) NOT NULL DEFAULT '0',
   `routing_strategy` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
-  `layout` varchar(127) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `internal` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'This column is temporary, please do not use it in any production code.'
+  `layout` varchar(127) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
 EOF);
 

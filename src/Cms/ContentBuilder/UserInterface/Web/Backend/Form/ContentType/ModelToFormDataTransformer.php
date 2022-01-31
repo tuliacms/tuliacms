@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\ContentType;
 
-use Tulia\Cms\ContentBuilder\Domain\ContentType\Model\ContentType;
-use Tulia\Cms\ContentBuilder\Domain\LayoutType\Model\LayoutType;
+use Tulia\Cms\ContentBuilder\Domain\WriteModel\Model\ContentType;
+use Tulia\Cms\ContentBuilder\Domain\WriteModel\Model\LayoutType;
 
 /**
  * @author Adam Banaszkiewicz

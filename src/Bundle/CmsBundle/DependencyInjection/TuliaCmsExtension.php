@@ -28,6 +28,7 @@ class TuliaCmsExtension extends Extension
         $configuration = $this->getConfiguration($configs, $container);
         $config = $this->processConfiguration($configuration, $configs);
 
+        $container->setParameter('cms.content_builder.content_type_entry.config', $config['content_building']['content_type_entry']);
         $container->setParameter('cms.content_builder.content_type.config', $config['content_building']['content_type']);
         $container->setParameter('cms.content_builder.data_types.mapping', $config['content_building']['data_types']['mapping']);
         $container->setParameter('cms.content_builder.constraint_types.mapping', $config['content_building']['constraint_types']['mapping']);
@@ -74,11 +75,14 @@ class TuliaCmsExtension extends Extension
             ->addTag('term.action_chain');
 
         // ContentBuilder
-        $container->registerForAutoconfiguration(\Tulia\Cms\ContentBuilder\Domain\ContentType\Service\ContentTypeDecoratorInterface::class)
+        $container->registerForAutoconfiguration(
+            \Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeDecoratorInterface::class)
             ->addTag('content_builder.content_type.decorator');
-        $container->registerForAutoconfiguration(\Tulia\Cms\ContentBuilder\Domain\ContentType\Service\ContentTypeProviderInterface::class)
+        $container->registerForAutoconfiguration(
+            \Tulia\Cms\ContentBuilder\Domain\WriteModel\ContentType\Service\ContentTypeProviderInterface::class)
             ->addTag('content_builder.content_type.provider');
-        $container->registerForAutoconfiguration(\Tulia\Cms\ContentBuilder\Domain\ContentType\Routing\Strategy\ContentTypeRoutingStrategyInterface::class)
+        $container->registerForAutoconfiguration(
+            \Tulia\Cms\ContentBuilder\Domain\WriteModel\Routing\Strategy\ContentTypeRoutingStrategyInterface::class)
             ->addTag('content_builder.content_type.routing_strategy');
         $container->registerForAutoconfiguration(\Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\LayoutTypeBuilderInterface::class)
             ->addTag('content_builder.layout_type.builder');

@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Infrastructure\Persistence\Dbal\ReadModel;
 
-use Tulia\Cms\ContentBuilder\Domain\ContentType\Service\ContentTypeRegistry;
+use Tulia\Cms\ContentBuilder\Domain\WriteModel\ContentType\Service\ContentTypeRegistry;
 use Tulia\Cms\Metadata\Domain\ReadModel\MetadataFinder;
+use Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderInterface;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\AbstractFinder;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Query\QueryInterface;
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
-use Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderInterface;
 
 /**
  * @author Adam Banaszkiewicz

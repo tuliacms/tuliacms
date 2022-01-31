@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContentBlock\Domain\Renderer;
 
-use Tulia\Cms\ContentBuilder\Domain\ContentType\Service\ContentTypeRegistry;
+use Tulia\Cms\ContentBuilder\Domain\WriteModel\ContentType\Service\ContentTypeRegistry;
 use Tulia\Component\Templating\EngineInterface;
 use Tulia\Component\Templating\View;
 

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Taxonomy\Domain\WriteModel;
 
-use Tulia\Cms\ContentBuilder\Domain\ContentType\Model\ContentType;
-use Tulia\Cms\ContentBuilder\Domain\ContentType\Service\ContentTypeRegistry;
+use Tulia\Cms\ContentBuilder\Domain\WriteModel\ContentType\Service\ContentTypeRegistry;
+use Tulia\Cms\ContentBuilder\Domain\WriteModel\Model\ContentType;
 use Tulia\Cms\Metadata\Domain\WriteModel\MetadataRepository;
 use Tulia\Cms\Platform\Infrastructure\Bus\Event\EventBusInterface;
 use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Uuid\UuidGeneratorInterface;

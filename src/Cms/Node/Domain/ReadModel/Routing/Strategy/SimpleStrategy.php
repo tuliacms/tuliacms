@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Domain\ReadModel\Routing\Strategy;
 
-use Tulia\Cms\ContentBuilder\Domain\ContentType\Routing\Strategy\ContentTypeRoutingStrategyInterface;
-use Tulia\Cms\ContentBuilder\Domain\ContentType\Service\ContentTypeRegistry;
-use Tulia\Cms\ContentBuilder\Domain\ContentType\Service\Router;
+use Tulia\Cms\ContentBuilder\Domain\WriteModel\ContentType\Service\ContentTypeRegistry;
+use Tulia\Cms\ContentBuilder\Domain\WriteModel\ContentType\Service\Router;
+use Tulia\Cms\ContentBuilder\Domain\WriteModel\Routing\Strategy\ContentTypeRoutingStrategyInterface;
 use Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderInterface;
 use Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderScopeEnum;
 use Tulia\Cms\Node\Domain\ReadModel\Model\Node;

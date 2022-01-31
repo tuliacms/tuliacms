@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Domain\WriteModel;
 
-use Tulia\Cms\ContentBuilder\Domain\ContentType\Exception\ContentTypeNotExistsException;
-use Tulia\Cms\ContentBuilder\Domain\ContentType\Model\ContentType;
-use Tulia\Cms\ContentBuilder\Domain\ContentType\Service\ContentTypeRegistry;
+use Tulia\Cms\ContentBuilder\Domain\WriteModel\ContentType\Service\ContentTypeRegistry;
+use Tulia\Cms\ContentBuilder\Domain\WriteModel\Exception\ContentTypeNotExistsException;
+use Tulia\Cms\ContentBuilder\Domain\WriteModel\Model\ContentType;
 use Tulia\Cms\Metadata\Domain\WriteModel\MetadataRepository;
 use Tulia\Cms\Node\Domain\WriteModel\ActionsChain\NodeActionsChainInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Event\NodeDeleted;

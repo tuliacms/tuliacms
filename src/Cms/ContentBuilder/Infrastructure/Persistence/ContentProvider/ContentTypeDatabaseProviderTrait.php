@@ -19,11 +19,13 @@ trait ContentTypeDatabaseProviderTrait
 
     private function getTypes(): array
     {
+        return [];
         $types = $this->connection->fetchAllAssociative('SELECT * FROM #__content_type');
 
         foreach ($types as $key => $type) {
-            $types[$key]['layout'] = $type['code'] . '_layout';
-            $types[$key]['fields'] = $this->getFields($type['id']);
+            $layout = $types[$key]['layout'];
+            $types[$key]['layout'] = [];
+            $types[$key]['layout']['sections']['main']['groups']['group'] = $this->getFields($type['id']);
         }
 
         return $types;

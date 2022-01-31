@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContentBuilder\Infrastructure\Persistence\Domain;
 
-use Tulia\Cms\ContentBuilder\Domain\ContentType\Service\ContentTypeStorageInterface;
+use Tulia\Cms\ContentBuilder\Domain\WriteModel\ContentType\Service\ContentTypeStorageInterface;
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
 

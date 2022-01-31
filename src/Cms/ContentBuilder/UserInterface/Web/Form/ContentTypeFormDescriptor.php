@@ -6,8 +6,8 @@ namespace Tulia\Cms\ContentBuilder\UserInterface\Web\Form;
 
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
-use Tulia\Cms\ContentBuilder\Domain\ContentType\Model\ContentType;
-use Tulia\Cms\ContentBuilder\Domain\ContentType\Model\Field;
+use Tulia\Cms\ContentBuilder\Domain\WriteModel\Model\ContentType;
+use Tulia\Cms\ContentBuilder\Domain\WriteModel\Model\Field;
 
 /**
  * @author Adam Banaszkiewicz

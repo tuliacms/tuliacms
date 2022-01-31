@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\UserInterface\Web\Backend\BackendMenu;
 
-use Tulia\Cms\BackendMenu\Ports\Domain\Builder\BuilderInterface;
 use Tulia\Cms\BackendMenu\Domain\Builder\Helper\BuilderHelperInterface;
 use Tulia\Cms\BackendMenu\Domain\Builder\Registry\ItemRegistryInterface;
-use Tulia\Cms\ContentBuilder\Domain\ContentType\Model\ContentType;
-use Tulia\Cms\ContentBuilder\Domain\ContentType\Service\ContentTypeRegistry;
+use Tulia\Cms\BackendMenu\Ports\Domain\Builder\BuilderInterface;
+use Tulia\Cms\ContentBuilder\Domain\WriteModel\ContentType\Service\ContentTypeRegistry;
+use Tulia\Cms\ContentBuilder\Domain\WriteModel\Model\ContentType;
 
 /**
  * @author Adam Banaszkiewicz

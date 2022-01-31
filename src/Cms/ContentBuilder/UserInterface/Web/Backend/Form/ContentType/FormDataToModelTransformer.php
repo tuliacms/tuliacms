@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\ContentType;
 
-use Tulia\Cms\ContentBuilder\Domain\ContentType\Exception\CannotOverwriteInternalFieldException;
-use Tulia\Cms\ContentBuilder\Domain\ContentType\Exception\EmptyRoutingStrategyForRoutableContentTypeException;
-use Tulia\Cms\ContentBuilder\Domain\ContentType\Exception\MultipleValueForTitleOrSlugOccuredException;
-use Tulia\Cms\ContentBuilder\Domain\ContentType\Exception\RoutableContentTypeWithoutSlugField;
-use Tulia\Cms\ContentBuilder\Domain\ContentType\Model\ContentType;
-use Tulia\Cms\ContentBuilder\Domain\ContentType\Model\Field;
-use Tulia\Cms\ContentBuilder\Domain\ContentType\Service\ContentTypeDecorator;
-use Tulia\Cms\ContentBuilder\Domain\LayoutType\Model\FieldsGroup;
-use Tulia\Cms\ContentBuilder\Domain\LayoutType\Model\LayoutType;
-use Tulia\Cms\ContentBuilder\Domain\LayoutType\Model\Section;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeDecorator;
+use Tulia\Cms\ContentBuilder\Domain\WriteModel\Exception\CannotOverwriteInternalFieldException;
+use Tulia\Cms\ContentBuilder\Domain\WriteModel\Exception\EmptyRoutingStrategyForRoutableContentTypeException;
+use Tulia\Cms\ContentBuilder\Domain\WriteModel\Exception\MultipleValueForTitleOrSlugOccuredException;
+use Tulia\Cms\ContentBuilder\Domain\WriteModel\Exception\RoutableContentTypeWithoutSlugField;
+use Tulia\Cms\ContentBuilder\Domain\WriteModel\Model\ContentType;
+use Tulia\Cms\ContentBuilder\Domain\WriteModel\Model\Field;
+use Tulia\Cms\ContentBuilder\Domain\WriteModel\Model\FieldsGroup;
+use Tulia\Cms\ContentBuilder\Domain\WriteModel\Model\LayoutType;
+use Tulia\Cms\ContentBuilder\Domain\WriteModel\Model\Section;
 use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
 
 /**

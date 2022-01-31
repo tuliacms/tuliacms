@@ -6,9 +6,9 @@ namespace Tulia\Cms\ContentBuilder\Infrastructure\Presentation;
 
 use Symfony\Component\Form\FormView;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Tulia\Cms\ContentBuilder\Domain\ContentType\Model\ContentType;
-use Tulia\Cms\ContentBuilder\Domain\ContentType\Routing\Strategy\ContentTypeRoutingStrategyRegistry;
-use Tulia\Cms\ContentBuilder\Domain\ContentType\Service\Configuration;
+use Tulia\Cms\ContentBuilder\Domain\WriteModel\ContentType\Service\Configuration;
+use Tulia\Cms\ContentBuilder\Domain\WriteModel\Model\ContentType;
+use Tulia\Cms\ContentBuilder\Domain\WriteModel\Routing\Strategy\ContentTypeRoutingStrategyRegistry;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\FieldTypeMappingRegistry;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\LayoutTypeBuilderInterface;
 use Tulia\Component\Templating\View;
