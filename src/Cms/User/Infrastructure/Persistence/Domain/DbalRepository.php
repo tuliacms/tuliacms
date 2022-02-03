@@ -66,7 +66,7 @@ class DbalRepository implements RepositoryInterface
             'credentialsExpired' => $user['credentials_expired'] === '1',
             'accountLocked' => $user['account_locked'] === '1',
             'roles'    => json_decode($user['roles'], true),
-            'metadata' => $this->metadataRepository->findAll(UserMetadataEnum::TYPE, $id->getId()),
+            'metadata' => $this->metadataRepository->findAll(UserMetadataEnum::TYPE, $id->getId(), []),
         ], User::class);
 
         return $aggregate;

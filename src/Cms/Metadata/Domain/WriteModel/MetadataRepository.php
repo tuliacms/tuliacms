@@ -29,14 +29,33 @@ class MetadataRepository
         $this->uuidGenerator = $uuidGenerator;
     }
 
-    public function findAllAggregated(string $type, array $ownerIdList): array
+    public function findAllAggregated(string $type, array $ownerIdList, array $info): array
     {
-        return $this->storage->find($type, $ownerIdList, $this->currentWebsite->getLocale()->getCode());
+        $result = $this->storage->find($type, $ownerIdList, $this->currentWebsite->getLocale()->getCode());
+
+        foreach ($result as $ownerId => $fields) {
+            foreach ($fields as $key => $value) {
+                if (isset($info[$key]) && $info[$key]['is_multiple']) {
+                    try {
+                        $value = (array) unserialize(
+                            (string) $value,
+                            ['allowed_classes' => []]
+                        );
+                    } catch (\ErrorException $e) {
+                        // If error, than empty or cannot be unserialized from singular value
+                    }
+
+                    $result[$ownerId][$key] = $value;
+                }
+            }
+        }
+
+        return $result;
     }
 
-    public function findAll(string $type, string $ownerId): array
+    public function findAll(string $type, string $ownerId, array $info): array
     {
-        return $this->findAllAggregated($type, [$ownerId])[$ownerId] ?? [];
+        return $this->findAllAggregated($type, [$ownerId], $info)[$ownerId] ?? [];
     }
 
     public function persist(string $type, string $ownerId, array $metadata): void
@@ -47,7 +66,6 @@ class MetadataRepository
         foreach ($metadata as $name => $info) {
             $structure[$name] = [
                 'id' => $this->uuidGenerator->generate(),
-                // @todo What to do when field contains multiple values?
                 'value' => $info['is_multiple'] ? serialize($info['value']) : $info['value'],
                 'owner_id' => $ownerId,
                 'name' => $name,

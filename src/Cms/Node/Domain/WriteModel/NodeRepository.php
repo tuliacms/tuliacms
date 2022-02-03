@@ -68,6 +68,7 @@ class NodeRepository
             $node->addAttributeInfo($name, new AttributeInfo(
                 $info['is_multilingual'],
                 $info['is_compilable'],
+                $info['is_multiple'],
                 $info['is_taxonomy'],
             ));
         }
@@ -94,7 +95,15 @@ class NodeRepository
 
         $nodeType = $this->contentTypeRegistry->get($node['type']);
 
-        $attributes = $this->metadataRepository->findAll('node', $id);
+        $attributesInfo = [];
+
+        foreach ($nodeType->getFields() as $field) {
+            $attributesInfo[$field->getCode()] = [
+                'is_multiple' => $field->isMultiple(),
+            ];
+        }
+
+        $attributes = $this->metadataRepository->findAll('node', $id, $attributesInfo);
 
         $node = Node::buildFromArray($node['type'], [
             'id'            => $node['id'],
@@ -201,6 +210,7 @@ class NodeRepository
                 'value' => $value,
                 'is_multilingual' => $info->isMultilingual(),
                 'is_taxonomy' => $info->isTaxonomy(),
+                'is_multiple' => $info->isMultiple(),
             ];
         }
 
@@ -234,6 +244,7 @@ class NodeRepository
             $result[$field->getCode()] = [
                 'is_multilingual' => $field->isMultilingual(),
                 'is_compilable' => $field->hasFlag('compilable'),
+                'is_multiple' => $field->isMultiple(),
                 'is_taxonomy' => $field->getType() === 'taxonomy',
             ];
         }

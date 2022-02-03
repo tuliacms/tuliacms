@@ -96,6 +96,7 @@ class Node extends AggregateRoot
             $self->attributesInfo[$name] = new AttributeInfo(
                 $info['is_multilingual'],
                 $info['is_compilable'],
+                $info['is_multiple'],
                 $info['is_taxonomy'],
             );
         }

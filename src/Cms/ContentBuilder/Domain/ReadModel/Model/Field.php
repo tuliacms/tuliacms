@@ -17,6 +17,7 @@ class Field
         'name' => '',
         'is_multilingual' => false,
         'is_internal' => false,
+        'is_multiple' => false,
         'flags' => [],
         'configuration' => [],
         'constraints' => [],
@@ -30,7 +31,8 @@ class Field
         \assert(\is_string($this->options['type']), 'The "type" option must be a string.');
         \assert(\is_string($this->options['name']), 'The "name" option must be a string.');
         \assert(\is_bool($this->options['is_multilingual']), 'The "is_multilingual" option must be a boolean.');
-        \assert(\is_bool($this->options['is_internal']), 'The "internal" option must be a boolean.');
+        \assert(\is_bool($this->options['is_internal']), 'The "is_internal" option must be a boolean.');
+        \assert(\is_bool($this->options['is_multiple']), 'The "is_multiple" option must be a boolean.');
         \assert(\is_array($this->options['flags']), 'The "flags" option must be an array.');
         \assert(\is_array($this->options['configuration']), 'The "configuration" option must be an array.');
         \assert(\is_array($this->options['constraints']), 'The "constraints" option must be an array.');
@@ -86,6 +88,11 @@ class Field
     public function isInternal(): bool
     {
         return $this->options['is_internal'];
+    }
+
+    public function isMultiple(): bool
+    {
+        return $this->options['is_multiple'];
     }
 
     public function getName(): string

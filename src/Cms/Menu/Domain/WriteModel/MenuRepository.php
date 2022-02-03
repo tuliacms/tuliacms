@@ -87,7 +87,7 @@ class MenuRepository
             throw new MenuNotFoundException(sprintf('Menu %s not found.', $id));
         }
 
-        $metadata = $this->metadataRepository->findAllAggregated(MetadataEnum::MENUITEM_GROUP, array_column($data['items'], 'id'));
+        $metadata = $this->metadataRepository->findAllAggregated(MetadataEnum::MENUITEM_GROUP, array_column($data['items'], 'id'), []);
         $menu = Menu::buildFromArray($data);
 
         foreach ($data['items'] as $item) {

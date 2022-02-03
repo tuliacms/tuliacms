@@ -93,6 +93,7 @@ class TaxonomyRepository
             $taxonomy->addAttributeInfo($name, new AttributeInfo(
                 $info['is_multilingual'],
                 $info['is_compilable'],
+                $info['is_multiple'],
                 $info['is_taxonomy'],
             ));
         }
@@ -177,7 +178,7 @@ class TaxonomyRepository
                 'path'       => $term['path'],
                 'visibility' => $term['visibility'] === '1',
                 'is_root'    => (bool) $term['is_root'],
-                'metadata'   => $this->metadataRepository->findAll('term', $term['id']),
+                'metadata'   => $this->metadataRepository->findAll('term', $term['id'], []),
                 'translated' => (bool) ($term['translated'] ?? false),
             ];
         }
@@ -200,6 +201,7 @@ class TaxonomyRepository
                 'value' => $value,
                 'is_multilingual' => $info->isMultilingual(),
                 'is_taxonomy' => $info->isTaxonomy(),
+                'is_multiple' => $info->isMultiple(),
             ];
         }
 
