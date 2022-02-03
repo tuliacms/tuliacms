@@ -26,7 +26,7 @@ class ContentBlockExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('content_block_render',[$this, 'contentBlockRender'], ['is_safe' => [ 'html' ]]),
+            new TwigFunction('content_block_render', [$this, 'contentBlockRender'], ['is_safe' => [ 'html' ]]),
         ];
     }
 

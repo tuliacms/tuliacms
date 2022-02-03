@@ -15,6 +15,10 @@ framework:
                     - /assets/core/contact-forms/js/build.js
 
 cms:
+    content_blocks:
+        templating:
+            paths:
+                - '@cms/forms/content-block'
     content_building:
         content_type_entry:
             contact_form:

@@ -29,7 +29,6 @@ cms:
                 content_blocks:
                     label: Content Blocks builder
                     classname: 'Tulia\Cms\ContentBlock\Infrastructure\Framework\Form\FormType\ContentBlockBuilderType'
-                    #builder: 'Tulia\Cms\Taxonomy\UserInterface\Web\Shared\Form\FormType\TaxonomyTypeaheadTypeBuilder'
                     exclude_for_types: [ content_block ]
                     constraints: [ required ]
                     flags: [ compilable ]

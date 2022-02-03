@@ -12,3 +12,4 @@ services:
     Tulia\Cms\ContentBlock\Domain\Renderer\Renderer:
         bind:
             $environment: '%kernel.environment%'
+            $paths: '%cms.content_blocks.templating.paths%'

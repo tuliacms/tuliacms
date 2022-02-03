@@ -23,6 +23,7 @@ class Configuration implements ConfigurationInterface
 
         $this->registerOptionsConfiguration($root);
         $this->registerContentBuildingConfiguration($root);
+        $this->registerContentBlockConfiguration($root);
 
         return $treeBuilder;
     }
@@ -58,7 +59,7 @@ class Configuration implements ConfigurationInterface
         ;
     }
 
-    private function registerContentBuildingConfiguration(ArrayNodeDefinition $root): void
+    private function registerContentBuildingConfiguration(NodeDefinition $root): void
     {
         $root
             ->children()
@@ -182,46 +183,6 @@ class Configuration implements ConfigurationInterface
                                             ->end()
                                         ->end()
                                     ->end()
-            /*
-                                                    ->defaultNull()
-                                                    ->beforeNormalization()
-                                                        ->always(function ($v) {
-                                                            if ($v === false) {
-                                                                return '';
-                                                            }
-
-                                                            return $v;
-                                                        })
-                                                    ->end()
-                                                ->end()
-                                                ->scalarNode('type')->defaultNull()->end()
-                                                ->booleanNode('is_multilingual')->defaultFalse()->end()
-                                                ->scalarNode('taxonomy')->defaultNull()->end()
-                                                ->arrayNode('configuration')
-                                                    ->arrayPrototype()
-                                                        ->children()
-                                                            ->scalarNode('config')->isRequired()->end()
-                                                            ->scalarNode('value')->isRequired()->end()
-                                                        ->end()
-                                                    ->end()
-                                                ->end()
-                                                ->arrayNode('constraints')
-                                                    ->arrayPrototype()
-                                                        ->children()
-                                                            ->arrayNode('modificators')
-                                                                ->arrayPrototype()
-                                                                    ->children()
-                                                                        ->scalarNode('modificator')->isRequired()->end()
-                                                                        ->scalarNode('value')->isRequired()->end()
-                                                                    ->end()
-                                                                ->end()
-                                                            ->end()
-                                                        ->end()
-                                                    ->end()
-                                                ->end()
-                                            ->end()
-                                        ->end()
-                                    ->end()*/
                                 ->end()
                             ->end()
                         ->end()
@@ -231,7 +192,24 @@ class Configuration implements ConfigurationInterface
         ;
     }
 
-    private function buildConstraintsNode(string $nodeName)
+    private function registerContentBlockConfiguration(NodeDefinition $root): void
+    {
+        $root
+            ->children()
+                ->arrayNode('content_blocks')
+                    ->children()
+                        ->arrayNode('templating')
+                            ->children()
+                                ->arrayNode('paths')->scalarPrototype()->defaultValue([])->end()->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
+            ->end()
+        ;
+    }
+
+    private function buildConstraintsNode(string $nodeName): NodeDefinition
     {
         $treeBuilder = new TreeBuilder($nodeName);
 

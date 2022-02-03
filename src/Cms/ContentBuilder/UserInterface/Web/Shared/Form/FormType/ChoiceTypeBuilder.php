@@ -19,7 +19,7 @@ class ChoiceTypeBuilder
             return $options;
         }
 
-        $choicesRaw = preg_split("/\r\n|\n|\r/", $choicesRaw);
+        $choicesRaw = preg_split("/\r\n|\n|\r/", trim($choicesRaw));
         $options['choices'] = [];
 
         foreach ($choicesRaw as $line => $choice) {
@@ -28,7 +28,7 @@ class ChoiceTypeBuilder
             if (is_array($data) && count($data) === 2) {
                 $options['choices'][trim($data[1])] = $data[0];
             } else {
-                $options['choices'][sprintf('--- option number %s is invalid ---')] = null;
+                $options['choices'][sprintf('--- option number "%s" is invalid ---', $choice)] = null;
             }
         }
 

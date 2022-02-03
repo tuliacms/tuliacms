@@ -16,15 +16,21 @@ class Renderer
     private ContentTypeRegistry $contentTypeRegistry;
     private EngineInterface $engine;
     private string $environment;
+    private array $paths;
+    private string $fallbackView;
 
     public function __construct(
         ContentTypeRegistry $contentTypeRegistry,
         EngineInterface $engine,
-        string $environment
+        string $environment,
+        array $paths
     ) {
         $this->contentTypeRegistry = $contentTypeRegistry;
         $this->engine = $engine;
         $this->environment = $environment;
+        $this->paths = $paths;
+
+        $this->prepareViews();
     }
 
     public function render(array $model): string
@@ -46,26 +52,32 @@ class Renderer
             $fields[$name] = new FieldValue($values);
         }
 
-        if ($this->environment === 'dev') {
-            $fallbackView = '@cms/content_block/empty-block.debug.tpl';
-        } else {
-            $fallbackView = '@cms/content_block/empty-block.tpl';
-        }
+        $views = array_map(static function (string $path) use ($block) {
+            return $path . $block['type'] . '.tpl';
+        }, $this->paths);
+        $views[] = $this->fallbackView;
+
+        dump($views);
 
         return $this->engine->render(
-            new View([
-                /**
-                 * @todo Configure modules, to use them as source of the views for blocks.
-                 *       Some of the modules can import/export it's own the content types,
-                 *       universally across whole system. So they also need to include
-                 *       theirs own views for the blocks.
-                 *       The best solution will be when we can configure those modules in
-                 *       in YAML.
-                 */
-                '@theme/content-block/' . $block['type'] . '.tpl',
-                // At the end, we have to add empty view, in case of any previous views are not defined.
-                $fallbackView
-            ], $fields)
+            new View($views, $fields)
         );
+    }
+
+    private function prepareViews(): void
+    {
+        if ($this->environment === 'dev') {
+            $this->fallbackView = '@cms/content_block/empty-block.debug.tpl';
+        } else {
+            $this->fallbackView = '@cms/content_block/empty-block.tpl';
+        }
+
+        /**
+         * Views priority:
+         * - Theme views - This allows to overwrite views from modules
+         * - Modules views
+         * - Fallback views -  At the end, we have to add empty view, in case of any previous views are not defined.
+         */
+        array_unshift($this->paths, '@theme/content-block/');
     }
 }

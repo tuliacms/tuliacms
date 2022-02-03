@@ -28,6 +28,13 @@ class TuliaCmsExtension extends Extension
         $configuration = $this->getConfiguration($configs, $container);
         $config = $this->processConfiguration($configuration, $configs);
 
+        $paths = $config['content_blocks']['templating']['paths'];
+
+        foreach ($paths as $key => $path) {
+            $paths[$key] = rtrim($path, '/') . '/';
+        }
+
+        $container->setParameter('cms.content_blocks.templating.paths', $paths);
         $container->setParameter('cms.content_builder.content_type_entry.config', $config['content_building']['content_type_entry']);
         $container->setParameter('cms.content_builder.content_type.config', $config['content_building']['content_type']);
         $container->setParameter('cms.content_builder.data_types.mapping', $config['content_building']['data_types']['mapping']);
