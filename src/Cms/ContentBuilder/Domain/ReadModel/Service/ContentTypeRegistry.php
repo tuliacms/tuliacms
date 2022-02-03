@@ -2,11 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\ContentBuilder\Domain\WriteModel\ContentType\Service;
+namespace Tulia\Cms\ContentBuilder\Domain\ReadModel\Service;
 
-use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeDecorator;
 use Tulia\Cms\ContentBuilder\Domain\WriteModel\Exception\ContentTypeNotExistsException;
-use Tulia\Cms\ContentBuilder\Domain\WriteModel\Model\ContentType;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\ContentType;
 
 /**
  * @author Adam Banaszkiewicz
@@ -91,7 +90,6 @@ class ContentTypeRegistry
         /** @var ContentType $type */
         foreach (array_merge(...$types) as $type) {
             $this->decorator->decorate($type);
-            $type->validate();
 
             $this->contentTypes[$type->getCode()] = $type;
         }

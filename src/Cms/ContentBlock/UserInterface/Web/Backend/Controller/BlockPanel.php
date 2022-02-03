@@ -6,7 +6,7 @@ namespace Tulia\Cms\ContentBlock\UserInterface\Web\Backend\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Tulia\Cms\ContentBuilder\Domain\WriteModel\ContentType\Service\ContentTypeRegistry;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistry;
 use Tulia\Cms\ContentBuilder\UserInterface\Web\Form\ContentTypeFormDescriptor;
 use Tulia\Cms\ContentBuilder\UserInterface\Web\Service\SymfonyFormBuilder;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;

@@ -56,21 +56,15 @@ class ArrayToReadModelTransformer
      *                                 type: string,
      *                                 name: string,
      *                                 is_multilingual: null|bool,
-     *                                 is_multiple: null|bool,
      *                                 configuration: [
-     *                                     [
-     *                                         code: string,
-     *                                         value: mixed
-     *                                     ]
+     *                                     {code}: {value} mixed,
+     *                                     ...
      *                                 ],
      *                                 constraints: [
-     *                                     [
-     *                                         code: string,
+     *                                     {constraint_name}: [
      *                                         modificators: [
-     *                                             [
-     *                                                 modificator: string,
-     *                                                 value: mixed
-     *                                             ]
+     *                                             {code}: {value} mixed,
+     *                                             ...
      *                                         ]
      *                                     ]
      *                                 ]
@@ -91,7 +85,7 @@ class ArrayToReadModelTransformer
     protected function buildContentType(array $type): ContentType
     {
         $layoutType = $this->buildLayoutType($type);
-        $contentType = new ContentType($type['id'] ?? null, $type['name'], $type['type'], $layoutType, (bool) ($type['internal'] ?? false));
+        $contentType = new ContentType($type['id'] ?? null, $type['code'], $type['type'], $layoutType, (bool) ($type['internal'] ?? false));
         $contentType->setController($type['controller'] ?? $this->config->getController($type['type']));
         $contentType->setIcon($type['icon'] ?? 'fa fa-box');
         $contentType->setName($type['name']);
@@ -122,7 +116,6 @@ class ArrayToReadModelTransformer
             'type' => $type['type'],
             'name' => (string) $type['name'],
             'is_multilingual' => (bool) $type['is_multilingual'],
-            'is_multiple' => (bool) $type['is_multiple'],
             'taxonomy' => $type['taxonomy'] ?? '',
             'configuration' => $type['configuration'],
             'constraints' => $type['constraints'],

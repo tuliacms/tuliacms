@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContentBuilder\Domain\WriteModel\Routing\Strategy;
 
-use Tulia\Cms\ContentBuilder\Domain\WriteModel\Model\ContentType;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\ContentType;
 
 /**
  * @author Adam Banaszkiewicz

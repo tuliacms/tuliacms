@@ -6,8 +6,8 @@ namespace Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Controller;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistry;
 use Tulia\Cms\ContentBuilder\Domain\WriteModel\ContentType\Service\Configuration;
-use Tulia\Cms\ContentBuilder\Domain\WriteModel\ContentType\Service\ContentTypeRegistry;
 use Tulia\Cms\ContentBuilder\Domain\WriteModel\ContentTypeRepository;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\LayoutTypeBuilderRegistry;
 use Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\ContentType\FormDataToModelTransformer;
@@ -114,11 +114,6 @@ class ContentModel extends AbstractController
             return $this->redirectToRoute('backend.content_builder.homepage');
         }
 
-        if ($contentType->isInternal()) {
-            $this->setFlash('danger', $this->trans('cannotEditInternalContentType', [], 'content_builder'));
-            return $this->redirectToRoute('backend.content_builder.homepage');
-        }
-
         $layout = $contentType->getLayout();
 
         $data = (new ModelToFormDataTransformer())->transform($contentType, $layout);
@@ -156,11 +151,6 @@ class ContentModel extends AbstractController
 
         if ($contentType === null) {
             $this->setFlash('danger', $this->trans('contentTypeNotExists', [], 'content_builder'));
-            return $this->redirectToRoute('backend.content_builder.homepage');
-        }
-
-        if ($contentType->isInternal()) {
-            $this->setFlash('danger', $this->trans('cannotRemoveInternalContentType', [], 'content_builder'));
             return $this->redirectToRoute('backend.content_builder.homepage');
         }
 

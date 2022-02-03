@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Taxonomy\UserInterface\Web\Frontend\Menu;
 
 use Symfony\Component\Form\FormFactoryInterface;
-use Tulia\Cms\ContentBuilder\Domain\WriteModel\ContentType\Service\ContentTypeRegistry;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistry;
 use Tulia\Cms\Menu\Domain\Builder\Type\TypeInterface;
 use Tulia\Cms\Menu\UserInterface\Web\Backend\Selector\SelectorInterface;
 use Tulia\Cms\Taxonomy\UserInterface\Web\Backend\Form\MenuItemSelectorForm;

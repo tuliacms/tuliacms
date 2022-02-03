@@ -6,8 +6,6 @@ namespace Tulia\Cms\ContentBuilder\Domain\WriteModel\Model;
 
 use Tulia\Cms\ContentBuilder\Domain\WriteModel\Exception\CannotOverwriteInternalFieldException;
 use Tulia\Cms\ContentBuilder\Domain\WriteModel\Exception\EmptyRoutingStrategyForRoutableContentTypeException;
-use Tulia\Cms\ContentBuilder\Domain\WriteModel\Exception\MultipleValueForTitleOrSlugOccuredException;
-use Tulia\Cms\ContentBuilder\Domain\WriteModel\Exception\RoutableContentTypeWithoutSlugField;
 
 /**
  * @author Adam Banaszkiewicz
@@ -19,11 +17,10 @@ class ContentType
     protected ?string $controller = null;
     protected LayoutType $layout;
     protected string $code;
-    protected string $name;
-    protected string $icon;
+    protected string $name = '';
+    protected string $icon = '';
     protected bool $isRoutable = false;
     protected bool $isHierarchical = false;
-    protected bool $isInternal = false;
     protected ?string $routingStrategy = null;
 
     /**
@@ -31,13 +28,35 @@ class ContentType
      */
     protected array $fields = [];
 
-    public function __construct(string $id, string $code, string $type, LayoutType $layout, bool $isInternal)
+    public function __construct(string $id, string $code, string $type, LayoutType $layout)
     {
         $this->id = $id;
         $this->code = $code;
         $this->type = $type;
         $this->layout = $layout;
-        $this->isInternal = $isInternal;
+    }
+
+    public static function recreateFromArray(array $data): self
+    {
+        $layout = new LayoutType($data['layout']['code']);
+
+        foreach ($data['layout']['sections'] as $sectionCode => $section) {
+            $groups = [];
+
+            foreach ($section['groups'] as $groupName => $group) {
+                $groups[$groupName] = new FieldsGroup($group['code'], $group['name'], (bool) $group['active'], (string) $group['interior'], $group['fields']);
+            }
+
+            $layout->addSection(new Section($sectionCode, $groups));
+        }
+
+        $self = new self($data['id'], $data['code'], $data['type'], $layout);
+
+        foreach ($data['fields'] as $field) {
+            $self->fields[$field['code']] = new Field($field);
+        }
+
+        return $self;
     }
 
     public function getId(): string
@@ -126,11 +145,6 @@ class ContentType
         $this->isHierarchical = $isHierarchical;
     }
 
-    public function isInternal(): bool
-    {
-        return $this->isInternal;
-    }
-
     /**
      * @return Field[]
      */
@@ -155,7 +169,6 @@ class ContentType
     }
 
     /**
-     * @throws MultipleValueForTitleOrSlugOccuredException
      * @throws CannotOverwriteInternalFieldException
      */
     public function addField(Field $field): Field
@@ -185,35 +198,12 @@ class ContentType
     }
 
     /**
-     * @throws RoutableContentTypeWithoutSlugField
-     */
-    public function validate(): void
-    {
-        $this->validateRoutableContentType();
-    }
-
-    /**
-     * @throws MultipleValueForTitleOrSlugOccuredException
      * @throws CannotOverwriteInternalFieldException
      */
     protected function validateField(Field $field): void
     {
-        if ($field->isMultiple() && in_array($field->getCode(), ['title', 'slug'])) {
-            throw MultipleValueForTitleOrSlugOccuredException::fromFieldType($field->getCode());
-        }
-
         if (isset($this->fields[$field->getCode()]) && $this->fields[$field->getCode()]->isInternal()) {
             throw CannotOverwriteInternalFieldException::fromCodeAndName($field->getCode(), $field->getName());
-        }
-    }
-
-    /**
-     * @throws RoutableContentTypeWithoutSlugField
-     */
-    protected function validateRoutableContentType(): void
-    {
-        if ($this->isRoutable && $this->type === 'node' && isset($this->fields['slug']) === false) {
-            throw RoutableContentTypeWithoutSlugField::fromType($this->code);
         }
     }
 }

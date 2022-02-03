@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Domain\WriteModel;
 
-use Tulia\Cms\ContentBuilder\Domain\WriteModel\ContentType\Service\ContentTypeRegistry;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistry;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\ContentType;
 use Tulia\Cms\ContentBuilder\Domain\WriteModel\Exception\ContentTypeNotExistsException;
-use Tulia\Cms\ContentBuilder\Domain\WriteModel\Model\ContentType;
 use Tulia\Cms\Metadata\Domain\WriteModel\MetadataRepository;
 use Tulia\Cms\Node\Domain\WriteModel\ActionsChain\NodeActionsChainInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Event\NodeDeleted;
@@ -67,7 +67,6 @@ class NodeRepository
         foreach ($this->buildAttributesMapping($type) as $name => $info) {
             $node->addAttributeInfo($name, new AttributeInfo(
                 $info['is_multilingual'],
-                $info['is_multiple'],
                 $info['is_compilable'],
                 $info['is_taxonomy'],
             ));
@@ -96,22 +95,6 @@ class NodeRepository
         $nodeType = $this->contentTypeRegistry->get($node['type']);
 
         $attributes = $this->metadataRepository->findAll('node', $id);
-
-        foreach ($nodeType->getFields() as $field) {
-            if ($field->isMultiple()) {
-                try {
-                    $value = (array) unserialize(
-                        (string) $attributes[$field->getCode()],
-                        ['allowed_classes' => []]
-                    );
-                } catch (\ErrorException $e) {
-                    // If error, than empty or cannot be unserialized from singular value
-                    $value = $attributes[$field->getCode()] ?? null;
-                }
-
-                $attributes[$field->getCode()] = $value;
-            }
-        }
 
         $node = Node::buildFromArray($node['type'], [
             'id'            => $node['id'],
@@ -217,7 +200,6 @@ class NodeRepository
             $attributes[$name] = [
                 'value' => $value,
                 'is_multilingual' => $info->isMultilingual(),
-                'is_multiple' => $info->isMultiple(),
                 'is_taxonomy' => $info->isTaxonomy(),
             ];
         }
@@ -251,7 +233,6 @@ class NodeRepository
         foreach ($contentType->getFields() as $field) {
             $result[$field->getCode()] = [
                 'is_multilingual' => $field->isMultilingual(),
-                'is_multiple' => $field->isMultiple(),
                 'is_compilable' => $field->hasFlag('compilable'),
                 'is_taxonomy' => $field->getType() === 'taxonomy',
             ];

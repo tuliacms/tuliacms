@@ -38,7 +38,6 @@ CREATE TABLE `#__content_type_field` (
   `type` varchar(127) COLLATE utf8_unicode_ci NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `is_multilingual` tinyint(1) NOT NULL DEFAULT '0',
-  `is_multiple` tinyint(1) NOT NULL DEFAULT '0',
   `taxonomy` varchar(36) COLLATE utf8_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
 EOF);

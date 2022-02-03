@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service;
 
 use Symfony\Component\Form\FormView;
-use Tulia\Cms\ContentBuilder\Domain\WriteModel\Model\ContentType;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\ContentType;
 use Tulia\Component\Templating\View;
 
 /**

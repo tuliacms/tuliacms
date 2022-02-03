@@ -38,7 +38,6 @@ cms:
                                             type: text
                                             name: Form to show
                                             is_multilingual: false
-                                            is_multiple: false
                                             configuration:
                                                 - { code: icon, value: /assets/theme/tulia/lisa/images/content-block/icon/company-in-numbers.png }
                                             constraints:

@@ -129,7 +129,7 @@ final class Version20220110213600 extends AbstractMigration
     {
         $fieldId = Uuid::uuid4()->toString();
 
-        $this->addSql('INSERT INTO #__content_type_field (`id`, `code`, `node_type`, `type`, `name`, `taxonomy`, `is_multilingual`, `is_multiple`) VALUES (:id, :code, :node_type, :type, :name, :taxonomy, :is_multilingual, :is_multiple)', [
+        $this->addSql('INSERT INTO #__content_type_field (`id`, `code`, `node_type`, `type`, `name`, `taxonomy`, `is_multilingual`) VALUES (:id, :code, :node_type, :type, :name, :taxonomy, :is_multilingual)', [
             'id' => $fieldId,
             'code' => $field['code'],
             'node_type' => $field['node_type'],
@@ -137,7 +137,6 @@ final class Version20220110213600 extends AbstractMigration
             'name' => $field['name'],
             'taxonomy' => $field['taxonomy'] ?? null,
             'is_multilingual' => $field['is_multilingual'] ?? '0',
-            'is_multiple' => $field['is_multiple'] ?? '0',
         ]);
 
         foreach ($field['constraints'] ?? [] as $constraint) {

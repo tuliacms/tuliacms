@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Validator\Constraints\Json;
-use Tulia\Cms\ContentBuilder\Domain\WriteModel\ContentType\Service\ContentTypeRegistry;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistry;
 
 /**
  * @author Adam Banaszkiewicz
@@ -60,7 +60,7 @@ class ContentBlockBuilderType extends AbstractType
                 $types[$type->getCode()] = [
                     'code' => $type->getCode(),
                     'name' => $type->getName(),
-                    'icon' => $this->requestStack->getCurrentRequest()->getUriForPath($icon),
+                    'icon' => $this->requestStack->getCurrentRequest()->getUriForPath((string) $icon),
                     'block_panel_url' => $this->router->generate('backend.content_block.block_panel.builder', [ 'type' => $type->getCode() ]),
                 ];
             }

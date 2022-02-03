@@ -54,7 +54,6 @@ class ArrayToWriteModelTransformer
      *                                 type: string,
      *                                 name: string,
      *                                 is_multilingual: null|bool,
-     *                                 is_multiple: null|bool,
      *                                 configuration: [
      *                                     [
      *                                         code: string,
@@ -158,7 +157,6 @@ class ArrayToWriteModelTransformer
             'type' => $field['type'],
             'name' => (string) $field['name'],
             'is_multilingual' => (bool) ($field['is_multilingual'] ?? false),
-            'is_multiple' => (bool) ($field['is_multiple'] ?? false),
             'taxonomy' => $field['taxonomy'] ?? null,
             'configuration' => $field['configuration'] ?? [],
             'constraints' => $field['constraints'] ?? [],

@@ -9,7 +9,9 @@ namespace Tulia\Cms\ContentBuilder\Domain\WriteModel\ContentType\Service;
  */
 interface ContentTypeStorageInterface
 {
-    public function find(string $id): array;
+    public function find(string $id): ?array;
+
+    public function findByCode(string $code): ?array;
 
     public function insert(array $contentType): void;
 

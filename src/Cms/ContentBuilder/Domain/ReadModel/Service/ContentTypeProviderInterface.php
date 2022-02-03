@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\ContentBuilder\Domain\WriteModel\ContentType\Service;
+namespace Tulia\Cms\ContentBuilder\Domain\ReadModel\Service;
 
-use Tulia\Cms\ContentBuilder\Domain\WriteModel\Model\ContentType;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\ContentType;
 
 /**
  * @author Adam Banaszkiewicz

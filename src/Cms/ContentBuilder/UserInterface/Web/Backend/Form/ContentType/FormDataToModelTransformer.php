@@ -4,11 +4,8 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\ContentType;
 
-use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeDecorator;
 use Tulia\Cms\ContentBuilder\Domain\WriteModel\Exception\CannotOverwriteInternalFieldException;
 use Tulia\Cms\ContentBuilder\Domain\WriteModel\Exception\EmptyRoutingStrategyForRoutableContentTypeException;
-use Tulia\Cms\ContentBuilder\Domain\WriteModel\Exception\MultipleValueForTitleOrSlugOccuredException;
-use Tulia\Cms\ContentBuilder\Domain\WriteModel\Exception\RoutableContentTypeWithoutSlugField;
 use Tulia\Cms\ContentBuilder\Domain\WriteModel\Model\ContentType;
 use Tulia\Cms\ContentBuilder\Domain\WriteModel\Model\Field;
 use Tulia\Cms\ContentBuilder\Domain\WriteModel\Model\FieldsGroup;
@@ -21,18 +18,14 @@ use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
  */
 class FormDataToModelTransformer
 {
-    private ContentTypeDecorator $decorator;
     private UuidGeneratorInterface $uuidGenerator;
 
-    public function __construct(ContentTypeDecorator $decorator, UuidGeneratorInterface $uuidGenerator)
+    public function __construct(UuidGeneratorInterface $uuidGenerator)
     {
-        $this->decorator = $decorator;
         $this->uuidGenerator = $uuidGenerator;
     }
 
     /**
-     * @throws MultipleValueForTitleOrSlugOccuredException
-     * @throws RoutableContentTypeWithoutSlugField
      * @throws CannotOverwriteInternalFieldException
      * @throws EmptyRoutingStrategyForRoutableContentTypeException
      */
@@ -49,17 +42,13 @@ class FormDataToModelTransformer
             $nodeType->addField($field);
         }
 
-        $this->decorator->decorate($nodeType);
-
-        $nodeType->validate();
-
         return $nodeType;
     }
 
     public function produceLayoutType(array $data): LayoutType
     {
         $layoutType = new LayoutType($data['type']['code'] . '_layout');
-        $layoutType->setName($data['type']['name'] . ' layout');
+        $layoutType->setName($data['type']['name'] . ' Layout');
 
         foreach ($this->transformSections($data['layout']) as $section) {
             $layoutType->addSection($section);

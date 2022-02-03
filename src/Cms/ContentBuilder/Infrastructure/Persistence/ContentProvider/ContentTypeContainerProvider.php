@@ -34,8 +34,6 @@ class ContentTypeContainerProvider extends AbstractContentTypeProvider
 
     private function standarizeArray(array $data): array
     {
-        $constraints = [];
-
         foreach ($data['layout']['sections'] as $sectionCode => $section) {
             foreach ($section['groups'] as $groupCode => $group) {
                 foreach ($group['fields'] as $fieldCode => $field) {

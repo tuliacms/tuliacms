@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Taxonomy\Domain\WriteModel;
 
-use Tulia\Cms\ContentBuilder\Domain\WriteModel\ContentType\Service\ContentTypeRegistry;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistry;
 use Tulia\Cms\ContentBuilder\Domain\WriteModel\Model\ContentType;
 use Tulia\Cms\Metadata\Domain\WriteModel\MetadataRepository;
 use Tulia\Cms\Platform\Infrastructure\Bus\Event\EventBusInterface;
@@ -92,7 +92,6 @@ class TaxonomyRepository
         foreach ($this->buildAttributesMapping($taxonomyType) as $name => $info) {
             $taxonomy->addAttributeInfo($name, new AttributeInfo(
                 $info['is_multilingual'],
-                $info['is_multiple'],
                 $info['is_compilable'],
                 $info['is_taxonomy'],
             ));
@@ -200,7 +199,6 @@ class TaxonomyRepository
             $attributes[$name] = [
                 'value' => $value,
                 'is_multilingual' => $info->isMultilingual(),
-                'is_multiple' => $info->isMultiple(),
                 'is_taxonomy' => $info->isTaxonomy(),
             ];
         }
@@ -229,7 +227,6 @@ class TaxonomyRepository
         foreach ($contentType->getFields() as $field) {
             $result[$field->getCode()] = [
                 'is_multilingual' => $field->isMultilingual(),
-                'is_multiple' => $field->isMultiple(),
                 'is_compilable' => $field->hasFlag('compilable'),
                 'is_taxonomy' => $field->getType() === 'taxonomy',
             ];

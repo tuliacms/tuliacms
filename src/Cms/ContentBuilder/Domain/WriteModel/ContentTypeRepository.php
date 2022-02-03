@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContentBuilder\Domain\WriteModel;
 
-use Tulia\Cms\ContentBuilder\Domain\WriteModel\ContentType\Service\ContentTypeRegistry;
-use Tulia\Cms\ContentBuilder\Domain\WriteModel\ContentType\Service\ContentTypeStorageInterface;
 use Tulia\Cms\ContentBuilder\Domain\WriteModel\Model\ContentType;
+use Tulia\Cms\ContentBuilder\Domain\WriteModel\ContentType\Service\ContentTypeStorageInterface;
 use Tulia\Cms\Platform\Infrastructure\Bus\Event\EventBusInterface;
 use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
 
@@ -18,18 +17,15 @@ class ContentTypeRepository
     private ContentTypeStorageInterface $storage;
     private UuidGeneratorInterface $uuidGenerator;
     private EventBusInterface $eventBus;
-    private ContentTypeRegistry $contentTypeRegistry;
 
     public function __construct(
         ContentTypeStorageInterface $contentTypeStorage,
         UuidGeneratorInterface $uuidGenerator,
-        EventBusInterface $eventBus,
-        ContentTypeRegistry $contentTypeRegistry
+        EventBusInterface $eventBus
     ) {
         $this->storage = $contentTypeStorage;
         $this->uuidGenerator = $uuidGenerator;
         $this->eventBus = $eventBus;
-        $this->contentTypeRegistry = $contentTypeRegistry;
     }
 
     public function generateId(): string
@@ -39,24 +35,24 @@ class ContentTypeRepository
 
     public function find(string $id): ?ContentType
     {
-        foreach ($this->contentTypeRegistry->all() as $contentType) {
-            if ($contentType->getId() === $id) {
-                return $contentType;
-            }
+        $contentType = $this->storage->find($id);
+
+        if ($contentType === []) {
+            return null;
         }
 
-        return null;
+        return ContentType::recreateFromArray($contentType);
     }
 
     public function findByCode(string $code): ?ContentType
     {
-        foreach ($this->contentTypeRegistry->all() as $contentType) {
-            if ($contentType->getCode() === $code) {
-                return $contentType;
-            }
+        $contentType = $this->storage->findByCode($code);
+
+        if ($contentType === []) {
+            return null;
         }
 
-        return null;
+        return ContentType::recreateFromArray($contentType);
     }
 
     public function insert(ContentType $contentType): void
@@ -127,7 +123,6 @@ class ContentTypeRepository
                 'type' => $field->getType(),
                 'name' => $field->getName(),
                 'is_multilingual' => $field->isMultilingual(),
-                'is_multiple' => $field->isMultiple(),
                 'is_internal' => $field->isInternal(),
                 'configuration' => $field->getConfiguration(),
                 'constraints' => $constraints,
@@ -164,7 +159,6 @@ class ContentTypeRepository
             'icon' => $contentType->getIcon(),
             'is_routable' => $contentType->isRoutable(),
             'is_hierarchical' => $contentType->isHierarchical(),
-            'is_internal' => $contentType->isInternal(),
             'routing_strategy' => $contentType->getRoutingStrategy(),
             'fields' => $fields,
             'layout' => [

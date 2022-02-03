@@ -79,7 +79,7 @@ class TuliaCmsExtension extends Extension
             \Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeDecoratorInterface::class)
             ->addTag('content_builder.content_type.decorator');
         $container->registerForAutoconfiguration(
-            \Tulia\Cms\ContentBuilder\Domain\WriteModel\ContentType\Service\ContentTypeProviderInterface::class)
+            \Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeProviderInterface::class)
             ->addTag('content_builder.content_type.provider');
         $container->registerForAutoconfiguration(
             \Tulia\Cms\ContentBuilder\Domain\WriteModel\Routing\Strategy\ContentTypeRoutingStrategyInterface::class)

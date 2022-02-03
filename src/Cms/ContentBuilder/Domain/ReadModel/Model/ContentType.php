@@ -6,8 +6,6 @@ namespace Tulia\Cms\ContentBuilder\Domain\ReadModel\Model;
 
 use Tulia\Cms\ContentBuilder\Domain\WriteModel\Exception\CannotOverwriteInternalFieldException;
 use Tulia\Cms\ContentBuilder\Domain\WriteModel\Exception\EmptyRoutingStrategyForRoutableContentTypeException;
-use Tulia\Cms\ContentBuilder\Domain\WriteModel\Exception\MultipleValueForTitleOrSlugOccuredException;
-use Tulia\Cms\ContentBuilder\Domain\WriteModel\Exception\RoutableContentTypeWithoutSlugField;
 
 /**
  * @author Adam Banaszkiewicz
@@ -155,7 +153,6 @@ class ContentType
     }
 
     /**
-     * @throws MultipleValueForTitleOrSlugOccuredException
      * @throws CannotOverwriteInternalFieldException
      */
     public function addField(Field $field): Field
@@ -185,35 +182,12 @@ class ContentType
     }
 
     /**
-     * @throws RoutableContentTypeWithoutSlugField
-     */
-    public function validate(): void
-    {
-        $this->validateRoutableContentType();
-    }
-
-    /**
-     * @throws MultipleValueForTitleOrSlugOccuredException
      * @throws CannotOverwriteInternalFieldException
      */
     protected function validateField(Field $field): void
     {
-        if ($field->isMultiple() && in_array($field->getCode(), ['title', 'slug'])) {
-            throw MultipleValueForTitleOrSlugOccuredException::fromFieldType($field->getCode());
-        }
-
         if (isset($this->fields[$field->getCode()]) && $this->fields[$field->getCode()]->isInternal()) {
             throw CannotOverwriteInternalFieldException::fromCodeAndName($field->getCode(), $field->getName());
-        }
-    }
-
-    /**
-     * @throws RoutableContentTypeWithoutSlugField
-     */
-    protected function validateRoutableContentType(): void
-    {
-        if ($this->isRoutable && $this->type === 'node' && isset($this->fields['slug']) === false) {
-            throw RoutableContentTypeWithoutSlugField::fromType($this->code);
         }
     }
 }
