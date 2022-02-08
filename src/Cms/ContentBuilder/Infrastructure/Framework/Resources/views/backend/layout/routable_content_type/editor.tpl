@@ -95,6 +95,7 @@
     .content-builder-repeatable-element-header {
         background-color: rgba(0, 0, 0, 0.03);
         border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+        text-align: right;
     }
 
     .content-builder-repeatable-element-body {

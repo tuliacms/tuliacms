@@ -12,10 +12,6 @@ framework:
                 styles: [ '/assets/core/content-builder-layout-builder/css/styles.min.css' ]
                 require: [ vue, lodash ]
 
-#twig:
-#    form_themes:
-#        - '@backend/content_builder/form_layout/content_builder_form_layout.tpl'
-
 monolog:
     channels: ['contentBuilder']
 

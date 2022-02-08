@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Tulia\Cms\ContentBuilder\UserInterface\Web\Service;
 
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -16,7 +15,6 @@ use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Exception\ConstraintNotExi
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Exception\FieldTypeNotExistsException;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\ConstraintsBuilder;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\FieldTypeMappingRegistry;
-use Tulia\Cms\ContentBuilder\UserInterface\Web\Shared\Form\FormType\RepeatableGroupType;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\CancelType;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\SubmitType;
 
@@ -47,14 +45,6 @@ class SymfonyFormBuilder
 
     public function createForm(ContentType $contentType, array $data, bool $expectCqrsToken = true): FormInterface
     {
-        $data['repeatable_field'][] = [
-            'repeatable_title' => 'repeatable_title',
-            'repeatable_filepicker' => 'repeatable_filepicker',
-        ];
-        $data['repeatable_field'][] = [
-            'repeatable_title' => 'repeatable_title 2',
-            'repeatable_filepicker' => 'repeatable_filepicker 2',
-        ];
         $builder = $this->createFormBuilder($contentType->getCode(), $data, $expectCqrsToken);
 
         $fields = $contentType->getFields();
