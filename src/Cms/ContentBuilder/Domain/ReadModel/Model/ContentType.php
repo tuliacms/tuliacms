@@ -182,6 +182,22 @@ class ContentType
     }
 
     /**
+     * @return string[]
+     */
+    public function getSubfields(string $code): array
+    {
+        $subfields = [];
+
+        foreach ($this->fields as $fieldCode => $field) {
+            if ($field->getParent() === $code) {
+                $subfields[] = $fieldCode;
+            }
+        }
+
+        return $subfields;
+    }
+
+    /**
      * @throws CannotOverwriteInternalFieldException
      */
     protected function validateField(Field $field): void

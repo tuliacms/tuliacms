@@ -30,12 +30,17 @@
 
 
 {% block filepicker_widget -%}
-    {% assets ['filemanager'] %}
-
     <div class="input-group">
         {{- block('form_widget_simple') -}}
         <div class="input-group-append">
-            <button class="btn btn-default btn-icon-only" type="button">
+            <button
+                class="btn btn-default btn-icon-only"
+                type="button"
+                data-form-action="open-filemanager"
+                data-input-target="{{ id }}"
+                data-filemanager-endpoint="{{ path('backend.filemanager.endpoint') }}"
+                data-filemanager-filter="{{ filter.type == '*' ? '*' : filter.type|json_encode|raw }}"
+            >
                 <i class="btn-icon fas fa-folder-open"></i>
             </button>
         </div>
@@ -44,28 +49,6 @@
     {% if value %}
         {{ image(value, { size: 'thumbnail-md', attributes: { alt: 'Node thumbnail', class: 'img-thumbnail' } }) }}
     {% endif %}
-
-    <script nonce="{{ csp_nonce() }}">
-        $(function () {
-            Tulia.Filemanager.create({
-                targetInput: '#{{ id }}',
-                openTrigger: $('#{{ id }}').closest('.input-group').find('button'),
-                endpoint: '{{ path('backend.filemanager.endpoint') }}',
-                filter: {
-                    type: {{ filter.type == '*' ? "'*'" : filter.type|json_encode|raw }}
-                },
-                multiple: false,
-                closeOnSelect: true,
-                onSelect: function (files) {
-                    if (!files.length) {
-                        return;
-                    }
-
-                    $('#{{ id }}').val(files[0].id);
-                }
-            });
-        });
-    </script>
 {%- endblock filepicker_widget %}
 
 

@@ -55,11 +55,9 @@ cms:
                                         text_field:
                                             type: text
                                             name: Text
-                                            repeatable_for: repeatable_field_group
                                         filepicker:
                                             type: filepicker
                                             name: Filepicker
-                                            repeatable_for: repeatable_field_group
                                         repeatable_field_group:
                                             type: repeatable
                                             name: Pole repeatable

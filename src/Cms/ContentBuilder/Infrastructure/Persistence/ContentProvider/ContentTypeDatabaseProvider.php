@@ -80,6 +80,7 @@ class ContentTypeDatabaseProvider extends AbstractContentTypeProvider
             }
 
             $fields[$field['code']] = $field;
+            $fields[$field['code']]['fields'] = (array) json_decode((string) $field['fields'], true);
             $fields[$field['code']]['configuration'] = $this->getConfiguration($field['id']);
             $fields[$field['code']]['constraints'] = $this->getConstraints($field['id']);
         }

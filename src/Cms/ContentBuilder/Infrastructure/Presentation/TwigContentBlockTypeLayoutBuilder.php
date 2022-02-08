@@ -38,7 +38,7 @@ class TwigContentBlockTypeLayoutBuilder implements LayoutTypeBuilderInterface
     public function editorView(ContentType $contentType, FormView $formView): View
     {
         return new View('@backend/content_builder/layout/content_block_type/editor.tpl', [
-            'type' => $contentType,
+            'contentType' => $contentType,
             'layout' => $contentType->getLayout(),
             'form' => $formView,
         ]);

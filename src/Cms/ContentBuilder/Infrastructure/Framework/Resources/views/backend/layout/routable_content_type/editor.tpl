@@ -1,29 +1,12 @@
-{% macro form_row(form, field) %}
-    {% if form[field] is not defined %}
-        {% set id = "not-existing-field-popover-" ~ uniqid() %}
-        <label>No existing field <a href="#" id="{{ id }}" data-bs-content="If this field is created in NodeType, please check ContentBuilder logs to more informations. Otherwise, You have a typo or You used not existing field in layout."><b>Why?</b></a></label>
-        <input class="form-control" type="text" value="The '{{ field }}' field not exists in configuration of this form." disabled readonly>
-        <script nonce="{{ csp_nonce() }}">
-            $(function () {
-                let popover = new bootstrap.Popover(document.querySelector('#{{ id }}'), {
-                    container: 'body',
-                    placement: 'top'
-                });
-            })
-        </script>
-    {% else %}
-        {{ form_row(form[field]) }}
-    {% endif %}
-{% endmacro %}
-
 {% macro tab(id, group, form) %}
     {% import '@backend/_macros/form/bootstrap/badge.tpl' as badge %}
+
     <li class="nav-item">
         <a
-                href="#"
-                class="nav-link {{ group.active ? 'active' : '' }}"
-                data-bs-toggle="tab"
-                data-bs-target="#tab-{{ id }}"
+            href="#"
+            class="nav-link {{ group.active ? 'active' : '' }}"
+            data-bs-toggle="tab"
+            data-bs-target="#tab-{{ id }}"
         >
             {{ group.name }}
             {{ badge.errors_count(form, group.fields|default([])) }}
@@ -31,23 +14,22 @@
     </li>
 {% endmacro %}
 
-{% macro tab_content(id, group, form) %}
+{% macro tab_content(id, group, form, contentType) %}
+    {% import relative(_self, '../../_macros/form_render.tpl') as form_render %}
+
     <div class="tab-pane fade {{ group.active ? 'show active' : '' }}" id="tab-{{ id }}">
-        {% if group.interior == 'default' %}
         <div class="container-fluid">
             <div class="row">
                 <div class="col">
-                    {% endif %}
                     {% for field in group.fields %}
-                        <div class="col">
-                            {{ _self.form_row(form, field) }}
-                        </div>
+                        {% set fieldType = contentType.field(field) %}
+                        {% if fieldType.parent == null %}
+                            {{ form_render.form_row(form, field, contentType) }}
+                        {% endif %}
                     {% endfor %}
-                    {% if group.interior == 'default' %}
                 </div>
             </div>
         </div>
-        {% endif %}
     </div>
 {% endmacro %}
 
@@ -63,8 +45,10 @@
     </div>
 {% endmacro %}
 
-{% macro section(id, group, form, translationDomain) %}
+{% macro section(id, group, form, translationDomain, contentType) %}
     {% import '@backend/_macros/form/bootstrap/badge.tpl' as badge %}
+    {% import relative(_self, '../../_macros/form_render.tpl') as form_render %}
+
     <div class="accordion-section">
         <div
                 class="accordion-section-button {{ group.active ? '' : 'collapsed' }}"
@@ -79,9 +63,7 @@
                 class="accordion-collapse collapse {{ group.active ? 'show' : '' }}"
         >
             <div class="accordion-section-body">
-                {% for field in group.fields %}
-                    {{ _self.form_row(form, field) }}
-                {% endfor %}
+                {{ form_render.render_fields(form, group.fields, contentType) }}
             </div>
         </div>
     </div>
@@ -89,10 +71,36 @@
 
 {############################################################}
 
+{% assets ['tulia-dynamic-form'] %}
+
 {{ form_start(form) }}
 {{ form_errors(form) }}
 {{ form_row(form.id) }}
 {{ form_row(form._token) }}
+
+{% import relative(_self, '../../_macros/form_render.tpl') as form_render %}
+
+<style>
+    .content-builder-repeatable-target {
+        border: 1px solid #ddd;
+        border-bottom: none;
+        border-radius: 3px;
+        margin-bottom: 10px;
+    }
+
+    .content-builder-repeatable-element {
+        border-bottom: 1px solid #ddd;
+    }
+
+    .content-builder-repeatable-element-header {
+        background-color: rgba(0, 0, 0, 0.03);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+    }
+
+    .content-builder-repeatable-element-body {
+        padding: 10px 10px 0 10px;
+    }
+</style>
 
 <div class="page-form" id="node-form">
     <div class="page-form-sidebar">
@@ -138,7 +146,7 @@
                 </div>
             </div>
             {% for id, group in layout.section('sidebar').fieldsGroups %}
-                {{ _self.section(id, group, form) }}
+                {{ _self.section(id, group, form, null, contentType) }}
             {% endfor %}
         </div>
     </div>
@@ -147,11 +155,11 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col">
-                        {{ _self.form_row(form, 'title') }}
+                        {{ form_render.form_row(form, 'title', contentType) }}
                     </div>
                     {% if form.slug is defined %}
                         <div class="col">
-                            {{ _self.form_row(form, 'slug') }}
+                            {{ form_render.form_row(form, 'slug', contentType) }}
                         </div>
                     {% endif %}
                 </div>
@@ -174,7 +182,7 @@
         </ul>
         <div class="tab-content">
             {% for id, group in layout.section('main').fieldsGroups %}
-                {{ _self.tab_content(id, group, form) }}
+                {{ _self.tab_content(id, group, form, contentType) }}
             {% endfor %}
 
             {{ _self.tab_rest_content('rest', form) }}

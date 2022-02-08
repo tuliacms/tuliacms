@@ -12,6 +12,10 @@ framework:
                 styles: [ '/assets/core/content-builder-layout-builder/css/styles.min.css' ]
                 require: [ vue, lodash ]
 
+#twig:
+#    form_themes:
+#        - '@backend/content_builder/form_layout/content_builder_form_layout.tpl'
+
 monolog:
     channels: ['contentBuilder']
 
@@ -48,6 +52,9 @@ cms:
                         placeholder:
                             label: Placeholder text
                             help_text: Shows when no value selected.
+                repeatable:
+                    label: Repeatable
+                    classname: 'Tulia\Cms\ContentBuilder\UserInterface\Web\Shared\Form\FormType\RepeatableGroupType'
 
         constraint_types:
             mapping:

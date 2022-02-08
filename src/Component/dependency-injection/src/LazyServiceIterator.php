@@ -49,7 +49,7 @@ class LazyServiceIterator implements \IteratorAggregate, \ArrayAccess, \Countabl
     /**
      * {@inheritdoc}
      */
-    public function getIterator()
+    public function getIterator(): \Traversable
     {
         $this->fetch();
 
@@ -67,7 +67,7 @@ class LazyServiceIterator implements \IteratorAggregate, \ArrayAccess, \Countabl
     /**
      * {@inheritdoc}
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         $this->fetch();
 
@@ -87,7 +87,7 @@ class LazyServiceIterator implements \IteratorAggregate, \ArrayAccess, \Countabl
     /**
      * {@inheritdoc}
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         $this->fetch();
 
@@ -101,7 +101,7 @@ class LazyServiceIterator implements \IteratorAggregate, \ArrayAccess, \Countabl
     /**
      * {@inheritdoc}
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         $this->fetch();
 

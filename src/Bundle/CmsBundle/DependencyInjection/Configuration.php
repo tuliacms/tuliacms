@@ -148,7 +148,6 @@ class Configuration implements ConfigurationInterface
                                                                             ->scalarNode('type')->isRequired()->end()
                                                                             ->scalarNode('name')->isRequired()->end()
                                                                             ->booleanNode('is_multilingual')->defaultFalse()->end()
-                                                                            ->scalarNode('repeatable_for')->defaultNull()->end()
                                                                             ->arrayNode('fields')->scalarPrototype()->defaultValue([])->end()->end()
                                                                             ->arrayNode('configuration')
                                                                                 ->arrayPrototype()

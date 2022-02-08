@@ -25,7 +25,7 @@ class TaxonomyExtension extends AbstractExtension
     /**
      * {@inheritdoc}
      */
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return [
             new TwigFunction('term_path', function ($identity, array $parameters = []) {

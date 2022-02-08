@@ -281,7 +281,7 @@ class Node implements \ArrayAccess
         return $this->attributes;
     }
 
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return array_key_exists($offset, $this->attributes);
     }
@@ -295,12 +295,12 @@ class Node implements \ArrayAccess
         return null;
     }
 
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         $this->attributes[$offset] = $value;
     }
 
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         unset($this->attributes[$offset]);
     }

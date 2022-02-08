@@ -24,7 +24,7 @@ class BodyClassExtension extends AbstractExtension
     /**
      * {@inheritdoc}
      */
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return [
             new TwigFunction('body_class', function (Request $request, array $append = []) {

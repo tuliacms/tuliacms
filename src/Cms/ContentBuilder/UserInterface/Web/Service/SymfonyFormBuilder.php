@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\ContentBuilder\UserInterface\Web\Service;
 
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -15,6 +16,7 @@ use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Exception\ConstraintNotExi
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Exception\FieldTypeNotExistsException;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\ConstraintsBuilder;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\FieldTypeMappingRegistry;
+use Tulia\Cms\ContentBuilder\UserInterface\Web\Shared\Form\FormType\RepeatableGroupType;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\CancelType;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\SubmitType;
 
@@ -23,33 +25,46 @@ use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\SubmitType;
  */
 class SymfonyFormBuilder
 {
-    protected FormFactoryInterface $formFactory;
-    protected FieldTypeMappingRegistry $mappingRegistry;
-    protected ConstraintsBuilder $constraintsBuilder;
-    protected LoggerInterface $logger;
+    private FormFactoryInterface $formFactory;
+    private FieldTypeMappingRegistry $mappingRegistry;
+    private ConstraintsBuilder $constraintsBuilder;
+    private LoggerInterface $logger;
+    private SymfonyFieldBuilder $symfonyFieldBuilder;
 
     public function __construct(
         FormFactoryInterface $formFactory,
         FieldTypeMappingRegistry $mappingRegistry,
         ConstraintsBuilder $constraintsBuilder,
-        LoggerInterface $contentBuilderLogger
+        LoggerInterface $contentBuilderLogger,
+        SymfonyFieldBuilder $symfonyFieldBuilder
     ) {
         $this->formFactory = $formFactory;
         $this->mappingRegistry = $mappingRegistry;
         $this->constraintsBuilder = $constraintsBuilder;
         $this->logger = $contentBuilderLogger;
+        $this->symfonyFieldBuilder = $symfonyFieldBuilder;
     }
 
-    public function createForm(ContentType $taxonomyType, array $data, bool $expectCqrsToken = true): FormInterface
+    public function createForm(ContentType $contentType, array $data, bool $expectCqrsToken = true): FormInterface
     {
-        $builder = $this->createFormBuilder($taxonomyType->getCode(), $data, $expectCqrsToken);
+        $data['repeatable_field'][] = [
+            'repeatable_title' => 'repeatable_title',
+            'repeatable_filepicker' => 'repeatable_filepicker',
+        ];
+        $data['repeatable_field'][] = [
+            'repeatable_title' => 'repeatable_title 2',
+            'repeatable_filepicker' => 'repeatable_filepicker 2',
+        ];
+        $builder = $this->createFormBuilder($contentType->getCode(), $data, $expectCqrsToken);
 
-        $this->buildFieldsWithBuilder($taxonomyType->getFields(), $builder);
+        $fields = $contentType->getFields();
+
+        $this->buildFieldsWithBuilder($fields, $builder, $contentType);
 
         return $builder->getForm();
     }
 
-    protected function createFormBuilder(string $type, array $data, bool $expectCqrsToken = true): FormBuilderInterface
+    private function createFormBuilder(string $type, array $data, bool $expectCqrsToken = true): FormBuilderInterface
     {
         return $this->formFactory->createNamedBuilder(
             sprintf('content_builder_form_%s', $type),
@@ -57,35 +72,27 @@ class SymfonyFormBuilder
             $data,
             [
                 'csrf_protection' => $expectCqrsToken,
+                'attr' => [
+                    'class' => 'tulia-dynamic-form'
+                ],
             ]
         );
     }
 
-    protected function buildFieldsWithBuilder(array $fields, FormBuilderInterface $builder): void
+    /**
+     * @param Field[] $fields
+     */
+    private function buildFieldsWithBuilder(array $fields, FormBuilderInterface $builder, ContentType $contentType): void
     {
         /** @var Field $field */
         foreach ($fields as $field) {
+            // Here we render only main fields, children will be rendered in RepeatableGroupType
+            if ($field->getParent()) {
+                continue;
+            }
+
             try {
-                $typeBuilder = $this->mappingRegistry->getTypeBuilder($field->getType());
-
-                $options = array_merge([
-                    'label' => $field->getName() === ''
-                        ? false
-                        : $field->getName(),
-                    'translation_domain' => 'content_builder.field',
-                ], $field->getBuilderOptions());
-
-                $options['constraints'] = $this->constraintsBuilder->build($options['constraints'] ?? []);
-
-                if ($typeBuilder) {
-                    $options = (new $typeBuilder)->build($field, $options);
-                }
-
-                $builder->add(
-                    $field->getCode(),
-                    $this->mappingRegistry->getTypeClassname($field->getType()),
-                    $options
-                );
+                $this->symfonyFieldBuilder->buildFieldAndAddToBuilder($field, $builder, $contentType);
             } catch (ConstraintNotExistsException $e) {
                 $this->logger->warning(
                     sprintf(

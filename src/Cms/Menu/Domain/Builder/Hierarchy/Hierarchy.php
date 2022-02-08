@@ -56,7 +56,7 @@ class Hierarchy implements HierarchyInterface
     /**
      * {@inheritdoc}
      */
-    public function getIterator()
+    public function getIterator(): \Traversable
     {
         return new \ArrayIterator($this->elements);
     }
@@ -64,7 +64,7 @@ class Hierarchy implements HierarchyInterface
     /**
      * {@inheritdoc}
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return isset($this->elements[$offset]);
     }
@@ -80,7 +80,7 @@ class Hierarchy implements HierarchyInterface
     /**
      * {@inheritdoc}
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         if ($offset !== null) {
             $this->elements[$offset] = $value;
@@ -92,7 +92,7 @@ class Hierarchy implements HierarchyInterface
     /**
      * {@inheritdoc}
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         unset($this->elements[$offset]);
     }

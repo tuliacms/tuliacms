@@ -57,8 +57,6 @@ class Renderer
         }, $this->paths);
         $views[] = $this->fallbackView;
 
-        dump($views);
-
         return $this->engine->render(
             new View($views, $fields)
         );

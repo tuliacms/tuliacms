@@ -2,3 +2,28 @@ framework:
     templating:
         paths:
             - { name: backend/filemanager, path: '%kernel.project_dir%/src/Cms/Filemanager/Infrastructure/Framework/Resources/views/backend' }
+    assetter:
+        assets:
+            filemanager:
+                styles: [ '/assets/core/filemanager/css/filemanager.css' ]
+                scripts:
+                    - '/assets/core/filemanager/js/src/variables.js'
+                    - '/assets/core/filemanager/js/src/front-controller.js'
+                    - '/assets/core/filemanager/js/src/command-bus.js'
+                    - '/assets/core/filemanager/js/src/container.js'
+                    - '/assets/core/filemanager/js/src/directory-tree.js'
+                    - '/assets/core/filemanager/js/src/event-dispatcher.js'
+                    - '/assets/core/filemanager/js/src/files-collection.js'
+                    - '/assets/core/filemanager/js/src/manager.js'
+                    - '/assets/core/filemanager/js/src/model.js'
+                    - '/assets/core/filemanager/js/src/selection.js'
+                    - '/assets/core/filemanager/js/src/view.js'
+                    - '/assets/core/filemanager/js/src/cache.js'
+                    - '/assets/core/filemanager/js/src/upload.js'
+                    - '/assets/core/filemanager/js/src/config.js'
+                require: [ 'jquery', 'jstree', 'fileapi' ]
+                group: head
+            filemanager.dynamic_form_plugin:
+                scripts: [ '/assets/core/filemanager/js/filemanager.dynamic-form-plugin.js' ]
+                collection: tulia-dynamic-form
+                require: [ filemanager, tulia_dynamic_form ]

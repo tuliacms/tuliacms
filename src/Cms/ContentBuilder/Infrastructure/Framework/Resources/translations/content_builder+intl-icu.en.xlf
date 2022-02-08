@@ -256,6 +256,16 @@
                 <target>Content Type file imported.</target>
                 <note>Flash message</note>
             </trans-unit>
+            <trans-unit id="tuliacms.content_builder.68">
+                <source>moveUp</source>
+                <target>Move up</target>
+                <note>Button tooltip</note>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.69">
+                <source>moveDown</source>
+                <target>Move down</target>
+                <note>Button tooltip</note>
+            </trans-unit>
         </body>
     </file>
 </xliff>

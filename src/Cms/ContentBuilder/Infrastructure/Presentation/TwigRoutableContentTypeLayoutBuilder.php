@@ -38,7 +38,7 @@ class TwigRoutableContentTypeLayoutBuilder implements LayoutTypeBuilderInterface
     public function editorView(ContentType $contentType, FormView $formView): View
     {
         return new View('@backend/content_builder/layout/routable_content_type/editor.tpl', [
-            'type' => $contentType,
+            'contentType' => $contentType,
             'layout' => $contentType->getLayout(),
             'form' => $formView,
         ]);

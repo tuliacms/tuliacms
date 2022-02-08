@@ -8,6 +8,7 @@ use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\Field;
 
 /**
  * @author Adam Banaszkiewicz
+ * @todo Add interface for FieldType builders
  */
 class ChoiceTypeBuilder
 {

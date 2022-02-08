@@ -68,7 +68,7 @@ class DirectoryDiscoveryStorage implements StorageInterface
     /**
      * {@inheritdoc}
      */
-    public function getIterator()
+    public function getIterator(): \Traversable
     {
         $this->resolveThemes();
 

@@ -51,6 +51,11 @@ class ContentType
         }
 
         $self = new self($data['id'], $data['code'], $data['type'], $layout);
+        $self->name = $data['name'];
+        $self->icon = $data['icon'];
+        $self->isRoutable = (bool) $data['is_routable'];
+        $self->isHierarchical = (bool) $data['is_hierarchical'];
+        $self->routingStrategy = $data['routing_strategy'];
 
         foreach ($data['fields'] as $field) {
             $self->fields[$field['code']] = new Field($field);

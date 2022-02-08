@@ -32,7 +32,7 @@ class NodeExtension extends AbstractExtension
     /**
      * {@inheritdoc}
      */
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return [
             new TwigFunction('node_path', function (Node $node, array $parameters = []) {

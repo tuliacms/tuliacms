@@ -109,7 +109,7 @@ class Breadcrumbs implements BreadcrumbsInterface
     /**
      * {@inheritdoc}
      */
-    public function getIterator()
+    public function getIterator(): \Traversable
     {
         return new \ArrayIterator($this->breadcrumbs);
     }
