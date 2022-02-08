@@ -80,6 +80,7 @@
 
 {% import relative(_self, '../../_macros/form_render.tpl') as form_render %}
 
+{# TODO Move styles to separate CSS file #}
 <style>
     .content-builder-repeatable-target {
         border: 1px solid #ddd;
