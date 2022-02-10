@@ -20,6 +20,7 @@ class Field
         'flags' => [],
         'configuration' => [],
         'constraints' => [],
+        'parent' => null,
         'builder_options' => null,
     ];
 
@@ -34,6 +35,7 @@ class Field
         \assert(\is_array($this->options['flags']), 'The "flags" option must be an array.');
         \assert(\is_array($this->options['configuration']), 'The "configuration" option must be an array.');
         \assert(\is_array($this->options['constraints']), 'The "constraints" option must be an array.');
+        \assert($this->options['parent'] === null || \is_string($this->options['parent']), 'The "parent" option must be an string.');
         \assert($this->options['builder_options'] === null || \is_callable($this->options['builder_options']), 'The "builder_options" option must be an array.');
 
         if ($this->options['type'] === 'taxonomy') {
@@ -106,6 +108,11 @@ class Field
     public function getConstraints(): array
     {
         return $this->options['constraints'];
+    }
+
+    public function getParent(): ?string
+    {
+        return $this->options['parent'];
     }
 
     public function hasFlag(string $flag): bool

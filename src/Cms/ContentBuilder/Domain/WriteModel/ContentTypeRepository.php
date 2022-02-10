@@ -124,6 +124,7 @@ class ContentTypeRepository
                 'name' => $field->getName(),
                 'is_multilingual' => $field->isMultilingual(),
                 'is_internal' => $field->isInternal(),
+                'parent' => $field->getParent(),
                 'configuration' => $field->getConfiguration(),
                 'constraints' => $constraints,
             ];

@@ -100,6 +100,7 @@ class ModelToFormDataTransformer
                 ],
                 'configuration' => $this->transformFieldConfiguration($field->getConfiguration()),
                 'constraints' => $this->transformFieldConstraints($field->getConstraints()),
+                'parent' => $field->getParent(),
             ];
         }
 

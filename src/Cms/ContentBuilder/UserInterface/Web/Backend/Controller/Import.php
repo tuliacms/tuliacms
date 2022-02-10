@@ -27,13 +27,10 @@ class Import extends AbstractController
      */
     public function importFile(Request $request): Response
     {
-        $file = $request->files->get('file')->getPathname();
-        $content = file_get_contents($file);
-        $model = json_decode($content, true, JSON_THROW_ON_ERROR);
-
-        foreach ($model['types'] ?? [] as $type) {
-            $this->importer->importFromArray($type);
-        }
+        $this->importer->importFromFile(
+            $request->files->get('file')->getPathname(),
+            $request->files->get('file')->getClientOriginalExtension()
+        );
 
         $this->addFlash('success', $this->trans('contentTypeFileImported', [], 'content_builder'));
         return $this->redirectToRoute('backend.content_builder.homepage');

@@ -56,6 +56,7 @@ class Field extends AbstractType
                     new Choice(['choices' => $choices]),
                 ],
             ])
+            ->add('parent', TextType::class)
         ;
 
         $builder->addEventListener(FormEvents::PRE_SUBMIT, [$this, 'addDynamicFields']);

@@ -72,6 +72,7 @@ class FormDataToModelTransformer
                         'type' => $field['type']['value'],
                         'name' => $field['name']['value'],
                         'is_multilingual' => $field['multilingual']['value'],
+                        'parent' => $field['parent'],
                         'configuration' => $this->transformConfiguration($field['configuration']),
                         'constraints' => $this->transformConstraints($field['constraints']),
                     ]);

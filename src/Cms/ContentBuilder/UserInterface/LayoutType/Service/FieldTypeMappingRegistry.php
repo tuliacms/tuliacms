@@ -43,7 +43,10 @@ class FieldTypeMappingRegistry
                 continue;
             }
 
-            if ($map['only_for_types'] !== [] && \in_array($contentTypeType, $map['only_for_types'], true) === false) {
+            if (
+                $map['only_for_types'] !== []
+                && \in_array($contentTypeType, $map['only_for_types'], true) === false
+            ) {
                 continue;
             }
 

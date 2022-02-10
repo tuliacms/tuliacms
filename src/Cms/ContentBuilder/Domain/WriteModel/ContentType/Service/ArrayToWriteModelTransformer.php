@@ -54,6 +54,7 @@ class ArrayToWriteModelTransformer
      *                                 type: string,
      *                                 name: string,
      *                                 is_multilingual: null|bool,
+     *                                 parent: null|string,
      *                                 configuration: [
      *                                     [
      *                                         code: string,
@@ -128,7 +129,7 @@ class ArrayToWriteModelTransformer
 
     protected function buildContentType(array $type, LayoutType $layoutType): ContentType
     {
-        $nodeType = new ContentType($type['id'], $type['code'], $type['type'], $layoutType, (bool) ($type['internal'] ?? false));
+        $nodeType = new ContentType($type['id'], $type['code'], $type['type'], $layoutType);
         $nodeType->setController($type['controller'] ?? $this->config->getController($type['type']));
         $nodeType->setIcon($type['icon'] ?? 'fa fa-box');
         $nodeType->setName($type['name'] ?? '');
@@ -160,6 +161,7 @@ class ArrayToWriteModelTransformer
             'taxonomy' => $field['taxonomy'] ?? null,
             'configuration' => $field['configuration'] ?? [],
             'constraints' => $field['constraints'] ?? [],
+            'parent' => $field['parent'] ?? null,
             'flags' => $this->fieldTypeMappingRegistry->getTypeFlags($field['type']),
             'builder_options' => function () use ($field) {
                 return [

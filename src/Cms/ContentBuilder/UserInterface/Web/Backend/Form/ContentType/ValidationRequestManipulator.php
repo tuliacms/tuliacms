@@ -78,6 +78,7 @@ class ValidationRequestManipulator
                     'name' => $field['name']['value'],
                     'multilingual' => $field['multilingual']['value'],
                     'type' => $field['type']['value'],
+                    'parent' => $field['parent'],
                     'configuration' => $newConfiguration,
                     'constraints' => $newConstratints,
                 ];
@@ -164,6 +165,7 @@ class ValidationRequestManipulator
                     ],
                     'configuration' => $configuration,
                     'constraints' => $constraints,
+                    'parent' => $field['parent'],
                 ];
             }
         }

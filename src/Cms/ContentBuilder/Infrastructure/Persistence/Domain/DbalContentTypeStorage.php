@@ -65,7 +65,6 @@ class DbalContentTypeStorage implements ContentTypeStorageInterface
             'is_hierarchical' => $contentType['is_hierarchical'] ? '1' : '0',
             'routing_strategy' => $contentType['routing_strategy'],
             'layout' => $contentType['layout']['code'],
-            'internal' => $contentType['is_internal'] ? '1' : '0',
         ]);
 
         foreach ($contentType['fields'] as $field) {
@@ -77,8 +76,8 @@ class DbalContentTypeStorage implements ContentTypeStorageInterface
                 'content_type_id' => $contentType['id'],
                 'type' => $field['type'],
                 'name' => $field['name'],
+                'parent' => $field['parent'],
                 'is_multilingual' => $field['is_multilingual'] ? '1' : '0',
-                //'taxonomy' => $field['taxonomy'],
             ]);
 
             foreach ($field['configuration'] as $code => $value) {
@@ -144,6 +143,7 @@ class DbalContentTypeStorage implements ContentTypeStorageInterface
 
     public function update(array $contentType): void
     {
+        // todo update data instead of remove and insert new one
         $this->delete($contentType);
         $this->insert($contentType);
     }

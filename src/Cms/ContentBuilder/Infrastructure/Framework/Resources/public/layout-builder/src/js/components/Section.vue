@@ -15,19 +15,13 @@
                 </div>
             </div>
             <div class="ctb-section-fields-container">
-                <draggable class="ctb-sortable-fields" v-bind="dragOptions" :list="section.fields" handle=".ctb-sortable-handler" group="fields" @start="drag=true" @end="drag=false" ghost-class="ctb-draggable-ghost">
-                    <transition-group type="transition" :name="!drag ? 'flip-list' : null" class="ctb-sortable-placeholder" tag="div" :data-label="translations.addNewField">
-                        <Field
-                            v-for="(field, key) in section.fields"
-                            :key="field.code.value"
-                            :field="field"
-                            :translations="translations"
-                        ></Field>
-                    </transition-group>
-                </draggable>
-            </div>
-            <div class="ctb-section-footer text-center">
-                <button class="ctb-button" type="button" @click="$root.$emit('field:add', section.code)">{{ translations.addNewField }}</button>
+                <Fields
+                    :translations="translations"
+                    :fields="section.fields"
+                    :section="section"
+                    :group="'fields'"
+                    :parent_field="null"
+                ></Fields>
             </div>
         </div>
     </div>
@@ -35,13 +29,13 @@
 
 <script>
 import draggable from 'vuedraggable';
-import Field from './Field';
+import Fields from './Fields';
 
 export default {
     props: ['section', 'translations'],
     components: {
         draggable,
-        Field
+        Fields
     },
     computed: {
         dragOptions() {

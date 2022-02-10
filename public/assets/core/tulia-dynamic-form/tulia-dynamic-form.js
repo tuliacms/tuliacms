@@ -9,14 +9,36 @@ window.Tulia.DynamicForm = function (form) {
         this.form.on('click', '[data-form-action]', function () {
             self.executeAction($(this).attr('data-form-action'), $(this));
         });
+
+        this.rendered();
     };
 
     this.executeAction = function (action, target) {
         for (let i in Tulia.DynamicForm.plugins) {
             if (Tulia.DynamicForm.plugins[i].plugin.on[action]) {
-                Tulia.DynamicForm.plugins[i].plugin.on[action].call(target.get(0), this.form);
+                Tulia.DynamicForm.plugins[i].plugin.on[action].call(this, target);
             }
         }
+    };
+
+    this.executeRender = function (element, target) {
+        for (let i in Tulia.DynamicForm.plugins) {
+            if (Tulia.DynamicForm.plugins[i].plugin.render[element]) {
+                Tulia.DynamicForm.plugins[i].plugin.render[element].call(this, target);
+            }
+        }
+    };
+
+    this.rendered = function () {
+        let self = this;
+
+        this.form.find('[data-dynamic-element]').filter(function () {
+            return $(this).attr('data-dynamic-element-rendered') !== 'rendered';
+        }).each(function () {
+            $(this).attr('data-dynamic-element-rendered', 1);
+
+            self.executeRender($(this).attr('data-dynamic-element'), $(this));
+        });
     };
 
     this.init();
@@ -28,6 +50,7 @@ window.Tulia.DynamicForm.plugin = function (name, plugin) {
     window.Tulia.DynamicForm.plugins.push({
         name: name,
         plugin: $.extend({}, {
+            render: {},
             on: {},
         }, plugin)
     });
@@ -35,10 +58,9 @@ window.Tulia.DynamicForm.plugin = function (name, plugin) {
 
 Tulia.DynamicForm.plugin('collection-field', {
     on: {
-        'create-from-prototype': function () {
-            const target = document.querySelector('#' + $(this).attr('data-target'));
+        'create-from-prototype': function (button) {
+            const target = document.querySelector('#' + button.attr('data-target'));
             const item = document.createElement('div');
-            item.classList.add('content-builder-repeatable-element');
 
             if (!target.dataset.index) {
                 target.dataset.index = 98688776;
@@ -62,19 +84,21 @@ Tulia.DynamicForm.plugin('collection-field', {
 
             target.appendChild(item);
             target.dataset.index++;
+
+            this.rendered();
         },
-        'create-from-prototype:move-down': function () {
-            let currentElement = $(this).closest('.content-builder-repeatable-element');
+        'create-from-prototype:move-down': function (button) {
+            let currentElement = button.closest('.content-builder-repeatable-element');
             currentElement.next().insertBefore(currentElement);
         },
-        'create-from-prototype:move-up': function () {
-            let currentElement = $(this).closest('.content-builder-repeatable-element');
+        'create-from-prototype:move-up': function (button) {
+            let currentElement = button.closest('.content-builder-repeatable-element');
             currentElement.prev().insertAfter(currentElement);
         },
-        'create-from-prototype:remove': function () {
+        'create-from-prototype:remove': function (button) {
             Tulia.Confirmation.warning().then((value) => {
                 if (value.value) {
-                    $(this).closest('.content-builder-repeatable-element').remove();
+                    button.closest('.content-builder-repeatable-element').remove();
                 }
             });
         },

@@ -102,8 +102,6 @@ class ArrayToReadModelTransformer
             }
         }
 
-        $fields = $this->findFieldsParents($fields);
-
         foreach ($fields as $fieldCode => $field) {
             $contentType->addField($this->buildNodeField($fieldCode, $field));
         }
@@ -154,16 +152,5 @@ class ArrayToReadModelTransformer
         }
 
         return $layoutType;
-    }
-
-    private function findFieldsParents(array $fields): array
-    {
-        foreach ($fields as $code => $field) {
-            foreach ($field['fields'] as $item) {
-                $fields[$item]['parent'] = $code;
-            }
-        }
-
-        return $fields;
     }
 }

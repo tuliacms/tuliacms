@@ -1,13 +1,13 @@
 Tulia.DynamicForm.plugin('filemanager', {
     on: {
-        'open-filemanager': function () {
-            const fieldId = $(this).attr('data-input-target');
-            const filter = $(this).attr('data-filemanager-filter');
+        'open-filemanager': function (button) {
+            const fieldId = button.attr('data-input-target');
+            const filter = button.attr('data-filemanager-filter');
 
             Tulia.Filemanager.create({
                 targetInput: '#' + fieldId,
                 showOnInit: true,
-                endpoint: $(this).attr('data-filemanager-endpoint'),
+                endpoint: button.attr('data-filemanager-endpoint'),
                 filter: {
                     type: filter === '*' ? '*' : JSON.parse(filter)
                 },

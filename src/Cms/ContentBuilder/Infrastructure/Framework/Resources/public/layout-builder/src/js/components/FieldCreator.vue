@@ -51,7 +51,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="alert alert-info text-center mb-0">{{ translations.theseOptionsWillNotBeEditableAfterSave }}</div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-success" @click="saveField()">{{ translations.create }}</button>

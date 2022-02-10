@@ -73,6 +73,7 @@
         </div>
     </div>
 
+    {# TODO rewrite for Dynamic Form #}
     <script nonce="{{ csp_nonce() }}">
         $(function () {
             $('#datetimepicker-{{ fieldId }}').datetimepicker({
@@ -140,6 +141,7 @@
         </div>
     {% endif %}
 
+    {# TODO rewrite for Dynamic Form #}
     <script nonce="{{ csp_nonce() }}">
         $(function () {
             let typeahead = $('#typeahead-entity-{{ fieldId }}');

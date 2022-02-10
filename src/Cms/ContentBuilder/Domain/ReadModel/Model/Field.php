@@ -25,7 +25,8 @@ class Field
         'builder_options' => null,
     ];
 
-    public function __construct(array $options) {
+    public function __construct(array $options)
+    {
         $this->options = array_merge(static::$defaults, $options);
 
         \assert(\is_string($this->options['code']), 'The "code" option must be a string.');
