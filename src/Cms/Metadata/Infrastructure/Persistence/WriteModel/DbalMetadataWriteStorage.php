@@ -20,29 +20,37 @@ class DbalMetadataWriteStorage extends AbstractLocalizableStorage implements Met
         $this->connection = $connection;
     }
 
-    public function find(string $type, array $ownerIdList, string $locale): array
+    public function find(string $type, array $ownerIdList, array $attributes, string $locale): array
     {
         $sql = "SELECT
             tm.owner_id,
             tm.name,
+            tm.uri,
             COALESCE(tl.value, tm.value) AS `value`
         FROM #__{$type}_metadata AS tm
         LEFT JOIN #__{$type}_metadata_lang AS tl
             ON tm.id = tl.metadata_id AND tl.locale = :locale
         WHERE
-            tm.owner_id IN (:owner_id)";
+            tm.owner_id IN (:owner_id)
+            AND tm.name IN (:names)";
 
         $source = $this->connection->fetchAllAssociative($sql, [
             'locale' => $locale,
             'owner_id' => $ownerIdList,
+            'names' => $attributes,
         ], [
             'owner_id' => ConnectionInterface::PARAM_ARRAY_STR,
+            'names' => ConnectionInterface::PARAM_ARRAY_STR,
         ]);
 
         $result = [];
 
         foreach ($source as $row) {
-            $result[$row['owner_id']][$row['name']] = $row['value'];
+            $result[$row['owner_id']][$row['uri']] = [
+                'value' => $row['value'],
+                'uri' => $row['uri'],
+                'name' => $row['name'],
+            ];
         }
 
         return $result;
@@ -81,6 +89,7 @@ class DbalMetadataWriteStorage extends AbstractLocalizableStorage implements Met
             'owner_id' => $data['owner_id'],
             'name' => $data['name'],
             'value' => $data['value'],
+            'uri' => $data['uri'],
         ]);
     }
 
@@ -95,6 +104,7 @@ class DbalMetadataWriteStorage extends AbstractLocalizableStorage implements Met
         ], [
             'owner_id' => $data['owner_id'],
             'name' => $data['name'],
+            'uri' => $data['uri'],
         ]);
     }
 
@@ -137,13 +147,13 @@ class DbalMetadataWriteStorage extends AbstractLocalizableStorage implements Met
         LEFT JOIN #__{$data['type']}_metadata_lang AS tl
             ON tm.id = tl.metadata_id AND tl.locale = :locale
         WHERE
-            tm.owner_id IN (:owner_id) AND tm.`name` = :name
+            tm.owner_id IN (:owner_id) AND tm.`uri` = :uri
         LIMIT 1";
 
         $result = $this->connection->fetchAllAssociative($sql, [
             'locale' => $data['locale'],
             'owner_id' => $data['owner_id'],
-            'name' => $data['name'],
+            'uri' => $data['uri'],
         ], [
             'owner_id' => \PDO::PARAM_STR,
         ]);
@@ -155,14 +165,14 @@ class DbalMetadataWriteStorage extends AbstractLocalizableStorage implements Met
     {
         $sql = "SELECT id
         FROM #__{$metadata['type']}_metadata
-        WHERE owner_id = :owner_id AND `name` = :name
+        WHERE owner_id = :owner_id AND `uri` = :uri
         LIMIT 1";
 
         $result = $this->connection->fetchAllAssociative($sql, [
-            'name' => $metadata['name'],
+            'uri' => $metadata['uri'],
             'owner_id' => $metadata['owner_id'],
         ], [
-            'name' => \PDO::PARAM_STR,
+            'uri' => \PDO::PARAM_STR,
             'owner_id' => \PDO::PARAM_STR,
         ]);
 

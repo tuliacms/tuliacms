@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Metadata\Domain\WriteModel;
 
+use Tulia\Cms\Metadata\Domain\WriteModel\Model\Attribute;
 use Tulia\Cms\Metadata\Ports\Infrastructure\Persistence\WriteModel\MetadataWriteStorageInterface;
 use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
@@ -31,22 +32,38 @@ class MetadataRepository
 
     public function findAllAggregated(string $type, array $ownerIdList, array $info): array
     {
-        $result = $this->storage->find($type, $ownerIdList, $this->currentWebsite->getLocale()->getCode());
+        $source = $this->storage->find($type, $ownerIdList, array_keys($info), $this->currentWebsite->getLocale()->getCode());
+        $result = [];
 
-        foreach ($result as $ownerId => $fields) {
-            foreach ($fields as $key => $value) {
-                if (isset($info[$key]) && $info[$key]['is_multiple']) {
+        foreach ($source as $ownerId => $fields) {
+            foreach ($fields as $key => $element) {
+                $value = $element['value'];
+
+                if ($info[$element['name']]['has_nonscalar_value']) {
                     try {
                         $value = (array) unserialize(
-                            (string) $value,
+                            (string) $element['value'],
                             ['allowed_classes' => []]
                         );
                     } catch (\ErrorException $e) {
                         // If error, than empty or cannot be unserialized from singular value
                     }
-
-                    $result[$ownerId][$key] = $value;
                 }
+
+                $flags = [];
+
+                if ($info[$element['name']]['is_compilable']) {
+                    $flags[] = 'compilable';
+                }
+
+                $result[$ownerId][$key] = new Attribute(
+                    $element['name'],
+                    $value,
+                    $element['uri'],
+                    $flags,
+                    $info[$element['name']]['is_multilingual'],
+                    $info[$element['name']]['has_nonscalar_value'],
+                );
             }
         }
 
@@ -58,20 +75,24 @@ class MetadataRepository
         return $this->findAllAggregated($type, [$ownerId], $info)[$ownerId] ?? [];
     }
 
+    /**
+     * @param Attribute[] $metadata
+     */
     public function persist(string $type, string $ownerId, array $metadata): void
     {
         $locale = $this->currentWebsite->getLocale()->getCode();
         $structure = [];
 
-        foreach ($metadata as $name => $info) {
-            $structure[$name] = [
+        foreach ($metadata as $uri => $attribute) {
+            $structure[$uri] = [
                 'id' => $this->uuidGenerator->generate(),
-                'value' => $info['is_multiple'] ? serialize($info['value']) : $info['value'],
+                'value' => $attribute->hasNonscalarValue() ? serialize($attribute->getValue()) : $attribute->getValue(),
                 'owner_id' => $ownerId,
-                'name' => $name,
+                'name' => $attribute->getCode(),
+                'uri' => $uri,
                 'locale' => $locale,
                 'type' => $type,
-                'multilingual' => $info['is_multilingual'],
+                'multilingual' => $attribute->isMultilingual(),
             ];
         }
 

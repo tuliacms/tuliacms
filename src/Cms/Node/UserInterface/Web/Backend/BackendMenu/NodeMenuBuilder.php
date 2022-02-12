@@ -54,7 +54,8 @@ class NodeMenuBuilder implements BuilderInterface
             'parent' => $root,
         ]);
 
-        foreach ($type->getFields() as $field) {
+        // TODO Finish listing of taxonomies attached to ContentType
+        /*foreach ($type->getFields() as $field) {
             if ($field->getType() !== 'taxonomy') {
                 continue;
             }
@@ -66,6 +67,6 @@ class NodeMenuBuilder implements BuilderInterface
                 'link'   => $this->helper->generateUrl('backend.term', [ 'taxonomyType' => $taxonomy->getCode() ]),
                 'parent' => $root,
             ]);
-        }
+        }*/
     }
 }

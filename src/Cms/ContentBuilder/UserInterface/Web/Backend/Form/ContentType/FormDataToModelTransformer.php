@@ -38,8 +38,12 @@ class FormDataToModelTransformer
         $nodeType->setRoutingStrategy($data['type']['routingStrategy'] ?? '');
         $nodeType->setIsRoutable((bool) $data['type']['isRoutable']);
 
-        foreach ($this->collectFields($data['layout']) as $field) {
-            $nodeType->addField($field);
+        foreach ($data['layout'] as $section) {
+            foreach ($section['sections'] as $group) {
+                foreach ($this->collectFields($group['fields']) as $field) {
+                    $nodeType->addField($field);
+                }
+            }
         }
 
         return $nodeType;
@@ -60,27 +64,23 @@ class FormDataToModelTransformer
     /**
      * @return Field[]
      */
-    private function collectFields(array $groups): array
+    private function collectFields(array $fields): array
     {
-        $fields = [];
+        $result = [];
 
-        foreach ($groups as $group) {
-            foreach ($group['sections'] as $section) {
-                foreach ($section['fields'] as $field) {
-                    $fields[] = new Field([
-                        'code' => $field['code']['value'],
-                        'type' => $field['type']['value'],
-                        'name' => $field['name']['value'],
-                        'is_multilingual' => $field['multilingual']['value'],
-                        'parent' => $field['parent'],
-                        'configuration' => $this->transformConfiguration($field['configuration']),
-                        'constraints' => $this->transformConstraints($field['constraints']),
-                    ]);
-                }
-            }
+        foreach ($fields as $field) {
+            $result[] = new Field([
+                'code' => $field['code']['value'],
+                'type' => $field['type']['value'],
+                'name' => $field['name']['value'],
+                'is_multilingual' => $field['multilingual']['value'],
+                'configuration' => $this->transformConfiguration($field['configuration']),
+                'constraints' => $this->transformConstraints($field['constraints']),
+                'children' => $this->collectFields($field['children']),
+            ]);
         }
 
-        return $fields;
+        return $result;
     }
 
     private function transformConfiguration(array $configuration): array

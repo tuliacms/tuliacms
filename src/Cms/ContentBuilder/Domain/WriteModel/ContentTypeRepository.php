@@ -6,6 +6,7 @@ namespace Tulia\Cms\ContentBuilder\Domain\WriteModel;
 
 use Tulia\Cms\ContentBuilder\Domain\WriteModel\Model\ContentType;
 use Tulia\Cms\ContentBuilder\Domain\WriteModel\ContentType\Service\ContentTypeStorageInterface;
+use Tulia\Cms\ContentBuilder\Domain\WriteModel\Model\Field;
 use Tulia\Cms\Platform\Infrastructure\Bus\Event\EventBusInterface;
 use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
 
@@ -106,30 +107,6 @@ class ContentTypeRepository
 
     public function extract(ContentType $contentType): array
     {
-        $fields = [];
-
-        foreach ($contentType->getFields() as $field) {
-            $constraints = [];
-
-            foreach ($field->getConstraints() as $code => $info) {
-                $constraints[] = [
-                    'code' => $code,
-                    'modificators' => $info['modificators'] ?? [],
-                ];
-            }
-
-            $fields[] = [
-                'code' => $field->getCode(),
-                'type' => $field->getType(),
-                'name' => $field->getName(),
-                'is_multilingual' => $field->isMultilingual(),
-                'is_internal' => $field->isInternal(),
-                'parent' => $field->getParent(),
-                'configuration' => $field->getConfiguration(),
-                'constraints' => $constraints,
-            ];
-        }
-
         $sections = [];
 
         foreach ($contentType->getLayout()->getSections() as $section) {
@@ -161,7 +138,7 @@ class ContentTypeRepository
             'is_routable' => $contentType->isRoutable(),
             'is_hierarchical' => $contentType->isHierarchical(),
             'routing_strategy' => $contentType->getRoutingStrategy(),
-            'fields' => $fields,
+            'fields' => $this->extractFields(null, $contentType->getFields()),
             'layout' => [
                 'code' => $contentType->getLayout()->getCode(),
                 'name' => $contentType->getLayout()->getName(),
@@ -170,5 +147,40 @@ class ContentTypeRepository
         ];
 
         return $extracted;
+    }
+
+    /**
+     * @param Field[] $fields
+     */
+    private function extractFields(?string $parent, array $fields): array
+    {
+        $result = [];
+
+        foreach ($fields as $field) {
+            $constraints = [];
+
+            foreach ($field->getConstraints() as $code => $info) {
+                $constraints[] = [
+                    'code' => $code,
+                    'modificators' => $info['modificators'] ?? [],
+                ];
+            }
+
+            $result[] = [[
+                'code' => $field->getCode(),
+                'type' => $field->getType(),
+                'name' => $field->getName(),
+                'is_multilingual' => $field->isMultilingual(),
+                'configuration' => $field->getConfiguration(),
+                'constraints' => $constraints,
+                'parent' => $parent,
+            ]];
+
+            if ($field->getChildren() !== []) {
+                $result[] = $this->extractFields($field->getCode(), $field->getChildren());
+            }
+        }
+
+        return array_merge(...$result);
     }
 }

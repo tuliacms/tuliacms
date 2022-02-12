@@ -52,10 +52,6 @@ class Importer
             $id = $this->repository->generateId();
         }
 
-        foreach ($type['field_groups'] as $groupKey => $group) {
-            $type['field_groups'][$groupKey]['fields'] = $this->flattenFields($group['fields']);
-        }
-
         $type['id'] = $id;
         // @todo Validate structure of inported array
         $model = $this->arrayToModelTransformer->transform($type);
@@ -65,21 +61,5 @@ class Importer
         } else {
             $this->repository->insert($model);
         }
-    }
-
-    private function flattenFields(array $fields, ?string $parent = null): array
-    {
-        $result = [];
-
-        foreach ($fields as $field) {
-            $field['parent'] = $parent;
-            $result[] = [$field];
-
-            if (isset($field['children']) && $field['children'] !== []) {
-                $result[] = $this->flattenFields($field['children'], $field['code']);
-            }
-        }
-
-        return array_merge(...$result);
     }
 }

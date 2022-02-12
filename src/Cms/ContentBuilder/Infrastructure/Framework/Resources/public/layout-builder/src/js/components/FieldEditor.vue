@@ -15,7 +15,7 @@
                             <div class="form-text">{{ translations.fieldLabelHelp }}</div>
                         </div>
                         <div class="col mb-3">
-                            <label for="ctb-edit-field-id" class="form-label">{{ translations.fieldId }}</label>
+                            <label for="ctb-edit-field-id" class="form-label">{{ translations.fieldCode }}</label>
                             <input type="text" :class="{ 'form-control': true, 'is-invalid': model.code.valid === false }" id="ctb-edit-field-id" v-model="model.code.value" disabled />
                             <div v-if="model.code.valid === false" class="invalid-feedback">{{ model.code.message }}</div>
                         </div>

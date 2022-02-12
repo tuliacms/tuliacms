@@ -14,7 +14,7 @@
             });
         </script>
     {% else %}
-        {% if fieldType.isRepeatable %}
+        {#{% if fieldType.type == 'repeatable' %}
             {% set repeatable_id = "content-builder-repeatable-target-" ~ uniqid() %}
             <div class="mb-3">
                 <label class="form-label">{{ form[field].vars.label }}</label>
@@ -27,16 +27,16 @@
                                 <button type="button" class="btn btn-sm btn-icon-only btn-default" data-form-action="create-from-prototype:remove" data-toggle="tooltip" title="{{ 'remove'|trans }}"><i class="btn-icon fas fa-times"></i></button>
                             </div>
                             <div class="content-builder-repeatable-element-body">
-                                {{ _self.render_subfields(group, contentType.subfields(field), contentType) }}
+                                {{ _self.render_subfields(group, fieldType.children, contentType) }}
                             </div>
                         </div>
                     {% endfor %}
                 </div>
                 <button type="button" class="btn btn-success btn-icon-left" data-form-action="create-from-prototype" data-target="{{ repeatable_id }}"><i class="btn-icon fa fa-plus"></i>Add new row</button>
             </div>
-        {% else %}
+        {% else %}#}
             {{ form_row(form[field]) }}
-        {% endif %}
+        {#{% endif %}#}
     {% endif %}
 {% endmacro %}
 
@@ -47,9 +47,7 @@
         {% if fieldType.type starts with '___content_block' %}
             {# Do not render fields that are internal for the Content Block ContentTypes #}
         {% else %}
-            {% if fieldType.parent == null %}
-                {{ _self.form_row(form, field, contentType) }}
-            {% endif %}
+            {{ _self.form_row(form, field, contentType) }}
         {% endif %}
     {% endfor %}
 {% endmacro %}

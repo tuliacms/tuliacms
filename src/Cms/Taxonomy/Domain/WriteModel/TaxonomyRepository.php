@@ -93,7 +93,7 @@ class TaxonomyRepository
             $taxonomy->addAttributeInfo($name, new AttributeInfo(
                 $info['is_multilingual'],
                 $info['is_compilable'],
-                $info['is_multiple'],
+                $info['has_nonscalar_value'],
                 $info['is_taxonomy'],
             ));
         }
@@ -201,7 +201,7 @@ class TaxonomyRepository
                 'value' => $value,
                 'is_multilingual' => $info->isMultilingual(),
                 'is_taxonomy' => $info->isTaxonomy(),
-                'is_multiple' => $info->isMultiple(),
+                'has_nonscalar_value' => $info->hasNonscalarValue(),
             ];
         }
 
@@ -230,7 +230,7 @@ class TaxonomyRepository
             $result[$field->getCode()] = [
                 'is_multilingual' => $field->isMultilingual(),
                 'is_compilable' => $field->hasFlag('compilable'),
-                'is_multiple' => $field->isMultiple(),
+                'has_nonscalar_value' => $field->hasNonscalarValue(),
                 'is_taxonomy' => $field->getType() === 'taxonomy',
             ];
         }

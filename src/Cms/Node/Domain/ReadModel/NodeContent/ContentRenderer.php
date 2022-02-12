@@ -27,7 +27,7 @@ class ContentRenderer
                 continue;
             }
 
-            $content = $node[$name . '__compiled'];
+            $content = $node[$name.':compiled'];
 
             if (! $content) {
                 continue;

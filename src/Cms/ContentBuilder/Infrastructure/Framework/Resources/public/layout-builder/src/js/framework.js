@@ -1,68 +1,13 @@
-const createHierarchicalFields = function (model) {
-    const recursiveHierarchicalFields = function (parent, fields) {
-        let result = [];
-
-        for (let field of fields) {
-            if (field.parent === parent) {
-                field.children = recursiveHierarchicalFields(field.code.value, fields);
-                result.push(field);
-            }
-        }
-
-        return result;
-    };
-
-    for (let k in model.layout) {
-        for (let s in model.layout[k].sections) {
-            model.layout[k].sections[s].fields = recursiveHierarchicalFields(null, model.layout[k].sections[s].fields);
-        }
-    }
-
-    return model;
-};
-
-const flattenFields = function (model) {
-    const recursiveFlattenFields = function (fields) {
-        let result = [];
-
-        for (let field of fields) {
-            field.parent = null;
-            result.push(field);
-
-            if (field.children.length) {
-                for (let subfield of recursiveFlattenFields(field.children)) {
-                    subfield.parent = field.code.value;
-                    result.push(subfield);
-                }
-                field.children = [];
-            }
-        }
-
-        return result;
-    };
-
-    for (let k in model.layout) {
-        for (let s in model.layout[k].sections) {
-            model.layout[k].sections[s].fields = recursiveFlattenFields(model.layout[k].sections[s].fields);
-        }
-    }
-
-    return model;
-};
-
 export default {
-    createHierarchicalFields: createHierarchicalFields,
     methods: {
         save: function () {
             if (this.validate() === false) {
                 return;
             }
 
-            let model = flattenFields(JSON.parse(JSON.stringify(this.model)));
-
             $('#ctb-form-field-node-type').val(JSON.stringify({
-                layout: model.layout,
-                type: model.type
+                layout: this.model.layout,
+                type: this.model.type
             }));
             $('#ctb-form').submit();
         },
@@ -128,9 +73,9 @@ export default {
         createFieldUsingCreatorData: function (data) {
             let section = this._findSection(this.view.form.field_creator_section_code);
 
-            if (this._findField(data.id)) {
+            if (this._findField(data.code)) {
                 Tulia.Info.info({
-                    title: this.translations.youCannotCreateTwoFieldsWithTheSameId,
+                    title: this.translations.youCannotCreateTwoFieldsWithTheSameCode,
                     type: 'warning'
                 });
                 return;

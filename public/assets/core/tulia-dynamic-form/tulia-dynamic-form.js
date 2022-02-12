@@ -35,7 +35,7 @@ window.Tulia.DynamicForm = function (form) {
         this.form.find('[data-dynamic-element]').filter(function () {
             return $(this).attr('data-dynamic-element-rendered') !== 'rendered';
         }).each(function () {
-            $(this).attr('data-dynamic-element-rendered', 1);
+            $(this).attr('data-dynamic-element-rendered', 'rendered');
 
             self.executeRender($(this).attr('data-dynamic-element'), $(this));
         });
@@ -56,54 +56,76 @@ window.Tulia.DynamicForm.plugin = function (name, plugin) {
     });
 };
 
-Tulia.DynamicForm.plugin('collection-field', {
-    on: {
-        'create-from-prototype': function (button) {
-            const target = document.querySelector('#' + button.attr('data-target'));
-            const item = document.createElement('div');
+(function () {
+    const wrapElement = function (element) {
+        let body = $('<div class="content-builder-repeatable-element-body" />');
+        let header = $('<div class="content-builder-repeatable-element-header">\
+            <button type="button" class="btn btn-sm btn-icon-only btn-default" data-form-action="create-from-prototype:move-down" data-toggle="tooltip" title=""><i class="btn-icon fas fa-chevron-down"></i></button>\
+            <button type="button" class="btn btn-sm btn-icon-only btn-default" data-form-action="create-from-prototype:move-up" data-toggle="tooltip" title=""><i class="btn-icon fas fa-chevron-up"></i></button>\
+            <button type="button" class="btn btn-sm btn-icon-only btn-default" data-form-action="create-from-prototype:remove" data-toggle="tooltip" title=""><i class="btn-icon fas fa-times"></i></button>\
+        </div>');
+        let repeatableElement = $('<div class="content-builder-repeatable-element" />');
 
-            if (!target.dataset.index) {
-                target.dataset.index = 98688776;
+        repeatableElement.append(header);
+        repeatableElement.append(body);
+
+        element.after(repeatableElement);
+        body.append(element);
+    };
+
+    Tulia.DynamicForm.plugin('collection-field', {
+        render: {
+            'repeatable-element': function (element) {
+                const target = $('<div class="content-builder-repeatable-target" />');
+                element.append(target);
+                element.find('> fieldset').each(function () {
+                    wrapElement($(this));
+                });
+                element.find('> .content-builder-repeatable-element').appendTo(target);
+                element.append('<button type="button" class="btn btn-success btn-icon-left" data-form-action="create-from-prototype"><i class="btn-icon fa fa-plus"></i>Add new row</button>');
             }
-
-            let html = target.dataset.prototype.replace(
-                /__name__/g,
-                target.dataset.index
-            );
-
-            html = '<div class="content-builder-repeatable-element">\
-                <div class="content-builder-repeatable-element-header">\
-                    <button type="button" class="btn btn-sm btn-icon-only btn-default" data-form-action="create-from-prototype:move-down" data-toggle="tooltip" title=""><i class="btn-icon fas fa-chevron-down"></i></button>\
-                    <button type="button" class="btn btn-sm btn-icon-only btn-default" data-form-action="create-from-prototype:move-up" data-toggle="tooltip" title=""><i class="btn-icon fas fa-chevron-up"></i></button>\
-                    <button type="button" class="btn btn-sm btn-icon-only btn-default" data-form-action="create-from-prototype:remove" data-toggle="tooltip" title=""><i class="btn-icon fas fa-times"></i></button>\
-                </div>\
-                <div class="content-builder-repeatable-element-body">' + html + '</div>\
-            </div>';
-
-            item.innerHTML = html;
-
-            target.appendChild(item);
-            target.dataset.index++;
-
-            this.rendered();
         },
-        'create-from-prototype:move-down': function (button) {
-            let currentElement = button.closest('.content-builder-repeatable-element');
-            currentElement.next().insertBefore(currentElement);
-        },
-        'create-from-prototype:move-up': function (button) {
-            let currentElement = button.closest('.content-builder-repeatable-element');
-            currentElement.prev().insertAfter(currentElement);
-        },
-        'create-from-prototype:remove': function (button) {
-            Tulia.Confirmation.warning().then((value) => {
-                if (value.value) {
-                    button.closest('.content-builder-repeatable-element').remove();
+        on: {
+            'create-from-prototype': function (button) {
+                const source = button.closest('.repeatable-field');
+                let index = source.data('index');
+
+                if (!index) {
+                    index = 98688776;
                 }
-            });
-        },
-    }
-});
+
+                let html = source.data('prototype').replace(
+                    new RegExp(source.data('prototype-name'), 'g'),
+                    index
+                );
+
+                const element = $(html);
+
+                source.find('> .content-builder-repeatable-target').append(element);
+                wrapElement(element);
+
+                source.data('index', index + 1);
+
+                this.rendered();
+            },
+            'create-from-prototype:move-down': function (button) {
+                let currentElement = button.closest('.content-builder-repeatable-element');
+                currentElement.next('.content-builder-repeatable-element').insertBefore(currentElement);
+            },
+            'create-from-prototype:move-up': function (button) {
+                let currentElement = button.closest('.content-builder-repeatable-element');
+                currentElement.prev('.content-builder-repeatable-element').insertAfter(currentElement);
+            },
+            'create-from-prototype:remove': function (button) {
+                Tulia.Confirmation.warning().then((value) => {
+                    if (value.value) {
+                        button.closest('.content-builder-repeatable-element').remove();
+                    }
+                });
+            },
+        }
+    });
+})();
 
 $(function () {
     $('.tulia-dynamic-form').each(function () {

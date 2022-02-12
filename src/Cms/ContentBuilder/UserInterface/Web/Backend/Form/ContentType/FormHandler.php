@@ -79,7 +79,7 @@ class FormHandler
         // Layout sidebar section form
         $request = Request::create('/', 'POST');
         $request->request->set('layout_section', $formData['layout']['sidebar']);
-        $form = $this->formFactory->create(LayoutSectionType::class);
+        $form = $this->formFactory->create(LayoutSectionType::class, [], ['max_depth_fields' => 5]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
 
@@ -92,7 +92,7 @@ class FormHandler
         // Layout main section form
         $request = Request::create('/', 'POST');
         $request->request->set('layout_section', $formData['layout']['main']);
-        $form = $this->formFactory->create(LayoutSectionType::class);
+        $form = $this->formFactory->create(LayoutSectionType::class, [], ['max_depth_fields' => 5]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
 

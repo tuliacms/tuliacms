@@ -263,16 +263,26 @@ class Node extends AbstractController
 
     private function updateModel(ContentTypeFormDescriptor $formDescriptor, ReadModel $node, string $strategy): void
     {
-        $data = $formDescriptor->getData();
+        $attributes = $formDescriptor->getData();
 
-        $node->setStatus($data['status']);
-        $node->setSlug($data['slug'] ?? null);
-        $node->setTitle($data['title']);
-        $node->setPublishedAt(new ImmutableDateTime($data['published_at']));
-        $node->setPublishedTo($data['published_to'] ? new ImmutableDateTime($data['published_to']) : null);
-        $node->setParentId($data['parent_id'] ?? null);
-        $node->setAuthorId($data['author_id']);
-        $node->updateAttributes($data);
+        $getValue = function (string $code) use ($attributes) {
+            foreach ($attributes as $attribute) {
+                if ($attribute->getCode() === $code) {
+                    return $attribute->getValue();
+                }
+            }
+
+            return '';
+        };
+
+        $node->setStatus($getValue('value'));
+        $node->setSlug($getValue('slug'));
+        $node->setTitle($getValue('title'));
+        $node->setPublishedAt(new ImmutableDateTime($getValue('published_at')));
+        $node->setPublishedTo($getValue('published_to') ? new ImmutableDateTime($getValue('published_to')) : null);
+        $node->setParentId($getValue('parent_id') ?? null);
+        $node->setAuthorId($getValue('author_id'));
+        $node->updateAttributes($attributes);
 
         if ($strategy === 'create') {
             $this->repository->insert($node);

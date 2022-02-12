@@ -66,7 +66,7 @@ class ContentTypeDatabaseProvider extends AbstractContentTypeProvider
         return $types;
     }
 
-    private function getFields(string $contentTypeId): array
+    private function getFields(string $contentTypeId, ?string $parent = null): array
     {
         if ($this->fieldsSource === []) {
             $this->fieldsSource = $this->connection->fetchAllAssociative('SELECT * FROM #__content_type_field');
@@ -79,9 +79,14 @@ class ContentTypeDatabaseProvider extends AbstractContentTypeProvider
                 continue;
             }
 
+            if ($field['parent'] !== $parent) {
+                continue;
+            }
+
             $fields[$field['code']] = $field;
             $fields[$field['code']]['configuration'] = $this->getConfiguration($field['id']);
             $fields[$field['code']]['constraints'] = $this->getConstraints($field['id']);
+            $fields[$field['code']]['children'] = $this->getFields($contentTypeId, $field['code']);
         }
 
         return $fields;

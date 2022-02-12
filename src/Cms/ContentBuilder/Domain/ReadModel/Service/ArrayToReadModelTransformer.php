@@ -11,7 +11,6 @@ use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\FieldsGroup;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\LayoutType;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\Section;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\FieldTypeMappingRegistry;
-// @todo Move Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\FieldTypeMappingRegistry to Domain layer
 
 /**
  * @author Adam Banaszkiewicz
@@ -92,18 +91,12 @@ class ArrayToReadModelTransformer
         $contentType->setIsHierarchical((bool) $type['is_hierarchical']);
         $contentType->setRoutingStrategy($type['routing_strategy']);
 
-        $fields = [];
-
         foreach ($type['layout']['sections'] as $sectionCode => $section) {
             foreach ($section['groups'] as $groupCode => $group) {
-                foreach ($group['fields'] as $fieldCode => $field) {
-                    $fields[$fieldCode] = $field;
+                foreach ($this->buildFields($group['fields']) as $field) {
+                    $contentType->addField($field);
                 }
             }
-        }
-
-        foreach ($fields as $fieldCode => $field) {
-            $contentType->addField($this->buildNodeField($fieldCode, $field));
         }
 
         /**
@@ -115,24 +108,30 @@ class ArrayToReadModelTransformer
         return $contentType;
     }
 
-    protected function buildNodeField(string $code, array $type): Field
+    protected function buildFields(array $fields): array
     {
-        return new Field([
-            'code' => $code,
-            'type' => $type['type'],
-            'name' => (string) $type['name'],
-            'is_multilingual' => (bool) $type['is_multilingual'],
-            'taxonomy' => $type['taxonomy'] ?? '',
-            'configuration' => $type['configuration'],
-            'constraints' => $type['constraints'],
-            'parent' => $type['parent'] ?? null,
-            'flags' => $this->fieldTypeMappingRegistry->getTypeFlags($type['type']),
-            'builder_type' => function () use ($type) {
-                return [
-                    'constraints' => $type['constraints'],
-                ];
-            }
-        ]);
+        $result = [];
+
+        foreach ($fields as $code => $field) {
+            $result[] = new Field([
+                'code' => $code,
+                'type' => $field['type'],
+                'name' => (string)$field['name'],
+                'is_multilingual' => (bool)($field['is_multilingual'] ?? false),
+                'taxonomy' => $field['taxonomy'] ?? null,
+                'configuration' => $field['configuration'] ?? [],
+                'constraints' => $field['constraints'] ?? [],
+                'children' => $this->buildFields($field['children'] ?? []),
+                'flags' => $this->fieldTypeMappingRegistry->getTypeFlags($field['type']),
+                'builder_options' => function () use ($field) {
+                    return [
+                        'constraints' => $field['constraints'],
+                    ];
+                }
+            ]);
+        }
+
+        return $result;
     }
 
     protected function buildLayoutType(array $type): LayoutType

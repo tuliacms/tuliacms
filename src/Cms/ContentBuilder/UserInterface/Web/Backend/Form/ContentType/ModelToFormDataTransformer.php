@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\ContentType;
 
 use Tulia\Cms\ContentBuilder\Domain\WriteModel\Model\ContentType;
+use Tulia\Cms\ContentBuilder\Domain\WriteModel\Model\Field;
 use Tulia\Cms\ContentBuilder\Domain\WriteModel\Model\LayoutType;
 
 /**
@@ -40,7 +41,7 @@ class ModelToFormDataTransformer
     {
         $groups = [];
 
-        foreach ($layoutType->getSections() as $code => $section) {
+        foreach ($layoutType->getSections() as $section) {
             if ($section->getCode() !== $sectionName) {
                 continue;
             }
@@ -53,7 +54,7 @@ class ModelToFormDataTransformer
                         'valid' => true,
                         'message' => null,
                     ],
-                    'fields' => $this->transformFields($contentType, $group->getFields()),
+                    'fields' => $this->transformFields($group->getFields(), $contentType, $contentType->getFields()),
                 ];
             }
         }
@@ -61,20 +62,25 @@ class ModelToFormDataTransformer
         return $groups;
     }
 
-    private function transformFields(ContentType $contentType, array $fieldsCodes): array
+    /**
+     * @param string[] $allowedFields
+     * @param Field[] $fields
+     */
+    private function transformFields(array $allowedFields, ContentType $contentType, array $fields): array
     {
-        $fields = [];
+        $result = [];
 
-        foreach ($fieldsCodes as $code) {
-            // Prevent errors. If field not exists, just dont show it in form.
-            // Saving form without field removes the field from storage.
-            if ($contentType->hasField($code) === false) {
+        foreach ($fields as $field) {
+            // Only allowed fields (from defined group) can be returned here.
+            if (!in_array($field->getCode(), $allowedFields, true)) {
                 continue;
             }
 
-            $field = $contentType->getField($code);
+            $allowedSubfields = array_map(function ($field) {
+                return $field->getCode();
+            }, $field->getChildren());
 
-            $fields[] = [
+            $result[] = [
                 'metadata' => [
                     'has_errors' => false,
                 ],
@@ -100,11 +106,11 @@ class ModelToFormDataTransformer
                 ],
                 'configuration' => $this->transformFieldConfiguration($field->getConfiguration()),
                 'constraints' => $this->transformFieldConstraints($field->getConstraints()),
-                'parent' => $field->getParent(),
+                'children' => $this->transformFields($allowedSubfields, $contentType, $field->getChildren()),
             ];
         }
 
-        return $fields;
+        return $result;
     }
 
     private function transformFieldConfiguration(array $configuration): array

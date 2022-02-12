@@ -80,7 +80,7 @@ import framework from './framework';
 export default {
     name: 'ContentLayoutBuilder',
     data() {
-        let model = framework.createHierarchicalFields(window.ContentBuilderLayoutBuilder.model);
+        let model = window.ContentBuilderLayoutBuilder.model;
         let errors = window.ContentBuilderLayoutBuilder.errors;
         let sections = this.$get(model, 'layout.main.sections', []);
         let typeValidation = {

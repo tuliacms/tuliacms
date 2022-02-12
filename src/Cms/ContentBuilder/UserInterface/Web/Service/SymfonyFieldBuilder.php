@@ -62,24 +62,25 @@ class SymfonyFieldBuilder
 
     private function buildRepeatable(Field $field, FormBuilderInterface $builder, ContentType $contentType): void
     {
-        $fields = [];
-
-        foreach ($contentType->getFields() as $pretender) {
-            if ($pretender->getParent() === $field->getCode()) {
-                $fields[] = $pretender;
-            }
-        }
+        $prototypeName = sprintf('__name_%s__', $field->getCode());
 
         $builder->add(
             $field->getCode(),
             CollectionType::class,
             [
-                'label' => 'Repeatable',
+                'label' => $field->getName(),
                 'allow_add' => true,
                 'allow_delete' => true,
+                'attr' => [
+                    'class' => 'repeatable-field',
+                    'data-prototype-name' => $prototypeName,
+                    'data-dynamic-element' => 'repeatable-element',
+                ],
+                'prototype_name' => $prototypeName,
                 'entry_type' => RepeatableGroupType::class,
                 'entry_options' => [
-                    'fields' => $fields,
+                    'label' => false,
+                    'fields' => $field->getChildren(),
                     'repeatable_field' => true,
                     'content_type' => $contentType,
                 ],

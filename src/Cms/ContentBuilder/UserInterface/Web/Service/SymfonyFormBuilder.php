@@ -76,11 +76,6 @@ class SymfonyFormBuilder
     {
         /** @var Field $field */
         foreach ($fields as $field) {
-            // Here we render only main fields, children will be rendered in RepeatableGroupType
-            if ($field->getParent()) {
-                continue;
-            }
-
             try {
                 $this->symfonyFieldBuilder->buildFieldAndAddToBuilder($field, $builder, $contentType);
             } catch (ConstraintNotExistsException $e) {

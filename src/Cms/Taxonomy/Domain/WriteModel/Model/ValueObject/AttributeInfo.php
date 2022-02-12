@@ -11,14 +11,14 @@ class AttributeInfo
 {
     private bool $multilingual;
     private bool $compilable;
-    private bool $multiple;
+    private bool $hasNonscalarValue;
     private bool $taxonomy;
 
-    public function __construct(bool $multilingual, bool $compilable, bool $multiple, bool $taxonomy)
+    public function __construct(bool $multilingual, bool $compilable, bool $hasNonscalarValue, bool $taxonomy)
     {
         $this->multilingual = $multilingual;
         $this->compilable = $compilable;
-        $this->multiple = $multiple;
+        $this->hasNonscalarValue = $hasNonscalarValue;
         $this->taxonomy = $taxonomy;
     }
 
@@ -32,9 +32,9 @@ class AttributeInfo
         return $this->compilable;
     }
 
-    public function isMultiple(): bool
+    public function hasNonscalarValue(): bool
     {
-        return $this->multiple;
+        return $this->hasNonscalarValue;
     }
 
     public function isTaxonomy(): bool

@@ -24,6 +24,7 @@ class ContentTypeContainerProvider extends AbstractContentTypeProvider
 
         foreach ($this->configuration as $code => $type) {
             $type['code'] = $code;
+            $type['internal'] = true;
             $type = $this->standarizeArray($type);
 
             $result[] = $this->buildFromArray($type);

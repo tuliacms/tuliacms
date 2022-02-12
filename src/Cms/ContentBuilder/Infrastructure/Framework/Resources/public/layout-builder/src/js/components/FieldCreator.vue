@@ -15,10 +15,10 @@
                             <div class="form-text">{{ translations.fieldLabelHelp }}</div>
                         </div>
                         <div class="col mb-3">
-                            <label for="ctb-new-field-id" class="form-label">{{ translations.fieldId }}</label>
+                            <label for="ctb-new-field-id" class="form-label">{{ translations.fieldCode }}</label>
                             <input type="text" :class="{ 'form-control': true, 'is-invalid': model.code.valid === false }" id="ctb-new-field-id" v-model="model.code.value" @keyup="idFieldChanged = true" @change="_validateBasics()" />
                             <div v-if="model.code.valid === false" class="invalid-feedback">{{ model.code.message }}</div>
-                            <div class="form-text">{{ translations.fieldIdHelp }}</div>
+                            <div class="form-text">{{ translations.fieldCodeHelp }}</div>
                         </div>
                     </div>
                     <div v-if="showMultilingualOption">

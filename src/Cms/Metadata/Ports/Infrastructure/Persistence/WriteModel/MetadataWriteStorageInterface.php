@@ -9,7 +9,7 @@ namespace Tulia\Cms\Metadata\Ports\Infrastructure\Persistence\WriteModel;
  */
 interface MetadataWriteStorageInterface
 {
-    public function find(string $type, array $ownerIdList, string $locale): array;
+    public function find(string $type, array $ownerIdList, array $attributes, string $locale): array;
 
     public function persist(array $metadata, string $defaultLocale): void;
 

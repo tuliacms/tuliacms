@@ -54,7 +54,6 @@ class ArrayToWriteModelTransformer
      *                                 type: string,
      *                                 name: string,
      *                                 is_multilingual: null|bool,
-     *                                 parent: null|string,
      *                                 configuration: [
      *                                     [
      *                                         code: string,
@@ -71,7 +70,8 @@ class ArrayToWriteModelTransformer
      *                                             ]
      *                                         ]
      *                                     ]
-     *                                 ]
+     *                                 ],
+     *                                 children: [...]
      *                             ]
      *                         ]
      *                     ]
@@ -137,8 +137,8 @@ class ArrayToWriteModelTransformer
         $nodeType->setRoutingStrategy($type['routing_strategy'] ?? '');
 
         foreach ($type['field_groups'] ?? [] as $group) {
-            foreach ($group['fields'] ?? [] as $field) {
-                $nodeType->addField($this->buildNodeField($field));
+            foreach ($this->buildFields($group['fields'] ?? []) as $field) {
+                $nodeType->addField($field);
             }
         }
 
@@ -151,23 +151,29 @@ class ArrayToWriteModelTransformer
         return $nodeType;
     }
 
-    protected function buildNodeField(array $field): Field
+    protected function buildFields(array $fields): array
     {
-        return new Field([
-            'code' => $field['code'],
-            'type' => $field['type'],
-            'name' => (string) $field['name'],
-            'is_multilingual' => (bool) ($field['is_multilingual'] ?? false),
-            'taxonomy' => $field['taxonomy'] ?? null,
-            'configuration' => $field['configuration'] ?? [],
-            'constraints' => $field['constraints'] ?? [],
-            'parent' => $field['parent'] ?? null,
-            'flags' => $this->fieldTypeMappingRegistry->getTypeFlags($field['type']),
-            'builder_options' => function () use ($field) {
-                return [
-                    'constraints' => $field['constraints'],
-                ];
-            }
-        ]);
+        $result = [];
+
+        foreach ($fields as $field) {
+            $result [] = new Field([
+                'code' => $field['code'],
+                'type' => $field['type'],
+                'name' => (string)$field['name'],
+                'is_multilingual' => (bool)($field['is_multilingual'] ?? false),
+                'taxonomy' => $field['taxonomy'] ?? null,
+                'configuration' => $field['configuration'] ?? [],
+                'constraints' => $field['constraints'] ?? [],
+                'children' => $this->buildFields($field['children'] ?? []),
+                'flags' => $this->fieldTypeMappingRegistry->getTypeFlags($field['type']),
+                'builder_options' => function () use ($field) {
+                    return [
+                        'constraints' => $field['constraints'],
+                    ];
+                }
+            ]);
+        }
+
+        return $result;
     }
 }

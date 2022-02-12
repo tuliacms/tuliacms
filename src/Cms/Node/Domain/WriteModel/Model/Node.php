@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Domain\WriteModel\Model;
 
+use Tulia\Cms\Metadata\Domain\WriteModel\Model\Attribute;
 use Tulia\Cms\Node\Domain\WriteModel\Event;
 use Tulia\Cms\Node\Domain\WriteModel\Event\AttributeUpdated;
-use Tulia\Cms\Node\Domain\WriteModel\Model\ValueObject\AttributeInfo;
 use Tulia\Cms\Node\Domain\WriteModel\Model\ValueObject\NodeId;
 use Tulia\Cms\Platform\Domain\WriteModel\Model\AggregateRoot;
 use Tulia\Cms\Platform\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
@@ -46,12 +46,10 @@ class Node extends AggregateRoot
 
     protected ?string $slug = null;
 
-    protected array $attributes = [];
-
     /**
-     * @var AttributeInfo[]
+     * @var Attribute[]
      */
-    protected array $attributesInfo = [];
+    protected array $attributes = [];
 
     private function __construct(string $id, string $type, string $websiteId, string $locale)
     {
@@ -92,22 +90,7 @@ class Node extends AggregateRoot
         $self->level = (int) ($data['level'] ?? 0);
         $self->translated = (bool) ($data['translated'] ?? true);
 
-        foreach ($data['attributes_mapping'] as $name => $info) {
-            $self->attributesInfo[$name] = new AttributeInfo(
-                $info['is_multilingual'],
-                $info['is_compilable'],
-                $info['is_multiple'],
-                $info['is_taxonomy'],
-            );
-        }
-
-        foreach ($data['attributes'] as $name => $value) {
-            if (isset($self->attributesInfo[$name]) === false) {
-                continue;
-            }
-
-            $self->attributes[$name] = $value;
-        }
+        $self->attributes = $data['attributes'];
 
         return $self;
     }
@@ -122,18 +105,9 @@ class Node extends AggregateRoot
         return $this->type;
     }
 
-    public function getAttributeInfo(string $name): AttributeInfo
-    {
-        return $this->attributesInfo[$name];
-    }
-
-    public function addAttributeInfo(string $name, AttributeInfo $info): void
-    {
-        $this->validateAttributeName($name);
-
-        $this->attributesInfo[$name] = $info;
-    }
-
+    /**
+     * @param Attribute[] $attributes
+     */
     public function updateAttributes(array $attributes): void
     {
         unset(
@@ -141,15 +115,19 @@ class Node extends AggregateRoot
             $attributes['type'],
             $attributes['status'],
             $attributes['title'],
+            $attributes['slug'],
+            $attributes['parent_id'],
+            $attributes['published_at'],
+            $attributes['published_to'],
+            $attributes['author_id'],
         );
 
-        foreach ($attributes as $name => $value) {
-            if (isset($this->attributesInfo[$name]) === false) {
-                throw new \Exception(sprintf('Attribute "%s" Must have AttributeInfo for this attribute.', $name));
-            }
+        foreach ($attributes as $attribute) {
+            $name = $attribute->getCode();
+            $value = $attribute->getValue();
 
-            if (isset($this->attributes[$name]) === false || $this->attributes[$name] !== $value) {
-                $this->attributes[$name] = $value;
+            if (isset($this->attributes[$name]) === false || $this->attributes[$name]->getValue() !== $value) {
+                $this->attributes[$attribute->getUri()] = $attribute;
                 /**
                  * Calling recordUniqueThat() prevents the system to record multiple changes on the same attribute.
                  * This may be caused, in example, by SlugGenerator: first time system sets raw value from From,
@@ -192,12 +170,12 @@ class Node extends AggregateRoot
 
     public function hasFlag(string $flag): bool
     {
-        return isset($this->attributes['flags']) && \in_array($flag, $this->attributes['flags'], true);
+        return isset($this->attributes['flags']) && \in_array($flag, $this->attributes['flags']->getValue(), true);
     }
 
     public function getFlags(): array
     {
-        return $this->attributes['flags'] ?? [];
+        return $this->attributes['flags'] ? $this->attributes['flags']->getValue() : [];
     }
 
     public function getTitle(): string

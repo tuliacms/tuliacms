@@ -185,12 +185,13 @@ class DbalContentTypeStorage implements ContentTypeStorageInterface
         );
 
         foreach ($fields as $key => $field) {
+            $fields[$key]['has_nonscalar_value'] = (bool) $fields[$key]['has_nonscalar_value'];
             $fields[$key]['is_multilingual'] = (bool) $fields[$key]['is_multilingual'];
             $fields[$key]['configuration'] = $this->getFieldConfiguration($field['id']);
             $fields[$key]['constraints'] = $this->getFieldConstraints($field['id']);
         }
 
-        return $fields;
+        return $this->sortFieldsHierarchically(null, $fields);
     }
 
     private function getFieldConfiguration(string $id): array
@@ -264,5 +265,19 @@ class DbalContentTypeStorage implements ContentTypeStorageInterface
         }
 
         return $layout;
+    }
+
+    private function sortFieldsHierarchically(?string $parent, array $fields): array
+    {
+        $result = [];
+
+        foreach ($fields as $field) {
+            if ($field['parent'] === $parent) {
+                $field['children'] = $this->sortFieldsHierarchically($field['code'], $fields);
+                $result[] = $field;
+            }
+        }
+
+        return $result;
     }
 }

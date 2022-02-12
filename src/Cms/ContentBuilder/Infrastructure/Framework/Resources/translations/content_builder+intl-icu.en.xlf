@@ -48,16 +48,16 @@
                 <target>This label will be showed on the content form for administrators.</target>
             </trans-unit>
             <trans-unit id="tuliacms.content_builder.12">
-                <source>fieldId</source>
-                <target>Field ID</target>
+                <source>fieldCode</source>
+                <target>Field code</target>
             </trans-unit>
             <trans-unit id="tuliacms.content_builder.13">
-                <source>fieldIdHelp</source>
-                <target>Please use lowercased alphanum and underscores. THis field is used in API and in templates.</target>
+                <source>fieldCodeHelp</source>
+                <target>Please use lowercased alphanum and underscores. This field is used in API and in templates.</target>
             </trans-unit>
             <trans-unit id="tuliacms.content_builder.14">
-                <source>youCannotCreateTwoFieldsWithTheSameId</source>
-                <target>Yout cannot create two fields with the same ID.</target>
+                <source>youCannotCreateTwoFieldsWithTheSameCode</source>
+                <target>Yout cannot create two fields with the same Code.</target>
             </trans-unit>
             <trans-unit id="tuliacms.content_builder.15">
                 <source>contentTypeNotExists</source>

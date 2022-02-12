@@ -11,6 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Constraints\Choice;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -56,10 +57,25 @@ class Field extends AbstractType
                     new Choice(['choices' => $choices]),
                 ],
             ])
-            ->add('parent', TextType::class)
         ;
 
+        if ($options['max_depth_fields'] > 0) {
+            $builder->add('children', CollectionType::class, [
+                'entry_type' => Field::class,
+                'allow_add' => true,
+                'allow_delete' => true,
+                'entry_options' => [
+                    'max_depth_fields' => $options['max_depth_fields'] - 1,
+                ],
+            ]);
+        }
+
         $builder->addEventListener(FormEvents::PRE_SUBMIT, [$this, 'addDynamicFields']);
+    }
+
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setRequired('max_depth_fields');
     }
 
     public function addDynamicFields(FormEvent $event): void

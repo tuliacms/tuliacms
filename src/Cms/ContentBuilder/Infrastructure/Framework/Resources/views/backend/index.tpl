@@ -24,20 +24,13 @@
             <small class="text-muted">{{ 'contentTypeCode'|trans }}: {{ type.code }}</small>
         </div>
 
-        {% set notInternalFieldsCount = 0 %}
-        {% for field in type.fields %}
-            {% if not field.isInternal %}
-                {% set notInternalFieldsCount = notInternalFieldsCount + 1 %}
-            {% endif %}
-        {% endfor %}
-
         <ul class="list-group list-group-flush">
             {% if type.isInternal %}
                 <li class="list-group-item"><i>{{ 'internalContentType'|trans }}</i></li>
             {% endif %}
             <li class="list-group-item d-flex justify-content-between align-items-center">{{ 'isRoutable'|trans }}: {{ macros.badge_yes_no(type.isRoutable) }}</li>
             <li class="list-group-item d-flex justify-content-between align-items-center">{{ 'isHierarchical'|trans }}: {{ macros.badge_yes_no(type.isHierarchical) }}</li>
-            <li class="list-group-item d-flex justify-content-between align-items-center">{{ 'numberOfFields'|trans }}: <span class="badge badge-info">{{ notInternalFieldsCount }}</span></li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">{{ 'numberOfFields'|trans }}: <span class="badge badge-info">{{ type.fields|length }}</span></li>
         </ul>
         {% if type.isInternal == false %}
             <div class="card-footer py-0 pr-0">
