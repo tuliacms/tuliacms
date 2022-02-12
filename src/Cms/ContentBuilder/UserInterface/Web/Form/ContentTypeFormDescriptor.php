@@ -81,6 +81,9 @@ class ContentTypeFormDescriptor
         foreach ($fields as $field) {
             if ($field->isType('repeatable')) {
                 $subfieldsGroups = array_values($rawData[$field->getCode()]);
+                usort($subfieldsGroups, function (array $a, array $b) {
+                    return $a['__order'] <=> $b['__order'];
+                });
 
                 foreach ($subfieldsGroups as $groupKey => $subfields) {
                     if ($uniquePrefix) {

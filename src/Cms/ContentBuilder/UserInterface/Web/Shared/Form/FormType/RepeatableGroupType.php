@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\ContentBuilder\UserInterface\Web\Shared\Form\FormType;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -30,6 +31,12 @@ class RepeatableGroupType extends AbstractType
         foreach ($options['fields'] as $field) {
             $this->symfonyFieldBuilder->buildFieldAndAddToBuilder($field, $builder, $options['content_type']);
         }
+
+        $builder->add('__order', HiddenType::class, [
+            'attr' => [
+                'class' => 'repeatable-element-order-store',
+            ],
+        ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
