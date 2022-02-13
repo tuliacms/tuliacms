@@ -17,7 +17,7 @@ use Tulia\Cms\Menu\Domain\WriteModel\Exception\MenuNotFoundException;
 use Tulia\Cms\Menu\Domain\WriteModel\Model\Item;
 use Tulia\Cms\Menu\Domain\WriteModel\Model\Menu;
 use Tulia\Cms\Menu\Ports\Infrastructure\Persistence\WriteModel\MenuStorageInterface;
-use Tulia\Cms\Metadata\Domain\WriteModel\MetadataRepository;
+use Tulia\Cms\Attributes\Domain\WriteModel\AttributesRepository;
 use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 
@@ -34,7 +34,7 @@ class MenuRepository
 
     private CurrentWebsiteInterface $currentWebsite;
 
-    private MetadataRepository $metadataRepository;
+    private AttributesRepository $metadataRepository;
 
     private MenuActionsChainInterface $actionsChain;
 
@@ -43,7 +43,7 @@ class MenuRepository
         UuidGeneratorInterface $uuidGenerator,
         EventDispatcherInterface $eventDispatcher,
         CurrentWebsiteInterface $currentWebsite,
-        MetadataRepository $metadataRepository,
+        AttributesRepository $metadataRepository,
         MenuActionsChainInterface $actionsChain
     ) {
         $this->storage = $storage;
@@ -217,7 +217,7 @@ class MenuRepository
                 'locale' => $item->getLocale(),
                 'name' => $item->getName(),
                 'visibility' => $item->getVisibility(),
-                'metadata' => $item->getAllMetadata(),
+                'metadata' => $item->getAttributes(),
             ];
         }
 

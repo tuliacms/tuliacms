@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\TuliaEditor\Infrastructure\Framework\Twig\Extension;
 
-use Tulia\Cms\Metadata\Ports\Domain\WriteModel\MetadataAwareInterface;
+use Tulia\Cms\Attributes\Domain\WriteModel\Model\AttributesAwareInterface;
 use Tulia\Component\Templating\EngineInterface;
 use Tulia\Component\Templating\View;
 use Twig\Extension\AbstractExtension;
@@ -25,7 +25,7 @@ class TuliaEditorExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('tulia_editor', function (string $name, ?string $content, MetadataAwareInterface $entity, array $params = []) {
+            new TwigFunction('tulia_editor', function (string $name, ?string $content, AttributesAwareInterface $entity, array $params = []) {
                 if (isset($params['id']) === false) {
                     $params['id'] = uniqid('', true);
                 }

@@ -7,7 +7,7 @@ namespace Tulia\Cms\Taxonomy\Infrastructure\Persistence\Domain\ReadModel\Finder\
 use Doctrine\DBAL\Connection;
 use Exception;
 use PDO;
-use Tulia\Cms\Metadata\Domain\ReadModel\MetadataFinder;
+use Tulia\Cms\Attributes\Domain\ReadModel\AttributesFinder;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Exception\QueryException;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
@@ -20,9 +20,9 @@ use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Term as WriteModelTerm;
  */
 class DbalQuery extends AbstractDbalQuery
 {
-    private MetadataFinder $metadataFinder;
+    private AttributesFinder $metadataFinder;
 
-    public function __construct(QueryBuilder $queryBuilder, MetadataFinder $metadataFinder)
+    public function __construct(QueryBuilder $queryBuilder, AttributesFinder $metadataFinder)
     {
         parent::__construct($queryBuilder);
 
@@ -164,7 +164,7 @@ class DbalQuery extends AbstractDbalQuery
             $result = $this->sortHierarchical($result, WriteModelTerm::ROOT_LEVEL + 1);
         }
 
-        $metadata = $this->metadataFinder->findAllAggregated('node', array_column($result, 'id'));
+        $metadata = $this->metadataFinder->findAllAggregated('term', array_column($result, 'id'));
 
         try {
             foreach ($result as $row) {

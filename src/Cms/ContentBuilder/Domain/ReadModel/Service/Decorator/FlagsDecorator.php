@@ -27,6 +27,8 @@ class FlagsDecorator implements ContentTypeDecoratorInterface
 
     public function decorate(ContentType $contentType): void
     {
+        // @todo How to transform Flags to more intuitive settings of node?
+        return;
         if ($contentType->isType('node') === false) {
             return;
         }

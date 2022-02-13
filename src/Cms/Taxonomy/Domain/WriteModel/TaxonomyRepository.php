@@ -6,7 +6,7 @@ namespace Tulia\Cms\Taxonomy\Domain\WriteModel;
 
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistry;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\ContentType;
-use Tulia\Cms\Metadata\Domain\WriteModel\MetadataRepository;
+use Tulia\Cms\Attributes\Domain\WriteModel\AttributesRepository;
 use Tulia\Cms\Platform\Infrastructure\Bus\Event\EventBusInterface;
 use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\ActionsChain\TaxonomyActionsChainInterface;
@@ -31,7 +31,7 @@ class TaxonomyRepository
 
     private CurrentWebsiteInterface $currentWebsite;
 
-    private MetadataRepository $metadataRepository;
+    private AttributesRepository $metadataRepository;
 
     private UuidGeneratorInterface $uuidGenerator;
 
@@ -42,7 +42,7 @@ class TaxonomyRepository
     public function __construct(
         TermWriteStorageInterface $storage,
         CurrentWebsiteInterface $currentWebsite,
-        MetadataRepository $metadataRepository,
+        AttributesRepository $metadataRepository,
         UuidGeneratorInterface $uuidGenerator,
         EventBusInterface $eventBus,
         TaxonomyActionsChainInterface $actionsChain,

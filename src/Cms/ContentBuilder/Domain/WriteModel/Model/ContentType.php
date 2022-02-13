@@ -31,7 +31,7 @@ class ContentType extends AbstractContentType
             $groups = [];
 
             foreach ($section['groups'] as $groupName => $group) {
-                $groups[$groupName] = new FieldsGroup($group['code'], $group['name'], (bool) $group['active'], (string) $group['interior'], $group['fields']);
+                $groups[$groupName] = new FieldsGroup($group['code'], $group['name'], $group['fields']);
             }
 
             $layout->addSection(new Section($sectionCode, $groups));

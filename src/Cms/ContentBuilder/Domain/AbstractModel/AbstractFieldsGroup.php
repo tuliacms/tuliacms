@@ -11,16 +11,12 @@ class AbstractFieldsGroup
 {
     protected string $code;
     protected string $name;
-    protected bool $active;
-    protected string $interior;
     protected array $fields;
 
-    public function __construct(string $code, string $name, bool $active, string $interior, array $fields)
+    public function __construct(string $code, string $name, array $fields)
     {
         $this->code = $code;
         $this->name = $name;
-        $this->active = $active;
-        $this->interior = $interior;
         $this->fields = $fields;
     }
 
@@ -52,25 +48,5 @@ class AbstractFieldsGroup
     public function setName(string $name): void
     {
         $this->name = $name;
-    }
-
-    public function isActive(): bool
-    {
-        return $this->active;
-    }
-
-    public function setActive(bool $active): void
-    {
-        $this->active = $active;
-    }
-
-    public function getInterior(): string
-    {
-        return $this->interior;
-    }
-
-    public function setInterior(string $interior): void
-    {
-        $this->interior = $interior;
     }
 }

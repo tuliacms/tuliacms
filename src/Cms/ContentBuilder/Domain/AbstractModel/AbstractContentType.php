@@ -162,6 +162,40 @@ class AbstractContentType
     }
 
     /**
+     * @return AbstractField[]
+     */
+    public function flattenFields(): array
+    {
+        return $this->flattenFieldsRecursive($this->fields);
+    }
+
+    /**
+     * @param AbstractField[] $fields
+     * @return AbstractField[]
+     */
+    private function flattenFieldsRecursive(array $fields, string $prefix = ''): array
+    {
+        $result = [];
+
+        foreach ($fields as $field) {
+            if ($field->isType('repeatable')) {
+                $flatenedSubfields = $this->flattenFieldsRecursive(
+                    $field->getChildren(),
+                    sprintf('%s%s.', $prefix, $field->getCode())
+                );
+
+                foreach ($flatenedSubfields as $code => $subfield) {
+                    $result[$code] = $subfield;
+                }
+            } else {
+                $result[$prefix . $field->getCode()] = $field;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
      * @throws CannotOverwriteInternalFieldException
      */
     protected function validateField(AbstractField $field): void

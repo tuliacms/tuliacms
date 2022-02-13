@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\ContentBlock\Domain\Renderer;
 
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistry;
+use Tulia\Cms\Attributes\Domain\ReadModel\Model\AttributeValue;
 use Tulia\Component\Templating\EngineInterface;
 use Tulia\Component\Templating\View;
 
@@ -49,7 +50,7 @@ class Renderer
         $fields = ['__block' => $block];
 
         foreach ($block['fields'] as $name => $values) {
-            $fields[$name] = new FieldValue($values);
+            $fields[$name] = new AttributeValue($values);
         }
 
         $views = array_map(static function (string $path) use ($block) {

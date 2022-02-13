@@ -68,11 +68,27 @@ class ContentTypeRegistry
     /**
      * @return ContentType[]
      */
-    public function all(): array
+    public function all(): iterable
     {
         $this->fetch();
 
-        return $this->contentTypes;
+        foreach ($this->contentTypes as $contentType) {
+            yield $contentType;
+        }
+    }
+
+    /**
+     * @return ContentType[]
+     */
+    public function allByType(string $type): iterable
+    {
+        $this->fetch();
+
+        foreach ($this->contentTypes as $contentType) {
+            if ($contentType->getType() === $type) {
+                yield $contentType;
+            }
+        }
     }
 
     private function fetch(): void

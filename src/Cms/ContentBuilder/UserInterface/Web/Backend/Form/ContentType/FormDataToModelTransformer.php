@@ -132,8 +132,6 @@ class FormDataToModelTransformer
                 $groups[] = new FieldsGroup(
                     $group['code'],
                     $group['name']['value'],
-                    false,
-                    'default',
                     $fields
                 );
             }

@@ -116,8 +116,6 @@ class ContentTypeRepository
                 $fieldsGroups[] = [
                     'code' => $fieldsGroup->getCode(),
                     'name' => $fieldsGroup->getName(),
-                    'active' => $fieldsGroup->isActive(),
-                    'interior' => $fieldsGroup->getInterior(),
                     'fields' => $fieldsGroup->getFields(),
                 ];
             }

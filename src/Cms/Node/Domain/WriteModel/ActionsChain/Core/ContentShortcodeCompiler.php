@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Domain\WriteModel\ActionsChain\Core;
 
-use Tulia\Cms\Metadata\Domain\WriteModel\Model\Attribute;
+use Tulia\Cms\Attributes\Domain\WriteModel\Model\Attribute;
 use Tulia\Cms\Node\Domain\WriteModel\ActionsChain\NodeActionInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Model\Node;
 use Tulia\Component\Shortcode\ProcessorInterface;
@@ -51,7 +51,7 @@ class ContentShortcodeCompiler implements NodeActionInterface
                     $attribute->produceCodeWithModificator('compiled'),
                     $this->processor->process($attribute->getValue()),
                     $uri,
-                    [],
+                    ['renderable'],
                     $attribute->isMultilingual(),
                     $attribute->hasNonscalarValue()
                 )

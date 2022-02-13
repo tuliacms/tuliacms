@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\User\Infrastructure\Persistence\Domain;
 
-use Tulia\Cms\Metadata\Domain\WriteModel\MetadataRepository;
+use Tulia\Cms\Attributes\Domain\WriteModel\AttributesRepository;
 use Tulia\Cms\Platform\Infrastructure\DataManipulation\Hydrator\HydratorInterface;
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 use Tulia\Cms\User\Domain\Aggregate\User;
@@ -21,13 +21,13 @@ class DbalRepository implements RepositoryInterface
     protected ConnectionInterface $connection;
     protected DbalPersister $persister;
     protected HydratorInterface $hydrator;
-    protected MetadataRepository $metadataRepository;
+    protected AttributesRepository $metadataRepository;
 
     public function __construct(
         ConnectionInterface $connection,
         DbalPersister $persister,
         HydratorInterface $hydrator,
-        MetadataRepository $metadataRepository
+        AttributesRepository $metadataRepository
     ) {
         $this->connection = $connection;
         $this->persister = $persister;

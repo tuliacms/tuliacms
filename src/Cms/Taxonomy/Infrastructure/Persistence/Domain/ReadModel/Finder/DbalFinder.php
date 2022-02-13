@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Taxonomy\Infrastructure\Persistence\Domain\ReadModel\Finder;
 
-use Tulia\Cms\Metadata\Domain\ReadModel\MetadataFinder;
+use Tulia\Cms\Attributes\Domain\ReadModel\AttributesFinder;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\AbstractFinder;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Query\QueryInterface;
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
@@ -18,9 +18,9 @@ class DbalFinder extends AbstractFinder implements TermFinderInterface
 {
     private ConnectionInterface $connection;
 
-    private MetadataFinder $metadataFinder;
+    private AttributesFinder $metadataFinder;
 
-    public function __construct(ConnectionInterface $connection, MetadataFinder $metadataFinder)
+    public function __construct(ConnectionInterface $connection, AttributesFinder $metadataFinder)
     {
         $this->connection = $connection;
         $this->metadataFinder = $metadataFinder;

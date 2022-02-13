@@ -144,7 +144,7 @@ class ArrayToReadModelTransformer
             $sectionObject = new Section($sectionCode);
 
             foreach ($section['groups'] as $groupCode => $group) {
-                $sectionObject->addFieldsGroup(new FieldsGroup($groupCode, $group['name'], (bool) $group['active'], '', array_keys($group['fields'])));
+                $sectionObject->addFieldsGroup(new FieldsGroup($groupCode, $group['name'], array_keys($group['fields'])));
             }
 
             $layoutType->addSection($sectionObject);

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Domain\WriteModel\Model;
 
-use Tulia\Cms\Metadata\Domain\WriteModel\Model\Attribute;
+use Tulia\Cms\Attributes\Domain\WriteModel\Model\Attribute;
 use Tulia\Cms\Node\Domain\WriteModel\Event;
 use Tulia\Cms\Node\Domain\WriteModel\Event\AttributeUpdated;
 use Tulia\Cms\Node\Domain\WriteModel\Model\ValueObject\NodeId;
@@ -146,6 +146,9 @@ class Node extends AggregateRoot
         $this->markAsUpdated();
     }
 
+    /**
+     * @return Attribute[]
+     */
     public function getAttributes(): array
     {
         return $this->attributes;
@@ -175,7 +178,7 @@ class Node extends AggregateRoot
 
     public function getFlags(): array
     {
-        return $this->attributes['flags'] ? $this->attributes['flags']->getValue() : [];
+        return isset($this->attributes['flags']) ? $this->attributes['flags']->getValue() : [];
     }
 
     public function getTitle(): string

@@ -8,7 +8,7 @@ use Doctrine\DBAL\Connection;
 use Exception;
 use PDO;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistry;
-use Tulia\Cms\Metadata\Domain\ReadModel\MetadataFinder;
+use Tulia\Cms\Attributes\Domain\ReadModel\AttributesFinder;
 use Tulia\Cms\Node\Domain\ReadModel\Model\Node;
 use Tulia\Cms\Node\Domain\WriteModel\Model\Enum\TermTypeEnum;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Exception\QueryException;
@@ -22,15 +22,17 @@ use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
  */
 class DbalFinderQuery extends AbstractDbalQuery
 {
-    private MetadataFinder $metadataFinder;
+    private AttributesFinder $metadataFinder;
 
     protected array $joinedTables = [];
+
+    protected array $attributesInfo = [];
 
     private ContentTypeRegistry $contentTypeRegistry;
 
     public function __construct(
         QueryBuilder $queryBuilder,
-        MetadataFinder $metadataFinder,
+        AttributesFinder $metadataFinder,
         ContentTypeRegistry $contentTypeRegistry
     ) {
         parent::__construct($queryBuilder);
@@ -215,27 +217,16 @@ class DbalFinderQuery extends AbstractDbalQuery
         }
 
         $terms = $this->fetchTerms(array_column($result, 'id'));
-        $attributes = $this->metadataFinder->findAllAggregated('node', array_column($result, 'id'));
 
         try {
+            $result = $this->fetchAttributes($result);
+
             foreach ($result as $row) {
                 if (isset($terms[$row['id']][TermTypeEnum::MAIN][0])) {
                     $row['category'] = $terms[$row['id']][TermTypeEnum::MAIN][0];
                 }
 
-                $row['attributes'] = $attributes[$row['id']] ?? [];
-                $row['attributes_info'] = [];
                 $row['flags'] = array_filter(explode(',', (string) $row['flags']));
-
-                foreach ($this->contentTypeRegistry->get($row['type'])->getFields() as $name => $field) {
-                    if ($field->hasFlag('compilable') === false || isset($row['attributes'][$name]) === false) {
-                        continue;
-                    }
-
-                    $row['attributes_info'][$name] = [
-                        'compilable' => true,
-                    ];
-                }
 
                 $collection->append(Node::buildFromArray($row));
             }
@@ -244,6 +235,30 @@ class DbalFinderQuery extends AbstractDbalQuery
         }
 
         return $collection;
+    }
+
+    protected function fetchAttributes(array $nodes): array
+    {
+        $nodesByType = [];
+
+        foreach ($nodes as &$node) {
+            $nodesByType[$node['type']][$node['id']] = &$node;
+        }
+        unset($node);
+
+        foreach ($nodesByType as $groupedNodes) {
+            $attributes = $this->metadataFinder->findAllAggregated(
+                'node',
+                array_column($groupedNodes, 'id')
+            );
+
+            foreach ($groupedNodes as &$node) {
+                $node['attributes'] = $attributes[$node['id']] ?? [];
+            }
+            unset($node);
+        }
+
+        return $nodes;
     }
 
     protected function fetchTerms(array $nodeIdList): array

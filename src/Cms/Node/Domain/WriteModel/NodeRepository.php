@@ -7,7 +7,7 @@ namespace Tulia\Cms\Node\Domain\WriteModel;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistry;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\Field;
 use Tulia\Cms\ContentBuilder\Domain\WriteModel\Exception\ContentTypeNotExistsException;
-use Tulia\Cms\Metadata\Domain\WriteModel\MetadataRepository;
+use Tulia\Cms\Attributes\Domain\WriteModel\AttributesRepository;
 use Tulia\Cms\Node\Domain\WriteModel\ActionsChain\NodeActionsChainInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Event\NodeDeleted;
 use Tulia\Cms\Node\Domain\WriteModel\Event\NodeUpdated;
@@ -28,7 +28,7 @@ class NodeRepository
 
     private NodeWriteStorageInterface $storage;
     private CurrentWebsiteInterface $currentWebsite;
-    private MetadataRepository $metadataRepository;
+    private AttributesRepository $metadataRepository;
     private UuidGeneratorInterface $uuidGenerator;
     private EventBusInterface $eventBus;
     private NodeActionsChainInterface $actionsChain;
@@ -37,7 +37,7 @@ class NodeRepository
     public function __construct(
         NodeWriteStorageInterface $storage,
         CurrentWebsiteInterface $currentWebsite,
-        MetadataRepository $metadataRepository,
+        AttributesRepository $metadataRepository,
         UuidGeneratorInterface $uuidGenerator,
         EventBusInterface $eventBus,
         NodeActionsChainInterface $actionsChain,

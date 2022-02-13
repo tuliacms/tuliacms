@@ -116,8 +116,6 @@ class ArrayToWriteModelTransformer
             $result[$group['code']] = new FieldsGroup(
                 $group['code'],
                 $group['name'],
-                (bool) ($group['active'] ?? 0),
-                (string) ($group['interior'] ?? ''),
                 array_map(static function (array $field) {
                     return $field['code'];
                 }, $group['fields'])

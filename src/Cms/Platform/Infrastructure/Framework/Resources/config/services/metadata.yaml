@@ -3,10 +3,10 @@ services:
         autowire: true
         autoconfigure: true
 
-    Tulia\Cms\Metadata\:
-        resource: '../../../../../../Metadata/**'
+    Tulia\Cms\Attributes\:
+        resource: '../../../../../../Attributes/**'
         exclude:
-            - '../../../../../../Metadata/**/Resources/**'
-            - '../../../../../../Metadata/**/Model/**'
-            - '../../../../../../Metadata/**/*Exception.php'
-            - '../../../../../../Metadata/**/*Trait.php'
+            - '../../../../../../Attributes/**/Resources/**'
+            - '../../../../../../Attributes/**/Model/**'
+            - '../../../../../../Attributes/**/*Exception.php'
+            - '../../../../../../Attributes/**/*Trait.php'

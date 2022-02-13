@@ -14,10 +14,10 @@
     </li>
 {% endmacro %}
 
-{% macro tab_content(id, group, form, contentType) %}
+{% macro tab_content(id, active, group, form, contentType) %}
     {% import relative(_self, '../../_macros/form_render.tpl') as form_render %}
 
-    <div class="tab-pane fade {{ group.active ? 'show active' : '' }}" id="tab-{{ id }}">
+    <div class="tab-pane fade {{ active ? 'show active' : '' }}" id="tab-{{ id }}">
         <div class="container-fluid">
             <div class="row">
                 <div class="col">
@@ -48,7 +48,7 @@
 
     <div class="accordion-section">
         <div
-                class="accordion-section-button {{ group.active ? '' : 'collapsed' }}"
+                class="accordion-section-button collapsed"
                 data-bs-toggle="collapse"
                 data-bs-target="#form-collapse-sidebar-{{ id }}"
         >
@@ -56,8 +56,8 @@
             {{ badge.errors_count(form, group.fields|default([])) }}
         </div>
         <div
-                id="form-collapse-sidebar-{{ id }}"
-                class="accordion-collapse collapse {{ group.active ? 'show' : '' }}"
+            id="form-collapse-sidebar-{{ id }}"
+            class="accordion-collapse collapse"
         >
             <div class="accordion-section-body">
                 {{ form_render.render_fields(form, group.fields, contentType) }}
@@ -167,7 +167,7 @@
         <ul class="nav nav-tabs page-form-tabs" role="tablist">
             {% for id, group in layout.section('main').fieldsGroups %}
                 {{ _self.tab(id, {
-                    active: group.active,
+                    active: loop.index0 == 0,
                     name: group.name|trans,
                     fields: group.fields
                 }, form) }}
@@ -181,7 +181,7 @@
         </ul>
         <div class="tab-content">
             {% for id, group in layout.section('main').fieldsGroups %}
-                {{ _self.tab_content(id, group, form, contentType) }}
+                {{ _self.tab_content(id, loop.index0 == 0, group, form, contentType) }}
             {% endfor %}
 
             {{ _self.tab_rest_content('rest', form) }}

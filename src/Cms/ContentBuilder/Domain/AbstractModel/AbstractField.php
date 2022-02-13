@@ -15,6 +15,7 @@ class AbstractField
         'code' => '',
         'type' => '',
         'name' => '',
+        'taxonomy' => '',
         'is_multilingual' => false,
         'has_nonscalar_value' => false,
         'flags' => [],
@@ -146,5 +147,10 @@ class AbstractField
         }
 
         return [];
+    }
+
+    public function getTaxonomy(): string
+    {
+        return $this->options['taxonomy'];
     }
 }

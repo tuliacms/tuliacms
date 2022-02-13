@@ -6,7 +6,7 @@ namespace Tulia\Cms\User\Query;
 
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Tulia\Cms\Metadata\Domain\ReadModel\MetadataFinder;
+use Tulia\Cms\Attributes\Domain\ReadModel\AttributesFinder;
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 use Tulia\Cms\User\Query\Model\Collection;
 use Tulia\Cms\User\Query\Model\User;
@@ -30,9 +30,9 @@ class Finder implements FinderInterface
     ];
     protected ?Query $query = null;
     protected EventDispatcherInterface $eventDispatcher;
-    protected MetadataFinder $metadataFinder;
+    protected AttributesFinder $metadataFinder;
 
-    public function __construct(ConnectionInterface $connection, MetadataFinder $metadataFinder, array $params)
+    public function __construct(ConnectionInterface $connection, AttributesFinder $metadataFinder, array $params)
     {
         $this->connection = $connection;
         $this->metadataFinder = $metadataFinder;

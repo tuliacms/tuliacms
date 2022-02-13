@@ -11,10 +11,7 @@
 <div class="cbb-block-type-edit-panel">
     {% for id, group in layout.section('main').fieldsGroups %}
         {% for field in group.fields %}
-            {% set fieldType = contentType.field(field) %}
-            {% if fieldType.parent == null %}
-                {{ form_render.form_row(form, field, contentType) }}
-            {% endif %}
+            {{ form_render.form_row(form, field, contentType) }}
         {% endfor %}
     {% endfor %}
 </div>

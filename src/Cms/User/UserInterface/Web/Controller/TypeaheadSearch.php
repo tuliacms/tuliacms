@@ -42,8 +42,8 @@ class TypeaheadSearch extends TypeaheadFormTypeSearch
         {
             $username = $row->getUsername();
 
-            if ($row->meta(UserMetadataEnum::NAME)) {
-                $username = $row->meta(UserMetadataEnum::NAME) . " ({$username})";
+            if ($row->attribute(UserMetadataEnum::NAME)) {
+                $username = $row->attribute(UserMetadataEnum::NAME) . " ({$username})";
             }
 
             $result[] = ['username' => $username];

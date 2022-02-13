@@ -8,7 +8,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\ContentType;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\Field;
-use Tulia\Cms\Metadata\Domain\WriteModel\Model\Attribute;
+use Tulia\Cms\Attributes\Domain\WriteModel\Model\Attribute;
 
 /**
  * @author Adam Banaszkiewicz

@@ -8,15 +8,15 @@ use DateTime;
 use DateTimeImmutable;
 use Exception;
 use InvalidArgumentException;
-use Tulia\Cms\Metadata\Domain\ReadModel\MagickMetadataTrait;
-use Tulia\Cms\Metadata\Ports\Domain\WriteModel\MetadataAwareInterface;
+use Tulia\Cms\Attributes\Domain\ReadModel\MagickAttributesTrait;
+use Tulia\Cms\Attributes\Domain\WriteModel\Model\AttributesAwareInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class File implements MetadataAwareInterface
+class File implements AttributesAwareInterface
 {
-    use MagickMetadataTrait;
+    use MagickAttributesTrait;
 
     protected string $id;
 
@@ -59,7 +59,7 @@ class File implements MetadataAwareInterface
         $file->setPath($data['path'] ?? '');
         $file->setCreatedAt($data['created_at']);
         $file->setUpdatedAt($data['updated_at']);
-        $file->replaceMetadata($data['metadata'] ?? []);
+        $file->replaceAttributes($data['metadata'] ?? []);
 
         return $file;
     }

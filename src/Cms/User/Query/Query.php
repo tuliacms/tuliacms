@@ -6,7 +6,7 @@ namespace Tulia\Cms\User\Query;
 
 use Exception;
 use PDO;
-use Tulia\Cms\Metadata\Domain\ReadModel\MetadataFinder;
+use Tulia\Cms\Attributes\Domain\ReadModel\AttributesFinder;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Connection;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
 use Tulia\Cms\User\Infrastructure\Cms\Metadata\UserMetadataEnum;
@@ -20,9 +20,9 @@ use Tulia\Cms\User\Query\Exception\QueryException;
 class Query
 {
     protected QueryBuilder $queryBuilder;
-    protected MetadataFinder $metadataFinder;
+    protected AttributesFinder $metadataFinder;
 
-    public function __construct(QueryBuilder $queryBuilder, MetadataFinder $metadataFinder)
+    public function __construct(QueryBuilder $queryBuilder, AttributesFinder $metadataFinder)
     {
         $this->queryBuilder = $queryBuilder;
         $this->metadataFinder = $metadataFinder;

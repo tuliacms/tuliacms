@@ -5,15 +5,15 @@ declare(strict_types=1);
 namespace Tulia\Cms\Menu\Domain\ReadModel\Model;
 
 use InvalidArgumentException;
-use Tulia\Cms\Metadata\Domain\ReadModel\MagickMetadataTrait;
-use Tulia\Cms\Metadata\Ports\Domain\WriteModel\MetadataAwareInterface;
+use Tulia\Cms\Attributes\Domain\ReadModel\MagickAttributesTrait;
+use Tulia\Cms\Attributes\Domain\WriteModel\Model\AttributesAwareInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class Item implements MetadataAwareInterface
+class Item implements AttributesAwareInterface
 {
-    use MagickMetadataTrait;
+    use MagickAttributesTrait;
 
     protected $id;
     protected $menuId;
@@ -50,7 +50,7 @@ class Item implements MetadataAwareInterface
         $item->setVisibility((int) ($data['visibility'] ?? 1));
         $item->setTranslated((bool) ($data['translated'] ?? true));
 
-        $item->metadata = $data['metadata'] ?? [];
+        $item->attributes = $data['metadata'] ?? [];
 
         return $item;
     }
