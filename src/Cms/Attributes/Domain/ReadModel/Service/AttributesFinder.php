@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Attributes\Domain\ReadModel;
+namespace Tulia\Cms\Attributes\Domain\ReadModel\Service;
 
 use Tulia\Cms\Attributes\Domain\ReadModel\Model\AttributeValue;
 use Tulia\Cms\Attributes\Domain\WriteModel\Service\UriToArrayTransformer;
@@ -14,16 +14,19 @@ class AttributesFinder
 {
     private AttributeReadStorageInterface $finder;
     private UriToArrayTransformer $uriToArrayTransformer;
+    private AttributesValueRenderer $attributesValueRenderer;
 
     public function __construct(
         AttributeReadStorageInterface $finder,
-        UriToArrayTransformer $uriToArrayTransformer
+        UriToArrayTransformer $uriToArrayTransformer,
+        AttributesValueRenderer $attributesValueRenderer
     ) {
         $this->finder = $finder;
         $this->uriToArrayTransformer = $uriToArrayTransformer;
+        $this->attributesValueRenderer = $attributesValueRenderer;
     }
 
-    public function findAllAggregated(string $type, array $ownerIdList): array
+    public function findAllAggregated(string $type, string $scope, array $ownerIdList): array
     {
         $source = $this->finder->findAll($type, $ownerIdList);
         $result = [];
@@ -46,6 +49,7 @@ class AttributesFinder
                 $attributes[$uri] = $value;
             }
 
+            $attributes = $this->attributesValueRenderer->renderValues($attributes, $type, $scope);
             $result[$ownerId] = $this->uriToArrayTransformer->transform($attributes);
 
             foreach ($result[$ownerId] as $key => $value) {
@@ -56,8 +60,8 @@ class AttributesFinder
         return $result;
     }
 
-    public function findAll(string $type, string $ownerId): array
+    public function findAll(string $type, string $scope, string $ownerId): array
     {
-        return $this->findAllAggregated($type, [$ownerId])[$ownerId] ?? [];
+        return $this->findAllAggregated($type, $scope, [$ownerId])[$ownerId] ?? [];
     }
 }

@@ -6,9 +6,9 @@ namespace Tulia\Cms\Menu\Infrastructure\Persistence\Domain\ReadModel\Finder\Quer
 
 use Exception;
 use PDO;
-use Tulia\Cms\Menu\Domain\ReadModel\Model\Menu;
+use Tulia\Cms\Attributes\Domain\ReadModel\Service\AttributesFinder;
 use Tulia\Cms\Menu\Domain\Metadata\Item\Enum\MetadataEnum;
-use Tulia\Cms\Attributes\Domain\ReadModel\AttributesFinder;
+use Tulia\Cms\Menu\Domain\ReadModel\Model\Menu;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Exception\QueryException;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
@@ -59,7 +59,7 @@ class DbalQuery extends AbstractDbalQuery
         ];
     }
 
-    public function query(array $criteria): Collection
+    public function query(array $criteria, string $scope): Collection
     {
         $criteria = array_merge($this->getBaseQueryArray(), $criteria);
         $criteria = $this->filterCriteria($criteria);
@@ -72,10 +72,10 @@ class DbalQuery extends AbstractDbalQuery
 
         $this->callPlugins($criteria);
 
-        return $this->createCollection($this->queryBuilder->execute()->fetchAllAssociative(), $criteria);
+        return $this->createCollection($this->queryBuilder->execute()->fetchAllAssociative(), $scope, $criteria);
     }
 
-    protected function createCollection(array $result, array $criteria): Collection
+    protected function createCollection(array $result, string $scope, array $criteria): Collection
     {
         $collection = new Collection();
 
@@ -88,7 +88,7 @@ class DbalQuery extends AbstractDbalQuery
 
         if ($criteria['fetch_items']) {
             $items = $this->fetchMenuItems($criteria);
-            $metadata = $this->metadataFinder->findAllAggregated(MetadataEnum::MENUITEM_GROUP, array_column($items, 'id'));
+            $metadata = $this->metadataFinder->findAllAggregated(MetadataEnum::MENUITEM_GROUP, $scope, array_column($items, 'id'));
         }
 
         try {

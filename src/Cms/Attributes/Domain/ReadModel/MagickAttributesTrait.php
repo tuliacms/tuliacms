@@ -10,7 +10,7 @@ use Tulia\Cms\Attributes\Domain\ReadModel\Model\AttributeValue;
  * @property array $attributes
  * @author Adam Banaszkiewicz
  */
-trait MagickAttributesTrait /* implements ArrayAccess */
+trait MagickAttributesTrait
 {
     protected array $attributes = [];
 
@@ -69,6 +69,14 @@ trait MagickAttributesTrait /* implements ArrayAccess */
     public function replaceAttributes(array $attributes): void
     {
         $this->attributes = $attributes;
+    }
+
+    /**
+     * @param AttributeValue[] $attributes
+     */
+    public function mergeAttributes(array $attributes): void
+    {
+        $this->attributes += $attributes;
     }
 
     public function offsetExists($offset): bool

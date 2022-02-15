@@ -6,12 +6,13 @@ namespace Tulia\Cms\Node\Domain\ReadModel\Model;
 
 use InvalidArgumentException;
 use Tulia\Cms\Attributes\Domain\ReadModel\MagickAttributesTrait;
+use Tulia\Cms\Attributes\Domain\ReadModel\Model\AttributesAwareInterface;
 use Tulia\Cms\Platform\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class Node implements \ArrayAccess
+class Node implements AttributesAwareInterface
 {
     use MagickAttributesTrait;
 

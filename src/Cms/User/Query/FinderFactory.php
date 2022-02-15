@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\User\Query;
 
 use Psr\EventDispatcher\EventDispatcherInterface;
-use Tulia\Cms\Attributes\Domain\ReadModel\AttributesFinder;
+use Tulia\Cms\Attributes\Domain\ReadModel\Service\AttributesFinder;
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 use Tulia\Cms\User\Query\Model\Collection;
 

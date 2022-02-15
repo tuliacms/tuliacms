@@ -16,7 +16,7 @@ interface QueryInterface
 
     public function getBaseQueryArray(): array;
 
-    public function query(array $criteria): Collection;
+    public function query(array $criteria, string $scope): Collection;
 
     public function countFoundRows(): int;
 

@@ -7,7 +7,7 @@ namespace Tulia\Cms\Taxonomy\Infrastructure\Persistence\Domain\ReadModel\Finder\
 use Doctrine\DBAL\Connection;
 use Exception;
 use PDO;
-use Tulia\Cms\Attributes\Domain\ReadModel\AttributesFinder;
+use Tulia\Cms\Attributes\Domain\ReadModel\Service\AttributesFinder;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Exception\QueryException;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
@@ -122,7 +122,7 @@ class DbalQuery extends AbstractDbalQuery
         ];
     }
 
-    public function query(array $criteria): Collection
+    public function query(array $criteria, string $scope): Collection
     {
         $criteria = array_merge($this->getBaseQueryArray(), $criteria);
         $criteria = $this->filterCriteria($criteria);
@@ -144,10 +144,10 @@ class DbalQuery extends AbstractDbalQuery
 
         $this->callPlugins($criteria);
 
-        return $this->createCollection($this->queryBuilder->execute()->fetchAllAssociative(), $criteria);
+        return $this->createCollection($this->queryBuilder->execute()->fetchAllAssociative(), $criteria, $scope);
     }
 
-    protected function createCollection(array $result, array $criteria): Collection
+    protected function createCollection(array $result, array $criteria, string $scope): Collection
     {
         $collection = new Collection();
 
@@ -164,7 +164,7 @@ class DbalQuery extends AbstractDbalQuery
             $result = $this->sortHierarchical($result, WriteModelTerm::ROOT_LEVEL + 1);
         }
 
-        $metadata = $this->metadataFinder->findAllAggregated('term', array_column($result, 'id'));
+        $metadata = $this->metadataFinder->findAllAggregated('term', $scope, array_column($result, 'id'));
 
         try {
             foreach ($result as $row) {

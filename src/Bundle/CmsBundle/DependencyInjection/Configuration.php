@@ -24,6 +24,7 @@ class Configuration implements ConfigurationInterface
         $this->registerOptionsConfiguration($root);
         $this->registerContentBuildingConfiguration($root);
         $this->registerContentBlockConfiguration($root);
+        $this->registerAttributesConfiguration($root);
 
         return $treeBuilder;
     }
@@ -48,6 +49,30 @@ class Configuration implements ConfigurationInterface
                                                 ->ifNotInArray(['scalar', 'boolean', 'number', 'array'])
                                                 ->thenInvalid('Invalid option type %s. Allowed: scalar, array.')
                                             ->end()
+                                        ->end()
+                                    ->end()
+                                ->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
+            ->end()
+        ;
+    }
+
+    private function registerAttributesConfiguration(NodeDefinition $root): void
+    {
+        $root
+            ->children()
+                ->arrayNode('attributes')
+                    ->children()
+                        ->arrayNode('finder')
+                            ->children()
+                                ->arrayNode('types')
+                                    ->arrayPrototype()
+                                        ->addDefaultsIfNotSet()
+                                        ->children()
+                                            ->arrayNode('scopes')->scalarPrototype()->defaultValue([])->end()->end()
                                         ->end()
                                     ->end()
                                 ->end()

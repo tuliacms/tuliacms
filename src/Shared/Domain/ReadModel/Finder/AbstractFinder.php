@@ -54,7 +54,7 @@ abstract class AbstractFinder
         $query = $this->createQuery();
         $query->setPluginsRegistry($this->pluginRegistry);
 
-        $result = $query->query($criteria);
+        $result = $query->query($criteria, $scope);
 
         return $this->afterQuery($result, $criteria, $scope);
     }

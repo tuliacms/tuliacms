@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Attributes\Domain\ReadModel;
+namespace Tulia\Cms\Attributes\Domain\ReadModel\Service;
 
 /**
  * @author Adam Banaszkiewicz

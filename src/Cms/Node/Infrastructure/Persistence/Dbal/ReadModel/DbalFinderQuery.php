@@ -7,8 +7,7 @@ namespace Tulia\Cms\Node\Infrastructure\Persistence\Dbal\ReadModel;
 use Doctrine\DBAL\Connection;
 use Exception;
 use PDO;
-use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistry;
-use Tulia\Cms\Attributes\Domain\ReadModel\AttributesFinder;
+use Tulia\Cms\Attributes\Domain\ReadModel\Service\AttributesFinder;
 use Tulia\Cms\Node\Domain\ReadModel\Model\Node;
 use Tulia\Cms\Node\Domain\WriteModel\Model\Enum\TermTypeEnum;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Exception\QueryException;
@@ -22,23 +21,16 @@ use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
  */
 class DbalFinderQuery extends AbstractDbalQuery
 {
-    private AttributesFinder $metadataFinder;
-
+    private AttributesFinder $attributesFinder;
     protected array $joinedTables = [];
-
-    protected array $attributesInfo = [];
-
-    private ContentTypeRegistry $contentTypeRegistry;
 
     public function __construct(
         QueryBuilder $queryBuilder,
-        AttributesFinder $metadataFinder,
-        ContentTypeRegistry $contentTypeRegistry
+        AttributesFinder $attributesFinder
     ) {
         parent::__construct($queryBuilder);
 
-        $this->metadataFinder = $metadataFinder;
-        $this->contentTypeRegistry = $contentTypeRegistry;
+        $this->attributesFinder = $attributesFinder;
     }
 
     public function getBaseQueryArray(): array
@@ -181,7 +173,7 @@ class DbalFinderQuery extends AbstractDbalQuery
         ];
     }
 
-    public function query(array $criteria): Collection
+    public function query(array $criteria, string $scope): Collection
     {
         $criteria = array_merge($this->getBaseQueryArray(), $criteria);
         $criteria = $this->filterCriteria($criteria);
@@ -205,10 +197,10 @@ class DbalFinderQuery extends AbstractDbalQuery
 
         $this->callPlugins($criteria);
 
-        return $this->createCollection($this->queryBuilder->execute()->fetchAllAssociative());
+        return $this->createCollection($this->queryBuilder->execute()->fetchAllAssociative(), $scope);
     }
 
-    protected function createCollection(array $result): Collection
+    protected function createCollection(array $result, string $scope): Collection
     {
         $collection = new Collection();
 
@@ -219,7 +211,7 @@ class DbalFinderQuery extends AbstractDbalQuery
         $terms = $this->fetchTerms(array_column($result, 'id'));
 
         try {
-            $result = $this->fetchAttributes($result);
+            $result = $this->fetchAttributes($result, $scope);
 
             foreach ($result as $row) {
                 if (isset($terms[$row['id']][TermTypeEnum::MAIN][0])) {
@@ -237,7 +229,7 @@ class DbalFinderQuery extends AbstractDbalQuery
         return $collection;
     }
 
-    protected function fetchAttributes(array $nodes): array
+    protected function fetchAttributes(array $nodes, string $scope): array
     {
         $nodesByType = [];
 
@@ -247,8 +239,9 @@ class DbalFinderQuery extends AbstractDbalQuery
         unset($node);
 
         foreach ($nodesByType as $groupedNodes) {
-            $attributes = $this->metadataFinder->findAllAggregated(
+            $attributes = $this->attributesFinder->findAllAggregated(
                 'node',
+                $scope,
                 array_column($groupedNodes, 'id')
             );
 
