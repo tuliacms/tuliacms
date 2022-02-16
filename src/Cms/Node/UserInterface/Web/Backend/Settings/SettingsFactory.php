@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\UserInterface\Web\Backend\Settings;
 
-use Tulia\Cms\ContentBuilder\Domain\ContentType\Service\ContentTypeRegistry;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistry;
 use Tulia\Cms\Settings\Ports\Domain\Group\AbstractSettingsGroupFactory;
 
 /**

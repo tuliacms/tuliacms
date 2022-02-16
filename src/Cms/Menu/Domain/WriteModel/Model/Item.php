@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Menu\Domain\WriteModel\Model;
 
+use Tulia\Cms\Attributes\Domain\WriteModel\MagickAttributesTrait;
+use Tulia\Cms\Attributes\Domain\WriteModel\Model\AttributesAwareInterface;
 use Tulia\Cms\Menu\Domain\WriteModel\Exception\ParentItemReccurencyException;
-use Tulia\Cms\Metadata\Domain\WriteModel\MagickMetadataTrait;
-use Tulia\Cms\Metadata\Ports\Domain\WriteModel\MetadataAwareInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class Item implements MetadataAwareInterface
+class Item implements AttributesAwareInterface
 {
-    use MagickMetadataTrait;
+    use MagickAttributesTrait;
 
     public const ROOT_ID = '00000000-0000-0000-0000-000000000000';
     public const ROOT_LEVEL = 0;
@@ -72,7 +72,7 @@ class Item implements MetadataAwareInterface
         $item->locale = $data['locale'];
         $item->translated = (bool) ($data['translated'] ?? false);
         $item->visibility = (bool) ($data['visibility'] ?? 1);
-        $item->replaceMetadata($data['metadata'] ?? []);
+        $item->replaceAttributes($data['metadata'] ?? []);
 
         return $item;
     }

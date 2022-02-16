@@ -6,15 +6,15 @@ namespace Tulia\Cms\User\Query;
 
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Tulia\Cms\Metadata\Domain\ReadModel\MetadataFinder;
+use Tulia\Cms\Attributes\Domain\ReadModel\Service\AttributesFinder;
+use Tulia\Cms\Platform\Shared\Pagination\Paginator;
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
-use Tulia\Cms\User\Query\Model\Collection;
-use Tulia\Cms\User\Query\Model\User;
 use Tulia\Cms\User\Query\Event\QueryFilterEvent;
 use Tulia\Cms\User\Query\Event\QueryPrepareEvent;
 use Tulia\Cms\User\Query\Exception\MultipleFetchException;
 use Tulia\Cms\User\Query\Exception\QueryNotFetchedException;
-use Tulia\Cms\Platform\Shared\Pagination\Paginator;
+use Tulia\Cms\User\Query\Model\Collection;
+use Tulia\Cms\User\Query\Model\User;
 
 /**
  * @author Adam Banaszkiewicz
@@ -30,9 +30,9 @@ class Finder implements FinderInterface
     ];
     protected ?Query $query = null;
     protected EventDispatcherInterface $eventDispatcher;
-    protected MetadataFinder $metadataFinder;
+    protected AttributesFinder $metadataFinder;
 
-    public function __construct(ConnectionInterface $connection, MetadataFinder $metadataFinder, array $params)
+    public function __construct(ConnectionInterface $connection, AttributesFinder $metadataFinder, array $params)
     {
         $this->connection = $connection;
         $this->metadataFinder = $metadataFinder;
@@ -89,7 +89,7 @@ class Finder implements FinderInterface
     public function fetch(): void
     {
         $this->prepareFetch();
-        $this->fetchData['result'] = $this->query->query($this->criteria);
+        $this->fetchData['result'] = $this->query->query($this->criteria, $this->params['scope']);
         $this->afterQuery();
     }
 
@@ -99,7 +99,7 @@ class Finder implements FinderInterface
     public function fetchRaw(): void
     {
         $this->prepareFetch();
-        $this->fetchData['result'] = $this->query->queryRaw($this->criteria);
+        $this->fetchData['result'] = $this->query->queryRaw($this->criteria, $this->params['scope']);
         $this->afterQuery();
     }
 

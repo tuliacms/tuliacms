@@ -7,8 +7,7 @@ namespace Tulia\Cms\Node\Infrastructure\Persistence\Dbal\ReadModel;
 use Doctrine\DBAL\Connection;
 use Exception;
 use PDO;
-use Tulia\Cms\ContentBuilder\Domain\ContentType\Service\ContentTypeRegistry;
-use Tulia\Cms\Metadata\Domain\ReadModel\MetadataFinder;
+use Tulia\Cms\Attributes\Domain\ReadModel\Service\AttributesFinder;
 use Tulia\Cms\Node\Domain\ReadModel\Model\Node;
 use Tulia\Cms\Node\Domain\WriteModel\Model\Enum\TermTypeEnum;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Exception\QueryException;
@@ -16,27 +15,26 @@ use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Query\AbstractDbalQuery;
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
+use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class DbalFinderQuery extends AbstractDbalQuery
 {
-    private MetadataFinder $metadataFinder;
-
+    private AttributesFinder $attributesFinder;
     protected array $joinedTables = [];
-
-    private ContentTypeRegistry $contentTypeRegistry;
+    private CurrentWebsiteInterface $currentWebsite;
 
     public function __construct(
         QueryBuilder $queryBuilder,
-        MetadataFinder $metadataFinder,
-        ContentTypeRegistry $contentTypeRegistry
+        AttributesFinder $attributesFinder,
+        CurrentWebsiteInterface $currentWebsite
     ) {
         parent::__construct($queryBuilder);
 
-        $this->metadataFinder = $metadataFinder;
-        $this->contentTypeRegistry = $contentTypeRegistry;
+        $this->attributesFinder = $attributesFinder;
+        $this->currentWebsite = $currentWebsite;
     }
 
     public function getBaseQueryArray(): array
@@ -164,12 +162,12 @@ class DbalFinderQuery extends AbstractDbalQuery
             /**
              * Locale of the node to fetch.
              */
-            'locale' => 'en_US',
+            'locale' => $this->currentWebsite->getLocale()->getCode(),
             /**
              * Search for rows in the website. Given null search in all websites.
              * @param null|string
              */
-            'website' => null,
+            'website' => $this->currentWebsite->getId(),
             'limit' => null,
             /**
              * Posts with defined flag or flags.
@@ -179,7 +177,7 @@ class DbalFinderQuery extends AbstractDbalQuery
         ];
     }
 
-    public function query(array $criteria): Collection
+    public function query(array $criteria, string $scope): Collection
     {
         $criteria = array_merge($this->getBaseQueryArray(), $criteria);
         $criteria = $this->filterCriteria($criteria);
@@ -203,10 +201,10 @@ class DbalFinderQuery extends AbstractDbalQuery
 
         $this->callPlugins($criteria);
 
-        return $this->createCollection($this->queryBuilder->execute()->fetchAllAssociative());
+        return $this->createCollection($this->queryBuilder->execute()->fetchAllAssociative(), $scope);
     }
 
-    protected function createCollection(array $result): Collection
+    protected function createCollection(array $result, string $scope): Collection
     {
         $collection = new Collection();
 
@@ -215,27 +213,16 @@ class DbalFinderQuery extends AbstractDbalQuery
         }
 
         $terms = $this->fetchTerms(array_column($result, 'id'));
-        $attributes = $this->metadataFinder->findAllAggregated('node', array_column($result, 'id'));
 
         try {
+            $result = $this->fetchAttributes($result, $scope);
+
             foreach ($result as $row) {
                 if (isset($terms[$row['id']][TermTypeEnum::MAIN][0])) {
                     $row['category'] = $terms[$row['id']][TermTypeEnum::MAIN][0];
                 }
 
-                $row['attributes'] = $attributes[$row['id']] ?? [];
-                $row['attributes_info'] = [];
                 $row['flags'] = array_filter(explode(',', (string) $row['flags']));
-
-                foreach ($this->contentTypeRegistry->get($row['type'])->getFields() as $name => $field) {
-                    if ($field->hasFlag('compilable') === false || isset($row['attributes'][$name]) === false) {
-                        continue;
-                    }
-
-                    $row['attributes_info'][$name] = [
-                        'compilable' => true,
-                    ];
-                }
 
                 $collection->append(Node::buildFromArray($row));
             }
@@ -244,6 +231,31 @@ class DbalFinderQuery extends AbstractDbalQuery
         }
 
         return $collection;
+    }
+
+    protected function fetchAttributes(array $nodes, string $scope): array
+    {
+        $nodesByType = [];
+
+        foreach ($nodes as &$node) {
+            $nodesByType[$node['type']][$node['id']] = &$node;
+        }
+        unset($node);
+
+        foreach ($nodesByType as $groupedNodes) {
+            $attributes = $this->attributesFinder->findAllAggregated(
+                'node',
+                $scope,
+                array_column($groupedNodes, 'id')
+            );
+
+            foreach ($groupedNodes as &$node) {
+                $node['attributes'] = $attributes[$node['id']] ?? [];
+            }
+            unset($node);
+        }
+
+        return $nodes;
     }
 
     protected function fetchTerms(array $nodeIdList): array
@@ -288,6 +300,11 @@ class DbalFinderQuery extends AbstractDbalQuery
             ->leftJoin('tm', '#__node_has_flag', 'tnhf', 'tm.id = tnhf.node_id')
             ->addGroupBy('tm.id')
         ;
+
+        if ($criteria['website']) {
+            $this->queryBuilder->andWhere('tm.website_id = :website_id')
+                ->setParameter('website_id', $criteria['website']);
+        }
     }
 
     protected function searchById(array $criteria): void

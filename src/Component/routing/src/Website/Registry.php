@@ -41,7 +41,7 @@ class Registry implements RegistryInterface
     /**
      * {@inheritdoc}
      */
-    public function getIterator()
+    public function getIterator(): \Traversable
     {
         return new \ArrayIterator($this->websites);
     }
@@ -49,7 +49,7 @@ class Registry implements RegistryInterface
     /**
      * {@inheritdoc}
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return isset($this->websites[$offset]);
     }
@@ -65,7 +65,7 @@ class Registry implements RegistryInterface
     /**
      * {@inheritdoc}
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         if ($offset !== null) {
             $this->websites[$offset] = $value;
@@ -77,7 +77,7 @@ class Registry implements RegistryInterface
     /**
      * {@inheritdoc}
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         unset($this->websites[$offset]);
     }

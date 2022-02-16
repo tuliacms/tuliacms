@@ -15,7 +15,10 @@ final class Version20220110213600 extends AbstractMigration
 {
     public function up(Schema $schema) : void
     {
+        $contentTypeId = Uuid::uuid4()->toString();
+
         $this->addSql('INSERT INTO #__content_type (`code`, `type`, `name`, `icon`, `is_routable`, `is_hierarchical`, `layout`, `internal`, `routing_strategy`) VALUES (:code, :type, :name, :icon, :is_routable, :is_hierarchical, :layout, :internal, :routing_strategy)', [
+            'id' => $contentTypeId,
             'code' => 'page',
             'type' => 'node',
             'name' => 'Page',
@@ -76,7 +79,7 @@ final class Version20220110213600 extends AbstractMigration
 
         $this->addField([
             'code' => 'introduction',
-            'node_type' => 'page',
+            'content_type_id' => $contentTypeId,
             'type' => 'textarea',
             'name' => 'Introduction',
             'is_multilingual' => '1',
@@ -94,14 +97,14 @@ final class Version20220110213600 extends AbstractMigration
         ]);
         $this->addField([
             'code' => 'content',
-            'node_type' => 'page',
+            'node_type' => $contentTypeId,
             'type' => 'wysiwyg',
             'name' => 'Content',
             'is_multilingual' => '1',
         ]);
         $this->addField([
             'code' => 'category',
-            'node_type' => 'page',
+            'node_type' => $contentTypeId,
             'type' => 'taxonomy',
             'name' => 'Introduction',
             'taxonomy' => 'category',
@@ -109,7 +112,7 @@ final class Version20220110213600 extends AbstractMigration
         ]);
         $this->addField([
             'code' => 'thumbnail',
-            'node_type' => 'page',
+            'node_type' => $contentTypeId,
             'type' => 'filepicker',
             'name' => 'Thumbnail',
             'is_multilingual' => '0',
@@ -126,7 +129,7 @@ final class Version20220110213600 extends AbstractMigration
     {
         $fieldId = Uuid::uuid4()->toString();
 
-        $this->addSql('INSERT INTO #__content_type_field (`id`, `code`, `node_type`, `type`, `name`, `taxonomy`, `is_multilingual`, `is_multiple`) VALUES (:id, :code, :node_type, :type, :name, :taxonomy, :is_multilingual, :is_multiple)', [
+        $this->addSql('INSERT INTO #__content_type_field (`id`, `code`, `node_type`, `type`, `name`, `taxonomy`, `is_multilingual`) VALUES (:id, :code, :node_type, :type, :name, :taxonomy, :is_multilingual)', [
             'id' => $fieldId,
             'code' => $field['code'],
             'node_type' => $field['node_type'],
@@ -134,7 +137,6 @@ final class Version20220110213600 extends AbstractMigration
             'name' => $field['name'],
             'taxonomy' => $field['taxonomy'] ?? null,
             'is_multilingual' => $field['is_multilingual'] ?? '0',
-            'is_multiple' => $field['is_multiple'] ?? '0',
         ]);
 
         foreach ($field['constraints'] ?? [] as $constraint) {

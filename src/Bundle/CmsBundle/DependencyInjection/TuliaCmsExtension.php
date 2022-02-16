@@ -28,12 +28,19 @@ class TuliaCmsExtension extends Extension
         $configuration = $this->getConfiguration($configs, $container);
         $config = $this->processConfiguration($configuration, $configs);
 
-        $container->setParameter('cms.content_builder.content_type.node.default_controller', $config['content_building']['content_type']['node']['default_controller']);
-        $container->setParameter('cms.content_builder.content_type.taxonomy.default_controller', $config['content_building']['content_type']['taxonomy']['default_controller']);
-        $container->setParameter('cms.content_builder.layout_type.default_builder', $config['content_building']['layout_type']['default_builder']);
+        $paths = $config['content_blocks']['templating']['paths'];
+
+        foreach ($paths as $key => $path) {
+            $paths[$key] = rtrim($path, '/') . '/';
+        }
+
+        $container->setParameter('cms.content_blocks.templating.paths', $paths);
+        $container->setParameter('cms.content_builder.content_type_entry.config', $config['content_building']['content_type_entry']);
+        $container->setParameter('cms.content_builder.content_type.config', $config['content_building']['content_type']);
         $container->setParameter('cms.content_builder.data_types.mapping', $config['content_building']['data_types']['mapping']);
         $container->setParameter('cms.content_builder.constraint_types.mapping', $config['content_building']['constraint_types']['mapping']);
         $container->setParameter('cms.options.definitions', $this->validateOptionsValues($config['options']['definitions'] ?? []));
+        $container->setParameter('cms.attributes.finder.types', $config['attributes']['finder']['types'] ?? []);
 
         // BodyClass
         $container->registerForAutoconfiguration(\Tulia\Cms\BodyClass\Ports\Domain\BodyClassCollectorInterface::class)
@@ -76,14 +83,21 @@ class TuliaCmsExtension extends Extension
             ->addTag('term.action_chain');
 
         // ContentBuilder
-        $container->registerForAutoconfiguration(\Tulia\Cms\ContentBuilder\Domain\ContentType\Service\ContentTypeDecoratorInterface::class)
+        $container->registerForAutoconfiguration(\Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeDecoratorInterface::class)
             ->addTag('content_builder.content_type.decorator');
-        $container->registerForAutoconfiguration(\Tulia\Cms\ContentBuilder\Domain\ContentType\Service\ContentTypeProviderInterface::class)
+        $container->registerForAutoconfiguration(\Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeProviderInterface::class)
             ->addTag('content_builder.content_type.provider');
-        $container->registerForAutoconfiguration(\Tulia\Cms\ContentBuilder\Domain\ContentType\Routing\Strategy\ContentTypeRoutingStrategyInterface::class)
+        $container->registerForAutoconfiguration(\Tulia\Cms\ContentBuilder\Domain\WriteModel\Routing\Strategy\ContentTypeRoutingStrategyInterface::class)
             ->addTag('content_builder.content_type.routing_strategy');
         $container->registerForAutoconfiguration(\Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\LayoutTypeBuilderInterface::class)
             ->addTag('content_builder.layout_type.builder');
+        $container->registerForAutoconfiguration(\Tulia\Cms\ContentBuilder\Domain\ReadModel\FieldTypeBuilder\FieldTypeBuilderInterface::class)
+            ->addTag('content_builder.data_types.builder')
+            ->setLazy(true);
+
+        // Shortcode
+        $container->registerForAutoconfiguration(\Tulia\Component\Shortcode\Compiler\ShortcodeCompilerInterface::class)
+            ->addTag('shortcode.compiler');
     }
 
     protected function validateOptionsValues(array $definitions): array

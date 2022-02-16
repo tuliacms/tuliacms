@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\User\Domain\Aggregate;
 
-use Tulia\Cms\Metadata\Domain\WriteModel\MagickMetadataTrait;
-use Tulia\Cms\Metadata\Ports\Domain\WriteModel\MetadataAwareInterface;
+use Tulia\Cms\Attributes\Domain\WriteModel\MagickAttributesTrait;
+use Tulia\Cms\Attributes\Domain\WriteModel\Model\AttributesAwareInterface;
 use Tulia\Cms\Platform\Domain\WriteModel\Model\AggregateRoot;
-use Tulia\Cms\User\Domain\ValueObject\AggregateId;
-use Tulia\Cms\User\Domain\Exception;
 use Tulia\Cms\User\Domain\Event;
+use Tulia\Cms\User\Domain\Exception;
+use Tulia\Cms\User\Domain\ValueObject\AggregateId;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class User extends AggregateRoot implements MetadataAwareInterface
+class User extends AggregateRoot implements AttributesAwareInterface
 {
-    use MagickMetadataTrait;
+    use MagickAttributesTrait;
 
     private AggregateId $id;
 
@@ -56,20 +56,20 @@ class User extends AggregateRoot implements MetadataAwareInterface
      */
     public function changeMetadataValue(string $name, $value): void
     {
-        if (\array_key_exists($name, $this->metadata)) {
-            if ($this->metadata[$name] !== $value) {
+        if (\array_key_exists($name, $this->attributes)) {
+            if ($this->attributes[$name] !== $value) {
                 if (empty($value)) {
                     $this->recordThat(new Event\MetadataValueDeleted($this->id, $name, $value));
                 } else {
                     $this->recordThat(new Event\MetadataValueChanged($this->id, $name, $value));
                 }
 
-                $this->metadata[$name] = $value;
+                $this->attributes[$name] = $value;
             }
         } else {
             if (empty($value) === false) {
                 $this->recordThat(new Event\MetadataValueChanged($this->id, $name, $value));
-                $this->metadata[$name] = $value;
+                $this->attributes[$name] = $value;
             }
         }
     }

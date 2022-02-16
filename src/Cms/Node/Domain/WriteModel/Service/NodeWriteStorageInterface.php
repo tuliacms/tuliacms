@@ -9,7 +9,7 @@ namespace Tulia\Cms\Node\Domain\WriteModel\Service;
  */
 interface NodeWriteStorageInterface
 {
-    public function find(string $id, string $locale, string $defaultLocale): array;
+    public function find(string $id, string $websiteId, string $locale, string $defaultLocale): array;
 
     public function insert(array $node, string $defaultLocale): void;
 

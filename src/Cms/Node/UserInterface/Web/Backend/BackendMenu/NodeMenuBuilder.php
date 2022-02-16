@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\UserInterface\Web\Backend\BackendMenu;
 
-use Tulia\Cms\BackendMenu\Ports\Domain\Builder\BuilderInterface;
 use Tulia\Cms\BackendMenu\Domain\Builder\Helper\BuilderHelperInterface;
 use Tulia\Cms\BackendMenu\Domain\Builder\Registry\ItemRegistryInterface;
-use Tulia\Cms\ContentBuilder\Domain\ContentType\Model\ContentType;
-use Tulia\Cms\ContentBuilder\Domain\ContentType\Service\ContentTypeRegistry;
+use Tulia\Cms\BackendMenu\Ports\Domain\Builder\BuilderInterface;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistry;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\ContentType;
 
 /**
  * @author Adam Banaszkiewicz
@@ -54,7 +54,8 @@ class NodeMenuBuilder implements BuilderInterface
             'parent' => $root,
         ]);
 
-        foreach ($type->getFields() as $field) {
+        // TODO Finish listing of taxonomies attached to ContentType
+        /*foreach ($type->getFields() as $field) {
             if ($field->getType() !== 'taxonomy') {
                 continue;
             }
@@ -66,6 +67,6 @@ class NodeMenuBuilder implements BuilderInterface
                 'link'   => $this->helper->generateUrl('backend.term', [ 'taxonomyType' => $taxonomy->getCode() ]),
                 'parent' => $root,
             ]);
-        }
+        }*/
     }
 }

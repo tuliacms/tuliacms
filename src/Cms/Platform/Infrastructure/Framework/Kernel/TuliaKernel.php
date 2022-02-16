@@ -44,6 +44,7 @@ class TuliaKernel extends Kernel
                 $base . '/WysiwygEditor/Infrastructure/Framework/Resources/config',
                 $base . '/TuliaEditor/Infrastructure/Framework/Resources/config',
                 $base . '/ContentBuilder/Infrastructure/Framework/Resources/config',
+                $base . '/ContentBlock/Infrastructure/Framework/Resources/config',
             ],
             $this->getActiveThemesConfigDirs(),
             $this->getActiveModulesConfigDirs()

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Domain\WriteModel\ActionsChain\Core;
 
+use Tulia\Cms\Attributes\Domain\WriteModel\Model\Attribute;
 use Tulia\Cms\Node\Domain\WriteModel\ActionsChain\NodeActionInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Model\Node;
-use Tulia\Cms\Node\Domain\WriteModel\Model\ValueObject\AttributeInfo;
 use Tulia\Component\Shortcode\ProcessorInterface;
 
 /**
@@ -35,28 +35,26 @@ class ContentShortcodeCompiler implements NodeActionInterface
 
     public function execute(Node $node): void
     {
-        foreach ($node->getAttributes() as $name => $value) {
-            if (! $value) {
+        foreach ($node->getAttributes() as $attribute) {
+            if (! $attribute->getValue()) {
                 continue;
             }
 
-            $info = $node->getAttributeInfo($name);
-
-            if ($info->isCompilable() === false) {
+            if ($attribute->isCompilable() === false) {
                 continue;
             }
 
-            $compiledAttributeName = $name . '__compiled';
-
-            $node->addAttributeInfo($compiledAttributeName, new AttributeInfo(
-                $info->isMultilingual(),
-                $info->isMultiple(),
-                $info->isCompilable(),
-                $info->isTaxonomy()
-            ));
+            $uri = $attribute->produceUriWithModificator('compiled');
 
             $node->updateAttributes([
-                $compiledAttributeName => $this->processor->process($value)
+                $uri => new Attribute(
+                    $attribute->produceCodeWithModificator('compiled'),
+                    $this->processor->process($attribute->getValue()),
+                    $uri,
+                    ['renderable'],
+                    $attribute->isMultilingual(),
+                    $attribute->hasNonscalarValue()
+                )
             ]);
         }
     }

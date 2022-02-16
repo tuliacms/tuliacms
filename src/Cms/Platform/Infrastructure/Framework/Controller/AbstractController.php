@@ -113,6 +113,7 @@ abstract class AbstractController extends SymfonyController
 
     public function isHomepage(Request $request): bool
     {
-        return $request->getUri() === $this->generateUrl('homepage', [], UrlGeneratorInterface::ABSOLUTE_URL);
+        return $request->getSchemeAndHttpHost().$request->getPathInfo()
+            === $this->generateUrl('homepage', [], UrlGeneratorInterface::ABSOLUTE_URL);
     }
 }

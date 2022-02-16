@@ -6,14 +6,14 @@ namespace Tulia\Cms\Node\Domain\SearchAnything;
 
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Tulia\Cms\ContentBuilder\Domain\ContentType\Service\ContentTypeRegistry;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistry;
 use Tulia\Cms\Filemanager\Application\Service\ImageUrlResolver;
-use Tulia\Cms\Filemanager\Ports\Domain\WriteModel\FileTypeEnum;
 use Tulia\Cms\Filemanager\Ports\Domain\ReadModel\FileFinderInterface;
 use Tulia\Cms\Filemanager\Ports\Domain\ReadModel\FileFinderScopeEnum as FilesScopeEnum;
-use Tulia\Cms\Node\Domain\ReadModel\Model\Node;
+use Tulia\Cms\Filemanager\Ports\Domain\WriteModel\FileTypeEnum;
 use Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderInterface;
 use Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderScopeEnum as NodeScopeEnum;
+use Tulia\Cms\Node\Domain\ReadModel\Model\Node;
 use Tulia\Cms\SearchAnything\Domain\Model\Hit;
 use Tulia\Cms\SearchAnything\Domain\Model\Results;
 use Tulia\Cms\SearchAnything\Ports\Provider\AbstractProvider;
@@ -101,8 +101,8 @@ class SearchProvider extends AbstractProvider
 
         /** @var Node $node */
         foreach ($nodes as $node) {
-            if ($node->meta('thumbnail')) {
-                $ids[$node->getId()] = $node->meta('thumbnail');
+            if ($node->attribute('thumbnail')) {
+                $ids[$node->getId()] = $node->attribute('thumbnail');
             }
         }
 

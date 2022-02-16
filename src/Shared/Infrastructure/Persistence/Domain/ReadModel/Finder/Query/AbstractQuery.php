@@ -15,7 +15,7 @@ abstract class AbstractQuery implements QueryInterface
     protected PluginRegistry $pluginRegistry;
 
     abstract public function getBaseQueryArray(): array;
-    abstract public function query(array $criteria): Collection;
+    abstract public function query(array $criteria, string $scope): Collection;
     abstract public function countFoundRows(): int;
     abstract public function getSupportedStorage(): string;
 

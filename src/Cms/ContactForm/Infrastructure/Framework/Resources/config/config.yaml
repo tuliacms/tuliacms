@@ -13,3 +13,48 @@ framework:
             tulia.contact_forms:
                 scripts:
                     - /assets/core/contact-forms/js/build.js
+
+cms:
+    content_blocks:
+        templating:
+            paths:
+                - '@cms/forms/content-block'
+    content_building:
+        data_types:
+            mapping:
+                contact_form:
+                    label: Contact form select
+                    classname: 'Symfony\Component\Form\Extension\Core\Type\ChoiceType'
+                    builder: 'Tulia\Cms\ContactForm\UserInterface\Web\Shared\Form\FormType\FormSelectorBuilder'
+                    constraints: [ required ]
+        content_type_entry:
+            contact_form:
+                type: content_block
+                name: Contact form
+                icon: null
+                controller: null
+                is_routable: false
+                is_hierarchical: false
+                routing_strategy: null
+                layout:
+                    sections:
+                        main:
+                            groups:
+                                fields_group:
+                                    name: fields
+                                    active: true
+                                    order: 0
+                                    fields:
+                                        form_id:
+                                            type: contact_form
+                                            name: Form to show
+                                            configuration:
+                                                - { code: icon, value: /assets/theme/tulia/lisa/images/content-block/icon/company-in-numbers.png }
+                                            constraints:
+                                                -
+                                                    code: required
+                                                -
+                                                    code: length
+                                                    modificators:
+                                                        - { code: min, value: 0 }
+                                                        - { code: max, value: 127 }

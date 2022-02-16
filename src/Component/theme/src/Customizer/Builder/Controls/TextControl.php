@@ -11,7 +11,7 @@ class TextControl extends AbstractControl
 {
     public function build(array $params): string
     {
-        return '<div class="form-group' . ($params['multilingual'] ? ' form-group-multilingual' : '') . '">
+        return '<div class="form-group mb-2' . ($params['multilingual'] ? ' form-group-multilingual' : '') . '">
             <label class="customizer-label">' . $this->trans($params['label'], [], $params['translation_domain']) . '</label>
             <input type="text" id="' . $params['control_id'] . '" name="' . $params['control_name'] . '" class="customizer-control form-control" value="' . $this->escapeAttribute($params['value']) . '" data-transport="' . $params['transport'] . '" />
         </div>';

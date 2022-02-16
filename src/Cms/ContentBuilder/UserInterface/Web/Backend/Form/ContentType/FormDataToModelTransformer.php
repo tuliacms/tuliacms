@@ -4,41 +4,47 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\ContentType;
 
-use Tulia\Cms\ContentBuilder\Domain\ContentType\Model\ContentType;
-use Tulia\Cms\ContentBuilder\Domain\ContentType\Model\Field;
-use Tulia\Cms\ContentBuilder\Domain\ContentType\Service\ContentTypeDecorator;
-use Tulia\Cms\ContentBuilder\Domain\LayoutType\Model\FieldsGroup;
-use Tulia\Cms\ContentBuilder\Domain\LayoutType\Model\LayoutType;
-use Tulia\Cms\ContentBuilder\Domain\LayoutType\Model\Section;
+use Tulia\Cms\ContentBuilder\Domain\WriteModel\Exception\CannotOverwriteInternalFieldException;
+use Tulia\Cms\ContentBuilder\Domain\WriteModel\Exception\EmptyRoutingStrategyForRoutableContentTypeException;
+use Tulia\Cms\ContentBuilder\Domain\WriteModel\Model\ContentType;
+use Tulia\Cms\ContentBuilder\Domain\WriteModel\Model\Field;
+use Tulia\Cms\ContentBuilder\Domain\WriteModel\Model\FieldsGroup;
+use Tulia\Cms\ContentBuilder\Domain\WriteModel\Model\LayoutType;
+use Tulia\Cms\ContentBuilder\Domain\WriteModel\Model\Section;
+use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class FormDataToModelTransformer
 {
-    private ContentTypeDecorator $decorator;
+    private UuidGeneratorInterface $uuidGenerator;
 
-    public function __construct(ContentTypeDecorator $decorator)
+    public function __construct(UuidGeneratorInterface $uuidGenerator)
     {
-        $this->decorator = $decorator;
+        $this->uuidGenerator = $uuidGenerator;
     }
 
+    /**
+     * @throws CannotOverwriteInternalFieldException
+     * @throws EmptyRoutingStrategyForRoutableContentTypeException
+     */
     public function produceContentType(array $data, string $type, LayoutType $layout): ContentType
     {
-        $nodeType = new ContentType($data['type']['code'], $type, $layout, false);
+        $nodeType = new ContentType($this->uuidGenerator->generate(), $data['type']['code'], $type, $layout, false);
         $nodeType->setName($data['type']['name']);
         $nodeType->setIcon($data['type']['icon']);
         $nodeType->setIsHierarchical((bool) $data['type']['icon']);
+        $nodeType->setRoutingStrategy($data['type']['routingStrategy'] ?? '');
         $nodeType->setIsRoutable((bool) $data['type']['isRoutable']);
-        $nodeType->setRoutingStrategy($data['type']['routingStrategy']);
 
-        foreach ($this->collectFields($data['layout']) as $field) {
-            $nodeType->addField($field);
+        foreach ($data['layout'] as $section) {
+            foreach ($section['sections'] as $group) {
+                foreach ($this->collectFields($group['fields']) as $field) {
+                    $nodeType->addField($field);
+                }
+            }
         }
-
-        $this->decorator->decorate($nodeType);
-
-        $nodeType->validate();
 
         return $nodeType;
     }
@@ -46,7 +52,7 @@ class FormDataToModelTransformer
     public function produceLayoutType(array $data): LayoutType
     {
         $layoutType = new LayoutType($data['type']['code'] . '_layout');
-        $layoutType->setName($data['type']['name'] . ' layout');
+        $layoutType->setName($data['type']['name'] . ' Layout');
 
         foreach ($this->transformSections($data['layout']) as $section) {
             $layoutType->addSection($section);
@@ -58,26 +64,23 @@ class FormDataToModelTransformer
     /**
      * @return Field[]
      */
-    private function collectFields(array $groups): array
+    private function collectFields(array $fields): array
     {
-        $fields = [];
+        $result = [];
 
-        foreach ($groups as $group) {
-            foreach ($group['sections'] as $section) {
-                foreach ($section['fields'] as $field) {
-                    $fields[] = new Field([
-                        'code' => $field['code']['value'],
-                        'type' => $field['type']['value'],
-                        'name' => $field['name']['value'],
-                        'is_multilingual' => $field['multilingual']['value'],
-                        'configuration' => $this->transformConfiguration($field['configuration']),
-                        'constraints' => $this->transformConstraints($field['constraints']),
-                    ]);
-                }
-            }
+        foreach ($fields as $field) {
+            $result[] = new Field([
+                'code' => $field['code']['value'],
+                'type' => $field['type']['value'],
+                'name' => $field['name']['value'],
+                'is_multilingual' => $field['multilingual']['value'],
+                'configuration' => $this->transformConfiguration($field['configuration']),
+                'constraints' => $this->transformConstraints($field['constraints']),
+                'children' => $this->collectFields($field['children']),
+            ]);
         }
 
-        return $fields;
+        return $result;
     }
 
     private function transformConfiguration(array $configuration): array
@@ -129,8 +132,6 @@ class FormDataToModelTransformer
                 $groups[] = new FieldsGroup(
                     $group['code'],
                     $group['name']['value'],
-                    false,
-                    'default',
                     $fields
                 );
             }

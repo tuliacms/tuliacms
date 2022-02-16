@@ -54,6 +54,6 @@ class DbalActivityWriteStorage implements ActivityWriteStorageInterface
 
     private function recordExists(string $id): bool
     {
-        return $id === $this->connection->fetchColumn('SELECT id FROM #__activity WHERE id = :id LIMIT 1', ['id' => $id]);
+        return $id === $this->connection->fetchFirstColumn('SELECT id FROM #__activity WHERE id = :id LIMIT 1', ['id' => $id]);
     }
 }

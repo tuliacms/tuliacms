@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Taxonomy\Domain\WriteModel;
 
-use Tulia\Cms\ContentBuilder\Domain\ContentType\Model\ContentType;
-use Tulia\Cms\ContentBuilder\Domain\ContentType\Service\ContentTypeRegistry;
-use Tulia\Cms\Metadata\Domain\WriteModel\MetadataRepository;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistry;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\ContentType;
+use Tulia\Cms\Attributes\Domain\WriteModel\AttributesRepository;
 use Tulia\Cms\Platform\Infrastructure\Bus\Event\EventBusInterface;
 use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\ActionsChain\TaxonomyActionsChainInterface;
@@ -31,7 +31,7 @@ class TaxonomyRepository
 
     private CurrentWebsiteInterface $currentWebsite;
 
-    private MetadataRepository $metadataRepository;
+    private AttributesRepository $metadataRepository;
 
     private UuidGeneratorInterface $uuidGenerator;
 
@@ -42,7 +42,7 @@ class TaxonomyRepository
     public function __construct(
         TermWriteStorageInterface $storage,
         CurrentWebsiteInterface $currentWebsite,
-        MetadataRepository $metadataRepository,
+        AttributesRepository $metadataRepository,
         UuidGeneratorInterface $uuidGenerator,
         EventBusInterface $eventBus,
         TaxonomyActionsChainInterface $actionsChain,
@@ -92,8 +92,8 @@ class TaxonomyRepository
         foreach ($this->buildAttributesMapping($taxonomyType) as $name => $info) {
             $taxonomy->addAttributeInfo($name, new AttributeInfo(
                 $info['is_multilingual'],
-                $info['is_multiple'],
                 $info['is_compilable'],
+                $info['has_nonscalar_value'],
                 $info['is_taxonomy'],
             ));
         }
@@ -178,7 +178,7 @@ class TaxonomyRepository
                 'path'       => $term['path'],
                 'visibility' => $term['visibility'] === '1',
                 'is_root'    => (bool) $term['is_root'],
-                'metadata'   => $this->metadataRepository->findAll('term', $term['id']),
+                'metadata'   => $this->metadataRepository->findAll('term', $term['id'], []),
                 'translated' => (bool) ($term['translated'] ?? false),
             ];
         }
@@ -200,8 +200,8 @@ class TaxonomyRepository
             $attributes[$name] = [
                 'value' => $value,
                 'is_multilingual' => $info->isMultilingual(),
-                'is_multiple' => $info->isMultiple(),
                 'is_taxonomy' => $info->isTaxonomy(),
+                'has_nonscalar_value' => $info->hasNonscalarValue(),
             ];
         }
 
@@ -229,8 +229,8 @@ class TaxonomyRepository
         foreach ($contentType->getFields() as $field) {
             $result[$field->getCode()] = [
                 'is_multilingual' => $field->isMultilingual(),
-                'is_multiple' => $field->isMultiple(),
                 'is_compilable' => $field->hasFlag('compilable'),
+                'has_nonscalar_value' => $field->hasNonscalarValue(),
                 'is_taxonomy' => $field->getType() === 'taxonomy',
             ];
         }

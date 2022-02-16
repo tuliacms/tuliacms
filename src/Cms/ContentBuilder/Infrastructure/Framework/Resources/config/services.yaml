@@ -8,20 +8,26 @@ services:
         resource: '../../../../**'
         exclude:
             - '../../../../Infrastructure/Framework/Resources/**'
-            - '../../../../Domain/ContentType/Model/**'
-            - '../../../../Domain/ContentType/Exception/**'
+            - '../../../../Domain/**/Model/**'
+            - '../../../../Domain/**/Exception/**'
             - '../../../../UserInterface/LayoutType/Model/**'
 
-    Tulia\Cms\ContentBuilder\Domain\ContentType\Service\AbstractContentTypeProvider:
+    Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\AbstractContentTypeProvider:
         abstract: true
         calls:
-            - setDefaultController: [ 'node', '%cms.content_builder.content_type.node.default_controller%' ]
-            - setDefaultController: [ 'taxonomy', '%cms.content_builder.content_type.taxonomy.default_controller%' ]
-            - setDefaultLayoutBuilder: [ '%cms.content_builder.layout_type.default_builder%' ]
-            - setFieldTypeMappingRegistry: [ '@Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\FieldTypeMappingRegistry' ]
+            - setArrayToReadModelTransformer: [ '@Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ArrayToReadModelTransformer' ]
 
     Tulia\Cms\ContentBuilder\Infrastructure\Persistence\ContentProvider\ContentTypeDatabaseProvider:
-        parent: Tulia\Cms\ContentBuilder\Domain\ContentType\Service\AbstractContentTypeProvider
+        parent: Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\AbstractContentTypeProvider
+
+    Tulia\Cms\ContentBuilder\Infrastructure\Persistence\ContentProvider\ContentTypeContainerProvider:
+        parent: Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\AbstractContentTypeProvider
+        arguments:
+            $configuration: '%cms.content_builder.content_type_entry.config%'
 
     Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\ContentType\FormHandler:
         shared: false
+
+    Tulia\Cms\ContentBuilder\Domain\WriteModel\ContentType\Service\Configuration:
+        arguments:
+            $configuration: '%cms.content_builder.content_type.config%'

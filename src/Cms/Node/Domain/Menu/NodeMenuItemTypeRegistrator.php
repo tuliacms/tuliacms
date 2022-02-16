@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Domain\Menu;
 
-use Tulia\Cms\ContentBuilder\Domain\ContentType\Service\ContentTypeRegistry;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistry;
 use Tulia\Cms\Menu\Domain\Builder\Type\RegistratorInterface;
 use Tulia\Cms\Menu\Domain\Builder\Type\RegistryInterface;
 use Tulia\Cms\Node\UserInterface\Web\Backend\Menu\Selector;
@@ -32,8 +32,7 @@ class NodeMenuItemTypeRegistrator implements RegistratorInterface
         foreach ($this->contentTypeRegistry->all() as $nodeType) {
             if ($nodeType->isType('node')) {
                 $type = $registry->registerType('node:' . $nodeType->getCode());
-                $type->setLabel('node');
-                $type->setTranslationDomain('node');
+                $type->setLabel($nodeType->getName());
                 $type->setSelectorService($this->selector);
             }
         }

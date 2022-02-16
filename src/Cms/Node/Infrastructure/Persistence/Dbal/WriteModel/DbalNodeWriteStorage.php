@@ -21,7 +21,7 @@ class DbalNodeWriteStorage extends AbstractLocalizableStorage implements NodeWri
         $this->connection = $connection;
     }
 
-    public function find(string $id, string $locale, string $defaultLocale): array
+    public function find(string $id, string $websiteId, string $locale, string $defaultLocale): array
     {
         if ($defaultLocale !== $locale) {
             $translationColumn = 'IF(ISNULL(tl.title), 0, 1) AS translated';
@@ -40,11 +40,12 @@ class DbalNodeWriteStorage extends AbstractLocalizableStorage implements NodeWri
                 ON tm.id = tl.node_id AND tl.locale = :locale
             LEFT JOIN #__node_has_flag AS tnhf
                 ON tm.id = tnhf.node_id
-            WHERE tm.id = :id
+            WHERE tm.id = :id AND tm.website_id = :website_id
             GROUP BY tm.id
             LIMIT 1", [
             'id'     => $id,
-            'locale' => $locale
+            'locale' => $locale,
+            'website_id' => $websiteId
         ]);
 
         if ($node === []) {

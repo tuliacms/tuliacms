@@ -15,7 +15,10 @@ final class Version20220117185000 extends AbstractMigration
 {
     public function up(Schema $schema) : void
     {
+        $contentTypeId = Uuid::uuid4()->toString();
+
         $this->addSql('INSERT INTO #__content_type (`code`, `type`, `name`, `icon`, `is_routable`, `is_hierarchical`, `layout`, `internal`, `routing_strategy`) VALUES (:code, :type, :name, :icon, :is_routable, :is_hierarchical, :layout, :internal, :routing_strategy)', [
+            'id' => $contentTypeId,
             'code' => 'category',
             'type' => 'taxonomy',
             'name' => 'Category',

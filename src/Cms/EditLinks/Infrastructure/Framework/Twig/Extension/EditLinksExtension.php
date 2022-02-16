@@ -39,7 +39,7 @@ class EditLinksExtension extends AbstractExtension
     /**
      * {@inheritdoc}
      */
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return [
             new TwigFunction('edit_links', function ($context, $object, array $options = []) {

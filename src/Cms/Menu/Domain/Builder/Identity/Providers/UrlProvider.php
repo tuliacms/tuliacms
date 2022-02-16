@@ -24,7 +24,7 @@ class UrlProvider implements IdentityProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function provide(string $identity): ?IdentityInterface
+    public function provide(string $type, string $identity): ?IdentityInterface
     {
         return new Identity($identity);
     }

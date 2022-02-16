@@ -1,11 +1,3 @@
-parameters:
-    # List of scopes, where ContentRenderer listener will work. Allows to bind Node's
-    # content rendering in many more scopes than default ones, even for custom created
-    # by extensions.
-    cms.node.finder.content_renderer.scopes:
-        - !php/const Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderScopeEnum::SINGLE
-        - !php/const Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderScopeEnum::ROUTING_MATCHER
-
 services:
     _defaults:
         autowire: true
@@ -32,15 +24,6 @@ services:
     Tulia\Cms\Node\Domain\SearchAnything\SearchProvider:
         tags:
             - { name: search.provider, priority: 1000 }
-
-    Tulia\Cms\Node\Application\EventListener\RegisterContentRenderer:
-        bind:
-            $scopes: '%cms.node.finder.content_renderer.scopes%'
-
-    Tulia\Cms\Node\Domain\ReadModel\NodeContent\NodeContentFactoryInterface:
-        class: Tulia\Cms\Node\Infrastructure\Domain\ReadModel\NodeContent\TwigRenderingNodeContentFactory
-        bind:
-            $environment: '%kernel.environment%'
 
     Tulia\Cms\Node\Domain\Filemanager\ImageSize\DefaultSizesImagesSizeProvider:
         tags: [ filemanager.image_size.provider ]

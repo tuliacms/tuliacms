@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\User\Query;
 
 use Psr\EventDispatcher\EventDispatcherInterface;
-use Tulia\Cms\Metadata\Domain\ReadModel\MetadataFinder;
+use Tulia\Cms\Attributes\Domain\ReadModel\Service\AttributesFinder;
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 use Tulia\Cms\User\Query\Model\Collection;
 
@@ -16,12 +16,12 @@ class FinderFactory implements FinderFactoryInterface
 {
     protected ConnectionInterface $connection;
     protected EventDispatcherInterface $eventDispatcher;
-    protected MetadataFinder $metadataFinder;
+    protected AttributesFinder $metadataFinder;
 
     public function __construct(
         ConnectionInterface $connection,
         EventDispatcherInterface $eventDispatcher,
-        MetadataFinder $metadataFinder
+        AttributesFinder $metadataFinder
     ) {
         $this->connection = $connection;
         $this->eventDispatcher = $eventDispatcher;

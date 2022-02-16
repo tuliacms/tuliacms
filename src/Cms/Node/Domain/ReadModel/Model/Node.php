@@ -5,14 +5,17 @@ declare(strict_types=1);
 namespace Tulia\Cms\Node\Domain\ReadModel\Model;
 
 use InvalidArgumentException;
-use Tulia\Cms\Node\Infrastructure\Domain\ReadModel\NodeContent\VoidNodeContent;
+use Tulia\Cms\Attributes\Domain\ReadModel\MagickAttributesTrait;
+use Tulia\Cms\Attributes\Domain\ReadModel\Model\AttributesAwareInterface;
 use Tulia\Cms\Platform\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class Node implements \ArrayAccess
+class Node implements AttributesAwareInterface
 {
+    use MagickAttributesTrait;
+
     protected string $id;
     protected string $type;
     protected string $status;
@@ -30,35 +33,6 @@ class Node implements \ArrayAccess
     protected ?string $slug;
     protected bool $visibility;
     protected array $flags = [];
-    protected array $attributes = [];
-
-    public function __get(string $name)
-    {
-        return $this->{$name} ?? $this->attributes[$name] ?? null;
-    }
-
-    public function __set(string $name, $value): void
-    {
-        if (method_exists($this, $name)) {
-            $this->{$name} = $value;
-        } else {
-            $this->attributes[$name] = $value;
-        }
-    }
-
-    public function __call(string $name, array $arguments)
-    {
-        if (method_exists($this, $name)) {
-            return $this->{$name}(...$arguments);
-        }
-
-        return $this->attributes[$name] ?? null;
-    }
-
-    public function __isset(string $name): bool
-    {
-        return method_exists($this, $name) || isset($this->attributes[$name]);
-    }
 
     public static function buildFromArray(array $data): self
     {
@@ -98,12 +72,6 @@ class Node implements \ArrayAccess
         $node->setSlug($data['slug'] ?? '');
         $node->setFlags($data['flags'] ?? []);
         $node->attributes = $data['attributes'];
-
-        foreach ($data['attributes_info'] as $name => $info) {
-            if ($info['compilable']) {
-                $node->attributes[$name] = new VoidNodeContent($node->attributes[$name]);
-            }
-        }
 
         return $node;
     }
@@ -223,7 +191,7 @@ class Node implements \ArrayAccess
 
     public function getCategory(): ?string
     {
-        return $this->category;
+        return (string) $this->category;
     }
 
     public function setCategory(?string $category): void
@@ -274,30 +242,5 @@ class Node implements \ArrayAccess
     public function setFlags(array $flags): void
     {
         $this->flags = $flags;
-    }
-
-    public function getAttributes(): array
-    {
-        return $this->attributes;
-    }
-
-    public function offsetExists($offset)
-    {
-        return array_key_exists($offset, $this->attributes);
-    }
-
-    public function offsetGet($offset)
-    {
-        return $this->attributes[$offset];
-    }
-
-    public function offsetSet($offset, $value)
-    {
-        $this->attributes[$offset] = $value;
-    }
-
-    public function offsetUnset($offset)
-    {
-        unset($this->attributes[$offset]);
     }
 }

@@ -2,12 +2,14 @@ framework:
     translator:
         paths:
             - '%kernel.project_dir%/src/Cms/ContentBuilder/Infrastructure/Framework/Resources/translations'
+    public_paths:
+        '%kernel.project_dir%/src/Cms/ContentBuilder/Infrastructure/Framework/Resources/public/layout_builder/dist': '/core/content-builder-layout-builder'
     templating:
         paths:
             - { name: backend/content_builder, path: '%kernel.project_dir%/src/Cms/ContentBuilder/Infrastructure/Framework/Resources/views/backend' }
     assetter:
         assets:
-            content_builder.layout_builder:
+            content_builder.layout_builder.routable_content_type:
                 scripts: [ '/assets/core/content-builder-layout-builder/js/build.js' ]
                 styles: [ '/assets/core/content-builder-layout-builder/css/styles.min.css' ]
                 require: [ vue, lodash ]
@@ -17,13 +19,6 @@ monolog:
 
 cms:
     content_building:
-        content_type:
-            node:
-                default_controller: 'Tulia\Cms\Node\UserInterface\Web\Frontend\Controller\Node::show'
-            taxonomy:
-                default_controller: 'Tulia\Cms\Taxonomy\UserInterface\Web\Frontend\Controller\Term::show'
-        layout_type:
-            default_builder: 'Tulia\Cms\ContentBuilder\Infrastructure\Presentation\TwigLayoutTypeBuilder'
         data_types:
             mapping:
                 text:
@@ -55,6 +50,9 @@ cms:
                         placeholder:
                             label: Placeholder text
                             help_text: Shows when no value selected.
+                repeatable:
+                    label: Repeatable
+                    classname: 'Tulia\Cms\ContentBuilder\UserInterface\Web\Shared\Form\FormType\RepeatableGroupType'
 
         constraint_types:
             mapping:

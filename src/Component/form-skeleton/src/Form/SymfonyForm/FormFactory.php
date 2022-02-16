@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Tulia\Component\FormSkeleton\Form\SymfonyForm;
 
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormRegistryInterface;
 use Tulia\Component\FormSkeleton\Form\FormSkeletonTypeInterface;
 use Tulia\Component\FormSkeleton\Extension\ExtensionRegistryInterface;
@@ -32,7 +34,7 @@ class FormFactory implements FormFactoryInterface
         string $type = 'Symfony\Component\Form\Extension\Core\Type\FormType',
         $data = null,
         array $options = []
-    ) {
+    ): FormInterface {
         return $this->createBuilder($type, $data, $options)->getForm();
     }
 
@@ -41,11 +43,11 @@ class FormFactory implements FormFactoryInterface
         string $type = 'Symfony\Component\Form\Extension\Core\Type\FormType',
         $data = null,
         array $options = []
-    ) {
+    ): FormInterface {
         return $this->createNamedBuilder($name, $type, $data, $options)->getForm();
     }
 
-    public function createForProperty(string $class, string $property, $data = null, array $options = [])
+    public function createForProperty(string $class, string $property, $data = null, array $options = []): FormInterface
     {
         return $this->createBuilderForProperty($class, $property, $data, $options)->getForm();
     }
@@ -54,7 +56,7 @@ class FormFactory implements FormFactoryInterface
         string $type = 'Symfony\Component\Form\Extension\Core\Type\FormType',
         $data = null,
         array $options = []
-    ) {
+    ): FormBuilderInterface {
         return $this->createNamedBuilder($this->typeRegistry->getType($type)->getBlockPrefix(), $type, $data, $options);
     }
 
@@ -63,7 +65,7 @@ class FormFactory implements FormFactoryInterface
         string $type = 'Symfony\Component\Form\Extension\Core\Type\FormType',
         $data = null,
         array $options = []
-    ) {
+    ): FormBuilderInterface {
         $formType = $this->typeRegistry->getType($type)->getInnerType();
         $options['form_type_instance'] = $formType;
 

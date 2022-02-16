@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Constraints\Choice;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
-use Tulia\Cms\ContentBuilder\Domain\ContentType\Service\ContentTypeRegistry;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistry;
 use Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\Validator\CodenameValidator;
 
 /**
@@ -46,9 +46,7 @@ class ContentTypeForm extends AbstractType
                     new Callback([$this, 'validateNodeTypeDuplicate'], null, ['edit_form' => $options['edit_form']]),
                 ],
             ])
-            ->add('icon', TextType::class, [
-                'constraints' => [new NotBlank()],
-            ])
+            ->add('icon', TextType::class)
             ->add('isRoutable', ChoiceType::class, [
                 'choices' => $choices,
                 'constraints' => [
@@ -63,6 +61,7 @@ class ContentTypeForm extends AbstractType
                     new Choice(['choices' => $choices]),
                 ],
             ])
+            ->add('routingStrategy', TextType::class)
         ;
     }
 
@@ -76,7 +75,7 @@ class ContentTypeForm extends AbstractType
     public function validateNodeTypeDuplicate(?string $nodeType, ExecutionContextInterface $context, array $payload): void
     {
         if ($payload['edit_form'] === false && $this->contentTypeRegistry->has($nodeType)) {
-            $context->buildViolation('thisNodeTypeIsAlreadyRegistered')
+            $context->buildViolation('thisContentTypeIsAlreadyRegistered')
                 ->setTranslationDomain('content_builder')
                 ->addViolation();
         }

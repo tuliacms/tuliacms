@@ -4,16 +4,15 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Domain\WriteModel;
 
-use Tulia\Cms\ContentBuilder\Domain\ContentType\Exception\ContentTypeNotExistsException;
-use Tulia\Cms\ContentBuilder\Domain\ContentType\Model\ContentType;
-use Tulia\Cms\ContentBuilder\Domain\ContentType\Service\ContentTypeRegistry;
-use Tulia\Cms\Metadata\Domain\WriteModel\MetadataRepository;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistry;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\Field;
+use Tulia\Cms\ContentBuilder\Domain\WriteModel\Exception\ContentTypeNotExistsException;
+use Tulia\Cms\Attributes\Domain\WriteModel\AttributesRepository;
 use Tulia\Cms\Node\Domain\WriteModel\ActionsChain\NodeActionsChainInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Event\NodeDeleted;
 use Tulia\Cms\Node\Domain\WriteModel\Event\NodeUpdated;
 use Tulia\Cms\Node\Domain\WriteModel\Exception\NodeNotFoundException;
 use Tulia\Cms\Node\Domain\WriteModel\Model\Node;
-use Tulia\Cms\Node\Domain\WriteModel\Model\ValueObject\AttributeInfo;
 use Tulia\Cms\Node\Domain\WriteModel\Service\NodeWriteStorageInterface;
 use Tulia\Cms\Platform\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
 use Tulia\Cms\Platform\Infrastructure\Bus\Event\EventBusInterface;
@@ -29,7 +28,7 @@ class NodeRepository
 
     private NodeWriteStorageInterface $storage;
     private CurrentWebsiteInterface $currentWebsite;
-    private MetadataRepository $metadataRepository;
+    private AttributesRepository $metadataRepository;
     private UuidGeneratorInterface $uuidGenerator;
     private EventBusInterface $eventBus;
     private NodeActionsChainInterface $actionsChain;
@@ -38,7 +37,7 @@ class NodeRepository
     public function __construct(
         NodeWriteStorageInterface $storage,
         CurrentWebsiteInterface $currentWebsite,
-        MetadataRepository $metadataRepository,
+        AttributesRepository $metadataRepository,
         UuidGeneratorInterface $uuidGenerator,
         EventBusInterface $eventBus,
         NodeActionsChainInterface $actionsChain,
@@ -55,25 +54,14 @@ class NodeRepository
 
     public function createNew(string $nodeType): Node
     {
-        $type = $this->contentTypeRegistry->get($nodeType);
+        $this->contentTypeRegistry->get($nodeType);
 
-        $node = Node::createNew(
+        return Node::createNew(
             $this->uuidGenerator->generate(),
             $nodeType,
             $this->currentWebsite->getId(),
             $this->currentWebsite->getLocale()->getCode()
         );
-
-        foreach ($this->buildAttributesMapping($type) as $name => $info) {
-            $node->addAttributeInfo($name, new AttributeInfo(
-                $info['is_multilingual'],
-                $info['is_multiple'],
-                $info['is_compilable'],
-                $info['is_taxonomy'],
-            ));
-        }
-
-        return $node;
     }
 
     /**
@@ -85,6 +73,7 @@ class NodeRepository
     {
         $node = $this->storage->find(
             $id,
+            $this->currentWebsite->getId(),
             $this->currentWebsite->getLocale()->getCode(),
             $this->currentWebsite->getDefaultLocale()->getCode()
         );
@@ -95,23 +84,9 @@ class NodeRepository
 
         $nodeType = $this->contentTypeRegistry->get($node['type']);
 
-        $attributes = $this->metadataRepository->findAll('node', $id);
+        $attributesInfo = $this->buildAttributesMapping($nodeType->getFields());
 
-        foreach ($nodeType->getFields() as $field) {
-            if ($field->isMultiple()) {
-                try {
-                    $value = (array) unserialize(
-                        (string) $attributes[$field->getCode()],
-                        ['allowed_classes' => []]
-                    );
-                } catch (\ErrorException $e) {
-                    // If error, than empty or cannot be unserialized from singular value
-                    $value = $attributes[$field->getCode()] ?? null;
-                }
-
-                $attributes[$field->getCode()] = $value;
-            }
-        }
+        $attributes = $this->metadataRepository->findAll('node', $id, $attributesInfo);
 
         $node = Node::buildFromArray($node['type'], [
             'id'            => $node['id'],
@@ -129,7 +104,6 @@ class NodeRepository
             'title'         => $node['title'],
             'slug'          => $node['slug'],
             'attributes'    => $attributes,
-            'attributes_mapping' => $this->buildAttributesMapping($nodeType),
         ]);
 
         $this->actionsChain->execute('find', $node);
@@ -207,19 +181,12 @@ class NodeRepository
     {
         $attributes = [];
 
-        foreach ($node->getAttributes() as $name => $value) {
-            if (\in_array($name, self::RESERVED_NAMES)) {
+        foreach ($node->getAttributes() as $uri => $attribute) {
+            if (\in_array($uri, self::RESERVED_NAMES)) {
                 continue;
             }
 
-            $info = $node->getAttributeInfo($name);
-
-            $attributes[$name] = [
-                'value' => $value,
-                'is_multilingual' => $info->isMultilingual(),
-                'is_multiple' => $info->isMultiple(),
-                'is_taxonomy' => $info->isTaxonomy(),
-            ];
+            $attributes[$uri] = $attribute;
         }
 
         $result = [
@@ -244,17 +211,33 @@ class NodeRepository
         return $result;
     }
 
-    private function buildAttributesMapping(ContentType $contentType): array
+    /**
+     * @param Field[] $fields
+     */
+    private function buildAttributesMapping(array $fields, string $prefix = ''): array
     {
         $result = [];
 
-        foreach ($contentType->getFields() as $field) {
-            $result[$field->getCode()] = [
-                'is_multilingual' => $field->isMultilingual(),
-                'is_multiple' => $field->isMultiple(),
-                'is_compilable' => $field->hasFlag('compilable'),
-                'is_taxonomy' => $field->getType() === 'taxonomy',
-            ];
+        foreach ($fields as $field) {
+            if ($field->isType('repeatable')) {
+                foreach ($this->buildAttributesMapping($field->getChildren(), $prefix.$field->getCode().'.') as $code => $subfield) {
+                    $result[$code] = $subfield;
+                }
+            } else {
+                $result[$prefix.$field->getCode()] = [
+                    'is_multilingual' => $field->isMultilingual(),
+                    'is_compilable' => $field->hasFlag('compilable'),
+                    'has_nonscalar_value' => $field->hasNonscalarValue(),
+                ];
+
+                if ($field->hasFlag('compilable')) {
+                    $result[$prefix.$field->getCode().':compiled'] = [
+                        'is_multilingual' => $field->isMultilingual(),
+                        'is_compilable' => false,
+                        'has_nonscalar_value' => $field->hasNonscalarValue(),
+                    ];
+                }
+            }
         }
 
         return $result;

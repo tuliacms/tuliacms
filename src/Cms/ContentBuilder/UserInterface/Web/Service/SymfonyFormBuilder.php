@@ -9,8 +9,8 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
-use Tulia\Cms\ContentBuilder\Domain\ContentType\Model\ContentType;
-use Tulia\Cms\ContentBuilder\Domain\ContentType\Model\Field;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\ContentType;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\Field;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Exception\ConstraintNotExistsException;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Exception\FieldTypeNotExistsException;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\ConstraintsBuilder;
@@ -23,65 +23,61 @@ use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\SubmitType;
  */
 class SymfonyFormBuilder
 {
-    protected FormFactoryInterface $formFactory;
-    protected FieldTypeMappingRegistry $mappingRegistry;
-    protected ConstraintsBuilder $constraintsBuilder;
-    protected LoggerInterface $logger;
+    private FormFactoryInterface $formFactory;
+    private FieldTypeMappingRegistry $mappingRegistry;
+    private ConstraintsBuilder $constraintsBuilder;
+    private LoggerInterface $logger;
+    private SymfonyFieldBuilder $symfonyFieldBuilder;
 
     public function __construct(
         FormFactoryInterface $formFactory,
         FieldTypeMappingRegistry $mappingRegistry,
         ConstraintsBuilder $constraintsBuilder,
-        LoggerInterface $contentBuilderLogger
+        LoggerInterface $contentBuilderLogger,
+        SymfonyFieldBuilder $symfonyFieldBuilder
     ) {
         $this->formFactory = $formFactory;
         $this->mappingRegistry = $mappingRegistry;
         $this->constraintsBuilder = $constraintsBuilder;
         $this->logger = $contentBuilderLogger;
+        $this->symfonyFieldBuilder = $symfonyFieldBuilder;
     }
 
-    public function createForm(ContentType $taxonomyType, array $data): FormInterface
+    public function createForm(ContentType $contentType, array $data, bool $expectCqrsToken = true): FormInterface
     {
-        $builder = $this->createFormBuilder($taxonomyType->getCode(), $data);
+        $builder = $this->createFormBuilder($contentType->getCode(), $data, $expectCqrsToken);
 
-        $this->buildFieldsWithBuilder($taxonomyType->getFields(), $builder);
+        $fields = $contentType->getFields();
+
+        $this->buildFieldsWithBuilder($fields, $builder, $contentType);
 
         return $builder->getForm();
     }
 
-    protected function createFormBuilder(string $type, array $data): FormBuilderInterface
+    private function createFormBuilder(string $type, array $data, bool $expectCqrsToken = true): FormBuilderInterface
     {
         return $this->formFactory->createNamedBuilder(
             sprintf('content_builder_form_%s', $type),
             'Symfony\Component\Form\Extension\Core\Type\FormType',
-            $data
+            $data,
+            [
+                'csrf_protection' => $expectCqrsToken,
+                'attr' => [
+                    'class' => 'tulia-dynamic-form'
+                ],
+            ]
         );
     }
 
-    protected function buildFieldsWithBuilder(array $fields, FormBuilderInterface $builder): void
+    /**
+     * @param Field[] $fields
+     */
+    private function buildFieldsWithBuilder(array $fields, FormBuilderInterface $builder, ContentType $contentType): void
     {
         /** @var Field $field */
         foreach ($fields as $field) {
             try {
-                $typeBuilder = $this->mappingRegistry->getTypeBuilder($field->getType());
-
-                $options = array_merge([
-                    'label' => $field->getName() === ''
-                        ? false
-                        : $field->getName()
-                ], $field->getBuilderOptions());
-
-                $options['constraints'] = $this->constraintsBuilder->build($options['constraints'] ?? []);
-
-                if ($typeBuilder) {
-                    $options = (new $typeBuilder)->build($field, $options);
-                }
-
-                $builder->add(
-                    $field->getCode(),
-                    $this->mappingRegistry->getTypeClassname($field->getType()),
-                    $options
-                );
+                $this->symfonyFieldBuilder->buildFieldAndAddToBuilder($field, $builder, $contentType);
             } catch (ConstraintNotExistsException $e) {
                 $this->logger->warning(
                     sprintf(
@@ -106,6 +102,7 @@ class SymfonyFormBuilder
                 'required' => true,
             ])
             ->add('cancel', CancelType::class, [
+                // @todo Configure back button URL
                 'route' => 'backend.widget',
             ])
             ->add('save', SubmitType::class);

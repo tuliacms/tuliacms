@@ -159,7 +159,7 @@ class ArrayConfiguration implements ConfigurationInterface
     /**
      * {@inheritdoc}
      */
-    public function getIterator()
+    public function getIterator(): \Traversable
     {
         return new ArrayIterator($this->config);
     }
@@ -167,7 +167,7 @@ class ArrayConfiguration implements ConfigurationInterface
     /**
      * {@inheritdoc}
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return isset($this->config[$offset]);
     }
@@ -183,7 +183,7 @@ class ArrayConfiguration implements ConfigurationInterface
     /**
      * {@inheritdoc}
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         if ($offset !== null) {
             $this->config[$offset] = $value;
@@ -195,7 +195,7 @@ class ArrayConfiguration implements ConfigurationInterface
     /**
      * {@inheritdoc}
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         unset($this->config[$offset]);
     }

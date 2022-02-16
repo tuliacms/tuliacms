@@ -98,12 +98,11 @@ interface ConnectionInterface
     /**
      * @param $statement
      * @param array $params
-     * @param int $column
      * @param array $types
      *
      * @return mixed
      */
-    public function fetchColumn($statement, array $params = [], $column = 0, array $types = []);
+    public function fetchFirstColumn($statement, array $params = [], array $types = []);
 
     /**
      * @param string $query

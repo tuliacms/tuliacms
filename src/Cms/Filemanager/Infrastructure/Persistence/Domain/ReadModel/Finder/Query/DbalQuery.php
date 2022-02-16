@@ -4,13 +4,10 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Filemanager\Infrastructure\Persistence\Domain\ReadModel\Finder\Query;
 
-use Doctrine\DBAL\Connection;
 use Exception;
 use PDO;
+use Tulia\Cms\Attributes\Domain\ReadModel\Service\AttributesFinder;
 use Tulia\Cms\Filemanager\Domain\ReadModel\Model\File;
-use Tulia\Cms\Metadata\Domain\ReadModel\MetadataFinder;
-use Tulia\Cms\Node\Domain\ReadModel\Model\Node;
-use Tulia\Cms\Node\Domain\WriteModel\Model\Enum\TermTypeEnum;
 use Tulia\Cms\Node\Domain\Metadata\NodeMetadataEnum;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Exception\QueryException;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
@@ -23,11 +20,11 @@ use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
  */
 class DbalQuery extends AbstractDbalQuery
 {
-    private MetadataFinder $metadataFinder;
+    private AttributesFinder $metadataFinder;
 
     protected array $joinedTables = [];
 
-    public function __construct(QueryBuilder $criteriaBuilder, MetadataFinder $metadataFinder)
+    public function __construct(QueryBuilder $criteriaBuilder, AttributesFinder $metadataFinder)
     {
         parent::__construct($criteriaBuilder);
 
@@ -87,7 +84,7 @@ class DbalQuery extends AbstractDbalQuery
         ];
     }
 
-    public function query(array $criteria): Collection
+    public function query(array $criteria, string $scope): Collection
     {
         $criteria = array_merge($this->getBaseQueryArray(), $criteria);
         $criteria = $this->filterCriteria($criteria);

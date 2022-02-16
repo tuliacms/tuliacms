@@ -133,11 +133,11 @@ class Connection extends DoctrineConnection implements ConnectionInterface
     /**
      * {@inheritdoc}
      */
-    public function fetchColumn($statement, array $params = [], $column = 0, array $types = [])
+    public function fetchFirstColumn($statement, array $params = [], array $types = []): array
     {
         $statement = $this->prepareTablePrefix($statement);
 
-        return parent::fetchColumn($statement, $params, $column, $types);
+        return parent::fetchFirstColumn($statement, $params, $types);
     }
 
     /**

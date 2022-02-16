@@ -4,20 +4,27 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service;
 
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\FieldTypeBuilder\FieldTypeBuilderInterface;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\FieldTypeBuilder\FieldTypeBuilderRegistry;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Exception\FieldTypeNotExistsException;
 
 /**
  * @author Adam Banaszkiewicz
  */
+// @todo Move Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\FieldTypeMappingRegistry to Domain layer
 class FieldTypeMappingRegistry
 {
     private ConstraintTypeMappingRegistry $constraintTypeMappingRegistry;
     private array $mapping = [];
     private bool $mappingResolved = false;
+    private FieldTypeBuilderRegistry $builderRegistry;
 
-    public function __construct(ConstraintTypeMappingRegistry $constraintTypeMappingRegistry)
-    {
+    public function __construct(
+        ConstraintTypeMappingRegistry $constraintTypeMappingRegistry,
+        FieldTypeBuilderRegistry $builderRegistry
+    ) {
         $this->constraintTypeMappingRegistry = $constraintTypeMappingRegistry;
+        $this->builderRegistry = $builderRegistry;
     }
 
     public function addMapping(string $type, array $mapingInfo): void
@@ -30,6 +37,30 @@ class FieldTypeMappingRegistry
         $this->resolveMapping();
 
         return $this->mapping;
+    }
+
+    public function allForContentType(string $contentTypeCode): array
+    {
+        $this->resolveMapping();
+
+        $result = [];
+
+        foreach ($this->mapping as $type => $map) {
+            if (\in_array($contentTypeCode, $map['exclude_for_types'], true)) {
+                continue;
+            }
+
+            if (
+                $map['only_for_types'] !== []
+                && \in_array($contentTypeCode, $map['only_for_types'], true) === false
+            ) {
+                continue;
+            }
+
+            $result[$type] = $map;
+        }
+
+        return $result;
     }
 
     /**
@@ -46,11 +77,17 @@ class FieldTypeMappingRegistry
         return $this->mapping[$type]['classname'];
     }
 
-    public function getTypeBuilder(string $type): ?string
+    public function getTypeBuilder(string $type): ?FieldTypeBuilderInterface
     {
         $this->resolveMapping();
 
-        return $this->mapping[$type]['builder'] ?? null;
+        if (isset($this->mapping[$type]['builder']) === false) {
+            return null;
+        }
+
+        return $this->builderRegistry->has($this->mapping[$type]['builder'])
+            ? $this->builderRegistry->get($this->mapping[$type]['builder'])
+            : null;
     }
 
     public function get(string $type): array

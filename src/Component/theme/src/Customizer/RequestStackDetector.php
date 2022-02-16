@@ -26,7 +26,7 @@ class RequestStackDetector implements DetectorInterface
 
     public function isCustomizerMode(): bool
     {
-        $request = $this->requestStack->getMasterRequest();
+        $request = $this->requestStack->getMainRequest();
 
         if (! $request) {
             return false;
@@ -37,7 +37,7 @@ class RequestStackDetector implements DetectorInterface
 
     public function getChangesetId(): string
     {
-        $request = $this->requestStack->getMasterRequest();
+        $request = $this->requestStack->getMainRequest();
 
         if (! $request) {
             return '';

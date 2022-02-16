@@ -22,7 +22,7 @@ class SelectControl extends AbstractControl
             $values .= '<option value="' . $this->escapeAttribute($id) . '"' . ($selected ? ' selected="selected"' : '') . '>' . $this->escapeAttribute($val) . '</option>';
         }
 
-        return '<div class="form-group">
+        return '<div class="form-group mb-2">
             <label>' . $this->trans($params['label'], [], $params['translation_domain']) . '</label>
             <select id="' . $params['control_id'] . '" name="' . $params['control_name'] . '" class="customizer-control form-control" data-transport="'.$params['transport'].'">'.$values.'</select>
         </div>';

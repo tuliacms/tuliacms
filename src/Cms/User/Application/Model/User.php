@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\User\Application\Model;
 
-use Tulia\Cms\Metadata\Domain\WriteModel\MagickMetadataTrait;
-use Tulia\Cms\Metadata\Ports\Domain\WriteModel\MetadataAwareInterface;
+use Tulia\Cms\Attributes\Domain\WriteModel\MagickAttributesTrait;
+use Tulia\Cms\Attributes\Domain\WriteModel\Model\AttributesAwareInterface;
 use Tulia\Cms\User\Query\Model\User as QueryModelUser;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class User implements MetadataAwareInterface
+class User implements AttributesAwareInterface
 {
-    use MagickMetadataTrait;
+    use MagickAttributesTrait;
 
     protected ?string $id = null;
 
@@ -47,7 +47,7 @@ class User implements MetadataAwareInterface
         $self->setAccountExpired($user->getAccountExpired());
         $self->setCredentialsExpired($user->getCredentialsExpired());
         $self->setAccountLocked($user->getAccountLocked());
-        $self->replaceMetadata($user->getAllMetadata());
+        $self->replaceAttributes($user->getAttributes());
 
         return $self;
     }

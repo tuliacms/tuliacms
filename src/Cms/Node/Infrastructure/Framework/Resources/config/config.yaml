@@ -8,7 +8,18 @@ framework:
             - { name: cms/node, path: '%kernel.project_dir%/src/Cms/Node/Infrastructure/Framework/Resources/views/frontend' }
 
 cms:
+    attributes:
+        finder:
+            types:
+                node:
+                    scopes:
+                        - !php/const Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderScopeEnum::SINGLE
+                        - !php/const Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderScopeEnum::ROUTING_MATCHER
     content_building:
+        content_type:
+            node:
+                controller: 'Tulia\Cms\Node\UserInterface\Web\Frontend\Controller\Node::show'
+                layout_builder: 'Tulia\Cms\ContentBuilder\Infrastructure\Presentation\TwigRoutableContentTypeLayoutBuilder'
         data_types:
             mapping:
                 node_select:

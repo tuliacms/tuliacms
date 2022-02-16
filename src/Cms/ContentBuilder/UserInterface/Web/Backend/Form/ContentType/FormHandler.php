@@ -62,7 +62,7 @@ class FormHandler
 
         // Node type form
         $request = Request::create('/', 'POST');
-        $request->request->set('node_type_form', $formData['type']);
+        $request->request->set('content_type_form', $formData['type']);
         $form = $this->formFactory->create(ContentTypeForm::class, null, [
             'fields' => $this->collectFieldsFromSections($formData['layout']),
             'edit_form' => $editForm,
@@ -79,7 +79,7 @@ class FormHandler
         // Layout sidebar section form
         $request = Request::create('/', 'POST');
         $request->request->set('layout_section', $formData['layout']['sidebar']);
-        $form = $this->formFactory->create(LayoutSectionType::class);
+        $form = $this->formFactory->create(LayoutSectionType::class, [], ['max_depth_fields' => 5]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
 
@@ -92,7 +92,7 @@ class FormHandler
         // Layout main section form
         $request = Request::create('/', 'POST');
         $request->request->set('layout_section', $formData['layout']['main']);
-        $form = $this->formFactory->create(LayoutSectionType::class);
+        $form = $this->formFactory->create(LayoutSectionType::class, [], ['max_depth_fields' => 5]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
 
@@ -130,7 +130,7 @@ class FormHandler
         }
 
         foreach ($form->all() as $child) {
-            if (!$child->isValid()) {
+            if (!$child->isSubmitted() || !$child->isValid()) {
                 $errors[$child->getName()] = $this->getErrorMessages($child);
             }
         }

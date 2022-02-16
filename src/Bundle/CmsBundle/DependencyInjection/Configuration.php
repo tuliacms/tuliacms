@@ -23,6 +23,8 @@ class Configuration implements ConfigurationInterface
 
         $this->registerOptionsConfiguration($root);
         $this->registerContentBuildingConfiguration($root);
+        $this->registerContentBlockConfiguration($root);
+        $this->registerAttributesConfiguration($root);
 
         return $treeBuilder;
     }
@@ -58,7 +60,31 @@ class Configuration implements ConfigurationInterface
         ;
     }
 
-    private function registerContentBuildingConfiguration(ArrayNodeDefinition $root): void
+    private function registerAttributesConfiguration(NodeDefinition $root): void
+    {
+        $root
+            ->children()
+                ->arrayNode('attributes')
+                    ->children()
+                        ->arrayNode('finder')
+                            ->children()
+                                ->arrayNode('types')
+                                    ->arrayPrototype()
+                                        ->addDefaultsIfNotSet()
+                                        ->children()
+                                            ->arrayNode('scopes')->scalarPrototype()->defaultValue([])->end()->end()
+                                        ->end()
+                                    ->end()
+                                ->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
+            ->end()
+        ;
+    }
+
+    private function registerContentBuildingConfiguration(NodeDefinition $root): void
     {
         $root
             ->children()
@@ -80,6 +106,8 @@ class Configuration implements ConfigurationInterface
                                             ->scalarNode('classname')->isRequired()->end()
                                             ->scalarNode('builder')->defaultNull()->end()
                                             ->arrayNode('constraints')->scalarPrototype()->defaultValue([])->end()->end()
+                                            ->arrayNode('exclude_for_types')->scalarPrototype()->defaultValue([])->end()->end()
+                                            ->arrayNode('only_for_types')->scalarPrototype()->defaultValue([])->end()->end()
                                             ->arrayNode('configuration')
                                                 ->arrayPrototype()
                                                     ->addDefaultsIfNotSet()
@@ -111,13 +139,75 @@ class Configuration implements ConfigurationInterface
                             ->arrayPrototype()
                                 ->addDefaultsIfNotSet()
                                 ->children()
-                                    ->scalarNode('default_controller')->isRequired()->end()
+                                    ->scalarNode('controller')->isRequired()->end()
+                                    ->scalarNode('layout_builder')->isRequired()->end()
+                                    ->scalarNode('multilingual')->defaultTrue()->end()
                                 ->end()
                             ->end()
                         ->end()
-                        ->arrayNode('layout_type')
-                            ->children()
-                                ->scalarNode('default_builder')->isRequired()->end()
+                        ->arrayNode('content_type_entry')
+                            ->arrayPrototype()
+                                ->addDefaultsIfNotSet()
+                                ->children()
+                                    ->scalarNode('type')->isRequired()->end()
+                                    ->scalarNode('name')->isRequired()->end()
+                                    ->scalarNode('icon')->defaultNull()->end()
+                                    ->scalarNode('controller')->defaultNull()->end()
+                                    ->booleanNode('is_routable')->defaultFalse()->end()
+                                    ->booleanNode('is_hierarchical')->defaultFalse()->end()
+                                    ->scalarNode('routing_strategy')->defaultNull()->end()
+                                    ->arrayNode('layout')
+                                        ->children()
+                                            ->arrayNode('sections')
+                                                ->arrayPrototype()
+                                                ->children()
+                                                    ->arrayNode('groups')
+                                                        ->arrayPrototype()
+                                                            ->children()
+                                                                ->scalarNode('name')->isRequired()->end()
+                                                                ->booleanNode('active')->defaultFalse()->end()
+                                                                ->integerNode('order')->defaultValue(1)->end()
+                                                                ->arrayNode('fields')
+                                                                    ->arrayPrototype()
+                                                                        ->children()
+                                                                            ->scalarNode('type')->isRequired()->end()
+                                                                            ->scalarNode('name')->isRequired()->end()
+                                                                            ->booleanNode('is_multilingual')->defaultFalse()->end()
+                                                                            ->arrayNode('fields')->scalarPrototype()->defaultValue([])->end()->end()
+                                                                            ->arrayNode('configuration')
+                                                                                ->arrayPrototype()
+                                                                                    ->children()
+                                                                                        ->scalarNode('code')->isRequired()->end()
+                                                                                        ->scalarNode('value')->isRequired()->end()
+                                                                                    ->end()
+                                                                                ->end()
+                                                                            ->end()
+                                                                            ->arrayNode('constraints')
+                                                                                ->arrayPrototype()
+                                                                                    ->children()
+                                                                                        ->scalarNode('code')->isRequired()->end()
+                                                                                        ->arrayNode('modificators')
+                                                                                            ->arrayPrototype()
+                                                                                                ->children()
+                                                                                                    ->scalarNode('code')->isRequired()->end()
+                                                                                                    ->scalarNode('value')->isRequired()->end()
+                                                                                                ->end()
+                                                                                            ->end()
+                                                                                        ->end()
+                                                                                    ->end()
+                                                                                ->end()
+                                                                            ->end()
+                                                                        ->end()
+                                                                    ->end()
+                                                                ->end()
+                                                            ->end()
+                                                        ->end()
+                                                    ->end()
+                                                ->end()
+                                            ->end()
+                                        ->end()
+                                    ->end()
+                                ->end()
                             ->end()
                         ->end()
                     ->end()
@@ -126,7 +216,24 @@ class Configuration implements ConfigurationInterface
         ;
     }
 
-    private function buildConstraintsNode(string $nodeName)
+    private function registerContentBlockConfiguration(NodeDefinition $root): void
+    {
+        $root
+            ->children()
+                ->arrayNode('content_blocks')
+                    ->children()
+                        ->arrayNode('templating')
+                            ->children()
+                                ->arrayNode('paths')->scalarPrototype()->defaultValue([])->end()->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
+            ->end()
+        ;
+    }
+
+    private function buildConstraintsNode(string $nodeName): NodeDefinition
     {
         $treeBuilder = new TreeBuilder($nodeName);
 

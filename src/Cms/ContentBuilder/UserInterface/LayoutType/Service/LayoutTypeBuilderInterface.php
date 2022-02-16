@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service;
 
 use Symfony\Component\Form\FormView;
-use Tulia\Cms\ContentBuilder\Domain\ContentType\Model\ContentType;
-use Tulia\Cms\ContentBuilder\Domain\LayoutType\Model\LayoutType;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\ContentType;
+use Tulia\Component\Templating\View;
 
 /**
  * @author Adam Banaszkiewicz
@@ -14,10 +14,14 @@ use Tulia\Cms\ContentBuilder\Domain\LayoutType\Model\LayoutType;
 interface LayoutTypeBuilderInterface
 {
     /**
-     * Returns name used in admin panel, to select wich builder
-     * should be responsible for rendering the node type layout.
+     * Returns view for building the content type. This builder is wrote in Vue.js in example,
+     * and allows to create sections and fields used in the content type.
      */
-    public function getName(): string;
+    public function builderView(string $contentType, array $data, array $errors, bool $creationMode): View;
 
-    public function build(ContentType $contentType, LayoutType $layoutType, FormView $formView): string;
+    /**
+     * Returns view for creadint/editing content type. The content type is already configured,
+     * and we want to create first content with this type.
+     */
+    public function editorView(ContentType $contentType, FormView $formView): View;
 }

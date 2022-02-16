@@ -31,7 +31,6 @@ class Term extends AbstractController
         $this->getDocument()->setTitle($term->getTitle());
 
         $nodes = $this->nodeFinder->find([
-            'node_type' => null,
             'category'  => $term->getId(),
             'page'      => $page,
             'per_page'  => $perPage,

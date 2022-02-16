@@ -140,6 +140,7 @@ class Configuration extends SymfonyConfiguration
                                     ->arrayNode('require')
                                         ->scalarPrototype()->defaultValue([])->end()
                                     ->end()
+                                    ->scalarNode('collection')->defaultNull()->end()
                                     ->scalarNode('group')->defaultValue('body')->end()
                                     ->scalarNode('priority')->defaultValue('100')->end()
                                     ->arrayNode('included')

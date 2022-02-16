@@ -21,8 +21,10 @@ class NodeExtension extends AbstractExtension
 
     private NodeFinderInterface $nodeFinder;
 
-    public function __construct(RouterInterface $router, NodeFinderInterface $nodeFinder)
-    {
+    public function __construct(
+        RouterInterface $router,
+        NodeFinderInterface $nodeFinder
+    ) {
         $this->router = $router;
         $this->nodeFinder = $nodeFinder;
     }
@@ -30,7 +32,7 @@ class NodeExtension extends AbstractExtension
     /**
      * {@inheritdoc}
      */
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return [
             new TwigFunction('node_path', function (Node $node, array $parameters = []) {
@@ -58,6 +60,11 @@ class NodeExtension extends AbstractExtension
                 ], NodeFinderScopeEnum::ROUTING_GENERATOR);
 
                 return $this->generate($node, $parameters, RouterInterface::ABSOLUTE_PATH);
+            }, [
+                'is_safe' => [ 'html' ]
+            ]),
+            new TwigFunction('find_nodes', function (array $parameters) {
+                return $this->nodeFinder->find($parameters, NodeFinderScopeEnum::LISTING);
             }, [
                 'is_safe' => [ 'html' ]
             ]),

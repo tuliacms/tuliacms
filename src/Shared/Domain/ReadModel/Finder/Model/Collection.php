@@ -62,12 +62,12 @@ class Collection implements \ArrayAccess, \IteratorAggregate
         return $this->elements[0] ?? null;
     }
 
-    public function getIterator()
+    public function getIterator(): \Traversable
     {
         return new \ArrayIterator($this->elements);
     }
 
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return isset($this->elements[$offset]);
     }
@@ -77,7 +77,7 @@ class Collection implements \ArrayAccess, \IteratorAggregate
         return $this->elements[$offset];
     }
 
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         if ($offset !== null) {
             $this->elements[$offset] = $value;
@@ -86,7 +86,7 @@ class Collection implements \ArrayAccess, \IteratorAggregate
         }
     }
 
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         unset($this->elements[$offset]);
     }

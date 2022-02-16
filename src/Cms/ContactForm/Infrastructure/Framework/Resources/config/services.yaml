@@ -10,16 +10,15 @@ services:
 
     Tulia\Cms\ContactForm\:
         resource: '../../../../**'
-        exclude: '../../../../{Infrastructure/Framework/Resources,Domain/Event,Domain/Exception,Domain/FieldsParser/Exception,Domain/WriteModel/Model}'
+        exclude:
+            - '../../../../{Infrastructure/Framework/Resources,Domain/Event,Domain/Exception,Domain/FieldsParser/Exception,Domain/WriteModel/Model}'
+            - '../../../../Domain/FieldsParser/DynamicShortcode.php'
 
     Tulia\Cms\ContactForm\Ports\Domain\FieldType\FieldsTypeRegistryInterface:
         class: Tulia\Cms\ContactForm\Domain\FieldType\FieldsTypeRegistry
         bind:
             $sourceTypes: !tagged_iterator cms.form.field_type
             $sourceParsers: !tagged_iterator cms.form.field_parser
-
-    Tulia\Cms\ContactForm\Domain\Shortcode\ContactForm:
-        tags: [ shortcode.compiler ]
 
     Tulia\Cms\ContactForm\Domain\SearchAnything\SearchProvider:
         tags:

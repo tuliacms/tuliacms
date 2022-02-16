@@ -6,10 +6,10 @@ namespace Tulia\Cms\TuliaEditor\Infrastructure\Framework\Form\FormType;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Tulia\Cms\Metadata\Ports\Domain\WriteModel\MetadataAwareInterface;
+use Tulia\Cms\Attributes\Domain\WriteModel\Model\AttributesAwareInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -23,7 +23,7 @@ class TuliaEditorType extends AbstractType
         ]);
 
         $resolver->setRequired('entity');
-        $resolver->setAllowedTypes('entity', [MetadataAwareInterface::class]);
+        $resolver->setAllowedTypes('entity', [AttributesAwareInterface::class]);
     }
 
     public function buildView(FormView $view, FormInterface $form, array $options)

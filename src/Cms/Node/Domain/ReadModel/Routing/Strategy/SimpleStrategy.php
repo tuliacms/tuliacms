@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Domain\ReadModel\Routing\Strategy;
 
-use Tulia\Cms\ContentBuilder\Domain\ContentType\Routing\Strategy\ContentTypeRoutingStrategyInterface;
-use Tulia\Cms\ContentBuilder\Domain\ContentType\Service\ContentTypeRegistry;
-use Tulia\Cms\ContentBuilder\Domain\ContentType\Service\Router;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistry;
+use Tulia\Cms\ContentBuilder\Domain\WriteModel\ContentType\Service\Router;
+use Tulia\Cms\ContentBuilder\Domain\WriteModel\Routing\Strategy\ContentTypeRoutingStrategyInterface;
 use Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderInterface;
 use Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderScopeEnum;
 use Tulia\Cms\Node\Domain\ReadModel\Model\Node;
@@ -34,12 +34,22 @@ class SimpleStrategy implements ContentTypeRoutingStrategyInterface
 
     public function generate(string $id, array $parameters = []): string
     {
-        return '/' . $parameters['_node_instance']->getSlug();
+        if (isset($parameters['_node_instance'])) {
+            return '/' . $parameters['_node_instance']->getSlug();
+        }
+
+        $node = $this->findNodeById($id);
+
+        if ($node) {
+            return '/' . $node->getSlug();
+        }
+
+        return '';
     }
 
     public function match(string $pathinfo, array $parameters = []): array
     {
-        $node = $this->getNode(substr($pathinfo, 1));
+        $node = $this->findNodeBySlug(substr($pathinfo, 1));
 
         if (! $node) {
             return [];
@@ -69,13 +79,20 @@ class SimpleStrategy implements ContentTypeRoutingStrategyInterface
         return 'simple';
     }
 
-    private function getNode(?string $slug): ?Node
+    private function findNodeBySlug(?string $slug): ?Node
     {
         return $this->nodeFinder->findOne([
             'slug'      => $slug,
             'per_page'  => 1,
             'order_by'  => null,
             'order_dir' => null,
+        ], NodeFinderScopeEnum::ROUTING_MATCHER);
+    }
+
+    private function findNodeById(?string $id): ?Node
+    {
+        return $this->nodeFinder->findOne([
+            'id' => $id,
         ], NodeFinderScopeEnum::ROUTING_MATCHER);
     }
 }

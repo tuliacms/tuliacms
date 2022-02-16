@@ -4,19 +4,16 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Taxonomy\Domain\ReadModel\Model;
 
-use DateTime;
 use InvalidArgumentException;
-use Tulia\Cms\Metadata\Domain\ReadModel\MagickMetadataTrait;
-use Tulia\Cms\Metadata\Ports\Domain\WriteModel\MetadataAwareInterface;
-use Tulia\Cms\Node\Domain\ReadModel\NodeContent\NodeContentInterface;
-use Tulia\Cms\Node\Infrastructure\Domain\ReadModel\NodeContent\VoidNodeContent;
+use Tulia\Cms\Attributes\Domain\ReadModel\MagickAttributesTrait;
+use Tulia\Cms\Attributes\Domain\WriteModel\Model\AttributesAwareInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class Term implements MetadataAwareInterface
+class Term implements AttributesAwareInterface
 {
-    use MagickMetadataTrait;
+    use MagickAttributesTrait;
 
     protected string $id;
 
@@ -73,7 +70,7 @@ class Term implements MetadataAwareInterface
         $term->setTitle($data['title'] ?? '');
         $term->setSlug($data['slug'] ?? '');
         $term->isRoot = (bool) ($data['is_root'] ?? true);
-        $term->replaceMetadata($data['metadata'] ?? []);
+        $term->replaceAttributes($data['metadata'] ?? []);
 
         return $term;
     }

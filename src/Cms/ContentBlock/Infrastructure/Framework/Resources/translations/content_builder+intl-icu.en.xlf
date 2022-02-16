@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" target-language="en" datatype="plaintext" original="content_builder+intl-icu.en.xlf">
+        <body>
+            <trans-unit id="tuliacms.content_builder.content_block.1">
+                <source>content_block</source>
+                <target>Content Block</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

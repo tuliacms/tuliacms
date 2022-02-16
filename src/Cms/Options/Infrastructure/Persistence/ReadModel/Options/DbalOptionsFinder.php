@@ -21,7 +21,7 @@ class DbalOptionsFinder implements OptionsFinderInterface
 
     public function findByName(string $name, string $locale, string $website)
     {
-        $result = $this->connection->fetchColumn('SELECT COALESCE(tl.`value`, tm.`value`) AS `value`
+        $result = $this->connection->fetchFirstColumn('SELECT COALESCE(tl.`value`, tm.`value`) AS `value`
             FROM #__option tm
             LEFT JOIN #__option_lang tl
                 ON tm.id = tl.option_id AND tl.locale = :locale
@@ -30,7 +30,7 @@ class DbalOptionsFinder implements OptionsFinderInterface
             'name'      => $name,
             'locale'    => $locale,
             'websiteId' => $website,
-        ], 0, [
+        ], [
             'name'      => \PDO::PARAM_STR,
             'locale'    => \PDO::PARAM_STR,
             'websiteId' => \PDO::PARAM_STR,

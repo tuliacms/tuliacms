@@ -6,10 +6,10 @@ namespace Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Controller;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Tulia\Cms\ContentBuilder\Domain\ContentType\ContentTypeRepository;
-use Tulia\Cms\ContentBuilder\Domain\ContentType\Routing\Strategy\ContentTypeRoutingStrategyRegistry;
-use Tulia\Cms\ContentBuilder\Domain\ContentType\Service\ContentTypeRegistry;
-use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\FieldTypeMappingRegistry;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistry;
+use Tulia\Cms\ContentBuilder\Domain\WriteModel\ContentType\Service\Configuration;
+use Tulia\Cms\ContentBuilder\Domain\WriteModel\ContentTypeRepository;
+use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\LayoutTypeBuilderRegistry;
 use Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\ContentType\FormDataToModelTransformer;
 use Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\ContentType\FormHandler;
 use Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\ContentType\ModelToFormDataTransformer;
@@ -22,38 +22,31 @@ use Tulia\Component\Templating\ViewInterface;
  */
 class ContentModel extends AbstractController
 {
-    private FieldTypeMappingRegistry $fieldTypeMappingRegistry;
     private FormDataToModelTransformer $formDataToModelTransformer;
     private ContentTypeRepository $contentTypeRepository;
     private ContentTypeRegistry $contentTypeRegistry;
-    private ContentTypeRoutingStrategyRegistry $strategyRegistry;
+    private Configuration $configuration;
+    private LayoutTypeBuilderRegistry $layoutTypeBuilderRegistry;
 
     public function __construct(
-        FieldTypeMappingRegistry $fieldTypeMappingRegistry,
         FormDataToModelTransformer $formDataToModelTransformer,
         ContentTypeRepository $contentTypeRepository,
         ContentTypeRegistry $contentTypeRegistry,
-        ContentTypeRoutingStrategyRegistry $strategyRegistry
+        Configuration $configuration,
+        LayoutTypeBuilderRegistry $layoutTypeBuilderRegistry
     ) {
-        $this->fieldTypeMappingRegistry = $fieldTypeMappingRegistry;
         $this->formDataToModelTransformer = $formDataToModelTransformer;
         $this->contentTypeRepository = $contentTypeRepository;
         $this->contentTypeRegistry = $contentTypeRegistry;
-        $this->strategyRegistry = $strategyRegistry;
+        $this->configuration = $configuration;
+        $this->layoutTypeBuilderRegistry = $layoutTypeBuilderRegistry;
     }
 
     public function index(): ViewInterface
     {
-        $contentTypeList = $this->contentTypeRegistry->all();
-        $contentTypeCodes = [];
-
-        foreach ($contentTypeList as $type) {
-            $contentTypeCodes[] = $type->getType();
-        }
-
         return $this->view('@backend/content_builder/index.tpl', [
-            'contentTypeList' => $contentTypeList,
-            'contentTypeCodes' => array_unique($contentTypeCodes),
+            'contentTypeList' => iterator_to_array($this->contentTypeRegistry->all()),
+            'contentTypeCodes' => $this->configuration->getTypes(),
         ]);
     }
 
@@ -63,6 +56,11 @@ class ContentModel extends AbstractController
      */
     public function create(string $contentType, Request $request, FormHandler $nodeTypeFormHandler)
     {
+        if ($this->configuration->typeExists($contentType) === false) {
+            $this->addFlash('danger', $this->trans('contentTypeOfNotExists', ['name' => $contentType], 'content_builder'));
+            return $this->redirectToRoute('backend.content_builder.homepage');
+        }
+
         if ($request->isMethod('POST')) {
             $data = json_decode($request->request->get('node_type'), true);
         } else {
@@ -78,18 +76,18 @@ class ContentModel extends AbstractController
             try {
                 $this->contentTypeRepository->insert($nodeType);
             } catch (\Exception $e) {
-
+                dump($e);exit;
             }
 
-            $this->setFlash('success', $this->trans('nodeTypeCreatedSuccessfully', [], 'content_builder'));
+            $this->setFlash('success', $this->trans('contentTypeCreatedSuccessfully', [], 'content_builder'));
             return $this->redirectToRoute('backend.content_builder.homepage');
         }
 
+        $layoutBuilder = $this->layoutTypeBuilderRegistry->get($this->configuration->getLayoutBuilder($contentType));
+
         return $this->view('@backend/content_builder/content_type/create.tpl', [
-            'fieldTypes' => $this->getFieldTypes(),
-            'routingStrategies' => $this->getRoutingStrategies($contentType),
-            'model' => $data,
-            'errors' => $nodeTypeFormHandler->getErrors(),
+            'type' => $contentType,
+            'builderView' => $layoutBuilder->builderView($contentType, $data, $nodeTypeFormHandler->getErrors(), true),
             'cleaningResult' => $nodeTypeFormHandler->getCleaningResult(),
         ]);
     }
@@ -98,79 +96,67 @@ class ContentModel extends AbstractController
      * @CsrfToken(id="create-content-type")
      * @return ViewInterface|RedirectResponse
      */
-    public function edit(string $code, string $contentType, Request $request, FormHandler $nodeTypeFormHandler)
-    {
-        if ($this->contentTypeRegistry->has($code) === false) {
-            $this->setFlash('danger', $this->trans('nodeTypeNotExists', [], 'content_builder'));
+    public function edit(
+        string $id,
+        string $contentType,
+        Request $request,
+        FormHandler $nodeTypeFormHandler
+    ) {
+        if ($this->configuration->typeExists($contentType) === false) {
+            $this->addFlash('danger', $this->trans('contentTypeOfNotExists', ['name' => $contentType], 'content_builder'));
             return $this->redirectToRoute('backend.content_builder.homepage');
         }
 
-        $type = $this->contentTypeRegistry->get($code);
+        $contentType = $this->contentTypeRepository->find($id);
 
-        if ($type->isInternal()) {
-            $this->setFlash('danger', $this->trans('cannotEditInternalNodeType', [], 'content_builder'));
+        if ($contentType === null) {
+            $this->setFlash('danger', $this->trans('contentTypeNotExists', [], 'content_builder'));
             return $this->redirectToRoute('backend.content_builder.homepage');
         }
 
-        $layout = $type->getLayout();
+        $layout = $contentType->getLayout();
 
-        $data = (new ModelToFormDataTransformer())->transform($type, $layout);
+        $data = (new ModelToFormDataTransformer())->transform($contentType, $layout);
         $data = $nodeTypeFormHandler->handle($request, $data, true);
 
         if ($nodeTypeFormHandler->isRequestValid()) {
             $layoutType = $this->formDataToModelTransformer->produceLayoutType($data);
-            $nodeType = $this->formDataToModelTransformer->produceContentType($data, $contentType, $layoutType);
+            $nodeType = $this->formDataToModelTransformer->produceContentType($data, $contentType->getType(), $layoutType);
 
             try {
                 $this->contentTypeRepository->update($nodeType);
             } catch (\Exception $e) {
-
+                dump($e);exit;
             }
 
-            $this->setFlash('success', $this->trans('nodeTypeUpdatedSuccessfully', [], 'content_builder'));
+            $this->setFlash('success', $this->trans('contentTypeUpdatedSuccessfully', [], 'content_builder'));
             return $this->redirectToRoute('backend.content_builder.homepage');
         }
 
+        $layoutBuilder = $this->layoutTypeBuilderRegistry->get($this->configuration->getLayoutBuilder($contentType->getType()));
+
         return $this->view('@backend/content_builder/content_type/edit.tpl', [
-            'fieldTypes' => $this->getFieldTypes(),
-            'routingStrategies' => $this->getRoutingStrategies($contentType),
-            'model' => $data,
-            'errors' => $nodeTypeFormHandler->getErrors(),
+            'type' => $contentType->getType(),
+            'builderView' => $layoutBuilder->builderView($contentType->getType(), $data, $nodeTypeFormHandler->getErrors(), false),
             'cleaningResult' => $nodeTypeFormHandler->getCleaningResult(),
         ]);
     }
 
-    private function getFieldTypes(): array
+    /**
+     * @CsrfToken(id="delete-content-type")
+     */
+    public function delete(string $id): RedirectResponse
     {
-        $types = [];
+        $contentType = $this->contentTypeRepository->find($id);
 
-        foreach ($this->fieldTypeMappingRegistry->all() as $type => $data) {
-            $types[$type] = [
-                'id' => $type,
-                'label' => $data['label'],
-                'configuration' => $data['configuration'],
-                'constraints' => $data['constraints'],
-            ];
+        if ($contentType === null) {
+            $this->setFlash('danger', $this->trans('contentTypeNotExists', [], 'content_builder'));
+            return $this->redirectToRoute('backend.content_builder.homepage');
         }
 
-        return $types;
-    }
+        $this->contentTypeRepository->delete($contentType);
 
-    private function getRoutingStrategies(string $contentType): array
-    {
-        $strategies = [];
-
-        foreach ($this->strategyRegistry->all() as $strategy) {
-            if ($strategy->supports($contentType) === false) {
-                continue;
-            }
-
-            $strategies[] = [
-                'id' => $strategy->getId(),
-                'label' => $this->trans(sprintf('contentTypeStrategy_%s', $strategy->getId()), [], 'content_builder'),
-            ];
-        }
-
-        return $strategies;
+        $this->setFlash('success', $this->trans('contentTypeWasRemoved', [], 'content_builder'));
+        return $this->redirectToRoute('backend.content_builder.homepage');
     }
 }

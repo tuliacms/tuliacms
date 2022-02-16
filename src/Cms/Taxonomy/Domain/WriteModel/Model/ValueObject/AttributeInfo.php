@@ -10,15 +10,15 @@ namespace Tulia\Cms\Taxonomy\Domain\WriteModel\Model\ValueObject;
 class AttributeInfo
 {
     private bool $multilingual;
-    private bool $multiple;
     private bool $compilable;
+    private bool $hasNonscalarValue;
     private bool $taxonomy;
 
-    public function __construct(bool $multilingual, bool $multiple, bool $compilable, bool $taxonomy)
+    public function __construct(bool $multilingual, bool $compilable, bool $hasNonscalarValue, bool $taxonomy)
     {
         $this->multilingual = $multilingual;
-        $this->multiple = $multiple;
         $this->compilable = $compilable;
+        $this->hasNonscalarValue = $hasNonscalarValue;
         $this->taxonomy = $taxonomy;
     }
 
@@ -27,14 +27,14 @@ class AttributeInfo
         return $this->multilingual;
     }
 
-    public function isMultiple(): bool
-    {
-        return $this->multiple;
-    }
-
     public function isCompilable(): bool
     {
         return $this->compilable;
+    }
+
+    public function hasNonscalarValue(): bool
+    {
+        return $this->hasNonscalarValue;
     }
 
     public function isTaxonomy(): bool
