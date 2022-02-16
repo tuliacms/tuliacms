@@ -2,6 +2,8 @@ framework:
     translator:
         paths:
             - '%kernel.project_dir%/src/Cms/ContentBuilder/Infrastructure/Framework/Resources/translations'
+    public_paths:
+        '%kernel.project_dir%/src/Cms/ContentBuilder/Infrastructure/Framework/Resources/public/layout_builder/dist': '/core/content-builder-layout-builder'
     templating:
         paths:
             - { name: backend/content_builder, path: '%kernel.project_dir%/src/Cms/ContentBuilder/Infrastructure/Framework/Resources/views/backend' }

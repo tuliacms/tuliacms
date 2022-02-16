@@ -2,6 +2,8 @@ framework:
     templating:
         paths:
             - { name: backend/filemanager, path: '%kernel.project_dir%/src/Cms/Filemanager/Infrastructure/Framework/Resources/views/backend' }
+    public_paths:
+        '%kernel.project_dir%/src/Cms/Filemanager/Infrastructure/Framework/Resources/public/filemanager/dist': '/core/filemanager'
     assetter:
         assets:
             filemanager:

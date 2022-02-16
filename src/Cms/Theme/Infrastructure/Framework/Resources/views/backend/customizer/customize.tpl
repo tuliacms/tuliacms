@@ -9,10 +9,10 @@
         <div class="side-panel">
             <div class="panel-headline">
                 <div class="headline-btns">
-                    <a href="{{ path('backend.theme.customize.left', { changeset: changeset.id, returnUrl: returnUrl }) }}" class="customizer-close" data-toggle="tooltip" data-placement="right" title="{{ 'close'|trans }}"><i class="fas fa-times"></i></a>
+                    <a href="{{ path('backend.theme.customize.left', { changeset: changeset.id, returnUrl: returnUrl }) }}" class="customizer-close" data-bs-toggle="tooltip" data-bs-placement="right" title="{{ 'close'|trans }}"><i class="fas fa-times"></i></a>
                     {% if locales()|length > 1 %}
                         {% set contentLocale = current_website().locale.code %}
-                        <div class="dropdown d-inline" data-toggle="tooltip" data-placement="left" title="{{ 'changeLanguage'|trans }}">
+                        <div class="dropdown d-inline" data-bs-toggle="tooltip" data-bs-placement="left" title="{{ 'changeLanguage'|trans }}">
                             <a class="btn btn-dark btn-sm btn-icon-only" href="#" data-bs-toggle="dropdown">
                                 <i class="btn-icon fas fa-language"></i>
                             </a>
@@ -31,14 +31,14 @@
                         </a>
                         <div class="dropdown-menu dropdown-menu-right">
                             <h6 class="dropdown-header">{{ 'layouts'|trans({}, 'customizer') }}</h6>
-                            {#<a class="dropdown-item customizer-layouts-list dropdown-item-with-icon" href="#" data-toggle="modal" data-target="#modal-customizer-layouts"><i class="dropdown-icon fas fa-folder-open"></i> {{ 'browseLayouts'|trans({}, 'customizer') }}</a>#}
+                            {#<a class="dropdown-item customizer-layouts-list dropdown-item-with-icon" href="#" data-bs-toggle="modal" data-target="#modal-customizer-layouts"><i class="dropdown-icon fas fa-folder-open"></i> {{ 'browseLayouts'|trans({}, 'customizer') }}</a>#}
                             <a class="dropdown-item customizer-layouts-save dropdown-item-with-icon" href="#"><i class="dropdown-icon fas fa-save"></i> {{ 'saveCurrentLayout'|trans({}, 'customizer') }}</a>
                             {% if theme.parent %}
                                 <div class="dropdown-divider"></div>
                                 <h6 class="dropdown-header">{{ 'tools'|trans({}, 'customizer') }}</h6>
-                                <a class="dropdown-item dropdown-item-with-icon" href="#" data-toggle="modal" data-target="#modal-customizer-copy-settings"><i class="dropdown-icon fas fa-copy"></i> {{ 'copySettingsFromParentTheme'|trans({}, 'customizer') }}</a>
+                                <a class="dropdown-item dropdown-item-with-icon" href="#" data-bs-toggle="modal" data-target="#modal-customizer-copy-settings"><i class="dropdown-icon fas fa-copy"></i> {{ 'copySettingsFromParentTheme'|trans({}, 'customizer') }}</a>
                             {% endif %}
-                            {#<a class="dropdown-item dropdown-item-with-icon" href="#" data-toggle="modal" data-target="#modal-customizer-reset-settings"><i class="dropdown-icon fas fa-eraser"></i> {{ 'resetCustomizerSettings'|trans({}, 'customizer') }}</a>#}
+                            {#<a class="dropdown-item dropdown-item-with-icon" href="#" data-bs-toggle="modal" data-target="#modal-customizer-reset-settings"><i class="dropdown-icon fas fa-eraser"></i> {{ 'resetCustomizerSettings'|trans({}, 'customizer') }}</a>#}
                         </div>
                     </div>
                 </div>
@@ -82,7 +82,7 @@
                             <hr />
                         {% endfor %}
                         <h5>{{ 'resetCustomizerSettings'|trans({}, 'customizer') }}</h5>
-                        <button class="btn btn-primary btn-sm btn-icon-left" type="button" data-toggle="modal" data-target="#modal-customizer-reset-settings">
+                        <button class="btn btn-primary btn-sm btn-icon-left" type="button" data-bs-toggle="modal" data-target="#modal-customizer-reset-settings">
                             <i class="btn-icon fas fa-eraser"></i> {{ 'resetCustomizerSettings'|trans({}, 'customizer') }}
                         </button>
                     </div>
@@ -96,9 +96,9 @@
                     <button type="button" class="customizer-panel-toggle active" data-panel="hide"><i class="fas fa-chevron-left"></i> {{ 'hide'|trans }}</button>
                     <button type="button" class="customizer-panel-toggle" data-panel="show"><i class="fas fa-chevron-right"></i> {{ 'show'|trans }}</button>
                 </div>
-                <button type="button" class="btn customizer-resolution-change active" data-toggle="tooltip" data-placement="bottom" title="{{ 'desktop'|trans }}" data-resolution="full"><i class="fas fa-desktop"></i></button>
-                <button type="button" class="btn customizer-resolution-change" data-toggle="tooltip" data-placement="bottom" title="{{ 'tablet'|trans }}" data-resolution="tablet"><i class="fas fa-tablet-alt"></i></button>
-                <button type="button" class="btn customizer-resolution-change" data-toggle="tooltip" data-placement="bottom" title="{{ 'smartphone'|trans }}" data-resolution="mobile"><i class="fas fa-mobile-alt"></i></button>
+                <button type="button" class="btn customizer-resolution-change active" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ 'desktop'|trans }}" data-resolution="full"><i class="fas fa-desktop"></i></button>
+                <button type="button" class="btn customizer-resolution-change" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ 'tablet'|trans }}" data-resolution="tablet"><i class="fas fa-tablet-alt"></i></button>
+                <button type="button" class="btn customizer-resolution-change" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ 'smartphone'|trans }}" data-resolution="mobile"><i class="fas fa-mobile-alt"></i></button>
             </div>
             <div class="preview-loader"><div class="loader-icon"><i class="fas fa-circle-notch fa-spin"></i></div></div>
             <iframe class="customizer-preview"></iframe>

@@ -5,8 +5,7 @@
 /.env.*.local
 /config/secrets/prod/prod.decrypt.private.php
 /public/bundles/
-/public/assets/module/
-/public/assets/theme/
+/public/assets/
 /public/uploads/
 /extension/module/
 /extension/theme/

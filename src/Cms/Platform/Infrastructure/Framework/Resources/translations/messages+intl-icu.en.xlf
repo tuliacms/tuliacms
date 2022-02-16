@@ -812,6 +812,11 @@
                 <target>Import</target>
                 <note>Label of the button, means we want to import some data, want to execute action</note>
             </trans-unit>
+            <trans-unit id="tuliacms.messages.203">
+                <source>rememberMe</source>
+                <target>Remember me</target>
+                <note>Label of the checkbox on login page</note>
+            </trans-unit>
         </body>
     </file>
 </xliff>

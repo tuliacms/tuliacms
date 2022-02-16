@@ -38,7 +38,7 @@ class Security extends AbstractController
 
     public function getCollection(): array
     {
-        $filepath = $this->getParameter('kernel.public_dir').'/assets/core/backend/login/login-bg/collection.json';
+        $filepath = $this->getParameter('kernel.public_dir').'/assets/core/backend/theme/images/login-bg/collection.json';
 
         return json_decode(file_get_contents($filepath));
     }

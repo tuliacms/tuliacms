@@ -1,0 +1,139 @@
+.dropdown-toggle {
+    padding: 0 17px;
+}
+.dropdown-toggle::after {
+    margin-left: .95rem;
+    border-top: .4em solid;
+    border-right: .4em solid transparent;
+    border-left: .4em solid transparent;
+    transform: translateY(1px);
+}
+.dropdown-toggle.dropdown-toggle-split {
+    border-left: 1px solid #fff
+}
+.dropup .dropdown-toggle::after {
+    margin-left: .95rem;
+    border-right: .4em solid transparent;
+    border-bottom: .4em solid;
+    border-left: .4em solid transparent;
+}
+
+.dropdown-menu {
+    padding: 8px 0;
+    min-width: 170px;
+    border: none;
+    box-shadow: $box-shadow;
+
+    &.show {
+        animation-name: zoomInDropdown;
+        animation-iteration-count: 1;
+        animation-duration: .12s;
+    }
+}
+
+.dropdown-header {
+    font-size: 12px;
+    padding: $dropdown-item-padding;
+    text-transform: uppercase;
+}
+
+@keyframes zoomInDropdown {
+    0% {opacity:0;}
+    100% {opacity:1;}
+}
+
+.dropdown-item {
+    padding: $dropdown-item-padding;
+    font-size: 13px;
+    line-height: 1.6;
+    transition: $transition-time all;
+    position: relative;
+    color: $dropdown-item-color;
+
+    &.active {
+        padding-right: 35px;
+        background: rgba(0,0,0,.06);
+        color: inherit;
+    }
+
+    &.active:after {
+        content: "\f00c";
+        font-family: "Font Awesome 5 Free";
+        font-weight: bold;
+        display: block;
+        position: absolute;
+        top: 50%;
+        right: 12px;
+        font-size: 13px;
+        color: #9aa0ac;
+        transform: translateY(-50%);
+    }
+
+    &:hover,
+    &:focus {
+        background-color: map-get($colors, 'primary');
+        color: #fff;
+        text-decoration: none;
+    }
+
+    &.active:hover:after,
+    &.active:focus:after {
+        color: #fff;
+    }
+
+    @each $type in $list-base-colors {
+        &.dropdown-item-#{$type}:hover,
+        &.dropdown-item-#{$type}:focus {
+            background-color: map-get($colors, $type);
+        }
+    }
+
+    &.dropdown-item-light:hover,
+    &.dropdown-item-light:focus {
+        background-color: map-get($colors-darkest, 'light');
+        color: #000;
+    }
+
+    &.dropdown-item-with-icon {
+        padding-left: 40px;
+
+        .dropdown-icon {
+            transition: $transition-time all;
+            display: block;
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 18px;
+            height: 13px;
+            line-height: 13px;
+            font-size: 13px;
+            text-align: center;
+            color: #9aa0ac;
+        }
+
+        @each $type in $list-base-colors {
+            &.dropdown-item-#{$type} .dropdown-icon {
+                //color: map-get($colors, $type);
+            }
+        }
+
+        &.dropdown-item-light .dropdown-icon {
+            color: invert(map-get($colors, 'light'));
+        }
+
+        &:hover,
+        &:focus {
+            .dropdown-icon {
+                color: #fff;
+            }
+        }
+
+        &.dropdown-item-light:hover .dropdown-icon,
+        &.dropdown-item-light:focus .dropdown-icon {
+            color: #000;
+        }
+    }
+}
+
+.dropdown-divider {margin:8px 0;}

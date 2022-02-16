@@ -133,7 +133,7 @@
                         {% endif %}
                         <form method="POST" action="{{ path('backend.login') }}">
                             <input type="hidden" name="_token" value="{{ csrf_token('authenticate') }}" />
-                            <fieldset class="form-group">
+                            <fieldset class="form-group mb-3">
                                 <label class="d-none">{{ 'username'|trans }}</label>
                                 <div class="input-group mb-1">
                                     <div class="input-group-prepend">
@@ -142,7 +142,7 @@
                                     <input type="text" class="form-control form-control-autofocus" id="username" name="_username" value="{{ last_username }}" placeholder="{{ 'username'|trans }}" />
                                 </div>
                             </fieldset>
-                            <fieldset class="form-group">
+                            <fieldset class="form-group mb-3">
                                 <label class="d-none">{{ 'password'|trans }}</label>
                                 <div class="input-group m-0">
                                     <div class="input-group-prepend">
@@ -151,10 +151,12 @@
                                     <input type="password" class="form-control form-control-autofocus" id="password" name="_password" placeholder="{{ 'password'|trans }}" value="MyP4$$w0rdT04Dm!n" />
                                 </div>
                             </fieldset>
-                            <fieldset class="form-group form-check">
-                                <input type="checkbox" class="form-check-input" id="exampleCheck1" name="_remember_me">
-                                <label class="form-check-label" for="exampleCheck1">{{ 'rememberMe'|trans }}</label>
-                            </fieldset>
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" name="_remember_me">
+                                <label class="form-check-label" for="flexCheckChecked">
+                                    {{ 'rememberMe'|trans }}
+                                </label>
+                            </div>
                             <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
                             <button type="submit" class="btn btn-primary login-btn">{{ 'signIn'|trans }}</button>
                             <a href="#" class="btn btn-link" data-show-viewbox="viewbox-password-remember">Forgot password?</a>
@@ -169,7 +171,7 @@
                     <div class="box-body">
                         <div class="logo">Tulia CMS</div>
                         <p class="logo-slogan">Insert Your e-mail address to restore password.</p>
-                        <fieldset class="form-group">
+                        <fieldset class="form-group mb-3">
                             <label class="d-none">Username</label>
                             <div class="input-group mb-1">
                                 <div class="input-group-prepend">
