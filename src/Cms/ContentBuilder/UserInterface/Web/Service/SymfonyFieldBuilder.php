@@ -50,7 +50,7 @@ class SymfonyFieldBuilder
         $typeBuilder = $this->mappingRegistry->getTypeBuilder($field->getType());
 
         if ($typeBuilder) {
-            $options = (new $typeBuilder)->build($field, $options);
+            $options = $typeBuilder->build($field, $options);
         }
 
         $builder->add(

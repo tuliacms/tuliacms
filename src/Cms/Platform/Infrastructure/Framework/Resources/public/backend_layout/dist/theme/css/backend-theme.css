@@ -11617,22 +11617,17 @@ textarea.form-control {
 .page-header .page-title span {display:inline-block;vertical-align:middle;}
 .page-header .page-title .page-title-icon {display:inline-block;margin-right:10px;}*/
 .page-form {
-  position: relative;
   min-height: 775px;
   display: flex;
 }
 
 .page-form .page-form-sidebar {
-  position: relative;
-  z-index: 10;
   flex: 0 0 310px;
   max-width: 310px;
   border-right: 1px solid #d6dce4;
 }
 
 .page-form .page-form-content {
-  position: relative;
-  z-index: 5;
   flex: 1 1 auto;
   max-width: calc(100% - 310px);
 }
@@ -14076,7 +14071,7 @@ footer .cms-version:before {
   position: fixed;
   z-index: 10000000;
   left: 50%;
-  top: -40px;
+  top: -50px;
   height: 40px;
   line-height: 40px;
   text-align: center;

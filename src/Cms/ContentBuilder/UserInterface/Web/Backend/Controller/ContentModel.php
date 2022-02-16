@@ -45,7 +45,7 @@ class ContentModel extends AbstractController
     public function index(): ViewInterface
     {
         return $this->view('@backend/content_builder/index.tpl', [
-            'contentTypeList' => $this->contentTypeRegistry->all(),
+            'contentTypeList' => iterator_to_array($this->contentTypeRegistry->all()),
             'contentTypeCodes' => $this->configuration->getTypes(),
         ]);
     }

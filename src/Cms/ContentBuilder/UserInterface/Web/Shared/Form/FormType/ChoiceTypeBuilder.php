@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContentBuilder\UserInterface\Web\Shared\Form\FormType;
 
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\FieldTypeBuilder\FieldTypeBuilderInterface;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\Field;
 
 /**
  * @author Adam Banaszkiewicz
- * @todo Add interface for FieldType builders
  */
-class ChoiceTypeBuilder
+class ChoiceTypeBuilder implements FieldTypeBuilderInterface
 {
     public function build(Field $field, array $options): array
     {

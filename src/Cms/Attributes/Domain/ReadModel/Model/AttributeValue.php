@@ -40,6 +40,19 @@ class AttributeValue implements \Stringable, \ArrayAccess, \IteratorAggregate, \
         return $this->isRepeatable;
     }
 
+    public function isEmpty(): bool
+    {
+        if ($this->values === []) {
+            return true;
+        }
+
+        if (count($this->values) === 1 && empty(reset($this->values))) {
+            return true;
+        }
+
+        return false;
+    }
+
     public function __toString(): string
     {
         return implode(', ', $this->values);

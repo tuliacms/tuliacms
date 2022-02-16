@@ -21,7 +21,7 @@
                                 {{ translations.internalFields }}
                             </div>
                             <div class="ctb-section-fields-container">
-                                <div class="ctb-sortable-fields mb-3">
+                                <div class="ctb-sortable-fields">
                                     <div class="ctb-field"><span class="ctb-field-label">{{ translations.title }}</span></div>
                                     <div class="ctb-field"><span class="ctb-field-label">{{ translations.slug }}</span></div>
                                     <div class="ctb-field"><span class="ctb-field-label">{{ translations.publishedAt }}</span></div>

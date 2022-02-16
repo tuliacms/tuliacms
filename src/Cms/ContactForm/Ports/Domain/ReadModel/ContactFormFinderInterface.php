@@ -19,5 +19,8 @@ interface ContactFormFinderInterface
      */
     public function findOne(array $criteria, string $scope);
 
+    /**
+     * @return Collection|Form[]
+     */
     public function find(array $criteria, string $scope): Collection;
 }

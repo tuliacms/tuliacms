@@ -68,7 +68,7 @@ class ContentTypeRegistry
     /**
      * @return ContentType[]
      */
-    public function all(): iterable
+    public function all(): \Traversable
     {
         $this->fetch();
 
@@ -80,7 +80,7 @@ class ContentTypeRegistry
     /**
      * @return ContentType[]
      */
-    public function allByType(string $type): iterable
+    public function allByType(string $type): \Traversable
     {
         $this->fetch();
 

@@ -83,17 +83,17 @@ class TuliaCmsExtension extends Extension
             ->addTag('term.action_chain');
 
         // ContentBuilder
-        $container->registerForAutoconfiguration(
-            \Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeDecoratorInterface::class)
+        $container->registerForAutoconfiguration(\Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeDecoratorInterface::class)
             ->addTag('content_builder.content_type.decorator');
-        $container->registerForAutoconfiguration(
-            \Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeProviderInterface::class)
+        $container->registerForAutoconfiguration(\Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeProviderInterface::class)
             ->addTag('content_builder.content_type.provider');
-        $container->registerForAutoconfiguration(
-            \Tulia\Cms\ContentBuilder\Domain\WriteModel\Routing\Strategy\ContentTypeRoutingStrategyInterface::class)
+        $container->registerForAutoconfiguration(\Tulia\Cms\ContentBuilder\Domain\WriteModel\Routing\Strategy\ContentTypeRoutingStrategyInterface::class)
             ->addTag('content_builder.content_type.routing_strategy');
         $container->registerForAutoconfiguration(\Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\LayoutTypeBuilderInterface::class)
             ->addTag('content_builder.layout_type.builder');
+        $container->registerForAutoconfiguration(\Tulia\Cms\ContentBuilder\Domain\ReadModel\FieldTypeBuilder\FieldTypeBuilderInterface::class)
+            ->addTag('content_builder.data_types.builder')
+            ->setLazy(true);
 
         // Shortcode
         $container->registerForAutoconfiguration(\Tulia\Component\Shortcode\Compiler\ShortcodeCompilerInterface::class)

@@ -123,8 +123,6 @@ class DbalContentTypeStorage implements ContentTypeStorageInterface
                     'code' => $group['code'],
                     'name' => $group['name'],
                     'section' => $section['code'],
-                    'interior' => $group['interior'],
-                    'active' => $group['active'] ? '1' : '0',
                     'layout_type' => $contentType['layout']['code'],
                     '`order`' => $groupPosition++,
                 ]);

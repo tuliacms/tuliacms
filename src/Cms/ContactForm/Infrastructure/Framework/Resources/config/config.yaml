@@ -20,6 +20,13 @@ cms:
             paths:
                 - '@cms/forms/content-block'
     content_building:
+        data_types:
+            mapping:
+                contact_form:
+                    label: Contact form select
+                    classname: 'Symfony\Component\Form\Extension\Core\Type\ChoiceType'
+                    builder: 'Tulia\Cms\ContactForm\UserInterface\Web\Shared\Form\FormType\FormSelectorBuilder'
+                    constraints: [ required ]
         content_type_entry:
             contact_form:
                 type: content_block
@@ -39,9 +46,8 @@ cms:
                                     order: 0
                                     fields:
                                         form_id:
-                                            type: text
+                                            type: contact_form
                                             name: Form to show
-                                            is_multilingual: false
                                             configuration:
                                                 - { code: icon, value: /assets/theme/tulia/lisa/images/content-block/icon/company-in-numbers.png }
                                             constraints:
@@ -52,13 +58,3 @@ cms:
                                                     modificators:
                                                         - { code: min, value: 0 }
                                                         - { code: max, value: 127 }
-                                        text_field:
-                                            type: text
-                                            name: Text
-                                        filepicker:
-                                            type: filepicker
-                                            name: Filepicker
-                                        repeatable_field_group:
-                                            type: repeatable
-                                            name: Pole repeatable
-                                            fields: [ text_field, filepicker ]

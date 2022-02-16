@@ -43,9 +43,9 @@
 .page-header .page-title span {display:inline-block;vertical-align:middle;}
 .page-header .page-title .page-title-icon {display:inline-block;margin-right:10px;}*/
 
-.page-form {position:relative;min-height:775px;display:flex;}
-.page-form .page-form-sidebar {position:relative;z-index:10;flex:0 0 310px;max-width:310px;border-right:1px solid $border-color;}
-.page-form .page-form-content {position:relative;z-index:5;flex:1 1 auto;max-width:calc(100% - 310px);}
+.page-form {min-height:775px;display:flex;}
+.page-form .page-form-sidebar {flex:0 0 310px;max-width:310px;border-right:1px solid $border-color;}
+.page-form .page-form-content {flex:1 1 auto;max-width:calc(100% - 310px);}
 
 .page-form-sidebar .accordion-section-button {border-bottom:1px solid $border-color;padding:11px 15px;font-size:13px;position:relative;background-color:#f7f7f7;transition:.12s all}
 .page-form-sidebar .accordion-section-button:before {position:absolute;display:block;top:50%;right:15px;transform:translateY(-50%) rotate(180deg);color:$color-primary;content:"\f078";font-family:$base-font-awesome;font-weight:bold;transition:.12s all}

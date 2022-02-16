@@ -36,7 +36,7 @@ cms:
                     flags: [ compilable ]
                 ___content_block_icon:
                     label: Content Block::Icon
-                    classname: 'Symfony\Component\Form\Extension\Core\Type\TextType'
+                    classname: 'Symfony\Component\Form\Extension\Core\Type\HiddenType'
                     only_for_types: [ content_block ]
                     configuration:
                         icon:

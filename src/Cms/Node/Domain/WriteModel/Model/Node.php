@@ -288,7 +288,7 @@ class Node extends AggregateRoot
 
     public function getCategoryId(): ?string
     {
-        return $this->attributes['category']->getValue() ?? null;
+        return isset($this->attributes['category']) ? $this->attributes['category']->getValue() : null;
     }
 
     public function getLocale(): string
