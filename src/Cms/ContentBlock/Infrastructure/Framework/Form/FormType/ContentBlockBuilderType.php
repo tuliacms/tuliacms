@@ -11,19 +11,19 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Validator\Constraints\Json;
-use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistry;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class ContentBlockBuilderType extends AbstractType
 {
-    private ContentTypeRegistry $contentTypeRegistry;
+    private ContentTypeRegistryInterface $contentTypeRegistry;
     private RouterInterface $router;
     private RequestStack $requestStack;
 
     public function __construct(
-        ContentTypeRegistry $contentTypeRegistry,
+        ContentTypeRegistryInterface $contentTypeRegistry,
         RouterInterface $router,
         RequestStack $requestStack
     ) {

@@ -164,11 +164,6 @@ class ArrayToWriteModelTransformer
                 'constraints' => $field['constraints'] ?? [],
                 'children' => $this->buildFields($field['children'] ?? []),
                 'flags' => $this->fieldTypeMappingRegistry->getTypeFlags($field['type']),
-                'builder_options' => function () use ($field) {
-                    return [
-                        'constraints' => $field['constraints'],
-                    ];
-                }
             ]);
         }
 

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Taxonomy\Domain\WriteModel;
 
-use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistry;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\ContentType;
 use Tulia\Cms\Attributes\Domain\WriteModel\AttributesRepository;
 use Tulia\Cms\Platform\Infrastructure\Bus\Event\EventBusInterface;
@@ -25,7 +25,7 @@ class TaxonomyRepository
 {
     private const RESERVED_NAMES = ['title', 'slug', 'parent_id'];
 
-    private ContentTypeRegistry $contentTypeRegistry;
+    private ContentTypeRegistryInterface $contentTypeRegistry;
 
     private TermWriteStorageInterface $storage;
 
@@ -46,7 +46,7 @@ class TaxonomyRepository
         UuidGeneratorInterface $uuidGenerator,
         EventBusInterface $eventBus,
         TaxonomyActionsChainInterface $actionsChain,
-        ContentTypeRegistry $contentTypeRegistry
+        ContentTypeRegistryInterface $contentTypeRegistry
     ) {
         $this->storage = $storage;
         $this->currentWebsite = $currentWebsite;

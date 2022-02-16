@@ -31,3 +31,6 @@ services:
     Tulia\Cms\ContentBuilder\Domain\WriteModel\ContentType\Service\Configuration:
         arguments:
             $configuration: '%cms.content_builder.content_type.config%'
+
+    Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistryInterface:
+        class: Tulia\Cms\ContentBuilder\Infrastructure\Persistence\ContentProvider\CachedContentTypeRegistry

@@ -6,7 +6,7 @@ namespace Tulia\Cms\Node\Domain\SearchAnything;
 
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistry;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\Filemanager\Application\Service\ImageUrlResolver;
 use Tulia\Cms\Filemanager\Ports\Domain\ReadModel\FileFinderInterface;
 use Tulia\Cms\Filemanager\Ports\Domain\ReadModel\FileFinderScopeEnum as FilesScopeEnum;
@@ -32,7 +32,7 @@ class SearchProvider extends AbstractProvider
 
     protected TranslatorInterface $translator;
 
-    protected ContentTypeRegistry $contentTypeRegistry;
+    protected ContentTypeRegistryInterface $contentTypeRegistry;
 
     protected ImageUrlResolver $imageUrlResolver;
 
@@ -41,7 +41,7 @@ class SearchProvider extends AbstractProvider
         FileFinderInterface $filesFinder,
         RouterInterface $router,
         TranslatorInterface $translator,
-        ContentTypeRegistry $contentTypeRegistry,
+        ContentTypeRegistryInterface $contentTypeRegistry,
         ImageUrlResolver $imageUrlResolver
     ) {
         $this->nodeFinder  = $nodeFinder;

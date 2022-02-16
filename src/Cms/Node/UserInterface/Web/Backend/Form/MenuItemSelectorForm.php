@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\UserInterface\Web\Backend\Form;
 
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Tulia\Cms\Node\Infrastructure\Framework\Form\FormType\NodeTypeaheadType;
+use Tulia\Cms\Node\UserInterface\Web\Shared\Form\FormType\NodeTypeaheadType;
 
 /**
  * @author Adam Banaszkiewicz

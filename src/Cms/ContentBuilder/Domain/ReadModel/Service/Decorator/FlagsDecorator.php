@@ -38,7 +38,6 @@ class FlagsDecorator implements ContentTypeDecoratorInterface
             'type' => 'select',
             'name' => 'flags',
             'is_multilingual' => false,
-            'is_internal' => true,
             'has_nonscalar_value' => true,
             'builder_options' => function () {
                 $availableFlags = [];

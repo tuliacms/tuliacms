@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContentBuilder\Domain\WriteModel\ContentType\Service;
 
-use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistry;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\ContentBuilder\Domain\WriteModel\Routing\Strategy\ContentTypeRoutingStrategyRegistry;
 
 /**
@@ -13,11 +13,11 @@ use Tulia\Cms\ContentBuilder\Domain\WriteModel\Routing\Strategy\ContentTypeRouti
 class Router
 {
     private ContentTypeRoutingStrategyRegistry $strategyRegistry;
-    private ContentTypeRegistry $contentTypeRegistry;
+    private ContentTypeRegistryInterface $contentTypeRegistry;
 
     public function __construct(
         ContentTypeRoutingStrategyRegistry $strategyRegistry,
-        ContentTypeRegistry $contentTypeRegistry
+        ContentTypeRegistryInterface $contentTypeRegistry
     ) {
         $this->strategyRegistry = $strategyRegistry;
         $this->contentTypeRegistry = $contentTypeRegistry;

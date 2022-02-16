@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Taxonomy\Domain\ReadModel\Routing\Strategy;
 
 use Psr\Log\LoggerInterface;
-use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistry;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\ContentType;
 use Tulia\Cms\ContentBuilder\Domain\WriteModel\Routing\Strategy\ContentTypeRoutingStrategyInterface;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\TermFinderInterface;
@@ -22,14 +22,14 @@ abstract class AbstractRoutingStrategy implements ContentTypeRoutingStrategyInte
 
     protected TermFinderInterface $termFinder;
 
-    protected ContentTypeRegistry $contentTypeRegistry;
+    protected ContentTypeRegistryInterface $contentTypeRegistry;
 
     protected LoggerInterface $logger;
 
     public function __construct(
         TermPathReadStorageInterface $storage,
         TermFinderInterface $termFinder,
-        ContentTypeRegistry $contentTypeRegistry,
+        ContentTypeRegistryInterface $contentTypeRegistry,
         LoggerInterface $logger
     ) {
         $this->storage = $storage;

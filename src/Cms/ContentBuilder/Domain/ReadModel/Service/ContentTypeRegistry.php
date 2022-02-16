@@ -10,7 +10,7 @@ use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\ContentType;
 /**
  * @author Adam Banaszkiewicz
  */
-class ContentTypeRegistry
+class ContentTypeRegistry implements ContentTypeRegistryInterface
 {
     /**
      * @var ContentType[]
@@ -24,8 +24,9 @@ class ContentTypeRegistry
 
     private ContentTypeDecorator $decorator;
 
-    public function __construct(ContentTypeDecorator $decorator)
-    {
+    public function __construct(
+        ContentTypeDecorator $decorator
+    ) {
         $this->decorator = $decorator;
     }
 
@@ -91,10 +92,10 @@ class ContentTypeRegistry
         }
     }
 
-    private function fetch(): void
+    protected function fetch(): array
     {
         if ($this->contentTypes !== []) {
-            return;
+            return [];
         }
 
         $types = [];
@@ -103,11 +104,15 @@ class ContentTypeRegistry
             $types[] = $provider->provide();
         }
 
+        $this->contentTypes = [];
+
         /** @var ContentType $type */
         foreach (array_merge(...$types) as $type) {
             $this->decorator->decorate($type);
 
             $this->contentTypes[$type->getCode()] = $type;
         }
+
+        return $this->contentTypes;
     }
 }

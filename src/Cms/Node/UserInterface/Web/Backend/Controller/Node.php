@@ -8,7 +8,7 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistry;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\ContentType;
 use Tulia\Cms\ContentBuilder\UserInterface\Web\Form\ContentTypeFormDescriptor;
 use Tulia\Cms\ContentBuilder\UserInterface\Web\Service\ContentFormService;
@@ -30,7 +30,7 @@ use Tulia\Component\Templating\ViewInterface;
  */
 class Node extends AbstractController
 {
-    private ContentTypeRegistry $typeRegistry;
+    private ContentTypeRegistryInterface $typeRegistry;
 
     private NodeRepository $repository;
 
@@ -41,7 +41,7 @@ class Node extends AbstractController
     private ContentFormService $contentFormService;
 
     public function __construct(
-        ContentTypeRegistry $typeRegistry,
+        ContentTypeRegistryInterface $typeRegistry,
         NodeRepository $repository,
         DatatableFactory $factory,
         NodeDatatableFinderInterface $finder,

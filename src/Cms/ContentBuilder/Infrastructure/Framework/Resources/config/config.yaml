@@ -13,6 +13,12 @@ framework:
                 scripts: [ '/assets/core/content-builder-layout-builder/js/build.js' ]
                 styles: [ '/assets/core/content-builder-layout-builder/css/styles.min.css' ]
                 require: [ vue, lodash ]
+    cache:
+        pools:
+            content_builder.cache:
+                adapter: '%tulia.cache.adapter%'
+                provider: '%tulia.cache.provider%'
+                default_lifetime: 86400
 
 monolog:
     channels: ['contentBuilder']

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContentBlock\Domain\Renderer;
 
-use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistry;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\Attributes\Domain\ReadModel\Model\AttributeValue;
 use Tulia\Component\Templating\EngineInterface;
 use Tulia\Component\Templating\View;
@@ -14,14 +14,14 @@ use Tulia\Component\Templating\View;
  */
 class Renderer
 {
-    private ContentTypeRegistry $contentTypeRegistry;
+    private ContentTypeRegistryInterface $contentTypeRegistry;
     private EngineInterface $engine;
     private string $environment;
     private array $paths;
     private string $fallbackView;
 
     public function __construct(
-        ContentTypeRegistry $contentTypeRegistry,
+        ContentTypeRegistryInterface $contentTypeRegistry,
         EngineInterface $engine,
         string $environment,
         array $paths

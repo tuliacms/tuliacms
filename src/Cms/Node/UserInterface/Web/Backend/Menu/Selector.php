@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Node\UserInterface\Web\Backend\Menu;
 
 use Symfony\Component\Form\FormFactoryInterface;
-use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistry;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\Menu\Domain\Builder\Type\TypeInterface;
 use Tulia\Cms\Menu\UserInterface\Web\Backend\Selector\SelectorInterface;
 use Tulia\Cms\Node\UserInterface\Web\Backend\Form\MenuItemSelectorForm;
@@ -17,14 +17,14 @@ use Tulia\Component\Templating\View;
  */
 class Selector implements SelectorInterface
 {
-    protected ContentTypeRegistry $contentTypeRegistry;
+    protected ContentTypeRegistryInterface $contentTypeRegistry;
 
     protected EngineInterface $engine;
 
     protected FormFactoryInterface $formFactory;
 
     public function __construct(
-        ContentTypeRegistry $contentTypeRegistry,
+        ContentTypeRegistryInterface $contentTypeRegistry,
         EngineInterface $engine,
         FormFactoryInterface $formFactory
     ) {

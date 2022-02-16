@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Taxonomy\Domain\ReadModel\Routing\Strategy;
 
 use Psr\Log\LoggerInterface;
-use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistry;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Finder\TermFinderInterface;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Service\TermPathReadStorageInterface;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Term;
@@ -18,7 +18,7 @@ class FullPathStrategy extends AbstractRoutingStrategy
     public function __construct(
         TermPathReadStorageInterface $storage,
         TermFinderInterface $termFinder,
-        ContentTypeRegistry $contentTypeRegistry,
+        ContentTypeRegistryInterface $contentTypeRegistry,
         LoggerInterface $logger
     ) {
         parent::__construct($storage, $termFinder, $contentTypeRegistry, $logger);

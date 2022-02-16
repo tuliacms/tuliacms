@@ -6,7 +6,7 @@ namespace Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Controller;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistry;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\ContentBuilder\Domain\WriteModel\ContentType\Service\Configuration;
 use Tulia\Cms\ContentBuilder\Domain\WriteModel\ContentTypeRepository;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\LayoutTypeBuilderRegistry;
@@ -24,14 +24,14 @@ class ContentModel extends AbstractController
 {
     private FormDataToModelTransformer $formDataToModelTransformer;
     private ContentTypeRepository $contentTypeRepository;
-    private ContentTypeRegistry $contentTypeRegistry;
+    private ContentTypeRegistryInterface $contentTypeRegistry;
     private Configuration $configuration;
     private LayoutTypeBuilderRegistry $layoutTypeBuilderRegistry;
 
     public function __construct(
         FormDataToModelTransformer $formDataToModelTransformer,
         ContentTypeRepository $contentTypeRepository,
-        ContentTypeRegistry $contentTypeRegistry,
+        ContentTypeRegistryInterface $contentTypeRegistry,
         Configuration $configuration,
         LayoutTypeBuilderRegistry $layoutTypeBuilderRegistry
     ) {

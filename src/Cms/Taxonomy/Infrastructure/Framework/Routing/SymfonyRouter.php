@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\RouterInterface;
-use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistry;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\ContentBuilder\Domain\WriteModel\ContentType\Service\Router;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\ContentType;
 use Tulia\Cms\Platform\Infrastructure\Framework\Routing\FrontendRouteSuffixResolver;
@@ -30,7 +30,7 @@ class SymfonyRouter implements RouterInterface, RequestMatcherInterface
 
     private TermFinderInterface $termFinder;
 
-    private ContentTypeRegistry $contentTypeRegistry;
+    private ContentTypeRegistryInterface $contentTypeRegistry;
 
     private Router $contentTypeRouter;
 
@@ -40,7 +40,7 @@ class SymfonyRouter implements RouterInterface, RequestMatcherInterface
         TermPathReadStorageInterface $storage,
         FrontendRouteSuffixResolver $frontendRouteSuffixResolver,
         TermFinderInterface $termFinder,
-        ContentTypeRegistry $contentTypeRegistry,
+        ContentTypeRegistryInterface $contentTypeRegistry,
         Router $contentTypeRouter
     ) {
         $this->storage = $storage;

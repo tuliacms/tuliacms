@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\ContentBuilder\UserInterface\Web\Shared\Form\FormType;
 
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\FieldTypeBuilder\FieldTypeBuilderInterface;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\ContentType;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\Field;
 
 /**
@@ -12,7 +13,7 @@ use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\Field;
  */
 class ChoiceTypeBuilder implements FieldTypeBuilderInterface
 {
-    public function build(Field $field, array $options): array
+    public function build(Field $field, array $options, ContentType $contentType): array
     {
         $choicesRaw = $field->getConfig('choices');
 

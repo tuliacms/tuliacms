@@ -6,7 +6,7 @@ namespace Tulia\Cms\ContentBlock\UserInterface\Web\Backend\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistry;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\ContentBuilder\UserInterface\Web\Form\ContentTypeFormDescriptor;
 use Tulia\Cms\ContentBuilder\UserInterface\Web\Service\SymfonyFormBuilder;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
@@ -17,11 +17,11 @@ use Tulia\Component\Security\Http\Csrf\Annotation\IgnoreCsrfToken;
  */
 class BlockPanel extends AbstractController
 {
-    private ContentTypeRegistry $contentTypeRegistry;
+    private ContentTypeRegistryInterface $contentTypeRegistry;
     private SymfonyFormBuilder $formBuilder;
 
     public function __construct(
-        ContentTypeRegistry $contentTypeRegistry,
+        ContentTypeRegistryInterface $contentTypeRegistry,
         SymfonyFormBuilder $formBuilder
     ) {
         $this->contentTypeRegistry = $contentTypeRegistry;

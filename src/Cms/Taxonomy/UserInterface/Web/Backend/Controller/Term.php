@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistry;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\ContentBuilder\UserInterface\Web\Form\ContentTypeFormDescriptor;
 use Tulia\Cms\ContentBuilder\UserInterface\Web\Service\ContentFormService;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
@@ -33,7 +33,7 @@ class Term extends AbstractController
     private DatatableFactory $factory;
     private TermDatatableFinderInterface $finder;
     private ContentFormService $contentFormService;
-    private ContentTypeRegistry $typeRegistry;
+    private ContentTypeRegistryInterface $typeRegistry;
 
     public function __construct(
         TermFinderInterface $termFinder,
@@ -41,7 +41,7 @@ class Term extends AbstractController
         DatatableFactory $factory,
         TermDatatableFinderInterface $finder,
         ContentFormService $contentFormService,
-        ContentTypeRegistry $typeRegistry
+        ContentTypeRegistryInterface $typeRegistry
     ) {
         $this->termFinder = $termFinder;
         $this->repository = $repository;

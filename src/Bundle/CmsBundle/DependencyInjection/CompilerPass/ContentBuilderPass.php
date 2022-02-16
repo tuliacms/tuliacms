@@ -9,7 +9,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\FieldTypeBuilder\FieldTypeBuilderRegistry;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeDecorator;
-use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistry;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\ContentBuilder\Domain\WriteModel\Routing\Strategy\ContentTypeRoutingStrategyRegistry;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\ConstraintTypeMappingRegistry;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\FieldTypeMappingRegistry;
@@ -22,7 +22,7 @@ class ContentBuilderPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container): void
     {
-        $this->addTaggedServices($container, ContentTypeRegistry::class, 'content_builder.content_type.provider', 'addProvider');
+        $this->addTaggedServices($container, ContentTypeRegistryInterface::class, 'content_builder.content_type.provider', 'addProvider');
         $this->addTaggedServices($container, ContentTypeDecorator::class, 'content_builder.content_type.decorator', 'addDecorator');
         $this->addTaggedServices($container, LayoutTypeBuilderRegistry::class, 'content_builder.layout_type.builder', 'addBuilder');
         $this->addTaggedServices($container, ContentTypeRoutingStrategyRegistry::class, 'content_builder.content_type.routing_strategy', 'addStrategy');

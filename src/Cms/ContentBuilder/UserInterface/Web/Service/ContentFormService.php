@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\ContentBuilder\UserInterface\Web\Service;
 
 use Symfony\Component\HttpFoundation\Request;
-use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistry;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\ContentBuilder\UserInterface\Web\Form\ContentTypeFormDescriptor;
 use Tulia\Cms\Attributes\Domain\WriteModel\Model\Attribute;
 use Tulia\Cms\Attributes\Domain\WriteModel\Service\UriToArrayTransformer;
@@ -15,12 +15,12 @@ use Tulia\Cms\Attributes\Domain\WriteModel\Service\UriToArrayTransformer;
  */
 class ContentFormService
 {
-    private ContentTypeRegistry $contentTypeRegistry;
+    private ContentTypeRegistryInterface $ContentTypeRegistryInterface;
     private SymfonyFormBuilder $formBuilder;
     private UriToArrayTransformer $attributesToArrayTransformer;
 
     public function __construct(
-        ContentTypeRegistry $contentTypeRegistry,
+        ContentTypeRegistryInterface $contentTypeRegistry,
         SymfonyFormBuilder $formBuilder,
         UriToArrayTransformer $attributesToArrayTransformer
     ) {

@@ -7,7 +7,7 @@ namespace Tulia\Cms\Node\UserInterface\Web\Backend\BackendMenu;
 use Tulia\Cms\BackendMenu\Domain\Builder\Helper\BuilderHelperInterface;
 use Tulia\Cms\BackendMenu\Domain\Builder\Registry\ItemRegistryInterface;
 use Tulia\Cms\BackendMenu\Ports\Domain\Builder\BuilderInterface;
-use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistry;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\ContentType;
 
 /**
@@ -17,11 +17,11 @@ class NodeMenuBuilder implements BuilderInterface
 {
     protected BuilderHelperInterface $helper;
 
-    protected ContentTypeRegistry $contentTypeRegistry;
+    protected ContentTypeRegistryInterface $contentTypeRegistry;
 
     public function __construct(
         BuilderHelperInterface $helper,
-        ContentTypeRegistry $contentTypeRegistry
+        ContentTypeRegistryInterface $contentTypeRegistry
     ) {
         $this->helper = $helper;
         $this->contentTypeRegistry = $contentTypeRegistry;

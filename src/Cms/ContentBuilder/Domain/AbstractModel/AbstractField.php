@@ -10,7 +10,6 @@ namespace Tulia\Cms\ContentBuilder\Domain\AbstractModel;
 class AbstractField
 {
     protected array $options;
-    protected array $builderOptions = [];
     protected static $defaults = [
         'code' => '',
         'type' => '',
@@ -21,7 +20,6 @@ class AbstractField
         'flags' => [],
         'configuration' => [],
         'constraints' => [],
-        'builder_options' => null,
         'children' => [],
     ];
 
@@ -37,7 +35,6 @@ class AbstractField
         \assert(\is_array($this->options['configuration']), 'The "configuration" option must be an array.');
         \assert(\is_array($this->options['constraints']), 'The "constraints" option must be an array.');
         \assert(\is_array($this->options['children']), 'The "children" option must be an array.');
-        \assert($this->options['builder_options'] === null || \is_callable($this->options['builder_options']), 'The "builder_options" option must be an array.');
 
         if ($this->options['type'] === 'taxonomy') {
             \assert(\is_string($this->options['taxonomy']), 'The "taxonomy" option must be a string.');
@@ -134,19 +131,6 @@ class AbstractField
     public function hasNonscalarValue(): bool
     {
         return $this->options['has_nonscalar_value'];
-    }
-
-    public function getBuilderOptions(): array
-    {
-        if ($this->builderOptions !== []) {
-            return $this->builderOptions;
-        }
-
-        if (is_callable($this->options['builder_options'])) {
-            return $this->options['builder_options'] = $this->options['builder_options']();
-        }
-
-        return [];
     }
 
     public function getTaxonomy(): string

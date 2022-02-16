@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Node\Domain\ReadModel\Routing\Strategy;
 
-use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistry;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\ContentBuilder\Domain\WriteModel\ContentType\Service\Router;
 use Tulia\Cms\ContentBuilder\Domain\WriteModel\Routing\Strategy\ContentTypeRoutingStrategyInterface;
 use Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderInterface;
@@ -18,13 +18,13 @@ class SimpleStrategy implements ContentTypeRoutingStrategyInterface
 {
     private NodeFinderInterface $nodeFinder;
 
-    private ContentTypeRegistry $contentTypeRegistry;
+    private ContentTypeRegistryInterface $contentTypeRegistry;
 
     private Router $contentTypeRouter;
 
     public function __construct(
         NodeFinderInterface $nodeFinder,
-        ContentTypeRegistry $contentTypeRegistry,
+        ContentTypeRegistryInterface $contentTypeRegistry,
         Router $contentTypeRouter
     ) {
         $this->nodeFinder = $nodeFinder;

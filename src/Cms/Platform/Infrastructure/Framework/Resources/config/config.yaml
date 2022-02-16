@@ -1,6 +1,10 @@
 imports:
     - { resource: assets.yaml }
 
+parameters:
+    tulia.cache.adapter: 'cache.adapter.doctrine_dbal'
+    tulia.cache.provider: 'doctrine.dbal.default_connection'
+
 framework:
     translator:
         default_path: '%kernel.project_dir%/src/Cms/Platform/Infrastructure/Framework/Resources/translations'
@@ -133,6 +137,9 @@ framework:
                 scripts: [ '/assets/core/masonry/masonry.pkgd.min.js' ]
                 priority: 500
                 group: head
+    cache:
+        directory: '%kernel.cache_dir%/pools'
+        default_pdo_provider: 'doctrine.dbal.default_connection'
 
 twig:
     paths:

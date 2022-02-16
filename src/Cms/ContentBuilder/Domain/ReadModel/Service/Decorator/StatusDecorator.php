@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\Decorator;
 
-use Symfony\Component\Validator\Constraints as Assert;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeDecoratorInterface;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\ContentType;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\Field;
@@ -22,25 +21,11 @@ class StatusDecorator implements ContentTypeDecoratorInterface
 
         $contentType->addField(new Field([
             'code' => 'status',
-            'type' => 'select',
+            'type' => 'node_status',
             'name' => 'publicationStatus',
-            'is_internal' => true,
             'constraints' => [
                 'required' => [],
-            ],
-            'builder_options' => function () {
-                return [
-                    'constraints' => [
-                        new Assert\NotBlank(),
-                        new Assert\Choice([ 'choices' => ['draft', 'published', 'trashed'] ]),
-                    ],
-                    'choices' => [
-                        'Draft' => 'draft',
-                        'Published' => 'published',
-                        'Trashed' => 'trashed',
-                    ],
-                ];
-            }
+            ]
         ]));
     }
 }

@@ -23,20 +23,14 @@ class DatesDecorator implements ContentTypeDecoratorInterface
             'code' => 'published_at',
             'type' => 'datetime',
             'name' => 'publishedAt',
-            'is_internal' => true,
-            'builder_options' => function () {
-                return [
-                    'constraints' => [
-                        'required' => [],
-                    ],
-                ];
-            }
+            'constraints' => [
+                'required' => [],
+            ],
         ]));
         $contentType->addField(new Field([
             'code' => 'published_to',
             'type' => 'datetime',
             'name' => 'publicationEndsAt',
-            'is_internal' => true,
         ]));
     }
 }

@@ -38,19 +38,18 @@ class SymfonyFieldBuilder
             return;
         }
 
-        $options = array_merge([
+        $options = [
             'label' => $field->getName() === ''
                 ? false
                 : $field->getName(),
             'translation_domain' => 'content_builder.field',
-        ], $field->getBuilderOptions());
-
-        $options['constraints'] = $this->constraintsBuilder->build($options['constraints'] ?? []);
+            'constraints' => $this->constraintsBuilder->build($options['constraints'] ?? []),
+        ];
 
         $typeBuilder = $this->mappingRegistry->getTypeBuilder($field->getType());
 
         if ($typeBuilder) {
-            $options = $typeBuilder->build($field, $options);
+            $options = $typeBuilder->build($field, $options, $contentType);
         }
 
         $builder->add(

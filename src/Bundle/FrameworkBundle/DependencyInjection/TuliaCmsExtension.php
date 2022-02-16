@@ -10,6 +10,8 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 use Tulia\Component\Templating\ViewFilter\FilterInterface;
 
+use function Symfony\Component\DependencyInjection\Loader\Configurator\env;
+
 /**
  * @author Adam Banaszkiewicz
  */
@@ -57,6 +59,9 @@ class TuliaCmsExtension extends FrameworkExtension
         // Widgets
         $container->registerForAutoconfiguration(\Tulia\Component\Widget\WidgetInterface::class)
             ->addTag('widget');
+
+        $container->getDefinition('cache.adapter.pdo')->replaceArgument(3, ['db_table' => sprintf('%scache_pools', env('DATABASE_PREFIX'))]);
+        $container->getDefinition('cache.adapter.doctrine_dbal')->replaceArgument(3, ['db_table' => sprintf('%scache_pools', env('DATABASE_PREFIX'))]);
     }
 
     private function prepareTemplatingPaths(array $paths): array

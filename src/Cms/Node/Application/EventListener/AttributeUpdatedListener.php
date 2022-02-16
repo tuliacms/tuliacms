@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Node\Application\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistry;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\Node\Domain\ReadModel\Persistence\CategoriesPersistenceInterface;
 use Tulia\Cms\Node\Domain\ReadModel\Persistence\FlagsPersistenceInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Event\AttributeUpdated;
@@ -15,12 +15,12 @@ use Tulia\Cms\Node\Domain\WriteModel\Event\AttributeUpdated;
  */
 class AttributeUpdatedListener implements EventSubscriberInterface
 {
-    private ContentTypeRegistry $contentTypeRegistry;
+    private ContentTypeRegistryInterface $contentTypeRegistry;
     private FlagsPersistenceInterface $flagsPersistence;
     private CategoriesPersistenceInterface $categoriesPersistence;
 
     public function __construct(
-        ContentTypeRegistry $contentTypeRegistry,
+        ContentTypeRegistryInterface $contentTypeRegistry,
         FlagsPersistenceInterface $flagsPersistence,
         CategoriesPersistenceInterface $categoriesPersistence
     ) {

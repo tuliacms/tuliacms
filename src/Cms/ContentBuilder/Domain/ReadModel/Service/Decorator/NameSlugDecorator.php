@@ -24,14 +24,9 @@ class NameSlugDecorator implements ContentTypeDecoratorInterface
             'type' => 'text',
             'name' => 'title',
             'is_multilingual' => true,
-            'is_internal' => true,
-            'builder_options' => function () {
-                return [
-                    'constraints' => [
-                        'required' => [],
-                    ],
-                ];
-            }
+            'constraints' => [
+                'required' => [],
+            ],
         ]));
 
         if ($contentType->isRoutable()) {
@@ -41,7 +36,6 @@ class NameSlugDecorator implements ContentTypeDecoratorInterface
                     'type' => 'text',
                     'name' => 'slug',
                     'is_multilingual' => true,
-                    'is_internal' => true,
                     // @todo Create constraint for globally uniqueness of the slug
                     /*'constraints' => [
                         ['name' => 'unique', 'flags' => 'globally'],
