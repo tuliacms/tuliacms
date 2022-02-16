@@ -15,6 +15,7 @@ use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Query\AbstractDbalQuery;
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
+use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -23,14 +24,17 @@ class DbalFinderQuery extends AbstractDbalQuery
 {
     private AttributesFinder $attributesFinder;
     protected array $joinedTables = [];
+    private CurrentWebsiteInterface $currentWebsite;
 
     public function __construct(
         QueryBuilder $queryBuilder,
-        AttributesFinder $attributesFinder
+        AttributesFinder $attributesFinder,
+        CurrentWebsiteInterface $currentWebsite
     ) {
         parent::__construct($queryBuilder);
 
         $this->attributesFinder = $attributesFinder;
+        $this->currentWebsite = $currentWebsite;
     }
 
     public function getBaseQueryArray(): array
@@ -158,12 +162,12 @@ class DbalFinderQuery extends AbstractDbalQuery
             /**
              * Locale of the node to fetch.
              */
-            'locale' => 'en_US',
+            'locale' => $this->currentWebsite->getLocale()->getCode(),
             /**
              * Search for rows in the website. Given null search in all websites.
              * @param null|string
              */
-            'website' => null,
+            'website' => $this->currentWebsite->getId(),
             'limit' => null,
             /**
              * Posts with defined flag or flags.
@@ -296,6 +300,11 @@ class DbalFinderQuery extends AbstractDbalQuery
             ->leftJoin('tm', '#__node_has_flag', 'tnhf', 'tm.id = tnhf.node_id')
             ->addGroupBy('tm.id')
         ;
+
+        if ($criteria['website']) {
+            $this->queryBuilder->andWhere('tm.website_id = :website_id')
+                ->setParameter('website_id', $criteria['website']);
+        }
     }
 
     protected function searchById(array $criteria): void

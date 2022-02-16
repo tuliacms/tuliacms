@@ -191,7 +191,7 @@ class Node implements AttributesAwareInterface
 
     public function getCategory(): ?string
     {
-        return $this->category;
+        return (string) $this->category;
     }
 
     public function setCategory(?string $category): void

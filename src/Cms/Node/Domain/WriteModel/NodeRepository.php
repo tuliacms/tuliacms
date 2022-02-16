@@ -73,6 +73,7 @@ class NodeRepository
     {
         $node = $this->storage->find(
             $id,
+            $this->currentWebsite->getId(),
             $this->currentWebsite->getLocale()->getCode(),
             $this->currentWebsite->getDefaultLocale()->getCode()
         );
