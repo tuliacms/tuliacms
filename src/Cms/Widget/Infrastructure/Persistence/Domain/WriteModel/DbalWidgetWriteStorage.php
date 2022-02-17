@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Widget\Infrastructure\Persistence\Domain\WriteModel;
 
-use Tulia\Cms\Widget\Ports\Infrastructure\Persistence\Domain\WriteModel\WidgetWriteStorageInterface;
 use Tulia\Cms\Platform\Infrastructure\Persistence\Domain\AbstractLocalizableStorage;
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
+use Tulia\Cms\Widget\Domain\WriteModel\WidgetWriteStorageInterface;
 
 /**
  * @author Adam Banaszkiewicz

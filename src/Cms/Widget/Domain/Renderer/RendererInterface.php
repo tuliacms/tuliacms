@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Widget\Ports\Domain\Renderer;
+namespace Tulia\Cms\Widget\Domain\Renderer;
 
 /**
  * @author Adam Banaszkiewicz

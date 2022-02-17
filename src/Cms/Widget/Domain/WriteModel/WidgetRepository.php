@@ -10,7 +10,6 @@ use Tulia\Cms\Widget\Domain\WriteModel\Event\WidgetDeleted;
 use Tulia\Cms\Widget\Domain\WriteModel\Event\WidgetUpdated;
 use Tulia\Cms\Widget\Domain\WriteModel\Exception\WidgetNotFoundException;
 use Tulia\Cms\Widget\Domain\WriteModel\Model\Widget;
-use Tulia\Cms\Widget\Ports\Infrastructure\Persistence\Domain\WriteModel\WidgetWriteStorageInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 use Tulia\Component\Widget\Registry\WidgetRegistryInterface;
 

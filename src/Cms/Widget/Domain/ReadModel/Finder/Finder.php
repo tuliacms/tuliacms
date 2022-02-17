@@ -8,7 +8,6 @@ use Tulia\Cms\Shared\Domain\ReadModel\Finder\AbstractFinder;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Query\QueryInterface;
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 use Tulia\Cms\Widget\Infrastructure\Persistence\Domain\ReadModel\Finder\Query\DbalQuery;
-use Tulia\Cms\Widget\Ports\Domain\ReadModel\WidgetFinderInterface;
 
 /**
  * @author Adam Banaszkiewicz

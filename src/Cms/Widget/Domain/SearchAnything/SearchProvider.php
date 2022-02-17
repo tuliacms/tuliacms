@@ -9,8 +9,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Cms\SearchAnything\Model\Hit;
 use Tulia\Cms\SearchAnything\Model\Results;
 use Tulia\Cms\SearchAnything\Provider\AbstractProvider;
-use Tulia\Cms\Widget\Ports\Domain\ReadModel\WidgetFinderInterface;
-use Tulia\Cms\Widget\Ports\Domain\ReadModel\WidgetFinderScopeEnum;
+use Tulia\Cms\Widget\Domain\ReadModel\Finder\WidgetFinderInterface;
+use Tulia\Cms\Widget\Domain\ReadModel\Finder\WidgetFinderScopeEnum;
 
 /**
  * @author Adam Banaszkiewicz

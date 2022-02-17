@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Widget\Domain\Renderer;
 
-use Tulia\Cms\Widget\Ports\Domain\Renderer\RendererInterface;
 use Tulia\Component\Templating\EngineInterface;
 use Tulia\Component\Widget\Configuration\ArrayConfiguration;
 use Tulia\Component\Widget\Registry\WidgetRegistryInterface;
