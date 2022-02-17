@@ -6,7 +6,7 @@ namespace Tulia\Cms\Node\UserInterface\Web\Backend\Settings;
 
 use Symfony\Component\Form\FormInterface;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\ContentType;
-use Tulia\Cms\Settings\Ports\Domain\Group\AbstractSettingsGroup;
+use Tulia\Cms\Settings\Domain\Group\AbstractSettingsGroup;
 
 /**
  * @author Adam Banaszkiewicz

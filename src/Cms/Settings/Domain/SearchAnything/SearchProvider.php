@@ -12,7 +12,7 @@ use Tulia\Cms\Options\Domain\WriteModel\OptionsRepositoryInterface;
 use Tulia\Cms\SearchAnything\Model\Hit;
 use Tulia\Cms\SearchAnything\Model\Results;
 use Tulia\Cms\SearchAnything\Provider\AbstractProvider;
-use Tulia\Cms\Settings\Ports\Domain\Group\SettingsGroupRegistryInterface;
+use Tulia\Cms\Settings\Domain\Group\SettingsGroupRegistryInterface;
 
 /**
  * @author Adam Banaszkiewicz

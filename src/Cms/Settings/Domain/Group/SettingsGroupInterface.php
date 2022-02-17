@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Settings\Ports\Domain\Group;
+namespace Tulia\Cms\Settings\Domain\Group;
 
 use Symfony\Component\Form\FormInterface;
 

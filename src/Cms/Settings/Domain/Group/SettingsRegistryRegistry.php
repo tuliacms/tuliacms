@@ -4,10 +4,6 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Settings\Domain\Group;
 
-use Tulia\Cms\Settings\Ports\Domain\Group\SettingsGroupFactoryInterface;
-use Tulia\Cms\Settings\Ports\Domain\Group\SettingsGroupInterface;
-use Tulia\Cms\Settings\Ports\Domain\Group\SettingsGroupRegistryInterface;
-
 /**
  * @author Adam Banaszkiewicz
  */

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\User\Infrastructure\Cms\Settings;
 
 use Symfony\Component\Form\FormInterface;
-use Tulia\Cms\Settings\Ports\Domain\Group\AbstractSettingsGroup;
+use Tulia\Cms\Settings\Domain\Group\AbstractSettingsGroup;
 
 /**
  * @author Adam Banaszkiewicz
