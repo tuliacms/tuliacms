@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContentBuilder\Domain\WriteModel;
 
+use Tulia\Cms\ContentBuilder\Domain\WriteModel\Event\ContentTypeDeleted;
 use Tulia\Cms\ContentBuilder\Domain\WriteModel\Model\ContentType;
 use Tulia\Cms\ContentBuilder\Domain\WriteModel\ContentType\Service\ContentTypeStorageInterface;
 use Tulia\Cms\ContentBuilder\Domain\WriteModel\Model\Field;
@@ -103,6 +104,8 @@ class ContentTypeRepository
             $this->storage->rollback();
             throw $exception;
         }
+
+        $this->eventBus->dispatch(ContentTypeDeleted::fromModel($contentType));
     }
 
     public function extract(ContentType $contentType): array
