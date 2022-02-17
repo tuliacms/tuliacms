@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Filemanager\Domain\ImageSize;
 
-use Tulia\Cms\Filemanager\Ports\Domain\ImageSize\ImagesSizeProviderInterface;
-use Tulia\Cms\Filemanager\Ports\Domain\ImageSize\ImagesSizeRegistryInterface;
-
 /**
  * @author Adam Banaszkiewicz
  */

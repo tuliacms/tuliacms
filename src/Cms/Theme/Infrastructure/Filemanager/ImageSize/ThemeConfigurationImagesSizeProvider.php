@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Theme\Infrastructure\Filemanager\ImageSize;
 
-use Tulia\Cms\Filemanager\Ports\Domain\ImageSize\ImagesSizeProviderInterface;
+use Tulia\Cms\Filemanager\Domain\ImageSize\ImagesSizeProviderInterface;
 use Tulia\Component\Theme\ManagerInterface;
 
 /**

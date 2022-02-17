@@ -6,10 +6,9 @@ namespace Tulia\Cms\Filemanager\Application\Command;
 
 use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\Filemanager\Application\Command\Helper\FileResponseFormatter;
+use Tulia\Cms\Filemanager\Domain\ReadModel\Finder\FileFinderInterface;
+use Tulia\Cms\Filemanager\Domain\ReadModel\Finder\FileFinderScopeEnum;
 use Tulia\Cms\Filemanager\Domain\ReadModel\Model\File;
-use Tulia\Cms\Filemanager\Ports\Domain\Command\CommandInterface;
-use Tulia\Cms\Filemanager\Ports\Domain\ReadModel\FileFinderInterface;
-use Tulia\Cms\Filemanager\Ports\Domain\ReadModel\FileFinderScopeEnum;
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 
 /**

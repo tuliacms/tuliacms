@@ -3,8 +3,10 @@ services:
         autowire: true
         autoconfigure: true
     _instanceof:
-        Tulia\Cms\Filemanager\Ports\Domain\Command\CommandInterface:
+        Tulia\Cms\Filemanager\Application\Command\CommandInterface:
             tags: [ filemanager.command ]
+        Tulia\Cms\Filemanager\Domain\ImageSize\ImagesSizeProviderInterface:
+            tags: [ filemanager.image_size.provider ]
 
     Tulia\Cms\Filemanager\:
         resource: '../../../../**'
@@ -29,9 +31,6 @@ services:
     Tulia\Cms\Filemanager\Application\Command\Upload:
         bind:
             $projectDir: '%kernel.project_dir%'
-
-    Tulia\Cms\Filemanager\Domain\ImageSize\DefaultSizesImagesSizeProvider:
-        tags: [ filemanager.image_size.provider ]
 
     Tulia\Cms\Filemanager\Infrastructure\Framework\Theme\Customizer\FilepickerControl:
         tags: [ theme.customizer.control ]

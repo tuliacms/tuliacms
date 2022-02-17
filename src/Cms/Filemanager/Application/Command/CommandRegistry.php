@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Tulia\Cms\Filemanager\Application\Command;
 
 use RuntimeException;
-use Tulia\Cms\Filemanager\Ports\Domain\Command\CommandInterface;
 
 /**
  * @author Adam Banaszkiewicz

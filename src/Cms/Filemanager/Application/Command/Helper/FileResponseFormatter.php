@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Tulia\Cms\Filemanager\Application\Command\Helper;
 
 use Tulia\Cms\Filemanager\Application\Service\ImageUrlResolver;
-use Tulia\Cms\Filemanager\Ports\Domain\WriteModel\FileTypeEnum;
 use Tulia\Cms\Filemanager\Domain\ReadModel\Model\File;
+use Tulia\Cms\Filemanager\Domain\WriteModel\FileTypeEnum;
 use Tulia\Cms\Platform\Shared\Unit;
 
 /**

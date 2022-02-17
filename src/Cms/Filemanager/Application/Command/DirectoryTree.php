@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Filemanager\Application\Command;
 
-use Tulia\Cms\Filemanager\Ports\Domain\Command\CommandInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\Platform\Shared\ArraySorter;
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author Adam Banaszkiewicz

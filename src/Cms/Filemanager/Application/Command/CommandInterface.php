@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Filemanager\Ports\Domain\Command;
+namespace Tulia\Cms\Filemanager\Application\Command;
 
 use Symfony\Component\HttpFoundation\Request;
 

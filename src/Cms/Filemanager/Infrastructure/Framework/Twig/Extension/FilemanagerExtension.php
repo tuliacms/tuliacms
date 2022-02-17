@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Tulia\Cms\Filemanager\Infrastructure\Framework\Twig\Extension;
 
 use Tulia\Cms\Filemanager\Application\Service\ImageUrlResolver;
-use Tulia\Cms\Filemanager\Ports\Domain\ReadModel\FileFinderInterface;
-use Tulia\Cms\Filemanager\Ports\Domain\ReadModel\FileFinderScopeEnum;
-use Tulia\Cms\Filemanager\Ports\Domain\WriteModel\FileTypeEnum;
-use Tulia\Cms\Filemanager\Domain\ReadModel\Model\File;
 use Tulia\Cms\Filemanager\Domain\Generator\Html;
+use Tulia\Cms\Filemanager\Domain\ReadModel\Finder\FileFinderInterface;
+use Tulia\Cms\Filemanager\Domain\ReadModel\Finder\FileFinderScopeEnum;
+use Tulia\Cms\Filemanager\Domain\ReadModel\Model\File;
+use Tulia\Cms\Filemanager\Domain\WriteModel\FileTypeEnum;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
