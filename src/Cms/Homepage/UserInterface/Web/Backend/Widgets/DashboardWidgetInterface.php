@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Dashboard\Ports\Domain\Widgets;
+namespace Tulia\Cms\Homepage\UserInterface\Web\Backend\Widgets;
 
 /**
  * @author Adam Banaszkiewicz

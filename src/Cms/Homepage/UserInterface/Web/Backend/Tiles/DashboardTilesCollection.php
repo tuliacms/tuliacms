@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Dashboard\Domain\Tiles;
+namespace Tulia\Cms\Homepage\UserInterface\Web\Backend\Tiles;
 
 /**
  * @author Adam Banaszkiewicz

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Activity\DashboardWidget;
 
 use Tulia\Cms\Activity\Model\ActivityStorageInterface;
-use Tulia\Cms\Dashboard\Domain\Widgets\AbstractDashboardWidget;
+use Tulia\Cms\Homepage\UserInterface\Web\Backend\Widgets\AbstractDashboardWidget;
 
 /**
  * @author Adam Banaszkiewicz

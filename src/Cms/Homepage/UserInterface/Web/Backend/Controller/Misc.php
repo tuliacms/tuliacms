@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Homepage\UserInterface\Web\Backend\Controller;
 
-use Tulia\Cms\Dashboard\Ports\Domain\Tiles\DashboardTilesRegistryInterface;
+use Tulia\Cms\Homepage\UserInterface\Web\Backend\Tiles\DashboardTilesRegistryInterface;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Component\Templating\ViewInterface;
 

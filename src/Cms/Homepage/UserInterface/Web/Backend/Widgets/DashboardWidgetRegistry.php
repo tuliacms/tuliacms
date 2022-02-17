@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Dashboard\Domain\Widgets;
-
-use Tulia\Cms\Dashboard\Ports\Domain\Widgets\DashboardWidgetInterface;
+namespace Tulia\Cms\Homepage\UserInterface\Web\Backend\Widgets;
 
 /**
  * @author Adam Banaszkiewicz

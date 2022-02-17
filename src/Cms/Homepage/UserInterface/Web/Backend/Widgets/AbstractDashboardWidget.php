@@ -2,11 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Dashboard\Domain\Widgets;
+namespace Tulia\Cms\Homepage\UserInterface\Web\Backend\Widgets;
 
-use Tulia\Cms\Dashboard\Ports\Domain\Widgets\DashboardWidgetInterface;
-use Tulia\Component\Templating\View;
 use Tulia\Component\Templating\EngineInterface;
+use Tulia\Component\Templating\View;
 
 /**
  * @author Adam Banaszkiewicz

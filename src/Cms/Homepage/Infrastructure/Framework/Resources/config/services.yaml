@@ -6,3 +6,11 @@ services:
     Tulia\Cms\Homepage\:
         resource: '../../../../**'
         exclude: '../../../../{Infrastructure/Framework/Resources}'
+
+    Tulia\Cms\Homepage\UserInterface\Web\Backend\Widgets\DashboardWidgetRegistry:
+        bind:
+            $widgets: !tagged_iterator dashboard.widget
+
+    Tulia\Cms\Homepage\UserInterface\Web\Backend\Tiles\DashboardTilesRegistry:
+        bind:
+            $collectors: !tagged_iterator dashboard.tiles_collector

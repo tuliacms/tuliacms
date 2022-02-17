@@ -2,10 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Dashboard\Domain\Tiles;
-
-use Tulia\Cms\Dashboard\Ports\Domain\Tiles\DashboardTilesCollector;
-use Tulia\Cms\Dashboard\Ports\Domain\Tiles\DashboardTilesRegistryInterface;
+namespace Tulia\Cms\Homepage\UserInterface\Web\Backend\Tiles;
 
 /**
  * @author Adam Banaszkiewicz

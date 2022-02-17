@@ -6,8 +6,6 @@ namespace Tulia\Cms\Homepage\UserInterface\Web\Backend\Tiles;
 
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Tulia\Cms\Dashboard\Domain\Tiles\DashboardTilesCollection;
-use Tulia\Cms\Dashboard\Ports\Domain\Tiles\DashboardTilesCollector;
 
 /**
  * @author Adam Banaszkiewicz

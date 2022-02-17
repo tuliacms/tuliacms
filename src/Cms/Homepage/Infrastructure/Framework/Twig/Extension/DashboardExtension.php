@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Dashboard\Infrastructure\Framework\Twig\Extension;
+namespace Tulia\Cms\Homepage\Infrastructure\Framework\Twig\Extension;
 
-use Tulia\Cms\Dashboard\Domain\Widgets\DashboardWidgetRegistry;
+use Tulia\Cms\Homepage\UserInterface\Web\Backend\Widgets\DashboardWidgetRegistry;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 

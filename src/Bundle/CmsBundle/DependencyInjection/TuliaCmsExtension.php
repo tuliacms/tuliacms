@@ -51,9 +51,11 @@ class TuliaCmsExtension extends Extension
             ->addTag('breadcrumbs.resolver');
 
         // Dashboard
-        $container->registerForAutoconfiguration(\Tulia\Cms\Dashboard\Ports\Domain\Tiles\DashboardTilesCollector::class)
+        $container->registerForAutoconfiguration(
+            \Tulia\Cms\Homepage\UserInterface\Web\Backend\Tiles\DashboardTilesCollector::class)
             ->addTag('dashboard.tiles_collector');
-        $container->registerForAutoconfiguration(\Tulia\Cms\Dashboard\Ports\Domain\Widgets\DashboardWidgetInterface::class)
+        $container->registerForAutoconfiguration(
+            \Tulia\Cms\Homepage\UserInterface\Web\Backend\Widgets\DashboardWidgetInterface::class)
             ->addTag('dashboard.widget');
         $container->registerForAutoconfiguration(\Tulia\Cms\BackendMenu\Domain\Builder\BuilderInterface::class)
             ->addTag('backend_menu.builder');
