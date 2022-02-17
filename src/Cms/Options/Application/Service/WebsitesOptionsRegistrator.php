@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Options\Application\Service;
 
 use Tulia\Cms\Options\Domain\WriteModel\Model\Option;
-use Tulia\Cms\Options\Ports\Infrastructure\Persistence\Domain\WriteModel\OptionsRepositoryInterface;
+use Tulia\Cms\Options\Domain\WriteModel\OptionsRepositoryInterface;
 
 /**
  * @author Adam Banaszkiewicz

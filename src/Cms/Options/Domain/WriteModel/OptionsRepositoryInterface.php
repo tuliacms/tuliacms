@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Options\Ports\Infrastructure\Persistence\Domain\WriteModel;
+namespace Tulia\Cms\Options\Domain\WriteModel;
 
 use Tulia\Cms\Options\Domain\WriteModel\Exception\OptionNotFoundException;
 use Tulia\Cms\Options\Domain\WriteModel\Model\Option;

@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Options\Domain\ReadModel;
 
-use Tulia\Cms\Options\Ports\Infrastructure\Persistence\Domain\ReadModel\OptionsFinderInterface;
-use Tulia\Cms\Options\Ports\Infrastructure\Persistence\Domain\WriteModel\OptionsRepositoryInterface;
+use Tulia\Cms\Options\Domain\WriteModel\OptionsRepositoryInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 
 /**

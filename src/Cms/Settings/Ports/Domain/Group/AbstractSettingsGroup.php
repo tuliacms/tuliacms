@@ -6,7 +6,7 @@ namespace Tulia\Cms\Settings\Ports\Domain\Group;
 
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
-use Tulia\Cms\Options\Ports\Infrastructure\Persistence\Domain\WriteModel\OptionsRepositoryInterface;
+use Tulia\Cms\Options\Domain\WriteModel\OptionsRepositoryInterface;
 
 /**
  * @author Adam Banaszkiewicz

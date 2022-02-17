@@ -6,8 +6,6 @@ namespace Tulia\Cms\Options\Domain\WriteModel;
 
 use Tulia\Cms\Options\Domain\WriteModel\Exception\OptionNotFoundException;
 use Tulia\Cms\Options\Domain\WriteModel\Model\Option;
-use Tulia\Cms\Options\Ports\Infrastructure\Persistence\Domain\WriteModel\OptionsRepositoryInterface;
-use Tulia\Cms\Options\Ports\Infrastructure\Persistence\Domain\WriteModel\OptionsStorageInterface;
 use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Options\Application\EventListener;
+namespace Tulia\Cms\Options\Infrastructure\Framework\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Tulia\Cms\Options\Application\Service\WebsitesOptionsRegistrator;

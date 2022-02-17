@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Theme\Infrastructure\Framework\Theme\Activator;
 
-use Tulia\Cms\Options\Ports\Infrastructure\Persistence\Domain\WriteModel\OptionsRepositoryInterface;
+use Tulia\Cms\Options\Domain\WriteModel\OptionsRepositoryInterface;
+use Tulia\Component\Theme\Activator\ActivatorInterface;
 use Tulia\Component\Theme\Exception\MissingThemeException;
 use Tulia\Component\Theme\Storage\StorageInterface;
-use Tulia\Component\Theme\Activator\ActivatorInterface;
 
 /**
  * @author Adam Banaszkiewicz

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Options\Infrastructure\Persistence\ReadModel\Options;
 
-use Tulia\Cms\Options\Ports\Infrastructure\Persistence\Domain\ReadModel\OptionsFinderInterface;
+use Tulia\Cms\Options\Domain\ReadModel\OptionsFinderInterface;
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 
 /**
