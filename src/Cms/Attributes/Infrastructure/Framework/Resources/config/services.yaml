@@ -6,12 +6,12 @@ services:
             $environment: '%kernel.environment%'
 
     Tulia\Cms\Attributes\:
-        resource: '../../../../../../Attributes/**'
+        resource: '../../../../../Attributes/**'
         exclude:
-            - '../../../../../../Attributes/**/Resources/**'
-            - '../../../../../../Attributes/**/Model/**'
-            - '../../../../../../Attributes/**/*Exception.php'
-            - '../../../../../../Attributes/**/*Trait.php'
+            - '../../../../../Attributes/**/Resources/**'
+            - '../../../../../Attributes/**/Model/**'
+            - '../../../../../Attributes/**/*Exception.php'
+            - '../../../../../Attributes/**/*Trait.php'
 
     Tulia\Cms\Attributes\Domain\ReadModel\ValueRender\ValueRendererInterface:
         class: Tulia\Cms\Attributes\Infrastructure\Framework\Twig\TwigValueRenderer
