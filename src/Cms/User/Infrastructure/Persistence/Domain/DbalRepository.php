@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Tulia\Cms\User\Infrastructure\Persistence\Domain;
 
 use Tulia\Cms\Attributes\Domain\WriteModel\AttributesRepository;
-use Tulia\Cms\Platform\Infrastructure\DataManipulation\Hydrator\HydratorInterface;
-use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
+use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
+use Tulia\Cms\Shared\Infrastructure\Utils\Hydrator\HydratorInterface;
 use Tulia\Cms\User\Domain\Aggregate\User;
 use Tulia\Cms\User\Domain\Exception\UserNotFoundException;
 use Tulia\Cms\User\Domain\RepositoryInterface;

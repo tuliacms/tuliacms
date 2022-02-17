@@ -6,8 +6,8 @@ namespace Tulia\Cms\Taxonomy\Infrastructure\Persistence\Domain\ReadModel\Datatab
 
 use PDO;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
-use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Service\Datatable\TermDatatableFinderInterface;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Model\Term;
 use Tulia\Component\Datatable\Finder\AbstractDatatableFinder;

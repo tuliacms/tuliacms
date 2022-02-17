@@ -7,7 +7,7 @@ use Tulia\Cms\Installator\Application\Service\Steps\DatabaseInstallator;
 use Tulia\Cms\Installator\Application\Service\Steps\InstallationFinisher;
 use Tulia\Cms\Installator\Application\Service\Steps\WebsiteInstallator;
 use Tulia\Cms\Platform\Application\Service\AssetsPublisher;
-use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
+use Tulia\Cms\Shared\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
 use Tulia\Cms\User\Application\Command\UserStorage;
 use Tulia\Cms\Website\Application\Command\WebsiteStorage;
 use Tulia\Component\DependencyInjection\ContainerBuilderInterface;

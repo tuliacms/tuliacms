@@ -6,7 +6,7 @@ namespace Tulia\Cms\User\Domain\Aggregate;
 
 use Tulia\Cms\Attributes\Domain\WriteModel\MagickAttributesTrait;
 use Tulia\Cms\Attributes\Domain\WriteModel\Model\AttributesAwareInterface;
-use Tulia\Cms\Platform\Domain\WriteModel\Model\AggregateRoot;
+use Tulia\Cms\Shared\Domain\WriteModel\Model\AggregateRoot;
 use Tulia\Cms\User\Domain\Event;
 use Tulia\Cms\User\Domain\Exception;
 use Tulia\Cms\User\Domain\ValueObject\AggregateId;

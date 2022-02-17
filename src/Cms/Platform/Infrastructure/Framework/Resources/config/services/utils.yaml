@@ -3,5 +3,5 @@ services:
         autowire: true
         autoconfigure: true
 
-    Tulia\Cms\Platform\Infrastructure\Utilities\DateTime\DateFormatterInterface:
+    Tulia\Cms\Shared\Infrastructure\Utils\DateTime\DateFormatterInterface:
         class: Tulia\Cms\Platform\Infrastructure\Utilities\DateTime\DateFormatterTranslatorAware

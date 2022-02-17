@@ -10,7 +10,7 @@ use Tulia\Cms\ContentBuilder\Domain\WriteModel\Model\Field;
 use Tulia\Cms\ContentBuilder\Domain\WriteModel\Model\FieldsGroup;
 use Tulia\Cms\ContentBuilder\Domain\WriteModel\Model\LayoutType;
 use Tulia\Cms\ContentBuilder\Domain\WriteModel\Model\Section;
-use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
+use Tulia\Cms\Shared\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
 
 /**
  * @author Adam Banaszkiewicz

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\ContentBuilder\Domain\WriteModel\Event;
 
 use Tulia\Cms\ContentBuilder\Domain\WriteModel\Model\ContentType;
-use Tulia\Cms\Platform\Domain\WriteModel\Event\DomainEvent;
+use Tulia\Cms\Shared\Domain\WriteModel\Event\DomainEvent;
 
 /**
  * @author Adam Banaszkiewicz

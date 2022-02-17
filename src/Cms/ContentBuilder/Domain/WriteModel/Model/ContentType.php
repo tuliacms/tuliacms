@@ -6,7 +6,7 @@ namespace Tulia\Cms\ContentBuilder\Domain\WriteModel\Model;
 
 use Tulia\Cms\ContentBuilder\Domain\AbstractModel\AbstractContentType;
 use Tulia\Cms\ContentBuilder\Domain\WriteModel\Event\ContentTypeCreated;
-use Tulia\Cms\Platform\Domain\WriteModel\Model\AggregateRootTrait;
+use Tulia\Cms\Shared\Domain\WriteModel\Model\AggregateRootTrait;
 
 /**
  * @author Adam Banaszkiewicz

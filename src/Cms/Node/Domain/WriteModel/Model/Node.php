@@ -8,8 +8,8 @@ use Tulia\Cms\Attributes\Domain\WriteModel\Model\Attribute;
 use Tulia\Cms\Node\Domain\WriteModel\Event;
 use Tulia\Cms\Node\Domain\WriteModel\Event\AttributeUpdated;
 use Tulia\Cms\Node\Domain\WriteModel\Model\ValueObject\NodeId;
-use Tulia\Cms\Platform\Domain\WriteModel\Model\AggregateRoot;
-use Tulia\Cms\Platform\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
+use Tulia\Cms\Shared\Domain\WriteModel\Model\AggregateRoot;
+use Tulia\Cms\Shared\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
 
 /**
  * @author Adam Banaszkiewicz

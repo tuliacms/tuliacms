@@ -6,8 +6,8 @@ namespace Tulia\Cms\ContactForm\Domain\ReadModel\Finder;
 
 use Tulia\Cms\ContactForm\Infrastructure\Persistence\Domain\ReadModel\Finder\Query\DbalQuery;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\AbstractFinder;
+use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Query\QueryInterface;
-use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 
 /**
  * @author Adam Banaszkiewicz

@@ -6,7 +6,7 @@ namespace Tulia\Cms\Attributes\Domain\WriteModel;
 
 use Tulia\Cms\Attributes\Domain\WriteModel\Model\Attribute;
 use Tulia\Cms\Attributes\Domain\WriteModel\Service\AttributesWriteStorageInterface;
-use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
+use Tulia\Cms\Shared\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 
 /**

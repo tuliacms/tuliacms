@@ -9,8 +9,8 @@ use Tulia\Cms\ContactForm\Domain\FieldsParser\Exception\InvalidFieldNameExceptio
 use Tulia\Cms\ContactForm\Domain\FieldsParser\Exception\MultipleFieldsInTemplateException;
 use Tulia\Cms\ContactForm\Domain\FieldsParser\FieldsParserInterface;
 use Tulia\Cms\ContactForm\Domain\WriteModel\Model\ValueObject\FormId;
-use Tulia\Cms\Platform\Domain\WriteModel\EntitiesChangelog;
-use Tulia\Cms\Platform\Domain\WriteModel\Model\AggregateRoot;
+use Tulia\Cms\Shared\Domain\WriteModel\EntitiesChangelog;
+use Tulia\Cms\Shared\Domain\WriteModel\Model\AggregateRoot;
 
 /**
  * @author Adam Banaszkiewicz

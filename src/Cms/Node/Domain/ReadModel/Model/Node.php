@@ -7,7 +7,7 @@ namespace Tulia\Cms\Node\Domain\ReadModel\Model;
 use InvalidArgumentException;
 use Tulia\Cms\Attributes\Domain\ReadModel\MagickAttributesTrait;
 use Tulia\Cms\Attributes\Domain\ReadModel\Model\AttributesAwareInterface;
-use Tulia\Cms\Platform\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
+use Tulia\Cms\Shared\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
 
 /**
  * @author Adam Banaszkiewicz

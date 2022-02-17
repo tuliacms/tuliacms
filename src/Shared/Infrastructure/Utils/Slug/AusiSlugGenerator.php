@@ -6,7 +6,6 @@ namespace Tulia\Cms\Shared\Infrastructure\Utils\Slug;
 
 use Ausi\SlugGenerator\SlugGenerator;
 use Ausi\SlugGenerator\SlugOptions;
-use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Slug\SluggerInterface;
 
 /**
  * @author Adam Banaszkiewicz

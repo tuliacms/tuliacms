@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Platform\Infrastructure\Framework\Twig\Extension;
 
-use Tulia\Cms\Platform\Infrastructure\Utilities\DateTime\DateFormatterInterface;
+use Tulia\Cms\Shared\Infrastructure\Utils\DateTime\DateFormatterInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 

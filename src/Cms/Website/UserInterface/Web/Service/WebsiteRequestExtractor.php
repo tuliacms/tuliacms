@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Website\UserInterface\Web\Service;
 
 use Symfony\Component\HttpFoundation\Request;
-use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
+use Tulia\Cms\Shared\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
 use Tulia\Component\Routing\Enum\SslModeEnum;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 

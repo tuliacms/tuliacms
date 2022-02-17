@@ -7,7 +7,7 @@ namespace Tulia\Cms\ContactForm\Infrastructure\Transport\Email;
 use Tulia\Cms\ContactForm\Domain\FieldType\Core\EmailType;
 use Tulia\Cms\ContactForm\Domain\ReadModel\Model\Form;
 use Tulia\Cms\ContactForm\Domain\WriteModel\SenderInterface;
-use Tulia\Cms\Platform\Infrastructure\Mail\MailerInterface;
+use Tulia\Cms\Shared\Infrastructure\Mail\MailerInterface;
 use Tulia\Component\Templating\EngineInterface;
 use Tulia\Component\Templating\View;
 

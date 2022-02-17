@@ -7,7 +7,7 @@ namespace Tulia\Cms\Menu\Infrastructure\Persistence\Domain\WriteModel;
 use PDO;
 use Tulia\Cms\Menu\Domain\WriteModel\ItemStorageInterface;
 use Tulia\Cms\Menu\Domain\WriteModel\MenuStorageInterface;
-use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
+use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
 
 /**
  * @author Adam Banaszkiewicz

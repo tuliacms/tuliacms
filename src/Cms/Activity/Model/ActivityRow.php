@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Activity\Model;
 
-use Tulia\Cms\Platform\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
+use Tulia\Cms\Shared\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
 
 /**
  * @author Adam Banaszkiewicz

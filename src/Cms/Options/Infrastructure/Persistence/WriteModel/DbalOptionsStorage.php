@@ -6,7 +6,7 @@ namespace Tulia\Cms\Options\Infrastructure\Persistence\WriteModel;
 
 use Tulia\Cms\Options\Domain\WriteModel\OptionsStorageInterface;
 use Tulia\Cms\Platform\Infrastructure\Persistence\Domain\AbstractLocalizableStorage;
-use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
+use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
 
 /**
  * @author Adam Banaszkiewicz

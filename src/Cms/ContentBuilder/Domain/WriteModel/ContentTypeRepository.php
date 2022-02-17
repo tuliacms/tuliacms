@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContentBuilder\Domain\WriteModel;
 
+use Tulia\Cms\ContentBuilder\Domain\WriteModel\ContentType\Service\ContentTypeStorageInterface;
 use Tulia\Cms\ContentBuilder\Domain\WriteModel\Event\ContentTypeDeleted;
 use Tulia\Cms\ContentBuilder\Domain\WriteModel\Model\ContentType;
-use Tulia\Cms\ContentBuilder\Domain\WriteModel\ContentType\Service\ContentTypeStorageInterface;
 use Tulia\Cms\ContentBuilder\Domain\WriteModel\Model\Field;
-use Tulia\Cms\Platform\Infrastructure\Bus\Event\EventBusInterface;
-use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
+use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
+use Tulia\Cms\Shared\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
 
 /**
  * @author Adam Banaszkiewicz

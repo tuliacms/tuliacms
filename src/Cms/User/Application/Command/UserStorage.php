@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\User\Application\Command;
 
+use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
 use Tulia\Cms\User\Application\Event\UserCreatedEvent;
 use Tulia\Cms\User\Application\Event\UserDeletedEvent;
 use Tulia\Cms\User\Application\Event\UserPreCreateEvent;
@@ -16,7 +17,6 @@ use Tulia\Cms\User\Domain\Event\UserDeleted;
 use Tulia\Cms\User\Domain\Exception\UserNotFoundException;
 use Tulia\Cms\User\Domain\RepositoryInterface;
 use Tulia\Cms\User\Domain\ValueObject\AggregateId;
-use Tulia\Cms\Platform\Infrastructure\Bus\Event\EventBusInterface;
 
 /**
  * @author Adam Banaszkiewicz

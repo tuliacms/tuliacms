@@ -1,0 +1,4 @@
+services:
+    Tulia\Cms\Shared\Infrastructure\Mail\MailerInterface:
+        class: Tulia\Cms\Shared\Infrastructure\Mail\Swiftmailer
+        autowire: true

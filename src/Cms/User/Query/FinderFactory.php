@@ -6,7 +6,7 @@ namespace Tulia\Cms\User\Query;
 
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Tulia\Cms\Attributes\Domain\ReadModel\Service\AttributesFinder;
-use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
+use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
 use Tulia\Cms\User\Query\Model\Collection;
 
 /**

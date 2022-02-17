@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Component\Theme\Customizer\Changeset\Factory;
 
-use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
+use Tulia\Cms\Shared\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
 use Tulia\Component\Theme\Customizer\Changeset\Changeset;
 use Tulia\Component\Theme\Customizer\Changeset\ChangesetInterface;
 

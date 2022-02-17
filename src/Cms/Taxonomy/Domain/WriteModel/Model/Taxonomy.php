@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Taxonomy\Domain\WriteModel\Model;
 
-use Tulia\Cms\Platform\Domain\WriteModel\Model\AggregateRoot;
+use Tulia\Cms\Shared\Domain\WriteModel\Model\AggregateRoot;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Event\TermCreated;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Event\TermDeleted;
 use Tulia\Cms\Taxonomy\Domain\WriteModel\Exception\TermNotFoundException;

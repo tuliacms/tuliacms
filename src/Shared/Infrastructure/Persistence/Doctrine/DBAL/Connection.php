@@ -5,14 +5,12 @@ declare(strict_types=1);
 namespace Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL;
 
 use CLosure;
-use Doctrine\DBAL\Connection as DoctrineConnection;
 use Doctrine\DBAL\Cache\QueryCacheProfile;
-use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Connection as DoctrineConnection;
 use Doctrine\DBAL\Result;
 use Doctrine\DBAL\Statement;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Schema\SchemaManager;
-use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 
 /**
  * @author Adam Banaszkiewicz

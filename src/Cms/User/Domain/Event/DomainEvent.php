@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\User\Domain\Event;
 
+use Tulia\Cms\Shared\Domain\WriteModel\Event\DomainEvent as PlatformDomainEvent;
 use Tulia\Cms\User\Domain\ValueObject\AggregateId;
-use Tulia\Cms\Platform\Domain\WriteModel\Event\DomainEvent as PlatformDomainEvent;
 
 /**
  * @author Adam Banaszkiewicz

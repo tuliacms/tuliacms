@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Attributes\Infrastructure\Persistence\ReadModel;
 
 use Tulia\Cms\Attributes\Domain\ReadModel\Service\AttributeReadStorageInterface;
-use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
+use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 
 /**

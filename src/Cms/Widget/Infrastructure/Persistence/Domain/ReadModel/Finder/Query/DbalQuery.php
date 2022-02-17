@@ -7,11 +7,11 @@ namespace Tulia\Cms\Widget\Infrastructure\Persistence\Domain\ReadModel\Finder\Qu
 use Doctrine\DBAL\Connection;
 use Exception;
 use PDO;
-use Tulia\Cms\Widget\Domain\ReadModel\Model\Widget;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Exception\QueryException;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
+use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Query\AbstractDbalQuery;
-use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
+use Tulia\Cms\Widget\Domain\ReadModel\Model\Widget;
 
 /**
  * @author Adam Banaszkiewicz

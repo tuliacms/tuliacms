@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\User\Query\Factory;
 
+use Tulia\Cms\Shared\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
 use Tulia\Cms\User\Query\Model\User;
-use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
 
 /**
  * @author Adam Banaszkiewicz

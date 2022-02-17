@@ -1,0 +1,4 @@
+services:
+    Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface:
+        class: Tulia\Cms\Shared\Infrastructure\Bus\Event\PsrEventDispatcher
+        autowire: true

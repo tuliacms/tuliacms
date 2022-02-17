@@ -6,7 +6,7 @@ namespace Tulia\Cms\Activity\Persistence;
 
 use Tulia\Cms\Activity\Model\ActivityRow;
 use Tulia\Cms\Activity\Model\ActivityStorageInterface;
-use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
+use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 
 /**

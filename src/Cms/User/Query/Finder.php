@@ -8,7 +8,7 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\Attributes\Domain\ReadModel\Service\AttributesFinder;
 use Tulia\Cms\Platform\Shared\Pagination\Paginator;
-use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
+use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
 use Tulia\Cms\User\Query\Event\QueryFilterEvent;
 use Tulia\Cms\User\Query\Event\QueryPrepareEvent;
 use Tulia\Cms\User\Query\Exception\MultipleFetchException;

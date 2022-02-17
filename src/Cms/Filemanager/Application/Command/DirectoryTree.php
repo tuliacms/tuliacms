@@ -6,7 +6,7 @@ namespace Tulia\Cms\Filemanager\Application\Command;
 
 use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\Platform\Shared\ArraySorter;
-use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
+use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
 
 /**
  * @author Adam Banaszkiewicz

@@ -6,7 +6,6 @@ namespace Tulia\Cms\Shared\Infrastructure\Utils\Slug;
 
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\String\Slugger\SluggerInterface as SymfonySluggerInterface;
-use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Slug\SluggerInterface;
 
 /**
  * @author Adam Banaszkiewicz
