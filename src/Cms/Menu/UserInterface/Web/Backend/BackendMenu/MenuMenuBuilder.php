@@ -9,11 +9,11 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Tulia\Cms\BackendMenu\Domain\Builder\BuilderInterface;
 use Tulia\Cms\BackendMenu\Domain\Builder\Helper\BuilderHelperInterface;
 use Tulia\Cms\BackendMenu\Domain\Builder\Registry\ItemRegistryInterface;
+use Tulia\Cms\Menu\Domain\ReadModel\Finder\MenuFinderInterface;
+use Tulia\Cms\Menu\Domain\ReadModel\Finder\MenuFinderScopeEnum;
 use Tulia\Cms\Menu\Domain\WriteModel\Event\MenuCreated;
 use Tulia\Cms\Menu\Domain\WriteModel\Event\MenuDeleted;
 use Tulia\Cms\Menu\Domain\WriteModel\Event\MenuUpdated;
-use Tulia\Cms\Menu\Ports\Domain\ReadModel\MenuFinderInterface;
-use Tulia\Cms\Menu\Ports\Domain\ReadModel\MenuFinderScopeEnum;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 
 /**

@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Menu\Domain\SearchAnything;
 
-use Tulia\Cms\Menu\Ports\Domain\ReadModel\MenuFinderScopeEnum;
-use Tulia\Cms\Menu\Ports\Domain\ReadModel\MenuFinderInterface;
-use Tulia\Cms\SearchAnything\Ports\Provider\AbstractProvider;
+use Symfony\Component\Routing\RouterInterface;
+use Tulia\Cms\Menu\Domain\ReadModel\Finder\MenuFinderInterface;
+use Tulia\Cms\Menu\Domain\ReadModel\Finder\MenuFinderScopeEnum;
 use Tulia\Cms\SearchAnything\Domain\Model\Hit;
 use Tulia\Cms\SearchAnything\Domain\Model\Results;
-use Symfony\Component\Routing\RouterInterface;
+use Tulia\Cms\SearchAnything\Ports\Provider\AbstractProvider;
 
 /**
  * @author Adam Banaszkiewicz

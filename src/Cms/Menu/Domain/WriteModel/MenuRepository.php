@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Menu\Domain\WriteModel;
 
 use Psr\EventDispatcher\EventDispatcherInterface;
+use Tulia\Cms\Attributes\Domain\WriteModel\AttributesRepository;
 use Tulia\Cms\Menu\Domain\Metadata\Item\Enum\MetadataEnum;
 use Tulia\Cms\Menu\Domain\WriteModel\ActionsChain\MenuActionsChainInterface;
 use Tulia\Cms\Menu\Domain\WriteModel\Event\ItemAdded;
@@ -16,8 +17,6 @@ use Tulia\Cms\Menu\Domain\WriteModel\Event\MenuUpdated;
 use Tulia\Cms\Menu\Domain\WriteModel\Exception\MenuNotFoundException;
 use Tulia\Cms\Menu\Domain\WriteModel\Model\Item;
 use Tulia\Cms\Menu\Domain\WriteModel\Model\Menu;
-use Tulia\Cms\Menu\Ports\Infrastructure\Persistence\WriteModel\MenuStorageInterface;
-use Tulia\Cms\Attributes\Domain\WriteModel\AttributesRepository;
 use Tulia\Cms\Shared\Ports\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 

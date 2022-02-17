@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Tulia\Cms\Menu\Infrastructure\Persistence\Domain\ReadModel\Datatable;
 
 use PDO;
-use Tulia\Cms\Menu\Ports\Infrastructure\Persistence\ReadModel\Datatable\MenuDatatableFinderInterface;
-use Tulia\Component\Datatable\Finder\AbstractDatatableFinder;
+use Tulia\Cms\Menu\Domain\ReadModel\Datatable\MenuDatatableFinderInterface;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
+use Tulia\Component\Datatable\Finder\AbstractDatatableFinder;
 
 /**
  * @author Adam Banaszkiewicz

@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Menu\UserInterface\Web\Shared\Form\FormType;
 
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Tulia\Cms\Menu\Ports\Domain\ReadModel\MenuFinderScopeEnum;
+use Tulia\Cms\Menu\Domain\ReadModel\Finder\MenuFinderInterface;
+use Tulia\Cms\Menu\Domain\ReadModel\Finder\MenuFinderScopeEnum;
 use Tulia\Cms\Menu\Domain\WriteModel\Model\Item;
-use Tulia\Cms\Menu\Ports\Domain\ReadModel\MenuFinderInterface;
 
 /**
  * @author Adam Banaszkiewicz

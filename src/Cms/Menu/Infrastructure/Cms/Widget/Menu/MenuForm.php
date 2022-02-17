@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Tulia\Cms\Menu\Infrastructure\Cms\Widget\Menu;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Tulia\Cms\Menu\Ports\Domain\ReadModel\MenuFinderScopeEnum;
-use Tulia\Cms\Menu\Ports\Domain\ReadModel\MenuFinderInterface;
+use Tulia\Cms\Menu\Domain\ReadModel\Finder\MenuFinderInterface;
+use Tulia\Cms\Menu\Domain\ReadModel\Finder\MenuFinderScopeEnum;
 
 /**
  * @author Adam Banaszkiewicz

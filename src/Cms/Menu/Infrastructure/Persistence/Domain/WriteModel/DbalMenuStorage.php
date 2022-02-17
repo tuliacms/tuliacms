@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Tulia\Cms\Menu\Infrastructure\Persistence\Domain\WriteModel;
 
 use PDO;
-use Tulia\Cms\Menu\Ports\Infrastructure\Persistence\WriteModel\ItemStorageInterface;
-use Tulia\Cms\Menu\Ports\Infrastructure\Persistence\WriteModel\MenuStorageInterface;
+use Tulia\Cms\Menu\Domain\WriteModel\ItemStorageInterface;
+use Tulia\Cms\Menu\Domain\WriteModel\MenuStorageInterface;
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 
 /**
