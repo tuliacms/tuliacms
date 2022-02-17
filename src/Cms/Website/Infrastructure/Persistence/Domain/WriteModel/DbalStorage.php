@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Website\Infrastructure\Persistence\Domain\WriteModel;
 
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
-use Tulia\Cms\Website\Ports\Infrastructure\Persistence\Domain\WriteModel\WebsiteStorageInterface;
+use Tulia\Cms\Website\Domain\WriteModel\WebsiteStorageInterface;
 
 /**
  * @author Adam Banaszkiewicz

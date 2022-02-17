@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Website\Ports\Infrastructure\Persistence\Domain\WriteModel;
+namespace Tulia\Cms\Website\Domain\WriteModel;
 
 use Tulia\Cms\Website\Domain\WriteModel\Exception\WebsiteNotFoundException;
 use Tulia\Cms\Website\Domain\WriteModel\Model\Website;

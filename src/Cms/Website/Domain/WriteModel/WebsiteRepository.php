@@ -12,8 +12,6 @@ use Tulia\Cms\Website\Domain\WriteModel\Event\WebsiteUpdated;
 use Tulia\Cms\Website\Domain\WriteModel\Exception\WebsiteNotFoundException;
 use Tulia\Cms\Website\Domain\WriteModel\Model\Locale;
 use Tulia\Cms\Website\Domain\WriteModel\Model\Website;
-use Tulia\Cms\Website\Ports\Infrastructure\Persistence\Domain\WriteModel\WebsiteRepositoryInterface;
-use Tulia\Cms\Website\Ports\Infrastructure\Persistence\Domain\WriteModel\WebsiteStorageInterface;
 
 /**
  * @author Adam Banaszkiewicz

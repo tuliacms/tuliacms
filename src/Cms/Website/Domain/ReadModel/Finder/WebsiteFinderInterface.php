@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Website\Ports\Domain\ReadModel;
+namespace Tulia\Cms\Website\Domain\ReadModel\Finder;
 
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
 use Tulia\Cms\Website\Domain\ReadModel\Model\Website;
