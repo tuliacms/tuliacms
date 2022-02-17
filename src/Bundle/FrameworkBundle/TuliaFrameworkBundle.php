@@ -14,7 +14,7 @@ use Tulia\Bundle\FrameworkBundle\DependencyInjection\CompilerPass\RoutingPass;
 use Tulia\Bundle\FrameworkBundle\DependencyInjection\CompilerPass\TemplatingPass;
 use Tulia\Bundle\FrameworkBundle\DependencyInjection\CompilerPass\ThemePass;
 use Tulia\Bundle\FrameworkBundle\DependencyInjection\TuliaCmsExtension;
-use Tulia\Component\Security\DependencyInjection\CompilerPass\SecurityPass;
+use Tulia\Cms\Security\Framework\DependencyInjection\CompilerPass\SecurityPass;
 
 /**
  * @author Adam Banaszkiewicz

@@ -1,9 +1,13 @@
 security:
+    enable_authenticator_manager: true
     providers:
-        tulia_user_provider:
-            id: Tulia\Component\Security\Core\User\UserProvider
+        tulia_chain_user_provider:
+            chain:
+                providers: [ 'tulia_local_user_provider' ]
+        tulia_local_user_provider:
+            id: Tulia\Cms\Security\Framework\Security\Core\User\UserProvider
     encoders:
-        Tulia\Component\Security\Core\User\User:
+        Tulia\Cms\Security\Framework\Security\Core\User\User:
             algorithm: auto
         # todo Find out why save new user without it throws error.
         Symfony\Component\Security\Core\User\User:
@@ -14,14 +18,10 @@ security:
             security: false
         backend:
             stateless: false
-            anonymous: false
             lazy: true
             context: backend_context
-            provider: tulia_user_provider
-            request_matcher: Tulia\Component\Security\BackendRequestMatcher
-            guard:
-                authenticators:
-                    - Tulia\Component\Security\Guard\Authenticator\BackendLoginFormAuthenticator
+            provider: tulia_chain_user_provider
+            request_matcher: Tulia\Cms\Security\Framework\Security\RequestMatcher\BackendRequestMatcher
             logout:
                 path: backend.logout
                 target: backend.homepage
@@ -29,30 +29,26 @@ security:
             form_login:
                 login_path: backend.login
                 check_path: backend.login
+                enable_csrf: true
             remember_me:
                 secret: '%kernel.secret%'
                 lifetime: 604800
-                path: /
         main:
-            anonymous: true
             stateless: false
             context: backend_context
             lazy: true
-            provider: tulia_user_provider
-            request_matcher: Tulia\Component\Security\FrontendRequestMatcher
-            guard:
-                authenticators:
-                    - Tulia\Component\Security\Guard\Authenticator\FrontendLoginFormAuthenticator
+            provider: tulia_chain_user_provider
+            request_matcher: Tulia\Cms\Security\Framework\Security\RequestMatcher\FrontendRequestMatcher
             logout:
                 path: logout
                 target: homepage
                 invalidate_session: true
             form_login:
                 login_path: login
+                enable_csrf: true
             remember_me:
                 secret: '%kernel.secret%'
                 lifetime: 604800
-                path: /
 
     access_control:
         - { path: ^/auth, roles: IS_AUTHENTICATED_ANONYMOUSLY }

@@ -8,12 +8,12 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
+use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Cms\Website\Domain\ReadModel\Finder\WebsiteFinderScopeEnum;
 use Tulia\Cms\Website\Domain\WriteModel\WebsiteRepositoryInterface;
 use Tulia\Cms\Website\Infrastructure\Persistence\Domain\ReadModel\Finder\DbalFinder;
 use Tulia\Cms\Website\UserInterface\Web\Form\WebsiteForm;
 use Tulia\Cms\Website\UserInterface\Web\Service\WebsiteRequestExtractor;
-use Tulia\Component\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Component\Templating\ViewInterface;
 
 /**

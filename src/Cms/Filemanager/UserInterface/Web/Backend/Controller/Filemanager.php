@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\Filemanager\Application\Service\FilemanagerCommandHandler;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
-use Tulia\Component\Security\Http\Csrf\Annotation\IgnoreCsrfToken;
+use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\IgnoreCsrfToken;
 
 /**
  * @IgnoreCsrfToken

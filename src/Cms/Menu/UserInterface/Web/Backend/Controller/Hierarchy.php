@@ -10,7 +10,7 @@ use Tulia\Cms\Menu\Domain\Service\MenuHierarchy;
 use Tulia\Cms\Menu\Domain\WriteModel\MenuRepository;
 use Tulia\Cms\Menu\Domain\WriteModel\Model\Item;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
-use Tulia\Component\Security\Http\Csrf\Annotation\CsrfToken;
+use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Component\Templating\ViewInterface;
 
 /**

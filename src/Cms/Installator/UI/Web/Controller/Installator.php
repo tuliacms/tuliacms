@@ -5,15 +5,15 @@ declare(strict_types=1);
 namespace Tulia\Cms\Installator\UI\Web\Controller;
 
 use Doctrine\DBAL\DriverManager;
+use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\Installator\Application\Requirements\Requirements;
 use Tulia\Cms\Installator\UI\Web\Form\DatabaseForm;
 use Tulia\Cms\Installator\UI\Web\Form\UserForm;
 use Tulia\Cms\Installator\UI\Web\Form\WebsiteForm;
+use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Cms\Website\Application\Service\BackendPrefixGenerator;
 use Tulia\Component\Routing\Enum\SslModeEnum;
 use Tulia\Component\Templating\ViewInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Tulia\Component\Security\Http\Csrf\Annotation\CsrfToken;
 
 /**
  * @author Adam Banaszkiewicz

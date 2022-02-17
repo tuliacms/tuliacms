@@ -6,7 +6,6 @@ imports:
     - { resource: 'services/templating.yaml' }
     - { resource: 'services/utils.yaml' }
     - { resource: 'services/routing.yaml' }
-    - { resource: 'services/security.yaml' }
     - { resource: 'services/widget.yaml' }
     - { resource: 'services/datatable.yaml' }
     - { resource: 'services/form-skeleton.yaml' }

@@ -18,11 +18,11 @@ use Tulia\Cms\Node\Domain\WriteModel\Exception\SingularFlagImposedOnMoreThanOneN
 use Tulia\Cms\Node\Domain\WriteModel\Model\Node as ReadModel;
 use Tulia\Cms\Node\Domain\WriteModel\NodeRepository;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
+use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
+use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\IgnoreCsrfToken;
+use Tulia\Cms\Security\Framework\Security\Http\Csrf\Exception\RequestCsrfTokenException;
 use Tulia\Cms\Shared\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
 use Tulia\Component\Datatable\DatatableFactory;
-use Tulia\Component\Security\Http\Csrf\Annotation\CsrfToken;
-use Tulia\Component\Security\Http\Csrf\Annotation\IgnoreCsrfToken;
-use Tulia\Component\Security\Http\Csrf\Exception\RequestCsrfTokenException;
 use Tulia\Component\Templating\ViewInterface;
 
 /**

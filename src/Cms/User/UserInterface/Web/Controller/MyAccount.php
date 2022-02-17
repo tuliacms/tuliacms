@@ -6,7 +6,9 @@ namespace Tulia\Cms\User\UserInterface\Web\Controller;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
+use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Cms\User\Application\Command\UserStorage;
 use Tulia\Cms\User\Application\Model\User as ApplicationUser;
 use Tulia\Cms\User\Application\Service\AuthenticatedUserProviderInterface;
@@ -19,8 +21,6 @@ use Tulia\Cms\User\Query\Model\User;
 use Tulia\Cms\User\UserInterface\Web\Form\MyAccount\MyAccountForm;
 use Tulia\Cms\User\UserInterface\Web\Form\PasswordForm;
 use Tulia\Component\Templating\ViewInterface;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Tulia\Component\Security\Http\Csrf\Annotation\CsrfToken;
 
 /**
  * @author Adam Banaszkiewicz

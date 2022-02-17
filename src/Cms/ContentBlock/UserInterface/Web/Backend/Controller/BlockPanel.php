@@ -10,7 +10,7 @@ use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistryInterfa
 use Tulia\Cms\ContentBuilder\UserInterface\Web\Form\ContentTypeFormDescriptor;
 use Tulia\Cms\ContentBuilder\UserInterface\Web\Service\SymfonyFormBuilder;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
-use Tulia\Component\Security\Http\Csrf\Annotation\IgnoreCsrfToken;
+use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\IgnoreCsrfToken;
 
 /**
  * @author Adam Banaszkiewicz

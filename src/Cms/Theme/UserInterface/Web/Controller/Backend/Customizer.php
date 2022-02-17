@@ -6,7 +6,9 @@ namespace Tulia\Cms\Theme\UserInterface\Web\Controller\Backend;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
+use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Cms\Theme\Infrastructure\Framework\Theme\Customizer\Changeset\Changeset;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 use Tulia\Component\Templating\ViewInterface;
@@ -16,8 +18,6 @@ use Tulia\Component\Theme\Customizer\CustomizerInterface;
 use Tulia\Component\Theme\Enum\ChangesetTypeEnum;
 use Tulia\Component\Theme\Exception\ChangesetNotFoundException;
 use Tulia\Component\Theme\ManagerInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Tulia\Component\Security\Http\Csrf\Annotation\CsrfToken;
 
 /**
  * @author Adam Banaszkiewicz

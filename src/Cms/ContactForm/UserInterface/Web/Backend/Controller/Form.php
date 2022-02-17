@@ -17,8 +17,8 @@ use Tulia\Cms\ContactForm\Infrastructure\Persistence\Domain\ReadModel\Datatable\
 use Tulia\Cms\ContactForm\UserInterface\Web\Backend\Form\Form as FormType;
 use Tulia\Cms\ContactForm\UserInterface\Web\Backend\Form\ModelTransformer\DomainModelTransformer;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
+use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Component\Datatable\DatatableFactory;
-use Tulia\Component\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Component\Templating\ViewInterface;
 
 /**

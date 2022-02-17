@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Tulia\Cms\Platform\Infrastructure\Framework\EventListener\ExceptionListener;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
-use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Tulia\Component\Security\Http\Csrf\Exception\RequestCsrfTokenException;
+use Symfony\Contracts\Translation\TranslatorInterface;
+use Tulia\Cms\Security\Framework\Security\Http\Csrf\Exception\RequestCsrfTokenException;
 
 /**
  * @author Adam Banaszkiewicz

@@ -13,7 +13,7 @@ use Tulia\Cms\ContactForm\Domain\WriteModel\SenderInterface;
 use Tulia\Cms\ContactForm\UserInterface\Web\Frontend\Form\ContactFormBuilderInterface;
 use Tulia\Cms\ContactForm\UserInterface\Web\Frontend\Service\FormDataExtractor;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
-use Tulia\Component\Security\Http\Csrf\Annotation\IgnoreCsrfToken;
+use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\IgnoreCsrfToken;
 
 /**
  * @author Adam Banaszkiewicz
