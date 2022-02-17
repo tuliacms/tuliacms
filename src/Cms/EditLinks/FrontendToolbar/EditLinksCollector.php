@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\EditLinks\UserInterface\Web\Frontend\FrontendToolbar;
+namespace Tulia\Cms\EditLinks\FrontendToolbar;
 
-use Tulia\Cms\FrontendToolbar\Ports\Domain\Links\HelperInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\FrontendToolbar\Domain\Links\Link;
 use Tulia\Cms\FrontendToolbar\Domain\Links\LinksCollection;
 use Tulia\Cms\FrontendToolbar\Ports\Domain\Links\AbstractLinksCollector;
+use Tulia\Cms\FrontendToolbar\Ports\Domain\Links\HelperInterface;
 use Tulia\Component\Templating\View;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author Adam Banaszkiewicz

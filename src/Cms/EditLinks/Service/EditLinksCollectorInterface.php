@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\EditLinks\Ports\Domain;
+namespace Tulia\Cms\EditLinks\Service;
 
-use Tulia\Cms\EditLinks\Domain\Collection;
+use Tulia\Cms\EditLinks\Model\Collection;
 
 /**
  * @author Adam Banaszkiewicz

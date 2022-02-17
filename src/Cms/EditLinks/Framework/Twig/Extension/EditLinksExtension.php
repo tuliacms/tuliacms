@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\EditLinks\Infrastructure\Framework\Twig\Extension;
+namespace Tulia\Cms\EditLinks\Framework\Twig\Extension;
 
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Tulia\Cms\EditLinks\Domain\Service\EditLinksCollector;
+use Tulia\Cms\EditLinks\Service\EditLinksCollector;
 use Tulia\Component\Theme\Customizer\DetectorInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;

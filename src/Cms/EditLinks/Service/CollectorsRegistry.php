@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\EditLinks\Domain;
-
-use Tulia\Cms\EditLinks\Ports\Domain\EditLinksCollectorInterface;
+namespace Tulia\Cms\EditLinks\Service;
 
 /**
  * @author Adam Banaszkiewicz

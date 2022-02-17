@@ -1,4 +1,0 @@
-framework:
-    templating:
-        paths:
-            - { name: cms/edit_links, path: '%kernel.project_dir%/src/Cms/EditLinks/Infrastructure/Framework/Resources/views/frontend' }

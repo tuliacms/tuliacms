@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\EditLinks\Domain;
+namespace Tulia\Cms\EditLinks\Model;
 
 /**
  * @author Adam Banaszkiewicz

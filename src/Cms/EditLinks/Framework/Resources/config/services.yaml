@@ -4,9 +4,9 @@ services:
         autoconfigure: true
 
     Tulia\Cms\EditLinks\:
-        resource: '../../../../**'
-        exclude: '../../../../{Infrastructure/Framework/Resources}'
+        resource: '../../../**'
+        exclude: '../../../{Framework/Resources}'
 
-    Tulia\Cms\EditLinks\Domain\CollectorsRegistry:
+    Tulia\Cms\EditLinks\Service\CollectorsRegistry:
         bind:
             $collectors: !tagged_iterator edit_links.collector

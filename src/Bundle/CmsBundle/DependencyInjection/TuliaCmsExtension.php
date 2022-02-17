@@ -61,7 +61,7 @@ class TuliaCmsExtension extends Extension
             ->addTag('backend_menu.builder');
 
         // EditLinks
-        $container->registerForAutoconfiguration(\Tulia\Cms\EditLinks\Ports\Domain\EditLinksCollectorInterface::class)
+        $container->registerForAutoconfiguration(\Tulia\Cms\EditLinks\Service\EditLinksCollectorInterface::class)
             ->addTag('edit_links.collector');
 
         // FrontendToolbar
