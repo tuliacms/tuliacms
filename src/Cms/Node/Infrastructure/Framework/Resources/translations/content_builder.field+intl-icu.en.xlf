@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" target-language="en" datatype="plaintext" original="content_builder.field+intl-icu.en.xlf">
+        <body>
+            <trans-unit id="tuliacms.content_builder.field.node.1">
+                <source>publicationStatus</source>
+                <target>Publication status</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.field.node.2">
+                <source>publishedAt</source>
+                <target>Published at</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.field.node.3">
+                <source>publicationEndsAt</source>
+                <target>Publication ends at</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.field.node.4">
+                <source>parentNode</source>
+                <target>Parent node</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

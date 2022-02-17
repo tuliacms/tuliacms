@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\Decorator;
+namespace Tulia\Cms\Taxonomy\Domain\ContentBuilder;
 
-use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeDecoratorInterface;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\ContentType;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\Field;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeDecoratorInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class ParentContentDecorator implements ContentTypeDecoratorInterface
+class ParentTermDecorator implements ContentTypeDecoratorInterface
 {
     public function decorate(ContentType $contentType): void
     {
-        if ($contentType->isType('node') === false) {
+        if ($contentType->isType('taxonomy') === false) {
             return;
         }
 
@@ -25,8 +25,10 @@ class ParentContentDecorator implements ContentTypeDecoratorInterface
 
         $contentType->addField(new Field([
             'code' => 'parent_id',
-            'type' => 'node_select',
-            'name' => 'parentNode',
+            'type' => 'taxonomy',
+            'taxonomy' => $contentType->getCode(),
+            'name' => 'parentTerm',
+            'internal' => true,
         ]));
     }
 }

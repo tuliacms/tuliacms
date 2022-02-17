@@ -2,28 +2,27 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\Decorator;
+namespace Tulia\Cms\Node\Domain\ContentBuilder;
 
-use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeDecoratorInterface;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\ContentType;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\Field;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeDecoratorInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class VisibilityDecorator implements ContentTypeDecoratorInterface
+class AuthorDecorator implements ContentTypeDecoratorInterface
 {
     public function decorate(ContentType $contentType): void
     {
-        if ($contentType->isType('taxonomy') === false) {
+        if ($contentType->isType('node') === false) {
             return;
         }
 
         $contentType->addField(new Field([
-            'code' => 'visibility',
-            'name' => 'visibility',
-            'type' => 'yes_no',
-            'is_multilingual' => true,
+            'code' => 'author_id',
+            'type' => 'user',
+            'name' => 'author',
             'constraints' => [
                 'required' => [],
             ],
