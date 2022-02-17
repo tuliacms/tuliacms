@@ -2,17 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\ContactForm\Infrastructure\Persistence\Domain\ReadModel\Finder\Query;
+namespace Tulia\Cms\Widget\Infrastructure\Persistence\Domain\ReadModel\Finder;
 
 use Doctrine\DBAL\Connection;
 use Exception;
 use PDO;
-use Tulia\Cms\ContactForm\Domain\ReadModel\Model\Field;
-use Tulia\Cms\ContactForm\Domain\ReadModel\Model\Form;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Exception\QueryException;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Query\AbstractDbalQuery;
+use Tulia\Cms\Widget\Domain\ReadModel\Model\Widget;
 
 /**
  * @author Adam Banaszkiewicz
@@ -32,9 +31,17 @@ class DbalQuery extends AbstractDbalQuery
             /**
              * Search for nodes that are not with provided IDs list.
              *
-             * @param null|string|array
+             * @param null|string|array|string[]
              */
             'id__not_in' => null,
+            /**
+             * @param null|int|bool
+             */
+            'visibility' => null,
+            /**
+             * @param null|string|array|string[]
+             */
+            'space' => null,
             /**
              * @param null|int
              */
@@ -48,7 +55,7 @@ class DbalQuery extends AbstractDbalQuery
              * Allows to define custom sort option.
              */
             /*'order' => null,*/
-            'order_by' => 'id',
+            'order_by' => 'name',
             'order_dir' => 'DESC',
             /**
              * If query have to count rows, please provide the column name
@@ -56,10 +63,6 @@ class DbalQuery extends AbstractDbalQuery
              * provide boolean `true` and Query does care about column name.
              */
             'count' => null,
-            /**
-             * Search string. Seaching by title with LIKE operator.
-             */
-            'search' => null,
             /**
              * Locale of the node to fetch.
              */
@@ -71,10 +74,11 @@ class DbalQuery extends AbstractDbalQuery
              */
             'website' => null,
             /**
-             * Whether or not to fetch forms fields too.
+             * Search widgets by names and titles.
+             *
+             * @param null|string
              */
-            'fetch_fields' => false,
-            'limit' => 1,
+            'search' => null,
         ];
     }
 
@@ -86,25 +90,17 @@ class DbalQuery extends AbstractDbalQuery
         $this->searchById($criteria);
         $this->searchByName($criteria);
         $this->setDefaults($criteria);
+        $this->buildSpace($criteria);
+        $this->buildVisibility($criteria);
         $this->buildOffset($criteria);
         $this->buildOrderBy($criteria);
 
-        if ($criteria['website']) {
-            $this->queryBuilder
-                ->andWhere('tm.website_id = :tm_website_id')
-                ->setParameter('tm_website_id', $criteria['website'], PDO::PARAM_STR);
-        }
-
-        if ($criteria['limit']) {
-            $this->queryBuilder->setMaxResults($criteria['limit']);
-        }
-
         $this->callPlugins($criteria);
 
-        return $this->createCollection($this->queryBuilder->execute()->fetchAllAssociative(), $criteria);
+        return $this->createCollection($this->queryBuilder->execute()->fetchAllAssociative());
     }
 
-    protected function createCollection(array $result, array $criteria): Collection
+    protected function createCollection(array $result): Collection
     {
         $collection = new Collection();
 
@@ -112,26 +108,16 @@ class DbalQuery extends AbstractDbalQuery
             return $collection;
         }
 
-        if ($criteria['fetch_fields']) {
-            $fields = $this->fetchFields(array_column($result, 'id'), $criteria);
-        } else {
-            $fields = [];
-        }
-
         try {
             foreach ($result as $row) {
-                if (isset($fields[$row['id']])) {
-                    foreach ($fields[$row['id']] as $field) {
-                        $row['fields'][] = Field::buildFromArray($field);
-                    }
-                }
+                $row['styles'] = json_decode($row['styles'], true);
+                $row['payload'] = json_decode($row['payload'], true);
+                $row['payload_localized'] = json_decode($row['payload_localized'], true);
 
-                $row['receivers'] = @ (array) json_decode($row['receivers'], true);
-
-                $collection->append(Form::buildFromArray($row));
+                $collection->append(Widget::buildFromArray($row));
             }
         } catch (Exception $e) {
-            throw new QueryException('Exception during create colection of found forms: ' . $e->getMessage(), 0, $e);
+            throw new QueryException('Exception during create colection of found nodes: ' . $e->getMessage(), 0, $e);
         }
 
         return $collection;
@@ -144,23 +130,34 @@ class DbalQuery extends AbstractDbalQuery
         } elseif ($criteria['count']) {
             $this->queryBuilder->select('COUNT(' . $criteria['count'] . ') AS count');
         } else {
-            $this->queryBuilder->select([
-                'tm.*',
-                'tl.locale',
-                'IF(ISNULL(tl.name), 0, 1) AS translated',
-                'COALESCE(tl.name, tm.name) AS name',
-                'COALESCE(tl.subject, tm.subject) AS subject',
-                'COALESCE(tl.message_template, tm.message_template) AS message_template',
-                'COALESCE(tl.fields_view, tm.fields_view) AS fields_view',
-                'COALESCE(tl.fields_template, tm.fields_template) AS fields_template',
-            ]);
+            $this->queryBuilder->select('
+                tm.*,
+                tl.locale,
+                tm.widget_type,
+                IF(ISNULL(tl.title), 0, 1) AS translated,
+                COALESCE(tl.title, tm.title) AS title,
+                COALESCE(tl.visibility, tm.visibility) AS visibility,
+                COALESCE(tl.payload_localized, tm.payload_localized) AS payload_localized
+            ');
         }
 
         $this->queryBuilder
-            ->from('#__form', 'tm')
-            ->leftJoin('tm', '#__form_lang', 'tl', 'tm.id = tl.form_id AND tl.locale = :tl_locale')
-            ->setParameter('tl_locale', $criteria['locale'], PDO::PARAM_STR)
-        ;
+            ->from('#__widget', 'tm')
+            ->leftJoin('tm', '#__widget_lang', 'tl', 'tm.id = tl.widget_id AND tl.locale = :tl_locale')
+            ->andWhere('tm.website_id = :tm_website_id')
+            ->setParameter('tm_website_id', $criteria['website'], PDO::PARAM_STR)
+            ->setParameter('tl_locale', $criteria['locale'], PDO::PARAM_STR);
+    }
+
+    protected function searchByName(array $criteria): void
+    {
+        if (! $criteria['search']) {
+            return;
+        }
+
+        $this->queryBuilder
+            ->andWhere('tm.name LIKE :tm_name OR tl.title = :tm_name')
+            ->setParameter('tm_name', '%' . $criteria['search'] . '%', PDO::PARAM_STR);
     }
 
     protected function searchById(array $criteria): void
@@ -185,15 +182,30 @@ class DbalQuery extends AbstractDbalQuery
         }
     }
 
-    protected function searchByName(array $criteria): void
+    protected function buildSpace(array $criteria): void
     {
-        if (! $criteria['search']) {
+        if (! $criteria['space']) {
+            return;
+        }
+
+        if (\is_array($criteria['space']) === false) {
+            $criteria['space'] = [$criteria['space']];
+        }
+
+        $this->queryBuilder
+            ->andWhere('tm.space IN(:tm_spaces)')
+            ->setParameter('tm_spaces', $criteria['space'], ConnectionInterface::PARAM_ARRAY_STR);
+    }
+
+    protected function buildVisibility(array $criteria): void
+    {
+        if (! $criteria['visibility']) {
             return;
         }
 
         $this->queryBuilder
-            ->andWhere('COALESCE(tl.name, tm.name) LIKE :tl_name')
-            ->setParameter('tl_name', '%' . $criteria['search'] . '%', PDO::PARAM_STR);
+            ->andWhere('tl.visibility = :tl_visibility')
+            ->setParameter('tl_visibility', $criteria['visibility'], PDO::PARAM_INT);
     }
 
     protected function buildOffset(array $criteria): void
@@ -212,36 +224,5 @@ class DbalQuery extends AbstractDbalQuery
         if ($criteria['order_by']) {
             $this->queryBuilder->addOrderBy($criteria['order_by'], $criteria['order_dir']);
         }
-    }
-
-    protected function fetchFields(array $ids, array $criteria): array
-    {
-        $fields = $this->queryBuilder->getConnection()->fetchAllAssociative("
-            SELECT
-                tm.name,
-                tm.type,
-                tm.type_alias,
-                tm.form_id,
-                COALESCE(tl.locale, :locale) AS locale,
-                COALESCE(tl.options, tm.options) AS options
-            FROM #__form_field AS tm
-            LEFT JOIN #__form_field_lang AS tl
-                ON tl.form_id = :form_id AND tl.name = tm.name AND tl.locale = :locale
-            WHERE tm.form_id = :form_id", [
-            'form_id' => $ids,
-            'locale' => $criteria['locale'],
-        ], [
-            'form_id' => ConnectionInterface::PARAM_ARRAY_STR
-        ]);
-
-        $result = [];
-
-        foreach ($fields as $key => $val) {
-            $fields[$key]['options'] = @ (array) json_decode($fields[$key]['options'], true);
-
-            $result[$val['form_id']][] = $fields[$key];
-        }
-
-        return $result;
     }
 }

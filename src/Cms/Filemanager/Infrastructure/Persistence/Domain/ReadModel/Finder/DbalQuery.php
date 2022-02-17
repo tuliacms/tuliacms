@@ -2,13 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Filemanager\Infrastructure\Persistence\Domain\ReadModel\Finder\Query;
+namespace Tulia\Cms\Filemanager\Infrastructure\Persistence\Domain\ReadModel\Finder;
 
 use Exception;
 use PDO;
 use Tulia\Cms\Attributes\Domain\ReadModel\Service\AttributesFinder;
 use Tulia\Cms\Filemanager\Domain\ReadModel\Model\File;
-use Tulia\Cms\Node\Domain\Metadata\NodeMetadataEnum;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Exception\QueryException;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;

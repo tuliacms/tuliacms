@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Widget\Domain\ReadModel\Finder;
+namespace Tulia\Cms\Widget\Infrastructure\Persistence\Domain\ReadModel\Finder;
 
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\AbstractFinder;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Query\QueryInterface;
-use Tulia\Cms\Widget\Infrastructure\Persistence\Domain\ReadModel\Finder\Query\DbalQuery;
+use Tulia\Cms\Widget\Domain\ReadModel\Finder\WidgetFinderInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class Finder extends AbstractFinder implements WidgetFinderInterface
+class DbalFinder extends AbstractFinder implements WidgetFinderInterface
 {
     private ConnectionInterface $connection;
 

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Menu\Domain\ReadModel\Finder;
+namespace Tulia\Cms\Menu\Infrastructure\Persistence\Domain\ReadModel\Finder\Query;
 
 use Tulia\Cms\Attributes\Domain\ReadModel\Service\AttributesFinder;
-use Tulia\Cms\Menu\Infrastructure\Persistence\Domain\ReadModel\Finder\Query\DbalQuery;
+use Tulia\Cms\Menu\Domain\ReadModel\Finder\MenuFinderInterface;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\AbstractFinder;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Query\QueryInterface;
@@ -13,7 +13,7 @@ use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Query\Qu
 /**
  * @author Adam Banaszkiewicz
  */
-class Finder extends AbstractFinder implements MenuFinderInterface
+class DbalFinder extends AbstractFinder implements MenuFinderInterface
 {
     private ConnectionInterface $connection;
 

@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\ContactForm\Domain\ReadModel\Finder;
+namespace Tulia\Cms\Website\Infrastructure\Persistence\Domain\ReadModel\Finder;
 
-use Tulia\Cms\ContactForm\Infrastructure\Persistence\Domain\ReadModel\Finder\Query\DbalQuery;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\AbstractFinder;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Domain\ReadModel\Finder\Query\QueryInterface;
+use Tulia\Cms\Website\Domain\ReadModel\Finder\WebsiteFinderInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class Finder extends AbstractFinder implements ContactFormFinderInterface
+class DbalFinder extends AbstractFinder implements WebsiteFinderInterface
 {
     private ConnectionInterface $connection;
 
@@ -23,7 +23,7 @@ class Finder extends AbstractFinder implements ContactFormFinderInterface
 
     public function getAlias(): string
     {
-        return 'contact_form';
+        return 'website';
     }
 
     public function createQuery(): QueryInterface
