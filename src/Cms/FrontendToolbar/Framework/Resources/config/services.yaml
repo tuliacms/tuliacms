@@ -4,10 +4,10 @@ services:
         autoconfigure: true
 
     Tulia\Cms\FrontendToolbar\:
-        resource: '../../../../**'
+        resource: '../../../**'
         exclude:
-        exclude: '../../../../{Infrastructure/Framework/Resources}'
+        exclude: '../../../{Framework/Resources}'
 
-    Tulia\Cms\FrontendToolbar\Domain\Links\ProviderRegistry:
+    Tulia\Cms\FrontendToolbar\Links\ProviderRegistry:
         bind:
             $providers: !tagged_iterator frontend_toolbar.links.provider

@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Tulia\Cms\EditLinks\FrontendToolbar;
 
 use Symfony\Component\HttpFoundation\Request;
-use Tulia\Cms\FrontendToolbar\Domain\Links\Link;
-use Tulia\Cms\FrontendToolbar\Domain\Links\LinksCollection;
-use Tulia\Cms\FrontendToolbar\Ports\Domain\Links\AbstractLinksCollector;
-use Tulia\Cms\FrontendToolbar\Ports\Domain\Links\HelperInterface;
+use Tulia\Cms\FrontendToolbar\Helper\HelperInterface;
+use Tulia\Cms\FrontendToolbar\Links\AbstractLinksCollector;
+use Tulia\Cms\FrontendToolbar\Links\Link;
+use Tulia\Cms\FrontendToolbar\Links\LinksCollection;
 use Tulia\Component\Templating\View;
 
 /**

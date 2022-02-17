@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\FrontendToolbar\Ports\Domain\Links;
+namespace Tulia\Cms\FrontendToolbar\Links;
 
 use Symfony\Component\HttpFoundation\Request;
-use Tulia\Cms\FrontendToolbar\Domain\Links\LinksCollection;
 
 /**
  * @author Adam Banaszkiewicz

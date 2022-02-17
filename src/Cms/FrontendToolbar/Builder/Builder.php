@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\FrontendToolbar\Domain\Builder;
+namespace Tulia\Cms\FrontendToolbar\Builder;
 
-use Tulia\Cms\FrontendToolbar\Domain\Links\LinksCollection;
-use Tulia\Cms\FrontendToolbar\Domain\Links\ProviderRegistry;
+use Symfony\Component\HttpFoundation\Request;
+use Tulia\Cms\FrontendToolbar\Links\LinksCollection;
+use Tulia\Cms\FrontendToolbar\Links\ProviderRegistry;
 use Tulia\Component\Templating\EngineInterface;
 use Tulia\Component\Templating\View;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author Adam Banaszkiewicz

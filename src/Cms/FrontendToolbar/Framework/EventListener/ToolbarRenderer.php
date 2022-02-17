@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\FrontendToolbar\Application\EventListener;
+namespace Tulia\Cms\FrontendToolbar\Framework\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Tulia\Cms\FrontendToolbar\Domain\Builder\Builder;
+use Tulia\Cms\FrontendToolbar\Builder\Builder;
 
 /**
  * @author Adam Banaszkiewicz
@@ -16,9 +16,7 @@ use Tulia\Cms\FrontendToolbar\Domain\Builder\Builder;
 class ToolbarRenderer implements EventSubscriberInterface
 {
     private Builder $builder;
-
     private AuthorizationCheckerInterface $authorizationChecker;
-
     private TokenStorageInterface $tokenStorage;
 
     public function __construct(

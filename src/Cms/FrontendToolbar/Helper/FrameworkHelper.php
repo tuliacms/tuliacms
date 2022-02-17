@@ -2,11 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\FrontendToolbar\Infrastructure\Helper;
+namespace Tulia\Cms\FrontendToolbar\Helper;
 
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Tulia\Cms\FrontendToolbar\Ports\Domain\Links\HelperInterface;
 use Tulia\Component\Templating\EngineInterface;
 use Tulia\Component\Templating\ViewInterface;
 

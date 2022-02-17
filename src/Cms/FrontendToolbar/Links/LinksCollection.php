@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\FrontendToolbar\Domain\Links;
+namespace Tulia\Cms\FrontendToolbar\Links;
 
 /**
  * @author Adam Banaszkiewicz

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\FrontendToolbar\Ports\Domain\Links;
+namespace Tulia\Cms\FrontendToolbar\Helper;
 
 use Symfony\Component\Routing\RouterInterface;
 use Tulia\Component\Templating\ViewInterface;
