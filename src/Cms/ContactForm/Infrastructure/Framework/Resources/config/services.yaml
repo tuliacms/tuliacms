@@ -3,9 +3,9 @@ services:
         autowire: true
         autoconfigure: true
     _instanceof:
-        Tulia\Cms\ContactForm\Ports\Domain\FieldType\FieldTypeInterface:
+        Tulia\Cms\ContactForm\Domain\FieldType\FieldTypeInterface:
             tags: [ cms.form.field_type ]
-        Tulia\Cms\ContactForm\Ports\Domain\FieldType\FieldParserInterface:
+        Tulia\Cms\ContactForm\Domain\FieldType\FieldParserInterface:
             tags: [ cms.form.field_parser ]
 
     Tulia\Cms\ContactForm\:
@@ -14,7 +14,7 @@ services:
             - '../../../../{Infrastructure/Framework/Resources,Domain/Event,Domain/Exception,Domain/FieldsParser/Exception,Domain/WriteModel/Model}'
             - '../../../../Domain/FieldsParser/DynamicShortcode.php'
 
-    Tulia\Cms\ContactForm\Ports\Domain\FieldType\FieldsTypeRegistryInterface:
+    Tulia\Cms\ContactForm\Domain\FieldType\FieldsTypeRegistryInterface:
         class: Tulia\Cms\ContactForm\Domain\FieldType\FieldsTypeRegistry
         bind:
             $sourceTypes: !tagged_iterator cms.form.field_type

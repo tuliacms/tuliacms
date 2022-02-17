@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContactForm\Domain\FieldType\Core;
 
-use Tulia\Cms\ContactForm\Ports\Domain\FieldType\AbstractFieldType;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Tulia\Cms\ContactForm\Domain\FieldType\AbstractFieldType;
 
 /**
  * @author Adam Banaszkiewicz

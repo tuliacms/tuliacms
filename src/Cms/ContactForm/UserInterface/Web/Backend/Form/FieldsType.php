@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContactForm\UserInterface\Web\Backend\Form;
 
-use Symfony\Component\Form\Extension\Core\Type;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Validator\Constraints as Assert;
-use Tulia\Cms\ContactForm\Ports\Domain\FieldType\FieldsTypeRegistryInterface;
+use Tulia\Cms\ContactForm\Domain\FieldType\FieldsTypeRegistryInterface;
 
 /**
  * @author Adam Banaszkiewicz

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\ContactForm\Ports\Domain\FieldType;
+namespace Tulia\Cms\ContactForm\Domain\FieldType;
 
 use Tulia\Cms\ContactForm\Domain\Exception\FieldTypeNotFoundException;
 

@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContactForm\Domain\WriteModel\Model;
 
+use Tulia\Cms\ContactForm\Domain\Event;
 use Tulia\Cms\ContactForm\Domain\FieldsParser\Exception\InvalidFieldNameException;
 use Tulia\Cms\ContactForm\Domain\FieldsParser\Exception\MultipleFieldsInTemplateException;
+use Tulia\Cms\ContactForm\Domain\FieldsParser\FieldsParserInterface;
 use Tulia\Cms\ContactForm\Domain\WriteModel\Model\ValueObject\FormId;
-use Tulia\Cms\ContactForm\Domain\Event;
-use Tulia\Cms\ContactForm\Ports\Domain\FieldsParser\FieldsParserInterface;
-use Tulia\Cms\Platform\Domain\WriteModel\Model\AggregateRoot;
 use Tulia\Cms\Platform\Domain\WriteModel\EntitiesChangelog;
+use Tulia\Cms\Platform\Domain\WriteModel\Model\AggregateRoot;
 
 /**
  * @author Adam Banaszkiewicz

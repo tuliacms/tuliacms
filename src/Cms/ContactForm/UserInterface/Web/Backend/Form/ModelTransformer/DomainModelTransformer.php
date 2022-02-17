@@ -6,8 +6,8 @@ namespace Tulia\Cms\ContactForm\UserInterface\Web\Backend\Form\ModelTransformer;
 
 use Tulia\Cms\ContactForm\Domain\FieldsParser\Exception\InvalidFieldNameException;
 use Tulia\Cms\ContactForm\Domain\FieldsParser\Exception\MultipleFieldsInTemplateException;
+use Tulia\Cms\ContactForm\Domain\FieldsParser\FieldsParserInterface;
 use Tulia\Cms\ContactForm\Domain\WriteModel\Model\Form;
-use Tulia\Cms\ContactForm\Ports\Domain\FieldsParser\FieldsParserInterface;
 
 /**
  * @author Adam Banaszkiewicz

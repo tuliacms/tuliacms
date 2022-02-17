@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContactForm\Domain\FieldsParser;
 
-use Tulia\Cms\ContactForm\Ports\Domain\FieldsParser\FieldsParserInterface;
-use Tulia\Cms\ContactForm\Ports\Domain\FieldsParser\FieldsStreamInterface;
-use Tulia\Cms\ContactForm\Ports\Domain\FieldType\FieldsTypeRegistryInterface;
 use Tulia\Cms\ContactForm\Domain\FieldsParser\Exception\MultipleFieldsInTemplateException;
+use Tulia\Cms\ContactForm\Domain\FieldType\FieldsTypeRegistryInterface;
 use Tulia\Component\Shortcode\Processor;
 use Tulia\Component\Shortcode\Registry\CompilerRegistry;
 

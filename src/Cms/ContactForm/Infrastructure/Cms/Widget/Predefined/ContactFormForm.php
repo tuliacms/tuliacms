@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Tulia\Cms\ContactForm\Infrastructure\Cms\Widget\Predefined;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints as Assert;
-use Tulia\Cms\ContactForm\Ports\Domain\ReadModel\ContactFormFinderScopeEnum;
-use Tulia\Cms\ContactForm\Ports\Domain\ReadModel\ContactFormFinderInterface;
+use Tulia\Cms\ContactForm\Domain\ReadModel\Finder\ContactFormFinderInterface;
+use Tulia\Cms\ContactForm\Domain\ReadModel\Finder\ContactFormFinderScopeEnum;
 
 /**
  * @author Adam Banaszkiewicz

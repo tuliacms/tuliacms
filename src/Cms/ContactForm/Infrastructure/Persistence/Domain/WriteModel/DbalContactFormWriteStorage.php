@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContactForm\Infrastructure\Persistence\Domain\WriteModel;
 
-use Tulia\Cms\ContactForm\Ports\Infrastructure\Persistence\Domain\WriteModel\ContactFormWriteStorageInterface;
+use Tulia\Cms\ContactForm\Domain\WriteModel\ContactFormWriteStorageInterface;
 use Tulia\Cms\Platform\Infrastructure\Persistence\Domain\AbstractLocalizableStorage;
 use Tulia\Cms\Shared\Ports\Infrastructure\Persistence\DBAL\ConnectionInterface;
 

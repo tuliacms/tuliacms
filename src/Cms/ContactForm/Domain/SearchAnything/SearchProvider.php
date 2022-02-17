@@ -6,8 +6,8 @@ namespace Tulia\Cms\ContactForm\Domain\SearchAnything;
 
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Tulia\Cms\ContactForm\Ports\Domain\ReadModel\ContactFormFinderScopeEnum;
-use Tulia\Cms\ContactForm\Ports\Domain\ReadModel\ContactFormFinderInterface;
+use Tulia\Cms\ContactForm\Domain\ReadModel\Finder\ContactFormFinderInterface;
+use Tulia\Cms\ContactForm\Domain\ReadModel\Finder\ContactFormFinderScopeEnum;
 use Tulia\Cms\SearchAnything\Domain\Model\Hit;
 use Tulia\Cms\SearchAnything\Domain\Model\Results;
 use Tulia\Cms\SearchAnything\Ports\Provider\AbstractProvider;

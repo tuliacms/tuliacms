@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContactForm\UserInterface\Web\Frontend\Service;
 
-use Tulia\Cms\ContactForm\Domain\ReadModel\Model\Form;
-use Tulia\Cms\ContactForm\Ports\Domain\FieldType\FieldsTypeRegistryInterface;
 use Symfony\Component\Form\FormInterface;
+use Tulia\Cms\ContactForm\Domain\FieldType\FieldsTypeRegistryInterface;
+use Tulia\Cms\ContactForm\Domain\ReadModel\Model\Form;
 
 /**
  * @author Adam Banaszkiewicz

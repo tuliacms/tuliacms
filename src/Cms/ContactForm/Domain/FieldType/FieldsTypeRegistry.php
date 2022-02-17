@@ -5,9 +5,6 @@ declare(strict_types=1);
 namespace Tulia\Cms\ContactForm\Domain\FieldType;
 
 use Tulia\Cms\ContactForm\Domain\Exception\FieldTypeNotFoundException;
-use Tulia\Cms\ContactForm\Ports\Domain\FieldType\FieldParserInterface;
-use Tulia\Cms\ContactForm\Ports\Domain\FieldType\FieldsTypeRegistryInterface;
-use Tulia\Cms\ContactForm\Ports\Domain\FieldType\FieldTypeInterface;
 
 /**
  * @author Adam Banaszkiewicz

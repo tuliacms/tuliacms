@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContactForm\Domain\FieldType\Core;
 
-use Tulia\Cms\ContactForm\Ports\Domain\FieldType\AbstractFieldParser;
+use Tulia\Cms\ContactForm\Domain\FieldType\AbstractFieldParser;
 use Tulia\Component\Shortcode\ShortcodeInterface;
 
 /**

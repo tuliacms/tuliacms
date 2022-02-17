@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\ContactForm\Ports\Domain\ReadModel;
+namespace Tulia\Cms\ContactForm\Domain\ReadModel\Finder;
 
 use Tulia\Cms\ContactForm\Domain\ReadModel\Model\Form;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;

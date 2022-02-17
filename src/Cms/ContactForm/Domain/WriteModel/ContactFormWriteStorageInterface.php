@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\ContactForm\Ports\Infrastructure\Persistence\Domain\WriteModel;
+namespace Tulia\Cms\ContactForm\Domain\WriteModel;
 
 /**
  * @author Adam Banaszkiewicz

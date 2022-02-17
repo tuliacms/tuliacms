@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\ContactForm\Domain\FieldType\Core;
 
 use Symfony\Component\Validator\Constraints\Email;
-use Tulia\Cms\ContactForm\Ports\Domain\FieldType\AbstractFieldType;
+use Tulia\Cms\ContactForm\Domain\FieldType\AbstractFieldType;
 
 /**
  * @author Adam Banaszkiewicz

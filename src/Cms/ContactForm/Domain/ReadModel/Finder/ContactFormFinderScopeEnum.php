@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\ContactForm\Ports\Domain\ReadModel;
+namespace Tulia\Cms\ContactForm\Domain\ReadModel\Finder;
 
 /**
  * @author Adam Banaszkiewicz

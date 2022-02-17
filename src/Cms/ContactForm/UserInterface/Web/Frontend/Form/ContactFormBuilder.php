@@ -8,7 +8,6 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Tulia\Cms\ContactForm\Domain\ReadModel\Model\Form;
-use Tulia\Cms\ContactForm\Ports\UserInterface\Web\Frontend\FormBuilder\ContactFormBuilderInterface;
 
 /**
  * @author Adam Banaszkiewicz
