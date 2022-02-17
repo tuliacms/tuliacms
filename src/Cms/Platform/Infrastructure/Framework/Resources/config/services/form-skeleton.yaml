@@ -4,9 +4,9 @@ services:
         autoconfigure: true
 
     Tulia\Component\FormSkeleton\:
-        resource: '../../../../../../Component/form-skeleton/src/*'
+        resource: '../../../../../../../Component/form-skeleton/src/*'
         exclude:
-            - '../../../../../Component/form-skeleton/src/src/**/*Exception.php'
+            - '../../../../../../Component/form-skeleton/src/src/**/*Exception.php'
 
     Tulia\Component\FormSkeleton\Extension\ExtensionRegistryInterface:
         class: Tulia\Component\FormSkeleton\Extension\ExtensionRegistry

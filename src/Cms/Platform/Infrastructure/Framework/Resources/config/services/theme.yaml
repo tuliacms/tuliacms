@@ -4,9 +4,9 @@ services:
         autoconfigure: true
 
     Tulia\Component\Theme\:
-        resource: '../../../../../../Component/theme/src/*'
+        resource: '../../../../../../../Component/theme/src/*'
         exclude:
-            - '../../../../../Component/theme/src/src/**/*Exception.php'
+            - '../../../../../../Component/theme/src/src/**/*Exception.php'
 
     Tulia\Component\Theme\Customizer\Builder\BuilderInterface:
         class: Tulia\Component\Theme\Customizer\Builder\Builder

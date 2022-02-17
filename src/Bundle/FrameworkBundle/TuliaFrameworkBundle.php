@@ -46,7 +46,6 @@ class TuliaFrameworkBundle extends FrameworkBundle
         $this->ensureDynamicConfigFileExists($container, '/config/dynamic/modules.php');
 
         $container->addCompilerPass(new TemplatingPass());
-        $container->addCompilerPass(new CommandBusPass());
         $container->addCompilerPass(new RoutingPass());
         $container->addCompilerPass(new SecurityPass());
         $container->addCompilerPass(new FinderPass());

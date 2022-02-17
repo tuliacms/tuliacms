@@ -11,6 +11,7 @@ use Tulia\Framework\Kernel\Event\RequestEvent;
 /**
  * @author Adam Banaszkiewicz
  */
+// @todo This class is still needed?
 class ForwardSlashBackendFixer
 {
     /**

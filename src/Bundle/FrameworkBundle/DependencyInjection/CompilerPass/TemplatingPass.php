@@ -7,7 +7,6 @@ namespace Tulia\Bundle\FrameworkBundle\DependencyInjection\CompilerPass;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
-use Tulia\Component\CommandBus\Locator\LocatorInterface;
 use Tulia\Component\Templating\ViewFilter\FilterInterface;
 
 /**

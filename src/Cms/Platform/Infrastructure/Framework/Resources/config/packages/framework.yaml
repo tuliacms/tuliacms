@@ -1,11 +1,14 @@
-imports:
-    - { resource: assets.yaml }
-
-parameters:
-    tulia.cache.adapter: 'cache.adapter.doctrine_dbal'
-    tulia.cache.provider: 'doctrine.dbal.default_connection'
-
 framework:
+    secret: '%env(APP_SECRET)%'
+    session:
+        enabled: true
+        handler_id: session.handler.native_file
+        cookie_secure: auto
+        cookie_samesite: lax
+        cookie_lifetime: 86400
+        use_cookies: true
+    php_errors:
+        log: true
     translator:
         default_path: '%kernel.project_dir%/src/Cms/Platform/Infrastructure/Framework/Resources/translations'
     templating:
@@ -137,30 +140,46 @@ framework:
                 scripts: [ '/assets/core/masonry/masonry.pkgd.min.js' ]
                 priority: 500
                 group: head
+            datatables_core:
+                scripts: [ '/assets/core/datatables/datatables.min.js' ]
+                styles: [ '/assets/core/datatables/datatables.min.css' ]
+                priority: 800
+            datatables:
+                scripts: [ '/assets/core/datatables/integrations/js/dataTables.bootstrap4.min.js' ]
+                styles: [ '/assets/core/datatables/integrations/css/dataTables.bootstrap4.min.css' ]
+                require: [ 'datatables_core' ]
+                priority: 500
+            datatable_tulia:
+                scripts: [ '/assets/core/datatable-tulia/datatable.js' ]
+                require: [ 'datatables' ]
+                priority: 200
+            backend.font:
+                styles: [ 'https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&amp;subset=latin-ext' ]
+                group: head
+            backend.theme.head:
+                styles: [ '/assets/core/backend/theme/css/backend-theme.css' ]
+                require: [ 'backend.font', 'animate_css' ]
+                group: head
+            backend.theme:
+                scripts: [ '/assets/core/backend/theme/js/backend-theme.bundle.min.js' ]
+                require: [ 'vue', 'simplebar', 'lodash', 'backend.theme.head' ]
+            backend:
+                require: [ 'bootstrap', 'font_awesome', 'chosen', 'sweetalert2', 'js_cookie', 'backend.theme' ]
+            customizer.back:
+                scripts: [ '/assets/core/customizer/backend/customizer.js' ]
+                styles: [ '/assets/core/customizer/backend/customizer.css' ]
+                require: [ 'bootstrap', 'font_awesome', 'chosen', 'sweetalert2' ]
+            customizer.front:
+                scripts: [ '/assets/core/customizer/frontend/customizer.js' ]
+            frontend:
+                styles: [ '/assets/core/frontend/default-assets/style.css' ]
+                priority: 1000
+                group: head
+            tulia_dynamic_form:
+                scripts: [ '/assets/core/tulia-dynamic-form/tulia-dynamic-form.js' ]
+                collection: tulia-dynamic-form
+                priority: 1000
+                group: head
     cache:
         directory: '%kernel.cache_dir%/pools'
         default_pdo_provider: 'doctrine.dbal.default_connection'
-
-twig:
-    paths:
-        '%kernel.project_dir%/src/Cms/Platform/Infrastructure/Framework/Resources/views/backend': backend
-        '%kernel.project_dir%/src/Cms/Platform/Infrastructure/Framework/Resources/views/Form': form
-    form_themes:
-        - '@form/cms_form_layout.tpl'
-
-cms:
-    content_building:
-        data_types:
-            mapping:
-                datetime:
-                    label: Datetime
-                    classname: 'Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\DateTimeType'
-                    constraints: [required]
-                yes_no:
-                    label: Yes/No
-                    classname: 'Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\YesNoType'
-                    constraints: [required]
-                filepicker:
-                    label: Filepicker
-                    classname: 'Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\FilepickerType'
-                    constraints: [required]

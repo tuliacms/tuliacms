@@ -1,0 +1,3 @@
+parameters:
+    tulia.cache.adapter: 'cache.adapter.doctrine_dbal'
+    tulia.cache.provider: 'doctrine.dbal.default_connection'

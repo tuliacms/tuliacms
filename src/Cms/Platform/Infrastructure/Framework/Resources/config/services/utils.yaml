@@ -3,5 +3,14 @@ services:
         autowire: true
         autoconfigure: true
 
-    Tulia\Cms\Shared\Infrastructure\Utils\DateTime\DateFormatterInterface:
-        class: Tulia\Cms\Platform\Infrastructure\Utilities\DateTime\DateFormatterTranslatorAware
+    Tulia\Cms\Shared\Infrastructure\Utils\Uuid\UuidGeneratorInterface:
+        class: Tulia\Cms\Shared\Infrastructure\Utils\Uuid\RamseyUuidGenerator
+
+    Tulia\Cms\Shared\Infrastructure\Utils\Annotations\AnnotationsReaderInterface:
+        class: Tulia\Cms\Shared\Infrastructure\Utils\Annotations\AnnotationsReader
+
+    Tulia\Cms\Shared\Infrastructure\Utils\Slug\SluggerInterface:
+        class: Tulia\Cms\Shared\Infrastructure\Utils\Slug\SimpleSlugGenerator
+
+    Tulia\Cms\Shared\Infrastructure\Utils\Hydrator\HydratorInterface:
+        class: Tulia\Cms\Shared\Infrastructure\Utils\Hydrator\OcramiusHydrator

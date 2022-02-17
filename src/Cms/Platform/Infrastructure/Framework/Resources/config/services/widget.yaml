@@ -4,9 +4,9 @@ services:
         autoconfigure: true
 
     Tulia\Component\Widget\:
-        resource: '../../../../../../Component/widget/src/*'
+        resource: '../../../../../../../Component/widget/src/*'
         exclude:
-            - '../../../../../Component/widget/src/src/**/*Exception.php'
+            - '../../../../../../Component/widget/src/src/**/*Exception.php'
 
     Tulia\Component\Widget\Registry\WidgetRegistryInterface:
         class: Tulia\Component\Widget\Registry\WidgetRegistry

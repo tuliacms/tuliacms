@@ -16,27 +16,6 @@ abstract class Kernel extends BaseKernel
 {
     use MicroKernelTrait;
 
-    public function registerBundles(): iterable
-    {
-        $contents = require dirname(__DIR__) . '/Resources/config/bundles.php';
-
-        foreach ($contents as $class => $envs) {
-            if ($envs[$this->environment] ?? $envs['all'] ?? false) {
-                yield new $class();
-            }
-        }
-    }
-
-    public function getConfigDirs(): array
-    {
-        return [\dirname(__DIR__) . '/Resources/config'];
-    }
-
-    public function getPublicDir(): string
-    {
-        return $this->getProjectDir() . '/public';
-    }
-
     protected function configureContainer(ContainerConfigurator $container): void
     {
         foreach ($this->getConfigDirs() as $root) {

@@ -4,7 +4,7 @@ services:
         autoconfigure: true
 
     Tulia\Component\Templating\:
-        resource: '../../../../../../Component/templating/src/*'
+        resource: '../../../../../../../Component/templating/src/*'
 
     Tulia\Component\Templating\Twig\Loader\AdvancedFilesystemLoader:
         bind:

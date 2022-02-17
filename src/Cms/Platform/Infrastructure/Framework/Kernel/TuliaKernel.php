@@ -11,13 +11,18 @@ use Tulia\Cms\Shared\Infrastructure\Framework\Kernel\Kernel;
  */
 class TuliaKernel extends Kernel
 {
+    public function getPublicDir(): string
+    {
+        return $this->getProjectDir() . '/public';
+    }
+
     public function getConfigDirs(): array
     {
         $base = \dirname(__DIR__, 4);
 
         return array_merge(
-            parent::getConfigDirs(),
             [
+                $base . '/Platform/Infrastructure/Framework/Resources/config',
                 $base . '/Attributes/Infrastructure/Framework/Resources/config',
                 $base . '/Activity/Framework/Resources/config',
                 $base . '/BackendMenu/Infrastructure/Framework/Resources/config',
@@ -32,7 +37,6 @@ class TuliaKernel extends Kernel
                 $base . '/Menu/Infrastructure/Framework/Resources/config',
                 $base . '/Node/Infrastructure/Framework/Resources/config',
                 $base . '/Options/Infrastructure/Framework/Resources/config',
-                $base . '/Platform/Infrastructure/Framework/Resources/config',
                 $base . '/SearchAnything/Framework/Resources/config',
                 $base . '/Security/Framework/Resources/config',
                 $base . '/Settings/Infrastructure/Framework/Resources/config',
@@ -95,5 +99,16 @@ class TuliaKernel extends Kernel
         }
 
         return $configDirs;
+    }
+
+    public function registerBundles(): iterable
+    {
+        $contents = require dirname(__DIR__) . '/Resources/config/bundles.php';
+
+        foreach ($contents as $class => $envs) {
+            if ($envs[$this->environment] ?? $envs['all'] ?? false) {
+                yield new $class();
+            }
+        }
     }
 }

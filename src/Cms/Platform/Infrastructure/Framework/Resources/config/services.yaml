@@ -1,29 +1,16 @@
 imports:
+    - { resource: services/assetter.yaml }
+    - { resource: services/bus.yaml }
+    - { resource: services/database.yaml }
+    - { resource: services/datatable.yaml }
+    - { resource: services/finder.yaml }
+    - { resource: services/form-skeleton.yaml }
+    - { resource: services/image.yaml }
+    - { resource: services/mailer.yaml }
+    - { resource: services/platform.yaml }
     - { resource: services/routing.yaml }
+    - { resource: services/shortcode.yaml }
+    - { resource: services/templating.yaml }
+    - { resource: services/theme.yaml }
     - { resource: services/utils.yaml }
-
-services:
-    _defaults:
-        autowire: true
-        autoconfigure: true
-        bind:
-            $publicDir: '%kernel.public_dir%'
-            $rootDir: '%kernel.project_dir%'
-            $assetsPublicPaths: '%framework.assets.public_paths%'
-
-    Tulia\Cms\Platform\:
-        resource: '../../../../**'
-        exclude: '../../../../{Infrastructure/Framework/Resources,Domain/WriteModel,Shared}'
-
-    Tulia\Cms\Platform\Shared\Document\DocumentInterface:
-        class: Tulia\Cms\Platform\Shared\Document\Document
-
-    Tulia\Cms\Platform\UserInterface\Console\Command\AssetsPublish:
-        tags:
-            - { name: console.command, command: 'assets:publish' }
-
-    Tulia\Cms\Platform\Infrastructure\Framework\Theme\Storage\DirectoryDiscoveryStorage:
-        bind:
-            $extensionsDirectory: '%kernel.project_dir%/extension/theme'
-
-    Tulia\Component\Theme\Storage\StorageInterface: '@Tulia\Cms\Platform\Infrastructure\Framework\Theme\Storage\DirectoryDiscoveryStorage'
+    - { resource: services/widget.yaml }

@@ -1,0 +1,16 @@
+cms:
+    content_building:
+        data_types:
+            mapping:
+                datetime:
+                    label: Datetime
+                    classname: 'Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\DateTimeType'
+                    constraints: [required]
+                yes_no:
+                    label: Yes/No
+                    classname: 'Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\YesNoType'
+                    constraints: [required]
+                filepicker:
+                    label: Filepicker
+                    classname: 'Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\FilepickerType'
+                    constraints: [required]
