@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\SearchAnything\Ports\Provider;
+namespace Tulia\Cms\SearchAnything\Provider;
 
-use Tulia\Cms\SearchAnything\Domain\Model\Results;
+use Tulia\Cms\SearchAnything\Model\Results;
 
 /**
  * @author Adam Banaszkiewicz

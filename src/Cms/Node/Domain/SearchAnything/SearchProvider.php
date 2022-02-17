@@ -14,9 +14,9 @@ use Tulia\Cms\Filemanager\Domain\WriteModel\FileTypeEnum;
 use Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderInterface;
 use Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderScopeEnum as NodeScopeEnum;
 use Tulia\Cms\Node\Domain\ReadModel\Model\Node;
-use Tulia\Cms\SearchAnything\Domain\Model\Hit;
-use Tulia\Cms\SearchAnything\Domain\Model\Results;
-use Tulia\Cms\SearchAnything\Ports\Provider\AbstractProvider;
+use Tulia\Cms\SearchAnything\Model\Hit;
+use Tulia\Cms\SearchAnything\Model\Results;
+use Tulia\Cms\SearchAnything\Provider\AbstractProvider;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
 
 /**

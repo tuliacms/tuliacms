@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\SearchAnything\Domain\Model;
+namespace Tulia\Cms\SearchAnything\Model;
 
 use ArrayIterator;
 use IteratorAggregate;

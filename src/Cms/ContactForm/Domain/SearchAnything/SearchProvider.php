@@ -8,9 +8,9 @@ use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Cms\ContactForm\Domain\ReadModel\Finder\ContactFormFinderInterface;
 use Tulia\Cms\ContactForm\Domain\ReadModel\Finder\ContactFormFinderScopeEnum;
-use Tulia\Cms\SearchAnything\Domain\Model\Hit;
-use Tulia\Cms\SearchAnything\Domain\Model\Results;
-use Tulia\Cms\SearchAnything\Ports\Provider\AbstractProvider;
+use Tulia\Cms\SearchAnything\Model\Hit;
+use Tulia\Cms\SearchAnything\Model\Results;
+use Tulia\Cms\SearchAnything\Provider\AbstractProvider;
 
 /**
  * @author Adam Banaszkiewicz

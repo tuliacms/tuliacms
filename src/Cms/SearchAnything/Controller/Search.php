@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\SearchAnything\UserInterface\Web\Backend\Controller;
+namespace Tulia\Cms\SearchAnything\Controller;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
-use Tulia\Cms\SearchAnything\Ports\SearchEngine\SearchEngineInterface;
+use Tulia\Cms\SearchAnything\SearchEngine\SearchEngineInterface;
 
 /**
  * @author Adam Banaszkiewicz

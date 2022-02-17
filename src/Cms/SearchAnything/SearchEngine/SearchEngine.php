@@ -2,11 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\SearchAnything\Domain\SearchEngine;
+namespace Tulia\Cms\SearchAnything\SearchEngine;
 
-use Tulia\Cms\SearchAnything\Domain\Model\Results;
-use Tulia\Cms\SearchAnything\Ports\Provider\ProviderInterface;
-use Tulia\Cms\SearchAnything\Ports\SearchEngine\SearchEngineInterface;
+use Tulia\Cms\SearchAnything\Model\Results;
+use Tulia\Cms\SearchAnything\Provider\ProviderInterface;
 
 /**
  * @author Adam Banaszkiewicz

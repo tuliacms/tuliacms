@@ -9,9 +9,9 @@ use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Cms\Options\Domain\WriteModel\Exception\OptionNotFoundException;
 use Tulia\Cms\Options\Domain\WriteModel\OptionsRepositoryInterface;
-use Tulia\Cms\SearchAnything\Domain\Model\Hit;
-use Tulia\Cms\SearchAnything\Domain\Model\Results;
-use Tulia\Cms\SearchAnything\Ports\Provider\AbstractProvider;
+use Tulia\Cms\SearchAnything\Model\Hit;
+use Tulia\Cms\SearchAnything\Model\Results;
+use Tulia\Cms\SearchAnything\Provider\AbstractProvider;
 use Tulia\Cms\Settings\Ports\Domain\Group\SettingsGroupRegistryInterface;
 
 /**

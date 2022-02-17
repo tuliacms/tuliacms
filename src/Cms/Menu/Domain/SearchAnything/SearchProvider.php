@@ -7,9 +7,9 @@ namespace Tulia\Cms\Menu\Domain\SearchAnything;
 use Symfony\Component\Routing\RouterInterface;
 use Tulia\Cms\Menu\Domain\ReadModel\Finder\MenuFinderInterface;
 use Tulia\Cms\Menu\Domain\ReadModel\Finder\MenuFinderScopeEnum;
-use Tulia\Cms\SearchAnything\Domain\Model\Hit;
-use Tulia\Cms\SearchAnything\Domain\Model\Results;
-use Tulia\Cms\SearchAnything\Ports\Provider\AbstractProvider;
+use Tulia\Cms\SearchAnything\Model\Hit;
+use Tulia\Cms\SearchAnything\Model\Results;
+use Tulia\Cms\SearchAnything\Provider\AbstractProvider;
 
 /**
  * @author Adam Banaszkiewicz
