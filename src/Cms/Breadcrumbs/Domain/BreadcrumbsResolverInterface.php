@@ -21,7 +21,7 @@ interface BreadcrumbsResolverInterface
      *
      * @return object|null
      */
-    public function findRootCrumb(Request $request): ?object;
-    public function fillBreadcrumbs(object $identity, BreadcrumbsInterface $breadcrumbs): ?object;
-    public function supports(object $identity): bool;
+    public function findRootCrumb(Request $request): ?Crumb;
+    public function fillBreadcrumbs(Crumb $crumb, BreadcrumbsInterface $breadcrumbs): ?Crumb;
+    public function supports(Crumb $crumb): bool;
 }

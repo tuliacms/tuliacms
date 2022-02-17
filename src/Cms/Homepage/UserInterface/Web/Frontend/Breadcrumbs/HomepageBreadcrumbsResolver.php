@@ -9,6 +9,7 @@ use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Cms\Breadcrumbs\Domain\BreadcrumbsResolverInterface;
 use Tulia\Cms\Platform\Shared\Breadcrumbs\BreadcrumbsInterface;
+use Tulia\Cms\Breadcrumbs\Domain\Crumb;
 
 /**
  * @author Adam Banaszkiewicz
@@ -24,12 +25,12 @@ class HomepageBreadcrumbsResolver implements BreadcrumbsResolverInterface
         $this->router = $router;
     }
 
-    public function findRootCrumb(Request $request): ?object
+    public function findRootCrumb(Request $request): ?Crumb
     {
         return null;
     }
 
-    public function fillBreadcrumbs(object $identity, BreadcrumbsInterface $breadcrumbs): ?object
+    public function fillBreadcrumbs(Crumb $crumb, BreadcrumbsInterface $breadcrumbs): ?Crumb
     {
         $breadcrumbs->unshift(
             $this->router->generate('homepage'),
@@ -39,8 +40,8 @@ class HomepageBreadcrumbsResolver implements BreadcrumbsResolverInterface
         return null;
     }
 
-    public function supports(object $identity): bool
+    public function supports(Crumb $crumb): bool
     {
-        return $identity instanceof Homepage;
+        return $crumb->getCode() === 'homepage';
     }
 }

@@ -14,5 +14,5 @@ interface BreadcrumbsGeneratorInterface
 {
     public function generateFromRequest(Request $request): BreadcrumbsInterface;
 
-    public function generateFromIdentity(object $identity): BreadcrumbsInterface;
+    public function generateFromIdentity(Crumb $crumb): BreadcrumbsInterface;
 }

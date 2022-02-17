@@ -7,6 +7,7 @@ namespace Tulia\Cms\Taxonomy\UserInterface\Web\Frontend\Breadcrumbs;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
 use Tulia\Cms\Breadcrumbs\Domain\BreadcrumbsResolverInterface;
+use Tulia\Cms\Breadcrumbs\Domain\Crumb;
 use Tulia\Cms\Platform\Shared\Breadcrumbs\BreadcrumbsInterface;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Model\Term;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\TaxonomyBreadcrumbs;
@@ -28,47 +29,42 @@ class CrumbsResolver implements BreadcrumbsResolverInterface
         $this->taxonomyBreadcrumbs = $taxonomyBreadcrumbs;
     }
 
-    public function findRootCrumb(Request $request): ?object
+    public function findRootCrumb(Request $request): ?Crumb
     {
         $route = $request->attributes->get('_route');
         $term  = $request->attributes->get('term');
 
         return strncmp($route, 'term.', 5) === 0
-            && $this->supports($term)
-            ? $term
+            && $term instanceof Term
+            ? new Crumb($route, [ sprintf('term.%s', $term->getId()) ], $term)
             : null;
     }
 
-    /**
-     * @param Term $term
-     * @param BreadcrumbsInterface $breadcrumbs
-     * @return object|null
-     */
-    public function fillBreadcrumbs(object $term, BreadcrumbsInterface $breadcrumbs): ?object
+    public function fillBreadcrumbs(Crumb $crumb, BreadcrumbsInterface $breadcrumbs): ?Crumb
     {
-        $path = $this->taxonomyBreadcrumbs->find($term->getId());
+        $path = $this->taxonomyBreadcrumbs->find($crumb->getContext()->getId());
 
-        foreach ($path as $crumb) {
-            if ($crumb->isRoot()) {
+        foreach ($path as $part) {
+            if ($part->isRoot()) {
                 continue;
             }
 
             $breadcrumbs->unshift(
                 $this->router->generate(
-                    sprintf('term.%s.%s', $crumb->getType(), $crumb->getId()),
+                    sprintf('term.%s.%s', $part->getType(), $part->getId()),
                     [
-                        '_term_instance' => $crumb,
+                        '_term_instance' => $part,
                     ]
                 ),
-                $crumb->getTitle()
+                $part->getTitle()
             );
         }
 
         return null;
     }
 
-    public function supports(object $identity): bool
+    public function supports(Crumb $crumb): bool
     {
-        return $identity instanceof Term;
+        return $crumb->getContext() instanceof Term;
     }
 }

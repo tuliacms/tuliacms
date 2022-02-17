@@ -37,9 +37,9 @@ class BreadcrumbsExtension extends AbstractExtension
 
                 // Append current page placeholder if at least
                 // homepage crumb is in collection.
-                if ($breadcrumbs->count() <= 1) {
+                /*if ($breadcrumbs->count() <= 1) {
                     $breadcrumbs->push('#', $this->document->getTitle());
-                }
+                }*/
 
                 return $breadcrumbs;
             }, [

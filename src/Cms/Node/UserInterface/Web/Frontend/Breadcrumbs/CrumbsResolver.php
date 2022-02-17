@@ -7,6 +7,7 @@ namespace Tulia\Cms\Node\UserInterface\Web\Frontend\Breadcrumbs;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
 use Tulia\Cms\Breadcrumbs\Domain\BreadcrumbsResolverInterface;
+use Tulia\Cms\Breadcrumbs\Domain\Crumb;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderInterface;
 use Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderScopeEnum;
@@ -39,20 +40,22 @@ class CrumbsResolver implements BreadcrumbsResolverInterface
         $this->termFinder = $termFinder;
     }
 
-    public function findRootCrumb(Request $request): ?object
+    public function findRootCrumb(Request $request): ?Crumb
     {
         $route = $request->attributes->get('_route');
         $node  = $request->attributes->get('node');
 
         return strncmp($route, 'node.', 5) === 0
-            && $this->supports($node)
-            ? $node
+            && $node instanceof Node
+            ? new Crumb($route, [ sprintf('node.%s', $node->getId()) ], $node)
             : null;
     }
 
-    public function fillBreadcrumbs(object $node, BreadcrumbsInterface $breadcrumbs): ?object
+    public function fillBreadcrumbs(Crumb $crumb, BreadcrumbsInterface $breadcrumbs): ?Crumb
     {
         /** @var Node $node */
+        $node = $crumb->getContext();
+
         $breadcrumbs->unshift($this->router->generate('node_' . $node->getId()), $node->getTitle());
 
         if ($this->contentTypeRegistry->has($node->getType())) {
@@ -69,17 +72,18 @@ class CrumbsResolver implements BreadcrumbsResolverInterface
         return null;
     }
 
-    public function supports(object $identity): bool
+    public function supports(Crumb $crumb): bool
     {
-        return $identity instanceof Node;
+        return $crumb->getContext() instanceof Node;
     }
 
     private function resolveHierarchyCrumbs(Node $node, BreadcrumbsInterface $breadcrumbs): void
     {
         $parentId = $node->getParentId();
         $nodes = [];
+        $securityLooper = 10;
 
-        while ($parentId) {
+        while ($parentId && $securityLooper) {
             $parent = $this->nodeFinder->findOne(['id' => $parentId], NodeFinderScopeEnum::BREADCRUMBS);
 
             if ($parent) {
@@ -88,6 +92,8 @@ class CrumbsResolver implements BreadcrumbsResolverInterface
             } else {
                 $parentId = null;
             }
+
+            $securityLooper--;
         }
 
         /** @var Node $parent */

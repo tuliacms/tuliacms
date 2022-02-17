@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Tulia\Cms\Breadcrumbs\Domain;
 
 use Symfony\Component\HttpFoundation\Request;
-use Tulia\Cms\Homepage\UserInterface\Web\Frontend\Breadcrumbs\Homepage;
 use Tulia\Cms\Platform\Shared\Breadcrumbs\Breadcrumbs;
 use Tulia\Cms\Platform\Shared\Breadcrumbs\BreadcrumbsInterface;
 
@@ -34,37 +33,43 @@ class BreadcrumbsGenerator implements BreadcrumbsGeneratorInterface
             }
         }
 
-        return $this->generateFromIdentity($root ?? new Homepage());
+        if (!$root) {
+            return new Breadcrumbs();
+        }
+
+        return $this->generateFromIdentity($root);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function generateFromIdentity(object $identity): BreadcrumbsInterface
+    public function generateFromIdentity(Crumb $crumb): BreadcrumbsInterface
     {
         $breadcrumbs = new Breadcrumbs();
-        $homepageAdded = $identity instanceof Homepage;
+        $homepageAdded = $crumb->getCode() === 'homepage';
         $parent = null;
+        $securityLooper = 10;
 
         do {
             $resolverCalled = false;
 
             foreach ($this->registry->all() as $resolver) {
-                if ($resolver->supports($identity) === false) {
+                if ($resolver->supports($crumb) === false) {
                     continue;
                 }
 
-                $parent = $resolver->fillBreadcrumbs($identity, $breadcrumbs);
+                $parent = $resolver->fillBreadcrumbs($crumb, $breadcrumbs);
                 $resolverCalled = true;
             }
 
             if ($parent === null && $homepageAdded === false) {
-                $parent = new Homepage();
+                $parent = new Crumb('homepage', []);
                 $homepageAdded = true;
             }
 
-            $identity = $parent;
-        } while ($identity && $resolverCalled);
+            $crumb = $parent;
+            $securityLooper--;
+        } while ($crumb && $resolverCalled && $securityLooper);
 
         return $breadcrumbs;
     }
