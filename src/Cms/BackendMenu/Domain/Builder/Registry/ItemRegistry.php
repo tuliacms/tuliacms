@@ -9,14 +9,8 @@ namespace Tulia\Cms\BackendMenu\Domain\Builder\Registry;
  */
 class ItemRegistry implements ItemRegistryInterface
 {
-    /**
-     * @var array
-     */
     protected $items = [];
 
-    /**
-     * @var array
-     */
     protected $defaults = [
         /**
          * Type of item. Can be `item` oraz `section`.

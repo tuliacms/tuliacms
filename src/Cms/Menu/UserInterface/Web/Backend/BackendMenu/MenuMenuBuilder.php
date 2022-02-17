@@ -6,14 +6,14 @@ namespace Tulia\Cms\Menu\UserInterface\Web\Backend\BackendMenu;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Tulia\Cms\BackendMenu\Ports\Domain\Builder\BuilderInterface;
+use Tulia\Cms\BackendMenu\Domain\Builder\BuilderInterface;
 use Tulia\Cms\BackendMenu\Domain\Builder\Helper\BuilderHelperInterface;
 use Tulia\Cms\BackendMenu\Domain\Builder\Registry\ItemRegistryInterface;
-use Tulia\Cms\Menu\Ports\Domain\ReadModel\MenuFinderScopeEnum;
 use Tulia\Cms\Menu\Domain\WriteModel\Event\MenuCreated;
 use Tulia\Cms\Menu\Domain\WriteModel\Event\MenuDeleted;
 use Tulia\Cms\Menu\Domain\WriteModel\Event\MenuUpdated;
 use Tulia\Cms\Menu\Ports\Domain\ReadModel\MenuFinderInterface;
+use Tulia\Cms\Menu\Ports\Domain\ReadModel\MenuFinderScopeEnum;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 
 /**

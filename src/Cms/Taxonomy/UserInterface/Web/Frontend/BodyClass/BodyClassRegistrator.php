@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Tulia\Cms\Taxonomy\UserInterface\Web\Frontend\BodyClass;
 
 use Symfony\Component\HttpFoundation\Request;
-use Tulia\Cms\BodyClass\Domain\BodyClassCollection;
-use Tulia\Cms\BodyClass\Ports\Domain\BodyClassCollectorInterface;
+use Tulia\Cms\BodyClass\Collector\BodyClassCollection;
+use Tulia\Cms\BodyClass\Collector\BodyClassCollectorInterface;
 use Tulia\Cms\Taxonomy\Domain\ReadModel\Model\Term;
 
 /**

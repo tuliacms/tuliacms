@@ -9,10 +9,5 @@ namespace Tulia\Cms\BackendMenu\Domain\Builder;
  */
 interface HtmlBuilderInterface
 {
-    /**
-     * @param array $params
-     *
-     * @return string
-     */
     public function build(array $params = []): string;
 }

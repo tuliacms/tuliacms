@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Theme\Infrastructure\Cms\BackendMenu;
 
-use Tulia\Cms\BackendMenu\Ports\Domain\Builder\BuilderInterface;
+use Tulia\Cms\BackendMenu\Domain\Builder\BuilderInterface;
 use Tulia\Cms\BackendMenu\Domain\Builder\Helper\BuilderHelperInterface;
 use Tulia\Cms\BackendMenu\Domain\Builder\Registry\ItemRegistryInterface;
 

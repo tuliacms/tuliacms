@@ -18,7 +18,6 @@ class BuilderHelper implements BuilderHelperInterface
     protected RequestStack $stack;
     protected RouterInterface $router;
     protected string $homepageRoute;
-
     private ?string $pathinfo = null;
     private ?bool $isHomepage = null;
 

@@ -43,11 +43,11 @@ class TuliaCmsExtension extends Extension
         $container->setParameter('cms.attributes.finder.types', $config['attributes']['finder']['types'] ?? []);
 
         // BodyClass
-        $container->registerForAutoconfiguration(\Tulia\Cms\BodyClass\Ports\Domain\BodyClassCollectorInterface::class)
+        $container->registerForAutoconfiguration(\Tulia\Cms\BodyClass\Collector\BodyClassCollectorInterface::class)
             ->addTag('body_class.collector');
 
         // Breadcrumbs
-        $container->registerForAutoconfiguration(\Tulia\Cms\Breadcrumbs\Ports\Domain\BreadcrumbsResolverInterface::class)
+        $container->registerForAutoconfiguration(\Tulia\Cms\Breadcrumbs\Domain\BreadcrumbsResolverInterface::class)
             ->addTag('breadcrumbs.resolver');
 
         // Dashboard
@@ -55,7 +55,7 @@ class TuliaCmsExtension extends Extension
             ->addTag('dashboard.tiles_collector');
         $container->registerForAutoconfiguration(\Tulia\Cms\Dashboard\Ports\Domain\Widgets\DashboardWidgetInterface::class)
             ->addTag('dashboard.widget');
-        $container->registerForAutoconfiguration(\Tulia\Cms\BackendMenu\Ports\Domain\Builder\BuilderInterface::class)
+        $container->registerForAutoconfiguration(\Tulia\Cms\BackendMenu\Domain\Builder\BuilderInterface::class)
             ->addTag('backend_menu.builder');
 
         // EditLinks

@@ -1,0 +1,13 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    Tulia\Cms\Breadcrumbs\:
+        resource: '../../../**'
+        exclude: '../../../{Framework/Resources}'
+
+    Tulia\Cms\Breadcrumbs\Domain\BreadcrumbsResolverRegistryInterface:
+        class: Tulia\Cms\Breadcrumbs\Domain\BreadcrumbsResolverRegistry
+        arguments:
+            - !tagged_iterator breadcrumbs.resolver

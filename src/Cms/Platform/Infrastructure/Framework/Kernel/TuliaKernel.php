@@ -18,10 +18,10 @@ class TuliaKernel extends Kernel
         return array_merge(
             parent::getConfigDirs(),
             [
-                $base . '/Activity/Infrastructure/Framework/Resources/config',
+                $base . '/Activity/Framework/Resources/config',
                 $base . '/BackendMenu/Infrastructure/Framework/Resources/config',
-                $base . '/BodyClass/Infrastructure/Framework/Resources/config',
-                $base . '/Breadcrumbs/Infrastructure/Framework/Resources/config',
+                $base . '/BodyClass/Framework/Resources/config',
+                $base . '/Breadcrumbs/Framework/Resources/config',
                 $base . '/ContactForm/Infrastructure/Framework/Resources/config',
                 $base . '/Dashboard/Infrastructure/Framework/Resources/config',
                 $base . '/EditLinks/Infrastructure/Framework/Resources/config',

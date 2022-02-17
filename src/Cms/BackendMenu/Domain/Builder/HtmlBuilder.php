@@ -6,7 +6,6 @@ namespace Tulia\Cms\BackendMenu\Domain\Builder;
 
 use Tulia\Cms\BackendMenu\Domain\Builder\Helper\BuilderHelperInterface;
 use Tulia\Cms\BackendMenu\Domain\Builder\Registry\ItemRegistry;
-use Tulia\Cms\BackendMenu\Ports\Domain\Builder\BuilderInterface;
 
 /**
  * @author Adam Banaszkiewicz

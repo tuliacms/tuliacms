@@ -1,4 +1,0 @@
-framework:
-    templating:
-        paths:
-            - { name: backend/activity, path: '%kernel.project_dir%/src/Cms/Activity/Infrastructure/Framework/Resources/views/backend' }
