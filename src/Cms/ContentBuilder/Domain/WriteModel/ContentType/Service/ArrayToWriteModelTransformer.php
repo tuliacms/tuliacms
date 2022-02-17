@@ -5,10 +5,6 @@ declare(strict_types=1);
 namespace Tulia\Cms\ContentBuilder\Domain\WriteModel\ContentType\Service;
 
 use Tulia\Cms\ContentBuilder\Domain\WriteModel\Model\ContentType;
-use Tulia\Cms\ContentBuilder\Domain\WriteModel\Model\Field;
-use Tulia\Cms\ContentBuilder\Domain\WriteModel\Model\FieldsGroup;
-use Tulia\Cms\ContentBuilder\Domain\WriteModel\Model\LayoutType;
-use Tulia\Cms\ContentBuilder\Domain\WriteModel\Model\Section;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\FieldTypeMappingRegistry;
 
 /**
@@ -83,90 +79,38 @@ class ArrayToWriteModelTransformer
      */
     public function transform(array $type): ContentType
     {
-        return $this->buildContentType($type, $this->buildLayoutType($type));
-    }
-
-    protected function buildLayoutType(array $type): LayoutType
-    {
-        $layoutType = new LayoutType($type['code'] . '_layout');
-        $layoutType->setName($type['name'] . ' Layout');
-        $layoutType->setBuilder($type['builder'] ?? $this->config->getLayoutBuilder($type['type']));
-
-        $sections = [
-            'main' => [],
-            'sidebar' => [],
+        $layout = [
+            'code' => $type['code'] . '_layout',
+            'name' => $type['name'] . ' Layout',
+            'sections' => [],
         ];
+        $fieldsAggs = [];
 
         foreach ($type['field_groups'] as $group) {
-            $sections[$group['section']][] = $group;
-        }
-
-        foreach ($sections as $section => $groups) {
-            $layoutType->addSection(new Section($section, $this->buildFieldsGroups($groups)));
-        }
-
-        return $layoutType;
-    }
-
-    private function buildFieldsGroups(array $groups): array
-    {
-        $result = [];
-
-        foreach ($groups as $group) {
-            $result[$group['code']] = new FieldsGroup(
-                $group['code'],
-                $group['name'],
-                array_map(static function (array $field) {
+            $layout['sections'][$group['section']]['groups'][] = [
+                'code' => $group['code'],
+                'name' => $group['name'],
+                'fields' => array_map(function (array $field) {
                     return $field['code'];
-                }, $group['fields'])
-            );
+                }, $group['fields']),
+            ];
+
+            $fieldsAggs = $group['fields'] + $fieldsAggs;
         }
 
-        return $result;
-    }
+        $transformed = [
+            'id' => $type['id'],
+            'code' => $type['code'],
+            'type' => $type['type'],
+            'name' => $type['name'],
+            'icon' => $type['icon'] ?? '',
+            'is_routable' => $type['is_routable'] ?? false,
+            'is_hierarchical' => $type['is_hierarchical'] ?? false,
+            'routing_strategy' => $type['routing_strategy'] ?? '',
+            'fields' => $fieldsAggs,
+            'layout' => $layout
+        ];
 
-    protected function buildContentType(array $type, LayoutType $layoutType): ContentType
-    {
-        $nodeType = new ContentType($type['id'], $type['code'], $type['type'], $layoutType);
-        $nodeType->setController($type['controller'] ?? $this->config->getController($type['type']));
-        $nodeType->setIcon($type['icon'] ?? 'fa fa-box');
-        $nodeType->setName($type['name'] ?? '');
-        $nodeType->setIsHierarchical((bool) ($type['is_hierarchical'] ?? false));
-        $nodeType->setRoutingStrategy($type['routing_strategy'] ?? '');
-
-        foreach ($type['field_groups'] ?? [] as $group) {
-            foreach ($this->buildFields($group['fields'] ?? []) as $field) {
-                $nodeType->addField($field);
-            }
-        }
-
-        /**
-         * Those following type needs fields to be set, so first we add fields,
-         * and then those type.
-         */
-        $nodeType->setIsRoutable((bool) ($type['is_routable'] ?? false));
-
-        return $nodeType;
-    }
-
-    protected function buildFields(array $fields): array
-    {
-        $result = [];
-
-        foreach ($fields as $field) {
-            $result [] = new Field([
-                'code' => $field['code'],
-                'type' => $field['type'],
-                'name' => (string)$field['name'],
-                'is_multilingual' => (bool)($field['is_multilingual'] ?? false),
-                'taxonomy' => $field['taxonomy'] ?? null,
-                'configuration' => $field['configuration'] ?? [],
-                'constraints' => $field['constraints'] ?? [],
-                'children' => $this->buildFields($field['children'] ?? []),
-                'flags' => $this->fieldTypeMappingRegistry->getTypeFlags($field['type']),
-            ]);
-        }
-
-        return $result;
+        return ContentType::recreateFromArray($transformed);
     }
 }

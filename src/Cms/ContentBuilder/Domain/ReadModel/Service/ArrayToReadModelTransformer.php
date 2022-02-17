@@ -133,7 +133,6 @@ class ArrayToReadModelTransformer
     {
         $layoutType = new LayoutType($type['code'] . '_layout');
         $layoutType->setName($type['name'] . ' Layout');
-        $layoutType->setBuilder($type['builder'] ?? $this->config->getLayoutBuilder($type['type']));
 
         foreach ($type['layout']['sections'] as $sectionCode => $section) {
             $sectionObject = new Section($sectionCode);

@@ -70,7 +70,7 @@ class ContentTypeRepository
             throw $exception;
         }
 
-        //$this->eventBus->dispatchCollection($contentType->collectDomainEvents());
+        $this->eventBus->dispatchCollection($contentType->collectDomainEvents());
     }
 
     public function update(ContentType $contentType): void
@@ -87,7 +87,7 @@ class ContentTypeRepository
             throw $exception;
         }
 
-        //$this->eventBus->dispatchCollection($contentType->collectDomainEvents());
+        $this->eventBus->dispatchCollection($contentType->collectDomainEvents());
     }
 
     public function delete(ContentType $contentType): void

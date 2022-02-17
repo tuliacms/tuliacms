@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Form\ContentType;
 
-use Tulia\Cms\ContentBuilder\Domain\WriteModel\Exception\CannotOverwriteInternalFieldException;
 use Tulia\Cms\ContentBuilder\Domain\WriteModel\Exception\EmptyRoutingStrategyForRoutableContentTypeException;
 use Tulia\Cms\ContentBuilder\Domain\WriteModel\Model\ContentType;
 use Tulia\Cms\ContentBuilder\Domain\WriteModel\Model\Field;
@@ -26,12 +25,11 @@ class FormDataToModelTransformer
     }
 
     /**
-     * @throws CannotOverwriteInternalFieldException
      * @throws EmptyRoutingStrategyForRoutableContentTypeException
      */
     public function produceContentType(array $data, string $type, LayoutType $layout): ContentType
     {
-        $nodeType = new ContentType($this->uuidGenerator->generate(), $data['type']['code'], $type, $layout, false);
+        $nodeType = ContentType::create($this->uuidGenerator->generate(), $data['type']['code'], $type, $layout, false);
         $nodeType->setName($data['type']['name']);
         $nodeType->setIcon($data['type']['icon']);
         $nodeType->setIsHierarchical((bool) $data['type']['icon']);

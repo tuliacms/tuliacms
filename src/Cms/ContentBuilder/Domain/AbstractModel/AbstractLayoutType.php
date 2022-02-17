@@ -11,7 +11,6 @@ class AbstractLayoutType
 {
     protected string $code;
     protected string $name;
-    protected string $builder;
 
     /**
      * @var AbstractSection[]
@@ -36,16 +35,6 @@ class AbstractLayoutType
     public function setName(string $name): void
     {
         $this->name = $name;
-    }
-
-    public function getBuilder(): string
-    {
-        return $this->builder;
-    }
-
-    public function setBuilder(string $builder): void
-    {
-        $this->builder = $builder;
     }
 
     public function getSections(): array

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContentBuilder\Domain\AbstractModel;
 
-use Tulia\Cms\ContentBuilder\Domain\WriteModel\Exception\CannotOverwriteInternalFieldException;
 use Tulia\Cms\ContentBuilder\Domain\WriteModel\Exception\EmptyRoutingStrategyForRoutableContentTypeException;
 
 /**
@@ -132,13 +131,8 @@ class AbstractContentType
         return isset($this->fields[$code]);
     }
 
-    /**
-     * @throws CannotOverwriteInternalFieldException
-     */
     public function addField(AbstractField $field): AbstractField
     {
-        $this->validateField($field);
-
         $this->fields[$field->getCode()] = $field;
 
         return $field;
@@ -193,15 +187,5 @@ class AbstractContentType
         }
 
         return $result;
-    }
-
-    /**
-     * @throws CannotOverwriteInternalFieldException
-     */
-    protected function validateField(AbstractField $field): void
-    {
-        if (isset($this->fields[$field->getCode()]) && $this->fields[$field->getCode()]->isInternal()) {
-            throw CannotOverwriteInternalFieldException::fromCodeAndName($field->getCode(), $field->getName());
-        }
     }
 }

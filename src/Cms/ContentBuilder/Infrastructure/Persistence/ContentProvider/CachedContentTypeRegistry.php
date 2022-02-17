@@ -29,4 +29,9 @@ class CachedContentTypeRegistry extends ContentTypeRegistry
             return parent::fetch();
         });
     }
+
+    public function clearCache(): void
+    {
+        $this->contentBuilderCache->delete('tulia.content_builder.content_types');
+    }
 }

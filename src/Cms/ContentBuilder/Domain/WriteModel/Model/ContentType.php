@@ -5,16 +5,20 @@ declare(strict_types=1);
 namespace Tulia\Cms\ContentBuilder\Domain\WriteModel\Model;
 
 use Tulia\Cms\ContentBuilder\Domain\AbstractModel\AbstractContentType;
+use Tulia\Cms\ContentBuilder\Domain\WriteModel\Event\ContentTypeCreated;
+use Tulia\Cms\Platform\Domain\WriteModel\Model\AggregateRootTrait;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class ContentType extends AbstractContentType
 {
+    use AggregateRootTrait;
+
     protected string $id;
     protected LayoutType $layout;
 
-    public function __construct(string $id, string $code, string $type, LayoutType $layout, bool $isInternal = false)
+    private function __construct(string $id, string $code, string $type, LayoutType $layout, bool $isInternal = false)
     {
         $this->id = $id;
         $this->code = $code;
@@ -23,9 +27,18 @@ class ContentType extends AbstractContentType
         $this->isInternal = $isInternal;
     }
 
+    public static function create(string $id, string $code, string $type, LayoutType $layout, bool $isInternal = false): self
+    {
+        $self = new self($id, $code, $type, $layout, $isInternal);
+        $self->recordThat(ContentTypeCreated::fromModel($self));
+
+        return $self;
+    }
+
     public static function recreateFromArray(array $data): self
     {
         $layout = new LayoutType($data['layout']['code']);
+        $layout->setName($data['layout']['name']);
 
         foreach ($data['layout']['sections'] as $sectionCode => $section) {
             $groups = [];
@@ -69,7 +82,7 @@ class ContentType extends AbstractContentType
         $result = [];
 
         foreach ($fields as $field) {
-            if ($field['children'] !== []) {
+            if (isset($field['children']) && $field['children'] !== []) {
                 $field['children'] = self::createFields($field['children']);
             }
 
