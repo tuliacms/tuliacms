@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\User\Application\Event;
 
 use Symfony\Contracts\EventDispatcher\Event;
-use Tulia\Cms\User\Application\Model\User;
+use Tulia\Cms\User\Domain\WriteModel\Model\User;
 
 /**
  * @author Adam Banaszkiewicz

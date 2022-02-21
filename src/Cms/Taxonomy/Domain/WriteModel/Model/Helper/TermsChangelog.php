@@ -37,11 +37,11 @@ class TermsChangelog
             return;
         }
 
-        $this->termsChanges['insert'][$term->getId()->getId()] = $term;
+        $this->termsChanges['insert'][$term->getId()->getValue()] = $term;
 
         unset(
-            $this->termsChanges['update'][$term->getId()->getId()],
-            $this->termsChanges['delete'][$term->getId()->getId()]
+            $this->termsChanges['update'][$term->getId()->getValue()],
+            $this->termsChanges['delete'][$term->getId()->getValue()]
         );
     }
 
@@ -51,7 +51,7 @@ class TermsChangelog
             return;
         }
 
-        $this->termsChanges['update'][$term->getId()->getId()] = $term;
+        $this->termsChanges['update'][$term->getId()->getValue()] = $term;
     }
 
     public function delete(Term $term): void
@@ -60,26 +60,26 @@ class TermsChangelog
             return;
         }
 
-        $this->termsChanges['delete'][$term->getId()->getId()] = $term;
+        $this->termsChanges['delete'][$term->getId()->getValue()] = $term;
 
         unset(
-            $this->termsChanges['insert'][$term->getId()->getId()],
-            $this->termsChanges['update'][$term->getId()->getId()]
+            $this->termsChanges['insert'][$term->getId()->getValue()],
+            $this->termsChanges['update'][$term->getId()->getValue()]
         );
     }
 
     private function alreadyInserted(Term $term): bool
     {
-        return isset($this->termsChanges['insert'][$term->getId()->getId()]);
+        return isset($this->termsChanges['insert'][$term->getId()->getValue()]);
     }
 
     private function alreadyUpdated(Term $term): bool
     {
-        return isset($this->termsChanges['update'][$term->getId()->getId()]);
+        return isset($this->termsChanges['update'][$term->getId()->getValue()]);
     }
 
     private function alreadyRemoved(Term $term): bool
     {
-        return isset($this->termsChanges['delete'][$term->getId()->getId()]);
+        return isset($this->termsChanges['delete'][$term->getId()->getValue()]);
     }
 }

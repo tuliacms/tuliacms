@@ -61,7 +61,7 @@ class WebsiteRepository implements WebsiteRepositoryInterface
     public function create(Website $website): void
     {
         $this->storage->insert($this->extract($website));
-        $this->eventDispatcher->dispatch(new WebsiteCreated($website->getId()->getId()));
+        $this->eventDispatcher->dispatch(new WebsiteCreated($website->getId()->getValue()));
     }
 
     /**
@@ -70,7 +70,7 @@ class WebsiteRepository implements WebsiteRepositoryInterface
     public function update(Website $website): void
     {
         $this->storage->update($this->extract($website));
-        $this->eventDispatcher->dispatch(new WebsiteUpdated($website->getId()->getId()));
+        $this->eventDispatcher->dispatch(new WebsiteUpdated($website->getId()->getValue()));
     }
 
     /**
@@ -85,7 +85,7 @@ class WebsiteRepository implements WebsiteRepositoryInterface
     private function extract(Website $website): array
     {
         $data = [];
-        $data['id'] = $website->getId()->getId();
+        $data['id'] = $website->getId()->getValue();
         $data['backend_prefix'] = '/administrator';
         $data['active'] = $website->isActive();
         $data['name'] = $website->getName();

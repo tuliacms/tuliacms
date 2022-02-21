@@ -34,7 +34,6 @@ class DbalPersister
 
         $mainTable = [];
         $mainTable['id'] = $user['id'];
-        $mainTable['username'] = $user['username'];
         $mainTable['password'] = $user['password'];
         $mainTable['email'] = $user['email'];
         $mainTable['locale'] = $user['locale'];
@@ -58,7 +57,6 @@ class DbalPersister
 
         $mainTable = [];
         $mainTable['id'] = $user['id'];
-        $mainTable['username'] = $user['username'];
         $mainTable['email'] = $user['email'];
         $mainTable['locale'] = $user['locale'];
         $mainTable['enabled'] = $user['enabled'] ? 1 : 0;

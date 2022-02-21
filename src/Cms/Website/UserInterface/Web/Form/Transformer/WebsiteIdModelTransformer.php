@@ -15,7 +15,7 @@ class WebsiteIdModelTransformer implements DataTransformerInterface
     public function transform($value): string
     {
         if ($value instanceof WebsiteId) {
-            return $value->getId();
+            return $value->getValue();
         }
 
         return '';

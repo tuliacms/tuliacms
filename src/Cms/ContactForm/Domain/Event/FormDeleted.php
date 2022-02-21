@@ -13,6 +13,6 @@ class FormDeleted extends DomainEvent
 {
     public static function fromForm(Form $form): self
     {
-        return new self($form->getId()->getId());
+        return new self($form->getId()->getValue());
     }
 }

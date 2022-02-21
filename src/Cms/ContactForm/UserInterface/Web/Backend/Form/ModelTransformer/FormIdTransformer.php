@@ -15,7 +15,7 @@ class FormIdTransformer implements DataTransformerInterface
     public function transform($value): string
     {
         if ($value instanceof FormId) {
-            return $value->getId();
+            return $value->getValue();
         }
 
         return '';

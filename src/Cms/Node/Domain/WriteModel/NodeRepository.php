@@ -28,7 +28,7 @@ class NodeRepository
 
     private NodeWriteStorageInterface $storage;
     private CurrentWebsiteInterface $currentWebsite;
-    private AttributesRepository $metadataRepository;
+    private AttributesRepository $attributeRepository;
     private UuidGeneratorInterface $uuidGenerator;
     private EventBusInterface $eventBus;
     private NodeActionsChainInterface $actionsChain;
@@ -37,7 +37,7 @@ class NodeRepository
     public function __construct(
         NodeWriteStorageInterface $storage,
         CurrentWebsiteInterface $currentWebsite,
-        AttributesRepository $metadataRepository,
+        AttributesRepository $attributeRepository,
         UuidGeneratorInterface $uuidGenerator,
         EventBusInterface $eventBus,
         NodeActionsChainInterface $actionsChain,
@@ -45,7 +45,7 @@ class NodeRepository
     ) {
         $this->storage = $storage;
         $this->currentWebsite = $currentWebsite;
-        $this->metadataRepository = $metadataRepository;
+        $this->attributeRepository = $attributeRepository;
         $this->uuidGenerator = $uuidGenerator;
         $this->eventBus = $eventBus;
         $this->actionsChain = $actionsChain;
@@ -83,10 +83,8 @@ class NodeRepository
         }
 
         $nodeType = $this->contentTypeRegistry->get($node['type']);
-
         $attributesInfo = $this->buildAttributesMapping($nodeType->getFields());
-
-        $attributes = $this->metadataRepository->findAll('node', $id, $attributesInfo);
+        $attributes = $this->attributeRepository->findAll('node', $id, $attributesInfo);
 
         $node = Node::buildFromArray($node['type'], [
             'id'            => $node['id'],
@@ -121,9 +119,9 @@ class NodeRepository
             $data = $this->extract($node);
 
             $this->storage->insert($data, $this->currentWebsite->getDefaultLocale()->getCode());
-            $this->metadataRepository->persist(
+            $this->attributeRepository->persist(
                 'node',
-                $node->getId()->getId(),
+                $node->getId()->getValue(),
                 $data['attributes']
             );
             $this->storage->commit();
@@ -145,9 +143,9 @@ class NodeRepository
             $data = $this->extract($node);
 
             $this->storage->update($data, $this->currentWebsite->getDefaultLocale()->getCode());
-            $this->metadataRepository->persist(
+            $this->attributeRepository->persist(
                 'node',
-                $node->getId()->getId(),
+                $node->getId()->getValue(),
                 $data['attributes']
             );
             $this->storage->commit();
@@ -167,7 +165,7 @@ class NodeRepository
 
         try {
             $this->storage->delete($this->extract($node));
-            $this->metadataRepository->delete('node', $node->getId()->getId());
+            $this->attributeRepository->delete('node', $node->getId()->getValue());
             $this->storage->commit();
         } catch (\Exception $exception) {
             $this->storage->rollback();
@@ -190,7 +188,7 @@ class NodeRepository
         }
 
         $result = [
-            'id'            => $node->getId()->getId(),
+            'id'            => $node->getId()->getValue(),
             'type'          => $node->getType(),
             'website_id'    => $node->getWebsiteId(),
             'published_at'  => $node->getPublishedAt()->format('Y-m-d H:i:s'),

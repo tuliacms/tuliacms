@@ -13,6 +13,6 @@ class NodeUpdated extends DomainEvent
 {
     public static function fromNode(Node $node): self
     {
-        return new self($node->getId()->getId(), $node->getType(), $node->getWebsiteId(), $node->getLocale());
+        return new self($node->getId()->getValue(), $node->getType(), $node->getWebsiteId(), $node->getLocale());
     }
 }

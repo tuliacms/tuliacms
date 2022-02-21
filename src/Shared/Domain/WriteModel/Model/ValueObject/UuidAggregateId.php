@@ -25,7 +25,7 @@ abstract class UuidAggregateId
         return $this->id;
     }
 
-    public function getId(): string
+    public function getValue(): string
     {
         return $this->id;
     }

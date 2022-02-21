@@ -46,7 +46,7 @@ class SlugGenerator implements NodeActionInterface
         // Fallback to Node's title, if no slug provided.
         $input = $slug ?: $title;
 
-        $slug = $this->findUniqueSlug($input, $node->getId()->getId());
+        $slug = $this->findUniqueSlug($input, $node->getId()->getValue());
 
         $node->setSlug($slug);
     }

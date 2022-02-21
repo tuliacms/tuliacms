@@ -22,7 +22,7 @@ class NodeCreated extends DomainEvent
 
     public static function fromNode(Node $node): self
     {
-        return new self($node->getId()->getId(), $node->getType(), $node->getWebsiteId(), $node->getLocale(), $node->getType());
+        return new self($node->getId()->getValue(), $node->getType(), $node->getWebsiteId(), $node->getLocale(), $node->getType());
     }
 
     public function getType(): string

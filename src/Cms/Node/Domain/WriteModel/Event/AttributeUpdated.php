@@ -17,7 +17,7 @@ class AttributeUpdated extends DomainEvent
     public static function fromNode(Node $node, string $attribute, $value): self
     {
         return new self(
-            $node->getId()->getId(),
+            $node->getId()->getValue(),
             $node->getType(),
             $node->getWebsiteId(),
             $node->getLocale(),

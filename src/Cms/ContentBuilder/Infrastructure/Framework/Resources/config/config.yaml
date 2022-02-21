@@ -26,6 +26,8 @@ monolog:
 cms:
     content_building:
         data_types:
+            # Declare here Symfony's and Vendor's field types
+            # as well as custom ContentBuilder's type.
             mapping:
                 text:
                     label: Textline
@@ -59,6 +61,10 @@ cms:
                 repeatable:
                     label: Repeatable
                     classname: 'Tulia\Cms\ContentBuilder\UserInterface\Web\Shared\Form\FormType\RepeatableGroupType'
+                email:
+                    label: Email
+                    classname: 'Symfony\Component\Form\Extension\Core\Type\EmailType'
+                    constraints: [required]
 
         constraint_types:
             mapping:
@@ -87,3 +93,6 @@ cms:
                             type: integer
                             label: Maximal characters length
                             value: null
+                email:
+                    classname: 'Symfony\Component\Validator\Constraints\Email'
+                    label: E-mail address

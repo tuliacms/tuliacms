@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\User\Domain\WriteModel\Model;
 
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Tulia\Cms\Attributes\Domain\WriteModel\MagickAttributesTrait;
 use Tulia\Cms\Attributes\Domain\WriteModel\Model\AttributesAwareInterface;
 use Tulia\Cms\Shared\Domain\WriteModel\Model\AggregateRoot;
+use Tulia\Cms\User\Domain\WriteModel\Event;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class User extends AggregateRoot implements AttributesAwareInterface, PasswordAuthenticatedUserInterface
+class User extends AggregateRoot implements AttributesAwareInterface
 {
     use MagickAttributesTrait;
 
@@ -55,9 +55,33 @@ class User extends AggregateRoot implements AttributesAwareInterface, PasswordAu
         $self->enabled = $enabled;
         $self->locale = $locale;
         $self->attributes = $attributes;
-        $self->recordThat(new \Tulia\Cms\User\Domain\WriteModel\Event\UserCreated($id));
+        $self->recordThat(new Event\UserCreated($id->getValue()));
 
         return $self;
+    }
+
+    public static function fromArray(array $data): self
+    {
+        $self = new self(new AggregateId($data['id']), $data['email'], $data['password'], $data['roles']);
+        $self->enabled = $data['enabled'] ? true : false;
+        $self->locale = $data['locale'];
+        $self->attributes = $data['attributes'];
+
+        return $self;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->id->getValue(),
+            'email' => $this->email,
+            'locale' => $this->locale,
+            'enabled' => $this->enabled,
+            'accountExpired' => $this->accountExpired,
+            'credentialsExpired' => $this->credentialsExpired,
+            'accountLocked' => $this->accountLocked,
+            'roles' => $this->roles,
+        ] + $this->attributes;
     }
 
     public function getId(): AggregateId
@@ -68,11 +92,6 @@ class User extends AggregateRoot implements AttributesAwareInterface, PasswordAu
     public function getEmail(): ?string
     {
         return $this->email;
-    }
-
-    public function getPassword(): ?string
-    {
-        return $this->password;
     }
 
     public function getLocale(): string
@@ -102,16 +121,16 @@ class User extends AggregateRoot implements AttributesAwareInterface, PasswordAu
         if (\array_key_exists($name, $this->attributes)) {
             if ($this->attributes[$name] !== $value) {
                 if (empty($value)) {
-                    $this->recordThat(new \Tulia\Cms\User\Domain\WriteModel\Event\AttributeValueDeleted($this->id, $name, $value));
+                    $this->recordThat(new Event\AttributeValueDeleted($this->id->getValue(), $name, $value));
                 } else {
-                    $this->recordThat(new \Tulia\Cms\User\Domain\WriteModel\Event\AttributeValueChanged($this->id, $name, $value));
+                    $this->recordThat(new Event\AttributeValueChanged($this->id->getValue(), $name, $value));
                 }
 
                 $this->attributes[$name] = $value;
             }
         } else {
             if (empty($value) === false) {
-                $this->recordThat(new \Tulia\Cms\User\Domain\WriteModel\Event\AttributeValueChanged($this->id, $name, $value));
+                $this->recordThat(new Event\AttributeValueChanged($this->id->getValue(), $name, $value));
                 $this->attributes[$name] = $value;
             }
         }
@@ -125,7 +144,7 @@ class User extends AggregateRoot implements AttributesAwareInterface, PasswordAu
         if (in_array($role, $this->roles) === false) {
             $this->roles[] = $role;
 
-            $this->recordThat(new \Tulia\Cms\User\Domain\WriteModel\Event\RoleWasGiven($this->id, $role));
+            $this->recordThat(new Event\RoleWasGiven($this->id->getValue(), $role));
         }
     }
 
@@ -139,7 +158,7 @@ class User extends AggregateRoot implements AttributesAwareInterface, PasswordAu
         if ($key !== false) {
             unset($this->roles[$key]);
 
-            $this->recordThat(new \Tulia\Cms\User\Domain\WriteModel\Event\RoleWasTaken($this->id, $role));
+            $this->recordThat(new Event\RoleWasTaken($this->id->getValue(), $role));
         }
     }
 
@@ -173,7 +192,7 @@ class User extends AggregateRoot implements AttributesAwareInterface, PasswordAu
         if ($this->password !== $password && empty($password) === false) {
             $this->password = $password;
 
-            $this->recordThat(new \Tulia\Cms\User\Domain\WriteModel\Event\PasswordChanged($this->id));
+            $this->recordThat(new Event\PasswordChanged($this->id->getValue()));
         }
     }
 
@@ -196,7 +215,7 @@ class User extends AggregateRoot implements AttributesAwareInterface, PasswordAu
         if ($this->email !== $email) {
             $this->email = $email;
 
-            $this->recordThat(new \Tulia\Cms\User\Domain\WriteModel\Event\EmailChanged($this->id, $email));
+            $this->recordThat(new Event\EmailChanged($this->id->getValue(), $email));
         }
     }
 
@@ -208,7 +227,7 @@ class User extends AggregateRoot implements AttributesAwareInterface, PasswordAu
         if ($this->locale !== $locale) {
             $this->locale = $locale;
 
-            $this->recordThat(new \Tulia\Cms\User\Domain\WriteModel\Event\LocaleChanged($this->id, $locale));
+            $this->recordThat(new Event\LocaleChanged($this->id->getValue(), $locale));
         }
     }
 
@@ -217,7 +236,7 @@ class User extends AggregateRoot implements AttributesAwareInterface, PasswordAu
         if ($this->enabled) {
             $this->enabled = false;
 
-            $this->recordThat(new \Tulia\Cms\User\Domain\WriteModel\Event\AccountWasDisabled($this->id));
+            $this->recordThat(new Event\AccountWasDisabled($this->id->getValue()));
         }
     }
 
@@ -226,7 +245,7 @@ class User extends AggregateRoot implements AttributesAwareInterface, PasswordAu
         if (!$this->enabled) {
             $this->enabled = true;
 
-            $this->recordThat(new \Tulia\Cms\User\Domain\WriteModel\Event\AccountWasEnabled($this->id));
+            $this->recordThat(new Event\AccountWasEnabled($this->id->getValue()));
         }
     }
 }

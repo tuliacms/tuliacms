@@ -16,7 +16,7 @@ interface UserRepositoryInterface
     /**
      * @throws UserNotFoundException
      */
-    public function find(AggregateId $id): User;
+    public function find(string $id): ?User;
 
     public function save(User $user): void;
 

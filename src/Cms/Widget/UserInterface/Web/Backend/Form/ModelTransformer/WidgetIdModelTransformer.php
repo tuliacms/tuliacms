@@ -15,7 +15,7 @@ class WidgetIdModelTransformer implements DataTransformerInterface
     public function transform($value): string
     {
         if ($value instanceof WidgetId) {
-            return $value->getId();
+            return $value->getValue();
         }
 
         return '';

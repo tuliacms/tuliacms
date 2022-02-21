@@ -35,10 +35,10 @@ class TaxonomyHierarchy
     public function calculateLevel(Taxonomy $taxonomy, string $parentId, int $baseLevel): void
     {
         foreach ($taxonomy->terms() as $term) {
-            if ($term->getParentId() && $term->getParentId()->getId() === $parentId) {
+            if ($term->getParentId() && $term->getParentId()->getValue() === $parentId) {
                 $term->setLevel($baseLevel + 1);
 
-                $this->calculateLevel($taxonomy, $term->getId()->getId(), $baseLevel + 1);
+                $this->calculateLevel($taxonomy, $term->getId()->getValue(), $baseLevel + 1);
             }
         }
     }

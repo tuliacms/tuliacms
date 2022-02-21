@@ -16,6 +16,7 @@ use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Cms\User\Application\Command\UserStorage;
 use Tulia\Cms\User\Application\Exception\TranslatableUserException;
 use Tulia\Cms\User\Application\Model\User as ApplicationUser;
+use Tulia\Cms\User\Application\UseCase\CreateUser;
 use Tulia\Cms\User\Domain\WriteModel\UserRepositoryInterface;
 use Tulia\Cms\User\Infrastructure\Persistence\Query\DatatableFinder;
 use Tulia\Cms\User\Query\Enum\ScopeEnum;
@@ -69,19 +70,15 @@ class User extends AbstractController
     /**
      * @CsrfToken(id="content_builder_form_user")
      */
-    public function create(Request $request)
+    public function create(Request $request, CreateUser $createUser)
     {
         $formDescriptor = $this->produceFormDescriptor($request);
 
-        /*$form = $this->createForm(UserForm::class, [], [ 'password_required' => true ]);
-        $form->handleRequest($request);*/
-
         if ($formDescriptor->isFormValid()) {
-            dump($formDescriptor->getData());
-            //$this->storage->save($formDescriptor->getData());
+            $userId = ($createUser)($formDescriptor->getData());
 
-            //$this->setFlash('success', $this->trans('userSaved', [], 'users'));
-            //return $this->redirectToRoute('backend.user.edit', [ 'id' => $user->getId() ]);
+            $this->setFlash('success', $this->trans('userSaved', [], 'users'));
+            return $this->redirectToRoute('backend.user.edit', [ 'id' => $userId ]);
         }
 
         return $this->view('@backend/user/user/create.tpl', [
@@ -94,22 +91,25 @@ class User extends AbstractController
      */
     public function edit(Request $request, string $id)
     {
-        $user = $this->getUserById($id);
-        $model = ApplicationUser::fromQueryModel($user);
+        $user = $this->repository->find($id);
 
-        $form = $this->createForm(UserForm::class, $model, [ 'password_required' => false ]);
-        $form->handleRequest($request);
+        if (! $user) {
+            $this->setFlash('danger', $this->trans('userNotExists', [], 'users'));
+            return $this->redirectToRoute('backend.user.list');
+        }
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->storage->save($form->getData());
+        $formDescriptor = $this->produceFormDescriptor($request, $user);
+
+        if ($formDescriptor->isFormValid()) {
+            dump($formDescriptor->getData());exit;
+            //$userId = ($createUser)($formDescriptor->getData());
 
             $this->setFlash('success', $this->trans('userSaved', [], 'users'));
-            return $this->redirectToRoute('backend.user.edit', [ 'id' => $user->getId() ]);
+            return $this->redirectToRoute('backend.user.edit', [ 'id' => $userId ]);
         }
 
         return $this->view('@backend/user/user/edit.tpl', [
-            'user' => $user,
-            'form' => $form->createView(),
+            'formDescriptor' => $formDescriptor,
         ]);
     }
 
@@ -180,15 +180,7 @@ class User extends AbstractController
         $data = [];
 
         if ($user) {
-            $data = array_merge(
-                [
-                    'email' => $user->getEmail(),
-                    'password' => $user->getPassword(),
-                    'enabled' => $user->isEnabled(),
-                    'roles' => $user->getRoles(),
-                ],
-                $user->getAttributes()
-            );
+            $data = $user->toArray();
         }
 
         return $this->contentFormService->buildFormDescriptor('user', $data, $request);

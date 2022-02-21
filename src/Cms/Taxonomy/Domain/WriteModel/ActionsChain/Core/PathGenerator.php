@@ -37,7 +37,7 @@ class PathGenerator implements TaxonomyActionInterface
     {
         $path = $this->router->generate(
             $taxonomy->getType(),
-            $term->getId()->getId(),
+            $term->getId()->getValue(),
             ['_locale' => $term->getLocale(), '_term_instance' => $term]
         );
 

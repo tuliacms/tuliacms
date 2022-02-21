@@ -206,7 +206,7 @@ class TaxonomyRepository
         }
 
         return [
-            'id'         => $term->getId()->getId(),
+            'id'         => $term->getId()->getValue(),
             'website_id' => $term->getTaxonomy()->getWebsiteId(),
             'type'       => $term->getTaxonomy()->getType(),
             'level'      => $term->getLevel(),

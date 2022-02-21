@@ -1,6 +1,8 @@
 cms:
     content_building:
         data_types:
+            # Declare here Platform's internal field types,
+            # that are used also as standalone types in standalone Forms.
             mapping:
                 datetime:
                     label: Datetime
@@ -12,6 +14,7 @@ cms:
                     constraints: [required]
                 filepicker:
                     label: Filepicker
+                    # TODO move Filepicker to Filemanager module
                     classname: 'Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\FilepickerType'
                     constraints: [required]
                 password:
@@ -21,7 +24,8 @@ cms:
                 password_repeat:
                     label: Password repeat
                     classname: 'Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\PasswordType'
-                    constraints: [required] # Add `repeat_password` constraint
+                    builder: 'Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\PasswordTypeRepeatedBuilder'
+                    constraints: [required]
                     configuration:
                         referenced_field:
                             label: Source password field
@@ -30,8 +34,4 @@ cms:
                 locale:
                     label: Locale selector
                     classname: 'Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\LocaleType'
-                    constraints: [required]
-                email:
-                    label: Email
-                    classname: 'Symfony\Component\Form\Extension\Core\Type\EmailType'
                     constraints: [required]

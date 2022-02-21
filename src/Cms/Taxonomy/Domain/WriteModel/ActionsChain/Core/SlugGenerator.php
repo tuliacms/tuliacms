@@ -58,7 +58,7 @@ class SlugGenerator implements TaxonomyActionInterface
 
         // Fallback to Term's name, if no slug provided.
         $input = $slug ?: $name;
-        $slug = $this->findUniqueSlug($input, $term->getId()->getId());
+        $slug = $this->findUniqueSlug($input, $term->getId()->getValue());
 
         // Do not update when already the same.
         if ($slug === $term->getSlug()) {

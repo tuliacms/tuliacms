@@ -119,7 +119,7 @@ class Website extends AbstractController
         $website = $this->repository->find($request->request->get('id'));
 
         try {
-            $this->repository->delete($website->getId()->getId());
+            $this->repository->delete($website->getId()->getValue());
             $this->setFlash('success', $this->trans('selectedWebsitesWereDeleted', [], 'websites'));
         } catch (TranslatableWebsiteException $e) {
             $this->setFlash('warning', $this->transObject($e));

@@ -126,6 +126,11 @@
                 <source>autoLogoutAfterPasswordChangeInfo</source>
                 <target>Changing the password is associated with automatic logout. Try to save this password somewhere so that you can easily log in again after changing it.</target>
             </trans-unit>
+            <trans-unit id="tuliacms.users.32">
+                <source>userNotExists</source>
+                <target>User not exists.</target>
+                <note>Alert message</note>
+            </trans-unit>
         </body>
     </file>
 </xliff>

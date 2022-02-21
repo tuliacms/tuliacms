@@ -22,9 +22,9 @@ cms:
                     constraints: [required]
         constraint_types:
             mapping:
-                email_unique:
+                user_email_unique:
                     classname: 'Tulia\Cms\User\Infrastructure\Framework\Validator\Constraints\EmailUnique'
-                    label: Unique email address
+                    label: Unique user e-mail address
                 password:
                     classname: 'Tulia\Cms\User\Infrastructure\Framework\Validator\Constraints\Password'
                     label: Password consistent with the Passwords Policy
@@ -55,7 +55,8 @@ cms:
                                             is_multilingual: false
                                             constraints:
                                                 - code: required
-                                                - code: email_unique
+                                                - code: email
+                                                - code: user_email_unique
                         sidebar:
                             groups:
                                 avatar:
@@ -83,7 +84,6 @@ cms:
                                                   value: password
                                             constraints:
                                                 - code: required
-                                                - code: password
                                         enabled:
                                             type: yes_no
                                             name: Enabled

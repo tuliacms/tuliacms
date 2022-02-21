@@ -11,21 +11,15 @@ use Tulia\Cms\User\Domain\WriteModel\Model\AggregateId;
  */
 class RoleWasGiven extends DomainEvent
 {
-    /**
-     * @var string
-     */
-    private $role;
+    private string $role;
 
-    public function __construct(AggregateId $userId, string $role)
+    public function __construct(string $userId, string $role)
     {
         parent::__construct($userId);
 
         $this->role = $role;
     }
 
-    /**
-     * @return string
-     */
     public function getRole(): string
     {
         return $this->role;

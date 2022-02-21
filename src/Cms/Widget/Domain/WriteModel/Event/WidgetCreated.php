@@ -14,7 +14,7 @@ class WidgetCreated extends DomainEvent
     public static function fromWidget(Widget $widget): self
     {
         return new self(
-            $widget->getId()->getId(),
+            $widget->getId()->getValue(),
             $widget->getWidgetInstance()->getId(),
             $widget->getWebsiteId(),
             $widget->getLocale()

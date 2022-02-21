@@ -133,7 +133,7 @@ class WidgetRepository
     private function extract(Widget $widget): array
     {
         return [
-            'id' => $widget->getId()->getId(),
+            'id' => $widget->getId()->getValue(),
             'website_id' => $widget->getWebsiteId(),
             'widget_type' => $widget->getWidgetInstance()->getId(),
             'space' => $widget->getSpace(),

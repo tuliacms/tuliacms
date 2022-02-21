@@ -48,7 +48,7 @@ class SingularFlagsValidator implements NodeActionInterface
             }
         }
 
-        $otherNodes = $this->byFlagFinder->findOtherNodesWithFlags($node->getId()->getId(), $singularFlags, $node->getWebsiteId());
+        $otherNodes = $this->byFlagFinder->findOtherNodesWithFlags($node->getId()->getValue(), $singularFlags, $node->getWebsiteId());
 
         if ($otherNodes !== []) {
             throw SingularFlagImposedOnMoreThanOneNodeException::fromFlag($otherNodes[0]['flag']);

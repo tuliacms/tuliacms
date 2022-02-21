@@ -77,16 +77,16 @@ class Taxonomy extends AggregateRoot
      */
     public function getTerm(TermId $id): Term
     {
-        if (isset($this->terms[$id->getId()])) {
-            return $this->terms[$id->getId()];
+        if (isset($this->terms[$id->getValue()])) {
+            return $this->terms[$id->getValue()];
         }
 
-        throw new TermNotFoundException(sprintf('Term %s not found.', $id->getId()));
+        throw new TermNotFoundException(sprintf('Term %s not found.', $id->getValue()));
     }
 
     public function addTerm(Term $term): void
     {
-        $this->terms[$term->getId()->getId()] = $term;
+        $this->terms[$term->getId()->getValue()] = $term;
         $term->setTaxonomy($this, $this->produceTermChangeCallback());
 
         if ($term->isRoot() === false) {
@@ -102,13 +102,13 @@ class Taxonomy extends AggregateRoot
 
     public function removeTerm(Term $term): void
     {
-        if (isset($this->terms[$term->getId()->getId()]) === false) {
+        if (isset($this->terms[$term->getId()->getValue()]) === false) {
             return;
         }
 
         $this->removeTermChildren($term);
 
-        unset($this->terms[$term->getId()->getId()]);
+        unset($this->terms[$term->getId()->getValue()]);
         $term->setTaxonomy($this, null);
 
         $this->changelog->delete($term);
