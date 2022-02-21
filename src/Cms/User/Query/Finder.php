@@ -197,23 +197,6 @@ class Finder implements FinderInterface
 
         return $this->getResult()[0] ?? null;
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function findByUsername(string $username): ?User
-    {
-        $this->setCriteria([
-            'username'  => $username,
-            'order_by'  => null,
-            'order_dir' => null,
-            'per_page'  => 1,
-        ]);
-        $this->fetch();
-
-        return $this->getResult()[0] ?? null;
-    }
-
     /**
      * {@inheritdoc}
      */

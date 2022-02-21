@@ -88,15 +88,6 @@ interface FinderInterface
     public function getPaginator(Request $request): Paginator;
 
     /**
-     * @param string $username
-     *
-     * @return User|null
-     *
-     * @throws QueryException
-     */
-    public function findByUsername(string $username): ?User;
-
-    /**
      * @param string $id
      *
      * @return User|null

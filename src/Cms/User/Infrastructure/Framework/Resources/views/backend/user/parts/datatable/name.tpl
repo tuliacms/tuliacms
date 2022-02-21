@@ -1,8 +1,8 @@
 {% set name %}
     {% if row.name is defined and row.name is not empty %}
-        {{ row.name }}, [{{ row.username }}]
+        {{ row.name }}, [{{ row.email }}]
     {% else %}
-        {{ row.username }}
+        {{ row.email }}
     {% endif %}
 {% endset %}
 

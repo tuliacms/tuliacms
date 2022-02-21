@@ -16,3 +16,86 @@ cms:
                     classname: 'Tulia\Cms\User\Infrastructure\Framework\Form\FormType\UserTypeaheadType'
                     builder: 'Tulia\Cms\User\Infrastructure\Framework\Form\FormType\UserTypeaheadTypeBuilder'
                     constraints: [required]
+                user_roles:
+                    label: User roles
+                    classname: 'Tulia\Cms\User\Infrastructure\Framework\Form\FormType\UserRolesType'
+                    constraints: [required]
+        constraint_types:
+            mapping:
+                email_unique:
+                    classname: 'Tulia\Cms\User\Infrastructure\Framework\Validator\Constraints\EmailUnique'
+                    label: Unique email address
+                password:
+                    classname: 'Tulia\Cms\User\Infrastructure\Framework\Validator\Constraints\Password'
+                    label: Password consistent with the Passwords Policy
+        content_type:
+            user:
+                layout_builder: 'Tulia\Cms\User\Infrastructure\Presentation\TwigUserContentTypeLayoutBuilder'
+                multilingual: false
+                configurable: false
+        content_type_entry:
+            user:
+                type: user
+                name: Users
+                icon: null
+                controller: null
+                is_routable: false
+                is_hierarchical: false
+                routing_strategy: null
+                layout:
+                    sections:
+                        lead:
+                            groups:
+                                email:
+                                    name: Email
+                                    fields:
+                                        email:
+                                            type: email
+                                            name: email
+                                            is_multilingual: false
+                                            constraints:
+                                                - code: required
+                                                - code: email_unique
+                        sidebar:
+                            groups:
+                                avatar:
+                                    name: Avatar
+                                    fields:
+                                        avatar:
+                                            type: filepicker
+                                            name: Avatar
+                        main:
+                            groups:
+                                security:
+                                    name: Security
+                                    fields:
+                                        password:
+                                            type: password
+                                            name: Password
+                                            constraints:
+                                                - code: required
+                                                - code: password
+                                        password_repeat:
+                                            type: password_repeat
+                                            name: Repeat password
+                                            configuration:
+                                                - code: referenced_field
+                                                  value: password
+                                            constraints:
+                                                - code: required
+                                                - code: password
+                                        enabled:
+                                            type: yes_no
+                                            name: Enabled
+                                        roles:
+                                            type: user_roles
+                                            name: Roles
+                                basics:
+                                    name: Basics
+                                    fields:
+                                        name:
+                                            type: text
+                                            name: Name
+                                        locale:
+                                            type: locale
+                                            name: Locale

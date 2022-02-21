@@ -15,9 +15,9 @@ class BootstrapTabsGroupBuilder extends AbstractGroupBuilder
 
     protected static string $tabTemplateDefault = <<<EOF
 <li class="nav-item">
-    <a class="nav-link{sectionActive}" data-toggle="tab" href="#tab-{sectionId}">
+    <button type="button" class="nav-link{sectionActive}" data-bs-toggle="tab" data-bs-target="#tab-{sectionId}">
         {{ '{sectionLabel}'|trans({}, '{sectionTranslationDomain}') }}
-    </a>
+    </button>
 </li>
 EOF
     ;

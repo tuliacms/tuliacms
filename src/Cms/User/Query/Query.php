@@ -20,12 +20,12 @@ use Tulia\Cms\User\Query\Model\User;
 class Query
 {
     protected QueryBuilder $queryBuilder;
-    protected AttributesFinder $metadataFinder;
+    protected AttributesFinder $attributesFinder;
 
-    public function __construct(QueryBuilder $queryBuilder, AttributesFinder $metadataFinder)
+    public function __construct(QueryBuilder $queryBuilder, AttributesFinder $attributesFinder)
     {
         $this->queryBuilder = $queryBuilder;
-        $this->metadataFinder = $metadataFinder;
+        $this->attributesFinder = $attributesFinder;
     }
 
     /**
@@ -48,13 +48,6 @@ class Query
              */
             'id__not_in' => null,
             /**
-             * Search for user with given username.
-             * If provided, Query searches only for ONE record (LIMIT 1).
-             *
-             * @param null|string
-             */
-            'username' => null,
-            /**
              * Search for user with given email address.
              * If provided, Query searches only for ONE record (LIMIT 1).
              *
@@ -74,7 +67,7 @@ class Query
              * Allows to define custom sort option.
              */
             /*'order' => null,*/
-            'order_by' => 'username',
+            'order_by' => 'email',
             'order_dir' => 'DESC',
             /**
              * Search string. Seaching by title with LIKE operator.
@@ -146,7 +139,6 @@ class Query
     {
         $this->setDefaults($query);
         $this->searchById($query);
-        $this->searchByUsername($query);
         $this->searchByEmail($query);
         $this->search($query);
         $this->buildOffset($query);
@@ -189,7 +181,7 @@ class Query
             return $collection;
         }
 
-        $metadata = $this->metadataFinder->findAllAggregated(UserMetadataEnum::TYPE, $scope, array_column($result, 'id'));
+        $metadata = $this->attributesFinder->findAllAggregated(UserMetadataEnum::TYPE, $scope, array_column($result, 'id'));
 
         foreach ($result as $row) {
             $row['metadata'] = $metadata[$row['id']] ?? [];
@@ -254,21 +246,6 @@ class Query
     /**
      * @param array $query
      */
-    protected function searchByUsername(array $query): void
-    {
-        if (! $query['username']) {
-            return;
-        }
-
-        $this->queryBuilder
-            ->andWhere('tm.username = :tm_username')
-            ->setParameter('tm_username', $query['username'], PDO::PARAM_STR)
-            ->setMaxResults(1);
-    }
-
-    /**
-     * @param array $query
-     */
     protected function searchByEmail(array $query): void
     {
         if (! $query['email']) {
@@ -291,7 +268,7 @@ class Query
         }
 
         $this->queryBuilder
-            ->andWhere('tm.username LIKE :tm_search')
+            ->andWhere('tm.email LIKE :tm_search')
             ->setParameter('tm_search', '%' . $query['search'] . '%', PDO::PARAM_STR);
     }
 

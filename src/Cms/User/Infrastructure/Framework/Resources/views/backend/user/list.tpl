@@ -16,7 +16,7 @@
             <div class="pane-buttons">
                 <a href="{{ path('backend.user.create') }}" class="btn btn-success btn-icon-left"><i class="btn-icon fas fa-plus"></i> {{ 'add'|trans }}</a>
             </div>
-            <i class="pane-header-icon fas fa-palette"></i>
+            <i class="pane-header-icon fas fa-users"></i>
             <h1 class="pane-title">{{ block('title') }}</h1>
         </div>
         {{ generator.generate(datatable, {

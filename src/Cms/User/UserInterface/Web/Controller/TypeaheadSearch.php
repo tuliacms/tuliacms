@@ -40,7 +40,7 @@ class TypeaheadSearch extends TypeaheadFormTypeSearch
 
         foreach ($finder->getResult() as $row)
         {
-            $username = $row->getUsername();
+            $username = $row->getEmail();
 
             if ($row->attribute(UserMetadataEnum::NAME)) {
                 $username = $row->attribute(UserMetadataEnum::NAME) . " ({$username})";

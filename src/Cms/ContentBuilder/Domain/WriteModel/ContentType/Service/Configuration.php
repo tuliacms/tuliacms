@@ -26,6 +26,24 @@ class Configuration
         return array_keys($this->configuration);
     }
 
+    public function getConfigurableTypes(): array
+    {
+        $result = [];
+
+        foreach ($this->configuration as $type => $info) {
+            if ($info['configurable']) {
+                $result[] = $type;
+            }
+        }
+
+        return $result;
+    }
+
+    public function isConfigurable(string $type): bool
+    {
+        return $this->configuration[$type]['configurable'];
+    }
+
     public function getController(string $type): string
     {
         return $this->configuration[$type]['controller'];

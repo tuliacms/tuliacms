@@ -29,7 +29,7 @@ abstract class AbstractExtension implements ExtensionInterface
     /**
      * {@inheritdoc}
      */
-    public function handle(FormInterface $form, object $data): void
+    public function handle(FormInterface $form, array $data): void
     {
     }
 

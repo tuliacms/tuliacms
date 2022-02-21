@@ -16,14 +16,8 @@ use Tulia\Cms\User\Query\FinderFactoryInterface;
  */
 class EmailUniqueValidator extends ConstraintValidator
 {
-    /**
-     * @var FinderFactoryInterface
-     */
-    protected $finderFactory;
+    protected FinderFactoryInterface $finderFactory;
 
-    /**
-     * @param FinderFactoryInterface $finderFactory
-     */
     public function __construct(FinderFactoryInterface $finderFactory)
     {
         $this->finderFactory = $finderFactory;
@@ -46,16 +40,18 @@ class EmailUniqueValidator extends ConstraintValidator
             throw new UnexpectedValueException($value, 'string');
         }
 
-        $root = $this->context->getRoot();
-
         $criteria = [
             'email' => $value,
-            'id__not_in' => [$root->has('id') ? $root->get('id')->getData() : null]
+            'id__not_in' => [],
         ];
 
-        if ($constraint->id_not_in_fields) {
-            $criteria['id__not_in'] = [];
+        $root = $this->context->getRoot();
 
+        if ($root->has('id') && $root->get('id')->getData()) {
+            $criteria['id__not_in'] = [$root->get('id')->getData()];
+        }
+
+        if ($constraint->id_not_in_fields !== []) {
             foreach ($constraint->id_not_in_fields as $field) {
                 $value = $root->get($field)->getData();
 

@@ -35,7 +35,7 @@ class FormFactory implements FormFactoryInterface
         $data = null,
         array $options = []
     ): FormInterface {
-        return $this->createBuilder($type, $data, $options)->getForm();
+        return new SymfonyFormDecorator($this->createBuilder($type, $data, $options)->getForm());
     }
 
     public function createNamed(
@@ -44,12 +44,12 @@ class FormFactory implements FormFactoryInterface
         $data = null,
         array $options = []
     ): FormInterface {
-        return $this->createNamedBuilder($name, $type, $data, $options)->getForm();
+        return new SymfonyFormDecorator($this->createNamedBuilder($name, $type, $data, $options)->getForm());
     }
 
     public function createForProperty(string $class, string $property, $data = null, array $options = []): FormInterface
     {
-        return $this->createBuilderForProperty($class, $property, $data, $options)->getForm();
+        return new SymfonyFormDecorator($this->createBuilderForProperty($class, $property, $data, $options)->getForm());
     }
 
     public function createBuilder(

@@ -57,15 +57,15 @@ class UserProvider implements UserProviderInterface, PasswordUpgraderInterface
         // 2. update the $user object with $user->setPassword($newEncodedPassword);
     }
 
-    private function getUser(string $username): UserInterface
+    private function getUser(string $email): UserInterface
     {
-        $result = $this->connection->fetchAllAssociative('SELECT * FROM #__user WHERE username = :username OR email = :username LIMIT 1', [
-            'username' => $username
+        $result = $this->connection->fetchAllAssociative('SELECT * FROM #__user WHERE email = :email LIMIT 1', [
+            'email' => $email
         ]);
 
         if ($result === []) {
-            $ex = new UserNotFoundException(sprintf('Username "%s" does not exist.', $username));
-            $ex->setUserIdentifier($username);
+            $ex = new UserNotFoundException(sprintf('Email "%s" does not exist.', $email));
+            $ex->setUserIdentifier($email);
 
             throw $ex;
         }
@@ -81,7 +81,7 @@ class UserProvider implements UserProviderInterface, PasswordUpgraderInterface
         }
 
         $user = new User(
-            $result[0]['username'],
+            $result[0]['email'],
             $result[0]['password'],
             $roles,
             null // @todo Make salts for users

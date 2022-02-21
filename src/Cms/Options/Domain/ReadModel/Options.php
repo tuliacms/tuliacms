@@ -46,7 +46,11 @@ class Options
             return $this->cache[$websiteId][$locale][$name];
         }
 
-        $value = $this->finder->findByName($name, $locale, $websiteId) ?? $default;
+        $value = $this->finder->findByName($name, $locale, $websiteId);
+
+        if (empty($value)) {
+            $value = $default;
+        }
 
         return $this->cache[$websiteId][$locale][$name] = $value;
     }

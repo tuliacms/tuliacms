@@ -14,3 +14,24 @@ cms:
                     label: Filepicker
                     classname: 'Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\FilepickerType'
                     constraints: [required]
+                password:
+                    label: Password
+                    classname: 'Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\PasswordType'
+                    constraints: [required, password]
+                password_repeat:
+                    label: Password repeat
+                    classname: 'Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\PasswordType'
+                    constraints: [required] # Add `repeat_password` constraint
+                    configuration:
+                        referenced_field:
+                            label: Source password field
+                            help_text: With which password field we should copare this repeated value?
+                            required: true
+                locale:
+                    label: Locale selector
+                    classname: 'Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\LocaleType'
+                    constraints: [required]
+                email:
+                    label: Email
+                    classname: 'Symfony\Component\Form\Extension\Core\Type\EmailType'
+                    constraints: [required]

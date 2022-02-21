@@ -71,8 +71,9 @@ class AvatarExtension extends AbstractExtension
     /**
      * {@inheritdoc}
      */
-    public function handle(FormInterface $form, object $data): void
+    public function handle(FormInterface $form, array $data): void
     {
+        return;
         $this->uploader->uploadForUser($data, $form);
 
         if ($form['remove_avatar']->getData()) {

@@ -12,14 +12,14 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    private string $username;
+    private string $email;
     private ?string $password;
     private array $roles;
     private ?string $salt;
 
-    public function __construct(string $username, ?string $password, array $roles, ?string $salt = null)
+    public function __construct(string $email, ?string $password, array $roles, ?string $salt = null)
     {
-        $this->username = $username;
+        $this->email = $email;
         $this->password = $password;
         $this->roles = $roles;
         $this->salt = $salt;
@@ -42,7 +42,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getUsername(): string
     {
-        return $this->username;
+        return $this->email;
     }
 
     public function eraseCredentials(): void

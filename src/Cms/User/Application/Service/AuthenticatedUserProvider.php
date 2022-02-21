@@ -39,7 +39,7 @@ class AuthenticatedUserProvider implements AuthenticatedUserProviderInterface
                 return $this->user;
             }
 
-            $user = $this->finderFactory->getInstance(ScopeEnum::INTERNAL)->findByUsername($token->getUsername());
+            $user = $this->finderFactory->getInstance(ScopeEnum::INTERNAL)->findByEmail($token->getUsername());
         }
 
         if (! $user) {

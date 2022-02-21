@@ -16,8 +16,6 @@ class User implements AttributesAwareInterface
 
     protected string $id;
 
-    protected string $username;
-
     protected string $password;
 
     protected string $email;
@@ -36,7 +34,6 @@ class User implements AttributesAwareInterface
 
     protected static array $fields = [
         'id'                  => 'id',
-        'username'            => 'username',
         'password'            => 'password',
         'email'               => 'email',
         'roles'               => 'roles',
@@ -69,7 +66,6 @@ class User implements AttributesAwareInterface
         }
 
         $user->setId($data['id']);
-        $user->setUsername($data['username'] ?? null);
         $user->setPassword($data['password'] ?? null);
         $user->setEmail($data['email'] ?? null);
         $user->setLocale($data['locale'] ?? 'en_US');
@@ -135,14 +131,6 @@ class User implements AttributesAwareInterface
     public function getUsername(): ?string
     {
         return $this->username;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setUsername(?string $username): void
-    {
-        $this->username = $username;
     }
 
     /**

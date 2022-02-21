@@ -38,7 +38,6 @@ class User implements AttributesAwareInterface
     public static function fromQueryModel(QueryModelUser $user): self
     {
         $self = new self($user->getId());
-        $self->setUsername($user->getUsername());
         $self->setPassword($user->getPassword());
         $self->setEmail($user->getEmail());
         $self->setLocale($user->getLocale());

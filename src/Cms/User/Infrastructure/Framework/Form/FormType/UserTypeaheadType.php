@@ -16,22 +16,13 @@ use Tulia\Cms\User\Query\Enum\ScopeEnum;
  */
 class UserTypeaheadType extends AbstractType
 {
-    /**
-     * @var FinderFactoryInterface
-     */
-    protected $finderFactory;
+    protected FinderFactoryInterface $finderFactory;
 
-    /**
-     * @param FinderFactoryInterface $finderFactory
-     */
     public function __construct(FinderFactoryInterface $finderFactory)
     {
         $this->finderFactory = $finderFactory;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
@@ -44,7 +35,7 @@ class UserTypeaheadType extends AbstractType
                     return null;
                 }
 
-                $username = $user->getUsername();
+                $username = $user->getEmail();
 
                 if ($user->attribute(UserMetadataEnum::NAME)) {
                     $username = $user->attribute(UserMetadataEnum::NAME) . " ({$username})";
@@ -55,9 +46,6 @@ class UserTypeaheadType extends AbstractType
         ]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getParent(): string
     {
         return TypeaheadType::class;

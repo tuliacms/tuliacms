@@ -9,21 +9,23 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Tulia\Cms\ContentBuilder\UserInterface\Web\Form\ContentTypeFormDescriptor;
+use Tulia\Cms\ContentBuilder\UserInterface\Web\Service\ContentFormService;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Cms\User\Application\Command\UserStorage;
 use Tulia\Cms\User\Application\Exception\TranslatableUserException;
 use Tulia\Cms\User\Application\Model\User as ApplicationUser;
+use Tulia\Cms\User\Domain\WriteModel\UserRepositoryInterface;
 use Tulia\Cms\User\Infrastructure\Persistence\Query\DatatableFinder;
 use Tulia\Cms\User\Query\Enum\ScopeEnum;
 use Tulia\Cms\User\Query\Exception\MultipleFetchException;
 use Tulia\Cms\User\Query\Exception\QueryException;
 use Tulia\Cms\User\Query\Exception\QueryNotFetchedException;
-use Tulia\Cms\User\Query\Factory\UserFactoryInterface;
 use Tulia\Cms\User\Query\FinderFactoryInterface;
 use Tulia\Cms\User\Query\Model\User as QueryModelUser;
+use Tulia\Cms\User\Domain\WriteModel\Model\User as DomainModel;
 use Tulia\Cms\User\UserInterface\Web\Form\UserForm\UserForm;
-use Tulia\Component\CommandBus\Exception\MissingHandlerException;
 use Tulia\Component\Datatable\DatatableFactory;
 use Tulia\Component\Templating\ViewInterface;
 
@@ -34,13 +36,17 @@ class User extends AbstractController
 {
     protected FinderFactoryInterface $finderFactory;
     protected UserStorage $storage;
+    private ContentFormService $contentFormService;
+    private UserRepositoryInterface $repository;
 
     public function __construct(
         FinderFactoryInterface $finderFactory,
-        UserStorage $storage
+        ContentFormService $contentFormService,
+        UserRepositoryInterface $repository
     ) {
         $this->finderFactory = $finderFactory;
-        $this->storage = $storage;
+        $this->contentFormService = $contentFormService;
+        $this->repository = $repository;
     }
 
     public function index(): RedirectResponse
@@ -61,37 +67,30 @@ class User extends AbstractController
     }
 
     /**
-     * @param Request $request
-     * @param UserFactoryInterface $userFactory
-     * @return RedirectResponse|ViewInterface
-     * @throws LogicException
-     * @CsrfToken(id="user_form")
+     * @CsrfToken(id="content_builder_form_user")
      */
-    public function create(
-        Request $request,
-        UserFactoryInterface $userFactory
-    ) {
-        $user = $userFactory->createNew();
-        $model = ApplicationUser::fromQueryModel($user);
+    public function create(Request $request)
+    {
+        $formDescriptor = $this->produceFormDescriptor($request);
 
-        $form = $this->createForm(UserForm::class, $model, [ 'password_required' => true ]);
-        $form->handleRequest($request);
+        /*$form = $this->createForm(UserForm::class, [], [ 'password_required' => true ]);
+        $form->handleRequest($request);*/
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->storage->save($form->getData());
+        if ($formDescriptor->isFormValid()) {
+            dump($formDescriptor->getData());
+            //$this->storage->save($formDescriptor->getData());
 
-            $this->setFlash('success', $this->trans('userSaved', [], 'users'));
-            return $this->redirectToRoute('backend.user.edit', [ 'id' => $user->getId() ]);
+            //$this->setFlash('success', $this->trans('userSaved', [], 'users'));
+            //return $this->redirectToRoute('backend.user.edit', [ 'id' => $user->getId() ]);
         }
 
         return $this->view('@backend/user/user/create.tpl', [
-            'user' => $user,
-            'form' => $form->createView(),
+            'formDescriptor' => $formDescriptor,
         ]);
     }
 
     /**
-     * @CsrfToken(id="user_form")
+     * @CsrfToken(id="content_builder_form_user")
      */
     public function edit(Request $request, string $id)
     {
@@ -174,5 +173,24 @@ class User extends AbstractController
         }
 
         return $user;
+    }
+
+    private function produceFormDescriptor(Request $request, ?DomainModel $user = null): ContentTypeFormDescriptor
+    {
+        $data = [];
+
+        if ($user) {
+            $data = array_merge(
+                [
+                    'email' => $user->getEmail(),
+                    'password' => $user->getPassword(),
+                    'enabled' => $user->isEnabled(),
+                    'roles' => $user->getRoles(),
+                ],
+                $user->getAttributes()
+            );
+        }
+
+        return $this->contentFormService->buildFormDescriptor('user', $data, $request);
     }
 }

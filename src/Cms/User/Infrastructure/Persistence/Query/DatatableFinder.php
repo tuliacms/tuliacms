@@ -31,9 +31,9 @@ class DatatableFinder extends AbstractDatatableFinder
                 'type' => 'uuid',
                 'label' => 'ID',
             ],
-            'username' => [
-                'selector' => 'tm.username',
-                'label' => 'username',
+            'email' => [
+                'selector' => 'tm.email',
+                'label' => 'email',
                 'sortable' => true,
                 'html_attr' => ['class' => 'col-title'],
                 'view' => '@backend/user/user/parts/datatable/name.tpl',
@@ -59,10 +59,6 @@ class DatatableFinder extends AbstractDatatableFinder
     public function getFilters(): array
     {
         return [
-            'username' => [
-                'label' => 'username',
-                'type' => 'text',
-            ],
             'email' => [
                 'label' => 'email',
                 'type' => 'text',
@@ -81,12 +77,12 @@ class DatatableFinder extends AbstractDatatableFinder
     public function prepareQueryBuilder(QueryBuilder $queryBuilder): QueryBuilder
     {
         $queryBuilder
-            ->select('tm.email, uml.value AS name')
+            ->select('tm.email, ual.value AS name')
             ->from('#__user', 'tm')
-            ->leftJoin('tm', '#__user_metadata', 'um', "um.owner_id = tm.id AND um.name = 'name'")
-            ->leftJoin('um', '#__user_metadata_lang', 'uml', 'um.id = uml.metadata_id')
+            ->leftJoin('tm', '#__user_attribute', 'ua', "ua.owner_id = tm.id AND ua.name = 'name'")
+            ->leftJoin('ua', '#__user_attribute_lang', 'ual', 'ua.id = ual.attribute_id')
             ->groupBy('tm.id')
-            ->addGroupBy('uml.value')
+            ->addGroupBy('ual.value')
         ;
 
         return $queryBuilder;

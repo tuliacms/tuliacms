@@ -12,32 +12,22 @@ use Tulia\Cms\User\Application\Event\UserPreDeleteEvent;
 use Tulia\Cms\User\Application\Event\UserPreUpdateEvent;
 use Tulia\Cms\User\Application\Event\UserUpdatedEvent;
 use Tulia\Cms\User\Application\Model\User as ApplicationUser;
-use Tulia\Cms\User\Domain\Aggregate\User as Aggregate;
-use Tulia\Cms\User\Domain\Event\UserDeleted;
-use Tulia\Cms\User\Domain\Exception\UserNotFoundException;
-use Tulia\Cms\User\Domain\RepositoryInterface;
-use Tulia\Cms\User\Domain\ValueObject\AggregateId;
+use Tulia\Cms\User\Domain\WriteModel\Event\UserDeleted;
+use Tulia\Cms\User\Domain\WriteModel\Exception\UserNotFoundException;
+use Tulia\Cms\User\Domain\WriteModel\Model\AggregateId;
+use Tulia\Cms\User\Domain\WriteModel\Model\User as Aggregate;
+use Tulia\Cms\User\Domain\WriteModel\UserRepositoryInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class UserStorage
 {
-    /**
-     * @var RepositoryInterface
-     */
     private $repository;
 
-    /**
-     * @var EventBusInterface
-     */
     private $eventDispatcher;
 
-    /**
-     * @param RepositoryInterface $repository
-     * @param EventBusInterface $eventDispatcher
-     */
-    public function __construct(RepositoryInterface $repository, EventBusInterface $eventDispatcher)
+    public function __construct(UserRepositoryInterface $repository, EventBusInterface $eventDispatcher)
     {
         $this->repository      = $repository;
         $this->eventDispatcher = $eventDispatcher;
@@ -108,7 +98,7 @@ class UserStorage
     private function updateAggregate(ApplicationUser $user, Aggregate $aggregate): void
     {
         foreach ($user->getAttributes() as $key => $val) {
-            $aggregate->changeMetadataValue($key, $val);
+            $aggregate->changeAttributeValue($key, $val);
         }
 
         if ($user->getPassword()) {

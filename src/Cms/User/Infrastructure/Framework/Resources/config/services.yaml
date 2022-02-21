@@ -5,7 +5,11 @@ services:
 
     Tulia\Cms\User\:
         resource: '../../../../**'
-        exclude: '../../../../{Infrastructure/Framework/Resources}'
+        exclude:
+            - '../../../../Infrastructure/Framework/Resources'
+            - '../../../../Domain/WriteModel/Model'
+            - '../../../../Domain/WriteModel/Exception'
+            - '../../../../Domain/WriteModel/Event'
 
     Tulia\Cms\User\Infrastructure\Framework\Validator\PasswordValidatorInterface:
         class: Tulia\Cms\User\Infrastructure\Framework\Validator\PasswordValidator
@@ -23,13 +27,7 @@ services:
         bind:
             $publicDir: '%kernel.public_dir%'
 
-    Tulia\Cms\User\UserInterface\Web\Form\Extension\SecurityExtension:
-        tags: [ form_extension ]
-
     Tulia\Cms\User\UserInterface\Web\Form\Extension\AvatarExtension:
-        tags: [ form_extension ]
-
-    Tulia\Cms\User\UserInterface\Web\Form\Extension\BasicsExtension:
         tags: [ form_extension ]
 
     Tulia\Cms\User\Infrastructure\Framework\Translator\UserLocaleResolver:

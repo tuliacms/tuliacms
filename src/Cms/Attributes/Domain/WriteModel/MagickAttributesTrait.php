@@ -46,6 +46,11 @@ trait MagickAttributesTrait
         return $this->attributes[$name] ?? $default;
     }
 
+    public function setAttribute(string $name, $value): void
+    {
+        $this->attributes[$name] = $value;
+    }
+
     /**
      * @return Attribute[]
      */

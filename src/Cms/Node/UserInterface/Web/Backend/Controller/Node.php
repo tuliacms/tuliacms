@@ -15,7 +15,7 @@ use Tulia\Cms\ContentBuilder\UserInterface\Web\Service\ContentFormService;
 use Tulia\Cms\Node\Domain\ReadModel\Datatable\NodeDatatableFinderInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Exception\NodeNotFoundException;
 use Tulia\Cms\Node\Domain\WriteModel\Exception\SingularFlagImposedOnMoreThanOneNodeException;
-use Tulia\Cms\Node\Domain\WriteModel\Model\Node as ReadModel;
+use Tulia\Cms\Node\Domain\WriteModel\Model\Node as WriteModelNode;
 use Tulia\Cms\Node\Domain\WriteModel\NodeRepository;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
@@ -241,7 +241,7 @@ class Node extends AbstractController
         return $result;
     }
 
-    private function produceFormDescriptor(ReadModel $node, Request $request): ContentTypeFormDescriptor
+    private function produceFormDescriptor(WriteModelNode $node, Request $request): ContentTypeFormDescriptor
     {
         return $this->contentFormService->buildFormDescriptor(
             $node->getType(),
@@ -261,7 +261,7 @@ class Node extends AbstractController
         );
     }
 
-    private function updateModel(ContentTypeFormDescriptor $formDescriptor, ReadModel $node, string $strategy): void
+    private function updateModel(ContentTypeFormDescriptor $formDescriptor, WriteModelNode $node, string $strategy): void
     {
         $attributes = $formDescriptor->getData();
 

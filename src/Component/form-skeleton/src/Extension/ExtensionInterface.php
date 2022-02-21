@@ -26,11 +26,8 @@ interface ExtensionInterface
      * Called when form is already submitted and validated. Allows to process form data, like save
      * metadatas on elements or insert data into Database.
      * $form->getData() here, store data from validated, submited form.
-     *
-     * @param FormInterface $form
-     * @param object $data
      */
-    public function handle(FormInterface $form, object $data): void;
+    public function handle(FormInterface $form, array $data): void;
 
     /**
      * Returns sections of the form. Each section has title and content (rendered in Twig).

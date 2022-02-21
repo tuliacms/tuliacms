@@ -6,8 +6,9 @@ namespace Tulia\Cms\User\Application\Service\Avatar;
 
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Tulia\Cms\Attributes\Domain\WriteModel\Model\Attribute;
 use Tulia\Cms\User\Infrastructure\Cms\Metadata\UserMetadataEnum;
-use Tulia\Cms\User\Query\Model\User;
+use Tulia\Cms\User\Application\Model\User;
 
 /**
  * @author Adam Banaszkiewicz
@@ -36,7 +37,14 @@ class Uploader implements UploaderInterface
         $newAvatar = $this->upload($avatarFile);
         $oldAvatar = $user->attribute(UserMetadataEnum::AVATAR);
 
-        $user->setMeta(UserMetadataEnum::AVATAR, $newAvatar);
+        $user->setAttribute(UserMetadataEnum::AVATAR, new Attribute(
+            UserMetadataEnum::AVATAR,
+            $newAvatar,
+            UserMetadataEnum::AVATAR,
+            [],
+            false,
+            false
+        ));
 
         if ($oldAvatar) {
             $this->removeUploaded($oldAvatar);

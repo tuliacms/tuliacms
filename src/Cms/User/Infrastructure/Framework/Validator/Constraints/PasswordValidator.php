@@ -15,14 +15,8 @@ use Tulia\Cms\User\Infrastructure\Framework\Validator\PasswordValidatorInterface
  */
 class PasswordValidator extends ConstraintValidator
 {
-    /**
-     * @var PasswordValidatorInterface
-     */
-    protected $passwordValidator;
+    protected PasswordValidatorInterface $passwordValidator;
 
-    /**
-     * @param PasswordValidatorInterface $passwordValidator
-     */
     public function __construct(PasswordValidatorInterface $passwordValidator)
     {
         $this->passwordValidator = $passwordValidator;

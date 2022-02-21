@@ -43,7 +43,7 @@ class SymfonyFieldBuilder
                 ? false
                 : $field->getName(),
             'translation_domain' => 'content_builder.field',
-            'constraints' => $this->constraintsBuilder->build($options['constraints'] ?? []),
+            'constraints' => $this->constraintsBuilder->build($field->getConstraints()),
         ];
 
         $typeBuilder = $this->mappingRegistry->getTypeBuilder($field->getType());
