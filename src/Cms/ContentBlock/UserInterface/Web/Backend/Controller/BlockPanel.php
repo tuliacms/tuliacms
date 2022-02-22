@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\ContentBuilder\UserInterface\Web\Form\ContentTypeFormDescriptor;
-use Tulia\Cms\ContentBuilder\UserInterface\Web\Service\SymfonyFormBuilder;
+use Tulia\Cms\ContentBuilder\UserInterface\Web\Service\SymfonyFormBuilderCreator;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\IgnoreCsrfToken;
 
@@ -18,11 +18,11 @@ use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\IgnoreCsrfToken;
 class BlockPanel extends AbstractController
 {
     private ContentTypeRegistryInterface $contentTypeRegistry;
-    private SymfonyFormBuilder $formBuilder;
+    private SymfonyFormBuilderCreator $formBuilder;
 
     public function __construct(
         ContentTypeRegistryInterface $contentTypeRegistry,
-        SymfonyFormBuilder $formBuilder
+        SymfonyFormBuilderCreator $formBuilder
     ) {
         $this->contentTypeRegistry = $contentTypeRegistry;
         $this->formBuilder = $formBuilder;
@@ -39,7 +39,7 @@ class BlockPanel extends AbstractController
 
         $data = (array) $request->request->get("content_builder_form_{$type}", []);
 
-        $form = $this->formBuilder->createForm($blockType, $data, false);
+        $form = $this->formBuilder->createBuilder($blockType, $data, false);
         $form->handleRequest($request);
 
         $validatedAndReadyToSave = false;

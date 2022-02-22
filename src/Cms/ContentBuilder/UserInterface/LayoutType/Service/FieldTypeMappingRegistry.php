@@ -6,6 +6,8 @@ namespace Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service;
 
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\FieldTypeBuilder\FieldTypeBuilderInterface;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\FieldTypeBuilder\FieldTypeBuilderRegistry;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\FieldTypeHandler\FieldTypeHandlerInterface;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\FieldTypeHandler\FieldTypeHandlerRegistry;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Exception\FieldTypeNotExistsException;
 
 /**
@@ -18,13 +20,16 @@ class FieldTypeMappingRegistry
     private array $mapping = [];
     private bool $mappingResolved = false;
     private FieldTypeBuilderRegistry $builderRegistry;
+    private FieldTypeHandlerRegistry $handlerRegistry;
 
     public function __construct(
         ConstraintTypeMappingRegistry $constraintTypeMappingRegistry,
-        FieldTypeBuilderRegistry $builderRegistry
+        FieldTypeBuilderRegistry $builderRegistry,
+        FieldTypeHandlerRegistry $handlerRegistry
     ) {
         $this->constraintTypeMappingRegistry = $constraintTypeMappingRegistry;
         $this->builderRegistry = $builderRegistry;
+        $this->handlerRegistry = $handlerRegistry;
     }
 
     public function addMapping(string $type, array $mapingInfo): void
@@ -75,6 +80,19 @@ class FieldTypeMappingRegistry
         }
 
         return $this->mapping[$type]['classname'];
+    }
+
+    public function getTypeHandler(string $type): ?FieldTypeHandlerInterface
+    {
+        $this->resolveMapping();
+
+        if (isset($this->mapping[$type]['handler']) === false) {
+            return null;
+        }
+
+        return $this->handlerRegistry->has($this->mapping[$type]['handler'])
+            ? $this->handlerRegistry->get($this->mapping[$type]['handler'])
+            : null;
     }
 
     public function getTypeBuilder(string $type): ?FieldTypeBuilderInterface

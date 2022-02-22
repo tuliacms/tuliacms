@@ -32,6 +32,6 @@ class LayoutBuilder
 
         return $this->builderRegistry
             ->get($this->config->getLayoutBuilder($type->getType()))
-            ->editorView($type, $formDescriptor->getFormView());
+            ->editorView($type, $formDescriptor->getFormView(), $formDescriptor->getViewContext());
     }
 }

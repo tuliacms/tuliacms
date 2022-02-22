@@ -71,7 +71,6 @@
 
     {{ form_start(form) }}
     {{ form_errors(form) }}
-    {{ form_row(form.id) }}
     {{ form_row(form._token) }}
 
     <input type="text" name="username" style="display: block;position: fixed;left:-1000px;top:-1000px;opacity:0;" tabindex="-1" />

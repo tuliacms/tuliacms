@@ -95,6 +95,11 @@ class TuliaCmsExtension extends Extension
             ->addTag('content_builder.layout_type.builder');
         $container->registerForAutoconfiguration(\Tulia\Cms\ContentBuilder\Domain\ReadModel\FieldTypeBuilder\FieldTypeBuilderInterface::class)
             ->addTag('content_builder.data_types.builder')
+            ->setShared(false)
+            ->setLazy(true);
+        $container->registerForAutoconfiguration(\Tulia\Cms\ContentBuilder\Domain\ReadModel\FieldTypeHandler\FieldTypeHandlerInterface::class)
+            ->addTag('content_builder.data_types.handler')
+            ->setShared(false)
             ->setLazy(true);
 
         // Shortcode

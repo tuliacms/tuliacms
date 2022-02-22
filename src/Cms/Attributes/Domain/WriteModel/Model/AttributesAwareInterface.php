@@ -18,6 +18,4 @@ interface AttributesAwareInterface
     public function attribute(string $name, $default = null);
 
     public function getAttributes(): array;
-
-    public function replaceAttributes(array $metadata): void;
 }

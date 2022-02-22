@@ -23,5 +23,5 @@ interface LayoutTypeBuilderInterface
      * Returns view for creadint/editing content type. The content type is already configured,
      * and we want to create first content with this type.
      */
-    public function editorView(ContentType $contentType, FormView $formView): View;
+    public function editorView(ContentType $contentType, FormView $formView, array $viewContext): View;
 }

@@ -163,6 +163,43 @@ class AbstractContentType
         return $this->flattenFieldsRecursive($this->fields);
     }
 
+    public function buildAttributesMapping(): array
+    {
+        return $this->buildAttributesMappingRecursive($this->fields);
+    }
+
+    /**
+     * @param AbstractField[] $fields
+     */
+    private function buildAttributesMappingRecursive(array $fields, string $prefix = ''): array
+    {
+        $result = [];
+
+        foreach ($fields as $field) {
+            if ($field->isType('repeatable')) {
+                foreach ($this->buildAttributesMappingRecursive($field->getChildren(), $prefix.$field->getCode().'.') as $code => $subfield) {
+                    $result[$code] = $subfield;
+                }
+            } else {
+                $result[$prefix.$field->getCode()] = [
+                    'is_multilingual' => $field->isMultilingual(),
+                    'is_compilable' => $field->hasFlag('compilable'),
+                    'has_nonscalar_value' => $field->hasNonscalarValue(),
+                ];
+
+                if ($field->hasFlag('compilable')) {
+                    $result[$prefix.$field->getCode().':compiled'] = [
+                        'is_multilingual' => $field->isMultilingual(),
+                        'is_compilable' => false,
+                        'has_nonscalar_value' => $field->hasNonscalarValue(),
+                    ];
+                }
+            }
+        }
+
+        return $result;
+    }
+
     /**
      * @param AbstractField[] $fields
      * @return AbstractField[]

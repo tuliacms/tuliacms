@@ -8,6 +8,7 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\FieldTypeBuilder\FieldTypeBuilderRegistry;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\FieldTypeHandler\FieldTypeHandlerRegistry;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeDecorator;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\ContentBuilder\Domain\WriteModel\Routing\Strategy\ContentTypeRoutingStrategyRegistry;
@@ -35,6 +36,11 @@ class ContentBuilderPass implements CompilerPassInterface
         $registry = $container->getDefinition(FieldTypeBuilderRegistry::class);
         foreach ($container->findTaggedServiceIds('content_builder.data_types.builder') as $id => $info) {
             $registry->addMethodCall('addBuilder', [$id, new Reference($id)]);
+        }
+
+        $registry = $container->getDefinition(FieldTypeHandlerRegistry::class);
+        foreach ($container->findTaggedServiceIds('content_builder.data_types.handler') as $id => $info) {
+            $registry->addMethodCall('addHandler', [$id, new Reference($id)]);
         }
 
         $registry = $container->getDefinition(ConstraintTypeMappingRegistry::class);

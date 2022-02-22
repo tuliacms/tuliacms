@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace Tulia\Cms\ContentBuilder\UserInterface\Web\Form;
 
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormView;
+use Symfony\Component\HttpFoundation\Request;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\FieldTypeHandler\FieldTypeHandlerInterface;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\ContentType;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\Field;
 use Tulia\Cms\Attributes\Domain\WriteModel\Model\Attribute;
@@ -16,13 +19,18 @@ use Tulia\Cms\Attributes\Domain\WriteModel\Model\Attribute;
 class ContentTypeFormDescriptor
 {
     protected ContentType $contentType;
-    protected FormInterface $form;
+    protected FormBuilderInterface $formBuilder;
+    protected ?FormInterface $form = null;
     protected ?FormView $formView = null;
+    protected bool $formClosed = false;
+    protected array $data = [];
+    private array $viewContext;
 
-    public function __construct(ContentType $contentType, FormInterface $form)
+    public function __construct(ContentType $contentType, FormBuilderInterface $formBuilder, array $viewContext = [])
     {
-        $this->form = $form;
+        $this->formBuilder = $formBuilder;
         $this->contentType = $contentType;
+        $this->viewContext = $viewContext;
     }
 
     /**
@@ -33,9 +41,23 @@ class ContentTypeFormDescriptor
         return $this->contentType->getFields();
     }
 
+    public function getFormBuilder(): FormBuilderInterface
+    {
+        if ($this->formClosed) {
+            throw new \RuntimeException('Form is already closed. Cannot modify form after doing any operations on it.');
+        }
+
+        return $this->formBuilder;
+    }
+
     public function getForm(): FormInterface
     {
-        return $this->form;
+        if ($this->formClosed) {
+            return $this->form;
+        }
+
+        $this->formClosed = true;
+        return $this->form = $this->formBuilder->getForm();
     }
 
     public function getFormView(): FormView
@@ -44,7 +66,7 @@ class ContentTypeFormDescriptor
             return $this->formView;
         }
 
-        return $this->formView = $this->form->createView();
+        return $this->formView = $this->getForm()->createView();
     }
 
     /**
@@ -52,23 +74,38 @@ class ContentTypeFormDescriptor
      */
     public function getData(): array
     {
-        $rawData = $this->form->getData();
+        if ($this->data !== []) {
+            return $this->data;
+        }
 
-        $result['id'] = $rawData['id'];
+        $this->handleFields(iterator_to_array($this->getForm()));
 
-        $result = $this->flattenFields($this->getFields(), $rawData);
+        $rawData = $this->getForm()->getData();
 
-        return $result;
+        $this->data = $this->flattenFields($this->getFields(), $rawData);
+        $this->data['id'] = $rawData['id'];
+
+        return $this->data;
     }
 
     public function isFormValid(): bool
     {
-        return $this->form->isSubmitted() && $this->form->isValid();
+        return $this->getForm()->isSubmitted() && $this->getForm()->isValid();
     }
 
     public function getContentType(): ContentType
     {
         return $this->contentType;
+    }
+
+    public function handleRequest(Request $request): void
+    {
+        $this->getForm()->handleRequest($request);
+    }
+
+    public function getViewContext(): array
+    {
+        return $this->viewContext;
     }
 
     /**
@@ -122,5 +159,28 @@ class ContentTypeFormDescriptor
         }
 
         return $result;
+    }
+
+    /**
+     * @param FormInterface[] $fields
+     */
+    private function handleFields(array $fields): void
+    {
+        foreach ($fields as $field) {
+            $fieldType = $field->getConfig()->getOption('content_builder_field');
+            $handler = $field->getConfig()->getOption('content_builder_field_handler');
+
+            if ($handler instanceof FieldTypeHandlerInterface) {
+                $value = $field->getData();
+
+                if ($value instanceof Attribute) {
+                    $value->setValue($handler->handle($fieldType, $value->getValue()));
+                } else {
+                    $field->setData($handler->handle($fieldType, $value));
+                }
+            }
+
+            $this->handleFields(iterator_to_array($field));
+        }
     }
 }

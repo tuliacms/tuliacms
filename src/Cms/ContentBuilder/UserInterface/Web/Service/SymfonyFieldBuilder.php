@@ -38,15 +38,18 @@ class SymfonyFieldBuilder
             return;
         }
 
+        $typeBuilder = $this->mappingRegistry->getTypeBuilder($field->getType());
+        $typeHandler = $this->mappingRegistry->getTypeHandler($field->getType());
+
         $options = [
             'label' => $field->getName() === ''
                 ? false
                 : $field->getName(),
             'translation_domain' => 'content_builder.field',
             'constraints' => $this->constraintsBuilder->build($field->getConstraints()),
+            'content_builder_field' => $field,
+            'content_builder_field_handler' => $typeHandler,
         ];
-
-        $typeBuilder = $this->mappingRegistry->getTypeBuilder($field->getType());
 
         if ($typeBuilder) {
             $options = $typeBuilder->build($field, $options, $contentType);
@@ -57,6 +60,10 @@ class SymfonyFieldBuilder
             $this->mappingRegistry->getTypeClassname($field->getType()),
             $options
         );
+
+        if ($typeHandler) {
+            $builder->get($field->getCode())->addModelTransformer(new FieldTypeHandlerAwareDataTransformer($typeHandler));
+        }
     }
 
     private function buildRepeatable(Field $field, FormBuilderInterface $builder, ContentType $contentType): void

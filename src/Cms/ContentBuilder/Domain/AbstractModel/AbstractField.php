@@ -97,6 +97,10 @@ class AbstractField
         return $this->options['configuration'];
     }
 
+    /**
+     * @param mixed $default
+     * @return mixed|null
+     */
     public function getConfig(string $name, $default = null)
     {
         return $this->options['configuration'][$name] ?? $default;
@@ -105,6 +109,11 @@ class AbstractField
     public function getConstraints(): array
     {
         return $this->options['constraints'];
+    }
+
+    public function removeConstraint(string $name): void
+    {
+        unset($this->options['constraints'][$name]);
     }
 
     /**
@@ -117,7 +126,7 @@ class AbstractField
 
     public function hasFlag(string $flag): bool
     {
-        return in_array($flag, $this->options['flags'], true);
+        return \in_array($flag, $this->options['flags'], true);
     }
 
     /**

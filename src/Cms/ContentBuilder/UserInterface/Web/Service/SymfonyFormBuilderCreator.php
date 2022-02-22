@@ -8,7 +8,6 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormFactoryInterface;
-use Symfony\Component\Form\FormInterface;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\ContentType;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\Field;
 use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Exception\ConstraintNotExistsException;
@@ -21,7 +20,7 @@ use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\SubmitType;
 /**
  * @author Adam Banaszkiewicz
  */
-class SymfonyFormBuilder
+class SymfonyFormBuilderCreator
 {
     private FormFactoryInterface $formFactory;
     private FieldTypeMappingRegistry $mappingRegistry;
@@ -43,7 +42,7 @@ class SymfonyFormBuilder
         $this->symfonyFieldBuilder = $symfonyFieldBuilder;
     }
 
-    public function createForm(ContentType $contentType, array $data, bool $expectCqrsToken = true): FormInterface
+    public function createBuilder(ContentType $contentType, array $data, bool $expectCqrsToken = true): FormBuilderInterface
     {
         $builder = $this->createFormBuilder($contentType->getCode(), $data, $expectCqrsToken);
 
@@ -51,7 +50,7 @@ class SymfonyFormBuilder
 
         $this->buildFieldsWithBuilder($fields, $builder, $contentType);
 
-        return $builder->getForm();
+        return $builder;
     }
 
     private function createFormBuilder(string $type, array $data, bool $expectCqrsToken = true): FormBuilderInterface
@@ -98,9 +97,6 @@ class SymfonyFormBuilder
         }
 
         $builder
-            ->add('id', HiddenType::class, [
-                'required' => true,
-            ])
             ->add('cancel', CancelType::class, [
                 // @todo Configure back button URL
                 'route' => 'backend.widget',

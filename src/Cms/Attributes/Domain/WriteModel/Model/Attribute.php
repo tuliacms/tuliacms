@@ -10,6 +10,7 @@ namespace Tulia\Cms\Attributes\Domain\WriteModel\Model;
 class Attribute implements \Stringable
 {
     private string $code;
+    /** @var mixed */
     private $value;
     private string $uri;
     private array $flags;
@@ -17,7 +18,7 @@ class Attribute implements \Stringable
     private bool $hasNonscalarValue;
 
     /**
-     * @param int|string|null|array $value
+     * @param mixed $value
      */
     public function __construct(
         string $code,
@@ -60,11 +61,19 @@ class Attribute implements \Stringable
     }
 
     /**
-     * @return array|int|string|null
+     * @return mixed
      */
     public function getValue()
     {
         return $this->value;
+    }
+
+    /**
+     * @param mixed $value
+     */
+    public function setValue($value): void
+    {
+        $this->value = $value;
     }
 
     public function getUri(): string

@@ -16,12 +16,12 @@ use Tulia\Cms\Attributes\Domain\WriteModel\Service\UriToArrayTransformer;
 class ContentFormService
 {
     private ContentTypeRegistryInterface $ContentTypeRegistryInterface;
-    private SymfonyFormBuilder $formBuilder;
+    private SymfonyFormBuilderCreator $formBuilder;
     private UriToArrayTransformer $attributesToArrayTransformer;
 
     public function __construct(
         ContentTypeRegistryInterface $contentTypeRegistry,
-        SymfonyFormBuilder $formBuilder,
+        SymfonyFormBuilderCreator $formBuilder,
         UriToArrayTransformer $attributesToArrayTransformer
     ) {
         $this->contentTypeRegistry = $contentTypeRegistry;
@@ -29,31 +29,20 @@ class ContentFormService
         $this->attributesToArrayTransformer = $attributesToArrayTransformer;
     }
 
-    public function buildFormDescriptor(string $type, array $data, Request $request): ContentTypeFormDescriptor
+    public function buildFormDescriptor(string $type, array $data, array $viewContext = []): ContentTypeFormDescriptor
     {
         $contentType = $this->contentTypeRegistry->get($type);
 
-        $attributes = [];
-        $decodedData = [];
-
-        foreach ($data as $uri => $value) {
-            if ($value instanceof Attribute) {
-                $attributes[$uri] = $value;
-            } else {
-                $decodedData[$uri] = $value;
-            }
+        if (isset($data['attributes']) && \is_array($data['attributes'])) {
+            $attributes = $this->attributesToArrayTransformer->transform($data['attributes']);
+            unset($data['attributes']);
+            $flattened = array_merge($attributes, $data);
+        } else {
+            $flattened = $data;
         }
 
-        $attributes = $this->attributesToArrayTransformer->transform($attributes);
+        $form = $this->formBuilder->createBuilder($contentType, $flattened);
 
-        $data = array_merge($attributes, $decodedData);
-
-        $form = $this->formBuilder->createForm($contentType, $data);
-        $form->handleRequest($request);
-
-        return new ContentTypeFormDescriptor(
-            $contentType,
-            $form
-        );
+        return new ContentTypeFormDescriptor($contentType, $form, $viewContext);
     }
 }

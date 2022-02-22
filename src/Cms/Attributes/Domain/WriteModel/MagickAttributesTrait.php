@@ -58,12 +58,4 @@ trait MagickAttributesTrait
     {
         return $this->attributes;
     }
-
-    /**
-     * @param Attribute[] $attributes
-     */
-    public function replaceAttributes(array $attributes): void
-    {
-        $this->attributes = $attributes;
-    }
 }

@@ -105,6 +105,7 @@ class Configuration implements ConfigurationInterface
                                             ->scalarNode('label')->isRequired()->end()
                                             ->scalarNode('classname')->isRequired()->end()
                                             ->scalarNode('builder')->defaultNull()->end()
+                                            ->scalarNode('handler')->defaultNull()->end()
                                             ->arrayNode('constraints')->scalarPrototype()->defaultValue([])->end()->end()
                                             ->arrayNode('exclude_for_types')->scalarPrototype()->defaultValue([])->end()->end()
                                             ->arrayNode('only_for_types')->scalarPrototype()->defaultValue([])->end()->end()
