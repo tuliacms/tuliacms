@@ -12,15 +12,20 @@ use Tulia\Cms\User\Domain\WriteModel\Model\User;
  */
 class UserEvent extends Event
 {
-    protected $user;
+    protected $userId;
 
-    public function __construct(User $user)
+    public function __construct(string $userId)
     {
-        $this->user = $user;
+        $this->userId = $userId;
     }
 
-    public function getUser(): User
+    public static function fromModel(User $user): self
     {
-        return $this->user;
+        return new self($user->getId()->getValue());
+    }
+
+    public function getUserId(): string
+    {
+        return $this->userId;
     }
 }

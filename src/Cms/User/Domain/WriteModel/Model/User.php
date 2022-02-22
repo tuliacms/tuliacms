@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace Tulia\Cms\User\Domain\WriteModel\Model;
 
 use Tulia\Cms\Attributes\Domain\WriteModel\MagickAttributesTrait;
+use Tulia\Cms\Attributes\Domain\WriteModel\Model\Attribute;
 use Tulia\Cms\Attributes\Domain\WriteModel\Model\AttributesAwareInterface;
 use Tulia\Cms\Shared\Domain\WriteModel\Model\AggregateRoot;
 use Tulia\Cms\User\Domain\WriteModel\Event;
+use Tulia\Cms\User\Domain\WriteModel\Event\AttributeUpdated;
 
 /**
  * @author Adam Banaszkiewicz
@@ -18,7 +20,7 @@ class User extends AggregateRoot implements AttributesAwareInterface
 
     private AggregateId $id;
 
-    protected string $password;
+    protected ?string $password;
 
     protected string $email;
 
@@ -34,7 +36,7 @@ class User extends AggregateRoot implements AttributesAwareInterface
 
     protected array $roles = [];
 
-    private function __construct(AggregateId $id, string $email, string $password, array $roles)
+    private function __construct(AggregateId $id, string $email, ?string $password, array $roles)
     {
         $this->id = $id;
         $this->email = $email;
@@ -45,7 +47,7 @@ class User extends AggregateRoot implements AttributesAwareInterface
     public static function create(
         AggregateId $id,
         string $email,
-        string $password,
+        ?string $password,
         array $roles,
         bool $enabled = true,
         string $locale = 'en_US',
@@ -62,7 +64,7 @@ class User extends AggregateRoot implements AttributesAwareInterface
 
     public static function fromArray(array $data): self
     {
-        $self = new self(new AggregateId($data['id']), $data['email'], $data['password'], $data['roles']);
+        $self = new self(new AggregateId($data['id']), $data['email'], null, $data['roles']);
         $self->enabled = $data['enabled'] ? true : false;
         $self->locale = $data['locale'];
         $self->attributes = $data['attributes'];
@@ -81,7 +83,8 @@ class User extends AggregateRoot implements AttributesAwareInterface
             'credentialsExpired' => $this->credentialsExpired,
             'accountLocked' => $this->accountLocked,
             'roles' => $this->roles,
-        ] + $this->attributes;
+            'attributes' => $this->attributes,
+        ];
     }
 
     public function getId(): AggregateId
@@ -113,25 +116,30 @@ class User extends AggregateRoot implements AttributesAwareInterface
     }
 
     /**
-     * @param string $name
-     * @param mixed $value
+     * @param Attribute[] $attributes
      */
-    public function changeAttributeValue(string $name, $value): void
+    public function updateAttributes(array $attributes): void
     {
-        if (\array_key_exists($name, $this->attributes)) {
-            if ($this->attributes[$name] !== $value) {
-                if (empty($value)) {
-                    $this->recordThat(new Event\AttributeValueDeleted($this->id->getValue(), $name, $value));
-                } else {
-                    $this->recordThat(new Event\AttributeValueChanged($this->id->getValue(), $name, $value));
-                }
+        unset(
+            $attributes['id'],
+            $attributes['password'],
+            $attributes['email'],
+            $attributes['locale'],
+            $attributes['enabled'],
+            $attributes['account_expired'],
+            $attributes['credentials_expired'],
+            $attributes['account_locked'],
+            $attributes['roles'],
+        );
 
-                $this->attributes[$name] = $value;
-            }
-        } else {
-            if (empty($value) === false) {
-                $this->recordThat(new Event\AttributeValueChanged($this->id->getValue(), $name, $value));
-                $this->attributes[$name] = $value;
+        foreach ($attributes as $attribute) {
+            $name = $attribute->getCode();
+            $value = $attribute->getValue();
+
+            if (isset($this->attributes[$name]) === false || $this->attributes[$name]->getValue() !== $value) {
+                $this->attributes[$attribute->getUri()] = $attribute;
+
+                $this->recordThat(AttributeUpdated::fromModel($this, $name, $value));
             }
         }
     }

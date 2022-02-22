@@ -28,14 +28,9 @@ class SelfUserDeleteDetector implements EventSubscriberInterface
         ];
     }
 
-    /**
-     * @param UserPreDeleteEvent $event
-     *
-     * @throws TranslatableUserException
-     */
     public function handle(UserPreDeleteEvent $event): void
     {
-        $user = $event->getUser();
+        $user = $event->getUserId();
 
         if ($user->getId() === $this->authenticatedUserProvider->getUser()->getId()) {
             $e = new TranslatableUserException('cannotDeleteSelfUser');

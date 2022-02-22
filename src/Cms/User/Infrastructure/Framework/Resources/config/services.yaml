@@ -27,9 +27,6 @@ services:
         bind:
             $publicDir: '%kernel.public_dir%'
 
-    Tulia\Cms\User\UserInterface\Web\Form\Extension\AvatarExtension:
-        tags: [ form_extension ]
-
     Tulia\Cms\User\Infrastructure\Framework\Translator\UserLocaleResolver:
         bind:
             $translator: '@translator.default'

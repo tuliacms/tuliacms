@@ -15,11 +15,19 @@ cms:
                     label: User
                     classname: 'Tulia\Cms\User\Infrastructure\Framework\Form\FormType\UserTypeaheadType'
                     builder: 'Tulia\Cms\User\Infrastructure\Framework\Form\FormType\UserTypeaheadTypeBuilder'
-                    constraints: [required]
+                    constraints: [ required ]
                 user_roles:
                     label: User roles
                     classname: 'Tulia\Cms\User\Infrastructure\Framework\Form\FormType\UserRolesType'
-                    constraints: [required]
+                    constraints: [ required ]
+                    only_for_types: [ user ]
+                user_avatar:
+                    label: User avatar
+                    classname: 'Symfony\Component\Form\Extension\Core\Type\FileType'
+                    builder: 'Tulia\Cms\User\Infrastructure\Framework\Form\FormType\UserAvatarBuilder'
+                    handler: 'Tulia\Cms\User\Infrastructure\Framework\Form\FormType\UserAvatarHandler'
+                    constraints: [ required ]
+                    only_for_types: [ user ]
         constraint_types:
             mapping:
                 user_email_unique:
@@ -63,7 +71,7 @@ cms:
                                     name: Avatar
                                     fields:
                                         avatar:
-                                            type: filepicker
+                                            type: user_avatar
                                             name: Avatar
                         main:
                             groups:

@@ -4,11 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\User\Application\Service\Avatar;
 
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Tulia\Cms\Attributes\Domain\WriteModel\Model\Attribute;
-use Tulia\Cms\User\Infrastructure\Cms\Metadata\UserMetadataEnum;
-use Tulia\Cms\User\Application\Model\User;
 
 /**
  * @author Adam Banaszkiewicz
@@ -22,40 +18,6 @@ class Uploader implements UploaderInterface
         $this->publicDir = $publicDir;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function uploadForUser(User $user, FormInterface $form, string $field = UserMetadataEnum::AVATAR): string
-    {
-        /** @var UploadedFile $avatarFile */
-        $avatarFile = $form[$field]->getData();
-
-        if (!$avatarFile) {
-            return '';
-        }
-
-        $newAvatar = $this->upload($avatarFile);
-        $oldAvatar = $user->attribute(UserMetadataEnum::AVATAR);
-
-        $user->setAttribute(UserMetadataEnum::AVATAR, new Attribute(
-            UserMetadataEnum::AVATAR,
-            $newAvatar,
-            UserMetadataEnum::AVATAR,
-            [],
-            false,
-            false
-        ));
-
-        if ($oldAvatar) {
-            $this->removeUploaded($oldAvatar);
-        }
-
-        return $newAvatar;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function upload(UploadedFile $file): string
     {
         $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
@@ -73,27 +35,20 @@ class Uploader implements UploaderInterface
         return $destination . '/' . $newFilename;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function removeUploadedForUser(User $user): void
-    {
-        if (! $user->attribute(UserMetadataEnum::AVATAR)) {
-            return;
-        }
-
-        $this->removeUploaded($user->attribute(UserMetadataEnum::AVATAR));
-
-        $user->setMeta(UserMetadataEnum::AVATAR, null);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function removeUploaded(string $filepath): void
     {
         if (is_file($this->publicDir . $filepath)) {
             @ unlink($this->publicDir . $filepath);
         }
+    }
+
+    public function getFilepath(string $filepath): string
+    {
+        return $this->publicDir . $filepath;
+    }
+
+    public function avatarExists(string $filepath): bool
+    {
+        return is_file($this->publicDir . $filepath);
     }
 }

@@ -14,6 +14,14 @@ class AttributeUpdated extends DomainEvent
     private string $attribute;
     private $value;
 
+    public function __construct(string $nodeId, string $nodeType, string $websiteId, string $locale, string $attribute, $value)
+    {
+        parent::__construct($nodeId, $nodeType, $websiteId, $locale);
+
+        $this->attribute = $attribute;
+        $this->value = $value;
+    }
+
     public static function fromNode(Node $node, string $attribute, $value): self
     {
         return new self(
@@ -24,14 +32,6 @@ class AttributeUpdated extends DomainEvent
             $attribute,
             $value,
         );
-    }
-
-    public function __construct(string $nodeId, string $nodeType, string $websiteId, string $locale, string $attribute, $value)
-    {
-        parent::__construct($nodeId, $nodeType, $websiteId, $locale);
-
-        $this->attribute = $attribute;
-        $this->value = $value;
     }
 
     public function getAttribute(): string

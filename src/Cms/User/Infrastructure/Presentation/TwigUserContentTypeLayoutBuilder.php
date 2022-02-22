@@ -14,12 +14,13 @@ use Tulia\Component\Templating\View;
  */
 class TwigUserContentTypeLayoutBuilder implements LayoutTypeBuilderInterface
 {
-    public function editorView(ContentType $contentType, FormView $formView): View
+    public function editorView(ContentType $contentType, FormView $formView, array $viewContext): View
     {
         return new View('@backend/user/content_builder/editor.tpl', [
             'contentType' => $contentType,
             'layout' => $contentType->getLayout(),
             'form' => $formView,
+            'context' => $viewContext,
         ]);
     }
 

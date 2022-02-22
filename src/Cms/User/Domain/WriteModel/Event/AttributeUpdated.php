@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\User\Domain\WriteModel\Event;
 
+use Tulia\Cms\User\Domain\WriteModel\Model\User;
+
 /**
  * @author Adam Banaszkiewicz
  */
-class AttributeValueChanged extends DomainEvent
+class AttributeUpdated extends DomainEvent
 {
     private string $name;
 
@@ -19,6 +21,11 @@ class AttributeValueChanged extends DomainEvent
 
         $this->name  = $name;
         $this->value = $value;
+    }
+
+    public static function fromModel(User $user, string $name, $value): self
+    {
+        return new self($user->getId()->getValue(), $name, $value);
     }
 
     public function getName(): string

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Tulia\Cms\Node\Domain\WriteModel;
 
 use Tulia\Cms\Attributes\Domain\WriteModel\AttributesRepository;
-use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\Field;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\ContentBuilder\Domain\WriteModel\Exception\ContentTypeNotExistsException;
 use Tulia\Cms\Node\Domain\WriteModel\ActionsChain\NodeActionsChainInterface;
@@ -14,7 +13,6 @@ use Tulia\Cms\Node\Domain\WriteModel\Event\NodeUpdated;
 use Tulia\Cms\Node\Domain\WriteModel\Exception\NodeNotFoundException;
 use Tulia\Cms\Node\Domain\WriteModel\Model\Node;
 use Tulia\Cms\Node\Domain\WriteModel\Service\NodeWriteStorageInterface;
-use Tulia\Cms\Shared\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
 use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
 use Tulia\Cms\Shared\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
@@ -24,8 +22,6 @@ use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
  */
 class NodeRepository
 {
-    private const RESERVED_NAMES = ['title', 'slug', 'parent_id', 'published_at', 'published_to', 'status', 'author_id'];
-
     private NodeWriteStorageInterface $storage;
     private CurrentWebsiteInterface $currentWebsite;
     private AttributesRepository $attributeRepository;
@@ -82,27 +78,10 @@ class NodeRepository
             throw new NodeNotFoundException();
         }
 
-        $nodeType = $this->contentTypeRegistry->get($node['type']);
-        $attributesInfo = $this->buildAttributesMapping($nodeType->getFields());
-        $attributes = $this->attributeRepository->findAll('node', $id, $attributesInfo);
+        $contentType = $this->contentTypeRegistry->get($node['type']);
+        $node['attributes'] = $this->attributeRepository->findAll('node', $id, $contentType->buildAttributesMapping());
 
-        $node = Node::buildFromArray($node['type'], [
-            'id'            => $node['id'],
-            'website_id'    => $node['website_id'],
-            'published_at'  => new ImmutableDateTime($node['published_at']),
-            'published_to'  => $node['published_to'] ? new ImmutableDateTime($node['published_to']) : null,
-            'created_at'    => new ImmutableDateTime($node['created_at']),
-            'updated_at'    => $node['updated_at'] ? new ImmutableDateTime($node['updated_at']) : null,
-            'status'        => $node['status'] ?? '',
-            'author_id'     => $node['author_id'],
-            'level'         => (int) $node['level'],
-            'parent_id'     => $node['parent_id'] ?? null,
-            'locale'        => $node['locale'],
-            'translated'    => $node['translated'] ?? true,
-            'title'         => $node['title'],
-            'slug'          => $node['slug'],
-            'attributes'    => $attributes,
-        ]);
+        $node = Node::fromArray($node);
 
         $this->actionsChain->execute('find', $node);
 
@@ -116,7 +95,7 @@ class NodeRepository
         $this->storage->beginTransaction();
 
         try {
-            $data = $this->extract($node);
+            $data = $node->toArray();
 
             $this->storage->insert($data, $this->currentWebsite->getDefaultLocale()->getCode());
             $this->attributeRepository->persist(
@@ -140,7 +119,7 @@ class NodeRepository
         $this->storage->beginTransaction();
 
         try {
-            $data = $this->extract($node);
+            $data = $node->toArray();
 
             $this->storage->update($data, $this->currentWebsite->getDefaultLocale()->getCode());
             $this->attributeRepository->persist(
@@ -164,7 +143,7 @@ class NodeRepository
         $this->storage->beginTransaction();
 
         try {
-            $this->storage->delete($this->extract($node));
+            $this->storage->delete($node->toArray());
             $this->attributeRepository->delete('node', $node->getId()->getValue());
             $this->storage->commit();
         } catch (\Exception $exception) {
@@ -173,71 +152,5 @@ class NodeRepository
         }
 
         $this->eventBus->dispatch(NodeDeleted::fromNode($node));
-    }
-
-    private function extract(Node $node): array
-    {
-        $attributes = [];
-
-        foreach ($node->getAttributes() as $uri => $attribute) {
-            if (\in_array($uri, self::RESERVED_NAMES)) {
-                continue;
-            }
-
-            $attributes[$uri] = $attribute;
-        }
-
-        $result = [
-            'id'            => $node->getId()->getValue(),
-            'type'          => $node->getType(),
-            'website_id'    => $node->getWebsiteId(),
-            'published_at'  => $node->getPublishedAt()->format('Y-m-d H:i:s'),
-            'published_to'  => $node->getPublishedTo() ? $node->getPublishedTo()->format('Y-m-d H:i:s') : null,
-            'created_at'    => $node->getCreatedAt(),
-            'updated_at'    => $node->getUpdatedAt(),
-            'status'        => $node->getStatus(),
-            'author_id'     => $node->getAuthorId(),
-            'category_id'   => $node->getCategoryId(),
-            'level'         => $node->getLevel(),
-            'parent_id'     => $node->getParentId(),
-            'locale'        => $node->getLocale(),
-            'title'         => $node->getTitle(),
-            'slug'          => $node->getSlug(),
-            'attributes'    => $attributes,
-        ];
-
-        return $result;
-    }
-
-    /**
-     * @param Field[] $fields
-     */
-    private function buildAttributesMapping(array $fields, string $prefix = ''): array
-    {
-        $result = [];
-
-        foreach ($fields as $field) {
-            if ($field->isType('repeatable')) {
-                foreach ($this->buildAttributesMapping($field->getChildren(), $prefix.$field->getCode().'.') as $code => $subfield) {
-                    $result[$code] = $subfield;
-                }
-            } else {
-                $result[$prefix.$field->getCode()] = [
-                    'is_multilingual' => $field->isMultilingual(),
-                    'is_compilable' => $field->hasFlag('compilable'),
-                    'has_nonscalar_value' => $field->hasNonscalarValue(),
-                ];
-
-                if ($field->hasFlag('compilable')) {
-                    $result[$prefix.$field->getCode().':compiled'] = [
-                        'is_multilingual' => $field->isMultilingual(),
-                        'is_compilable' => false,
-                        'has_nonscalar_value' => $field->hasNonscalarValue(),
-                    ];
-                }
-            }
-        }
-
-        return $result;
     }
 }

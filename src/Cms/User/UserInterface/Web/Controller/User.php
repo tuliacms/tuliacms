@@ -4,29 +4,20 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\User\UserInterface\Web\Controller;
 
-use Symfony\Component\Form\Exception\LogicException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Tulia\Cms\ContentBuilder\UserInterface\Web\Form\ContentTypeFormDescriptor;
 use Tulia\Cms\ContentBuilder\UserInterface\Web\Service\ContentFormService;
+use Tulia\Cms\ContentBuilder\UserInterface\Web\Service\SymfonyFieldBuilder;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
-use Tulia\Cms\User\Application\Command\UserStorage;
-use Tulia\Cms\User\Application\Exception\TranslatableUserException;
-use Tulia\Cms\User\Application\Model\User as ApplicationUser;
 use Tulia\Cms\User\Application\UseCase\CreateUser;
+use Tulia\Cms\User\Application\UseCase\UpdateUser;
+use Tulia\Cms\User\Domain\WriteModel\Model\User as DomainModel;
 use Tulia\Cms\User\Domain\WriteModel\UserRepositoryInterface;
 use Tulia\Cms\User\Infrastructure\Persistence\Query\DatatableFinder;
-use Tulia\Cms\User\Query\Enum\ScopeEnum;
-use Tulia\Cms\User\Query\Exception\MultipleFetchException;
-use Tulia\Cms\User\Query\Exception\QueryException;
-use Tulia\Cms\User\Query\Exception\QueryNotFetchedException;
 use Tulia\Cms\User\Query\FinderFactoryInterface;
-use Tulia\Cms\User\Query\Model\User as QueryModelUser;
-use Tulia\Cms\User\Domain\WriteModel\Model\User as DomainModel;
-use Tulia\Cms\User\UserInterface\Web\Form\UserForm\UserForm;
 use Tulia\Component\Datatable\DatatableFactory;
 use Tulia\Component\Templating\ViewInterface;
 
@@ -35,19 +26,21 @@ use Tulia\Component\Templating\ViewInterface;
  */
 class User extends AbstractController
 {
-    protected FinderFactoryInterface $finderFactory;
-    protected UserStorage $storage;
+    private FinderFactoryInterface $finderFactory;
     private ContentFormService $contentFormService;
     private UserRepositoryInterface $repository;
+    private SymfonyFieldBuilder $fieldBuilder;
 
     public function __construct(
         FinderFactoryInterface $finderFactory,
         ContentFormService $contentFormService,
-        UserRepositoryInterface $repository
+        UserRepositoryInterface $repository,
+        SymfonyFieldBuilder $fieldBuilder
     ) {
         $this->finderFactory = $finderFactory;
         $this->contentFormService = $contentFormService;
         $this->repository = $repository;
+        $this->fieldBuilder = $fieldBuilder;
     }
 
     public function index(): RedirectResponse
@@ -72,7 +65,8 @@ class User extends AbstractController
      */
     public function create(Request $request, CreateUser $createUser)
     {
-        $formDescriptor = $this->produceFormDescriptor($request);
+        $formDescriptor = $this->produceFormDescriptor();
+        $formDescriptor->handleRequest($request);
 
         if ($formDescriptor->isFormValid()) {
             $userId = ($createUser)($formDescriptor->getData());
@@ -89,7 +83,7 @@ class User extends AbstractController
     /**
      * @CsrfToken(id="content_builder_form_user")
      */
-    public function edit(Request $request, string $id)
+    public function edit(Request $request, string $id, UpdateUser $updateUser)
     {
         $user = $this->repository->find($id);
 
@@ -98,14 +92,14 @@ class User extends AbstractController
             return $this->redirectToRoute('backend.user.list');
         }
 
-        $formDescriptor = $this->produceFormDescriptor($request, $user);
+        $formDescriptor = $this->produceFormDescriptor($user);
+        $formDescriptor->handleRequest($request);
 
         if ($formDescriptor->isFormValid()) {
-            dump($formDescriptor->getData());exit;
-            //$userId = ($createUser)($formDescriptor->getData());
+            ($updateUser)($user, $formDescriptor->getData());
 
             $this->setFlash('success', $this->trans('userSaved', [], 'users'));
-            return $this->redirectToRoute('backend.user.edit', [ 'id' => $userId ]);
+            return $this->redirectToRoute('backend.user.edit', [ 'id' => $id ]);
         }
 
         return $this->view('@backend/user/user/edit.tpl', [
@@ -114,32 +108,20 @@ class User extends AbstractController
     }
 
     /**
-     * @param Request $request
-     *
-     * @return RedirectResponse
-     *
-     * @throws MissingHandlerException
-     *
      * @CsrfToken(id="user.delete")
      */
     public function delete(Request $request): RedirectResponse
     {
         $removedUsers = 0;
 
-        throw new \Exception('Remove user avatar when delete user.');
+        // @todo Remove user avatar when delete user
 
         foreach ($request->request->get('ids') as $id) {
-            try {
-                $user = $this->getUserById($id);
-            } catch (NotFoundHttpException $e) {
-                continue;
-            }
+            $user = $this->repository->find($id);
 
-            try {
+            if ($user) {
                 $this->repository->delete($user);
                 $removedUsers++;
-            } catch (TranslatableUserException $e) {
-                $this->setFlash('warning', $this->transObject($e));
             }
         }
 
@@ -150,39 +132,30 @@ class User extends AbstractController
         return $this->redirectToRoute('backend.user');
     }
 
-    /**
-     * @param string $id
-     *
-     * @return QueryModelUser
-     *
-     * @throws MultipleFetchException
-     * @throws NotFoundHttpException
-     * @throws QueryException
-     * @throws QueryNotFetchedException
-     */
-    private function getUserById(string $id): QueryModelUser
+    private function produceFormDescriptor(?DomainModel $user = null): ContentTypeFormDescriptor
     {
-        $finder = $this->finderFactory->getInstance(ScopeEnum::BACKEND_SINGLE);
-        $finder->setCriteria(['id' => $id]);
-        $finder->fetchRaw();
+        $context = [
+            'user_email' => $user === null ? null : $user->getEmail()
+        ];
 
-        $user = $finder->getResult()->first();
-
-        if (! $user) {
-            throw $this->createNotFoundException($this->trans('userNotFound', [], 'users'));
-        }
-
-        return $user;
-    }
-
-    private function produceFormDescriptor(Request $request, ?DomainModel $user = null): ContentTypeFormDescriptor
-    {
-        $data = [];
+        $descriptor = $this->contentFormService->buildFormDescriptor(
+            'user',
+            $user ? $user->toArray() : [],
+            $context
+        );
 
         if ($user) {
-            $data = $user->toArray();
+            $passwordField = $descriptor->getContentType()->getField('password');
+            $passwordField->removeConstraint('required');
+            $passwordRepeatField = $descriptor->getContentType()->getField('password_repeat');
+            $passwordRepeatField->removeConstraint('required');
+
+            $descriptor->getFormBuilder()->remove('email');
+
+            $this->fieldBuilder->buildFieldAndAddToBuilder($passwordField, $descriptor->getFormBuilder(), $descriptor->getContentType());
+            $this->fieldBuilder->buildFieldAndAddToBuilder($passwordRepeatField, $descriptor->getFormBuilder(), $descriptor->getContentType());
         }
 
-        return $this->contentFormService->buildFormDescriptor('user', $data, $request);
+        return $descriptor;
     }
 }

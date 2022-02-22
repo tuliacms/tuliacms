@@ -4,7 +4,14 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col">
-                        {{ form_row(form.email, { attr: { autocomplete: 'off' } }) }}
+                        {% if form.email is defined %}
+                            {{ form_row(form.email, { attr: { autocomplete: 'off' } }) }}
+                        {% else %}
+                            <div class="mb-3">
+                                <label class="form-label">{{ 'email'|trans }}</label>
+                                <input type="text" disabled="disabled" class="form-control" value="{{ context.user_email }}" />
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>

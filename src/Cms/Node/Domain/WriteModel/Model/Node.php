@@ -70,19 +70,19 @@ class Node extends AggregateRoot
         return $self;
     }
 
-    public static function buildFromArray(string $nodeType, array $data): self
+    public static function fromArray(array $data): self
     {
         $self = new self(
             $data['id'],
-            $nodeType,
+            $data['type'],
             $data['website_id'],
             $data['locale']
         );
         $self->status = $data['status'] ?? 'published';
-        $self->createdAt = $data['created_at'] ?? new ImmutableDateTime();
-        $self->updatedAt = $data['updated_at'] ?? null;
-        $self->publishedAt = $data['published_at'] ?? new ImmutableDateTime();
-        $self->publishedTo = $data['published_to'] ?? null;
+        $self->createdAt = new ImmutableDateTime($data['created_at']);
+        $self->updatedAt = $data['updated_at'] ? new ImmutableDateTime($data['updated_at']) : null;
+        $self->publishedAt = new ImmutableDateTime($data['published_at']);
+        $self->publishedTo = $data['published_to'] ? new ImmutableDateTime($data['published_to']) : null;
         $self->authorId = $data['author_id'] ?? null;
         $self->parentId = $data['parent_id'] ?? null;
         $self->title = $data['title'] ?? '';
@@ -93,6 +93,28 @@ class Node extends AggregateRoot
         $self->attributes = $data['attributes'];
 
         return $self;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'id'            => $this->getId()->getValue(),
+            'type'          => $this->getType(),
+            'website_id'    => $this->getWebsiteId(),
+            'published_at'  => $this->getPublishedAt(),
+            'published_to'  => $this->getPublishedTo(),
+            'created_at'    => $this->getCreatedAt(),
+            'updated_at'    => $this->getUpdatedAt(),
+            'status'        => $this->getStatus(),
+            'author_id'     => $this->getAuthorId(),
+            'category_id'   => $this->getCategoryId(),
+            'level'         => $this->getLevel(),
+            'parent_id'     => $this->getParentId(),
+            'locale'        => $this->getLocale(),
+            'title'         => $this->getTitle(),
+            'slug'          => $this->getSlug(),
+            'attributes'    => $this->attributes,
+        ];
     }
 
     public function getId(): NodeId

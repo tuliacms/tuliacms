@@ -90,7 +90,8 @@ class Node extends AbstractController
 
         $node = $this->repository->createNew($node_type);
 
-        $formDescriptor = $this->produceFormDescriptor($node, $request);
+        $formDescriptor = $this->produceFormDescriptor($node);
+        $formDescriptor->handleRequest($request);
         $nodeType = $formDescriptor->getContentType();
 
         if ($formDescriptor->isFormValid()) {
@@ -130,7 +131,8 @@ class Node extends AbstractController
             return $this->redirectToRoute('backend.node.list');
         }
 
-        $formDescriptor = $this->produceFormDescriptor($node, $request);
+        $formDescriptor = $this->produceFormDescriptor($node);
+        $formDescriptor->handleRequest($request);
         $form = $formDescriptor->getForm();
         $nodeType = $formDescriptor->getContentType();
 
@@ -241,23 +243,11 @@ class Node extends AbstractController
         return $result;
     }
 
-    private function produceFormDescriptor(WriteModelNode $node, Request $request): ContentTypeFormDescriptor
+    private function produceFormDescriptor(WriteModelNode $node): ContentTypeFormDescriptor
     {
         return $this->contentFormService->buildFormDescriptor(
             $node->getType(),
-            array_merge(
-                [
-                    'title' => $node->getTitle(),
-                    'slug' => $node->getSlug(),
-                    'published_at' => $node->getPublishedAt(),
-                    'published_to' => $node->getPublishedTo(),
-                    'parent_id' => $node->getParentId(),
-                    'status' => $node->getStatus(),
-                    'author_id' => $node->getAuthorId(),
-                ],
-                $node->getAttributes()
-            ),
-            $request
+            $node->toArray()
         );
     }
 

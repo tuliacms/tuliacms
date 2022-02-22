@@ -67,7 +67,7 @@ class DbalPersister
 
         // Update password only if exists. Empty password means user don't want to update
         // and user cannot have empty passwords.
-        if ($user['password']) {
+        if (isset($user['password']) && $user['password']) {
             $mainTable['password'] = $user['password'];
         }
 

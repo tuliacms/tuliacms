@@ -77,7 +77,7 @@ class DatatableFinder extends AbstractDatatableFinder
     public function prepareQueryBuilder(QueryBuilder $queryBuilder): QueryBuilder
     {
         $queryBuilder
-            ->select('tm.email, ual.value AS name')
+            ->select('tm.email, COALESCE(ua.value, ual.value, "") AS name')
             ->from('#__user', 'tm')
             ->leftJoin('tm', '#__user_attribute', 'ua', "ua.owner_id = tm.id AND ua.name = 'name'")
             ->leftJoin('ua', '#__user_attribute_lang', 'ual', 'ua.id = ual.attribute_id')

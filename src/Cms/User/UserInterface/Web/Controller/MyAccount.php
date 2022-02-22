@@ -33,12 +33,10 @@ class MyAccount extends AbstractController
 
     public function __construct(
         AuthenticatedUserProviderInterface $authenticatedUserProvider,
-        FinderFactoryInterface $finderFactory,
-        UserStorage $userStorage
+        FinderFactoryInterface $finderFactory
     ) {
         $this->authenticatedUserProvider = $authenticatedUserProvider;
         $this->finderFactory  = $finderFactory;
-        $this->userStorage = $userStorage;
     }
 
     public function me(): ViewInterface
