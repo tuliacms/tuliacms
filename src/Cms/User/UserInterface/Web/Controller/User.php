@@ -13,6 +13,7 @@ use Tulia\Cms\ContentBuilder\UserInterface\Web\Service\SymfonyFieldBuilder;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Cms\User\Application\UseCase\CreateUser;
+use Tulia\Cms\User\Application\UseCase\RemoveUser;
 use Tulia\Cms\User\Application\UseCase\UpdateUser;
 use Tulia\Cms\User\Domain\WriteModel\Model\User as DomainModel;
 use Tulia\Cms\User\Domain\WriteModel\UserRepositoryInterface;
@@ -110,17 +111,15 @@ class User extends AbstractController
     /**
      * @CsrfToken(id="user.delete")
      */
-    public function delete(Request $request): RedirectResponse
+    public function delete(Request $request, RemoveUser $removeUser): RedirectResponse
     {
         $removedUsers = 0;
-
-        // @todo Remove user avatar when delete user
 
         foreach ($request->request->get('ids') as $id) {
             $user = $this->repository->find($id);
 
             if ($user) {
-                $this->repository->delete($user);
+                ($removeUser)($user);
                 $removedUsers++;
             }
         }

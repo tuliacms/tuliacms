@@ -41,6 +41,9 @@ trait MagickAttributesTrait
         return method_exists($this, $name) || isset($this->attributes[$name]);
     }
 
+    /**
+     * @return Attribute|null
+     */
     public function attribute(string $name, $default = null)
     {
         return $this->attributes[$name] ?? $default;

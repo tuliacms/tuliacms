@@ -83,6 +83,7 @@ class User extends AggregateRoot implements AttributesAwareInterface
             'credentialsExpired' => $this->credentialsExpired,
             'accountLocked' => $this->accountLocked,
             'roles' => $this->roles,
+            'password' => $this->password,
             'attributes' => $this->attributes,
         ];
     }
