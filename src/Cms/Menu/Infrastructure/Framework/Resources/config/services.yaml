@@ -37,3 +37,13 @@ services:
 
     Tulia\Cms\Menu\Domain\Builder\Identity\Providers\UrlProvider:
         tags: [ menu.identity_provider ]
+
+    Tulia\Cms\Menu\Domain\Builder\HtmlBuilder\HtmlBuilderInterface:
+        class: Tulia\Cms\Menu\Infrastructure\Builder\HtmlBuilder\CachedHtmlBuilder
+        arguments:
+            - '@Tulia\Cms\Menu\Domain\Builder\HtmlBuilder\HtmlBuilder'
+
+    Tulia\Cms\Menu\Domain\Builder\Hierarchy\HierarchyBuilderInterface:
+        class: Tulia\Cms\Menu\Infrastructure\Builder\Hierarchy\CachedHierarchyBuilder
+        arguments:
+            - '@Tulia\Cms\Menu\Domain\Builder\Hierarchy\HierarchyBuilder'

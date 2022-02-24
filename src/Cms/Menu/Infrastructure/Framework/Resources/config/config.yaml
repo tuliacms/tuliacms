@@ -5,3 +5,10 @@ framework:
     templating:
         paths:
             - { name: backend/menu, path: '%kernel.project_dir%/src/Cms/Menu/Infrastructure/Framework/Resources/views/backend' }
+    cache:
+        pools:
+            menu.cache:
+                adapter: '%tulia.cache.adapter%'
+                provider: '%tulia.cache.provider%'
+                default_lifetime: 86400
+                tags: true

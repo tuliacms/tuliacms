@@ -21,7 +21,7 @@ class Connection extends DoctrineConnection implements ConnectionInterface
      * {@inheritdoc}
      */
     public function executeQuery(
-        string $sql,
+        $sql,
         array $params = [],
         $types = [],
         ?QueryCacheProfile $qcp = null
@@ -34,7 +34,7 @@ class Connection extends DoctrineConnection implements ConnectionInterface
     /**
      * {@inheritdoc}
      */
-    public function executeUpdate(string $sql, array $params = [], array $types = []): int
+    public function executeUpdate($sql, array $params = [], array $types = []): int
     {
         $sql = $this->prepareTablePrefix($sql);
 
@@ -44,7 +44,7 @@ class Connection extends DoctrineConnection implements ConnectionInterface
     /**
      * {@inheritdoc}
      */
-    public function query(string $sql): Result
+    public function query(): Result
     {
         $args = func_get_args();
         $args[0] = $this->prepareTablePrefix($args[0]);
@@ -55,7 +55,7 @@ class Connection extends DoctrineConnection implements ConnectionInterface
     /**
      * {@inheritdoc}
      */
-    public function exec(string $sql): int
+    public function exec($sql): int
     {
         return parent::exec($this->prepareTablePrefix($sql));
     }
@@ -71,7 +71,7 @@ class Connection extends DoctrineConnection implements ConnectionInterface
     /**
      * {@inheritdoc}
      */
-    public function prepare(string $sql): Statement
+    public function prepare($sql): Statement
     {
         $sql = $this->prepareTablePrefix($sql);
 

@@ -72,7 +72,7 @@ class Item implements AttributesAwareInterface
         $item->locale = $data['locale'];
         $item->translated = (bool) ($data['translated'] ?? false);
         $item->visibility = (bool) ($data['visibility'] ?? 1);
-        $item->replaceAttributes($data['metadata'] ?? []);
+        $item->attributes = $data['metadata'] ?? [];
 
         return $item;
     }

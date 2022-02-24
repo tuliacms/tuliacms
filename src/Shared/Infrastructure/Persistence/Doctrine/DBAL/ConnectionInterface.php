@@ -35,7 +35,7 @@ interface ConnectionInterface
      * @return mixed
      */
     public function executeQuery(
-        string $sql,
+        $sql,
         array $params = [],
         $types = [],
         ?QueryCacheProfile $qcp = null
@@ -43,11 +43,11 @@ interface ConnectionInterface
 
     public function executeUpdate(string $sql, array $params = [], array $types = []): int;
 
-    public function query(string $sql): Result;
+    public function query(): Result;
 
-    public function exec(string $sql): int;
+    public function exec($sql): int;
 
-    public function prepare(string $sql): Statement;
+    public function prepare($sql): Statement;
 
     /**
      * @param $tableExpression
