@@ -22,9 +22,17 @@ class PasswordForm extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('password', Type\RepeatedType::class, [
+            ->add('current_password', Type\PasswordType::class, [
+                'label' => 'currentPassword',
+                'help' => 'currentPasswordHelpText',
+                'translation_domain' => 'users',
+                'required' => true,
+                'constraints' => [
+                    new Assert\NotBlank(),
+                ],
+            ])
+            ->add('new_password', Type\RepeatedType::class, [
                 'type' => Type\PasswordType::class,
-                'invalid_message' => 'The password fields must match.',
                 'required' => true,
                 'constraints' => [
                     new Assert\NotBlank(),
@@ -39,7 +47,10 @@ class PasswordForm extends AbstractType
                     'attr' => ['autocomplete' => 'off'],
                 ],
             ])
-            ->add('save', FormType\SubmitType::class)
+            ->add('save', FormType\SubmitType::class, [
+                'label' => 'saveNewPassword',
+                'translation_domain' => 'users',
+            ])
         ;
     }
 }

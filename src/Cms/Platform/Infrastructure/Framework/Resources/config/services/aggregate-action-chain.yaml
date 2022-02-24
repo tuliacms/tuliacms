@@ -1,0 +1,4 @@
+services:
+    Tulia\Cms\Shared\Domain\WriteModel\ActionsChain\AggregateActionsChainInterface:
+        class: Tulia\Cms\Shared\Domain\WriteModel\ActionsChain\AggregateActionsChain
+        autowire: true

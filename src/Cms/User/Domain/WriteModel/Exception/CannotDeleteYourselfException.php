@@ -7,7 +7,6 @@ namespace Tulia\Cms\User\Domain\WriteModel\Exception;
 /**
  * @author Adam Banaszkiewicz
  */
-abstract class DomainException extends \Exception
+class CannotDeleteYourselfException extends DomainException
 {
-
 }

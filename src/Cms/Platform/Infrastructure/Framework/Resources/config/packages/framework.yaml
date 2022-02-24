@@ -9,6 +9,9 @@ framework:
         use_cookies: true
     php_errors:
         log: true
+    cache:
+        directory: '%kernel.cache_dir%/pools'
+        default_pdo_provider: 'doctrine.dbal.default_connection'
     translator:
         default_path: '%kernel.project_dir%/src/Cms/Platform/Infrastructure/Framework/Resources/translations'
     templating:
@@ -180,6 +183,3 @@ framework:
                 collection: tulia-dynamic-form
                 priority: 1000
                 group: head
-    cache:
-        directory: '%kernel.cache_dir%/pools'
-        default_pdo_provider: 'doctrine.dbal.default_connection'

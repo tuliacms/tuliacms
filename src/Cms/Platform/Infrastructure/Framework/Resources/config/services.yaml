@@ -1,4 +1,5 @@
 imports:
+    - { resource: services/aggregate-action-chain.yaml }
     - { resource: services/assetter.yaml }
     - { resource: services/bus.yaml }
     - { resource: services/database.yaml }

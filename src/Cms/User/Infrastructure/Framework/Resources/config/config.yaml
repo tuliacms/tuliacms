@@ -50,6 +50,10 @@ cms:
                 layout_builder: 'Tulia\Cms\User\Infrastructure\Presentation\TwigUserContentTypeLayoutBuilder'
                 multilingual: false
                 configurable: false
+            my_account:
+                layout_builder: 'Tulia\Cms\User\Infrastructure\Presentation\TwigMyAccountContentTypeLayoutBuilder'
+                multilingual: false
+                configurable: false
         content_type_entry:
             user:
                 type: user
@@ -119,3 +123,30 @@ cms:
                                         locale:
                                             type: locale
                                             name: Locale
+            my_account:
+                type: my_account
+                name: My account
+                icon: null
+                controller: null
+                is_routable: false
+                is_hierarchical: false
+                routing_strategy: null
+                layout:
+                    sections:
+                        main:
+                            groups:
+                                main:
+                                    name: My account
+                                    fields:
+                                        name:
+                                            type: text
+                                            name: Name
+                                        locale:
+                                            type: locale
+                                            name: Locale
+                                        avatar:
+                                            type: user_avatar
+                                            name: null
+                                        remove_avatar:
+                                            type: user_remove_avatar
+                                            name: Remove avatar

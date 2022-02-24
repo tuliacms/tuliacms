@@ -5,29 +5,32 @@ declare(strict_types=1);
 namespace Tulia\Cms\User\Application\Service;
 
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Tulia\Cms\User\Query\FinderFactoryInterface;
-use Tulia\Cms\User\Query\Enum\ScopeEnum;
-use Tulia\Cms\User\Query\Model\User;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Tulia\Cms\Security\Framework\Security\Core\User\User as CoreUser;
+use Tulia\Cms\User\Domain\ReadModel\Finder\UserFinderInterface;
+use Tulia\Cms\User\Domain\ReadModel\Finder\UserFinderScopeEnum;
+use Tulia\Cms\User\Domain\ReadModel\Model\User;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class AuthenticatedUserProvider implements AuthenticatedUserProviderInterface
 {
-    protected TokenStorageInterface $tokenStorage;
-    protected FinderFactoryInterface $finderFactory;
-    protected ?User $user = null;
+    private TokenStorageInterface $tokenStorage;
+    private ?User $user = null;
+    private UserFinderInterface $userFinder;
+    private UserPasswordHasherInterface $passwordHasher;
 
-    public function __construct(TokenStorageInterface $tokenStorage, FinderFactoryInterface $finderFactory)
-    {
+    public function __construct(
+        TokenStorageInterface $tokenStorage,
+        UserFinderInterface $userFinder,
+        UserPasswordHasherInterface $passwordHasher
+    ) {
         $this->tokenStorage = $tokenStorage;
-        $this->finderFactory = $finderFactory;
+        $this->userFinder = $userFinder;
+        $this->passwordHasher = $passwordHasher;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getUser(): User
     {
         $token = $this->tokenStorage->getToken();
@@ -39,7 +42,7 @@ class AuthenticatedUserProvider implements AuthenticatedUserProviderInterface
                 return $this->user;
             }
 
-            $user = $this->finderFactory->getInstance(ScopeEnum::INTERNAL)->findByEmail($token->getUsername());
+            $user = $this->userFinder->findOne(['email' => $token->getUsername()], UserFinderScopeEnum::INTERNAL);
         }
 
         if (! $user) {
@@ -49,11 +52,16 @@ class AuthenticatedUserProvider implements AuthenticatedUserProviderInterface
         return $this->user = $user;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDefaultUser(): User
     {
         return new User();
+    }
+
+    public function isPasswordValid(string $plaintextPassword): bool
+    {
+        $user = $this->getUser();
+        $coreUser = new CoreUser($user->getEmail(), $user->getPassword(), $user->getRoles());
+
+        return $this->passwordHasher->isPasswordValid($coreUser, $plaintextPassword);
     }
 }

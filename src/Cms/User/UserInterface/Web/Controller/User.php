@@ -13,12 +13,12 @@ use Tulia\Cms\ContentBuilder\UserInterface\Web\Service\SymfonyFieldBuilder;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Cms\User\Application\UseCase\CreateUser;
-use Tulia\Cms\User\Application\UseCase\RemoveUser;
+use Tulia\Cms\User\Application\UseCase\DeleteUser;
 use Tulia\Cms\User\Application\UseCase\UpdateUser;
+use Tulia\Cms\User\Domain\WriteModel\Exception\CannotDeleteYourselfException;
 use Tulia\Cms\User\Domain\WriteModel\Model\User as DomainModel;
 use Tulia\Cms\User\Domain\WriteModel\UserRepositoryInterface;
-use Tulia\Cms\User\Infrastructure\Persistence\Query\DatatableFinder;
-use Tulia\Cms\User\Query\FinderFactoryInterface;
+use Tulia\Cms\User\Infrastructure\Persistence\Dbal\ReadModel\DbalDatatableFinder;
 use Tulia\Component\Datatable\DatatableFactory;
 use Tulia\Component\Templating\ViewInterface;
 
@@ -27,18 +27,15 @@ use Tulia\Component\Templating\ViewInterface;
  */
 class User extends AbstractController
 {
-    private FinderFactoryInterface $finderFactory;
     private ContentFormService $contentFormService;
     private UserRepositoryInterface $repository;
     private SymfonyFieldBuilder $fieldBuilder;
 
     public function __construct(
-        FinderFactoryInterface $finderFactory,
         ContentFormService $contentFormService,
         UserRepositoryInterface $repository,
         SymfonyFieldBuilder $fieldBuilder
     ) {
-        $this->finderFactory = $finderFactory;
         $this->contentFormService = $contentFormService;
         $this->repository = $repository;
         $this->fieldBuilder = $fieldBuilder;
@@ -49,14 +46,14 @@ class User extends AbstractController
         return $this->redirectToRoute('backend.user.list');
     }
 
-    public function list(Request $request, DatatableFactory $factory, DatatableFinder $finder): ViewInterface
+    public function list(Request $request, DatatableFactory $factory, DbalDatatableFinder $finder): ViewInterface
     {
         return $this->view('@backend/user/user/list.tpl', [
             'datatable' => $factory->create($finder, $request),
         ]);
     }
 
-    public function datatable(Request $request, DatatableFactory $factory, DatatableFinder $finder): JsonResponse
+    public function datatable(Request $request, DatatableFactory $factory, DbalDatatableFinder $finder): JsonResponse
     {
         return $factory->create($finder, $request)->generateResponse();
     }
@@ -111,7 +108,7 @@ class User extends AbstractController
     /**
      * @CsrfToken(id="user.delete")
      */
-    public function delete(Request $request, RemoveUser $removeUser): RedirectResponse
+    public function delete(Request $request, DeleteUser $removeUser): RedirectResponse
     {
         $removedUsers = 0;
 
@@ -119,8 +116,12 @@ class User extends AbstractController
             $user = $this->repository->find($id);
 
             if ($user) {
-                ($removeUser)($user);
-                $removedUsers++;
+                try {
+                    ($removeUser)($user);
+                    $removedUsers++;
+                } catch (CannotDeleteYourselfException $e) {
+                    $this->setFlash('danger', $this->trans('cannotDeleteSelfUser', [], 'users'));
+                }
             }
         }
 

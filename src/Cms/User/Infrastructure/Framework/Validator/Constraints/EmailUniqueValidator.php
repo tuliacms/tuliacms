@@ -8,19 +8,19 @@ use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use Symfony\Component\Validator\Exception\UnexpectedValueException;
-use Tulia\Cms\User\Query\Enum\ScopeEnum;
-use Tulia\Cms\User\Query\FinderFactoryInterface;
+use Tulia\Cms\User\Domain\ReadModel\Finder\UserFinderInterface;
+use Tulia\Cms\User\Domain\ReadModel\Finder\UserFinderScopeEnum;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class EmailUniqueValidator extends ConstraintValidator
 {
-    protected FinderFactoryInterface $finderFactory;
+    protected UserFinderInterface $userFinder;
 
-    public function __construct(FinderFactoryInterface $finderFactory)
+    public function __construct(UserFinderInterface $userFinder)
     {
-        $this->finderFactory = $finderFactory;
+        $this->userFinder = $userFinder;
     }
 
     /**
@@ -61,10 +61,7 @@ class EmailUniqueValidator extends ConstraintValidator
             }
         }
 
-        $finder = $this->finderFactory->getInstance(ScopeEnum::INTERNAL);
-        $finder->setCriteria($criteria);
-        $finder->fetchRaw();
-        $founded = $finder->getResult()->first();
+        $founded = $this->userFinder->findOne($criteria, UserFinderScopeEnum::INTERNAL);
 
         if ($founded) {
             $this->context->buildViolation('emailAlreadyUsedPleaseTypeAnother')

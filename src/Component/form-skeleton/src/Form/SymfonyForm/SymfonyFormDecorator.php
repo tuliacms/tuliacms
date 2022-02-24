@@ -185,12 +185,12 @@ class SymfonyFormDecorator implements FormInterface, \IteratorAggregate
     public function handleRequest($request = null)
     {
         $this->form->handleRequest($request);
-        $data = $this->form->getData();
+        /*$data = $this->form->getData();
 
-        /** @var ExtensionInterface $extension */
+        /** @var ExtensionInterface $extension *
         foreach ($this->form->getConfig()->getOption('form_type_instance')->getExtensions() as $extension) {
             //$extension->handle($this, $data);
-        }
+        }*/
 
         return $this;
     }

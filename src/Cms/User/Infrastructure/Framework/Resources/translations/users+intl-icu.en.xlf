@@ -131,6 +131,29 @@
                 <target>User not exists.</target>
                 <note>Alert message</note>
             </trans-unit>
+            <trans-unit id="tuliacms.users.33">
+                <source>passwordChangedSuccessfully</source>
+                <target>Password changed successfully.</target>
+                <note>Alert message</note>
+            </trans-unit>
+            <trans-unit id="tuliacms.users.34">
+                <source>currentPassword</source>
+                <target>Current password</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.users.35">
+                <source>currentPasswordHelpText</source>
+                <target>Enter the current password and confirm that you really are changing the password.</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.users.36">
+                <source>saveNewPassword</source>
+                <target>Save new password</target>
+                <note>Button label</note>
+            </trans-unit>
+            <trans-unit id="tuliacms.users.37">
+                <source>pleaseTypeValidCurrentPasswordToDoThisOperation</source>
+                <target>Please type a valid current password to do this operation.</target>
+                <note>Alert message</note>
+            </trans-unit>
         </body>
     </file>
 </xliff>

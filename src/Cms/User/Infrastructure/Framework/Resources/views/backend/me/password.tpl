@@ -21,10 +21,11 @@
     {{ form_errors(form) }}
     {{ form_row(form._token) }}
     <div class="form-controls-terminator">
-        {{ form_row(form.password) }}
-        <div class="alert alert-info">
+        {{ form_row(form.new_password) }}
+        <div class="alert alert-info" style="margin-bottom: 40px">
             {{ 'autoLogoutAfterPasswordChangeInfo'|trans({}, 'users') }}
         </div>
+        {{ form_row(form.current_password) }}
         {{ form_row(form.save) }}
     </div>
     {{ form_end(form) }}

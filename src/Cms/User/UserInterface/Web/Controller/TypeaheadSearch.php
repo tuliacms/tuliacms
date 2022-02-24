@@ -4,46 +4,37 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\User\UserInterface\Web\Controller;
 
-use Tulia\Cms\Platform\Infrastructure\Framework\Controller\TypeaheadFormTypeSearch;
-use Tulia\Cms\User\Infrastructure\Cms\Metadata\UserMetadataEnum;
-use Tulia\Cms\User\Query\Enum\ScopeEnum;
-use Tulia\Cms\User\Query\FinderFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Tulia\Cms\Platform\Infrastructure\Framework\Controller\TypeaheadFormTypeSearch;
+use Tulia\Cms\User\Domain\ReadModel\Finder\UserFinderInterface;
+use Tulia\Cms\User\Domain\ReadModel\Finder\UserFinderScopeEnum;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class TypeaheadSearch extends TypeaheadFormTypeSearch
 {
-    /**
-     * @var FinderFactoryInterface
-     */
-    private $finderFactory;
+    private UserFinderInterface $userFinder;
 
-    /**
-     * @param FinderFactoryInterface $finderFactory
-     */
-    public function __construct(FinderFactoryInterface $finderFactory)
+    public function __construct(UserFinderInterface $userFinder)
     {
-        $this->finderFactory = $finderFactory;
+        $this->userFinder = $userFinder;
     }
 
     protected function findCollection(Request $request): array
     {
-        $finder = $this->finderFactory->getInstance(ScopeEnum::INTERNAL);
-        $finder->setCriteria([
+        $users = $this->userFinder->find([
             'search'   => $request->query->get('q'),
             'per_page' => 10,
-        ]);
-        $finder->fetchRaw();
+        ], UserFinderScopeEnum::INTERNAL);
+
         $result = [];
 
-        foreach ($finder->getResult() as $row)
-        {
+        foreach ($users as $row) {
             $username = $row->getEmail();
 
-            if ($row->attribute(UserMetadataEnum::NAME)) {
-                $username = $row->attribute(UserMetadataEnum::NAME) . " ({$username})";
+            if ($row->attribute('name')) {
+                $username = $row->attribute('name') . " ({$username})";
             }
 
             $result[] = ['username' => $username];

@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -32,13 +30,5 @@ class SubmitType extends AbstractType
     public function getBlockPrefix(): string
     {
         return 'tulia_submit';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function buildView(FormView $view, FormInterface $form, array $options)
-    {
-        $view->vars['icon'] = $options['icon'];
     }
 }

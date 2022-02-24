@@ -224,7 +224,7 @@
 {%- endblock tulia_submit_row %}
 
 {% block tulia_submit_widget -%}
-    <a href="#" data-submit-form="{{ form.parent.vars.id }}" {{ block('widget_attributes') }}><i class="btn-icon {{ icon }}"></i> {{ label|trans(label_translation_parameters) }}</a>
+    <a href="#" data-submit-form="{{ form.parent.vars.id }}" {{ block('widget_attributes') }}><i class="btn-icon {{ icon }}"></i> {{ label|trans(label_translation_parameters, translation_domain) }}</a>
 {%- endblock tulia_submit_widget %}
 
 {% block tulia_cancel_row -%}
@@ -235,5 +235,5 @@
 {%- endblock tulia_cancel_row %}
 
 {% block tulia_cancel_widget -%}
-    <a href="{{ route ? path(route, route_params) : '#' }}" {{ block('widget_attributes') }}><i class="btn-icon {{ icon }}"></i> {{ label|trans(label_translation_parameters) }}</a>
+    <a href="{{ route ? path(route, route_params) : '#' }}" {{ block('widget_attributes') }}><i class="btn-icon {{ icon }}"></i> {{ label|trans(label_translation_parameters, translation_domain) }}</a>
 {%- endblock tulia_cancel_widget %}

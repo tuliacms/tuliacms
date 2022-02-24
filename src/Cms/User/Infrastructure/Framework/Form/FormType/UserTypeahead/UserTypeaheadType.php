@@ -7,20 +7,19 @@ namespace Tulia\Cms\User\Infrastructure\Framework\Form\FormType\UserTypeahead;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\TypeaheadType;
-use Tulia\Cms\User\Infrastructure\Cms\Metadata\UserMetadataEnum;
-use Tulia\Cms\User\Query\Enum\ScopeEnum;
-use Tulia\Cms\User\Query\FinderFactoryInterface;
+use Tulia\Cms\User\Domain\ReadModel\Finder\UserFinderInterface;
+use Tulia\Cms\User\Domain\ReadModel\Finder\UserFinderScopeEnum;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class UserTypeaheadType extends AbstractType
 {
-    protected FinderFactoryInterface $finderFactory;
+    protected UserFinderInterface $userFinder;
 
-    public function __construct(FinderFactoryInterface $finderFactory)
+    public function __construct(UserFinderInterface $userFinder)
     {
-        $this->finderFactory = $finderFactory;
+        $this->userFinder = $userFinder;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -29,7 +28,7 @@ class UserTypeaheadType extends AbstractType
             'search_route'  => 'backend.user.search.typeahead',
             'display_prop'  => 'username',
             'data_provider_single' => function (array $criteria): ?array {
-                $user = $this->finderFactory->getInstance(ScopeEnum::INTERNAL)->find($criteria['value']);
+                $user = $this->userFinder->findOne(['id' => $criteria['value']], UserFinderScopeEnum::INTERNAL);
 
                 if ($user === null) {
                     return null;
@@ -37,8 +36,8 @@ class UserTypeaheadType extends AbstractType
 
                 $username = $user->getEmail();
 
-                if ($user->attribute(UserMetadataEnum::NAME)) {
-                    $username = $user->attribute(UserMetadataEnum::NAME) . " ({$username})";
+                if ($user->attribute('name')) {
+                    $username = $user->attribute('name') . " ({$username})";
                 }
 
                 return ['username' => $username];

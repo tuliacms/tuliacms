@@ -6,19 +6,13 @@ namespace Tulia\Cms\User\UserInterface\Web\Controller;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Tulia\Cms\ContentBuilder\UserInterface\Web\Service\ContentFormService;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
-use Tulia\Cms\User\Application\Command\UserStorage;
-use Tulia\Cms\User\Application\Model\User as ApplicationUser;
 use Tulia\Cms\User\Application\Service\AuthenticatedUserProviderInterface;
-use Tulia\Cms\User\Query\Enum\ScopeEnum;
-use Tulia\Cms\User\Query\Exception\MultipleFetchException;
-use Tulia\Cms\User\Query\Exception\QueryException;
-use Tulia\Cms\User\Query\Exception\QueryNotFetchedException;
-use Tulia\Cms\User\Query\FinderFactoryInterface;
-use Tulia\Cms\User\Query\Model\User;
-use Tulia\Cms\User\UserInterface\Web\Form\MyAccount\MyAccountForm;
+use Tulia\Cms\User\Application\UseCase\ChangePassword;
+use Tulia\Cms\User\Application\UseCase\UpdateMyAccount;
+use Tulia\Cms\User\Domain\WriteModel\UserRepositoryInterface;
 use Tulia\Cms\User\UserInterface\Web\Form\PasswordForm;
 use Tulia\Component\Templating\ViewInterface;
 
@@ -27,55 +21,24 @@ use Tulia\Component\Templating\ViewInterface;
  */
 class MyAccount extends AbstractController
 {
-    protected AuthenticatedUserProviderInterface $authenticatedUserProvider;
-    protected FinderFactoryInterface $finderFactory;
-    private UserStorage $userStorage;
+    private AuthenticatedUserProviderInterface $authenticatedUserProvider;
+    private UserRepositoryInterface $userRepository;
+    private ContentFormService $contentFormService;
 
     public function __construct(
         AuthenticatedUserProviderInterface $authenticatedUserProvider,
-        FinderFactoryInterface $finderFactory
+        UserRepositoryInterface $userRepository,
+        ContentFormService $contentFormService
     ) {
         $this->authenticatedUserProvider = $authenticatedUserProvider;
-        $this->finderFactory  = $finderFactory;
+        $this->userRepository = $userRepository;
+        $this->contentFormService = $contentFormService;
     }
 
     public function me(): ViewInterface
     {
         return $this->view('@backend/user/me/me.tpl', [
             'user' => $this->authenticatedUserProvider->getUser(),
-        ]);
-    }
-
-    /**
-     * @param Request $request
-     *
-     * @return RedirectResponse|ViewInterface
-     *
-     * @throws MultipleFetchException
-     * @throws NotFoundHttpException
-     * @throws QueryException
-     * @throws QueryNotFetchedException
-     *
-     * @CsrfToken(id="my_account_form")
-     */
-    public function edit(Request $request)
-    {
-        $user = $this->getUserInstance();
-        $model = ApplicationUser::fromQueryModel($user);
-
-        $form = $this->createForm(MyAccountForm::class, $model);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->userStorage->save($form->getData());
-
-            $this->setFlash('success', $this->trans('userSaved', [], 'users'));
-            return $this->redirectToRoute('backend.me.edit');
-        }
-
-        return $this->view('@backend/user/me/edit.tpl', [
-            'user'    => $this->authenticatedUserProvider->getUser(),
-            'form'    => $form->createView(),
         ]);
     }
 
@@ -87,50 +50,68 @@ class MyAccount extends AbstractController
     }
 
     /**
+     * @param Request $request
+     * @return RedirectResponse|ViewInterface
+     * @CsrfToken(id="content_builder_form_my_account")
+     */
+    public function edit(Request $request, UpdateMyAccount $updateMyAccount)
+    {
+        $user = $this->userRepository->find($this->authenticatedUserProvider->getUser()->getId());
+
+        if (!$user) {
+            return $this->redirectToRoute('backend.homepage');
+        }
+
+        $data = $user->toArray();
+        $data['remove_avatar'] = '0';
+
+        $formDescriptor = $this->contentFormService->buildFormDescriptor('my_account', $data);
+        $formDescriptor->handleRequest($request);
+
+        if ($formDescriptor->isFormValid()) {
+            ($updateMyAccount)($user, $formDescriptor->getData());
+
+            $this->setFlash('success', $this->trans('userSaved', [], 'users'));
+            return $this->redirectToRoute('backend.me.edit');
+        }
+
+        return $this->view('@backend/user/me/edit.tpl', [
+            'user' => $this->authenticatedUserProvider->getUser(),
+            'formDescriptor' => $formDescriptor,
+        ]);
+    }
+
+    /**
      * @CsrfToken(id="password_form")
      */
-    public function password(Request $request)
+    public function password(Request $request, ChangePassword $changePassword)
     {
-        $user = $this->getUserInstance();
+        $user = $this->userRepository->find($this->authenticatedUserProvider->getUser()->getId());
+
+        if (!$user) {
+            return $this->redirectToRoute('backend.homepage');
+        }
+
         $form = $this->createForm(PasswordForm::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $model = ApplicationUser::fromQueryModel($user);
-            $model->setPassword($form->getData()['password']);
+            $data = $form->getData();
 
-            $this->userStorage->save($model);
+            if ($this->authenticatedUserProvider->isPasswordValid($data['current_password']) === false) {
+                $this->setFlash('danger', $this->trans('pleaseTypeValidCurrentPasswordToDoThisOperation', [], 'users'));
+                return $this->redirectToRoute('backend.me.password');
+            }
 
-            $this->setFlash('success', $this->trans('userSaved', [], 'users'));
-            return $this->redirectToRoute('backend.me.password');
+            ($changePassword)($user, $data['new_password']);
+
+            $this->setFlash('danger', $this->trans('passwordChangedSuccessfully', [], 'users'));
+            return $this->redirectToRoute('backend.logout');
         }
 
         return $this->view('@backend/user/me/password.tpl', [
             'user' => $this->authenticatedUserProvider->getUser(),
             'form' => $form->createView(),
         ]);
-    }
-
-    /**
-     * @return User
-     *
-     * @throws MultipleFetchException
-     * @throws NotFoundHttpException
-     * @throws QueryException
-     * @throws QueryNotFetchedException
-     */
-    private function getUserInstance(): User
-    {
-        $finder = $this->finderFactory->getInstance(ScopeEnum::BACKEND_SINGLE);
-        $finder->setCriteria(['id' => $this->authenticatedUserProvider->getUser()->getId()]);
-        $finder->fetchRaw();
-
-        $user = $finder->getResult()->first();
-
-        if (! $user) {
-            throw $this->createNotFoundException($this->trans('userNotFound', [], 'users'));
-        }
-
-        return $user;
     }
 }

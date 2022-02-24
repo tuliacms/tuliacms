@@ -8,7 +8,7 @@ use Tulia\Cms\ContentBuilder\Domain\ReadModel\FieldTypeBuilder\FieldTypeBuilderI
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\ContentType;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\Field;
 use Tulia\Cms\User\Application\Service\AuthenticatedUserProviderInterface;
-use Tulia\Cms\User\Query\Model\User;
+use Tulia\Cms\User\Domain\ReadModel\Model\User;
 
 /**
  * @author Adam Banaszkiewicz

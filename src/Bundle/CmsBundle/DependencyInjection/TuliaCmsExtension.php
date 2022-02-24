@@ -75,8 +75,6 @@ class TuliaCmsExtension extends Extension
             ->addTag('menu.builder.type_registrator');
 
         // Nodes
-        $container->registerForAutoconfiguration(\Tulia\Cms\Node\Domain\WriteModel\ActionsChain\NodeActionInterface::class)
-            ->addTag('node.action_chain');
         $container->registerForAutoconfiguration(\Tulia\Cms\Node\Domain\NodeFlag\NodeFlagProviderInterface::class)
             ->addTag('node.flag_provider');
 
@@ -105,6 +103,10 @@ class TuliaCmsExtension extends Extension
         // Shortcode
         $container->registerForAutoconfiguration(\Tulia\Component\Shortcode\Compiler\ShortcodeCompilerInterface::class)
             ->addTag('shortcode.compiler');
+
+        // Common
+        $container->registerForAutoconfiguration(\Tulia\Cms\Shared\Domain\WriteModel\ActionsChain\AggregateActionInterface::class)
+            ->addTag('cms.domain.action_chain');
     }
 
     protected function validateOptionsValues(array $definitions): array

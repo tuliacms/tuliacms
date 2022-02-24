@@ -7,12 +7,12 @@ namespace Tulia\Cms\Node\Domain\WriteModel;
 use Tulia\Cms\Attributes\Domain\WriteModel\AttributesRepository;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\ContentBuilder\Domain\WriteModel\Exception\ContentTypeNotExistsException;
-use Tulia\Cms\Node\Domain\WriteModel\ActionsChain\NodeActionsChainInterface;
 use Tulia\Cms\Node\Domain\WriteModel\Event\NodeDeleted;
 use Tulia\Cms\Node\Domain\WriteModel\Event\NodeUpdated;
 use Tulia\Cms\Node\Domain\WriteModel\Exception\NodeNotFoundException;
 use Tulia\Cms\Node\Domain\WriteModel\Model\Node;
 use Tulia\Cms\Node\Domain\WriteModel\Service\NodeWriteStorageInterface;
+use Tulia\Cms\Shared\Domain\WriteModel\ActionsChain\AggregateActionsChainInterface;
 use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
 use Tulia\Cms\Shared\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
@@ -27,7 +27,7 @@ class NodeRepository
     private AttributesRepository $attributeRepository;
     private UuidGeneratorInterface $uuidGenerator;
     private EventBusInterface $eventBus;
-    private NodeActionsChainInterface $actionsChain;
+    private AggregateActionsChainInterface $actionsChain;
     private ContentTypeRegistryInterface $contentTypeRegistry;
 
     public function __construct(
@@ -36,7 +36,7 @@ class NodeRepository
         AttributesRepository $attributeRepository,
         UuidGeneratorInterface $uuidGenerator,
         EventBusInterface $eventBus,
-        NodeActionsChainInterface $actionsChain,
+        AggregateActionsChainInterface $actionsChain,
         ContentTypeRegistryInterface $contentTypeRegistry
     ) {
         $this->storage = $storage;

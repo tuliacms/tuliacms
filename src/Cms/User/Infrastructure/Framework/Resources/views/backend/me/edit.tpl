@@ -12,17 +12,8 @@
 {% endblock %}
 
 {% block mainContent %}
-    {{ form_start(form) }}
-    {{ form_errors(form) }}
-    {{ form_row(form._token) }}
-    {{ form_row(form.id) }}
-    {% set save = form_row(form.save) %}
-
-    {{ form_skeleton_render(form, 'default', {
-        active_first: ['_FIRST_'],
-    }) }}
-    <div class="my-5"></div>
-    {{ save|raw }}
-
-    {{ form_end(form) }}
+    <div class="form-controls-terminator">
+        {{ render_content_builder_form_layout(formDescriptor) }}
+        {{ form_row(formDescriptor.formView.save) }}
+    </div>
 {% endblock %}
