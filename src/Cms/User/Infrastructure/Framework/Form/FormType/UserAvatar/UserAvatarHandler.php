@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\User\Infrastructure\Framework\Form\FormType;
+namespace Tulia\Cms\User\Infrastructure\Framework\Form\FormType\UserAvatar;
 
-use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\FieldTypeHandler\FieldTypeHandlerInterface;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\Field;
 use Tulia\Cms\User\Application\Service\Avatar\UploaderInterface;
 
 /**
@@ -22,23 +22,17 @@ class UserAvatarHandler implements FieldTypeHandlerInterface
         $this->uploader = $uploader;
     }
 
-    public function prepareValueToForm($value)
+    public function prepareValueToForm(Field $field, $value)
     {
-        if ($value) {
+        if ($value && $this->uploader->avatarExists($value)) {
             $this->oldAvatar = $value;
-
-            if ($this->uploader->avatarExists($value)) {
-                return new File($this->uploader->getFilepath($value));
-            } else {
-                $this->oldAvatar = null;
-                return null;
-            }
+            return new UserAvatarFile($this->uploader->getFilepath($value), true, $value);
         }
 
         return null;
     }
 
-    public function handle($value)
+    public function handle(Field $field, $value)
     {
         if ($value instanceof UploadedFile) {
             try {
@@ -54,6 +48,6 @@ class UserAvatarHandler implements FieldTypeHandlerInterface
             return $newAvatar;
         }
 
-        return null;
+        return $this->oldAvatar;
     }
 }

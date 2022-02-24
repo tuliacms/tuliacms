@@ -135,14 +135,14 @@ class User extends AbstractController
     private function produceFormDescriptor(?DomainModel $user = null): ContentTypeFormDescriptor
     {
         $context = [
-            'user_email' => $user === null ? null : $user->getEmail()
+            'user_email' => $user === null ? null : $user->getEmail(),
+            'user_avatar' => $user === null ? null : $user->avatar,
         ];
 
-        $descriptor = $this->contentFormService->buildFormDescriptor(
-            'user',
-            $user ? $user->toArray() : [],
-            $context
-        );
+        $data = $user ? $user->toArray() : [];
+        $data['remove_avatar'] = '0';
+
+        $descriptor = $this->contentFormService->buildFormDescriptor('user', $data, $context);
 
         if ($user) {
             $passwordField = $descriptor->getContentType()->getField('password');

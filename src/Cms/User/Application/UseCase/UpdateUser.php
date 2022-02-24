@@ -9,6 +9,7 @@ use Tulia\Cms\Attributes\Domain\WriteModel\Model\Attribute;
 use Tulia\Cms\Security\Framework\Security\Core\User\User as CoreUser;
 use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
 use Tulia\Cms\User\Application\Event\UserPreUpdateEvent;
+use Tulia\Cms\User\Application\Service\Avatar\UploaderInterface;
 use Tulia\Cms\User\Application\UseCase\Traits\UserAttributesTrait;
 use Tulia\Cms\User\Domain\WriteModel\Event\UserUpdated;
 use Tulia\Cms\User\Domain\WriteModel\Model\User;
@@ -24,15 +25,18 @@ class UpdateUser
     private UserRepositoryInterface $repository;
     private EventBusInterface $eventDispatcher;
     private UserPasswordHasherInterface $passwordHasher;
+    private UploaderInterface $uploader;
 
     public function __construct(
         UserRepositoryInterface $repository,
         EventBusInterface $eventDispatcher,
-        UserPasswordHasherInterface $passwordHasher
+        UserPasswordHasherInterface $passwordHasher,
+        UploaderInterface $uploader
     ) {
         $this->repository = $repository;
         $this->eventDispatcher = $eventDispatcher;
         $this->passwordHasher = $passwordHasher;
+        $this->uploader = $uploader;
     }
 
     /**
@@ -42,6 +46,10 @@ class UpdateUser
     {
         $data = $this->flattenAttributes($attributes);
         $attributes = $this->removeModelsAttributes($attributes);
+
+        if ($data['remove_avatar'] && $data['avatar']) {
+            $this->uploader->removeUploaded($data['avatar']);
+        }
 
         $user->updateAttributes($attributes);
         $user->persistRoles($data['roles']);

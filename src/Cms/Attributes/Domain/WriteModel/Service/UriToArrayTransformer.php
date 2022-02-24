@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Attributes\Domain\WriteModel\Service;
 
+use Tulia\Cms\Attributes\Domain\WriteModel\Model\Attribute;
+
 /**
  * @author Adam Banaszkiewicz
  */
@@ -15,6 +17,10 @@ class UriToArrayTransformer
 
         foreach ($attributes as $uri => $value) {
             parse_str($uri.'=v', $result);
+
+            if ($value instanceof Attribute) {
+                $value = $value->getValue();
+            }
 
             $value = $this->assignValueToMostDeepIndex($result, $value);
             $output = $this->mergeRecursive($output, $value);

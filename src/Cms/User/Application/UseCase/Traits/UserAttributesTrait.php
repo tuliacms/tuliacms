@@ -34,12 +34,14 @@ trait UserAttributesTrait
     protected function removeModelsAttributes(array $attributes): array
     {
         unset(
+            $attributes['id'],
             $attributes['password'],
             $attributes['password_repeat'],
             $attributes['email'],
             $attributes['roles'],
             $attributes['enabled'],
             $attributes['locale'],
+            $attributes['remove_avatar'],
         );
 
         return $attributes;

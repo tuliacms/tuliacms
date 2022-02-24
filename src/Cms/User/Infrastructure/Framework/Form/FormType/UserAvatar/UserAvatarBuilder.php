@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\User\Infrastructure\Framework\Form\FormType;
+namespace Tulia\Cms\User\Infrastructure\Framework\Form\FormType\UserAvatar;
 
 use Symfony\Component\Validator\Constraints as Assert;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\FieldTypeBuilder\FieldTypeBuilderInterface;

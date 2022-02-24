@@ -73,6 +73,9 @@ class Attribute implements \Stringable
      */
     public function setValue($value): void
     {
+        if ($value instanceof Attribute) {
+            dump(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS));exit;
+        }
         $this->value = $value;
     }
 

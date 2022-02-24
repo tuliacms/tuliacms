@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContentBuilder\Domain\ReadModel\FieldTypeHandler;
 
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\Field;
+
 /**
  * @author Adam Banaszkiewicz
  */
@@ -15,12 +17,12 @@ interface FieldTypeHandlerInterface
      * the Symfony\Component\HttpFoundation\File\File instance with this filepath
      * to handle it in the form field.
      */
-    public function prepareValueToForm($value);
+    public function prepareValueToForm(Field $field, $value);
 
     /**
      * Handles operation of the value, and returns the handled value.
      * Ie. You get the value from uploaded file (object of Symfony\Component\HttpFoundation\File\UploadedFile),
      * You uploads here the file, and return destination path of the uploaded file.
      */
-    public function handle($value);
+    public function handle(Field $field, $value);
 }

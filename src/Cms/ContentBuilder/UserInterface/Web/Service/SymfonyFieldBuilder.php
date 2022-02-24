@@ -62,7 +62,7 @@ class SymfonyFieldBuilder
         );
 
         if ($typeHandler) {
-            $builder->get($field->getCode())->addModelTransformer(new FieldTypeHandlerAwareDataTransformer($typeHandler));
+            $builder->get($field->getCode())->addModelTransformer(new FieldTypeHandlerAwareDataTransformer($field, $typeHandler));
         }
     }
 

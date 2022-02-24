@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\User\Infrastructure\Framework\Form\FormType;
+namespace Tulia\Cms\User\Infrastructure\Framework\Form\FormType\UserTypeahead;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Tulia\Cms\Platform\Infrastructure\Framework\Form\FormType\TypeaheadType;
 use Tulia\Cms\User\Infrastructure\Cms\Metadata\UserMetadataEnum;
-use Tulia\Cms\User\Query\FinderFactoryInterface;
 use Tulia\Cms\User\Query\Enum\ScopeEnum;
+use Tulia\Cms\User\Query\FinderFactoryInterface;
 
 /**
  * @author Adam Banaszkiewicz

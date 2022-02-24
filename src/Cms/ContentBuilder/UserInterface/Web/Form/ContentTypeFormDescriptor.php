@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContentBuilder\UserInterface\Web\Form;
 
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\HttpFoundation\Request;
+use Tulia\Cms\Attributes\Domain\WriteModel\Model\Attribute;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\FieldTypeHandler\FieldTypeHandlerInterface;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\ContentType;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\Field;
-use Tulia\Cms\Attributes\Domain\WriteModel\Model\Attribute;
 
 /**
  * @author Adam Banaszkiewicz
@@ -78,9 +78,7 @@ class ContentTypeFormDescriptor
             return $this->data;
         }
 
-        $this->handleFields(iterator_to_array($this->getForm()));
-
-        $rawData = $this->getForm()->getData();
+        $rawData = $this->handleFields(iterator_to_array($this->getForm()), $this->getForm()->getData());
 
         $this->data = $this->flattenFields($this->getFields(), $rawData);
         $this->data['id'] = $rawData['id'];
@@ -164,23 +162,23 @@ class ContentTypeFormDescriptor
     /**
      * @param FormInterface[] $fields
      */
-    private function handleFields(array $fields): void
+    private function handleFields(array $fields, array $rawData): array
     {
-        foreach ($fields as $field) {
+        foreach ($fields as $code => $field) {
             $fieldType = $field->getConfig()->getOption('content_builder_field');
             $handler = $field->getConfig()->getOption('content_builder_field_handler');
 
             if ($handler instanceof FieldTypeHandlerInterface) {
-                $value = $field->getData();
-
-                if ($value instanceof Attribute) {
-                    $value->setValue($handler->handle($fieldType, $value->getValue()));
-                } else {
-                    $field->setData($handler->handle($fieldType, $value));
-                }
+                $rawData[$code] = $handler->handle($fieldType, $rawData[$code] ?? null);
             }
 
-            $this->handleFields(iterator_to_array($field));
+            $children = iterator_to_array($field);
+
+            if ($children !== []) {
+                $this->handleFields($children, $rawData[$code] ?? []);
+            }
         }
+
+        return $rawData;
     }
 }
