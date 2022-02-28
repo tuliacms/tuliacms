@@ -39,6 +39,7 @@ class TuliaCmsExtension extends FrameworkExtension
         $container->setParameter('framework.twig.loader.array.templates', $this->prepareTwigArrayLoaderTemplates($config['twig']['loader']['array']['templates'] ?? []));
         $container->setParameter('framework.templating.paths', $this->prepareTemplatingPaths($config['templating']['paths'] ?? []));
         $container->setParameter('framework.templating.namespace_overwrite', $config['templating']['namespace_overwrite'] ?? []);
+        $container->setParameter('framework.themes.configuration', $config['theme']['configuration'] ?? []);
 
         $this->registerViewFilters($container);
 
@@ -50,12 +51,8 @@ class TuliaCmsExtension extends FrameworkExtension
         // Themes
         $container->registerForAutoconfiguration(\Tulia\Component\Theme\Resolver\ResolverInterface::class)
             ->addTag('theme.resolver');
-        $container->registerForAutoconfiguration(\Tulia\Component\Theme\Customizer\Provider\ProviderInterface::class)
-            ->addTag('theme.customizer.provider');
-        $container->registerForAutoconfiguration(\Tulia\Component\Theme\Customizer\Builder\Controls\ControlInterface::class)
+        $container->registerForAutoconfiguration(\Tulia\Component\Theme\Customizer\Builder\Rendering\Controls\ControlInterface::class)
             ->addTag('theme.customizer.control');
-        $container->registerForAutoconfiguration(\Tulia\Component\Theme\Customizer\Builder\Plugin\PluginInterface::class)
-            ->addTag('theme.customizer.builder.plugin');
         // Widgets
         $container->registerForAutoconfiguration(\Tulia\Component\Widget\WidgetInterface::class)
             ->addTag('widget');

@@ -11,18 +11,8 @@ services:
     Tulia\Component\Theme\Customizer\Builder\BuilderInterface:
         class: Tulia\Component\Theme\Customizer\Builder\Builder
 
-    Tulia\Component\Theme\Customizer\CustomizerInterface:
-        class: Tulia\Component\Theme\Customizer\Customizer
-        bind:
-            $providers: !tagged_iterator theme.customizer.provider
-
-    Tulia\Component\Theme\Customizer\Builder\Plugin\RegistryInterface:
-        class: Tulia\Component\Theme\Customizer\Builder\Plugin\Registry
-        bind:
-            $plugins: !tagged_iterator theme.customizer.builder.plugin
-
-    Tulia\Component\Theme\Customizer\Builder\Controls\RegistryInterface:
-        class: Tulia\Component\Theme\Customizer\Builder\Controls\Registry
+    Tulia\Component\Theme\Customizer\Builder\Rendering\Controls\RegistryInterface:
+        class: Tulia\Component\Theme\Customizer\Builder\Rendering\Controls\Registry
         bind:
             $controls: !tagged_iterator theme.customizer.control
 

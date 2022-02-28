@@ -11,10 +11,6 @@ use Tulia\Component\Theme\Customizer\Changeset\ChangesetInterface;
  */
 class ChangesetFieldsDefinitionControlsTransformer
 {
-    /**
-     * @param ChangesetInterface $changeset
-     * @param iterable $controls
-     */
     public function transform(ChangesetInterface $changeset, iterable $controls): void
     {
         foreach ($controls as $control) {

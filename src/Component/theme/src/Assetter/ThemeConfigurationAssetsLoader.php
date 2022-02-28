@@ -14,20 +14,9 @@ use Tulia\Component\Theme\ManagerInterface;
  */
 class ThemeConfigurationAssetsLoader
 {
-    /**
-     * @var ManagerInterface
-     */
-    protected $manager;
+    private ManagerInterface $manager;
+    private AssetterInterface $assetter;
 
-    /**
-     * @var AssetterInterface
-     */
-    protected $assetter;
-
-    /**
-     * @param ManagerInterface $manager
-     * @param AssetterInterface $assetter
-     */
     public function __construct(ManagerInterface $manager, AssetterInterface $assetter)
     {
         $this->manager  = $manager;
@@ -52,8 +41,6 @@ class ThemeConfigurationAssetsLoader
     }
 
     /**
-     * @param ThemeInterface $theme
-     *
      * @throws MissingAssetException
      */
     private function loadAssets(ThemeInterface $theme): void

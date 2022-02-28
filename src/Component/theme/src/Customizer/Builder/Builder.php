@@ -4,78 +4,37 @@ declare(strict_types=1);
 
 namespace Tulia\Component\Theme\Customizer\Builder;
 
-use Tulia\Component\Theme\Customizer\Builder\Controls\RegistryInterface as ControlsRegistry;
-use Tulia\Component\Theme\Customizer\Builder\Plugin\RegistryInterface;
+use Tulia\Component\Theme\Customizer\Builder\Rendering\CustomizerView;
+use Tulia\Component\Theme\Customizer\Builder\Rendering\SectionRendererInterface;
+use Tulia\Component\Theme\Customizer\Builder\Structure\StructureRegistry;
 use Tulia\Component\Theme\Customizer\Changeset\ChangesetInterface;
-use Tulia\Component\Theme\Customizer\Builder\Section\SectionInterface;
-use Tulia\Component\Theme\Customizer\CustomizerInterface;
+use Tulia\Component\Theme\ThemeInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class Builder implements BuilderInterface
 {
-    protected CustomizerInterface $customizer;
-
-    protected ControlsRegistry $controlRegistry;
-
-    protected RegistryInterface $plugins;
-
-    protected bool $composed = false;
+    private StructureRegistry $structureRegistry;
+    private SectionRendererInterface $sectionRenderer;
 
     public function __construct(
-        CustomizerInterface $customizer,
-        ControlsRegistry $controlRegistry,
-        RegistryInterface $plugins
+        StructureRegistry $structureRegistry,
+        SectionRendererInterface $sectionRenderer
     ) {
-        $this->customizer = $customizer;
-        $this->controlRegistry = $controlRegistry;
-        $this->plugins = $plugins;
+        $this->structureRegistry = $structureRegistry;
+        $this->sectionRenderer = $sectionRenderer;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function build(ChangesetInterface $changeset): string
+    public function build(ChangesetInterface $changeset, ThemeInterface $theme): CustomizerView
     {
-        $html = '';
+        $structure = $this->structureRegistry->get($theme->getName());
+        $result = [];
 
-        /** @var SectionInterface $section */
-        foreach ($this->customizer->getSections() as $section) {
-            $sections = [];
-
-            /** @var SectionInterface $child */
-            foreach ($this->customizer->getSections() as $child) {
-                if ($child->get('parent') === $section->get('id')) {
-                    $sections[] = $child;
-                }
-            }
-
-            $html .= $section->render($this->buildControls($section, $changeset), $sections);
+        foreach ($structure as $section) {
+            $result[] = $this->sectionRenderer->render($structure, $section, $changeset);
         }
 
-        return $html;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function buildControls(SectionInterface $section, ChangesetInterface $changeset): string
-    {
-        $controls = [];
-
-        foreach ($this->customizer->getControls() as $control) {
-            if ($control['section'] !== $section->get('id')) {
-                continue;
-            }
-
-            if ($changeset->has($control['id'])) {
-                $control['value'] = $changeset->get($control['id']);
-            }
-
-            $controls[] = $this->controlRegistry->build($control['id'], $control['type'], $control);
-        }
-
-        return implode('', $controls);
+        return new CustomizerView(implode('', $result), $structure);
     }
 }

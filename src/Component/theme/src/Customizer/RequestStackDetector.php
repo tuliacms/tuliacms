@@ -11,14 +11,8 @@ use Symfony\Component\HttpFoundation\RequestStack;
  */
 class RequestStackDetector implements DetectorInterface
 {
-    /**
-     * @var RequestStack
-     */
-    protected $requestStack;
+    protected RequestStack $requestStack;
 
-    /**
-     * @param RequestStack $requestStack
-     */
     public function __construct(RequestStack $requestStack)
     {
         $this->requestStack = $requestStack;

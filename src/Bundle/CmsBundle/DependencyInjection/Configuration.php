@@ -29,7 +29,7 @@ class Configuration implements ConfigurationInterface
         return $treeBuilder;
     }
 
-    private function registerOptionsConfiguration(NodeDefinition $root): void
+    private function registerOptionsConfiguration(ArrayNodeDefinition $root): void
     {
         $root
             ->children()
@@ -60,7 +60,7 @@ class Configuration implements ConfigurationInterface
         ;
     }
 
-    private function registerAttributesConfiguration(NodeDefinition $root): void
+    private function registerAttributesConfiguration(ArrayNodeDefinition $root): void
     {
         $root
             ->children()
@@ -84,7 +84,7 @@ class Configuration implements ConfigurationInterface
         ;
     }
 
-    private function registerContentBuildingConfiguration(NodeDefinition $root): void
+    private function registerContentBuildingConfiguration(ArrayNodeDefinition $root): void
     {
         $root
             ->children()
@@ -218,7 +218,7 @@ class Configuration implements ConfigurationInterface
         ;
     }
 
-    private function registerContentBlockConfiguration(NodeDefinition $root): void
+    private function registerContentBlockConfiguration(ArrayNodeDefinition $root): void
     {
         $root
             ->children()

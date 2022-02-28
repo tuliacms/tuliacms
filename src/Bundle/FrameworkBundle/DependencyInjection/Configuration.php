@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Bundle\FrameworkBundle\DependencyInjection;
 
-use Symfony\Component\Config\Definition\Builder\NodeDefinition;
+use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Tulia\Component\Theme\Customizer\Changeset\Changeset;
 use Symfony\Bundle\FrameworkBundle\DependencyInjection\Configuration as SymfonyConfiguration;
@@ -28,7 +28,7 @@ class Configuration extends SymfonyConfiguration
         return $treeBuilder;
     }
 
-    private function registerTwigConfiguration(NodeDefinition $root): void
+    private function registerTwigConfiguration(ArrayNodeDefinition $root): void
     {
         $root
             ->children()
@@ -77,7 +77,7 @@ class Configuration extends SymfonyConfiguration
         ;
     }
 
-    private function registerTemplatingConfiguration(NodeDefinition $root): void
+    private function registerTemplatingConfiguration(ArrayNodeDefinition $root): void
     {
         $root
             ->children()
@@ -107,7 +107,7 @@ class Configuration extends SymfonyConfiguration
         ;
     }
 
-    private function registerAssetsConfiguration(NodeDefinition $root): void
+    private function registerAssetsConfiguration(ArrayNodeDefinition $root): void
     {
         $root
             ->children()
@@ -119,7 +119,7 @@ class Configuration extends SymfonyConfiguration
         ;
     }
 
-    private function registerAssetterConfiguration(NodeDefinition $root): void
+    private function registerAssetterConfiguration(ArrayNodeDefinition $root): void
     {
         $root
             ->children()
@@ -155,7 +155,7 @@ class Configuration extends SymfonyConfiguration
         ;
     }
 
-    private function registerThemeConfiguration(NodeDefinition $root): void
+    private function registerThemeConfiguration(ArrayNodeDefinition $root): void
     {
         $root
             ->children()
@@ -166,6 +166,91 @@ class Configuration extends SymfonyConfiguration
                             ->addDefaultsIfNotSet()
                             ->children()
                                 ->scalarNode('base_class')->defaultValue(Changeset::class)->end()
+                            ->end()
+                        ->end()
+                        ->arrayNode('configuration')
+                            ->arrayPrototype()
+                                ->children()
+                                    ->scalarNode('translation_domain')->isRequired()->end()
+                                    ->arrayNode('configuration')
+                                        ->children()
+                                            ->arrayNode('base')
+                                                ->children()
+                                                    ->arrayNode('assets')->scalarPrototype()->defaultValue([])->end()->end()
+                                                    ->arrayNode('colors')
+                                                        ->arrayPrototype()
+                                                            ->children()
+                                                                ->scalarNode('value')->isRequired()->end()
+                                                            ->end()
+                                                        ->end()
+                                                    ->end()
+                                                    ->arrayNode('widget_spaces')
+                                                        ->arrayPrototype()
+                                                            ->children()
+                                                                ->scalarNode('label')->isRequired()->end()
+                                                            ->end()
+                                                        ->end()
+                                                    ->end()
+                                                    ->arrayNode('widget_styles')
+                                                        ->arrayPrototype()
+                                                            ->children()
+                                                                ->scalarNode('label')->isRequired()->end()
+                                                            ->end()
+                                                        ->end()
+                                                    ->end()
+                                                    ->arrayNode('image_sizes')
+                                                        ->arrayPrototype()
+                                                            ->children()
+                                                                ->integerNode('width')->isRequired()->end()
+                                                                ->integerNode('height')->isRequired()->end()
+                                                            ->end()
+                                                        ->end()
+                                                    ->end()
+                                                ->end()
+                                            ->end()
+                                            ->arrayNode('customizer')
+                                                ->children()
+                                                    ->arrayNode('assets')->scalarPrototype()->defaultValue([])->end()->end()
+                                                ->end()
+                                            ->end()
+                                        ->end()
+                                    ->end()
+                                    ->arrayNode('customizer')
+                                        ->children()
+                                            ->arrayNode('changesets')
+                                                ->arrayPrototype()
+                                                    ->children()
+                                                        ->scalarNode('label')->isRequired()->end()
+                                                        ->scalarNode('description')->defaultNull()->end()
+                                                        ->variableNode('data')->defaultValue([])->end()
+                                                    ->end()
+                                                ->end()
+                                            ->end()
+                                            ->arrayNode('builder')
+                                                ->arrayPrototype()
+                                                    ->addDefaultsIfNotSet()
+                                                    ->children()
+                                                        ->scalarNode('label')->isRequired()->end()
+                                                        ->scalarNode('parent')->defaultNull()->end()
+                                                        ->arrayNode('controls')
+                                                            ->arrayPrototype()
+                                                                ->addDefaultsIfNotSet()
+                                                                ->children()
+                                                                    ->scalarNode('type')->defaultValue('text')->end()
+                                                                    ->scalarNode('label')->isRequired()->end()
+                                                                    ->variableNode('control_options')->defaultValue([])->end()
+                                                                    ->variableNode('value')->defaultNull()->end()
+                                                                    ->scalarNode('transport')->defaultValue('refresh')->end()
+                                                                    ->booleanNode('multilingual')->defaultFalse()->end()
+                                                                ->end()
+                                                            ->end()
+                                                        ->end()
+                                                    ->end()
+                                                ->end()
+                                            ->end()
+                                        ->end()
+                                    ->end()
+                                ->end()
                             ->end()
                         ->end()
                     ->end()

@@ -11,8 +11,5 @@ use Tulia\Component\Theme\ThemeInterface;
  */
 interface ResolverInterface
 {
-    /**
-     * @param ThemeInterface $theme
-     */
     public function resolve(ThemeInterface $theme): void;
 }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Component\Theme\Resolver;
 
-use Symfony\Component\HttpFoundation\RequestStack;
+use Tulia\Component\Theme\Configuration\ConfigurationInterface;
 use Tulia\Component\Theme\Customizer\Changeset\Storage\StorageInterface;
 use Tulia\Component\Theme\Customizer\DetectorInterface;
 use Tulia\Component\Theme\Enum\ChangesetTypeEnum;
@@ -17,31 +17,11 @@ use Tulia\Component\Theme\Customizer\CustomizerInterface;
  */
 class CustomizerResolver implements ResolverInterface
 {
-    /**
-     * @var ManagerInterface
-     */
-    protected $manager;
+    private ManagerInterface $manager;
+    private CustomizerInterface $customizer;
+    private StorageInterface $storage;
+    private DetectorInterface $detector;
 
-    /**
-     * @var CustomizerInterface
-     */
-    protected $customizer;
-
-    /**
-     * @var StorageInterface
-     */
-    protected $storage;
-
-    /**
-     * @var DetectorInterface
-     */
-    protected $detector;
-
-    /**
-     * @param ManagerInterface $manager
-     * @param CustomizerInterface $customizer
-     * @param DetectorInterface $detector
-     */
     public function __construct(
         ManagerInterface $manager,
         CustomizerInterface $customizer,
@@ -54,9 +34,6 @@ class CustomizerResolver implements ResolverInterface
         $this->detector   = $detector;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function resolve(ThemeInterface $theme): void
     {
         if ($theme->hasConfig() === false) {
@@ -66,26 +43,22 @@ class CustomizerResolver implements ResolverInterface
         $config    = $theme->getConfig();
         $changeset = $this->storage->getActiveChangeset($theme->getName());
 
-        /**
-         * If changeset not found, we create default one, and saves it
-         * in storage for future usages. Saving default values in Changeset
-         * prevents do the same operation (building with defaults)
-         * in every request when new/fresh theme installed.
-         */
         if (! $changeset) {
             $changeset = $this->customizer->buildDefaultChangeset($theme);
             $changeset->setType(ChangesetTypeEnum::ACTIVE);
-            $this->storage->save($changeset);
         }
 
         foreach ($changeset as $key => $val) {
             $config->add('customizer', $key, $val);
         }
 
-        if ($this->detector->isCustomizerMode() === false) {
-            return;
+        if ($this->detector->isCustomizerMode()) {
+            $this->applyCustomizerAwareChangeset($config);
         }
+    }
 
+    private function applyCustomizerAwareChangeset(ConfigurationInterface $config): void
+    {
         $id = $this->detector->getChangesetId();
 
         if ($this->storage->has($id)) {

@@ -18,8 +18,11 @@ class Manager implements ManagerInterface
     protected $resolver;
     protected $loader;
 
-    public function __construct(StorageInterface $storage, ResolverAggregateInterface $resolver, ThemeLoaderInterface $loader)
-    {
+    public function __construct(
+        StorageInterface $storage,
+        ResolverAggregateInterface $resolver,
+        ThemeLoaderInterface $loader
+    ) {
         $this->storage = $storage;
         $this->resolver = $resolver;
         $this->loader = $loader;
@@ -55,28 +58,13 @@ class Manager implements ManagerInterface
         return $this->storage;
     }
 
-    public function setStorage(StorageInterface $storage): void
-    {
-        $this->storage = $storage;
-    }
-
     public function getResolver(): ResolverAggregateInterface
     {
         return $this->resolver;
     }
 
-    public function setResolver(ResolverAggregateInterface $resolver): void
-    {
-        $this->resolver = $resolver;
-    }
-
     public function getLoader(): ThemeLoaderInterface
     {
         return $this->loader;
-    }
-
-    public function setLoader(ThemeLoaderInterface $loader): void
-    {
-        $this->loader = $loader;
     }
 }

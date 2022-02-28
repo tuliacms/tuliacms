@@ -9,14 +9,8 @@ namespace Tulia\Component\Theme\Configuration;
  */
 class Configuration implements ConfigurationInterface
 {
-    /**
-     * @var array
-     */
-    protected $configuration = [];
+    protected array $configuration = [];
 
-    /**
-     * {@inheritdoc}
-     */
     public function getRegisteredWidgetSpaces(): array
     {
         if (isset($this->configuration['widget_space']) === false) {
@@ -44,9 +38,6 @@ class Configuration implements ConfigurationInterface
         return $result;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getRegisteredWidgetStyles(): array
     {
         if (isset($this->configuration['widget_style']) === false) {
@@ -74,17 +65,16 @@ class Configuration implements ConfigurationInterface
         return $result;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function add(string $group, string $id, $value = null): void
+    public function merge(ConfigurationInterface $configuration): void
     {
-        $this->configuration[$group][$id] = $value;
+        $this->configuration = array_merge_recursive($this->configuration, $configuration->all());
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    public function add(string $group, string $code, $value = null): void
+    {
+        $this->configuration[$group][$code] = $value;
+    }
+
     public function all(?string $group = null): array
     {
         if ($group === null) {
@@ -94,36 +84,27 @@ class Configuration implements ConfigurationInterface
         return $this->configuration[$group] ?? [];
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function get(string $group, string $id, $default = null)
+    public function get(string $group, string $code, $default = null)
     {
-        return $this->configuration[$group][$id] ?? $default;
+        return $this->configuration[$group][$code] ?? $default;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function remove(string $group, ?string $id = null): void
+    public function remove(string $group, ?string $code = null): void
     {
-        if ($id !== null) {
-            unset($this->configuration[$group][$id]);
+        if ($code !== null) {
+            unset($this->configuration[$group][$code]);
         } else {
             unset($this->configuration[$group]);
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function has(string $group, ?string $id = null, ?string $valueKey = null): bool
+    public function has(string $group, ?string $code = null, ?string $valueKey = null): bool
     {
-        if ($group && $id && $valueKey) {
-            return isset($this->configuration[$group][$id][$valueKey]);
+        if ($group && $code && $valueKey) {
+            return isset($this->configuration[$group][$code][$valueKey]);
         }
-        if ($group && $id && ! $valueKey) {
-            return isset($this->configuration[$group][$id]);
+        if ($group && $code && ! $valueKey) {
+            return isset($this->configuration[$group][$code]);
         }
 
         return isset($this->configuration[$group]);

@@ -6,7 +6,7 @@ namespace Tulia\Component\Theme\Resolver;
 
 use Tulia\Component\Theme\Configuration\Configuration;
 use Tulia\Component\Theme\Configuration\ConfigurationInterface;
-use Tulia\Component\Theme\Configuration\ConfiguratorInterface;
+use Tulia\Component\Theme\Configuration\ConfigurationRegistry;
 use Tulia\Component\Theme\Customizer\DetectorInterface;
 use Tulia\Component\Theme\ManagerInterface;
 use Tulia\Component\Theme\ThemeInterface;
@@ -16,13 +16,18 @@ use Tulia\Component\Theme\ThemeInterface;
  */
 class ConfigurationResolver implements ResolverInterface
 {
-    protected ManagerInterface $manager;
-    protected DetectorInterface $detector;
+    private ManagerInterface $manager;
+    private DetectorInterface $detector;
+    private ConfigurationRegistry $configurationRegistry;
 
-    public function __construct(ManagerInterface $manager, DetectorInterface $detector)
-    {
+    public function __construct(
+        ManagerInterface $manager,
+        DetectorInterface $detector,
+        ConfigurationRegistry $configurationRegistry
+    ) {
         $this->manager = $manager;
         $this->detector = $detector;
+        $this->configurationRegistry = $configurationRegistry;
     }
 
     /**
@@ -49,16 +54,10 @@ class ConfigurationResolver implements ResolverInterface
 
     private function configure(ConfigurationInterface $configuration, ThemeInterface $theme): void
     {
-        $classname = substr(\get_class($theme), 0, -5) . 'Configurator';
+        $configuration->merge($this->configurationRegistry->get($theme->getName(), 'base'));
 
-        if (class_exists($classname, true)) {
-            /** @var ConfiguratorInterface $configurator */
-            $configurator = new $classname();
-            $configurator->configure($configuration);
-
-            if ($this->detector->isCustomizerMode()) {
-                $configurator->configureCustomizer($configuration);
-            }
+        if ($this->detector->isCustomizerMode()) {
+            $configuration->merge($this->configurationRegistry->get($theme->getName(), 'customizer'));
         }
     }
 }

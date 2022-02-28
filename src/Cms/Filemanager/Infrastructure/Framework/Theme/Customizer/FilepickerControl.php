@@ -6,7 +6,7 @@ namespace Tulia\Cms\Filemanager\Infrastructure\Framework\Theme\Customizer;
 
 use Tulia\Component\Templating\EngineInterface;
 use Tulia\Component\Templating\View;
-use Tulia\Component\Theme\Customizer\Builder\Controls\AbstractControl;
+use Tulia\Component\Theme\Customizer\Builder\Rendering\Controls\AbstractControl;
 
 /**
  * @author Adam Banaszkiewicz

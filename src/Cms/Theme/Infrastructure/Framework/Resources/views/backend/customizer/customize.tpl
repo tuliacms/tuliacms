@@ -45,7 +45,7 @@
             </div>
             <div class="panel-controls">
                 <form class="customizer-form">
-                    {{ builder.build(changeset)|raw }}
+                    {{ customizerView|raw }}
                 </form>
                 <div class="control-pane control-pane-name-home active" data-section="home">
                     <div class="home-control-pane-headline">
@@ -53,10 +53,10 @@
                         <h4>{{ theme.name }}</h4>
                     </div>
                     <div class="controls-list">
-                        {% for section in customizer.sections %}
+                        {% for section in customizerView.structure %}
                             {% if section.parent is empty %}
-                                <div class="control-trigger" data-show-pane="{{ section.id|str_replace('.', '_') }}">
-                                    {{ section.label|trans({}, section.translation_domain) }}
+                                <div class="control-trigger" data-show-pane="{{ section.code|str_replace('.', '_') }}">
+                                    {{ section.label|trans({}, section.transationDomain) }}
                                 </div>
                             {% endif %}
                         {% endfor %}
@@ -73,6 +73,13 @@
                         <h4>{{ 'browseLayouts'|trans({}, 'customizer') }}</h4>
                     </div>
                     <div class="control-pane-content">
+
+
+
+                        {# TODO #}
+
+
+
                         {% for item in customizer.predefinedChangesets %}
                             <h5>{{ item.name|trans({}, item.translationDomain) }}</h5>
                             {% if item.description %}

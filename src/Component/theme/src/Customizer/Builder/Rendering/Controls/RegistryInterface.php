@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Component\Theme\Customizer\Builder\Controls;
+namespace Tulia\Component\Theme\Customizer\Builder\Rendering\Controls;
 
 /**
  * @author Adam Banaszkiewicz

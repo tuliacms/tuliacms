@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Component\Theme\Customizer\Builder\Controls;
+namespace Tulia\Component\Theme\Customizer\Builder\Rendering\Controls;
 
 /**
  * @author Adam Banaszkiewicz
@@ -19,13 +19,10 @@ class Registry implements RegistryInterface
         $this->controls = $controls;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function build(string $id, string $type, array $params): ?string
     {
         $params['control_name'] = $id;
-        $params['control_id']   = $this->createControlId($params['id']);
+        $params['control_id']   = $this->createControlId($params['code']);
 
         foreach ($this->controls as $control) {
             if ($control::getName() === $type) {

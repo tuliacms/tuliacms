@@ -1,6 +1,6 @@
 {% assets ['filemanager'] %}
 
-<div class="form-group {{ multilingual ? ' form-group-multilingual' : '' }}">
+<div class="form-group mb-3 {{ is_multilingual ? ' form-group-multilingual' : '' }}">
     <label class="customizer-label">{{ label|trans({}, translation_domain) }}</label>
     <div class="input-group">
         <input type="text" id="{{ control_id }}" name="{{ control_name }}" class="customizer-control form-control" value="{{ value }}" data-transport="{{ transport }}" />

@@ -13,25 +13,7 @@ use Tulia\Component\Theme\ThemeInterface;
  */
 interface CustomizerInterface
 {
-    /**
-     * @param ProviderInterface $provider
-     */
-    public function addProvider(ProviderInterface $provider): void;
-
-    /**
-     * @return iterable
-     */
-    public function getProviders(): iterable;
-
-    /**
-     * @param ThemeInterface $theme
-     *
-     * @return ChangesetInterface
-     */
     public function buildDefaultChangeset(ThemeInterface $theme): ChangesetInterface;
 
-    /**
-     * @return iterable
-     */
     public function getPredefinedChangesets(): iterable;
 }

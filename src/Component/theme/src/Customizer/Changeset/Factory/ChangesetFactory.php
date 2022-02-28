@@ -22,9 +22,6 @@ class ChangesetFactory implements ChangesetFactoryInterface
         $this->classname = $classname;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function factory(string $id = null): ChangesetInterface
     {
         $classname = $this->classname;

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Component\Theme\TwigBridge\Extension;
 
+use Requtize\Assetter\AssetterInterface;
 use Tulia\Component\Theme\ManagerInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\Extension\GlobalsInterface;
@@ -14,17 +15,13 @@ use Twig\TwigFunction;
  */
 class ThemeExtension extends AbstractExtension implements GlobalsInterface
 {
-    /**
-     * @var ManagerInterface
-     */
-    protected $manager;
+    private ManagerInterface $manager;
+    private AssetterInterface $assetter;
 
-    /**
-     * @param ManagerInterface $manager
-     */
-    public function __construct(ManagerInterface $manager)
+    public function __construct(ManagerInterface $manager, AssetterInterface $assetter)
     {
         $this->manager = $manager;
+        $this->assetter = $assetter;
     }
 
     /**
@@ -45,6 +42,16 @@ class ThemeExtension extends AbstractExtension implements GlobalsInterface
         return [
             new TwigFunction('customizer_get', function (string $name, $default = null) {
                 return $this->manager->getTheme()->getConfig()->get('customizer', $name, $default);
+            }, [
+                'is_safe' => [ 'html' ]
+            ]),
+            new TwigFunction('theme_head', function () {
+                return $this->assetter->build('head')->all();
+            }, [
+                'is_safe' => [ 'html' ]
+            ]),
+            new TwigFunction('theme_body', function () {
+                return $this->assetter->build()->all();
             }, [
                 'is_safe' => [ 'html' ]
             ]),
