@@ -73,23 +73,16 @@
                         <h4>{{ 'browseLayouts'|trans({}, 'customizer') }}</h4>
                     </div>
                     <div class="control-pane-content">
-
-
-
-                        {# TODO #}
-
-
-
-                        {% for item in customizer.predefinedChangesets %}
-                            <h5>{{ item.name|trans({}, item.translationDomain) }}</h5>
+                        {% for item in predefinedChangesets %}
+                            <h5>{{ item.label|trans({}, item.translationDomain) }}</h5>
                             {% if item.description %}
                                 <p>{{ item.description|trans({}, item.translationDomain) }}</p>
                             {% endif %}
-                            <button type="button" class="btn btn-primary btn-sm customizer-predefined-changeset-apply" data-changeset-id="{{ item.changeset.id }}">{{ 'apply'|trans }}</button>
+                            <button type="button" class="btn btn-primary btn-sm customizer-predefined-changeset-apply" data-changeset-id="{{ item.id }}">{{ 'apply'|trans }}</button>
                             <hr />
                         {% endfor %}
                         <h5>{{ 'resetCustomizerSettings'|trans({}, 'customizer') }}</h5>
-                        <button class="btn btn-primary btn-sm btn-icon-left" type="button" data-bs-toggle="modal" data-target="#modal-customizer-reset-settings">
+                        <button class="btn btn-primary btn-sm btn-icon-left" type="button" data-bs-toggle="modal" data-bs-target="#modal-customizer-reset-settings">
                             <i class="btn-icon fas fa-eraser"></i> {{ 'resetCustomizerSettings'|trans({}, 'customizer') }}
                         </button>
                     </div>
@@ -116,16 +109,16 @@
             <div class="modal-content">
                 <div class="modal-header bg-danger text-white">
                     <h5 class="modal-title">{{ 'resetCustomizerSettings'|trans({}, 'customizer') }}</h5>
-                    <button type="button" class="close" data-dismiss="modal">
+                    <button type="button" class="close" data-bs-dismiss="modal">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p>Użyj tej opcji, by zresetować ustawienia szablonu do wartości fabrycznych. Ta opcja usunie wszelką konfigurację, <b>tej operacji nie można cofnąć!</b></p>
+                    <p>{{ 'useThisOptionToResetCustomizerConfigurationToDefaultValues'|trans({}, 'customizer')|raw }}</p>
                 </div>
                 <div class="modal-footer">
                     <a href="{{ path('backend.theme.customize.reset', { theme: theme.name, _token: csrf_token('theme.customizer.reset') }) }}" class="btn btn-danger customizer-drastic-operation-link">{{ 'resetSettings'|trans({}, 'customizer') }}</a>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'close'|trans }}</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ 'close'|trans }}</button>
                 </div>
             </div>
         </div>
@@ -135,7 +128,7 @@
             <div class="modal-content">
                 <div class="modal-header bg-danger text-white">
                     <h5 class="modal-title">{{ 'copySettingsFromParentTheme'|trans({}, 'customizer') }}</h5>
-                    <button type="button" class="close" data-dismiss="modal">
+                    <button type="button" class="close" data-bs-dismiss="modal">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -145,14 +138,14 @@
                 </div>
                 <div class="modal-footer">
                     <a href="{{ path('backend.theme.customize.copy_changeset_from_parent', { theme: theme.name, _token: csrf_token('theme.customizer.copy_changeset_from_parent') }) }}" class="btn btn-danger customizer-drastic-operation-link">{{ 'copySettings'|trans({}, 'customizer') }}</a>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'close'|trans }}</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ 'close'|trans }}</button>
                 </div>
             </div>
         </div>
     </div>
-    {% set predefinedChangesets = {} %}
-    {% for item in customizer.predefinedChangesets %}
-        {% set predefinedChangesets = predefinedChangesets|merge({ (item.id): item.changeset.data }) %}
+    {% set predefinedChangesetsJson = {} %}
+    {% for item in predefinedChangesets %}
+        {% set predefinedChangesetsJson = predefinedChangesetsJson|merge({ (item.id): item.data }) %}
     {% endfor %}
     <script nonce="{{ csp_nonce() }}">
         let customizer = null;
@@ -164,7 +157,7 @@
                     save: '{{ path('backend.theme.customize.save', { changeset: changeset.id, theme: theme.name, _token: csrf_token('theme.customizer.save') })|raw }}'
                 },
                 changeset: '{{ changeset.id }}',
-                predefinedChangesets: {{ predefinedChangesets|json_encode|raw }},
+                predefinedChangesets: {{ predefinedChangesetsJson|json_encode|raw }},
                 theme: '{{ theme.name }}',
                 changed: {{ changeset.isEmpty ? 'false' : 'true' }},
                 translations: {

@@ -80,13 +80,13 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">{{ 'localesUrlAddresses'|trans({}, 'websites') }}</h5>
-                    <button type="button" class="close" data-dismiss="modal">
+                    <button type="button" class="close" data-bs-dismiss="modal">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body"></div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'close'|trans }}</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ 'close'|trans }}</button>
                 </div>
             </div>
         </div>
@@ -97,7 +97,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">{{ 'deleteWebsite'|trans({}, 'websites') }}</h5>
-                    <button type="button" class="close" data-dismiss="modal">
+                    <button type="button" class="close" data-bs-dismiss="modal">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -110,7 +110,7 @@
                 </div>
                 <div class="modal-footer">
                     <a href="#" class="btn btn-danger" id="website-delete-submit-form">{{ 'delete'|trans }}</a>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'close'|trans }}</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ 'close'|trans }}</button>
                 </div>
             </div>
         </div>

@@ -7,6 +7,10 @@ services:
         resource: '../../../../../../../Component/theme/src/*'
         exclude:
             - '../../../../../../Component/theme/src/src/**/*Exception.php'
+            - '../../../../../../Component/theme/src/Customizer/Changeset/Changeset.php'
+            - '../../../../../../Component/theme/src/Customizer/Changeset/ChangesetInterface.php'
+            - '../../../../../../Component/theme/src/Customizer/Builder/Structure/Section.php'
+            - '../../../../../../Component/theme/src/Customizer/Builder/Structure/Control.php'
 
     Tulia\Component\Theme\Customizer\Builder\BuilderInterface:
         class: Tulia\Component\Theme\Customizer\Builder\Builder

@@ -45,29 +45,6 @@ interface ChangesetInterface extends \IteratorAggregate
     public function setData(array $data): void;
 
     /**
-     * @param array $fields
-     */
-    public function setFieldDefinitions(array $fields): void;
-
-    /**
-     * @return array
-     */
-    public function getFieldDefinitions(): array;
-
-    /**
-     * @param string $field
-     * @param array $definition
-     */
-    public function setFieldDefinition(string $field, array $definition): void;
-
-    /**
-     * @param string $field
-     *
-     * @return array
-     */
-    public function getFieldDefinition(string $field): array;
-
-    /**
      * @return bool
      */
     public function isEmpty(): bool;

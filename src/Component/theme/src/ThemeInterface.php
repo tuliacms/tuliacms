@@ -18,4 +18,6 @@ interface ThemeInterface
     public function setConfig(ConfigurationInterface $config): void;
 
     public function getParent(): ?string;
+
+    public function getName(): string;
 }

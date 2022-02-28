@@ -12,6 +12,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Component\Theme\Configuration\Configuration;
 use Tulia\Component\Theme\Configuration\ConfigurationRegistry;
 use Tulia\Component\Theme\Customizer\Builder\Structure\StructureRegistry;
+use Tulia\Component\Theme\Customizer\Changeset\PredefinedChangesetRegistry;
 
 /**
  * @author Adam Banaszkiewicz
@@ -25,7 +26,8 @@ class ThemePass implements CompilerPassInterface
         }
 
         $configurationRegistry = $container->getDefinition(ConfigurationRegistry::class);
-        $customizerBuilder = $container->getDefinition(StructureRegistry::class);
+        $structureRegistry = $container->getDefinition(StructureRegistry::class);
+        $predefinedChangesetsRegistry = $container->getDefinition(PredefinedChangesetRegistry::class);
 
         foreach ($container->getParameter('framework.themes.configuration') as $theme => $config) {
             if (isset($config['configuration']['base'])) {
@@ -35,7 +37,14 @@ class ThemePass implements CompilerPassInterface
                 $this->processThemeConfiguration($container, $configurationRegistry, 'customizer', $theme, $config['configuration']['customizer']);
             }
             if (isset($config['customizer']['builder'])) {
-                $customizerBuilder->addMethodCall('addForTheme', [$theme, $this->resolveCustomizerStructure($config['customizer']['builder'], $config['translation_domain'])]);
+                $structureRegistry->addMethodCall('addForTheme', [$theme, $this->resolveCustomizerStructure($config['customizer']['builder'], $config['translation_domain'])]);
+            }
+            if (isset($config['customizer']['changesets'])) {
+                foreach ($config['customizer']['changesets'] as $key => $changeset) {
+                    $config['customizer']['changesets'][$key]['translation_domain'] = $config['translation_domain'];
+                }
+
+                $predefinedChangesetsRegistry->addMethodCall('addForTheme', [$theme, $config['customizer']['changesets']]);
             }
         }
     }

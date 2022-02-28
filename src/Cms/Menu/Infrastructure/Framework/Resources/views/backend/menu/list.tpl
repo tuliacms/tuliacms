@@ -30,7 +30,7 @@
                     <input type="hidden" name="_token" value="{{ csrf_token('menu.create') }}" />
                     <div class="modal-header">
                         <h5 class="modal-title">{{ 'addMenu'|trans({}, 'menu') }}</h5>
-                        <button type="button" class="close" data-dismiss="modal">
+                        <button type="button" class="close" data-bs-dismiss="modal">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
@@ -41,7 +41,7 @@
                         </fieldset>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'close'|trans }}</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ 'close'|trans }}</button>
                         <button type="submit" class="btn btn-success">{{ 'save'|trans }}</button>
                     </div>
                 </form>
@@ -55,7 +55,7 @@
                     <input type="hidden" name="_token" value="{{ csrf_token('menu.edit') }}" />
                     <div class="modal-header">
                         <h5 class="modal-title">{{ 'editMenu'|trans({}, 'menu') }}</h5>
-                        <button type="button" class="close" data-dismiss="modal">
+                        <button type="button" class="close" data-bs-dismiss="modal">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
@@ -67,7 +67,7 @@
                         </fieldset>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'close'|trans }}</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ 'close'|trans }}</button>
                         <button type="submit" class="btn btn-success">{{ 'save'|trans }}</button>
                     </div>
                 </form>

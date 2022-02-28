@@ -13,8 +13,8 @@ use Tulia\Cms\Theme\Infrastructure\Framework\Theme\Customizer\Changeset\Changese
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 use Tulia\Component\Templating\ViewInterface;
 use Tulia\Component\Theme\Customizer\Builder\BuilderInterface;
+use Tulia\Component\Theme\Customizer\Changeset\PredefinedChangesetRegistry;
 use Tulia\Component\Theme\Customizer\Changeset\Storage\StorageInterface;
-use Tulia\Component\Theme\Customizer\CustomizerInterface;
 use Tulia\Component\Theme\Enum\ChangesetTypeEnum;
 use Tulia\Component\Theme\Exception\ChangesetNotFoundException;
 use Tulia\Component\Theme\ManagerInterface;
@@ -25,16 +25,13 @@ use Tulia\Component\Theme\ManagerInterface;
 class Customizer extends AbstractController
 {
     protected ManagerInterface $themeManager;
-    protected CustomizerInterface $customizer;
     protected StorageInterface $customizerChangesetStorage;
 
     public function __construct(
         ManagerInterface $manager,
-        CustomizerInterface $customizer,
         StorageInterface $storage
     ) {
         $this->themeManager = $manager;
-        $this->customizer = $customizer;
         $this->customizerChangesetStorage = $storage;
     }
 
@@ -71,6 +68,7 @@ class Customizer extends AbstractController
         Request $request,
         BuilderInterface $builder,
         CurrentWebsiteInterface $currentWebsite,
+        PredefinedChangesetRegistry $predefinedChangesetRegistry,
         string $theme,
         string $changeset = null
     ) {
@@ -94,8 +92,6 @@ class Customizer extends AbstractController
             return $this->redirectToRoute('backend.theme.customize.current');
         }
 
-        $this->customizer->configureFieldsTypes($changesetItem);
-
         $parameters = [
             'mode'      => 'customizer',
             'changeset' => $changesetItem->getId(),
@@ -115,23 +111,20 @@ class Customizer extends AbstractController
 
         return $this->view('@backend/theme/customizer/customize.tpl', [
             'theme'      => $themeObject,
-            'customizer' => $this->customizer,
             'changeset'  => $changesetItem,
             'customizerView' => $customizerView,
             'previewUrl' => $previewUrl,
             'returnUrl'  => $request->query->get('returnUrl'),
+            'predefinedChangesets' => $predefinedChangesetRegistry->get($themeObject),
         ]);
     }
 
     /**
-     * @param Request $request
-     * @param $theme
-     * @param $changeset
      * @return JsonResponse|RedirectResponse
      * @throws ChangesetNotFoundException
      * @CsrfToken(id="theme.customizer.save")
      */
-    public function save(Request $request, $theme, $changeset)
+    public function save(Request $request, string $theme, string $changeset)
     {
         $storage = $this->themeManager->getStorage();
 
@@ -141,24 +134,24 @@ class Customizer extends AbstractController
 
         $themeObject = $storage->get($theme);
 
-        $changeset = $this->customizerChangesetStorage->has($changeset)
+        $changesetEntity = $this->customizerChangesetStorage->has($changeset)
             ? $this->customizerChangesetStorage->get($changeset)
             : new Changeset($changeset);
 
-        if ($changeset->getType() !== ChangesetTypeEnum::TEMPORARY) {
+        if ($changesetEntity->getType() !== ChangesetTypeEnum::TEMPORARY) {
             return $this->responseJson([
                 'status' => 'error',
             ]);
         }
 
-        $changeset->setTheme($theme);
-        $changeset->setType(ChangesetTypeEnum::TEMPORARY);
+        $changesetEntity->setTheme($theme);
+        $changesetEntity->setType(ChangesetTypeEnum::TEMPORARY);
 
-        if ($changeset->isEmpty()) {
+        if ($changesetEntity->isEmpty()) {
             $themeChangeset = $this->customizerChangesetStorage->getActiveChangeset($themeObject->getName());
 
-            if ($themeChangeset && $changeset->getId() !== $themeChangeset->getId()) {
-                $changeset->merge($themeChangeset);
+            if ($themeChangeset && $changesetEntity->getId() !== $themeChangeset->getId()) {
+                $changesetEntity->merge($themeChangeset);
             }
         }
 
@@ -168,18 +161,16 @@ class Customizer extends AbstractController
             $data = [];
         }
 
-        $this->customizer->configureFieldsTypes($changeset);
-
-        $changeset->mergeArray($data);
-        //$changeset->setAuthorId($this->getUser()->getId());
+        $changesetEntity->mergeArray($data);
+        //changesetEntity->setAuthorId($this->getUser()->getId());
 
         if ($request->request->get('mode') === 'temporary') {
-            $this->customizerChangesetStorage->save($changeset);
+            $this->customizerChangesetStorage->save($changesetEntity);
         }
 
         if ($request->request->get('mode') === 'theme') {
-            $changeset->setType(ChangesetTypeEnum::ACTIVE);
-            $this->customizerChangesetStorage->save($changeset);
+            $changesetEntity->setType(ChangesetTypeEnum::ACTIVE);
+            $this->customizerChangesetStorage->save($changesetEntity);
         }
 
         return $this->responseJson([
@@ -220,17 +211,17 @@ class Customizer extends AbstractController
      */
     public function copyChangesetFromParent(string $theme): RedirectResponse
     {
-        $theme = $this->themeManager->getStorage()->get($theme);
+        $themeInstance = $this->themeManager->getStorage()->get($theme);
 
-        if (! $theme) {
+        if (! $themeInstance) {
             return $this->redirectToRoute('backend.theme.customize.current');
         }
 
-        if (! $theme->getParent()) {
+        if (! $themeInstance->getParent()) {
             return $this->redirectToRoute('backend.theme.customize.current');
         }
 
-        $parent  = $this->themeManager->getStorage()->get($theme->getParent());
+        $parent  = $this->themeManager->getStorage()->get($themeInstance->getParent());
 
         $changeset = $this->customizerChangesetStorage->getActiveChangeset($parent->getName());
 
@@ -238,15 +229,13 @@ class Customizer extends AbstractController
             return $this->redirectToRoute('backend.theme.customize.current');
         }
 
-        $this->customizer->configureFieldsTypes($changeset, $theme);
-
         $themeChangeset = $this->customizerChangesetStorage->getActiveChangeset($parent->getName());
 
         if ($themeChangeset && $changeset->getId() !== $themeChangeset->getId()) {
             $changeset->merge($themeChangeset);
         }
 
-        $changeset->setTheme($theme->getName());
+        $changeset->setTheme($themeInstance->getName());
         $this->customizerChangesetStorage->save($changeset);
 
         return $this->redirectToRoute('backend.theme.customize.current');
@@ -259,13 +248,13 @@ class Customizer extends AbstractController
      */
     public function reset(string $theme): RedirectResponse
     {
-        $theme = $this->themeManager->getStorage()->get($theme);
+        $themeInstance = $this->themeManager->getStorage()->get($theme);
 
-        if (! $theme) {
+        if (! $themeInstance) {
             return $this->redirectToRoute('backend.theme.customize.current');
         }
 
-        $changeset = $this->customizerChangesetStorage->getActiveChangeset($theme->getName());
+        $changeset = $this->customizerChangesetStorage->getActiveChangeset($themeInstance->getName());
 
         if ($changeset) {
             $this->customizerChangesetStorage->remove($changeset);

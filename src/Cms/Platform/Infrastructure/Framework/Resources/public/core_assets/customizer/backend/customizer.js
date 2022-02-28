@@ -130,8 +130,8 @@ let Customizer = function (options) {
                     return;
                 }
 
-                for (let field in self.options.predefinedChangesets[id]) {
-                    $('.customizer-control[name="' + field + '"]').val(self.options.predefinedChangesets[id][field]);
+                for (let field in self.options.predefinedChangesets[id].data) {
+                    $('.customizer-control[name="' + field + '"]').val(self.options.predefinedChangesets[id].data[field]);
                 }
 
                 self.showLoader();
