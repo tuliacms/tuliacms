@@ -20,41 +20,26 @@ class SettingsGroup extends AbstractSettingsGroup
         $this->contentType = $contentType;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getId(): string
     {
         return 'node.' . $this->contentType->getCode();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName(): string
     {
-        return 'nodes';
+        return $this->contentType->getName();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getIcon(): string
     {
-        return 'fas fa-file-powerpoint';
+        return $this->contentType->getIcon();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getTranslationDomain(): string
     {
         return 'node';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function buildForm(): FormInterface
     {
         $data = [
@@ -64,17 +49,11 @@ class SettingsGroup extends AbstractSettingsGroup
         return $this->createForm(SettingsForm::class, $data);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function buildView(): array
     {
         return $this->view('@backend/node/settings.tpl');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function saveAction(array $data): bool
     {
         $this->setOption('node.' . $this->contentType->getCode() . '.per_page', (int) $data['per_page']);

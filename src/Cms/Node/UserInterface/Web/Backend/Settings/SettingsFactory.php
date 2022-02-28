@@ -19,12 +19,9 @@ class SettingsFactory extends AbstractSettingsGroupFactory
         $this->registry = $registry;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function factory(): iterable
     {
-        foreach($this->registry->all() as $type) {
+        foreach($this->registry->allByType('node') as $type) {
             yield new SettingsGroup($type);
         }
 

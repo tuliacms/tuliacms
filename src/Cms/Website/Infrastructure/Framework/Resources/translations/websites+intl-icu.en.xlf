@@ -152,7 +152,7 @@
             </trans-unit>
             <trans-unit id="tuliacms.websites.38">
                 <source>websiteLocaleUrlPreview</source>
-                <target>'Website locale URL preview:'</target>
+                <target>Website locale URL preview:</target>
             </trans-unit>
             <trans-unit id="tuliacms.websites.39">
                 <source>panelAddress</source>

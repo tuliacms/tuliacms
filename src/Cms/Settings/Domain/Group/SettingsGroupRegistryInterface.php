@@ -10,14 +10,9 @@ namespace Tulia\Cms\Settings\Domain\Group;
 interface SettingsGroupRegistryInterface
 {
     /**
-     * @return iterable|array|SettingsGroupInterface[]
+     * @return SettingsGroupInterface[]
      */
     public function all(): iterable;
 
-    /**
-     * @param string $id
-     *
-     * @return SettingsGroupInterface
-     */
     public function getGroup(string $id): SettingsGroupInterface;
 }

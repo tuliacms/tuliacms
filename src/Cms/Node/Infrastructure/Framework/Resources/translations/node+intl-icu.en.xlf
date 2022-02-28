@@ -116,7 +116,7 @@
             </trans-unit>
             <trans-unit id="tuliacms.node.29">
                 <source>singularFlagImposedOnMoreThanOneNode</source>
-                <target>Singular flag imposed on more than one Node: "{flag}". Please take this flag off from other Nodes to impose on this one.</target>
+                <target>Singular Node purpose imposed on more than one Node: "{flag}". Please take this purpose off from other Nodes to impose on this one.</target>
             </trans-unit>
             <trans-unit id="tuliacms.node.30">
                 <source>nodesListOfType</source>

@@ -7,7 +7,7 @@ services:
         resource: '../../../../**'
         exclude: '../../../../{Infrastructure/Framework/Resources}'
 
-    Tulia\Cms\Settings\Ports\Domain\Group\SettingsGroupRegistryInterface:
+    Tulia\Cms\Settings\Domain\Group\SettingsGroupRegistryInterface:
         class: Tulia\Cms\Settings\Domain\Group\SettingsRegistryRegistry
         bind:
             $factories: !tagged_iterator settings.group_factory
