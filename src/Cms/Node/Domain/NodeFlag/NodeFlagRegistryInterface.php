@@ -17,4 +17,7 @@ interface NodeFlagRegistryInterface
      * @throws FlagNotFoundException
      */
     public function isSingular(string $name): bool;
+
+    public function has(string $name): bool;
+    public function get(string $name): array;
 }

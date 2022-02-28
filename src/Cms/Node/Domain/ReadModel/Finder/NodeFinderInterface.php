@@ -19,5 +19,8 @@ interface NodeFinderInterface
      */
     public function findOne(array $criteria, string $scope);
 
+    /**
+     * @return Node[]|Collection
+     */
     public function find(array $criteria, string $scope): Collection;
 }

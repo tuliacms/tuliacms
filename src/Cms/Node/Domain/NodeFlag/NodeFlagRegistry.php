@@ -43,6 +43,20 @@ class NodeFlagRegistry implements NodeFlagRegistryInterface
         throw FlagNotFoundException::fromName($name);
     }
 
+    public function has(string $name): bool
+    {
+        $this->resolveFlags();
+
+        return isset($this->flags[$name]);
+    }
+
+    public function get(string $name): array
+    {
+        $this->resolveFlags();
+
+        return $this->flags[$name] ?? [];
+    }
+
     private function resolveFlags(): void
     {
         if ($this->flags !== []) {

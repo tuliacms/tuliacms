@@ -11,6 +11,7 @@ use Tulia\Cms\Filemanager\Application\Service\ImageUrlResolver;
 use Tulia\Cms\Filemanager\Domain\ReadModel\Finder\FileFinderInterface;
 use Tulia\Cms\Filemanager\Domain\ReadModel\Finder\FileFinderScopeEnum as FilesScopeEnum;
 use Tulia\Cms\Filemanager\Domain\WriteModel\FileTypeEnum;
+use Tulia\Cms\Node\Domain\NodeFlag\NodeFlagRegistryInterface;
 use Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderInterface;
 use Tulia\Cms\Node\Domain\ReadModel\Finder\NodeFinderScopeEnum as NodeScopeEnum;
 use Tulia\Cms\Node\Domain\ReadModel\Model\Node;
@@ -24,17 +25,13 @@ use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
  */
 class SearchProvider extends AbstractProvider
 {
-    protected NodeFinderInterface $nodeFinder;
-
-    protected FileFinderInterface $filesFinder;
-
-    protected RouterInterface $router;
-
-    protected TranslatorInterface $translator;
-
-    protected ContentTypeRegistryInterface $contentTypeRegistry;
-
-    protected ImageUrlResolver $imageUrlResolver;
+    private NodeFinderInterface $nodeFinder;
+    private FileFinderInterface $filesFinder;
+    private RouterInterface $router;
+    private TranslatorInterface $translator;
+    private ContentTypeRegistryInterface $contentTypeRegistry;
+    private ImageUrlResolver $imageUrlResolver;
+    private NodeFlagRegistryInterface $nodeFlagRegistry;
 
     public function __construct(
         NodeFinderInterface $nodeFinder,
@@ -42,7 +39,8 @@ class SearchProvider extends AbstractProvider
         RouterInterface $router,
         TranslatorInterface $translator,
         ContentTypeRegistryInterface $contentTypeRegistry,
-        ImageUrlResolver $imageUrlResolver
+        ImageUrlResolver $imageUrlResolver,
+        NodeFlagRegistryInterface $nodeFlagRegistry
     ) {
         $this->nodeFinder  = $nodeFinder;
         $this->filesFinder = $filesFinder;
@@ -50,6 +48,7 @@ class SearchProvider extends AbstractProvider
         $this->translator = $translator;
         $this->contentTypeRegistry = $contentTypeRegistry;
         $this->imageUrlResolver = $imageUrlResolver;
+        $this->nodeFlagRegistry = $nodeFlagRegistry;
     }
 
     public function search(string $query, int $limit = 5, int $page = 1): Results
@@ -66,11 +65,14 @@ class SearchProvider extends AbstractProvider
             $hit = new Hit($node->getTitle(), $this->router->generate('backend.node.edit', ['node_type' => $node->getType(), 'id' => $node->getId() ]));
             $hit->setDescription($node->getIntroduction());
 
-            $nodeType = $this->contentTypeRegistry->get($node->getType());
-            /*$hit->addTag(
-                $this->translator->trans('node', [], $nodeType->getTranslationDomain()),
-                'fas fa-file-powerpoint'
-            );*/
+            foreach ($node->getFlags() as $flag) {
+                if ($this->nodeFlagRegistry->has($flag)) {
+                    $hit->addTag(
+                        $this->translator->trans($this->nodeFlagRegistry->get($flag)['label'], [], 'node'),
+                        'fas fa-tag'
+                    );
+                }
+            }
 
             $results->add($node->getId(), $hit);
         }
