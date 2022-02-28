@@ -18,7 +18,7 @@
             publishedAt: '{{ 'publishedAt'|trans({}, 'messages') }}',
             publicationStatus: '{{ 'publicationStatus'|trans({}, 'messages') }}',
             author: '{{ 'author'|trans({}, 'messages') }}',
-            flags: '{{ 'flags'|trans({}, 'node') }}',
+            nodePurpose: '{{ 'nodePurpose'|trans({}, 'node') }}',
             title: '{{ 'title'|trans({}, 'messages') }}',
             slug: '{{ 'slug'|trans({}, 'messages') }}',
             contentTypeName: '{{ 'contentTypeName'|trans }}',

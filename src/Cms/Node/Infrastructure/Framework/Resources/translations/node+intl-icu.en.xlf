@@ -123,16 +123,16 @@
                 <target>Nodes of {type}</target>
             </trans-unit>
             <trans-unit id="tuliacms.node.31">
-                <source>flags</source>
-                <target>Flags</target>
+                <source>nodePurpose</source>
+                <target>Node purpose</target>
             </trans-unit>
             <trans-unit id="tuliacms.node.32">
                 <source>flagWithName</source>
                 <target>Flag: {flag}</target>
             </trans-unit>
             <trans-unit id="tuliacms.node.33">
-                <source>flagsHelp</source>
-                <target>Flags describes additional functionalities or attributes of any node. You can set here, i.e. if this node should be a Homepage.</target>
+                <source>nodePurposeInfo</source>
+                <target>Node purpose describes additional purpose of any node. You can set here, i.e. if this node should be a Homepage.</target>
             </trans-unit>
             <trans-unit id="tuliacms.node.34">
                 <source>flagType.page:homepage</source>

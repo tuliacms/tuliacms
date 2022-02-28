@@ -27,7 +27,7 @@
                                     <div class="ctb-field"><span class="ctb-field-label">{{ translations.publishedAt }}</span></div>
                                     <div class="ctb-field"><span class="ctb-field-label">{{ translations.publicationStatus }}</span></div>
                                     <div class="ctb-field"><span class="ctb-field-label">{{ translations.author }}</span></div>
-                                    <div class="ctb-field"><span class="ctb-field-label">{{ translations.flags }}</span></div>
+                                    <div class="ctb-field"><span class="ctb-field-label">{{ translations.nodePurpose }}</span></div>
                                 </div>
                             </div>
                         </div>
