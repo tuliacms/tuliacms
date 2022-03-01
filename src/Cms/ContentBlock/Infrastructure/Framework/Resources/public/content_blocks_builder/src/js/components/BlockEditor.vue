@@ -9,8 +9,8 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col mb-3">
-                            <label for="cbb-new-field-label" class="form-label">{{ translations.blockName }}</label>
-                            <input type="text" :class="{ 'form-control': true, 'cbb-autofocus': true, 'is-invalid': model.name.valid === false }" id="cbb-new-field-label" v-model="model.name.value" />
+                            <label for="cbb-block-editor-field-label" class="form-label">{{ translations.blockName }}</label>
+                            <input type="text" :class="{ 'form-control': true, 'cbb-autofocus': true, 'is-invalid': model.name.valid === false }" id="cbb-block-editor-field-label" v-model="model.name.value" />
                             <div v-if="model.name.valid === false" class="invalid-feedback">{{ model.name.message }}</div>
                         </div>
                     </div>

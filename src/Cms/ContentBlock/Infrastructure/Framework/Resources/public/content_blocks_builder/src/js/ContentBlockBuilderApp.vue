@@ -1,5 +1,15 @@
 <template>
     <div class="content-block-builder">
+        <div class="cbb-toolbar">
+            <button type="button" class="btn btn-primary btn-icon-left" @click="openImportModal()">
+                <i class="btn-icon fas fa-upload"></i>
+                {{ translations.import }}
+            </button>
+            <button type="button" class="btn btn-primary btn-icon-left" @click="exportToJson()">
+                <i class="btn-icon fas fa-download"></i>
+                {{ translations.export }}
+            </button>
+        </div>
         <div class="cbb-blocks-list">
             <draggable class="cbb-sortable-fields" v-bind="dragOptions" :list="model.blocks" handle=".cbb-sortable-handler" group="fields" @start="drag=true" @end="drag=false" ghost-class="cbb-draggable-ghost">
                 <transition-group type="transition" :name="!drag ? 'flip-list' : null" class="cbb-sortable-placeholder" tag="div" :data-label="translations.addNewBlock">
@@ -17,6 +27,14 @@
             <i class="btn-icon fas fa-plus"></i>
             {{ translations.addBlock }}
         </button>
+        <ExportJson
+            :json="model_json"
+            :translations="translations"
+        ></ExportJson>
+        <ImportJson
+            :translations="translations"
+            @import="importJson"
+        ></ImportJson>
         <BlockCreator
             :block_types="block_types"
             :translations="translations"
@@ -38,6 +56,8 @@ import draggable from 'vuedraggable';
 import Block from './components/Block';
 import BlockCreator from './components/BlockCreator';
 import BlockEditor from './components/BlockEditor';
+import ExportJson from './components/ExportJson';
+import ImportJson from './components/ImportJson';
 
 export default {
     name: 'ContentBlockBuilder',
@@ -78,6 +98,8 @@ export default {
                 modal: {
                     block_creator: null,
                     block_editor: null,
+                    export_json: null,
+                    import_json: null,
                 },
                 form: {
                     block_editor: {
@@ -88,6 +110,7 @@ export default {
                 },
             },
             model: model,
+            model_json: '',
         };
     },
     computed: {
@@ -105,10 +128,27 @@ export default {
         Block,
         BlockCreator,
         BlockEditor,
+        ExportJson,
+        ImportJson,
     },
     methods: {
         save: function () {
             this.model_result = '[content_block_render source="' + btoa(unescape(encodeURIComponent(JSON.stringify(this.model)))) + '"]';
+        },
+        exportToJson: function () {
+            this.model_json = JSON.stringify(this.model, undefined, 4);
+            this.view.modal.export_json.show();
+
+            this.$root.$emit('export:modal:opened');
+        },
+        openImportModal: function () {
+            this.view.modal.import_json.show();
+
+            this.$root.$emit('import:modal:opened');
+        },
+        importJson: function (json) {
+            this.model = JSON.parse(json);
+            this.view.modal.import_json.hide();
         },
         removeBlock: function (blockId) {
             Tulia.Confirmation.warning().then((result) => {
@@ -229,6 +269,9 @@ export default {
         EditionModal.addEventListener('shown.bs.modal', function () {
             $(EditionModal).find('.cbb-autofocus').focus();
         });
+
+        this.view.modal.export_json = new bootstrap.Modal(document.getElementById('cbb-export-json-modal'));
+        this.view.modal.import_json = new bootstrap.Modal(document.getElementById('cbb-import-json-modal'));
 
         this.$root.$on('block:create', () => {
             this.openCreateBlockModel();

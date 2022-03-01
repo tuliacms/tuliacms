@@ -12,7 +12,7 @@
             </trans-unit>
             <trans-unit id="tuliacms.node.3">
                 <source>nodeSaved</source>
-                <target>Node saved</target>
+                <target>Node saved.</target>
             </trans-unit>
             <trans-unit id="tuliacms.node.4">
                 <source>trashNode</source>

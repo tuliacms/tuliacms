@@ -51,6 +51,18 @@
                 <source>duplicateBlock</source>
                 <target>Duplicate block</target>
             </trans-unit>
+            <trans-unit id="tuliacms.content_block.13">
+                <source>import</source>
+                <target>Import blocks</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_block.14">
+                <source>export</source>
+                <target>Export blocks</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_block.15">
+                <source>pasteJsonBlocks</source>
+                <target>Paste JSON with Blocks</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

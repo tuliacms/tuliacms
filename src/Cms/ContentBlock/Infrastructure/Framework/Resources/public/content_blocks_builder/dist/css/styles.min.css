@@ -1,5 +1,14 @@
 .content-block-builder {
   padding: 20px; }
+  .content-block-builder .cbb-toolbar {
+    margin-bottom: 30px;
+    text-align: right; }
+  .content-block-builder .cbb-export-pre {
+    max-width: 100%;
+    height: 300px;
+    overflow: auto; }
+  .content-block-builder .cbb-import-textarea {
+    height: 26px; }
   .content-block-builder .cbb-blocks-list .cbb-block {
     position: relative;
     margin-bottom: 10px;

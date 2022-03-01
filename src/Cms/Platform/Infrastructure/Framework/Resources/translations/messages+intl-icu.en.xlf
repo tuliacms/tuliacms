@@ -817,6 +817,10 @@
                 <target>Remember me</target>
                 <note>Label of the checkbox on login page</note>
             </trans-unit>
+            <trans-unit id="tuliacms.messages.204">
+                <source>copy</source>
+                <target>Copy</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
