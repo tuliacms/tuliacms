@@ -6,12 +6,12 @@ namespace Tulia\Cms\Widget\Domain\WriteModel;
 
 use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
 use Tulia\Cms\Shared\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
+use Tulia\Cms\Widget\Domain\Catalog\Registry\WidgetRegistryInterface;
 use Tulia\Cms\Widget\Domain\WriteModel\Event\WidgetDeleted;
 use Tulia\Cms\Widget\Domain\WriteModel\Event\WidgetUpdated;
 use Tulia\Cms\Widget\Domain\WriteModel\Exception\WidgetNotFoundException;
 use Tulia\Cms\Widget\Domain\WriteModel\Model\Widget;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
-use Tulia\Component\Widget\Registry\WidgetRegistryInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -19,13 +19,9 @@ use Tulia\Component\Widget\Registry\WidgetRegistryInterface;
 class WidgetRepository
 {
     private WidgetWriteStorageInterface $storage;
-
     private CurrentWebsiteInterface $currentWebsite;
-
     private WidgetRegistryInterface $widgetRegistry;
-
     private UuidGeneratorInterface $uuidGenerator;
-
     private EventBusInterface $eventBus;
 
     public function __construct(
@@ -46,7 +42,7 @@ class WidgetRepository
     {
         return Widget::createNew(
             $this->uuidGenerator->generate(),
-            $this->widgetRegistry->get($widgetType),
+            $widgetType,
             $this->currentWebsite->getId(),
             $this->currentWebsite->getLocale()->getCode()
         );
@@ -70,7 +66,6 @@ class WidgetRepository
         $data['styles'] = json_decode($data['styles'], true);
         $data['payload'] = json_decode($data['payload'], true);
         $data['payload_localized'] = json_decode($data['payload_localized'], true);
-        $data['widget_type'] = $this->widgetRegistry->get($data['widget_type']);
 
         return Widget::buildFromArray($data);
     }
@@ -135,7 +130,7 @@ class WidgetRepository
         return [
             'id' => $widget->getId()->getValue(),
             'website_id' => $widget->getWebsiteId(),
-            'widget_type' => $widget->getWidgetInstance()->getId(),
+            'widget_type' => $widget->getWidgetType(),
             'space' => $widget->getSpace(),
             'name' => $widget->getName(),
             'html_class' => $widget->getHtmlClass(),

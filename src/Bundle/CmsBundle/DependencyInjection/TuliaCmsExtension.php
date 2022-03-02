@@ -41,6 +41,7 @@ class TuliaCmsExtension extends Extension
         $container->setParameter('cms.content_builder.constraint_types.mapping', $config['content_building']['constraint_types']['mapping']);
         $container->setParameter('cms.options.definitions', $this->validateOptionsValues($config['options']['definitions'] ?? []));
         $container->setParameter('cms.attributes.finder.types', $config['attributes']['finder']['types'] ?? []);
+        $container->setParameter('cms.widgets', $config['widgets'] ?? []);
 
         // BodyClass
         $container->registerForAutoconfiguration(\Tulia\Cms\BodyClass\Collector\BodyClassCollectorInterface::class)
@@ -60,7 +61,7 @@ class TuliaCmsExtension extends Extension
         $container->registerForAutoconfiguration(\Tulia\Cms\BackendMenu\Domain\Builder\BuilderInterface::class)
             ->addTag('backend_menu.builder');
 
-        // EditLinks
+        // EditLinksHa
         $container->registerForAutoconfiguration(\Tulia\Cms\EditLinks\Service\EditLinksCollectorInterface::class)
             ->addTag('edit_links.collector');
 
@@ -107,6 +108,11 @@ class TuliaCmsExtension extends Extension
         // Common
         $container->registerForAutoconfiguration(\Tulia\Cms\Shared\Domain\WriteModel\ActionsChain\AggregateActionInterface::class)
             ->addTag('cms.domain.action_chain');
+
+        // Widgets
+        $container->registerForAutoconfiguration(\Tulia\Cms\Widget\Domain\Catalog\WidgetInterface::class)
+            ->setLazy(true)
+            ->addTag('cms.widget');
     }
 
     protected function validateOptionsValues(array $definitions): array

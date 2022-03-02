@@ -12,3 +12,114 @@ framework:
                 templates:
                     widget:
                         template: "{% extends [ '@theme/widget.tpl', '@parent/widget.tpl', '@widget-base/widget.tpl' ] %}"
+cms:
+    widgets:
+        internal.features:
+            classname: 'Tulia\Cms\Widget\Infrastructure\Cms\Widget\Predefined\Features\FeaturesWidget'
+            views: '%kernel.project_dir%/src/Cms/Widget/Infrastructure/Framework/Resources/views/widget/features'
+            name: widget.features.name
+            description: widget.features.description
+            translation_domain: widgets
+            fields:
+                features:
+                    type: repeatable
+                    name: Features
+                label:
+                    type: text
+                    name: title
+                    parent: features
+                description:
+                    type: text
+                    name: description
+                    parent: features
+                icon:
+                    type: text
+                    name: icon
+                    parent: features
+                position:
+                    type: hidden
+                    name: ~
+                    parent: features
+        internal.text:
+            classname: 'Tulia\Cms\Widget\Infrastructure\Cms\Widget\Predefined\Text\TextWidget'
+            views: '%kernel.project_dir%/src/Cms/Widget/Infrastructure/Framework/Resources/views/widget/text'
+            name: widget.text.name
+            description: widget.text.description
+            translation_domain: widgets
+            fields:
+                content:
+                    type: wysiwyg
+                    name: content
+    content_building:
+        content_type:
+            widget:
+                layout_builder: 'Tulia\Cms\User\Infrastructure\Presentation\TwigUserContentTypeLayoutBuilder'
+                multilingual: false
+                configurable: false
+        data_types:
+            mapping:
+                widget_space:
+                    label: Widget space
+                    classname: 'Symfony\Component\Form\Extension\Core\Type\ChoiceType'
+                    builder: 'Tulia\Cms\Widget\Infrastructure\Framework\Form\FormType\WidgetSpaceTypeBuilder'
+                    only_for_types: [ widget ]
+                    constraints: [ required ]
+                widget_styles:
+                    label: Widget styles
+                    classname: 'Symfony\Component\Form\Extension\Core\Type\ChoiceType'
+                    builder: 'Tulia\Cms\Widget\Infrastructure\Framework\Form\FormType\WidgetStylesTypeBuilder'
+                    only_for_types: [ widget ]
+        content_type_entry:
+            widget:
+                type: widget
+                name: Widgets
+                icon: null
+                controller: null
+                is_routable: false
+                is_hierarchical: false
+                routing_strategy: null
+                layout:
+                    sections:
+                        lead:
+                            groups:
+                                basisc:
+                                    name: Basics
+                                    fields:
+                                        name:
+                                            type: text
+                                            name: name
+                                            constraints:
+                                                - code: required
+                                        space:
+                                            type: widget_space
+                                            name: widgetSpace
+                                            constraints:
+                                                - code: required
+                        sidebar:
+                            groups:
+                                status:
+                                    name: Status
+                                    fields:
+                                        avatar:
+                                            type: yes_no
+                                            name: visibility
+                                look:
+                                    name: Look
+                                    fields:
+                                        title:
+                                            type: text
+                                            name: Title
+                                        styles:
+                                            type: widget_styles
+                                            name: Styles
+                                        html_class:
+                                            type: text
+                                            name: HTML Class
+                                        html_id:
+                                            type: text
+                                            name: HTML ID
+                        main:
+                            groups:
+                                widget_options:
+                                    name: Widget options
+                                    fields: []

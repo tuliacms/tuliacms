@@ -2,24 +2,18 @@
 
 declare(strict_types = 1);
 
-namespace Tulia\Component\Widget;
+namespace Tulia\Cms\Widget\Domain\Catalog;
 
 use Symfony\Component\Form\FormInterface;
+use Tulia\Cms\Widget\Domain\Catalog\Configuration\ConfigurationInterface;
 use Tulia\Component\Templating\ViewInterface;
-use Tulia\Component\Widget\Configuration\ConfigurationInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 interface WidgetInterface
 {
-    public static function getId(): string;
-
     public function configure(ConfigurationInterface $config): void;
-
-    public function getInfo(): array;
-
-    public function getViewsDirectory(): string;
 
     /**
      * Method called on front, when widget is rendered with declared config.

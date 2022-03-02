@@ -22,3 +22,9 @@ services:
         class: Tulia\Cms\Widget\Domain\Renderer\Renderer
         bind:
             $storage: '@Tulia\Cms\Widget\Infrastructure\Widget\Storage\DatabaseStorage'
+
+    Tulia\Cms\Widget\Infrastructure\Persistence\ContainerProvider\WidgetTypeContainerProvider:
+        parent: Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\AbstractContentTypeProvider
+        bind:
+            $widgets: '%cms.widgets%'
+            $configuration: '%cms.content_builder.content_type_entry.config%'

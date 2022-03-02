@@ -66,7 +66,8 @@ class ArrayToReadModelTransformer
      *                                             ...
      *                                         ]
      *                                     ]
-     *                                 ]
+     *                                 ],
+     *                                 children: [...]
      *                             ]
      *                         ]
      *                     ]

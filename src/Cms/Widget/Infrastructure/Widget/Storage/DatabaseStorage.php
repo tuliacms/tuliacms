@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Tulia\Cms\Widget\Infrastructure\Widget\Storage;
 
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
+use Tulia\Cms\Widget\Domain\Catalog\Storage\StorageInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
-use Tulia\Component\Widget\Storage\StorageInterface;
 
 /**
  * @author Adam Banaszkiewicz

@@ -12,11 +12,8 @@ use Tulia\Cms\Shared\Domain\WriteModel\Event\DomainEvent as PlatformDomainEvent;
 abstract class DomainEvent extends PlatformDomainEvent
 {
     private string $widgetId;
-
     private string $widgetType;
-
     private string $websiteId;
-
     private string $locale;
 
     public function __construct(string $widgetId, string $widgetType, string $websiteId, string $locale)

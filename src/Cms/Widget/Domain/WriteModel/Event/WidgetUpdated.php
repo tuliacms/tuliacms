@@ -15,7 +15,7 @@ class WidgetUpdated extends DomainEvent
     {
         return new self(
             $widget->getId()->getValue(),
-            $widget->getWidgetInstance()->getId(),
+            $widget->getWidgetType(),
             $widget->getWebsiteId(),
             $widget->getLocale()
         );

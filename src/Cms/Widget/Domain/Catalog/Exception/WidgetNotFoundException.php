@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Component\Widget\Exception;
+namespace Tulia\Cms\Widget\Domain\Catalog\Exception;
 
 /**
  * @author Adam Banaszkiewicz

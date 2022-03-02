@@ -8,10 +8,10 @@ use PDO;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Query\QueryBuilder;
+use Tulia\Cms\Widget\Domain\Catalog\Registry\WidgetRegistryInterface;
 use Tulia\Component\Datatable\Finder\AbstractDatatableFinder;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 use Tulia\Component\Theme\ManagerInterface;
-use Tulia\Component\Widget\Registry\WidgetRegistryInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -167,9 +167,7 @@ class DatatableFinder extends AbstractDatatableFinder
         $widgetsNames = [];
 
         foreach ($this->widgetRegistry->all() as $widget) {
-            $info = $widget->getInfo();
-
-            $widgetsNames[$widget->getId()] = $this->translator->trans($info['name'], [], $info['translation_domain'] ?? null);
+            $widgetsNames[$widget->getId()] = $this->translator->trans($widget->getName(), [], $widget->getTranslationDomain());
         }
 
         return $widgetsNames;

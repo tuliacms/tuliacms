@@ -9,7 +9,7 @@
     <div class="page-form-sidebar">
         <div class="text-center" style="padding:24px 10px;border-bottom:1px solid #ddd;">
             <span style="font-size:21px;display:block;">
-                {{ widget.info.name|default('_name not provided_')|trans({}, widget.info.translation_domain|default('widgets')) }}
+                {{ widget.name|default('_name not provided_')|trans({}, widget.translationDomain|default('widgets')) }}
             </span>
             <span style="font-size:10px;text-transform:uppercase;line-height:1.2;margin-top:-1px;display:block;opacity:.6;">
                 {{ 'widgetType'|trans({}, 'widgets') }}

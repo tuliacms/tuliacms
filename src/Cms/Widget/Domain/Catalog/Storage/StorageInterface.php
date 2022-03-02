@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace Tulia\Component\Widget\Storage;
+namespace Tulia\Cms\Widget\Domain\Catalog\Storage;
 
 /**
  * @author Adam Banaszkiewicz

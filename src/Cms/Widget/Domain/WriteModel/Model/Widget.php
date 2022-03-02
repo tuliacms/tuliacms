@@ -5,11 +5,10 @@ declare(strict_types=1);
 namespace Tulia\Cms\Widget\Domain\WriteModel\Model;
 
 use Tulia\Cms\Shared\Domain\WriteModel\Model\AggregateRoot;
+use Tulia\Cms\Widget\Domain\Catalog\Configuration\ArrayConfiguration;
+use Tulia\Cms\Widget\Domain\Catalog\Configuration\ConfigurationInterface;
 use Tulia\Cms\Widget\Domain\WriteModel\Event;
 use Tulia\Cms\Widget\Domain\WriteModel\Model\ValueObject\WidgetId;
-use Tulia\Component\Widget\Configuration\ArrayConfiguration;
-use Tulia\Component\Widget\Configuration\ConfigurationInterface;
-use Tulia\Component\Widget\WidgetInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -20,7 +19,7 @@ class Widget extends AggregateRoot
 
     protected string $websiteId;
 
-    protected WidgetInterface $widgetInstance;
+    protected string $widgetType;
 
     protected ?string $space = null;
 
@@ -46,15 +45,15 @@ class Widget extends AggregateRoot
 
     protected bool $translated = true;
 
-    private function __construct(string $id, WidgetInterface $widgetType, string $websiteId, string $locale)
+    private function __construct(string $id, string $widgetType, string $websiteId, string $locale)
     {
         $this->id = new WidgetId($id);
-        $this->widgetInstance = $widgetType;
+        $this->widgetType = $widgetType;
         $this->websiteId = $websiteId;
         $this->locale = $locale;
     }
 
-    public static function createNew(string $id, WidgetInterface $widgetType, string $websiteId, string $locale): self
+    public static function createNew(string $id, string $widgetType, string $websiteId, string $locale): self
     {
         $self = new self($id, $widgetType, $websiteId,  $locale);
         $self->recordThat(Event\WidgetCreated::fromWidget($self));
@@ -96,10 +95,6 @@ class Widget extends AggregateRoot
         $config->multilingualFields(array_keys($self->getPayloadLocalized()));
 
         $self->setWidgetConfiguration($config);
-
-        $configs = $config->all();
-        $self->getWidgetInstance()->configure($config);
-        $config->merge($configs);
     }
 
     public function getId(): WidgetId
@@ -122,9 +117,9 @@ class Widget extends AggregateRoot
         $this->websiteId = $websiteId;
     }
 
-    public function getWidgetInstance(): WidgetInterface
+    public function getWidgetType(): string
     {
-        return $this->widgetInstance;
+        return $this->widgetType;
     }
 
     public function getSpace(): ?string

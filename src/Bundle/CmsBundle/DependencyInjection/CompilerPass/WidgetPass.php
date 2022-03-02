@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Tulia\Bundle\CmsBundle\DependencyInjection\CompilerPass;
 
-use ReflectionClass;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Reference;
+use Tulia\Cms\Widget\Domain\Catalog\Registry\WidgetRegistryInterface;
 use Tulia\Component\Templating\Twig\Loader\AdvancedFilesystemLoader;
 
 /**
@@ -17,15 +18,26 @@ class WidgetPass implements CompilerPassInterface
     public function process(ContainerBuilder $container): void
     {
         $loader = $container->findDefinition(AdvancedFilesystemLoader::class);
-        $widgets = $container->findTaggedServiceIds('widget');
+        $registry = $container->findDefinition(WidgetRegistryInterface::class);
+        $widgets = $container->findTaggedServiceIds('cms.widget');
+        $widgetsInfo = $container->getParameter('cms.widgets');
 
-        foreach ($widgets as $id => $tags) {
-            $definition = $container->getDefinition($id);
-            $className = $definition->getClass();
+        foreach ($widgetsInfo as $id => $info) {
+            if (isset($widgets[$info['classname']]) === false) {
+                throw new \LogicException(sprintf(
+                    'Cannot find "%s" service for "%s" widget. Please verify that class exists and is registered and widget.',
+                    $info['classname'],
+                    $id
+                ));
+            }
+
+            $info['id'] = $id;
+
+            $registry->addMethodCall('addWidget', [$info, new Reference($info['classname'])]);
 
             $loader->addMethodCall('setPath', [
-                '@widget/' . str_replace('.', '/', $className::getId()),
-                \dirname((new ReflectionClass($className))->getFileName())
+                '@widget/' . str_replace('.', '/', $id),
+                $info['views']
             ]);
         }
     }

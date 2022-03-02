@@ -12,3 +12,31 @@ framework:
                 provider: '%tulia.cache.provider%'
                 default_lifetime: 86400
                 tags: true
+cms:
+    content_building:
+        data_types:
+            mapping:
+                menu_select:
+                    label: Menu
+                    classname: 'Symfony\Component\Form\Extension\Core\Type\ChoiceType'
+                    builder: 'Tulia\Cms\Menu\Infrastructure\Framework\Form\FormType\MenuSelectTypeBuilder'
+                    constraints: [ required ]
+                menu_layout:
+                    label: Widget styles
+                    classname: 'Symfony\Component\Form\Extension\Core\Type\ChoiceType'
+                    builder: 'Tulia\Cms\Widget\Infrastructure\Framework\Form\FormType\WidgetStylesTypeBuilder'
+                    constraints: [ required ]
+    widgets:
+        internal.menu:
+            classname: 'Tulia\Cms\Menu\Infrastructure\Cms\Widget\Menu\MenuWidget'
+            name: widget.menu.name
+            views: '%kernel.project_dir%/src/Cms/Menu/Infrastructure/Framework/Resources/views/widget/menu'
+            description: widget.menu.description
+            translation_domain: widgets
+            fields:
+                menu_id:
+                    type: menu_select
+                    name: Menu
+                layout:
+                    type: menu_layout
+                    name: Menu layout

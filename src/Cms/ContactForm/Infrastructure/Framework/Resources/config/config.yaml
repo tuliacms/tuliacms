@@ -15,6 +15,17 @@ framework:
                     - /assets/core/contact-forms/js/build.js
 
 cms:
+    widgets:
+        internal.contact_form:
+            classname: 'Tulia\Cms\ContactForm\Infrastructure\Cms\Widget\Predefined\ContactFormWidget'
+            name: widget.name
+            views: '%kernel.project_dir%/src/Cms/ContactForm/Infrastructure/Framework/Resources/views/widgets/contact-form'
+            description: widget.description
+            translation_domain: contact-form
+            fields:
+                form_id:
+                    type: contact_form
+                    name: form
     content_blocks:
         templating:
             paths:

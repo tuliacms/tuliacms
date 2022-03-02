@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Widget\Infrastructure\Framework\Twig\Extension;
 
+use Tulia\Cms\Widget\Domain\Catalog\Storage\StorageInterface;
 use Tulia\Cms\Widget\Domain\Renderer\RendererInterface;
-use Tulia\Component\Widget\Storage\StorageInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Widget\Domain\Renderer;
 
+use Tulia\Cms\Widget\Domain\Catalog\Configuration\ArrayConfiguration;
+use Tulia\Cms\Widget\Domain\Catalog\Registry\WidgetRegistryInterface;
+use Tulia\Cms\Widget\Domain\Catalog\Storage\StorageInterface;
 use Tulia\Component\Templating\EngineInterface;
-use Tulia\Component\Widget\Configuration\ArrayConfiguration;
-use Tulia\Component\Widget\Registry\WidgetRegistryInterface;
-use Tulia\Component\Widget\Storage\StorageInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -83,7 +83,7 @@ class Renderer implements RendererInterface
         }
 
         $config = new ArrayConfiguration($data['space']);
-        $widget = $this->registry->get($data['widget_type']);
+        $widget = $this->registry->get($data['widget_type'])->getInstance();
         $widget->configure($config);
         $config->merge(array_merge(
             $data['payload'],

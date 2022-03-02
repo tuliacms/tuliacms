@@ -90,7 +90,6 @@
             "Tulia\\Component\\Shortcode\\": "src/Component/shortcode/src",
             "Tulia\\Component\\Templating\\": "src/Component/templating/src",
             "Tulia\\Component\\Theme\\": "src/Component/theme/src",
-            "Tulia\\Component\\Widget\\": "src/Component/widget/src",
             "Tulia\\Cms\\Migrations\\": "src/Migrations",
             "Tulia\\Cms\\Shared\\": "src/Shared",
             "Tulia\\Cms\\": "src/Cms"

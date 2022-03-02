@@ -11,6 +11,8 @@ use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\AbstractContentTypeProvide
  */
 class ContentTypeContainerProvider extends AbstractContentTypeProvider
 {
+    use SymfonyContainerStandarizableTrait;
+
     private array $configuration;
 
     public function __construct(array $configuration)
@@ -37,29 +39,7 @@ class ContentTypeContainerProvider extends AbstractContentTypeProvider
     {
         foreach ($data['layout']['sections'] as $sectionCode => $section) {
             foreach ($section['groups'] as $groupCode => $group) {
-                foreach ($group['fields'] as $fieldCode => $field) {
-                    $constraints = [];
-                    $configuration = [];
-
-                    foreach ($field['constraints'] as $constraint) {
-                        $modificators = [];
-
-                        foreach ($constraint['modificators'] ?? [] as $modificator) {
-                            $modificators[$modificator['code']] = $modificator['value'];
-                        }
-
-                        $constraints[$constraint['code']] = [
-                            'modificators' => $modificators,
-                        ];
-                    }
-
-                    foreach ($field['configuration'] as $config) {
-                        $configuration[$config['code']] = $config['value'];
-                    }
-
-                    $data['layout']['sections'][$sectionCode]['groups'][$groupCode]['fields'][$fieldCode]['constraints'] = $constraints;
-                    $data['layout']['sections'][$sectionCode]['groups'][$groupCode]['fields'][$fieldCode]['configuration'] = $configuration;
-                }
+                $data['layout']['sections'][$sectionCode]['groups'][$groupCode]['fields'] = $this->standarizeFields($group['fields']);
             }
         }
 

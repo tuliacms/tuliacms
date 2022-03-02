@@ -2,33 +2,23 @@
 
 declare(strict_types = 1);
 
-namespace Tulia\Component\Widget;
+namespace Tulia\Cms\Widget\Domain\Catalog;
 
 use Symfony\Component\Form\FormInterface;
-use Tulia\Component\Templating\ViewInterface;
+use Tulia\Cms\Widget\Domain\Catalog\Configuration\ConfigurationInterface;
 use Tulia\Component\Templating\View;
-use Tulia\Component\Widget\Configuration\ConfigurationInterface;
+use Tulia\Component\Templating\ViewInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 abstract class AbstractWidget implements WidgetInterface
 {
-    protected string $viewsDirectory;
-
     /**
      * {@inheritdoc}
      */
     public function configure(ConfigurationInterface $config): void
     {}
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getInfo(): array
-    {
-        return [];
-    }
 
     /**
      * {@inheritdoc}
@@ -44,17 +34,6 @@ abstract class AbstractWidget implements WidgetInterface
     public function getForm(ConfigurationInterface $config): ?string
     {
         return null;
-    }
-
-    public function getViewsDirectory(): string
-    {
-        if ($this->viewsDirectory) {
-            return $this->viewsDirectory;
-        }
-
-        $reflection = new \ReflectionClass($this);
-
-        return $this->viewsDirectory = \dirname($reflection->getFileName());
     }
 
     public function saveAction(FormInterface $form, ConfigurationInterface $config): void

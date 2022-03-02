@@ -25,6 +25,7 @@ class Configuration implements ConfigurationInterface
         $this->registerContentBuildingConfiguration($root);
         $this->registerContentBlockConfiguration($root);
         $this->registerAttributesConfiguration($root);
+        $this->registerWidgetsConfiguration($root);
 
         return $treeBuilder;
     }
@@ -169,39 +170,7 @@ class Configuration implements ConfigurationInterface
                                                                 ->scalarNode('name')->isRequired()->end()
                                                                 ->booleanNode('active')->defaultFalse()->end()
                                                                 ->integerNode('order')->defaultValue(1)->end()
-                                                                ->arrayNode('fields')
-                                                                    ->arrayPrototype()
-                                                                        ->children()
-                                                                            ->scalarNode('type')->isRequired()->end()
-                                                                            ->scalarNode('name')->isRequired()->end()
-                                                                            ->booleanNode('is_multilingual')->defaultFalse()->end()
-                                                                            ->arrayNode('fields')->scalarPrototype()->defaultValue([])->end()->end()
-                                                                            ->arrayNode('configuration')
-                                                                                ->arrayPrototype()
-                                                                                    ->children()
-                                                                                        ->scalarNode('code')->isRequired()->end()
-                                                                                        ->scalarNode('value')->isRequired()->end()
-                                                                                    ->end()
-                                                                                ->end()
-                                                                            ->end()
-                                                                            ->arrayNode('constraints')
-                                                                                ->arrayPrototype()
-                                                                                    ->children()
-                                                                                        ->scalarNode('code')->isRequired()->end()
-                                                                                        ->arrayNode('modificators')
-                                                                                            ->arrayPrototype()
-                                                                                                ->children()
-                                                                                                    ->scalarNode('code')->isRequired()->end()
-                                                                                                    ->scalarNode('value')->isRequired()->end()
-                                                                                                ->end()
-                                                                                            ->end()
-                                                                                        ->end()
-                                                                                    ->end()
-                                                                                ->end()
-                                                                            ->end()
-                                                                        ->end()
-                                                                    ->end()
-                                                                ->end()
+                                                                ->append($this->buildContentTypeFieldsNode('fields'))
                                                             ->end()
                                                         ->end()
                                                     ->end()
@@ -235,6 +204,27 @@ class Configuration implements ConfigurationInterface
         ;
     }
 
+    private function registerWidgetsConfiguration(ArrayNodeDefinition $root): void
+    {
+        $root
+            ->children()
+                ->arrayNode('widgets')
+                    ->arrayPrototype()
+                        ->addDefaultsIfNotSet()
+                        ->children()
+                            ->scalarNode('classname')->isRequired()->end()
+                            ->scalarNode('name')->isRequired()->end()
+                            ->scalarNode('views')->isRequired()->end()
+                            ->scalarNode('description')->defaultNull()->end()
+                            ->scalarNode('translation_domain')->defaultNull()->end()
+                            ->append($this->buildContentTypeFieldsNode('fields'))
+                        ->end()
+                    ->end()
+                ->end()
+            ->end()
+        ;
+    }
+
     private function buildConstraintsNode(string $nodeName): NodeDefinition
     {
         $treeBuilder = new TreeBuilder($nodeName);
@@ -253,6 +243,45 @@ class Configuration implements ConfigurationInterface
                                 ->scalarNode('type')->isRequired()->end()
                                 ->scalarNode('label')->isRequired()->end()
                                 ->scalarNode('value')->defaultNull()->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
+            ->end()
+        ;
+    }
+
+    private function buildContentTypeFieldsNode(string $nodeName): NodeDefinition
+    {
+        $treeBuilder = new TreeBuilder($nodeName);
+
+        return $treeBuilder->getRootNode()
+            ->arrayPrototype()
+                ->children()
+                    ->scalarNode('type')->isRequired()->end()
+                    ->scalarNode('name')->isRequired()->end()
+                    ->booleanNode('is_multilingual')->defaultFalse()->end()
+                    ->scalarNode('parent')->defaultNull()->end()
+                    ->arrayNode('configuration')
+                        ->arrayPrototype()
+                            ->children()
+                                ->scalarNode('code')->isRequired()->end()
+                                ->scalarNode('value')->isRequired()->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                    ->arrayNode('constraints')
+                        ->arrayPrototype()
+                            ->children()
+                                ->scalarNode('code')->isRequired()->end()
+                                ->arrayNode('modificators')
+                                    ->arrayPrototype()
+                                        ->children()
+                                            ->scalarNode('code')->isRequired()->end()
+                                            ->scalarNode('value')->isRequired()->end()
+                                        ->end()
+                                    ->end()
+                                ->end()
                             ->end()
                         ->end()
                     ->end()

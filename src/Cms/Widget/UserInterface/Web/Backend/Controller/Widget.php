@@ -9,13 +9,13 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
+use Tulia\Cms\Widget\Domain\Catalog\Registry\WidgetRegistryInterface;
 use Tulia\Cms\Widget\Domain\WriteModel\Exception\WidgetNotFoundException;
 use Tulia\Cms\Widget\Domain\WriteModel\WidgetRepository;
 use Tulia\Cms\Widget\Infrastructure\Persistence\Domain\ReadModel\Datatable\DatatableFinder;
 use Tulia\Cms\Widget\UserInterface\Web\Backend\Form\WidgetForm;
 use Tulia\Component\Datatable\DatatableFactory;
 use Tulia\Component\Templating\ViewInterface;
-use Tulia\Component\Widget\Registry\WidgetRegistryInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -23,7 +23,6 @@ use Tulia\Component\Widget\Registry\WidgetRegistryInterface;
 class Widget extends AbstractController
 {
     private WidgetRegistryInterface $widgetRegistry;
-
     private WidgetRepository $repository;
 
     public function __construct(
@@ -62,9 +61,14 @@ class Widget extends AbstractController
      */
     public function create(Request $request, string $type)
     {
+        $widgetInfo = $this->widgetRegistry->get($type);
+        $widgetInstance = $widgetInfo->getInstance();
         $model = $this->repository->createNew($type);
-        $widgetInstance = $model->getWidgetInstance();
         $widgetConfiguration = $model->getWidgetConfiguration();
+
+        $configs = $widgetConfiguration->all();
+        $widgetInstance->configure($widgetConfiguration);
+        $widgetConfiguration->merge($configs);
 
         $form = $this->createForm(WidgetForm::class, $model, [
             'widget_form' => $widgetInstance->getForm($widgetConfiguration),
@@ -91,7 +95,7 @@ class Widget extends AbstractController
 
         return $this->view('@backend/widget/create.tpl', [
             'widgetView' => $widgetView,
-            'widget'     => $widgetInstance,
+            'widget'     => $widgetInfo,
             'form'       => $form->createView(),
         ]);
     }
@@ -104,8 +108,13 @@ class Widget extends AbstractController
     public function edit(Request $request, string $id)
     {
         $model = $this->repository->find($id);
-        $widgetInstance = $model->getWidgetInstance();
+        $widgetInfo = $this->widgetRegistry->get($model->getWidgetType());
+        $widgetInstance = $widgetInfo->getInstance();
         $widgetConfiguration = $model->getWidgetConfiguration();
+
+        $configs = $widgetConfiguration->all();
+        $widgetInstance->configure($widgetConfiguration);
+        $widgetConfiguration->merge($configs);
 
         $form = $this->createForm(WidgetForm::class, $model, [
             'widget_form' => $widgetInstance->getForm($widgetConfiguration),
@@ -132,7 +141,7 @@ class Widget extends AbstractController
 
         return $this->view('@backend/widget/edit.tpl', [
             'widgetView' => $widgetView,
-            'widget'     => $widgetInstance,
+            'widget'     => $widgetInfo,
             'model'      => $model,
             'form'       => $form->createView(),
         ]);

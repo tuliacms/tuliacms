@@ -14,4 +14,3 @@ imports:
     - { resource: services/templating.yaml }
     - { resource: services/theme.yaml }
     - { resource: services/utils.yaml }
-    - { resource: services/widget.yaml }

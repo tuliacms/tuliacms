@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace Tulia\Component\Widget\Configuration;
+namespace Tulia\Cms\Widget\Domain\Catalog\Configuration;
 
 /**
  * @author Adam Banaszkiewicz
