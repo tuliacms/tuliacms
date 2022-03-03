@@ -25,9 +25,6 @@ class FeaturesWidget extends AbstractWidget
         ]]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function render(ConfigurationInterface $config): ?ViewInterface
     {
         return $this->view('@widget/internal/features/frontend.tpl', [
@@ -35,9 +32,6 @@ class FeaturesWidget extends AbstractWidget
         ]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getView(ConfigurationInterface $config): ?ViewInterface
     {
         return $this->view('@widget/internal/features/backend.tpl');
@@ -52,13 +46,5 @@ class FeaturesWidget extends AbstractWidget
         });
 
         $config->set('features', $features);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getForm(ConfigurationInterface $config): ?string
-    {
-        return FeaturesForm::class;
     }
 }

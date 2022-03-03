@@ -31,13 +31,9 @@ use Tulia\Component\Templating\ViewInterface;
 class Node extends AbstractController
 {
     private ContentTypeRegistryInterface $typeRegistry;
-
     private NodeRepository $repository;
-
     private DatatableFactory $factory;
-
     private NodeDatatableFinderInterface $finder;
-
     private ContentFormService $contentFormService;
 
     public function __construct(
@@ -237,7 +233,7 @@ class Node extends AbstractController
                 continue;
             }
 
-            $result[] = $this->typeRegistry->get($field->getTaxonomy());
+            $result[] = $this->typeRegistry->get($field->getConfig('taxonomy'));
         }
 
         return $result;
@@ -265,7 +261,7 @@ class Node extends AbstractController
             return '';
         };
 
-        $node->setStatus($getValue('value'));
+        $node->setStatus($getValue('status'));
         $node->setSlug($getValue('slug'));
         $node->setTitle($getValue('title'));
         $node->setPublishedAt(new ImmutableDateTime($getValue('published_at')));
@@ -287,7 +283,7 @@ class Node extends AbstractController
     private function validateCsrfToken(Request $request, string $node_type): void
     {
         /**
-         * We must detect token validness manually, cause form name changes for every node type.
+         * We must detect token validness manually, cause form name changes for every content type.
          */
         if ($request->isMethod('POST')) {
             $tokenId = 'content_builder_form_' . $node_type;

@@ -30,17 +30,12 @@ class MenuWidget extends AbstractWidget
     public function render(ConfigurationInterface $config): ?ViewInterface
     {
         return $this->view('@widget/internal/menu/frontend.tpl', [
-            'menu' => $this->builder->buildHtml($config->get('menu_id')),
+            'menu' => $this->builder->buildHtml((string) $config->get('menu_id')),
         ]);
     }
 
     public function getView(ConfigurationInterface $config): ?ViewInterface
     {
         return $this->view('@widget/internal/menu/backend.tpl');
-    }
-
-    public function getForm(ConfigurationInterface $config): ?string
-    {
-        return MenuForm::class;
     }
 }

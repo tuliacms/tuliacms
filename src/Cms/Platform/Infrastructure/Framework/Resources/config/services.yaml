@@ -5,7 +5,6 @@ imports:
     - { resource: services/database.yaml }
     - { resource: services/datatable.yaml }
     - { resource: services/finder.yaml }
-    - { resource: services/form-skeleton.yaml }
     - { resource: services/image.yaml }
     - { resource: services/mailer.yaml }
     - { resource: services/platform.yaml }

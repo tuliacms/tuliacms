@@ -45,7 +45,7 @@ class SymfonyFieldBuilder
             'label' => $field->getName() === ''
                 ? false
                 : $field->getName(),
-            'translation_domain' => 'content_builder.field',
+            'translation_domain' => $field->getTranslationDomain(),
             'constraints' => $this->constraintsBuilder->build($field->getConstraints()),
             'content_builder_field' => $field,
             'content_builder_field_handler' => $typeHandler,

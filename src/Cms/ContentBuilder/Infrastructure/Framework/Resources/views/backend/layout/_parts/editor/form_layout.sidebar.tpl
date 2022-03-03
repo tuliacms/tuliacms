@@ -48,7 +48,7 @@
 
     <div class="accordion-section">
         <div
-            class="accordion-section-button collapsed"
+            class="accordion-section-button{{ group.active ? '' : ' collapsed' }}"
             data-bs-toggle="collapse"
             data-bs-target="#form-collapse-sidebar-{{ id }}"
         >
@@ -57,7 +57,7 @@
         </div>
         <div
             id="form-collapse-sidebar-{{ id }}"
-            class="accordion-collapse collapse"
+            class="accordion-collapse collapse{{ group.active ? ' show' : '' }}"
         >
             <div class="accordion-section-body">
                 {{ form_render.render_fields(form, group.fields, contentType) }}

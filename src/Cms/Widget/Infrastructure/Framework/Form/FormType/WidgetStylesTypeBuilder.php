@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Widget\Infrastructure\Framework\Form\FormType;
 
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\FieldTypeBuilder\FieldTypeBuilderInterface;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\ContentType;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\Field;
 use Tulia\Component\Theme\ManagerInterface;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @author Adam Banaszkiewicz
@@ -16,10 +17,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 class WidgetStylesTypeBuilder implements FieldTypeBuilderInterface
 {
     protected ManagerInterface $themeManager;
+    private TranslatorInterface $translator;
 
-    public function __construct(ManagerInterface $themeManager)
+    public function __construct(ManagerInterface $themeManager, TranslatorInterface $translator)
     {
         $this->themeManager = $themeManager;
+        $this->translator = $translator;
     }
 
     public function build(Field $field, array $options, ContentType $contentType): array
@@ -28,13 +31,9 @@ class WidgetStylesTypeBuilder implements FieldTypeBuilderInterface
         $widgetStyles = [];
 
         if ($theme->hasConfig()) {
-            $widgetStyles = $theme->getConfig()->getRegisteredWidgetStyles();
-            $widgetStyles = array_combine(
-                array_map(function ($item) {
-                    return $item['label'];
-                }, $widgetStyles),
-                array_keys($widgetStyles),
-            );
+            foreach ($theme->getConfig()->getRegisteredWidgetStyles() as $style) {
+                $widgetStyles[$this->translator->trans($style['label'], [], $style['translation_domain'])] = $style['name'];
+            }
         }
 
         $options['multiple'] = true;
@@ -42,7 +41,7 @@ class WidgetStylesTypeBuilder implements FieldTypeBuilderInterface
         $options['choice_translation_domain'] = false;
         $options['translation_domain'] = 'widgets';
         $options['help'] = 'stylesDescription';
-        $options['constraints'][] = new Assert\Choice([ 'choices' => $widgetStyles ]);
+        $options['constraints'][] = new Assert\Choice([ 'choices' => $widgetStyles, 'multiple' => true ]);
 
         return $options;
     }

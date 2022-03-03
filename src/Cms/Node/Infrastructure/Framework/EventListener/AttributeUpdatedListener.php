@@ -51,7 +51,7 @@ class AttributeUpdatedListener implements EventSubscriberInterface
             if ($field->getType() === 'taxonomy') {
                 $this->categoriesPersistence->update(
                     $event->getNodeId(),
-                    $field->getTaxonomy(),
+                    $field->getConfig('taxonomy'),
                     $event->getValue() ? [$event->getValue() => 'MAIN'] : []
                 );
             }

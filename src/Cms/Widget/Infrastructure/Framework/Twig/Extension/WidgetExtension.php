@@ -15,7 +15,6 @@ use Twig\TwigFunction;
 class WidgetExtension extends AbstractExtension
 {
     private RendererInterface $renderer;
-
     private StorageInterface $storage;
 
     public function __construct(RendererInterface $renderer, StorageInterface $storage)

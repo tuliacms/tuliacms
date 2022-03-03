@@ -14,9 +14,7 @@ use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 class DatabaseStorage implements StorageInterface
 {
     private ConnectionInterface $connection;
-
     private CurrentWebsiteInterface $currentWebsite;
-
     private static array $cache = [];
 
     public function __construct(ConnectionInterface $connection, CurrentWebsiteInterface $currentWebsite)
@@ -38,8 +36,7 @@ class DatabaseStorage implements StorageInterface
             SELECT
                 tm.*,
                 COALESCE(tl.title, tm.title) AS title,
-                COALESCE(tl.visibility, tm.visibility) AS visibility,
-                COALESCE(tl.payload_localized, tm.payload_localized) AS payload_localized
+                COALESCE(tl.visibility, tm.visibility) AS visibility
             FROM #__widget AS tm
             LEFT JOIN #__widget_lang AS tl
                 ON tl.widget_id = tm.id AND tl.locale = :locale
@@ -62,8 +59,7 @@ class DatabaseStorage implements StorageInterface
             SELECT
                 tm.*,
                 COALESCE(tl.title, tm.title) AS title,
-                COALESCE(tl.visibility, tm.visibility) AS visibility,
-                COALESCE(tl.payload_localized, tm.payload_localized, "{}") AS payload_localized
+                COALESCE(tl.visibility, tm.visibility) AS visibility
             FROM #__widget AS tm
             LEFT JOIN #__widget_lang AS tl
                 ON tl.widget_id = tm.id AND tl.locale = :locale
@@ -87,8 +83,7 @@ class DatabaseStorage implements StorageInterface
             SELECT
                 tm.*,
                 COALESCE(tl.title, tm.title) AS title,
-                COALESCE(tl.visibility, tm.visibility) AS visibility,
-                COALESCE(tl.payload_localized, tm.payload_localized, "{}") AS payload_localized
+                COALESCE(tl.visibility, tm.visibility) AS visibility
             FROM #__widget AS tm
             LEFT JOIN #__widget_lang AS tl
                 ON tl.widget_id = tm.id AND tl.locale = :locale

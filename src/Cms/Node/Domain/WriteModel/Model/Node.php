@@ -14,41 +14,24 @@ use Tulia\Cms\Shared\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
 /**
  * @author Adam Banaszkiewicz
  */
-class Node extends AggregateRoot
+final class Node extends AggregateRoot
 {
     protected NodeId $id;
-
     protected string $type;
-
     protected string $status = 'draft';
-
     protected string $websiteId;
-
     protected ImmutableDateTime $publishedAt;
-
     protected ?ImmutableDateTime $publishedTo = null;
-
     protected ImmutableDateTime $createdAt;
-
     protected ?ImmutableDateTime $updatedAt = null;
-
     protected ?string $authorId = null;
-
     protected ?string $parentId = null;
-
     protected int $level = 0;
-
     protected string $locale;
-
     protected bool $translated = true;
-
     protected string $title = '';
-
     protected ?string $slug = null;
-
-    /**
-     * @var Attribute[]
-     */
+    /** @var Attribute[] */
     protected array $attributes = [];
 
     private function __construct(string $id, string $type, string $websiteId, string $locale)

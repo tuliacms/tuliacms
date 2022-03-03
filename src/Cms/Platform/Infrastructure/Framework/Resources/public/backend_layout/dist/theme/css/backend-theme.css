@@ -11867,7 +11867,6 @@ body .tox-tinymce {
   border-radius: 5px;
   border-color: transparent;
   border: none;
-  margin-top: -15px;
 }
 
 body .tox .tox-statusbar {
@@ -13106,6 +13105,27 @@ body.login-page .form-check label {
 
 .custom-file-input:lang(it) ~ .custom-file-label::after {
   content: "Navigare";
+}
+
+.content-builder-repeatable-target {
+  border: 1px solid #ddd;
+  border-bottom: none;
+  border-radius: 3px;
+  margin-bottom: 10px;
+}
+
+.content-builder-repeatable-element {
+  border-bottom: 1px solid #ddd;
+}
+
+.content-builder-repeatable-element-header {
+  background-color: rgba(0, 0, 0, 0.03);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+  text-align: right;
+}
+
+.content-builder-repeatable-element-body {
+  padding: 10px 10px 0 10px;
 }
 
 /*body:before {content:"";display:block;position:absolute;left:0;top:0;right:0;height:150px;z-index:-2;background-color:#2b2b3c;background-image:url($header-bg);background-position:center top;background-repeat:no-repeat;background-size:cover;}*/

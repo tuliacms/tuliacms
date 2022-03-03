@@ -81,7 +81,6 @@ class ContentTypeFormDescriptor
         $rawData = $this->handleFields(iterator_to_array($this->getForm()), $this->getForm()->getData());
 
         $this->data = $this->flattenFields($this->getFields(), $rawData);
-        //$this->data['id'] = $rawData['id'];
 
         return $this->data;
     }

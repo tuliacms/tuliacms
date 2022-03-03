@@ -54,6 +54,7 @@ class ArrayToReadModelTransformer
      *                             {field_code}: [
      *                                 type: string,
      *                                 name: string,
+     *                                 translation_domain: string,
      *                                 is_multilingual: null|bool,
      *                                 configuration: [
      *                                     {code}: {value} mixed,
@@ -117,9 +118,10 @@ class ArrayToReadModelTransformer
             $result[] = new Field([
                 'code' => $code,
                 'type' => $field['type'],
-                'name' => (string)$field['name'],
-                'is_multilingual' => (bool)($field['is_multilingual'] ?? false),
+                'name' => (string) $field['name'],
+                'is_multilingual' => (bool) ($field['is_multilingual'] ?? false),
                 'taxonomy' => $field['taxonomy'] ?? null,
+                'translation_domain' => $field['translation_domain'] ?? 'content_builder.field',
                 'configuration' => $field['configuration'] ?? [],
                 'constraints' => $field['constraints'] ?? [],
                 'children' => $this->buildFields($field['children'] ?? []),
@@ -139,7 +141,7 @@ class ArrayToReadModelTransformer
             $sectionObject = new Section($sectionCode);
 
             foreach ($section['groups'] as $groupCode => $group) {
-                $sectionObject->addFieldsGroup(new FieldsGroup($groupCode, $group['name'], array_keys($group['fields'])));
+                $sectionObject->addFieldsGroup(new FieldsGroup($groupCode, $group['name'], array_keys($group['fields']), (bool) ($group['active'] ?? false)));
             }
 
             $layoutType->addSection($sectionObject);

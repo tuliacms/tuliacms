@@ -36,10 +36,6 @@ cms:
                     type: text
                     name: icon
                     parent: features
-                position:
-                    type: hidden
-                    name: ~
-                    parent: features
         internal.text:
             classname: 'Tulia\Cms\Widget\Infrastructure\Cms\Widget\Predefined\Text\TextWidget'
             views: '%kernel.project_dir%/src/Cms/Widget/Infrastructure/Framework/Resources/views/widget/text'
@@ -53,7 +49,7 @@ cms:
     content_building:
         content_type:
             widget:
-                layout_builder: 'Tulia\Cms\User\Infrastructure\Presentation\TwigUserContentTypeLayoutBuilder'
+                layout_builder: 'Tulia\Cms\Widget\Infrastructure\Presentation\TwigWidgetContentTypeLayoutBuilder'
                 multilingual: false
                 configurable: false
         data_types:
@@ -88,23 +84,28 @@ cms:
                                         name:
                                             type: text
                                             name: name
+                                            translation_domain: messages
                                             constraints:
                                                 - code: required
                                         space:
                                             type: widget_space
-                                            name: widgetSpace
+                                            name: space
+                                            translation_domain: widgets
                                             constraints:
                                                 - code: required
                         sidebar:
                             groups:
                                 status:
                                     name: Status
+                                    active: true
                                     fields:
-                                        avatar:
+                                        visibility:
                                             type: yes_no
                                             name: visibility
+                                            translation_domain: messages
                                 look:
                                     name: Look
+                                    active: true
                                     fields:
                                         title:
                                             type: text

@@ -76,7 +76,7 @@ class ThemePass implements CompilerPassInterface
         }
         if (isset($config['image_sizes'])) {
             foreach ($config['image_sizes'] as $code => $size) {
-                $service->addMethodCall('add', ['widget_style', $code, $size]);
+                $service->addMethodCall('add', ['image_size', $code, $size]);
             }
         }
 

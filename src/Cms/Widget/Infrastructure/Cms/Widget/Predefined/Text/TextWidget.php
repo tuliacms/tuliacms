@@ -19,9 +19,6 @@ class TextWidget extends AbstractWidget
         $configuration->set('content', '');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function render(ConfigurationInterface $config): ?ViewInterface
     {
         return $this->view('@widget/internal/text/frontend.tpl', [
@@ -29,19 +26,8 @@ class TextWidget extends AbstractWidget
         ]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getView(ConfigurationInterface $config): ?ViewInterface
     {
         return $this->view('@widget/internal/text/backend.tpl');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getForm(ConfigurationInterface $config): ?string
-    {
-        return TextForm::class;
     }
 }

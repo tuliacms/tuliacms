@@ -40,10 +40,10 @@ class BlockPanel extends AbstractController
         $data = (array) $request->request->get("content_builder_form_{$type}", []);
 
         $form = $this->formBuilder->createBuilder($blockType, $data, false);
-        $form->handleRequest($request);
 
         $validatedAndReadyToSave = false;
         $formDescriptor = new ContentTypeFormDescriptor($blockType, $form);
+        $formDescriptor->handleRequest($request);
 
         if ($formDescriptor->isFormValid()) {
             $validatedAndReadyToSave = true;

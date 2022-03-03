@@ -7,9 +7,6 @@ services:
         resource: '../../../../**'
         exclude: '../../../../{Infrastructure/Framework/Resources}'
 
-    Tulia\Cms\Widget\UserInterface\Web\Backend\Form\Extension\DefaultFieldsExtension:
-        tags: [ form_extension ]
-
     Tulia\Cms\Widget\Domain\SearchAnything\SearchProvider:
         tags:
             - { name: search.provider, priority: 1000 }

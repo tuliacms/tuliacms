@@ -34,7 +34,6 @@ class DbalWidgetWriteStorage extends AbstractLocalizableStorage implements Widge
                 tm.widget_type,
                 COALESCE(tl.title, tm.title) AS title,
                 COALESCE(tl.visibility, tm.visibility) AS visibility,
-                COALESCE(tl.payload_localized, tm.payload_localized) AS payload_localized,
                 COALESCE(tl.locale, :locale) AS locale,
                 {$translationColumn}
             FROM #__widget AS tm
@@ -46,7 +45,13 @@ class DbalWidgetWriteStorage extends AbstractLocalizableStorage implements Widge
             'locale' => $locale
         ]);
 
-        return $widget[0] ?? [];
+        if ($widget === []) {
+            return [];
+        }
+
+        $widget[0]['styles'] = json_decode($widget[0]['styles'], true);
+
+        return $widget[0];
     }
 
     public function delete(array $widget): void
@@ -77,14 +82,13 @@ class DbalWidgetWriteStorage extends AbstractLocalizableStorage implements Widge
         $mainTable['website_id'] = $data['website_id'];
         $mainTable['space'] = $data['space'];
         $mainTable['widget_type'] = $data['widget_type'];
+        $mainTable['content_type'] = $data['content_type'];
         $mainTable['name'] = $data['name'];
         $mainTable['title'] = $data['title'];
         $mainTable['visibility'] = $data['visibility'] ? '1' : '0';
         $mainTable['html_class'] = $data['html_class'];
         $mainTable['html_id'] = $data['html_id'];
-        $mainTable['styles'] = $data['styles'];
-        $mainTable['payload'] = $data['payload'];
-        $mainTable['payload_localized'] = $data['payload_localized'];
+        $mainTable['styles'] = json_encode($data['styles']);
 
         $this->connection->insert('#__widget', $mainTable);
     }
@@ -96,16 +100,15 @@ class DbalWidgetWriteStorage extends AbstractLocalizableStorage implements Widge
         $mainTable['website_id'] = $data['website_id'];
         $mainTable['space'] = $data['space'];
         $mainTable['widget_type'] = $data['widget_type'];
+        $mainTable['content_type'] = $data['content_type'];
         $mainTable['name'] = $data['name'];
         $mainTable['html_class'] = $data['html_class'];
         $mainTable['html_id'] = $data['html_id'];
-        $mainTable['styles'] = $data['styles'];
-        $mainTable['payload'] = $data['payload'];
+        $mainTable['styles'] = json_encode($data['styles']);
 
         if ($foreignLocale === false) {
             $mainTable['title'] = $data['title'];
             $mainTable['visibility'] = $data['visibility'] ? '1' : '0';
-            $mainTable['payload_localized'] = $data['payload_localized'];
         }
 
         $this->connection->update('#__widget', $mainTable, ['id' => $data['id']]);
@@ -117,7 +120,6 @@ class DbalWidgetWriteStorage extends AbstractLocalizableStorage implements Widge
         $langTable['widget_id'] = $data['id'];
         $langTable['locale'] = $data['locale'];
         $langTable['title'] = $data['title'];
-        $langTable['payload_localized'] = $data['payload_localized'];
 
         $this->connection->insert('#__widget_lang', $langTable);
     }
@@ -126,7 +128,6 @@ class DbalWidgetWriteStorage extends AbstractLocalizableStorage implements Widge
     {
         $langTable = [];
         $langTable['title'] = $data['title'];
-        $langTable['payload_localized'] = $data['payload_localized'];
 
         $this->connection->update('#__widget_lang', $langTable, [
             'widget_id' => $data['id'],

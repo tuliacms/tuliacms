@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Widget\Domain\WriteModel;
 
+use Tulia\Cms\Attributes\Domain\WriteModel\AttributesRepository;
+use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
 use Tulia\Cms\Shared\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
 use Tulia\Cms\Widget\Domain\Catalog\Registry\WidgetRegistryInterface;
@@ -22,20 +24,26 @@ class WidgetRepository
     private CurrentWebsiteInterface $currentWebsite;
     private WidgetRegistryInterface $widgetRegistry;
     private UuidGeneratorInterface $uuidGenerator;
+    private AttributesRepository $attributeRepository;
     private EventBusInterface $eventBus;
+    private ContentTypeRegistryInterface $contentTypeRegistry;
 
     public function __construct(
         WidgetWriteStorageInterface $storage,
         CurrentWebsiteInterface $currentWebsite,
         WidgetRegistryInterface $widgetRegistry,
         UuidGeneratorInterface $uuidGenerator,
-        EventBusInterface $eventBus
+        AttributesRepository $attributeRepository,
+        EventBusInterface $eventBus,
+        ContentTypeRegistryInterface $contentTypeRegistry
     ) {
         $this->storage = $storage;
         $this->currentWebsite = $currentWebsite;
         $this->widgetRegistry = $widgetRegistry;
         $this->uuidGenerator = $uuidGenerator;
+        $this->attributeRepository = $attributeRepository;
         $this->eventBus = $eventBus;
+        $this->contentTypeRegistry = $contentTypeRegistry;
     }
 
     public function createNew(string $widgetType): Widget
@@ -63,24 +71,23 @@ class WidgetRepository
             throw new WidgetNotFoundException(sprintf('Widget %s not found.', $id));
         }
 
-        $data['styles'] = json_decode($data['styles'], true);
-        $data['payload'] = json_decode($data['payload'], true);
-        $data['payload_localized'] = json_decode($data['payload_localized'], true);
+        $contentType = $this->contentTypeRegistry->get($data['content_type']);
+        $data['attributes'] = $this->attributeRepository->findAll('widget', $id, $contentType->buildAttributesMapping());
 
         return Widget::buildFromArray($data);
     }
 
     public function insert(Widget $widget): void
     {
-        $config = $widget->getWidgetConfiguration();
-
-        $widget->setPayload($config->allNotMultilingual());
-        $widget->setPayloadLocalized($config->allMultilingual());
-
         $this->storage->beginTransaction();
 
         try {
-            $this->storage->insert($this->extract($widget), $this->currentWebsite->getDefaultLocale()->getCode());
+            $this->storage->insert($widget->toArray(), $this->currentWebsite->getDefaultLocale()->getCode());
+            $this->attributeRepository->persist(
+                'widget',
+                $widget->getId()->getValue(),
+                $widget->getAttributes()
+            );
             $this->storage->commit();
         } catch (\Exception $exception) {
             $this->storage->rollback();
@@ -92,15 +99,15 @@ class WidgetRepository
 
     public function update(Widget $widget): void
     {
-        $config = $widget->getWidgetConfiguration();
-
-        $widget->setPayload($config->allNotMultilingual());
-        $widget->setPayloadLocalized($config->allMultilingual());
-
         $this->storage->beginTransaction();
 
         try {
-            $this->storage->update($this->extract($widget), $this->currentWebsite->getDefaultLocale()->getCode());
+            $this->storage->update($widget->toArray(), $this->currentWebsite->getDefaultLocale()->getCode());
+            $this->attributeRepository->persist(
+                'widget',
+                $widget->getId()->getValue(),
+                $widget->getAttributes()
+            );
             $this->storage->commit();
         } catch (\Exception $exception) {
             $this->storage->rollback();
@@ -115,7 +122,8 @@ class WidgetRepository
         $this->storage->beginTransaction();
 
         try {
-            $this->storage->delete($this->extract($widget));
+            $this->storage->delete($widget->toArray());
+            $this->attributeRepository->delete('widget', $widget->getId()->getValue());
             $this->storage->commit();
         } catch (\Exception $exception) {
             $this->storage->rollback();
@@ -125,22 +133,8 @@ class WidgetRepository
         $this->eventBus->dispatch(WidgetDeleted::fromWidget($widget));
     }
 
-    private function extract(Widget $widget): array
+    private function transformToContentTypeCode(string $widgetTypeCode): string
     {
-        return [
-            'id' => $widget->getId()->getValue(),
-            'website_id' => $widget->getWebsiteId(),
-            'widget_type' => $widget->getWidgetType(),
-            'space' => $widget->getSpace(),
-            'name' => $widget->getName(),
-            'html_class' => $widget->getHtmlClass(),
-            'html_id' => $widget->getHtmlId(),
-            'styles' => json_encode($widget->getStyles()),
-            'locale' => $widget->getLocale(),
-            'visibility' => $widget->getVisibility(),
-            'title' => $widget->getTitle(),
-            'payload' => json_encode($widget->getPayload()),
-            'payload_localized' => json_encode($widget->getPayloadLocalized()),
-        ];
+        return 'widget_' . str_replace('.', '_', $widgetTypeCode);
     }
 }

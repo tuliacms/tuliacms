@@ -21,11 +21,6 @@ interface WidgetInterface
     public function render(ConfigurationInterface $config): ?ViewInterface;
 
     /**
-     * Method called on backend, to build and provide configuration form for widget.
-     */
-    public function getForm(ConfigurationInterface $config): ?string;
-
-    /**
      * Method called on backend, to provide view and view data for widget create/edit view.
      */
     public function getView(ConfigurationInterface $config): ?ViewInterface;

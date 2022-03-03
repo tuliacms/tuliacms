@@ -34,15 +34,4 @@ class ContentTypeContainerProvider extends AbstractContentTypeProvider
 
         return $result;
     }
-
-    private function standarizeArray(array $data): array
-    {
-        foreach ($data['layout']['sections'] as $sectionCode => $section) {
-            foreach ($section['groups'] as $groupCode => $group) {
-                $data['layout']['sections'][$sectionCode]['groups'][$groupCode]['fields'] = $this->standarizeFields($group['fields']);
-            }
-        }
-
-        return $data;
-    }
 }

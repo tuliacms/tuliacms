@@ -99,7 +99,7 @@ export default {
             body.find('form').submit();
         },
         _htmlEscape: function (str) {
-            return str
+            return (String(str))
                 .replace(/&/g, '&amp;')
                 .replace(/"/g, '&quot;')
                 .replace(/'/g, '&#39;')

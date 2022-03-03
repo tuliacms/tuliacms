@@ -260,6 +260,7 @@ class Configuration implements ConfigurationInterface
                 ->children()
                     ->scalarNode('type')->isRequired()->end()
                     ->scalarNode('name')->isRequired()->end()
+                    ->scalarNode('translation_domain')->defaultValue('content_builder.field')->end()
                     ->booleanNode('is_multilingual')->defaultFalse()->end()
                     ->scalarNode('parent')->defaultNull()->end()
                     ->arrayNode('configuration')

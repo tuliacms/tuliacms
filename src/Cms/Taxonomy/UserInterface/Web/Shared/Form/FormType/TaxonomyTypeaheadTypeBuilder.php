@@ -17,20 +17,20 @@ class TaxonomyTypeaheadTypeBuilder implements FieldTypeBuilderInterface
 {
     public function build(Field $field, array $options, ContentType $contentType): array
     {
-        $options['taxonomy_type'] = $field->getTaxonomy();
+        $options['taxonomy_type'] = $field->getConfig('taxonomy');
         $options['search_route_params'] = [
-            'taxonomy_type' => $field->getTaxonomy(),
+            'taxonomy_type' => $field->getConfig('taxonomy'),
         ];
-        $options['constraints'] += [
-            new Callback(function ($value, ExecutionContextInterface $context) {
-                if (empty($value) === false && $value === $context->getRoot()->get('id')->getData()) {
-                    $context->buildViolation('cannotAssignSelfTermParent')
-                        ->setTranslationDomain('taxonomy')
-                        ->atPath('parent_id')
-                        ->addViolation();
-                }
-            }),
-        ];
+        $options['constraints'][] = new Callback(function ($value, ExecutionContextInterface $context) {
+            $root = $context->getRoot();
+
+            if (empty($value) === false && $root->has('id') && $value === $root->get('id')->getData()) {
+                $context->buildViolation('cannotAssignSelfTermParent')
+                    ->setTranslationDomain('taxonomy')
+                    ->atPath('parent_id')
+                    ->addViolation();
+            }
+        });
 
         return $options;
     }

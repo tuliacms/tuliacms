@@ -24,7 +24,7 @@ cms:
                 menu_layout:
                     label: Widget styles
                     classname: 'Symfony\Component\Form\Extension\Core\Type\ChoiceType'
-                    builder: 'Tulia\Cms\Widget\Infrastructure\Framework\Form\FormType\WidgetStylesTypeBuilder'
+                    builder: 'Tulia\Cms\Menu\Infrastructure\Framework\Form\FormType\MenuLayoutTypeBuilder'
                     constraints: [ required ]
     widgets:
         internal.menu:

@@ -9,6 +9,17 @@ namespace Tulia\Cms\ContentBuilder\Infrastructure\Persistence\ContentProvider;
  */
 trait SymfonyContainerStandarizableTrait
 {
+    protected function standarizeArray(array $data): array
+    {
+        foreach ($data['layout']['sections'] as $sectionCode => $section) {
+            foreach ($section['groups'] as $groupCode => $group) {
+                $data['layout']['sections'][$sectionCode]['groups'][$groupCode]['fields'] = $this->standarizeFields($group['fields']);
+            }
+        }
+
+        return $data;
+    }
+
     protected function standarizeFields(array $fields, ?string $parent = null): array
     {
         $result = [];

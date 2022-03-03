@@ -14,9 +14,9 @@ class AbstractField
         'code' => '',
         'type' => '',
         'name' => '',
-        'taxonomy' => '',
         'is_multilingual' => false,
         'has_nonscalar_value' => false,
+        'translation_domain' => 'content_builder.field',
         'flags' => [],
         'configuration' => [],
         'constraints' => [],
@@ -29,16 +29,13 @@ class AbstractField
         \assert(\is_string($this->options['code']), 'The "code" option must be a string.');
         \assert(\is_string($this->options['type']), 'The "type" option must be a string.');
         \assert(\is_string($this->options['name']), 'The "name" option must be a string.');
+        \assert(\is_string($this->options['translation_domain']), 'The "translation_domain" option must be a string.');
         \assert(\is_bool($this->options['is_multilingual']), 'The "is_multilingual" option must be a boolean.');
         \assert(\is_bool($this->options['has_nonscalar_value']), 'The "has_nonscalar_value" option must be a boolean.');
         \assert(\is_array($this->options['flags']), 'The "flags" option must be an array.');
         \assert(\is_array($this->options['configuration']), 'The "configuration" option must be an array.');
         \assert(\is_array($this->options['constraints']), 'The "constraints" option must be an array.');
         \assert(\is_array($this->options['children']), 'The "children" option must be an array.');
-
-        if ($this->options['type'] === 'taxonomy') {
-            \assert(\is_string($this->options['taxonomy']), 'The "taxonomy" option must be a string.');
-        }
 
         foreach ($this->options['children'] as $child) {
             \assert(is_object($child) && $child instanceof AbstractField, 'The children must be a Field instance.');
@@ -97,6 +94,11 @@ class AbstractField
         return $this->options['configuration'];
     }
 
+    public function getTranslationDomain(): string
+    {
+        return $this->options['translation_domain'];
+    }
+
     /**
      * @param mixed $default
      * @return mixed|null
@@ -140,10 +142,5 @@ class AbstractField
     public function hasNonscalarValue(): bool
     {
         return $this->options['has_nonscalar_value'];
-    }
-
-    public function getTaxonomy(): string
-    {
-        return $this->options['taxonomy'];
     }
 }

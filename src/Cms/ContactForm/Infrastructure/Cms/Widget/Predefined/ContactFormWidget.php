@@ -18,9 +18,6 @@ class ContactFormWidget extends AbstractWidget
         $configuration->set('form_id', null);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function render(ConfigurationInterface $config): ?ViewInterface
     {
         return $this->view('@widget/internal/contact_form/frontend.tpl', [
@@ -28,19 +25,8 @@ class ContactFormWidget extends AbstractWidget
         ]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getView(ConfigurationInterface $config): ?ViewInterface
     {
         return $this->view('@widget/internal/contact_form/backend.tpl');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getForm(ConfigurationInterface $config): ?string
-    {
-        return ContactFormForm::class;
     }
 }

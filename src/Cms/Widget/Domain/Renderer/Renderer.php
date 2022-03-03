@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Widget\Domain\Renderer;
 
+use Tulia\Cms\Attributes\Domain\ReadModel\Service\AttributesFinder;
 use Tulia\Cms\Widget\Domain\Catalog\Configuration\ArrayConfiguration;
 use Tulia\Cms\Widget\Domain\Catalog\Registry\WidgetRegistryInterface;
 use Tulia\Cms\Widget\Domain\Catalog\Storage\StorageInterface;
@@ -15,19 +16,20 @@ use Tulia\Component\Templating\EngineInterface;
 class Renderer implements RendererInterface
 {
     private StorageInterface $storage;
-
     private WidgetRegistryInterface $registry;
-
     private EngineInterface $engine;
+    private AttributesFinder $attributeFinder;
 
     public function __construct(
         StorageInterface $storage,
         WidgetRegistryInterface $registry,
-        EngineInterface $engine
+        EngineInterface $engine,
+        AttributesFinder $attributeFinder
     ) {
         $this->storage = $storage;
         $this->registry = $registry;
         $this->engine = $engine;
+        $this->attributeFinder = $attributeFinder;
     }
 
     /**
@@ -85,10 +87,7 @@ class Renderer implements RendererInterface
         $config = new ArrayConfiguration($data['space']);
         $widget = $this->registry->get($data['widget_type'])->getInstance();
         $widget->configure($config);
-        $config->merge(array_merge(
-            $data['payload'],
-            $data['payload_localized'],
-        ));
+        $config->merge($data['attributes']);
 
         $view = $widget->render($config);
 
@@ -128,8 +127,7 @@ class Renderer implements RendererInterface
     {
         $widget['visibility'] = (bool) $widget['visibility'];
         $widget['styles'] = (array) json_decode($widget['styles'], true);
-        $widget['payload'] = (array) json_decode($widget['payload'], true);
-        $widget['payload_localized'] = (array) json_decode($widget['payload_localized'], true);
+        $widget['attributes'] = $this->attributeFinder->findAll('widget', 'scope', $widget['id']);
 
         return $widget;
     }

@@ -14,31 +14,16 @@ use Tulia\Component\Templating\ViewInterface;
  */
 abstract class AbstractWidget implements WidgetInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function configure(ConfigurationInterface $config): void
     {}
 
-    /**
-     * {@inheritdoc}
-     */
     public function getView(ConfigurationInterface $config): ?ViewInterface
-    {
-        return null;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getForm(ConfigurationInterface $config): ?string
     {
         return null;
     }
 
     public function saveAction(FormInterface $form, ConfigurationInterface $config): void
     {
-
     }
 
     public function view(string $view, array $data = []): ViewInterface

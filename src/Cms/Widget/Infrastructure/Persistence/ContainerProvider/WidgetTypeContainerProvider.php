@@ -29,9 +29,10 @@ class WidgetTypeContainerProvider extends AbstractContentTypeProvider
 
         foreach ($this->widgets as $code => $widget) {
             $type = $this->configuration['widget'];
-            $type['layout']['sections']['main']['groups']['widget_options']['fields'] = $this->standarizeFields($widget['fields']);
-            $type['code'] = 'widget.' . $code;
+            $type['layout']['sections']['main']['groups']['widget_options']['fields'] = $widget['fields'];
+            $type['code'] = 'widget_' . str_replace('.', '_', $code);
             $type['internal'] = true;
+            $type = $this->standarizeArray($type);
 
             $result[] = $this->buildFromArray($type);
         }
