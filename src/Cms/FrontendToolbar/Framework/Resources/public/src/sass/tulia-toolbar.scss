@@ -132,6 +132,12 @@ $tulia-toolbar-background-color: #2b2b3c;
         list-style: none;
         padding: 0;
         margin: 0;
+        &:before {
+            display: none !important;
+        }
+        &:after {
+            display: none !important;
+        }
     }
 
     .tulia-toolbar-items {

@@ -31,7 +31,7 @@ gulp.task('js', gulp.series(['js-global']));
 
 gulp.task('publish', () => {
     return gulp.src(['dist/**/*'])
-        .pipe(gulp.dest('../../../../../../../../public/assets/core/frontend-toolbar'));
+        .pipe(gulp.dest('../../../../../../public/assets/core/frontend-toolbar'));
 });
 
 gulp.task('default', gulp.series(['css', 'js', 'publish'], () => {
