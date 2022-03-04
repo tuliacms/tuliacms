@@ -11,7 +11,8 @@ use Symfony\Component\HttpFoundation\RequestStack;
  */
 class RequestStackDetector implements DetectorInterface
 {
-    protected RequestStack $requestStack;
+    private RequestStack $requestStack;
+    private ?bool $isCustomizerMode = null;
 
     public function __construct(RequestStack $requestStack)
     {
@@ -20,13 +21,17 @@ class RequestStackDetector implements DetectorInterface
 
     public function isCustomizerMode(): bool
     {
+        if ($this->isCustomizerMode !== null) {
+            return $this->isCustomizerMode;
+        }
+
         $request = $this->requestStack->getMainRequest();
 
         if (! $request) {
-            return false;
+            return $this->isCustomizerMode = false;
         }
 
-        return $request->query->get('mode') === 'customizer';
+        return $this->isCustomizerMode = $request->query->get('mode') === 'customizer';
     }
 
     public function getChangesetId(): string

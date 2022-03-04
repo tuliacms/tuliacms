@@ -10,6 +10,7 @@
             });
 
             this.bindPostMessages();
+            this.bindLiveControls();
         };
 
         this.bindLinks = function () {
@@ -68,6 +69,36 @@
                     case 'customized': self.callCustomized(event.data.payload.name, event.data.payload.value); break;
                 }
             }, false);
+        };
+
+        this.bindLiveControls = function () {
+            $('[data-tulia-customizer-live-control]').each(function () {
+                let options = JSON.parse($(this).attr('data-tulia-customizer-live-control'));
+
+                customizer.customized(options.control, (value) => {
+                    if (!value) {
+                        value = options.default;
+                    }
+
+                    if (options.nl2br) {
+                        value = value.replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1<br />$2');
+                    }
+
+                    switch (options.type) {
+                        case 'background-image':
+                            if (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value)) {
+                                value = '/media/resolve/image/node_thumbnail/' + value + '/image.jpg';
+                            }
+
+                            $(this).css('background-image', 'url(' + value + ')');
+                            break;
+                        // default means case: 'inner-text'
+                        default:
+                            $(this).text(value);
+                            break;
+                    }
+                });
+            });
         };
 
         this.open = function (link) {
