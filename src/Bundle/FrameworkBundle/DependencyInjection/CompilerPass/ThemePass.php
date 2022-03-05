@@ -60,23 +60,23 @@ class ThemePass implements CompilerPassInterface
             }
         }
         if (isset($config['colors'])) {
-            foreach ($config['colors'] as $code => $color) {
-                $service->addMethodCall('add', ['color', $code, $color['value']]);
+            foreach ($config['colors'] as $color) {
+                $service->addMethodCall('add', ['color', $color['name'], $color['value']]);
             }
         }
         if (isset($config['widget_spaces'])) {
-            foreach ($config['widget_spaces'] as $code => $space) {
-                $service->addMethodCall('add', ['widget_space', $code, $space['label']]);
+            foreach ($config['widget_spaces'] as $space) {
+                $service->addMethodCall('add', ['widget_space', $space['name'], $space['label']]);
             }
         }
         if (isset($config['widget_styles'])) {
-            foreach ($config['widget_styles'] as $code => $space) {
-                $service->addMethodCall('add', ['widget_style', $code, $space['label']]);
+            foreach ($config['widget_styles'] as $style) {
+                $service->addMethodCall('add', ['widget_style', $style['name'], $style['label']]);
             }
         }
         if (isset($config['image_sizes'])) {
-            foreach ($config['image_sizes'] as $code => $size) {
-                $service->addMethodCall('add', ['image_size', $code, $size]);
+            foreach ($config['image_sizes'] as $size) {
+                $service->addMethodCall('add', ['image_size', $size['name'], $size]);
             }
         }
 
