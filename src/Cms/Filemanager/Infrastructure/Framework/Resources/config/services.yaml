@@ -2,6 +2,8 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
+        bind:
+            $imageSizes: '%cms.filemanager.image_sizes%'
     _instanceof:
         Tulia\Cms\Filemanager\Application\Command\CommandInterface:
             tags: [ filemanager.command ]

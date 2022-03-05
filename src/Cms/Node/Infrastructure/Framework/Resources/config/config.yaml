@@ -8,6 +8,9 @@ framework:
             - { name: cms/node, path: '%kernel.project_dir%/src/Cms/Node/Infrastructure/Framework/Resources/views/frontend' }
 
 cms:
+    filemanager:
+        image_sizes:
+            - { name: node-thumbnail, width: 450, height: 300 }
     attributes:
         finder:
             types:

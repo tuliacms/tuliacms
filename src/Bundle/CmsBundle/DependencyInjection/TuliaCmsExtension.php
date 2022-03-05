@@ -42,6 +42,7 @@ class TuliaCmsExtension extends Extension
         $container->setParameter('cms.options.definitions', $this->validateOptionsValues($config['options']['definitions'] ?? []));
         $container->setParameter('cms.attributes.finder.types', $config['attributes']['finder']['types'] ?? []);
         $container->setParameter('cms.widgets', $config['widgets'] ?? []);
+        $container->setParameter('cms.filemanager.image_sizes', $config['filemanager']['image_sizes'] ?? []);
 
         // BodyClass
         $container->registerForAutoconfiguration(\Tulia\Cms\BodyClass\Collector\BodyClassCollectorInterface::class)
@@ -113,6 +114,11 @@ class TuliaCmsExtension extends Extension
         $container->registerForAutoconfiguration(\Tulia\Cms\Widget\Domain\Catalog\WidgetInterface::class)
             ->setLazy(true)
             ->addTag('cms.widget');
+
+        // Widgets
+        $container->registerForAutoconfiguration(\Tulia\Cms\Filemanager\Domain\ImageSize\ImagesSizeProviderInterface::class)
+            ->setLazy(true)
+            ->addTag('filemanager.image_size.provider');
     }
 
     protected function validateOptionsValues(array $definitions): array

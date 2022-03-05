@@ -26,6 +26,7 @@ class Configuration implements ConfigurationInterface
         $this->registerContentBlockConfiguration($root);
         $this->registerAttributesConfiguration($root);
         $this->registerWidgetsConfiguration($root);
+        $this->registerFilemanagerConfiguration($root);
 
         return $treeBuilder;
     }
@@ -218,6 +219,30 @@ class Configuration implements ConfigurationInterface
                             ->scalarNode('description')->defaultNull()->end()
                             ->scalarNode('translation_domain')->defaultNull()->end()
                             ->append($this->buildContentTypeFieldsNode('fields'))
+                        ->end()
+                    ->end()
+                ->end()
+            ->end()
+        ;
+    }
+
+    private function registerFilemanagerConfiguration(ArrayNodeDefinition $root): void
+    {
+        $root
+            ->children()
+                ->arrayNode('filemanager')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->arrayNode('image_sizes')
+                            ->arrayPrototype()
+                                ->children()
+                                    ->scalarNode('name')->isRequired()->end()
+                                    ->integerNode('width')->defaultNull()->end()
+                                    ->integerNode('height')->defaultNull()->end()
+                                    ->scalarNode('mode')->defaultValue('fit')->end()
+                                    ->scalarNode('translation_domain')->defaultNull()->end()
+                                ->end()
+                            ->end()
                         ->end()
                     ->end()
                 ->end()

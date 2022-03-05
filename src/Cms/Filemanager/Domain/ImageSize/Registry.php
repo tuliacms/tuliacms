@@ -13,7 +13,6 @@ class Registry implements ImagesSizeRegistryInterface
      * @var ImagesSizeProviderInterface[]
      */
     protected iterable $providers;
-
     protected array $sizes = [];
 
     public function __construct(iterable $providers)
@@ -49,7 +48,9 @@ class Registry implements ImagesSizeRegistryInterface
         }
 
         foreach ($this->providers as $provider) {
-            foreach ($provider->provide() as $name => $size) {
+            foreach ($provider->provide() as $size) {
+                $name = $size['name'];
+
                 $this->sizes[$name] = array_merge([
                     'name' => $name,
                     'label' => $name,

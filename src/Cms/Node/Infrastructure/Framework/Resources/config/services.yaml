@@ -24,6 +24,3 @@ services:
     Tulia\Cms\Node\Domain\SearchAnything\SearchProvider:
         tags:
             - { name: search.provider, priority: 1000 }
-
-    Tulia\Cms\Node\Domain\Filemanager\ImageSize\DefaultSizesImagesSizeProvider:
-        tags: [ filemanager.image_size.provider ]

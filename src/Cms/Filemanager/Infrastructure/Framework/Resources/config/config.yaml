@@ -29,3 +29,8 @@ framework:
                 scripts: [ '/assets/core/filemanager/js/filemanager.dynamic-form-plugin.js' ]
                 collection: tulia-dynamic-form
                 require: [ filemanager, tulia_dynamic_form ]
+cms:
+    filemanager:
+        image_sizes:
+            - { name: thumbnail, width: 200, mode: widen }
+            - { name: thumbnail-md, width: 400, mode: widen }
