@@ -28,6 +28,11 @@ class ConstraintTypeMappingRegistry
         return $this->mapping[$type];
     }
 
+    public function all(): array
+    {
+        return $this->mapping;
+    }
+
     /**
      * @throws ConstraintNotExistsException
      */
