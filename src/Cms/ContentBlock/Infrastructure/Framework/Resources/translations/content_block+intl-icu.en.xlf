@@ -63,6 +63,10 @@
                 <source>pasteJsonBlocks</source>
                 <target>Paste JSON with Blocks</target>
             </trans-unit>
+            <trans-unit id="tuliacms.content_block.16">
+                <source>toggleVisibility</source>
+                <target>Toggle visibility</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

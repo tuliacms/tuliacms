@@ -28,6 +28,7 @@
                 import: '{{ 'import'|trans({}, 'content_block') }}',
                 export: '{{ 'export'|trans({}, 'content_block') }}',
                 pasteJsonBlocks: '{{ 'pasteJsonBlocks'|trans({}, 'content_block') }}',
+                toggleVisibility: '{{ 'toggleVisibility'|trans({}, 'content_block') }}',
             },
             block_types: {{ block_types|json_encode|raw }},
             field_name: '{{ full_name }}',

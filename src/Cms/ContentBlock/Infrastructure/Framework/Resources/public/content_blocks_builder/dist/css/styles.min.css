@@ -42,12 +42,13 @@
         .content-block-builder .cbb-blocks-list .cbb-block .cbb-block-header .cbb-block-name:hover {
           cursor: pointer; }
       .content-block-builder .cbb-blocks-list .cbb-block .cbb-block-header .cbb-block-options {
-        flex: 0 0 133px;
+        flex: 0 0 190px;
         text-align: right;
-        padding: 10px 5px; }
+        padding: 10px 5px;
+        font-size: 0; }
         .content-block-builder .cbb-blocks-list .cbb-block .cbb-block-header .cbb-block-options span {
           font-size: 18px;
-          padding: 6px 10px;
+          padding: 6px 8px;
           background-color: transparent;
           border: 1px solid transparent;
           border-radius: 4px;

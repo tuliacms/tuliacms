@@ -9,6 +9,7 @@
             </div>
             <div class="cbb-block-options">
                 <span v-if="type" @click="$root.$emit('block:edit', block.id)" v-bs-tooltip :title="translations.editBlock"><i class="fas fa-pen"></i></span>
+                <span v-if="type" @click="$root.$emit('block:toggle-visibility', block.id)" v-bs-tooltip :title="translations.toggleVisibility"><i :class="{ 'far': true, 'fa-eye': block.visible === true, 'fa-eye-slash': block.visible === false }"></i></span>
                 <span v-if="type" @click="$root.$emit('block:duplicate', block.id)" v-bs-tooltip :title="translations.duplicateBlock"><i class="fas fa-copy"></i></span>
                 <span class="cbb-btn-hover-danger" @click="$root.$emit('block:remove', block.id)" v-bs-tooltip :title="translations.removeBlock"><i class="fas fa-trash"></i></span>
             </div>

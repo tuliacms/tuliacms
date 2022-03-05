@@ -1,11 +1,11 @@
 <template>
     <div class="content-block-builder">
         <div class="cbb-toolbar">
-            <button type="button" class="btn btn-primary btn-icon-left" @click="openImportModal()">
+            <button type="button" class="btn btn-outline-primary btn-icon-left" @click="openImportModal()">
                 <i class="btn-icon fas fa-upload"></i>
                 {{ translations.import }}
             </button>
-            <button type="button" class="btn btn-primary btn-icon-left" @click="exportToJson()">
+            <button type="button" class="btn btn-outline-primary btn-icon-left" @click="exportToJson()">
                 <i class="btn-icon fas fa-download"></i>
                 {{ translations.export }}
             </button>
@@ -163,6 +163,11 @@ export default {
                 }
             });
         },
+        toggleBlockVisibility: function (blockId) {
+            let block = this._findBlock(blockId);
+
+            block.visible = !block.visible;
+        },
         duplicateBlock: function (blockId) {
             let block = this._findBlock(blockId);
             let newBlock = JSON.parse(JSON.stringify(block));
@@ -284,6 +289,9 @@ export default {
         });
         this.$root.$on('block:remove', (blockId) => {
             this.removeBlock(blockId);
+        });
+        this.$root.$on('block:toggle-visibility', (blockId) => {
+            this.toggleBlockVisibility(blockId);
         });
     }
 };

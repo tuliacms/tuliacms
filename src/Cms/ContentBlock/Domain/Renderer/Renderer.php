@@ -47,6 +47,10 @@ class Renderer
 
     private function renderBlock(array $block): string
     {
+        if (!$block['visible']) {
+            return '';
+        }
+
         $fields = ['__block' => $block];
 
         foreach ($block['fields'] as $name => $values) {
