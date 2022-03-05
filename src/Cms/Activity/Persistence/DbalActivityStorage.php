@@ -58,6 +58,8 @@ class DbalActivityStorage implements ActivityStorageInterface
             ['website_id' => $this->currentWebsite->getId()]
         );
 
+        $result = [];
+
         foreach ($source as $row) {
             $row['context'] = json_decode($row['context'], true);
             $result[] = ActivityRow::fromArray($row);

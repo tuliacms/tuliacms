@@ -5,10 +5,8 @@ declare(strict_types=1);
 namespace Tulia\Bundle\FrameworkBundle;
 
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
-use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
-use Tulia\Bundle\FrameworkBundle\DependencyInjection\CompilerPass\CommandBusPass;
 use Tulia\Bundle\FrameworkBundle\DependencyInjection\CompilerPass\FinderPass;
 use Tulia\Bundle\FrameworkBundle\DependencyInjection\CompilerPass\RoutingPass;
 use Tulia\Bundle\FrameworkBundle\DependencyInjection\CompilerPass\TemplatingPass;
@@ -42,24 +40,10 @@ class TuliaFrameworkBundle extends FrameworkBundle
     {
         parent::build($container);
 
-        $this->ensureDynamicConfigFileExists($container, '/config/dynamic/themes.php');
-        $this->ensureDynamicConfigFileExists($container, '/config/dynamic/modules.php');
-
         $container->addCompilerPass(new TemplatingPass());
         $container->addCompilerPass(new RoutingPass());
         $container->addCompilerPass(new SecurityPass());
         $container->addCompilerPass(new FinderPass());
         $container->addCompilerPass(new ThemePass());
-    }
-
-    private function ensureDynamicConfigFileExists(ContainerBuilder $container, string $path): void
-    {
-        $filepath = $container->getParameter('kernel.project_dir') . $path;
-
-        if (is_file($filepath) === false) {
-            file_put_contents($filepath, '<?php return [];');
-        }
-
-        $container->addResource(new FileResource($filepath));
     }
 }

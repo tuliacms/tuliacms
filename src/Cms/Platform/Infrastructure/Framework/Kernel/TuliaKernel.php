@@ -50,51 +50,55 @@ class TuliaKernel extends Kernel
                 $base . '/ContentBuilder/Infrastructure/Framework/Resources/config',
                 $base . '/ContentBlock/Infrastructure/Framework/Resources/config',
             ],
-            $this->getActiveThemesConfigDirs(),
-            $this->getActiveModulesConfigDirs()
+            $this->getThemesConfigDirs(),
+            $this->getModulesConfigDirs()
         );
     }
 
-    public function getActiveThemesConfigDirs(): array
+    public function getThemesConfigDirs(): array
     {
-        $filepath = $this->getProjectDir() . '/config/dynamic/themes.php';
-
-        if (is_file($filepath) === false) {
-            return [];
-        }
-
-        $base = \dirname(__DIR__, 6) . '/extension/theme';
-        $themes = include $filepath;
         $configDirs = [];
 
-        foreach ($themes as $theme) {
-            $path = $base . '/' . $theme . '/Resources/config';
+        foreach (new \DirectoryIterator($this->getProjectDir().'/extension/theme') as $vendor) {
+            if ($vendor->isDot()) {
+                continue;
+            }
 
-            if (is_dir($path)) {
-                $configDirs[] = $path;
+            foreach (new \DirectoryIterator($this->getProjectDir().'/extension/theme/'.$vendor->getFilename()) as $theme) {
+                if ($vendor->isDot()) {
+                    continue;
+                }
+
+                $path = $this->getProjectDir().'/extension/theme/'.$vendor->getFilename().'/'.$theme->getFilename().'/Resources/config';
+
+                if (is_dir($path)) {
+                    $configDirs[] = $path;
+                }
             }
         }
 
         return $configDirs;
     }
 
-    public function getActiveModulesConfigDirs(): array
+    public function getModulesConfigDirs(): array
     {
-        $filepath = $this->getProjectDir() . '/config/dynamic/modules.php';
-
-        if (is_file($filepath) === false) {
-            return [];
-        }
-
-        $base = \dirname(__DIR__, 6) . '/extension/module';
-        $modules = include $filepath;
         $configDirs = [];
 
-        foreach ($modules as $module) {
-            $path = $base . '/' . $module . '/Resources/config';
+        foreach (new \DirectoryIterator($this->getProjectDir().'/extension/module') as $vendor) {
+            if ($vendor->isDot()) {
+                continue;
+            }
 
-            if (is_dir($path)) {
-                $configDirs[] = $path;
+            foreach (new \DirectoryIterator($this->getProjectDir().'/extension/module/'.$vendor->getFilename()) as $module) {
+                if ($vendor->isDot()) {
+                    continue;
+                }
+
+                $path = $this->getProjectDir().'/extension/module/'.$vendor->getFilename().'/'.$module->getFilename().'/Resources/config';
+
+                if (is_dir($path)) {
+                    $configDirs[] = $path;
+                }
             }
         }
 
