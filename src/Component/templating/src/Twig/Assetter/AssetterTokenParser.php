@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Component\Templating\Twig\Assetter;
 
 use Twig\Token;
+use Twig\Node\Node;
 use Twig\TokenParser\AbstractTokenParser;
 
 /**
@@ -15,7 +16,7 @@ class AssetterTokenParser extends AbstractTokenParser
     /**
      * {@inheritdoc}
      */
-    public function parse(Token $token)
+    public function parse(Token $token): Node
     {
         $parser = $this->parser;
         $stream = $parser->getStream();
@@ -30,7 +31,7 @@ class AssetterTokenParser extends AbstractTokenParser
     /**
      * {@inheritdoc}
      */
-    public function getTag()
+    public function getTag(): string
     {
         return 'assets';
     }

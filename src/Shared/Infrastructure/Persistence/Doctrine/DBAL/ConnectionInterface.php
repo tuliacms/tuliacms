@@ -124,6 +124,7 @@ interface ConnectionInterface
 
     /**
      * @param Closure $func
+     * @return mixed
      *
      * @throws Exception
      * @throws Throwable

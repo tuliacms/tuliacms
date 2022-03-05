@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Shared\Domain\ReadModel\Finder\Model;
 
-use Tulia\Cms\Platform\Shared\Pagination\Paginator;
-
 /**
  * @author Adam Banaszkiewicz
  */
@@ -72,6 +70,9 @@ class Collection implements \ArrayAccess, \IteratorAggregate
         return isset($this->elements[$offset]);
     }
 
+    /**
+     * @return mixed
+     */
     public function offsetGet($offset)
     {
         return $this->elements[$offset];

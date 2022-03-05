@@ -40,9 +40,6 @@ class ContentBlockBuilderType extends AbstractType
         ]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
         $types = [];
@@ -70,10 +67,7 @@ class ContentBlockBuilderType extends AbstractType
         $view->vars['block_types'] = $types;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'content_block_builder';
     }

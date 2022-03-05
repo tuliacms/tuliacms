@@ -14,9 +14,6 @@ class QueryBuilder extends DoctrineQueryBuilder
 {
     private ConnectionInterface $connection;
 
-    /**
-     * {@inheritdoc}
-     */
     public function __construct(ConnectionInterface $connection)
     {
         parent::__construct($connection);
@@ -24,66 +21,42 @@ class QueryBuilder extends DoctrineQueryBuilder
         $this->connection = $connection;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function delete($delete = null, $alias = null)
+    public function delete($delete = null, $alias = null): DoctrineQueryBuilder
     {
         return parent::delete($this->connection->prepareTablePrefix($delete), $alias);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function update($update = null, $alias = null)
+    public function update($update = null, $alias = null): DoctrineQueryBuilder
     {
         return parent::update($this->connection->prepareTablePrefix($update), $alias);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function insert($insert = null)
+    public function insert($insert = null): DoctrineQueryBuilder
     {
         return parent::insert($this->connection->prepareTablePrefix($insert));
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function from($from, $alias = null)
+    public function from($from, $alias = null): DoctrineQueryBuilder
     {
         return parent::from($this->connection->prepareTablePrefix($from), $alias);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function join($fromAlias, $join, $alias, $condition = null)
+    public function join($fromAlias, $join, $alias, $condition = null): DoctrineQueryBuilder
     {
         return parent::join($this->connection->prepareTablePrefix($fromAlias), $join, $alias, $condition);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function innerJoin($fromAlias, $join, $alias, $condition = null)
+    public function innerJoin($fromAlias, $join, $alias, $condition = null): DoctrineQueryBuilder
     {
         return parent::innerJoin($this->connection->prepareTablePrefix($fromAlias), $join, $alias, $condition);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function leftJoin($fromAlias, $join, $alias, $condition = null)
+    public function leftJoin($fromAlias, $join, $alias, $condition = null): DoctrineQueryBuilder
     {
         return parent::leftJoin($this->connection->prepareTablePrefix($fromAlias), $join, $alias, $condition);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function rightJoin($fromAlias, $join, $alias, $condition = null)
+    public function rightJoin($fromAlias, $join, $alias, $condition = null): DoctrineQueryBuilder
     {
         return parent::rightJoin($this->connection->prepareTablePrefix($fromAlias), $join, $alias, $condition);
     }

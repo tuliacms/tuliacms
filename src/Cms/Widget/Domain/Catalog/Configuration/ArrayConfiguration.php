@@ -11,58 +11,31 @@ use ArrayIterator;
  */
 class ArrayConfiguration implements ConfigurationInterface
 {
-    /**
-     * @var null|string
-     */
-    protected $space = [];
+    protected ?string $space;
+    protected array $config;
+    protected array $multilingualFields = [];
 
-    /**
-     * @var array
-     */
-    protected $config = [];
-
-    /**
-     * @var array
-     */
-    protected $multilingualFields = [];
-
-    /**
-     * @param string|null $space
-     * @param array $config
-     */
     public function __construct(?string $space = null, array $config = [])
     {
         $this->space  = $space;
         $this->config = $config;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function multilingualFields(array $fields): void
     {
         $this->multilingualFields = $fields;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getMultilingualFields(): array
     {
         return $this->multilingualFields;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isMultilingual(string $name): bool
     {
         return \in_array($name, $this->multilingualFields, true);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function allMultilingual(): array
     {
         $payload = [];
@@ -76,9 +49,6 @@ class ArrayConfiguration implements ConfigurationInterface
         return $payload;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function allNotMultilingual(): array
     {
         $payload = [];
@@ -92,97 +62,64 @@ class ArrayConfiguration implements ConfigurationInterface
         return $payload;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getSpace(): ?string
     {
         return $this->space;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setSpace(?string $space): void
     {
         $this->space = $space;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function get(string $name, $default = null)
     {
         return $this->config[$name] ?? $default;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function set(string $name, $value): void
     {
         $this->config[$name] = $value;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function has(string $name): bool
     {
         return isset($this->config[$name]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function all(): array
     {
         return $this->config;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function defaults(array $defaults = []): void
     {
         $this->config = $defaults;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function merge(array $import = []): void
     {
         $this->config = array_merge($this->config, $import);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getIterator(): \Traversable
     {
         return new ArrayIterator($this->config);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function offsetExists($offset): bool
     {
         return isset($this->config[$offset]);
     }
 
     /**
-     * {@inheritdoc}
+     * @return mixed
      */
     public function offsetGet($offset)
     {
         return $this->config[$offset];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function offsetSet($offset, $value): void
     {
         if ($offset !== null) {
@@ -192,9 +129,6 @@ class ArrayConfiguration implements ConfigurationInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function offsetUnset($offset): void
     {
         unset($this->config[$offset]);

@@ -16,7 +16,6 @@ use Twig\TwigFunction;
 class AssetterExtention extends AbstractExtension implements GlobalsInterface
 {
     protected AssetterInterface $assetter;
-
     protected string $basePath;
 
     public function __construct(AssetterInterface $assetter, string $basePath = '/')
@@ -25,19 +24,13 @@ class AssetterExtention extends AbstractExtension implements GlobalsInterface
         $this->basePath = $basePath;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getTokenParsers()
+    public function getTokenParsers(): array
     {
         return [
             new AssetterTokenParser(),
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getFunctions(): array
     {
         return [
@@ -65,9 +58,6 @@ class AssetterExtention extends AbstractExtension implements GlobalsInterface
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getGlobals(): array
     {
         return [

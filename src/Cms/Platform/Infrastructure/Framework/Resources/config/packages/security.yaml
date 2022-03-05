@@ -6,7 +6,7 @@ security:
                 providers: [ 'tulia_local_user_provider' ]
         tulia_local_user_provider:
             id: Tulia\Cms\Security\Framework\Security\Core\User\UserProvider
-    encoders:
+    password_hashers:
         Tulia\Cms\Security\Framework\Security\Core\User\User:
             algorithm: auto
         # todo Find out why save new user without it throws error.

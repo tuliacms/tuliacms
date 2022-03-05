@@ -15,9 +15,6 @@ use Twig\TwigTest;
  */
 class BaseTwigExtension extends AbstractExtension
 {
-    /**
-     * {@inheritdoc}
-     */
     public function getFilters(): array
     {
         return [
@@ -81,10 +78,7 @@ class BaseTwigExtension extends AbstractExtension
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getTests()
+    public function getTests(): array
     {
         return [
             new TwigTest('boolean', function ($value) {
@@ -114,9 +108,6 @@ class BaseTwigExtension extends AbstractExtension
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getFunctions(): array
     {
         return [

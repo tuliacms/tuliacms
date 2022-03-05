@@ -16,17 +16,11 @@ class Registry implements RegistryInterface
      */
     protected array $websites = [];
 
-    /**
-     * {@inheritdoc}
-     */
     public function add(WebsiteInterface $website): void
     {
         $this->websites[] = $website;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function find(string $id): WebsiteInterface
     {
         foreach ($this->websites as $website) {
@@ -38,33 +32,24 @@ class Registry implements RegistryInterface
         throw new WebsiteNotFoundException(sprintf('Website with ID %s not exists in registry.', $id));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getIterator(): \Traversable
     {
         return new \ArrayIterator($this->websites);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function offsetExists($offset): bool
     {
         return isset($this->websites[$offset]);
     }
 
     /**
-     * {@inheritdoc}
+     * @return mixed
      */
     public function offsetGet($offset)
     {
         return $this->websites[$offset];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function offsetSet($offset, $value): void
     {
         if ($offset !== null) {
@@ -74,9 +59,6 @@ class Registry implements RegistryInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function offsetUnset($offset): void
     {
         unset($this->websites[$offset]);

@@ -22,13 +22,19 @@ class FieldTypeHandlerAwareDataTransformer implements DataTransformerInterface
         $this->handler = $handler;
     }
 
-    // From model to form
+    /**
+     * From model to form
+     * @return mixed
+     */
     public function transform($value)
     {
         return $this->handler->prepareValueToForm($this->field, $value);
     }
 
-    // From form to model
+    /**
+     * From form to model
+     * @return mixed
+     */
     public function reverseTransform($value)
     {
         return $value;

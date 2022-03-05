@@ -25,6 +25,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->salt = $salt;
     }
 
+    public function getUserIdentifier(): string
+    {
+        return $this->email;
+    }
+
     public function getRoles(): array
     {
         return $this->roles;

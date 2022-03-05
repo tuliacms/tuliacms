@@ -41,7 +41,7 @@ abstract class AbstractController extends SymfonyController
     public function setFlash(string $type, string $message): void
     {
         /** @var Request $request */
-        $request = $this->container->get(RequestStack::class)->getMasterRequest();
+        $request = $this->container->get(RequestStack::class)->getMainRequest();
 
         if ($request) {
             $request->getSession()->getFlashBag()->add($type, $message);
@@ -51,7 +51,7 @@ abstract class AbstractController extends SymfonyController
     public function getFlashes(): array
     {
         /** @var Request $request */
-        $request = $this->container->get(RequestStack::class)->getMasterRequest();
+        $request = $this->container->get(RequestStack::class)->getMainRequest();
 
         if ($request) {
             return $request->getSession()->getFlashBag()->all();

@@ -7,6 +7,7 @@ namespace Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\Schema;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
+use Doctrine\DBAL\Schema\Column;
 
 /**
  * @author Adam Banaszkiewicz
@@ -22,17 +23,17 @@ class SchemaManager extends AbstractSchemaManager
         $this->originalManager = $originalManager;
     }
 
-    public function tablesExist($tableNames)
+    public function tablesExist($tableNames): bool
     {
         return parent::tablesExist(array_map([$this->_conn, 'prepareTablePrefix'], (array) $tableNames));
     }
 
-    protected function _getPortableTableColumnDefinition($tableColumn)
+    protected function _getPortableTableColumnDefinition($tableColumn): Column
     {
         return $this->originalManager->_getPortableTableColumnDefinition($tableColumn);
     }
 
-    protected function _getPortableTableIndexesList($tableIndexRows, $tableName = null)
+    protected function _getPortableTableIndexesList($tableIndexRows, $tableName = null): array
     {
         foreach ($tableIndexRows as $key => $details) {
             foreach ($details as $name => $val) {
@@ -53,7 +54,7 @@ class SchemaManager extends AbstractSchemaManager
      *
      * @TODO Remove this method when DM fixed this problem.
      */
-    protected function _getPortableTableDefinition($table)
+    protected function _getPortableTableDefinition($table): ?string
     {
         return $table['Tables_in_' . $this->_conn->getParams()['dbname']] ?? null;
     }

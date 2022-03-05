@@ -68,6 +68,9 @@ class AttributeValue implements \Stringable, \ArrayAccess, \IteratorAggregate, \
         return isset($this->values[$offset]);
     }
 
+    /**
+     * @return mixed
+     */
     public function offsetGet($offset)
     {
         return $this->values[$offset];

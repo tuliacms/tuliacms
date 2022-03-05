@@ -20,57 +20,36 @@ class CompilerRegistry implements CompilerRegistryInterface
         $this->compilers = $compilers;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function add(ShortcodeCompilerInterface $shortcode): void
     {
         $this->compilers[] = $shortcode;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function all(): iterable
     {
         return $this->compilers;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function replace(iterable $compilers): void
     {
         $this->compilers = $compilers;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getIterator(): ArrayIterator
     {
         return new ArrayIterator($this->compilers);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function offsetExists($offset): bool
     {
         return isset($this->compilers[$offset]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function offsetGet($offset)
+    public function offsetGet($offset): ShortcodeCompilerInterface
     {
         return $this->compilers[$offset];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function offsetSet($offset, $value): void
     {
         if (! $value instanceof ShortcodeCompilerInterface) {
@@ -84,9 +63,6 @@ class CompilerRegistry implements CompilerRegistryInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function offsetUnset($offset): void
     {
         unset($this->compilers[$offset]);

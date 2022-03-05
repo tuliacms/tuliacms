@@ -25,9 +25,6 @@ class NamespaceLoader implements LoaderInterface
         $this->filesystemLoader = $filesystemLoader;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getSourceContext($name): Source
     {
         $this->resolveLoader();
@@ -35,9 +32,6 @@ class NamespaceLoader implements LoaderInterface
         return $this->loader->getSourceContext($name);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getCacheKey($name): string
     {
         $this->resolveLoader();
@@ -45,9 +39,6 @@ class NamespaceLoader implements LoaderInterface
         return $this->loader->getCacheKey($name);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isFresh($name, $time): bool
     {
         $this->resolveLoader();
@@ -55,10 +46,7 @@ class NamespaceLoader implements LoaderInterface
         return $this->loader->isFresh($name, $time);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function exists($name)
+    public function exists($name): bool
     {
         $this->resolveLoader();
 

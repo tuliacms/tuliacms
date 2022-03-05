@@ -21,9 +21,6 @@ class RequestExtension extends AbstractExtension
         $this->requestStack = $requestStack;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getFunctions(): array
     {
         return [
@@ -90,7 +87,7 @@ class RequestExtension extends AbstractExtension
     protected function getRequest(): Request
     {
         /** @var Request $request */
-        $request = $this->requestStack->getMasterRequest();
+        $request = $this->requestStack->getMainRequest();
 
         return $request;
     }

@@ -57,7 +57,7 @@ class MenuMenuBuilder implements BuilderInterface, EventSubscriberInterface
      */
     public function clearCache(): void
     {
-        $request = $this->requestStack->getMasterRequest();
+        $request = $this->requestStack->getMainRequest();
 
         if ($request && $request->hasSession() && $request->getSession()->has($this->getCachekey())) {
             $request->getSession()->remove($this->getCachekey());
@@ -95,7 +95,7 @@ class MenuMenuBuilder implements BuilderInterface, EventSubscriberInterface
 
     private function getMenus(): array
     {
-        $request = $this->requestStack->getMasterRequest();
+        $request = $this->requestStack->getMainRequest();
 
         if ($request && $request->hasSession() && $request->getSession()->has($this->getCachekey())) {
             return $request->getSession()->get($this->getCachekey());

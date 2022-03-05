@@ -21,6 +21,11 @@ class DateTimeFormatTransformer implements DataTransformerInterface
         $this->format = $format;
     }
 
+    /**
+     * @param string|DateTime $date
+     * @return string|null
+     * @throws TransformationFailedException
+     */
     public function transform($date)
     {
         if ($date === null) {
@@ -38,6 +43,11 @@ class DateTimeFormatTransformer implements DataTransformerInterface
         throw new TransformationFailedException(sprintf('Date must be string or DateTime object, given %s.', is_object($date) ? get_class($date) : gettype($date)));
     }
 
+    /**
+     * @param null|string $date
+     * @return string|null
+     * @throws TransformationFailedException
+     */
     public function reverseTransform($date)
     {
         if ($date === null) {

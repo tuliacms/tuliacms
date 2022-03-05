@@ -84,7 +84,7 @@ trait MagickAttributesTrait
         return array_key_exists($offset, $this->attributes) || array_key_exists("$offset:compiled", $this->attributes);
     }
 
-    public function offsetGet($offset)
+    public function offsetGet($offset): ?AttributeValue
     {
         return $this->attributes["$offset:compiled"] ?? $this->attributes[$offset] ?? null;
     }
