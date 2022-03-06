@@ -9,9 +9,8 @@ namespace Tulia\Cms\Filemanager\Domain\ImageSize;
  */
 interface ImagesSizeRegistryInterface
 {
+    /** @return ImageSize[] */
     public function all(): array;
-
     public function has(string $name): bool;
-
-    public function get(string $name): array;
+    public function get(string $name): ImageSize;
 }

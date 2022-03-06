@@ -9,9 +9,7 @@ namespace Tulia\Cms\Filemanager\Domain\ImageSize;
  */
 class Registry implements ImagesSizeRegistryInterface
 {
-    /**
-     * @var ImagesSizeProviderInterface[]
-     */
+    /** @var ImagesSizeProviderInterface[] */
     protected iterable $providers;
     protected array $sizes = [];
 
@@ -34,7 +32,7 @@ class Registry implements ImagesSizeRegistryInterface
         return isset($this->sizes[$name]);
     }
 
-    public function get(string $name): array
+    public function get(string $name): ImageSize
     {
         $this->resolve();
 
@@ -68,6 +66,8 @@ class Registry implements ImagesSizeRegistryInterface
                     ? null
                     : (int) $this->sizes[$name]['height']
                 ;
+
+                $this->sizes[$name] = ImageSize::fromArray($this->sizes[$name]);
             }
         }
     }

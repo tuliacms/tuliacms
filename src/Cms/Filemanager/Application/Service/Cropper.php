@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Filemanager\Application\Service;
 
+use Tulia\Cms\Filemanager\Domain\ImageSize\ImageSize;
 use Tulia\Cms\Filemanager\Domain\ImageSize\ImagesSizeRegistryInterface;
 use Tulia\Cms\Filemanager\Domain\ReadModel\Model\File;
 use Tulia\Cms\Filemanager\Domain\WriteModel\FileTypeEnum;
@@ -15,14 +16,15 @@ use Tulia\Component\Image\ImageManagerInterface;
  */
 class Cropper
 {
-    protected ImageManagerInterface $imageManager;
+    private ImageManagerInterface $imageManager;
+    private ImagesSizeRegistryInterface $imageSize;
+    private string $filesDirectory;
 
-    protected ImagesSizeRegistryInterface $imageSize;
-
-    protected string $filesDirectory;
-
-    public function __construct(ImageManagerInterface $imageManager, ImagesSizeRegistryInterface $imageSize, string $filesDirectory)
-    {
+    public function __construct(
+        ImageManagerInterface $imageManager,
+        ImagesSizeRegistryInterface $imageSize,
+        string $filesDirectory
+    ) {
         $this->imageManager   = $imageManager;
         $this->imageSize      = $imageSize;
         $this->filesDirectory = $filesDirectory;
@@ -34,6 +36,8 @@ class Cropper
             throw new \InvalidArgumentException(sprintf('First argument of crop() method must be an image, "%s" given.', $image->getType()));
         }
 
+        @ [$sizeName, $sizeDetails] = explode('_', $sizeName);
+
         if ($this->imageSize->has($sizeName) === false) {
             throw new \InvalidArgumentException(sprintf('Image size not found in registered sizes, "%s" given.', $sizeName));
         }
@@ -44,7 +48,7 @@ class Cropper
         $name = pathinfo($image->getFilename(), PATHINFO_FILENAME);
 
         $source = $this->filesDirectory . '/' . $image->getPath() . '/' . $image->getFilename();
-        $output = '/uploads/thumbnails/' . $sizeName . '/' . $directory . '/' . $name . '.' . $image->getExtension();
+        $output = '/uploads/thumbnails/' . $size->getCode() . '/' . $directory . '/' . $name . '.' . $image->getExtension();
 
         // Return path, if file already exists.
         if (is_file($this->filesDirectory . $output)) {
@@ -64,16 +68,16 @@ class Cropper
         return $output;
     }
 
-    private function cropMode(ImageInterface $image, array $size): void
+    private function cropMode(ImageInterface $image, ImageSize $size): void
     {
-        if ($size['mode'] === 'fit') {
-            $image->fit($size['width'], $size['height']);
-        } elseif ($size['mode'] === 'widen') {
-            $image->widen($size['width']);
-        } elseif ($size['mode'] === 'heighten') {
-            $image->heighten($size['width']);
-        } elseif ($size['mode'] === 'resize') {
-            $image->resize($size['width'], $size['height'], function ($constraint) {
+        if ($size->getMode() === 'fit') {
+            $image->fit($size->getWidth(), $size->getHeight());
+        } elseif ($size->getMode() === 'widen') {
+            $image->widen($size->getWidth());
+        } elseif ($size->getMode() === 'heighten') {
+            $image->heighten($size->getWidth());
+        } elseif ($size->getMode() === 'resize') {
+            $image->resize($size->getWidth(), $size->getHeight(), function ($constraint) {
                 $constraint->aspectRatio();
             });
         }

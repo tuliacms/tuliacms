@@ -18,14 +18,15 @@ use Twig\TwigFunction;
  */
 class FilemanagerExtension extends AbstractExtension
 {
-    protected FileFinderInterface $finder;
+    private FileFinderInterface $finder;
+    private ImageUrlResolver $urlResolver;
+    private string $publicDir;
 
-    protected ImageUrlResolver $urlResolver;
-
-    protected string $publicDir;
-
-    public function __construct(FileFinderInterface $finder, ImageUrlResolver $urlResolver, string $publicDir)
-    {
+    public function __construct(
+        FileFinderInterface $finder,
+        ImageUrlResolver $urlResolver,
+        string $publicDir
+    ) {
         $this->finder = $finder;
         $this->urlResolver = $urlResolver;
         $this->publicDir = $publicDir;
