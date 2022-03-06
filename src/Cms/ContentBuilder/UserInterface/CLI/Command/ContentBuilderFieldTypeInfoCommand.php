@@ -37,7 +37,7 @@ class ContentBuilderFieldTypeInfoCommand extends Command
         $io = new SymfonyStyle($input, $output);
 
         if ($this->mappingRegistry->hasType($input->getArgument('code')) === false) {
-            $io->error(sprintf('Field Types "%s" not exists.', $input->getArgument('code')));
+            $io->warning(sprintf('Field Types "%s" not exists.', $input->getArgument('code')));
             return Command::FAILURE;
         }
 
