@@ -5,20 +5,20 @@ declare(strict_types=1);
 namespace Tulia\Cms\ContentBuilder\UserInterface\CLI\Command;
 
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Helper\Table;
-use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\FieldTypeMappingRegistry;
+use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\ConstraintTypeMappingRegistry;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class ContentBuilderFieldTypesListCommand extends Command
+class ContentBuilderConstraintTypeListCommand extends Command
 {
-    protected static $defaultName = 'content-builder:field-type:list';
-    private FieldTypeMappingRegistry $mappingRegistry;
+    protected static $defaultName = 'content-builder:constraint-type:list';
+    private ConstraintTypeMappingRegistry $mappingRegistry;
 
-    public function __construct(FieldTypeMappingRegistry $mappingRegistry)
+    public function __construct(ConstraintTypeMappingRegistry $mappingRegistry)
     {
         parent::__construct(static::$defaultName);
 
@@ -32,15 +32,14 @@ class ContentBuilderFieldTypesListCommand extends Command
         foreach ($this->mappingRegistry->all() as $code => $type) {
             $rows[] = [
                 $code,
-                $type['label'],
                 $type['classname'],
-                implode(', ', $type['only_for_types']),
-                implode(', ', $type['exclude_for_types']),
+                $type['label'],
+                implode(', ', array_keys($type['modificators'])),
             ];
         }
 
         (new Table($output))
-            ->setHeaders(['code', 'label', 'classname', 'only_for_types', 'exclude_for_types'])
+            ->setHeaders(['code', 'classname', 'label', 'modificators'])
             ->setRows($rows)
             ->render()
         ;

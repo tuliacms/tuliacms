@@ -13,7 +13,7 @@ use Tulia\Cms\ContentBuilder\Domain\WriteModel\ContentType\Service\Configuration
 /**
  * @author Adam Banaszkiewicz
  */
-class ContentBuilderContentTypesListCommand extends Command
+class ContentBuilderContentTypeListCommand extends Command
 {
     protected static $defaultName = 'content-builder:content-type:list';
     private Configuration $configuration;

@@ -15,6 +15,10 @@ interface ContentTypeRegistryInterface
     public function get(string $type): ContentType;
     public function has(string $type): bool;
     public function getTypes(): array;
+
+    /**
+     * @return ContentType[]
+     */
     public function all(): \Traversable;
     public function allByType(string $type): \Traversable;
 }

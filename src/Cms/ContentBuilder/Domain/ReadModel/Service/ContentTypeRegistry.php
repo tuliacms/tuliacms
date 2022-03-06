@@ -12,21 +12,14 @@ use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\ContentType;
  */
 class ContentTypeRegistry implements ContentTypeRegistryInterface
 {
-    /**
-     * @var ContentType[]
-     */
+    /** @var ContentType[] */
     protected array $contentTypes = [];
-
-    /**
-     * @var ContentTypeProviderInterface[]
-     */
-    protected array $nodeTypeProviders = [];
-
+    /** @var ContentTypeProviderInterface[] */
+    private array $nodeTypeProviders = [];
     private ContentTypeDecorator $decorator;
 
-    public function __construct(
-        ContentTypeDecorator $decorator
-    ) {
+    public function __construct(ContentTypeDecorator $decorator)
+    {
         $this->decorator = $decorator;
     }
 
