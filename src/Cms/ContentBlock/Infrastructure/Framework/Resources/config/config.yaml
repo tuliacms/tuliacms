@@ -34,6 +34,11 @@ cms:
                     exclude_for_types: [ content_block ]
                     constraints: [ required ]
                     flags: [ compilable ]
+                    configuration:
+                        icon:
+                            required: false
+                            label: Define icon of this block
+
                 ___content_block_icon:
                     label: Content Block::Icon
                     classname: 'Symfony\Component\Form\Extension\Core\Type\HiddenType'
