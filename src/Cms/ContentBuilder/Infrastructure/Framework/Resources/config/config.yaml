@@ -27,7 +27,7 @@ cms:
     importer:
         objects:
             ContentTypeEntry:
-                importer:
+                importer: 'Tulia\Cms\ContentBuilder\Infrastructure\Importer\ContentTypeEntryImporter'
                 mapping:
                     code: ~
                     type: ~

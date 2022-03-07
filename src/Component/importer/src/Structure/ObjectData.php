@@ -20,6 +20,23 @@ class ObjectData implements \ArrayAccess
         $this->definition = $definition;
     }
 
+    public function toArray(): array
+    {
+        $result = [];
+
+        foreach ($this->objectData as $field => $value) {
+            if (is_array($value) && $this->definition->getField($field)->isCollection()) {
+                foreach ($value as $k => $v) {
+                    $value[$k] = $v->toArray();
+                }
+            }
+
+            $result[$field] = $value;
+        }
+
+        return $result;
+    }
+
     public function getDefinition(): ObjectDefinition
     {
         return $this->definition;

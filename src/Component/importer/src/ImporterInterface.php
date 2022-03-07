@@ -10,9 +10,13 @@ namespace Tulia\Component\Importer;
 interface ImporterInterface
 {
     /**
+     * @throws Exception\InvalidFieldDataTypeException
      * @throws Exception\FileNotSupportedException
      */
     public function importFromFile(string $filepath): void;
 
+    /**
+     * @throws Exception\InvalidFieldDataTypeException
+     */
     public function import(array $data): void;
 }

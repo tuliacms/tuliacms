@@ -34,3 +34,6 @@ services:
 
     Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistryInterface:
         class: Tulia\Cms\ContentBuilder\Infrastructure\Persistence\ContentProvider\CachedContentTypeRegistry
+
+    Tulia\Cms\ContentBuilder\Infrastructure\Importer\ContentTypeEntryImporter:
+        tags: [importer.object_importer]

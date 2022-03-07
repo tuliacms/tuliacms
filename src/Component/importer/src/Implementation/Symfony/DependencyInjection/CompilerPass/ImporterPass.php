@@ -8,6 +8,7 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 use Tulia\Component\Importer\FileReader\FileReaderRegistryInterface;
+use Tulia\Component\Importer\ObjectImporter\ObjectImporterRegistry;
 
 /**
  * @author Adam Banaszkiewicz
@@ -21,6 +22,13 @@ class ImporterPass implements CompilerPassInterface
 
         foreach ($taggedServices as $id => $tags) {
             $registry->addMethodCall('addReader', [new Reference($id)]);
+        }
+
+        $registry = $container->findDefinition(ObjectImporterRegistry::class);
+        $taggedServices = $container->findTaggedServiceIds('importer.object_importer');
+
+        foreach ($taggedServices as $id => $tags) {
+            $registry->addMethodCall('addObjectImporter', [new Reference($id)]);
         }
     }
 }

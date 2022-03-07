@@ -11,5 +11,8 @@ use Tulia\Component\Importer\Structure\ObjectData;
  */
 interface ObjectImporterInterface
 {
+    /**
+     * @return ObjectData[]|null
+     */
     public function import(ObjectData $objectData): ?array;
 }

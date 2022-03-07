@@ -14,6 +14,11 @@ class ObjectImporterRegistry
 
     public function addObjectImporter(ObjectImporterInterface $importer): void
     {
-        $this->importers = $importer;
+        $this->importers[get_class($importer)] = $importer;
+    }
+
+    public function getImporter(string $classname): ObjectImporterInterface
+    {
+        return $this->importers[$classname];
     }
 }
