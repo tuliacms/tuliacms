@@ -12,7 +12,6 @@ use Tulia\Component\Importer\Schema\ObjectDefinition;
  */
 class InvalidFieldDataTypeException extends \Exception
 {
-
     public static function fromField(
         ObjectDefinition $object,
         Field $field,

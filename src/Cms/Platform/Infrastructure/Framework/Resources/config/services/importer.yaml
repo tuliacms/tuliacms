@@ -11,7 +11,10 @@ services:
     Tulia\Component\Importer\:
         resource: '../../../../../../../Component/importer/src/*'
         exclude:
-            - '../../../../../../Component/importer/src/**/*Exception.php'
+            - '../../../../../../../Component/importer/src/Implementation/*'
+            - '../../../../../../../Component/importer/src/Exception/*'
+            - '../../../../../../../Component/importer/src/Schema/*'
+            - '../../../../../../../Component/importer/src/Structure/*'
 
     Tulia\Component\Importer\Schema\Schema:
         factory: [ 'Tulia\Component\Importer\Implementation\Symfony\SchemaFromContainerFactory', 'build' ]
