@@ -7,7 +7,7 @@ namespace Tulia\Cms\Filemanager\Domain\ImageSize;
 /**
  * @author Adam Banaszkiewicz
  */
-interface ImagesSizeRegistryInterface
+interface ImageSizeRegistryInterface
 {
     /** @return ImageSize[] */
     public function all(): array;

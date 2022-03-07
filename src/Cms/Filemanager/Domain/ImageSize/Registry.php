@@ -7,10 +7,11 @@ namespace Tulia\Cms\Filemanager\Domain\ImageSize;
 /**
  * @author Adam Banaszkiewicz
  */
-class Registry implements ImagesSizeRegistryInterface
+class Registry implements ImageSizeRegistryInterface
 {
     /** @var ImagesSizeProviderInterface[] */
     protected iterable $providers;
+    /** @var ImageSize[] */
     protected array $sizes = [];
 
     public function __construct(iterable $providers)
@@ -28,6 +29,12 @@ class Registry implements ImagesSizeRegistryInterface
     public function has(string $name): bool
     {
         $this->resolve();
+
+        foreach ($this->sizes as $size) {
+            if ($size->getCode() === $name) {
+                return true;
+            }
+        }
 
         return isset($this->sizes[$name]);
     }

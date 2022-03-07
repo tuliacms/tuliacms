@@ -37,8 +37,12 @@ class ConsoleWebsiteResolver implements EventSubscriberInterface
             return;
         }
 
-        if ($event->getInput()->hasOption('website')) {
-            $website = $this->websites->find($event->getInput()->getOption('website'));
+        $input = $event->getInput();
+
+        if ($input->hasOption('website') && $input->getOption('website') !== null) {
+            $website = $this->websites->find($input->getOption('website'));
+        } elseif ($input->hasArgument('website') && $input->getArgument('website') !== null) {
+            $website = $this->websites->find($input->getArgument('website'));
         } else {
             $website = $this->websites[0];
         }

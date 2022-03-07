@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Filemanager\Application\Service;
 
-use Tulia\Cms\Filemanager\Domain\ImageSize\ImagesSizeRegistryInterface;
+use Tulia\Cms\Filemanager\Domain\ImageSize\ImageSizeRegistryInterface;
 use Tulia\Cms\Filemanager\Domain\ReadModel\Model\File;
 use Symfony\Component\Routing\RouterInterface;
 
@@ -14,9 +14,9 @@ use Symfony\Component\Routing\RouterInterface;
 class ImageUrlResolver
 {
     private RouterInterface $router;
-    private ImagesSizeRegistryInterface $imageSize;
+    private ImageSizeRegistryInterface $imageSize;
 
-    public function __construct(RouterInterface $router, ImagesSizeRegistryInterface $imageSize)
+    public function __construct(RouterInterface $router, ImageSizeRegistryInterface $imageSize)
     {
         $this->router = $router;
         $this->imageSize = $imageSize;
