@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\ContentBuilder\Infrastructure\Importer;
 
-use Tulia\Cms\ContentBuilder\Domain\WriteModel\ContentType\Service\ArrayToWriteModelTransformer;
+use Tulia\Cms\ContentBuilder\Domain\WriteModel\ContentType\Service\Configuration;
 use Tulia\Cms\ContentBuilder\Domain\WriteModel\ContentTypeRepository;
+use Tulia\Cms\ContentBuilder\Domain\WriteModel\Model\ContentType;
+use Tulia\Cms\ContentBuilder\UserInterface\LayoutType\Service\FieldTypeMappingRegistry;
 use Tulia\Component\Importer\ObjectImporter\ObjectImporterInterface;
 use Tulia\Component\Importer\Structure\ObjectData;
 
@@ -15,14 +17,17 @@ use Tulia\Component\Importer\Structure\ObjectData;
 class ContentTypeEntryImporter implements ObjectImporterInterface
 {
     private ContentTypeRepository $repository;
-    private ArrayToWriteModelTransformer $arrayToWriteModelTransformer;
+    private FieldTypeMappingRegistry $fieldTypeMappingRegistry;
+    private Configuration $config;
 
     public function __construct(
         ContentTypeRepository $repository,
-        ArrayToWriteModelTransformer $arrayToWriteModelTransformer
+        FieldTypeMappingRegistry $fieldTypeMappingRegistry,
+        Configuration $config
     ) {
         $this->repository = $repository;
-        $this->arrayToWriteModelTransformer = $arrayToWriteModelTransformer;
+        $this->fieldTypeMappingRegistry = $fieldTypeMappingRegistry;
+        $this->config = $config;
     }
 
     public function import(ObjectData $objectData): ?array
@@ -38,7 +43,7 @@ class ContentTypeEntryImporter implements ObjectImporterInterface
         $data = $objectData->toArray();
         $data['id'] = $id;
 
-        $contentType = $this->arrayToWriteModelTransformer->transform($data);
+        $contentType = $this->transformArrayToModel($data);
 
         if ($currentModel) {
             $this->repository->update($contentType);
@@ -47,5 +52,42 @@ class ContentTypeEntryImporter implements ObjectImporterInterface
         }
 
         return null;
+    }
+
+    private function transformArrayToModel(array $type): ContentType
+    {
+        $layout = [
+            'code' => $type['code'] . '_layout',
+            'name' => $type['name'] . ' Layout',
+            'sections' => [],
+        ];
+        $fieldsAggs = [];
+
+        foreach ($type['field_groups'] as $group) {
+            $layout['sections'][$group['section']]['groups'][] = [
+                'code' => $group['code'],
+                'name' => $group['name'],
+                'fields' => array_map(function (array $field) {
+                    return $field['code'];
+                }, $group['fields']),
+            ];
+
+            $fieldsAggs = $group['fields'] + $fieldsAggs;
+        }
+
+        $transformed = [
+            'id' => $type['id'],
+            'code' => $type['code'],
+            'type' => $type['type'],
+            'name' => $type['name'],
+            'icon' => $type['icon'] ?? '',
+            'is_routable' => $type['is_routable'] ?? false,
+            'is_hierarchical' => $type['is_hierarchical'] ?? false,
+            'routing_strategy' => $type['routing_strategy'] ?? '',
+            'fields' => $fieldsAggs,
+            'layout' => $layout
+        ];
+
+        return ContentType::recreateFromArray($transformed);
     }
 }
