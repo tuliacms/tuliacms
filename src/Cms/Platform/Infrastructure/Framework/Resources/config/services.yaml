@@ -6,6 +6,7 @@ imports:
     - { resource: services/datatable.yaml }
     - { resource: services/finder.yaml }
     - { resource: services/image.yaml }
+    - { resource: services/importer.yaml }
     - { resource: services/mailer.yaml }
     - { resource: services/platform.yaml }
     - { resource: services/routing.yaml }

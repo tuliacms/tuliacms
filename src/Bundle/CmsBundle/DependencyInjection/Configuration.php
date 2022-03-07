@@ -27,6 +27,7 @@ class Configuration implements ConfigurationInterface
         $this->registerAttributesConfiguration($root);
         $this->registerWidgetsConfiguration($root);
         $this->registerFilemanagerConfiguration($root);
+        $this->registerImporterConfiguration($root);
 
         return $treeBuilder;
     }
@@ -241,6 +242,51 @@ class Configuration implements ConfigurationInterface
                                     ->integerNode('height')->defaultNull()->end()
                                     ->scalarNode('mode')->defaultValue('fit')->end()
                                     ->scalarNode('translation_domain')->defaultNull()->end()
+                                ->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
+            ->end()
+        ;
+    }
+
+    private function registerImporterConfiguration(ArrayNodeDefinition $root): void
+    {
+        $root
+            ->children()
+                ->arrayNode('importer')
+                    ->children()
+                        ->arrayNode('objects')
+                            ->arrayPrototype()
+                                ->children()
+                                    ->scalarNode('importer')->defaultNull()->end()
+                                    ->arrayNode('mapping')
+                                        ->arrayPrototype()
+                                            ->children()
+                                                ->scalarNode('type')->defaultValue('string')->end()
+                                                ->booleanNode('required')->defaultTrue()->end()
+                                                ->variableNode('default_value')->defaultNull()->end()
+                                                ->scalarNode('collection_of')->defaultNull()->end()
+                                            ->end()
+                                        ->end()
+                                        ->validate()
+                                            ->always(function (array $fields) {
+                                                foreach ($fields as $key => $field) {
+                                                    if ($fields[$key]['collection_of']) {
+                                                        $fields[$key]['type'] = $fields[$key]['collection_of'];
+                                                        $fields[$key]['collection'] = true;
+                                                    } else {
+                                                        $fields[$key]['collection'] = false;
+                                                    }
+
+                                                    unset($fields[$key]['collection_of']);
+                                                }
+
+                                                return $fields;
+                                            })
+                                        ->end()
+                                    ->end()
                                 ->end()
                             ->end()
                         ->end()

@@ -85,6 +85,7 @@
             "Tulia\\Component\\DependencyInjection\\": "src/Component/dependency-injection/src",
             "Tulia\\Component\\Hooking\\": "src/Component/hooking/src",
             "Tulia\\Component\\Image\\": "src/Component/image/src",
+            "Tulia\\Component\\Importer\\": "src/Component/importer/src",
             "Tulia\\Component\\Routing\\": "src/Component/routing/src",
             "Tulia\\Component\\Shortcode\\": "src/Component/shortcode/src",
             "Tulia\\Component\\Templating\\": "src/Component/templating/src",

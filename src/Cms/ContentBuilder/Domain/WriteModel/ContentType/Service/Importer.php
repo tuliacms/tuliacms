@@ -53,7 +53,7 @@ class Importer
         }
 
         $type['id'] = $id;
-        // @todo Validate structure of inported array
+        // @todo Validate structure of imported array
         $model = $this->arrayToModelTransformer->transform($type);
 
         if ($currentModel) {

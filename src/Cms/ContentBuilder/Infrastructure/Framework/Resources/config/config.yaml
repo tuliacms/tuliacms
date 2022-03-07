@@ -24,6 +24,59 @@ monolog:
     channels: ['contentBuilder']
 
 cms:
+    importer:
+        objects:
+            ContentTypeEntry:
+                importer:
+                mapping:
+                    code: ~
+                    type: ~
+                    name: ~
+                    icon:
+                        required: false
+                    controller:
+                        required: false
+                    is_routable:
+                        type: boolean
+                        required: false
+                        default_value: false
+                    is_hierarchical:
+                        type: boolean
+                        required: false
+                        default_value: false
+                    routing_strategy:
+                        required: false
+                    field_groups:
+                        collection_of: ContentTypeEntryFieldGroup
+            ContentTypeEntryFieldGroup:
+                mapping:
+                    ContentTypeEntry: ~
+                    code: ~
+                    name: ~
+                    section: ~
+                    fields:
+                        collection_of: ContentTypeEntryField
+            ContentTypeEntryField:
+                mapping:
+                    ContentTypeEntryFieldGroup: ~
+                    code: ~
+                    type: ~
+                    name: ~
+                    is_multilingual:
+                        type: boolean
+                        required: false
+                        default_value: false
+                    has_nonscalar_value:
+                        type: boolean
+                        required: false
+                        default_value: false
+                    parent:
+                        required: false
+                    configuration:
+                        type: one_dimension_array
+                    children:
+                        collection_of: ContentTypeEntryField
+
     content_building:
         data_types:
             # Declare here Symfony's and Vendor's field types

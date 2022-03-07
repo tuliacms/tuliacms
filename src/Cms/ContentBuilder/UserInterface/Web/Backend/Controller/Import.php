@@ -6,18 +6,18 @@ namespace Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Tulia\Cms\ContentBuilder\Domain\WriteModel\ContentType\Service\Importer;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
+use Tulia\Component\Importer\ImporterInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
 class Import extends AbstractController
 {
-    private Importer $importer;
+    private ImporterInterface $importer;
 
-    public function __construct(Importer $importer)
+    public function __construct(ImporterInterface $importer)
     {
         $this->importer = $importer;
     }
@@ -29,7 +29,7 @@ class Import extends AbstractController
     {
         $this->importer->importFromFile(
             $request->files->get('file')->getPathname(),
-            $request->files->get('file')->getClientOriginalExtension()
+            $request->files->get('file')->getClientOriginalName()
         );
 
         $this->addFlash('success', $this->trans('contentTypeFileImported', [], 'content_builder'));

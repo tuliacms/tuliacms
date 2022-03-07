@@ -43,6 +43,7 @@ class TuliaCmsExtension extends Extension
         $container->setParameter('cms.attributes.finder.types', $config['attributes']['finder']['types'] ?? []);
         $container->setParameter('cms.widgets', $config['widgets'] ?? []);
         $container->setParameter('cms.filemanager.image_sizes', $config['filemanager']['image_sizes'] ?? []);
+        $container->setParameter('importer.objects', $config['importer']['objects'] ?? []);
 
         // BodyClass
         $container->registerForAutoconfiguration(\Tulia\Cms\BodyClass\Collector\BodyClassCollectorInterface::class)

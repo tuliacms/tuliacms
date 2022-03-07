@@ -8,12 +8,13 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Tulia\Bundle\CmsBundle\DependencyInjection\CompilerPass\ContentBuilderPass;
-use Tulia\Bundle\CmsBundle\DependencyInjection\CompilerPass\WidgetPass;
-use Tulia\Bundle\CmsBundle\DependencyInjection\TuliaCmsExtension;
+use Tulia\Bundle\CmsBundle\DependencyInjection\CompilerPass\DashboardPass;
+use Tulia\Bundle\CmsBundle\DependencyInjection\CompilerPass\DomainActionChainPass;
 use Tulia\Bundle\CmsBundle\DependencyInjection\CompilerPass\MenuPass;
 use Tulia\Bundle\CmsBundle\DependencyInjection\CompilerPass\TaxonomyPass;
-use Tulia\Bundle\CmsBundle\DependencyInjection\CompilerPass\DomainActionChainPass;
-use Tulia\Bundle\CmsBundle\DependencyInjection\CompilerPass\DashboardPass;
+use Tulia\Bundle\CmsBundle\DependencyInjection\CompilerPass\WidgetPass;
+use Tulia\Bundle\CmsBundle\DependencyInjection\TuliaCmsExtension;
+use Tulia\Component\Importer\Implementation\Symfony\DependencyInjection\CompilerPass\ImporterPass;
 
 /**
  * @author Adam Banaszkiewicz
@@ -33,5 +34,6 @@ class TuliaCmsBundle extends Bundle
         $container->addCompilerPass(new DashboardPass());
         $container->addCompilerPass(new WidgetPass());
         $container->addCompilerPass(new ContentBuilderPass());
+        $container->addCompilerPass(new ImporterPass());
     }
 }
