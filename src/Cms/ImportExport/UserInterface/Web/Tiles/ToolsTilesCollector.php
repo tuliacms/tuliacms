@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\ContentBuilder\UserInterface\Web\Backend\Tiles;
+namespace Tulia\Cms\ImportExport\UserInterface\Web\Tiles;
 
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -12,7 +12,7 @@ use Tulia\Cms\Homepage\UserInterface\Web\Backend\Tiles\DashboardTilesCollector;
 /**
  * @author Adam Banaszkiewicz
  */
-class SystemTilesCollector implements DashboardTilesCollector
+class ToolsTilesCollector implements DashboardTilesCollector
 {
     protected RouterInterface $router;
     protected TranslatorInterface $translator;
@@ -26,16 +26,16 @@ class SystemTilesCollector implements DashboardTilesCollector
     public function collect(DashboardTilesCollection $collection): void
     {
         $collection
-            ->add('content_model', [
-                'name' => $this->translator->trans('contentModel', [], 'content_builder'),
-                'link' => $this->router->generate('backend.content_builder.homepage'),
-                'icon' => 'fas fa-box',
+            ->add('importer', [
+                'name' => $this->translator->trans('importer', [], 'import_export'),
+                'link' => $this->router->generate('backend.import_export.importer'),
+                'icon' => 'fas fa-file-import',
             ])
         ;
     }
 
     public function supports(string $group): bool
     {
-        return $group === 'system';
+        return $group === 'tools';
     }
 }

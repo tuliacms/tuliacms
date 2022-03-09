@@ -1,0 +1,7 @@
+framework:
+    templating:
+        paths:
+            - { name: backend/import_export, path: '%kernel.project_dir%/src/Cms/ImportExport/Infrastructure/Framework/Resources/views/backend' }
+    translator:
+        paths:
+            - '%kernel.project_dir%/src/Cms/ImportExport/Infrastructure/Framework/Resources/translations'

@@ -25,6 +25,10 @@ class ObjectData implements \ArrayAccess
         $result = [];
 
         foreach ($this->objectData as $field => $value) {
+            if ($field[0] === '@') {
+                continue;
+            }
+
             if (is_array($value) && $this->definition->getField($field)->isCollection()) {
                 foreach ($value as $k => $v) {
                     $value[$k] = $v->toArray();
@@ -35,6 +39,11 @@ class ObjectData implements \ArrayAccess
         }
 
         return $result;
+    }
+
+    public function getObjectType(): string
+    {
+        return $this->objectData['@type'];
     }
 
     public function getDefinition(): ObjectDefinition

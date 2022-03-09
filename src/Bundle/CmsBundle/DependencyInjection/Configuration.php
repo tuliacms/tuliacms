@@ -276,8 +276,13 @@ class Configuration implements ConfigurationInterface
                                                     if ($fields[$key]['collection_of']) {
                                                         $fields[$key]['type'] = $fields[$key]['collection_of'];
                                                         $fields[$key]['collection'] = true;
+                                                        $fields[$key]['default_value'] = [];
                                                     } else {
                                                         $fields[$key]['collection'] = false;
+                                                    }
+
+                                                    if ($field['type'] === 'one_dimension_array') {
+                                                        $fields[$key]['default_value'] = [];
                                                     }
 
                                                     unset($fields[$key]['collection_of']);

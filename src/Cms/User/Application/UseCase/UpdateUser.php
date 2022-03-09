@@ -16,7 +16,7 @@ use Tulia\Cms\User\Domain\WriteModel\UserRepositoryInterface;
 /**
  * @author Adam Banaszkiewicz
  */
-final class UpdateUser extends AbstractUserUserCase
+final class UpdateUser extends AbstractUserUseCase
 {
     private UserPasswordHasherInterface $passwordHasher;
     private UploaderInterface $uploader;

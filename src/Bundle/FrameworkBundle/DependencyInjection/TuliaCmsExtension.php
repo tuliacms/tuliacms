@@ -53,6 +53,9 @@ class TuliaCmsExtension extends FrameworkExtension
             ->addTag('theme.resolver');
         $container->registerForAutoconfiguration(\Tulia\Component\Theme\Customizer\Builder\Rendering\Controls\ControlInterface::class)
             ->addTag('theme.customizer.control');
+        // Import/Export
+        $container->registerForAutoconfiguration(\Tulia\Component\Importer\ObjectImporter\ObjectImporterInterface::class)
+            ->addTag('importer.object_importer');
 
         $container->getDefinition('cache.adapter.pdo')->replaceArgument(3, ['db_table' => sprintf('%scache_pools', env('DATABASE_PREFIX'))]);
         $container->getDefinition('cache.adapter.doctrine_dbal')->replaceArgument(3, ['db_table' => sprintf('%scache_pools', env('DATABASE_PREFIX'))]);

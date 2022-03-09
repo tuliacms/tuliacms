@@ -5,8 +5,6 @@ services:
     _instanceof:
         Tulia\Component\Importer\FileReader\FileReaderInterface:
             tags: [ importer.file_reader ]
-        Tulia\Component\Importer\ObjectImporter\ObjectImporterInterface:
-            tags: [ importer.object_importer ]
 
     Tulia\Component\Importer\:
         resource: '../../../../../../../Component/importer/src/*'

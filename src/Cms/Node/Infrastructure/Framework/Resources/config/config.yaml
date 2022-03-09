@@ -8,33 +8,34 @@ framework:
             - { name: cms/node, path: '%kernel.project_dir%/src/Cms/Node/Infrastructure/Framework/Resources/views/frontend' }
 
 cms:
-    #importer:
-    #    objects:
-    #        Node:
-    #            mapping:
-    #                id:
-    #                    type: uuid
-    #                parent_id:
-    #                    type: uuid
-    #                    required: false
-    #                type: ~
-    #                status:
-    #                    default_value: published
-    #                published_at:
-    #                    type: datetime
-    #                published_to:
-    #                    required: false
-    #                    type: datetime
-    #                created_at:
-    #                    type: datetime
-    #                updated_at:
-    #                    required: false
-    #                    type: datetime
-    #                title: ~
-    #                slug:
-    #                    required: false
-    #                attributes:
-    #                    collection_of: attribute
+    importer:
+        objects:
+            Node:
+                importer: 'Tulia\Cms\Node\Infrastructure\Importer\NodeEntryImporter'
+                mapping:
+                    parent_id:
+                        type: uuid
+                        required: false
+                    type: ~
+                    status:
+                        default_value: published
+                    published_at:
+                        type: datetime
+                        required: false
+                    published_to:
+                        type: datetime
+                        required: false
+                    created_at:
+                        type: datetime
+                        required: false
+                    updated_at:
+                        type: datetime
+                        required: false
+                    title: ~
+                    slug:
+                        required: false
+                    attributes:
+                        collection_of: Attribute
     filemanager:
         image_sizes:
             - { name: node-thumbnail, width: 450, height: 300 }

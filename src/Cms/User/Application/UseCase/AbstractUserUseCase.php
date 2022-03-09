@@ -14,7 +14,7 @@ use Tulia\Cms\User\Domain\WriteModel\UserRepositoryInterface;
 /**
  * @author Adam Banaszkiewicz
  */
-abstract class AbstractUserUserCase
+abstract class AbstractUserUseCase
 {
     public function __construct(
         UserRepositoryInterface $repository,

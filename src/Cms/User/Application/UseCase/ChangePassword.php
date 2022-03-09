@@ -14,7 +14,7 @@ use Tulia\Cms\User\Domain\WriteModel\UserRepositoryInterface;
 /**
  * @author Adam Banaszkiewicz
  */
-final class ChangePassword extends AbstractUserUserCase
+final class ChangePassword extends AbstractUserUseCase
 {
     private UserPasswordHasherInterface $passwordHasher;
 

@@ -9,9 +9,7 @@ namespace Tulia\Cms\Homepage\UserInterface\Web\Backend\Tiles;
  */
 class DashboardTilesRegistry implements DashboardTilesRegistryInterface
 {
-    /**
-     * @var DashboardTilesCollector[]
-     */
+    /** @var DashboardTilesCollector[] */
     private iterable $collectors;
 
     public function __construct(iterable $collectors)
@@ -19,9 +17,6 @@ class DashboardTilesRegistry implements DashboardTilesRegistryInterface
         $this->collectors = $collectors;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getTiles(string $group): array
     {
         $collection = new DashboardTilesCollection();

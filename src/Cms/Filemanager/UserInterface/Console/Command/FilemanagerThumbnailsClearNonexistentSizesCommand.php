@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Filemanager\UserInterface\CLI\Command;
+namespace Tulia\Cms\Filemanager\UserInterface\Console\Command;
 
 use DirectoryIterator;
 use Symfony\Component\Console\Command\Command;

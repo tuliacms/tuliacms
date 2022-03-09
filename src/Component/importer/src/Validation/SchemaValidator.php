@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Tulia\Component\Importer\Validation;
 
+use Tulia\Component\Importer\Exception\EmptyValueOfRequiredFieldException;
 use Tulia\Component\Importer\Exception\InvalidFieldDataTypeException;
 use Tulia\Component\Importer\Schema\Field;
 use Tulia\Component\Importer\Schema\ObjectDefinition;
 use Tulia\Component\Importer\Schema\Schema;
-
 use Tulia\Component\Importer\Structure\ObjectData;
 
 use function is_array;
@@ -40,6 +40,7 @@ class SchemaValidator implements SchemaValidatorInterface
 
     /**
      * @throws InvalidFieldDataTypeException
+     * @throws EmptyValueOfRequiredFieldException
      */
     private function validateObject(array $objectData, string $path): ?ObjectData
     {
@@ -69,6 +70,19 @@ class SchemaValidator implements SchemaValidatorInterface
             );
         }
 
+        foreach ($object->getFields() as $field) {
+            if (isset($objectData[$field->getName()])) {
+                continue;
+            }
+
+            $objectData[$field->getName()] = $this->validateField(
+                $object,
+                $field,
+                $field->getDefaultValue(),
+                $path.'.'.$field->getName()
+            );
+        }
+
         return new ObjectData($objectData, $object);
     }
 
@@ -76,62 +90,71 @@ class SchemaValidator implements SchemaValidatorInterface
      * @param mixed $data
      * @return mixed
      * @throws InvalidFieldDataTypeException
+     * @throws EmptyValueOfRequiredFieldException
      */
     private function validateField(ObjectDefinition $object, Field $field, $data, string $path)
     {
-        if ($field->isRequired() === false && $this->isEmpty($data)) {
+        if ($this->isEmpty($data)) {
+            if ($field->isRequired()) {
+                throw EmptyValueOfRequiredFieldException::fromField($object, $field, $path);
+            }
+
+            // Do nothing if is empty and not required.
             return null;
         }
 
         switch ($field->getType()) {
+            case 'boolean':
+                if (is_bool($data) === false) {
+                    throw InvalidFieldDataTypeException::fromField($object, $field, $data, $path);
+                }
+                break;
             case 'string':
                 if (is_string($data) === false) {
-                    throw InvalidFieldDataTypeException::fromField($object, $field, $data, 'string',
-                    $path);
+                    throw InvalidFieldDataTypeException::fromField($object, $field, $data, $path);
                 }
                 break;
             case 'integer':
                 if (is_int($data) === false) {
-                    throw InvalidFieldDataTypeException::fromField($object, $field, $data, 'integer',
-                    $path);
+                    throw InvalidFieldDataTypeException::fromField($object, $field, $data, $path);
                 }
                 break;
             case 'scalar':
                 if (is_scalar($data) === false) {
-                    throw InvalidFieldDataTypeException::fromField($object, $field, $data, 'scalar',
-                    $path);
+                    throw InvalidFieldDataTypeException::fromField($object, $field, $data, $path);
                 }
                 break;
             case 'number':
                 if (is_numeric($data) === false) {
-                    throw InvalidFieldDataTypeException::fromField($object, $field, $data, 'number',
-                    $path);
+                    throw InvalidFieldDataTypeException::fromField($object, $field, $data, $path);
                 }
                 break;
             case 'one_dimension_array':
                 if (is_array($data) === false) {
                     foreach ($data as $val) {
                         if (is_array($val)) {
-                            throw InvalidFieldDataTypeException::fromField(
-                                $object,
-                                $field,
-                                $data,
-                                'one_dimension_array',
-                                $path
-                            );
+                            throw InvalidFieldDataTypeException::fromField($object, $field, $data, $path);
                         }
+                    }
+                }
+                break;
+            case 'uuid':
+                if (preg_match('#^[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}$#', $data) === false) {
+                    if (is_array($data)) {
+                        throw InvalidFieldDataTypeException::fromField($object, $field, $data, $path);
+                    }
+                }
+                break;
+            case 'datetime':
+                if (preg_match('#^\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}$#', $data) === false) {
+                    if (is_array($data)) {
+                        throw InvalidFieldDataTypeException::fromField($object, $field, $data, $path);
                     }
                 }
                 break;
             default:
                 if ($this->schema->has($field->getType()) === false) {
-                    throw InvalidFieldDataTypeException::fromField(
-                        $object,
-                        $field,
-                        $data,
-                        'one_dimension_array',
-                        $path
-                    );
+                    throw InvalidFieldDataTypeException::fromField($object, $field, $data, $path);
                 }
 
                 foreach ($data as $key => $val) {
@@ -142,6 +165,9 @@ class SchemaValidator implements SchemaValidatorInterface
         return $data;
     }
 
+    /**
+     * @param mixed $data
+     */
     private function isEmpty($data): bool
     {
         return $data === null || $data === '';

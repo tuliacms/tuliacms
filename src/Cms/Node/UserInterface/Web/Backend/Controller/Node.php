@@ -12,8 +12,10 @@ use Tulia\Cms\ContentBuilder\Domain\ReadModel\Model\ContentType;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\ContentBuilder\UserInterface\Web\Form\ContentTypeFormDescriptor;
 use Tulia\Cms\ContentBuilder\UserInterface\Web\Service\ContentFormService;
+use Tulia\Cms\Node\Application\UseCase\CreateNode;
+use Tulia\Cms\Node\Application\UseCase\DeleteNode;
+use Tulia\Cms\Node\Application\UseCase\UpdateNode;
 use Tulia\Cms\Node\Domain\ReadModel\Datatable\NodeDatatableFinderInterface;
-use Tulia\Cms\Node\Domain\WriteModel\Exception\NodeNotFoundException;
 use Tulia\Cms\Node\Domain\WriteModel\Exception\SingularFlagImposedOnMoreThanOneNodeException;
 use Tulia\Cms\Node\Domain\WriteModel\Model\Node as WriteModelNode;
 use Tulia\Cms\Node\Domain\WriteModel\NodeRepository;
@@ -21,7 +23,6 @@ use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\IgnoreCsrfToken;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Exception\RequestCsrfTokenException;
-use Tulia\Cms\Shared\Domain\WriteModel\Model\ValueObject\ImmutableDateTime;
 use Tulia\Component\Datatable\DatatableFactory;
 use Tulia\Component\Templating\ViewInterface;
 
@@ -80,7 +81,7 @@ class Node extends AbstractController
      * @throws RequestCsrfTokenException
      * @IgnoreCsrfToken()
      */
-    public function create(Request $request, string $node_type)
+    public function create(Request $request, CreateNode $createNode, string $node_type)
     {
         $this->validateCsrfToken($request, $node_type);
 
@@ -91,7 +92,7 @@ class Node extends AbstractController
         $nodeType = $formDescriptor->getContentType();
 
         if ($formDescriptor->isFormValid()) {
-            $this->updateModel($formDescriptor, $node, 'create');
+            ($createNode)($node_type, $formDescriptor->getData());
 
             $this->setFlash('success', $this->trans('nodeSaved', [], 'node'));
             return $this->redirectToRoute('backend.node.edit', [ 'id' => $node->getId(), 'node_type' => $nodeType->getCode() ]);
@@ -105,24 +106,17 @@ class Node extends AbstractController
     }
 
     /**
-     * @param Request $request
-     * @param string $node_type
-     * @param string $id
      * @return RedirectResponse|ViewInterface
      * @throws RequestCsrfTokenException
      * @IgnoreCsrfToken()
      */
-    public function edit(Request $request, string $node_type, string $id)
+    public function edit(Request $request, UpdateNode $updateNode, string $node_type, string $id)
     {
         $this->validateCsrfToken($request, $node_type);
 
-        try {
-            $node = $this->repository->find($id);
+        $node = $this->repository->find($id);
 
-            if ($node->getType() !== $node_type) {
-                throw new NodeNotFoundException();
-            }
-        } catch (NodeNotFoundException|NodeTypeNotExistsException $e) {
+        if (!$node) {
             $this->setFlash('warning', $this->trans('nodeNotFound'));
             return $this->redirectToRoute('backend.node.list');
         }
@@ -134,7 +128,7 @@ class Node extends AbstractController
 
         if ($formDescriptor->isFormValid()) {
             try {
-                $this->updateModel($formDescriptor, $node, 'update');
+                ($updateNode)($node, $formDescriptor->getData());
                 $this->setFlash('success', $this->trans('nodeSaved', [], 'node'));
                 return $this->redirectToRoute('backend.node.edit', [ 'id' => $node->getId(), 'node_type' => $nodeType->getCode() ]);
             } catch (SingularFlagImposedOnMoreThanOneNodeException $e) {
@@ -161,9 +155,9 @@ class Node extends AbstractController
         $status = $request->query->get('status');
 
         foreach ($request->request->get('ids') as $id) {
-            try {
-                $node = $this->repository->find($id);
-            } catch (NodeNotFoundException $e) {
+            $node = $this->repository->find($id);
+
+            if (!$node) {
                 continue;
             }
 
@@ -191,19 +185,17 @@ class Node extends AbstractController
      * @return RedirectResponse
      * @CsrfToken(id="node.delete")
      */
-    public function delete(Request $request): RedirectResponse
+    public function delete(Request $request, DeleteNode $deleteNode): RedirectResponse
     {
         $removedNodes = 0;
 
         foreach ($request->request->get('ids') as $id) {
-            try {
-                $node = $this->repository->find($id);
-            } catch (NodeNotFoundException $e) {
-                continue;
-            }
+            $node = $this->repository->find($id);
 
-            $this->repository->delete($node);
-            $removedNodes++;
+            if ($node) {
+                ($deleteNode)($node);
+                $removedNodes++;
+            }
         }
 
         if ($removedNodes) {
@@ -245,36 +237,6 @@ class Node extends AbstractController
             $node->getType(),
             $node->toArray()
         );
-    }
-
-    private function updateModel(ContentTypeFormDescriptor $formDescriptor, WriteModelNode $node, string $strategy): void
-    {
-        $attributes = $formDescriptor->getData();
-
-        $getValue = function (string $code) use ($attributes) {
-            foreach ($attributes as $attribute) {
-                if ($attribute->getCode() === $code) {
-                    return $attribute->getValue();
-                }
-            }
-
-            return '';
-        };
-
-        $node->setStatus($getValue('status'));
-        $node->setSlug($getValue('slug'));
-        $node->setTitle($getValue('title'));
-        $node->setPublishedAt(new ImmutableDateTime($getValue('published_at')));
-        $node->setPublishedTo($getValue('published_to') ? new ImmutableDateTime($getValue('published_to')) : null);
-        $node->setParentId($getValue('parent_id') ?? null);
-        $node->setAuthorId($getValue('author_id'));
-        $node->updateAttributes($attributes);
-
-        if ($strategy === 'create') {
-            $this->repository->insert($node);
-        } else {
-            $this->repository->update($node);
-        }
     }
 
     /**

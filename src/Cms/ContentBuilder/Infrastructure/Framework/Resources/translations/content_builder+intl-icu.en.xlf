@@ -247,21 +247,12 @@
                 <target>Content Type was removed.</target>
                 <note>Flash message</note>
             </trans-unit>
-            <trans-unit id="tuliacms.content_builder.66">
-                <source>importingOverwriteNotification</source>
-                <target>Every import creates new Content Types, and overwrite existing with all fields and configurations (remove current data, and replace it with the new). Please make sure You really want to do this import in case of that.</target>
-            </trans-unit>
-            <trans-unit id="tuliacms.content_builder.67">
-                <source>contentTypeFileImported</source>
-                <target>Content Type file imported.</target>
-                <note>Flash message</note>
-            </trans-unit>
-            <trans-unit id="tuliacms.content_builder.68">
+            <trans-unit id="tuliacms.content_builder.65">
                 <source>moveUp</source>
                 <target>Move up</target>
                 <note>Button tooltip</note>
             </trans-unit>
-            <trans-unit id="tuliacms.content_builder.69">
+            <trans-unit id="tuliacms.content_builder.66">
                 <source>moveDown</source>
                 <target>Move down</target>
                 <note>Button tooltip</note>

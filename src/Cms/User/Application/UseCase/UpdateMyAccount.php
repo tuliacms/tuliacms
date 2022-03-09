@@ -14,7 +14,7 @@ use Tulia\Cms\User\Domain\WriteModel\UserRepositoryInterface;
 /**
  * @author Adam Banaszkiewicz
  */
-final class UpdateMyAccount extends AbstractUserUserCase
+final class UpdateMyAccount extends AbstractUserUseCase
 {
     private UploaderInterface $uploader;
 

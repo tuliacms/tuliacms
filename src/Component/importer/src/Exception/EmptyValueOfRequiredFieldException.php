@@ -10,20 +10,18 @@ use Tulia\Component\Importer\Schema\ObjectDefinition;
 /**
  * @author Adam Banaszkiewicz
  */
-class InvalidFieldDataTypeException extends \Exception
+class EmptyValueOfRequiredFieldException extends \Exception
 {
     public static function fromField(
         ObjectDefinition $object,
         Field $field,
-        $data,
         string $path
     ) {
         return new self(sprintf(
-            'Value of "%s.%s" field must be a "%s", but given "%s", at path "%s".',
+            'Value of "%s.%s" field must be a "%s", but field not exists in imported data, at path "%s".',
             $object->getName(),
             $field->getName(),
             $field->getType(),
-            gettype($data),
             $path
         ));
     }

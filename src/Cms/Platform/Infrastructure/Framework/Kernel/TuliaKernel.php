@@ -49,52 +49,28 @@ class TuliaKernel extends Kernel
                 $base . '/TuliaEditor/Infrastructure/Framework/Resources/config',
                 $base . '/ContentBuilder/Infrastructure/Framework/Resources/config',
                 $base . '/ContentBlock/Infrastructure/Framework/Resources/config',
+                $base . '/ImportExport/Infrastructure/Framework/Resources/config',
             ],
-            $this->getThemesConfigDirs(),
-            $this->getModulesConfigDirs()
+            $this->getExtensionConfigDirs('module'),
+            $this->getExtensionConfigDirs('theme'),
         );
     }
 
-    public function getThemesConfigDirs(): array
+    private function getExtensionConfigDirs(string $type): array
     {
         $configDirs = [];
 
-        foreach (new \DirectoryIterator($this->getProjectDir().'/extension/theme') as $vendor) {
+        foreach (new \DirectoryIterator($this->getProjectDir().'/extension/'.$type) as $vendor) {
             if ($vendor->isDot()) {
                 continue;
             }
 
-            foreach (new \DirectoryIterator($this->getProjectDir().'/extension/theme/'.$vendor->getFilename()) as $theme) {
+            foreach (new \DirectoryIterator($this->getProjectDir().'/extension/'.$type.'/'.$vendor->getFilename()) as $ext) {
                 if ($vendor->isDot()) {
                     continue;
                 }
 
-                $path = $this->getProjectDir().'/extension/theme/'.$vendor->getFilename().'/'.$theme->getFilename().'/Resources/config';
-
-                if (is_dir($path)) {
-                    $configDirs[] = $path;
-                }
-            }
-        }
-
-        return $configDirs;
-    }
-
-    public function getModulesConfigDirs(): array
-    {
-        $configDirs = [];
-
-        foreach (new \DirectoryIterator($this->getProjectDir().'/extension/module') as $vendor) {
-            if ($vendor->isDot()) {
-                continue;
-            }
-
-            foreach (new \DirectoryIterator($this->getProjectDir().'/extension/module/'.$vendor->getFilename()) as $module) {
-                if ($vendor->isDot()) {
-                    continue;
-                }
-
-                $path = $this->getProjectDir().'/extension/module/'.$vendor->getFilename().'/'.$module->getFilename().'/Resources/config';
+                $path = $this->getProjectDir().'/extension/'.$type.'/'.$vendor->getFilename().'/'.$ext->getFilename().'/Resources/config';
 
                 if (is_dir($path)) {
                     $configDirs[] = $path;

@@ -1,17 +1,17 @@
-#cms:
-#    importer:
-#        objects:
-#            Attribute:
-#                mapping:
-#                    id:
-#                        type: uuid
-#                    owner_id:
-#                        type: uuid
-#                    is_renderable:
-#                        type: integer
-#                    has_nonscalar_value:
-#                        type: integer
-#                    name: ~
-#                    uri: ~
-#                    value:
-#                        type: string
+cms:
+    importer:
+        objects:
+            Attribute:
+                mapping:
+                    is_renderable:
+                        required: false
+                        type: boolean
+                        default_value: false
+                    has_nonscalar_value:
+                        required: false
+                        type: boolean
+                        default_value: false
+                    name: ~
+                    uri: ~
+                    value:
+                        type: string

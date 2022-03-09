@@ -7,13 +7,9 @@ namespace Tulia\Cms\Node\Domain\WriteModel;
 use Tulia\Cms\Attributes\Domain\WriteModel\AttributesRepository;
 use Tulia\Cms\ContentBuilder\Domain\ReadModel\Service\ContentTypeRegistryInterface;
 use Tulia\Cms\ContentBuilder\Domain\WriteModel\Exception\ContentTypeNotExistsException;
-use Tulia\Cms\Node\Domain\WriteModel\Event\NodeDeleted;
-use Tulia\Cms\Node\Domain\WriteModel\Event\NodeUpdated;
-use Tulia\Cms\Node\Domain\WriteModel\Exception\NodeNotFoundException;
 use Tulia\Cms\Node\Domain\WriteModel\Model\Node;
 use Tulia\Cms\Node\Domain\WriteModel\Service\NodeWriteStorageInterface;
 use Tulia\Cms\Shared\Domain\WriteModel\ActionsChain\AggregateActionsChainInterface;
-use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
 use Tulia\Cms\Shared\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 
@@ -26,7 +22,6 @@ class NodeRepository
     private CurrentWebsiteInterface $currentWebsite;
     private AttributesRepository $attributeRepository;
     private UuidGeneratorInterface $uuidGenerator;
-    private EventBusInterface $eventBus;
     private AggregateActionsChainInterface $actionsChain;
     private ContentTypeRegistryInterface $contentTypeRegistry;
 
@@ -35,7 +30,6 @@ class NodeRepository
         CurrentWebsiteInterface $currentWebsite,
         AttributesRepository $attributeRepository,
         UuidGeneratorInterface $uuidGenerator,
-        EventBusInterface $eventBus,
         AggregateActionsChainInterface $actionsChain,
         ContentTypeRegistryInterface $contentTypeRegistry
     ) {
@@ -43,7 +37,6 @@ class NodeRepository
         $this->currentWebsite = $currentWebsite;
         $this->attributeRepository = $attributeRepository;
         $this->uuidGenerator = $uuidGenerator;
-        $this->eventBus = $eventBus;
         $this->actionsChain = $actionsChain;
         $this->contentTypeRegistry = $contentTypeRegistry;
     }
@@ -61,11 +54,10 @@ class NodeRepository
     }
 
     /**
-     * @throws NodeNotFoundException
      * @throws ContentTypeNotExistsException
      * @throws \Exception
      */
-    public function find(string $id): Node
+    public function find(string $id): ?Node
     {
         $node = $this->storage->find(
             $id,
@@ -75,7 +67,7 @@ class NodeRepository
         );
 
         if (empty($node)) {
-            throw new NodeNotFoundException();
+            return null;
         }
 
         $contentType = $this->contentTypeRegistry->get($node['type']);
@@ -90,8 +82,6 @@ class NodeRepository
 
     public function insert(Node $node): void
     {
-        $this->actionsChain->execute('insert', $node);
-
         $this->storage->beginTransaction();
 
         try {
@@ -108,14 +98,10 @@ class NodeRepository
             $this->storage->rollback();
             throw $exception;
         }
-
-        $this->eventBus->dispatchCollection($node->collectDomainEvents());
     }
 
     public function update(Node $node): void
     {
-        $this->actionsChain->execute('update', $node);
-
         $this->storage->beginTransaction();
 
         try {
@@ -132,14 +118,10 @@ class NodeRepository
             $this->storage->rollback();
             throw $exception;
         }
-
-        $this->eventBus->dispatchCollection(array_merge($node->collectDomainEvents(), [NodeUpdated::fromNode($node)]));
     }
 
     public function delete(Node $node): void
     {
-        $this->actionsChain->execute('delete', $node);
-
         $this->storage->beginTransaction();
 
         try {
@@ -150,7 +132,5 @@ class NodeRepository
             $this->storage->rollback();
             throw $exception;
         }
-
-        $this->eventBus->dispatch(NodeDeleted::fromNode($node));
     }
 }

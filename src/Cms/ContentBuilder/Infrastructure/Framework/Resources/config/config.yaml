@@ -50,7 +50,6 @@ cms:
                         collection_of: ContentTypeEntryFieldGroup
             ContentTypeEntryFieldGroup:
                 mapping:
-                    ContentTypeEntry: ~
                     code: ~
                     name: ~
                     section: ~
@@ -58,7 +57,6 @@ cms:
                         collection_of: ContentTypeEntryField
             ContentTypeEntryField:
                 mapping:
-                    ContentTypeEntryFieldGroup: ~
                     code: ~
                     type: ~
                     name: ~
