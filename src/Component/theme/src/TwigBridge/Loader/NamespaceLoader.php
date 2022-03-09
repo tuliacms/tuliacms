@@ -15,12 +15,14 @@ use Twig\Source;
  */
 class NamespaceLoader implements LoaderInterface
 {
-    protected ?FilesystemLoader $loader = null;
-    protected ManagerInterface $manager;
+    private ?FilesystemLoader $loader = null;
+    private ManagerInterface $manager;
     private AdvancedFilesystemLoader $filesystemLoader;
 
-    public function __construct(ManagerInterface $manager, AdvancedFilesystemLoader $filesystemLoader)
-    {
+    public function __construct(
+        ManagerInterface $manager,
+        AdvancedFilesystemLoader $filesystemLoader
+    ) {
         $this->manager = $manager;
         $this->filesystemLoader = $filesystemLoader;
     }
