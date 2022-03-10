@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Component\Theme\TwigBridge\Loader;
+namespace Tulia\Component\Theme\Bridge\Twig\Loader;
 
 use Tulia\Component\Templating\Twig\Loader\AdvancedFilesystemLoader;
 use Tulia\Component\Theme\ManagerInterface;
@@ -66,16 +66,9 @@ class NamespaceLoader implements LoaderInterface
 
         $this->loader = new FilesystemLoader;
 
-        $theme = $this->manager->getTheme();
-
-        $this->loader->addPath($theme->getViewsDirectory(), 'theme');
-        $this->filesystemLoader->setPath('@theme', $theme->getViewsDirectory());
-
-        if ($theme->getParent()) {
-            $parent = $this->manager->getStorage()->get($theme->getParent());
-
-            $this->loader->addPath($parent->getViewsDirectory(), 'parent');
-            $this->filesystemLoader->setPath('@parent', $theme->getViewsDirectory());
+        foreach ($this->manager->getThemes() as $theme) {
+            $this->loader->addPath($theme->getViewsDirectory(), $theme->getName());
+            $this->filesystemLoader->setPath('@'.$theme->getName(), $theme->getViewsDirectory());
         }
     }
 }

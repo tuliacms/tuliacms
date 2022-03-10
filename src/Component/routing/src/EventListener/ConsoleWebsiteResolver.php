@@ -18,8 +18,10 @@ class ConsoleWebsiteResolver implements EventSubscriberInterface
     protected RegistryInterface $websites;
     protected CurrentWebsiteInterface $currentWebsite;
 
-    public function __construct(RegistryInterface $websites, CurrentWebsiteInterface $currentWebsite)
-    {
+    public function __construct(
+        RegistryInterface $websites,
+        CurrentWebsiteInterface $currentWebsite
+    ) {
         $this->websites = $websites;
         $this->currentWebsite = $currentWebsite;
     }
@@ -41,12 +43,13 @@ class ConsoleWebsiteResolver implements EventSubscriberInterface
 
         if ($input->hasOption('website') && $input->getOption('website') !== null) {
             $website = $this->websites->find($input->getOption('website'));
-        } elseif ($input->hasArgument('website') && $input->getArgument('website') !== null) {
-            $website = $this->websites->find($input->getArgument('website'));
         } else {
-            $website = $this->websites[0];
+            $website = $this->websites->firstActiveWebsite();
+            $event->getOutput()->writeln(sprintf('<info>Used "%s" (%s) website by default.</info>', $website->getName(), $website->getId()));
         }
 
-        $this->currentWebsite->set($website);
+        if ($website) {
+            $this->currentWebsite->set($website);
+        }
     }
 }

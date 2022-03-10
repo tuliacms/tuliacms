@@ -21,6 +21,17 @@ class Registry implements RegistryInterface
         $this->websites[] = $website;
     }
 
+    public function firstActiveWebsite(): WebsiteInterface
+    {
+        foreach ($this->websites as $website) {
+            if ($website->isActive()) {
+                return $website;
+            }
+        }
+
+        throw new WebsiteNotFoundException('There is no active Website in system.');
+    }
+
     public function find(string $id): WebsiteInterface
     {
         foreach ($this->websites as $website) {

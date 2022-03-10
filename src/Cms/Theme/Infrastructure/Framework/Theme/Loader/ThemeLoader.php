@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Theme\Infrastructure\Framework\Theme\Loader;
 
-use Tulia\Cms\Options\Domain\ReadModel\Options;
+use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 use Tulia\Component\Theme\Storage\StorageInterface;
 use Tulia\Component\Theme\ThemeInterface;
 use Tulia\Component\Theme\Loader\ThemeLoader\ThemeLoaderInterface;
@@ -15,24 +15,29 @@ use Tulia\Cms\Platform\Infrastructure\DefaultTheme\DefaultTheme;
  */
 class ThemeLoader implements ThemeLoaderInterface
 {
-    protected StorageInterface$storage;
-    protected Options $options;
+    private StorageInterface $storage;
+    private CurrentWebsiteInterface $currentWebsite;
+    private string $configFilename;
 
-    public function __construct(StorageInterface $storage, Options $options)
-    {
+    public function __construct(
+        StorageInterface $storage,
+        CurrentWebsiteInterface $currentWebsite,
+        string $configFilename
+    ) {
         $this->storage = $storage;
-        $this->options = $options;
+        $this->currentWebsite = $currentWebsite;
+        $this->configFilename = $configFilename;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function load(): ThemeInterface
     {
-        $themeName = $this->options->get('theme', '');
+        $themesByWebsite = include $this->configFilename;
 
-        if ($themeName && $this->storage->has($themeName)) {
-            return $this->storage->get($themeName);
+        if (
+            isset($themesByWebsite[$this->currentWebsite->getId()])
+            && $this->storage->has($themesByWebsite[$this->currentWebsite->getId()])
+        ) {
+            return $this->storage->get($themesByWebsite[$this->currentWebsite->getId()]);
         }
 
         return new DefaultTheme();

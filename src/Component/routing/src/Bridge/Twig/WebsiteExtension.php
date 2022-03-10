@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Component\Routing\Twig;
+namespace Tulia\Component\Routing\Bridge\Twig;
 
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 use Tulia\Component\Routing\Website\RegistryInterface;
@@ -24,9 +24,6 @@ class WebsiteExtension extends AbstractExtension
         $this->registry = $registry;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getFunctions(): array
     {
         return [

@@ -2,15 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Component\Theme\TwigBridge\Extension;
+namespace Tulia\Component\Theme\Bridge\Twig\Extension;
 
 use Requtize\Assetter\AssetterInterface;
 use Tulia\Component\Theme\Customizer\DetectorInterface;
 use Tulia\Component\Theme\ManagerInterface;
-use Twig\Extension\AbstractExtension;
-use Twig\Extension\GlobalsInterface;
 use Twig\Extension\RuntimeExtensionInterface;
-use Twig\TwigFunction;
 
 /**
  * @author Adam Banaszkiewicz

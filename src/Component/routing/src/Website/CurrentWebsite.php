@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Component\Routing\Website;
 
 use Tulia\Component\Routing\Enum\SslModeEnum;
+use Tulia\Component\Routing\Website\Exception\WebsiteNotResolvedException;
 use Tulia\Component\Routing\Website\Locale\LocaleInterface;
 
 /**
@@ -14,139 +15,136 @@ class CurrentWebsite implements CurrentWebsiteInterface
 {
     protected ?WebsiteInterface $currentWebsite = null;
 
-    /**
-     * {@inheritdoc}
-     */
     public function set(WebsiteInterface $website): void
     {
         $this->currentWebsite = $website;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function get(): WebsiteInterface
     {
+        $this->ensureWebsiteIsset();
+
         return $this->currentWebsite;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function has(): bool
     {
         return $this->currentWebsite !== null;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getId(): string
     {
+        $this->ensureWebsiteIsset();
+
         return $this->currentWebsite->getId();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName(): string
     {
+        $this->ensureWebsiteIsset();
+
         return $this->currentWebsite->getName();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getPathPrefix(): ?string
     {
+        $this->ensureWebsiteIsset();
+
         return $this->currentWebsite->getLocale()->getPathPrefix();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getLocalePrefix(): ?string
     {
+        $this->ensureWebsiteIsset();
+
         return $this->currentWebsite->getLocale()->getLocalePrefix();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getBackendPrefix(): string
     {
+        $this->ensureWebsiteIsset();
+
         return $this->currentWebsite->getBackendPrefix();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDomain(): string
     {
+        $this->ensureWebsiteIsset();
+
         return $this->currentWebsite->getLocale()->getDomain();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getScheme(): string
     {
+        $this->ensureWebsiteIsset();
+
         return $this->currentWebsite->getLocale()->getSslMode() === SslModeEnum::FORCE_SSL ? 'https' : 'http';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getLocales(): iterable
     {
+        $this->ensureWebsiteIsset();
+
         return $this->currentWebsite->getLocales();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getLocale(): LocaleInterface
     {
+        $this->ensureWebsiteIsset();
+
         return $this->currentWebsite->getLocale();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDefaultLocale(): LocaleInterface
     {
+        $this->ensureWebsiteIsset();
+
         return $this->currentWebsite->getDefaultLocale();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getAddress(): string
     {
+        $this->ensureWebsiteIsset();
+
         return $this->currentWebsite->getAddress();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getBackendAddress(): string
     {
+        $this->ensureWebsiteIsset();
+
         return $this->currentWebsite->getBackendAddress();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isActive(): bool
     {
+        $this->ensureWebsiteIsset();
+
         return $this->currentWebsite->isActive();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getLocaleByCode(string $code): LocaleInterface
     {
+        $this->ensureWebsiteIsset();
+
         return $this->currentWebsite->getLocaleByCode($code);
+    }
+
+    private function ensureWebsiteIsset(): void
+    {
+        if ($this->currentWebsite === null) {
+            $message = 'for this Request. Did You forget to configure this domain for Website in system?';
+
+            if ($this->isCommandLineInterface()) {
+                $message = 'for this command, and system requires it to do the job. Did You forget to add a "website" argument to console command?';
+            }
+
+            throw new WebsiteNotResolvedException('Website is not resolved '.$message);
+        }
+    }
+
+    private function isCommandLineInterface(): bool
+    {
+        return php_sapi_name() === 'cli';
     }
 }

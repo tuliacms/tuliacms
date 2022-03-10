@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Component\Routing;
+namespace Tulia\Component\Routing\Bridge\Symfony;
 
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,7 +14,9 @@ use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\RouterInterface;
+use Tulia\Component\Routing\ChainRouterInterface;
 use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
+use Tulia\Component\Routing\WebsitePrefixesResolver;
 
 /**
  * @author Adam Banaszkiewicz

@@ -40,10 +40,21 @@ class TuliaFrameworkBundle extends FrameworkBundle
     {
         parent::build($container);
 
+        $this->ensureDynamicConfigFileExists($container, '/config/dynamic/themes.php');
+
         $container->addCompilerPass(new TemplatingPass());
         $container->addCompilerPass(new RoutingPass());
         $container->addCompilerPass(new SecurityPass());
         $container->addCompilerPass(new FinderPass());
         $container->addCompilerPass(new ThemePass());
+    }
+
+    private function ensureDynamicConfigFileExists(ContainerBuilder $container, string $path): void
+    {
+        $filepath = $container->getParameter('kernel.project_dir') . $path;
+
+        if (is_file($filepath) === false) {
+            file_put_contents($filepath, '<?php return [];');
+        }
     }
 }

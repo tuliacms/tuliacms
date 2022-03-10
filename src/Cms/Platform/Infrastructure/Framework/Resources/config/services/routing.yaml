@@ -7,9 +7,9 @@ services:
         resource: '../../../../../../../Component/routing/src/*'
         exclude:
             - '../../../../../../Component/routing/src/**/*Exception.php'
-            - '../../../../../../Component/routing/src/SymfonyRouterDecorator.php'
+            - '../../../../../../Component/routing/src/Bridge/Symfony/SymfonyRouterDecorator.php'
 
-    Tulia\Component\Routing\SymfonyRouterDecorator:
+    Tulia\Component\Routing\Bridge\Symfony\SymfonyRouterDecorator:
         decorates: router.default
         autowire: false
         autoconfigure: false

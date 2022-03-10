@@ -6,7 +6,6 @@ namespace Tulia\Cms\Filemanager\UserInterface\Console\Command;
 
 use DirectoryIterator;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -39,7 +38,6 @@ class FilemanagerThumbnailsClearNonexistentSizesCommand extends Command
 
     protected function configure()
     {
-        $this->addArgument('website', InputArgument::REQUIRED, 'Website for which command should be executed.');
         $this->addOption('dry-run', 'd', InputOption::VALUE_OPTIONAL, 'Only prints info, without remove files', false);
     }
 

@@ -14,8 +14,11 @@ interface RegistryInterface extends \ArrayAccess, \IteratorAggregate
     public function add(WebsiteInterface $website): void;
 
     /**
-     * @param string $id
-     * @return WebsiteInterface
+     * @throws WebsiteNotFoundException
+     */
+    public function firstActiveWebsite(): WebsiteInterface;
+
+    /**
      * @throws WebsiteNotFoundException
      */
     public function find(string $id): WebsiteInterface;

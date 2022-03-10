@@ -10,9 +10,13 @@ services:
 
     Tulia\Component\Theme\Loader\ThemeLoader\ThemeLoaderInterface:
         class: Tulia\Cms\Theme\Infrastructure\Framework\Theme\Loader\ThemeLoader
+        bind:
+            $configFilename: '%kernel.project_dir%/config/dynamic/themes.php'
 
     Tulia\Component\Theme\Activator\ActivatorInterface:
         class: Tulia\Cms\Theme\Infrastructure\Framework\Theme\Activator\Activator
+        bind:
+            $configFilename: '%kernel.project_dir%/config/dynamic/themes.php'
 
     Tulia\Cms\Theme\Infrastructure\Filemanager\ImageSize\ThemeConfigurationImagesSizeProvider:
         tags: [ filemanager.image_size.provider ]
