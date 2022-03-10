@@ -14,7 +14,7 @@
     <div class="pane pane-lead">
         <div class="pane-header">
             <div class="pane-buttons">
-                <a href="#" data-toggle="modal" data-target="#modal-menu-add" class="btn btn-success btn-icon-left"><i class="btn-icon fas fa-plus"></i> {{ 'create'|trans }}</a>
+                <a href="#" data-bs-toggle="modal" data-bs-target="#modal-menu-add" class="btn btn-success btn-icon-left"><i class="btn-icon fas fa-plus"></i> {{ 'create'|trans }}</a>
             </div>
             <i class="pane-header-icon fas fa-palette"></i>
             <h1 class="pane-title">{{ block('title') }}</h1>

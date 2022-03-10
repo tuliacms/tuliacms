@@ -17,7 +17,6 @@ use Tulia\Cms\Shared\Infrastructure\Utils\Slug\SluggerInterface;
 class SlugGenerator implements AggregateActionInterface
 {
     protected SluggerInterface $slugger;
-
     protected NodeFinderInterface $nodeFinder;
 
     public function __construct(SluggerInterface $slugger, NodeFinderInterface $nodeFinder)
@@ -29,7 +28,7 @@ class SlugGenerator implements AggregateActionInterface
     public static function listen(): array
     {
         return [
-            'insert' => 100,
+            'create' => 100,
             'update' => 100,
         ];
     }

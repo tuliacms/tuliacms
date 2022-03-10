@@ -29,7 +29,7 @@ class SingularFlagsValidator implements AggregateActionInterface
     public static function listen(): array
     {
         return [
-            'insert' => 100,
+            'create' => 100,
             'update' => 100,
         ];
     }

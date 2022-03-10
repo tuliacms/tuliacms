@@ -33,7 +33,7 @@ abstract class AbstractNodeUseCase
 
     protected function create(Node $node): void
     {
-        $this->actionsChain->execute('insert', $node);
+        $this->actionsChain->execute('create', $node);
 
         try {
             $this->repository->insert($node);

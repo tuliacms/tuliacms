@@ -32,7 +32,6 @@ class MenuItemTargetBuilder implements FieldTypeBuilderInterface
 
         $options['choices'] = $itemTargets;
         $options['choice_translation_domain'] = false;
-        $options['constraints'][] = new Assert\NotBlank();
         $options['constraints'][] = new Assert\Choice([ 'choices' => $itemTargets ]);
 
         return $options;

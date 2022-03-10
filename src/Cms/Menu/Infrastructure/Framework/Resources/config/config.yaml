@@ -35,7 +35,6 @@ cms:
                     label: Menu item target
                     classname: 'Symfony\Component\Form\Extension\Core\Type\ChoiceType'
                     builder: 'Tulia\Cms\Menu\Infrastructure\Framework\Form\FormType\MenuItemTargetBuilder'
-                    constraints: [ required ]
         content_type:
             menu_item:
                 layout_builder: 'Tulia\Cms\Menu\Infrastructure\Presentation\TwigMenuItemContentTypeLayoutBuilder'

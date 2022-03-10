@@ -19,21 +19,13 @@ class User extends AggregateRoot implements AttributesAwareInterface
     use MagickAttributesTrait;
 
     private AggregateId $id;
-
     protected ?string $password;
-
     protected string $email;
-
     protected string $locale = 'en_US';
-
     protected bool $enabled = true;
-
     protected bool $accountExpired = false;
-
     protected bool $credentialsExpired = false;
-
     protected bool $accountLocked = false;
-
     protected array $roles = [];
 
     private function __construct(AggregateId $id, string $email, ?string $password, array $roles)
@@ -121,18 +113,6 @@ class User extends AggregateRoot implements AttributesAwareInterface
      */
     public function updateAttributes(array $attributes): void
     {
-        unset(
-            $attributes['id'],
-            $attributes['password'],
-            $attributes['email'],
-            $attributes['locale'],
-            $attributes['enabled'],
-            $attributes['account_expired'],
-            $attributes['credentials_expired'],
-            $attributes['account_locked'],
-            $attributes['roles'],
-        );
-
         foreach ($attributes as $attribute) {
             $name = $attribute->getCode();
             $value = $attribute->getValue();

@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\ContentBuilder\UserInterface\Web\Form\ContentTypeFormDescriptor;
 use Tulia\Cms\ContentBuilder\UserInterface\Web\Service\ContentFormService;
+use Tulia\Cms\Menu\Application\UseCase\UpdateMenuItem;
 use Tulia\Cms\Menu\Domain\Builder\Type\RegistryInterface;
 use Tulia\Cms\Menu\Domain\ReadModel\Datatable\ItemDatatableFinderInterface;
 use Tulia\Cms\Menu\Domain\WriteModel\Exception\ItemNotFoundException;
@@ -77,9 +78,9 @@ class MenuItem extends AbstractController
 
     /**
      * @return RedirectResponse|ViewInterface
-     * @CsrfToken(id="menu_item_form")
+     * @CsrfToken(id="content_builder_form_menu_item")
      */
-    public function create(Request $request, string $menuId)
+    public function create(Request $request, UpdateMenuItem $updateMenuItem, string $menuId)
     {
         try {
             $menu = $this->repository->find($menuId);
@@ -89,14 +90,13 @@ class MenuItem extends AbstractController
         }
 
         $item = $this->repository->createNewItem($menu);
-        $item->setParentId($request->query->get('parentId'));
+        $item->setParentId($request->query->get('parentId', Item::ROOT_ID));
 
         $formDescriptor = $this->produceFormDescriptor($item);
         $formDescriptor->handleRequest($request);
 
         if ($formDescriptor->isFormValid()) {
-            dump($formDescriptor->getData());exit;
-            ($updateMenu)($menu, $formDescriptor->getData());
+            ($updateMenuItem)($menu, $item, $formDescriptor->getData());
 
             $this->setFlash('success', $this->trans('itemSaved', [], 'menu'));
             return $this->redirectToRoute('backend.menu.item', [ 'menuId' => $menu->getId() ]);
@@ -111,9 +111,9 @@ class MenuItem extends AbstractController
 
     /**
      * @return RedirectResponse|ViewInterface
-     * @CsrfToken(id="menu_item_form")
+     * @CsrfToken(id="content_builder_form_menu_item")
      */
-    public function edit(Request $request, string $menuId, string $id)
+    public function edit(Request $request, UpdateMenuItem $updateMenuItem, string $menuId, string $id)
     {
         try {
             $menu = $this->repository->find($menuId);
@@ -133,8 +133,7 @@ class MenuItem extends AbstractController
         $formDescriptor->handleRequest($request);
 
         if ($formDescriptor->isFormValid()) {
-            dump($formDescriptor->getData());exit;
-            ($updateMenu)($menu, $formDescriptor->getData());
+            ($updateMenuItem)($menu, $item, $formDescriptor->getData());
 
             $this->setFlash('success', $this->trans('itemSaved', [], 'menu'));
             return $this->redirectToRoute('backend.menu.item', [ 'menuId' => $menu->getId() ]);

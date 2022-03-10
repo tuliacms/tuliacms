@@ -99,8 +99,6 @@ class MenuRepository
 
     public function save(Menu $menu): void
     {
-        $this->actionsChain->execute('save', $menu);
-
         $data = $this->extract($menu);
         $this->storage->beginTransaction();
 
@@ -121,14 +119,11 @@ class MenuRepository
             throw $e;
         }
 
-        $this->eventDispatcher->dispatch(new MenuCreated($menu->getId()));
         $this->dispatchItemsEvents($data);
     }
 
     public function update(Menu $menu): void
     {
-        $this->actionsChain->execute('update', $menu);
-
         $data = $this->extract($menu);
 
         /**
@@ -156,16 +151,12 @@ class MenuRepository
             throw $e;
         }
 
-        $this->eventDispatcher->dispatch(new MenuUpdated($menu->getId()));
         $this->dispatchItemsEvents($data);
     }
 
     public function delete(Menu $menu): void
     {
-        $this->actionsChain->execute('delete', $menu);
-
         $this->storage->delete($menu->getId());
-        $this->eventDispatcher->dispatch(new MenuDeleted($menu->getId()));
     }
 
     private function dispatchItemsEvents(array $data): void

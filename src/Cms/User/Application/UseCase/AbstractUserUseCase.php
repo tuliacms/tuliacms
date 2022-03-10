@@ -28,20 +28,27 @@ abstract class AbstractUserUseCase
 
     protected function create(User $user): void
     {
-        $this->actionsChain->execute('update', $user);
+        $this->actionsChain->execute('create', $user);
 
-        $this->repository->save($user);
-        $this->eventDispatcher->dispatchCollection($user->collectDomainEvents());
-        $this->eventDispatcher->dispatch(UserUpdated::fromModel($user));
+        try {
+            $this->repository->save($user);
+            $this->eventDispatcher->dispatchCollection($user->collectDomainEvents());
+        } catch (\Throwable $e) {
+            throw $e;
+        }
     }
 
     protected function update(User $user): void
     {
         $this->actionsChain->execute('update', $user);
 
-        $this->repository->save($user);
-        $this->eventDispatcher->dispatchCollection($user->collectDomainEvents());
-        $this->eventDispatcher->dispatch(UserUpdated::fromModel($user));
+        try {
+            $this->repository->save($user);
+            $this->eventDispatcher->dispatchCollection($user->collectDomainEvents());
+            $this->eventDispatcher->dispatch(UserUpdated::fromModel($user));
+        } catch (\Throwable $e) {
+            throw $e;
+        }
     }
 
     /**
@@ -68,6 +75,9 @@ abstract class AbstractUserUseCase
     {
         unset(
             $attributes['id'],
+            $attributes['account_expired'],
+            $attributes['credentials_expired'],
+            $attributes['account_locked'],
             $attributes['password'],
             $attributes['password_repeat'],
             $attributes['email'],

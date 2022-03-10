@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Tulia\Cms\Menu\Domain\WriteModel\Model;
 
 use Tulia\Cms\Attributes\Domain\WriteModel\MagickAttributesTrait;
+use Tulia\Cms\Attributes\Domain\WriteModel\Model\Attribute;
 use Tulia\Cms\Attributes\Domain\WriteModel\Model\AttributesAwareInterface;
+use Tulia\Cms\Menu\Domain\WriteModel\Event\AttributeUpdated;
 use Tulia\Cms\Menu\Domain\WriteModel\Exception\ParentItemReccurencyException;
 
 /**
@@ -50,7 +52,7 @@ class Item implements AttributesAwareInterface
     {
         $item = new self($data['id'], $data['locale'], $data['menu'], (bool) $data['is_root']);
         $item->name = $data['name'] ?? null;
-        $item->setParentId($data['parent_id'] ?? null);
+        $item->setParentId($data['parent_id'] ?? Item::ROOT_ID);
         $item->position = (int) ($data['position'] ?? 0);
         $item->level = (int) ($data['level'] ?? 0);
         $item->type = $data['type'] ?? null;
@@ -65,9 +67,9 @@ class Item implements AttributesAwareInterface
         return $item;
     }
 
-    public static function createRoot(string $locale): self
+    public static function createRoot(string $locale, Menu $menu): self
     {
-        $item = new self(self::ROOT_ID, $locale, true);
+        $item = new self(self::ROOT_ID, $locale, $menu, true);
         $item->name = 'root';
         $item->parentId = null;
         $item->position = 0;
@@ -258,16 +260,7 @@ class Item implements AttributesAwareInterface
         $this->menu = null;
     }
 
-    public function assignToMenu(Menu $menu): void
-    {
-        if ($menu->hasItem($this) === false) {
-            throw new \RuntimeException('Cannot assign Item to Menu outside the Menu entity, using assignToMenu() method. Please use Menu->addItem() method to properly add Item to Menu.');
-        }
-
-        $this->menu = $menu;
-    }
-
-    public function getMenu(): ?Menu
+    public function getMenu(): Menu
     {
         return $this->menu;
     }
@@ -275,6 +268,7 @@ class Item implements AttributesAwareInterface
     /**
      * @param null|Item $parent
      * @throws ParentItemReccurencyException
+     * @TODO sprawdzić jak to można zrefaktoryzować, bo nie jest używane teraz nigdzie.
      */
     public function setParent(?Item $parent): void
     {
@@ -285,6 +279,23 @@ class Item implements AttributesAwareInterface
             }
 
             $this->parent = $parent;
+        }
+    }
+
+    /**
+     * @param Attribute[] $attributes
+     */
+    public function updateAttributes(array $attributes): void
+    {
+        foreach ($attributes as $attribute) {
+            $name = $attribute->getCode();
+            $value = $attribute->getValue();
+
+            if (isset($this->attributes[$name]) === false || $this->attributes[$name]->getValue() !== $value) {
+                $this->attributes[$attribute->getUri()] = $attribute;
+
+                $this->recordThat(AttributeUpdated::fromModel($this, $name, $value));
+            }
         }
     }
 

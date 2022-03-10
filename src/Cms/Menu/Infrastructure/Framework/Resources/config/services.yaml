@@ -5,7 +5,11 @@ services:
 
     Tulia\Cms\Menu\:
         resource: '../../../../**'
-        exclude: '../../../../{Infrastructure/Framework/Resources}'
+        exclude:
+            - '../../../../Infrastructure/Framework/Resources'
+            - '../../../../Domain/WriteModel/Exception'
+            - '../../../../Domain/WriteModel/Event'
+            - '../../../../Domain/WriteModel/Model'
 
     Tulia\Cms\Menu\Infrastructure\Framework\Twig\Extension\MenuExtension:
         tags: [ twig.extension ]

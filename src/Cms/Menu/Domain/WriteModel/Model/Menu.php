@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace Tulia\Cms\Menu\Domain\WriteModel\Model;
 
 use Tulia\Cms\Menu\Domain\WriteModel\Exception\ItemNotFoundException;
+use Tulia\Cms\Shared\Domain\WriteModel\Model\AggregateRoot;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class Menu
+final class Menu extends AggregateRoot
 {
     protected string $id;
     protected string $websiteId;
@@ -29,7 +30,9 @@ class Menu
     public static function create(string $id, string $websiteId, string $locale): self
     {
         $menu = new self($id, $websiteId, $locale);
-        $menu->addItem(Item::createRoot($locale));
+        $root = Item::createRoot($locale, $menu);
+        $menu->items[$root->getId()] = $root;
+        $menu->recordItemChange('add', $root);
 
         return $menu;
     }
@@ -102,17 +105,12 @@ class Menu
         }
     }
 
-    /**
-     * @TODO Sprawdzić czy można tą metodę wyrzucić.
-     */
-    public function addItem(Item $item): void
+    public function createNewItem(string $id): Item
     {
-        if (isset($this->items[$item->getId()])) {
-            return;
-        }
+        $item = Item::create($id, $this->locale, $this);
+        $item->setParentId(Item::ROOT_ID);
 
         $this->items[$item->getId()] = $item;
-        $item->assignToMenu($this);
 
         if ($item->isRoot() === false) {
             $this->resolveItemParent($item);
@@ -121,12 +119,6 @@ class Menu
         }
 
         $this->recordItemChange('add', $item);
-    }
-
-    public function createNewItem(string $id): Item
-    {
-        $item = Item::create($id, $this->locale, $this);
-        $this->addItem($item);
 
         return $item;
     }

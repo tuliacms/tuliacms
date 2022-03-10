@@ -8,6 +8,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Tulia\Cms\Menu\Application\UseCase\CreateMenu;
+use Tulia\Cms\Menu\Application\UseCase\DeleteMenu;
+use Tulia\Cms\Menu\Application\UseCase\UpdateMenu;
 use Tulia\Cms\Menu\Domain\ReadModel\Datatable\MenuDatatableFinderInterface;
 use Tulia\Cms\Menu\Domain\WriteModel\Exception\MenuNotFoundException;
 use Tulia\Cms\Menu\Domain\WriteModel\MenuRepository;
@@ -22,9 +25,7 @@ use Tulia\Component\Templating\ViewInterface;
 class Menu extends AbstractController
 {
     private MenuRepository $repository;
-
     private DatatableFactory $factory;
-
     private MenuDatatableFinderInterface $finder;
 
     public function __construct(
@@ -54,12 +55,12 @@ class Menu extends AbstractController
      * @return RedirectResponse
      * @CsrfToken(id="menu.create")
      */
-    public function create(Request $request): RedirectResponse
+    public function create(Request $request, CreateMenu $createMenu): RedirectResponse
     {
         $menu = $this->repository->createNewMenu();
         $menu->setName($request->request->get('name'));
 
-        $this->repository->save($menu);
+        ($createMenu)($menu);
 
         $this->setFlash('success', $this->trans('menuCreated', [], 'menu'));
         return $this->redirectToRoute('backend.menu');
@@ -71,7 +72,7 @@ class Menu extends AbstractController
      * @throws NotFoundHttpException
      * @CsrfToken(id="menu.edit")
      */
-    public function edit(Request $request): RedirectResponse
+    public function edit(Request $request, UpdateMenu $updateMenu): RedirectResponse
     {
         try {
             $menu = $this->repository->find($request->request->get('id'));
@@ -81,7 +82,7 @@ class Menu extends AbstractController
 
         $menu->setName($request->request->get('name'));
 
-        $this->repository->update($menu);
+        ($updateMenu)($menu);
 
         $this->setFlash('success', $this->trans('menuUpdated', [], 'menu'));
         return $this->redirectToRoute('backend.menu');
@@ -92,11 +93,11 @@ class Menu extends AbstractController
      * @return RedirectResponse
      * @CsrfToken(id="menu.delete")
      */
-    public function delete(Request $request): RedirectResponse
+    public function delete(Request $request, DeleteMenu $deleteMenu): RedirectResponse
     {
         foreach ($request->request->get('ids', []) as $id) {
             $menu = $this->repository->find($id);
-            $this->repository->delete($menu);
+            ($deleteMenu)($menu);
         }
 
         $this->setFlash('success', $this->trans('selectedMenusWereDeleted', [], 'menu'));
