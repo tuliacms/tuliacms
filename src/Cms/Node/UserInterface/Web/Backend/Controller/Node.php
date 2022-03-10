@@ -233,10 +233,7 @@ class Node extends AbstractController
 
     private function produceFormDescriptor(WriteModelNode $node): ContentTypeFormDescriptor
     {
-        return $this->contentFormService->buildFormDescriptor(
-            $node->getType(),
-            $node->toArray()
-        );
+        return $this->contentFormService->buildFormDescriptor($node->getType(), $node->toArray());
     }
 
     /**

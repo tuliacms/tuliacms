@@ -12,38 +12,37 @@ use Tulia\Cms\Menu\Domain\WriteModel\Exception\ItemNotFoundException;
 class Menu
 {
     protected string $id;
-
     protected string $websiteId;
-
+    protected string $locale;
     protected ?string $name = null;
-
     protected array $itemsChanges = [];
-
-    /**
-     * @var Item[]
-     */
+    /** @var Item[] */
     protected array $items = [];
 
-    private function __construct(string $id, string $websiteId)
+    private function __construct(string $id, string $websiteId, string $locale)
     {
         $this->id = $id;
         $this->websiteId = $websiteId;
+        $this->locale = $locale;
     }
 
     public static function create(string $id, string $websiteId, string $locale): self
     {
-        $root = Item::createRoot($locale);
-
-        $menu = new self($id, $websiteId);
-        $menu->addItem($root);
+        $menu = new self($id, $websiteId, $locale);
+        $menu->addItem(Item::createRoot($locale));
 
         return $menu;
     }
 
     public static function buildFromArray(array $data): self
     {
-        $menu = new self($data['id'], $data['website_id']);
+        $menu = new self($data['id'], $data['website_id'], $data['locale']);
         $menu->name = $data['name'] ?? null;
+
+        foreach ($data['items'] as $item) {
+            $item['menu'] = $menu;
+            $menu->items[$item['id']] = Item::buildFromArray($item);
+        }
 
         return $menu;
     }
@@ -103,6 +102,9 @@ class Menu
         }
     }
 
+    /**
+     * @TODO Sprawdzić czy można tą metodę wyrzucić.
+     */
     public function addItem(Item $item): void
     {
         if (isset($this->items[$item->getId()])) {
@@ -119,6 +121,14 @@ class Menu
         }
 
         $this->recordItemChange('add', $item);
+    }
+
+    public function createNewItem(string $id): Item
+    {
+        $item = Item::create($id, $this->locale, $this);
+        $this->addItem($item);
+
+        return $item;
     }
 
     public function removeItem(Item $item): void

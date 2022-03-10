@@ -116,6 +116,9 @@ cms:
                     label: Email
                     classname: 'Symfony\Component\Form\Extension\Core\Type\EmailType'
                     constraints: [required]
+                hidden:
+                    label: Hidden field
+                    classname: 'Symfony\Component\Form\Extension\Core\Type\HiddenType'
 
         constraint_types:
             mapping:

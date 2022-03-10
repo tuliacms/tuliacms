@@ -1,8 +1,6 @@
 <script nonce="{{ csp_nonce() }}">
-    let persistMode = '{{ persistMode }}';
-
     $(function () {
-        $('#menu_item_form_type').change(function () {
+        $('#content_builder_form_menu_item_type').change(function () {
             let container = $('.menu-item-type')
                 .addClass('d-none')
                 .filter('[data-type="' + $(this).val() + '"]')
@@ -20,21 +18,15 @@
         $('[data-identity]').on('change keyup keydown blur', function () {
             updateIdentityField($(this).attr('data-identity'), $(this).val());
         });
-
-        if (persistMode === 'create') {
-            $('#menu_item_form_type').trigger('change');
-        }
     });
 
     let updateIdentityField = function (type, identity) {
-        let currentType = $('#menu_item_form_type').val();
+        let currentType = $('#content_builder_form_menu_item_type').val();
 
         if (currentType !== type) {
             return;
         }
 
-        $('#menu_item_form_identity').val(identity);
+        $('#content_builder_form_menu_item_identity').val(identity);
     };
-
-
 </script>

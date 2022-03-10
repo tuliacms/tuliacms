@@ -7,16 +7,17 @@ namespace Tulia\Cms\Menu\UserInterface\Web\Backend\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Tulia\Cms\ContentBuilder\UserInterface\Web\Form\ContentTypeFormDescriptor;
+use Tulia\Cms\ContentBuilder\UserInterface\Web\Service\ContentFormService;
 use Tulia\Cms\Menu\Domain\Builder\Type\RegistryInterface;
 use Tulia\Cms\Menu\Domain\ReadModel\Datatable\ItemDatatableFinderInterface;
 use Tulia\Cms\Menu\Domain\WriteModel\Exception\ItemNotFoundException;
 use Tulia\Cms\Menu\Domain\WriteModel\Exception\MenuNotFoundException;
 use Tulia\Cms\Menu\Domain\WriteModel\MenuRepository;
-use Tulia\Cms\Menu\UserInterface\Web\Backend\Form\MenuItemForm;
+use Tulia\Cms\Menu\Domain\WriteModel\Model\Item;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Component\Datatable\DatatableFactory;
-use Tulia\Component\DependencyInjection\Exception\MissingServiceException;
 use Tulia\Component\Templating\ViewInterface;
 
 /**
@@ -25,23 +26,23 @@ use Tulia\Component\Templating\ViewInterface;
 class MenuItem extends AbstractController
 {
     private MenuRepository $repository;
-
     private RegistryInterface $menuTypeRegistry;
-
     private DatatableFactory $factory;
-
     private ItemDatatableFinderInterface $finder;
+    private ContentFormService $contentFormService;
 
     public function __construct(
         MenuRepository $repository,
         RegistryInterface $menuTypeRegistry,
         DatatableFactory $factory,
-        ItemDatatableFinderInterface $finder
+        ItemDatatableFinderInterface $finder,
+        ContentFormService $contentFormService
     ) {
         $this->repository = $repository;
         $this->menuTypeRegistry = $menuTypeRegistry;
         $this->factory = $factory;
         $this->finder = $finder;
+        $this->contentFormService = $contentFormService;
     }
 
     public function index(string $menuId): RedirectResponse
@@ -75,8 +76,6 @@ class MenuItem extends AbstractController
     }
 
     /**
-     * @param Request $request
-     * @param string $menuId
      * @return RedirectResponse|ViewInterface
      * @CsrfToken(id="menu_item_form")
      */
@@ -89,18 +88,15 @@ class MenuItem extends AbstractController
             return $this->redirectToRoute('backend.menu');
         }
 
-        $item = $this->repository->createNewItem();
+        $item = $this->repository->createNewItem($menu);
         $item->setParentId($request->query->get('parentId'));
 
-        $form = $this->createForm(MenuItemForm::class, $item, [
-            'persist_mode' => 'create',
-            'menu_id' => $menuId,
-        ]);
-        $form->handleRequest($request);
+        $formDescriptor = $this->produceFormDescriptor($item);
+        $formDescriptor->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $menu->addItem($form->getData());
-            $this->repository->update($menu);
+        if ($formDescriptor->isFormValid()) {
+            dump($formDescriptor->getData());exit;
+            ($updateMenu)($menu, $formDescriptor->getData());
 
             $this->setFlash('success', $this->trans('itemSaved', [], 'menu'));
             return $this->redirectToRoute('backend.menu.item', [ 'menuId' => $menu->getId() ]);
@@ -109,15 +105,11 @@ class MenuItem extends AbstractController
         return $this->view('@backend/menu/item/create.tpl', [
             'menu'  => $menu,
             'item'  => $item,
-            'form'  => $form->createView(),
-            'types' => $this->collectMenuTypes(),
+            'formDescriptor' => $formDescriptor,
         ]);
     }
 
     /**
-     * @param Request $request
-     * @param string $menuId
-     * @param string $id
      * @return RedirectResponse|ViewInterface
      * @CsrfToken(id="menu_item_form")
      */
@@ -137,14 +129,12 @@ class MenuItem extends AbstractController
             return $this->redirectToRoute('backend.menu.item', ['menuId' => $menuId]);
         }
 
-        $form = $this->createForm(MenuItemForm::class, $item, [
-            'persist_mode' => 'update',
-            'menu_id' => $menuId,
-        ]);
-        $form->handleRequest($request);
+        $formDescriptor = $this->produceFormDescriptor($item);
+        $formDescriptor->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->repository->update($menu);
+        if ($formDescriptor->isFormValid()) {
+            dump($formDescriptor->getData());exit;
+            ($updateMenu)($menu, $formDescriptor->getData());
 
             $this->setFlash('success', $this->trans('itemSaved', [], 'menu'));
             return $this->redirectToRoute('backend.menu.item', [ 'menuId' => $menu->getId() ]);
@@ -153,8 +143,7 @@ class MenuItem extends AbstractController
         return $this->view('@backend/menu/item/edit.tpl', [
             'menu'  => $menu,
             'item'  => $item,
-            'form'  => $form->createView(),
-            'types' => $this->collectMenuTypes(),
+            'formDescriptor' => $formDescriptor,
         ]);
     }
 
@@ -188,6 +177,14 @@ class MenuItem extends AbstractController
         return $this->redirectToRoute('backend.menu.item.list', [ 'menuId' => $menuId ]);
     }
 
+    private function produceFormDescriptor(Item $menuItem): ContentTypeFormDescriptor
+    {
+        return $this->contentFormService->buildFormDescriptor('menu_item', $menuItem->toArray(), [
+            'item' => $menuItem,
+            'types' => $this->collectMenuTypes(),
+        ]);
+    }
+
     private function collectMenuTypes(): array
     {
         $types = [];
@@ -197,14 +194,10 @@ class MenuItem extends AbstractController
                 continue;
             }
 
-            try {
-                $types[] = [
-                    'type'     => $type,
-                    'selector' => $type->getSelectorService(),
-                ];
-            } catch (MissingServiceException $e) {
-                throw new \RuntimeException(sprintf('Cannot load SelectorService for %s type, searching for service named %s.', $type->getType(), $type->getSelectorService()), 0, $e);
-            }
+            $types[] = [
+                'type'     => $type,
+                'selector' => $type->getSelectorService(),
+            ];
         }
 
         return $types;

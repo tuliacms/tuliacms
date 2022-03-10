@@ -36,10 +36,6 @@ class WebsiteResolver implements EventSubscriberInterface
 
     public function handle(RequestEvent $event): void
     {
-        if ($this->currentWebsite->has()) {
-            return;
-        }
-
         $request = $event->getRequest();
         $requestScheme = $request->getScheme();
         $requestDomain = $request->getHttpHost();

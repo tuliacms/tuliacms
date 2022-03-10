@@ -154,6 +154,18 @@
                 <source>vertical</source>
                 <target>Vertical</target>
             </trans-unit>
+            <trans-unit id="tuliacms.menu.39">
+                <source>basics</source>
+                <target>Basics</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.menu.40">
+                <source>destination</source>
+                <target>Destination</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.menu.41">
+                <source>options</source>
+                <target>Options</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

@@ -19,48 +19,36 @@ class Item implements AttributesAwareInterface
     public const ROOT_LEVEL = 0;
 
     protected string $id;
-
-    protected ?Menu $menu = null;
-
+    protected Menu $menu;
     protected ?string $parentId = null;
-
     protected int $position = 0;
-
     protected int $level = 0;
-
     protected bool $isRoot = false;
-
     protected ?string $type = null;
-
     protected ?string $identity = null;
-
     protected ?string $hash = null;
-
     protected ?string $target = null;
-
     protected string $locale = 'en_US';
-
     protected bool $translated = false;
-
     protected ?string $name = null;
-
     protected bool $visibility = true;
 
-    private function __construct(string $id, string $locale, bool $isRoot = false)
+    private function __construct(string $id, string $locale, Menu $menu, bool $isRoot = false)
     {
         $this->id = $id;
         $this->locale = $locale;
         $this->isRoot = $isRoot;
+        $this->menu = $menu;
     }
 
-    public static function create(string $id, string $locale, bool $isRoot = false): self
+    public static function create(string $id, string $locale, Menu $menu, bool $isRoot = false): self
     {
-        return new self($id, $locale, $isRoot);
+        return new self($id, $locale, $menu, $isRoot);
     }
 
     public static function buildFromArray(array $data): self
     {
-        $item = new self($data['id'], $data['locale'], (bool) $data['is_root']);
+        $item = new self($data['id'], $data['locale'], $data['menu'], (bool) $data['is_root']);
         $item->name = $data['name'] ?? null;
         $item->setParentId($data['parent_id'] ?? null);
         $item->position = (int) ($data['position'] ?? 0);
@@ -89,6 +77,26 @@ class Item implements AttributesAwareInterface
         $item->visibility = true;
 
         return $item;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'menu_id' => $this->menu->getId(),
+            'parent_id' => $this->parentId,
+            'position' => $this->position,
+            'level' => $this->level,
+            'is_root' => $this->isRoot,
+            'type' => $this->type,
+            'identity' => $this->identity,
+            'hash' => $this->hash,
+            'target' => $this->target,
+            'locale' => $this->locale,
+            'name' => $this->name,
+            'visibility' => $this->visibility,
+            'attributes' => $this->attributes,
+        ];
     }
 
     public function getId(): string

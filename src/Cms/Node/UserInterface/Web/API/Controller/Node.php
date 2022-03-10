@@ -15,15 +15,11 @@ use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractApiController
  */
 class Node extends AbstractApiController
 {
-    private NodeTypeRegistry $nodeRegistry;
-
     private NodeFinderInterface $nodeFinder;
 
     public function __construct(
-        NodeTypeRegistry $nodeRegistry,
         NodeFinderInterface $nodeFinder
     ) {
-        $this->nodeRegistry = $nodeRegistry;
         $this->nodeFinder = $nodeFinder;
     }
 

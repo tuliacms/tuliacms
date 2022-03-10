@@ -67,17 +67,9 @@
 {% endmacro %}
 
 {% block layout %}
-    {% assets ['tulia-dynamic-form'] %}
-
-    {{ form_start(form) }}
-    {{ form_errors(form) }}
-    {{ form_row(form._token) }}
-
-    <input type="text" name="username" style="display: block;position: fixed;left:-1000px;top:-1000px;opacity:0;" tabindex="-1" />
-    <input type="email" name="email" style="display: block;position: fixed;left:-1000px;top:-1000px;opacity:0;" tabindex="-1" />
-    <input type="password" name="password" style="display: block;position: fixed;left:-1000px;top:-1000px;opacity:0;" tabindex="-1" />
-
     {% import '@backend/content_builder/layout/_parts/editor/form_render.tpl' as form_render %}
+
+    {{ form_render.form_begin(form) }}
 
     <div class="page-form" id="node-form">
         <div class="page-form-sidebar">
@@ -114,5 +106,6 @@
             </div>
         </div>
     </div>
-    {{ form_end(form) }}
+
+    {{ form_render.form_end(form) }}
 {% endblock %}

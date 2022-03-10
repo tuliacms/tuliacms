@@ -62,13 +62,9 @@ class MenuRepository
         );
     }
 
-    public function createNewItem(): Item
+    public function createNewItem(Menu $menu): Item
     {
-        return Item::create(
-            $this->uuidGenerator->generate(),
-            $this->currentWebsite->getLocale()->getCode(),
-            false
-        );
+        return $menu->createNewItem($this->uuidGenerator->generate());
     }
 
     /**
@@ -87,13 +83,12 @@ class MenuRepository
         }
 
         $metadata = $this->metadataRepository->findAllAggregated(MetadataEnum::MENUITEM_GROUP, array_column($data['items'], 'id'), []);
-        $menu = Menu::buildFromArray($data);
 
-        foreach ($data['items'] as $item) {
-            $item['metadata'] = $metadata[$item['id']] ?? [];
-            $menu->addItem(Item::buildFromArray($item));
+        foreach ($data['items'] as $key => $item) {
+            $data['items'][$key]['metadata'] = $metadata[$item['id']] ?? [];
         }
 
+        $menu = Menu::buildFromArray($data);
         // Reset items changes after create new Entity with data from storage.
         $menu->getItemsChanges();
 

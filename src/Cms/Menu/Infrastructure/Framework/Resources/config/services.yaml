@@ -17,9 +17,6 @@ services:
     Tulia\Cms\Menu\UserInterface\Web\Shared\Form\FormType\MenuItemChoiceType:
         tags: [ form.type ]
 
-    Tulia\Cms\Menu\UserInterface\Web\Backend\Form\MenuItemForm:
-        tags: [ form.type ]
-
     Tulia\Cms\Menu\Domain\Builder\Identity\RegistryInterface:
         class: Tulia\Cms\Menu\Domain\Builder\Identity\Registry
         bind:

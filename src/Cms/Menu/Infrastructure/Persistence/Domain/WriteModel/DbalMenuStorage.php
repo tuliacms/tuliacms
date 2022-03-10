@@ -52,6 +52,7 @@ class DbalMenuStorage implements MenuStorageInterface
 
         $menu = reset($menu);
         $menu['items'] = $this->itemStorage->findAll($id, $defaultLocale, $locale);
+        $menu['locale'] = $locale;
 
         return $menu;
     }

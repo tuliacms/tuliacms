@@ -19,7 +19,6 @@ use Tulia\Cms\Menu\Domain\WriteModel\Model\Item;
 class MenuItemChoiceType extends ChoiceType
 {
     protected MenuFinderInterface $menuFinder;
-
     protected TranslatorInterface $translator;
 
     public function __construct(MenuFinderInterface $menuFinder, TranslatorInterface $translator)
@@ -30,9 +29,6 @@ class MenuItemChoiceType extends ChoiceType
         $this->translator = $translator;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $choices = $this->collectChoices($options['menu_id']);
@@ -57,9 +53,6 @@ class MenuItemChoiceType extends ChoiceType
         parent::buildForm($builder, $options);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);
