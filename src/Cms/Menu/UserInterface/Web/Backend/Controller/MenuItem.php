@@ -9,12 +9,13 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\ContentBuilder\UserInterface\Web\Form\ContentTypeFormDescriptor;
 use Tulia\Cms\ContentBuilder\UserInterface\Web\Service\ContentFormService;
+use Tulia\Cms\Menu\Application\UseCase\UpdateMenu;
 use Tulia\Cms\Menu\Application\UseCase\UpdateMenuItem;
 use Tulia\Cms\Menu\Domain\Builder\Type\RegistryInterface;
 use Tulia\Cms\Menu\Domain\ReadModel\Datatable\ItemDatatableFinderInterface;
 use Tulia\Cms\Menu\Domain\WriteModel\Exception\ItemNotFoundException;
 use Tulia\Cms\Menu\Domain\WriteModel\Exception\MenuNotFoundException;
-use Tulia\Cms\Menu\Domain\WriteModel\MenuRepository;
+use Tulia\Cms\Menu\Domain\WriteModel\MenuRepositoryInterface;
 use Tulia\Cms\Menu\Domain\WriteModel\Model\Item;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
@@ -26,14 +27,14 @@ use Tulia\Component\Templating\ViewInterface;
  */
 class MenuItem extends AbstractController
 {
-    private MenuRepository $repository;
+    private MenuRepositoryInterface $repository;
     private RegistryInterface $menuTypeRegistry;
     private DatatableFactory $factory;
     private ItemDatatableFinderInterface $finder;
     private ContentFormService $contentFormService;
 
     public function __construct(
-        MenuRepository $repository,
+        MenuRepositoryInterface $repository,
         RegistryInterface $menuTypeRegistry,
         DatatableFactory $factory,
         ItemDatatableFinderInterface $finder,
@@ -152,7 +153,7 @@ class MenuItem extends AbstractController
      * @return RedirectResponse
      * @CsrfToken(id="menu.item.delete")
      */
-    public function delete(Request $request, string $menuId): RedirectResponse
+    public function delete(Request $request, UpdateMenu $updateMenu, string $menuId): RedirectResponse
     {
         try {
             $menu = $this->repository->find($menuId);
@@ -170,7 +171,7 @@ class MenuItem extends AbstractController
             }
         }
 
-        $this->repository->update($menu);
+        ($updateMenu)($menu);
 
         $this->setFlash('success', $this->trans('selectedItemsWereDeleted', [], 'menu'));
         return $this->redirectToRoute('backend.menu.item.list', [ 'menuId' => $menuId ]);

@@ -6,7 +6,7 @@ namespace Tulia\Cms\Menu\Application\UseCase;
 
 use Tulia\Cms\Attributes\Domain\WriteModel\Model\Attribute;
 use Tulia\Cms\Menu\Domain\WriteModel\Event\MenuUpdated;
-use Tulia\Cms\Menu\Domain\WriteModel\MenuRepository;
+use Tulia\Cms\Menu\Domain\WriteModel\MenuRepositoryInterface;
 use Tulia\Cms\Menu\Domain\WriteModel\Model\Menu;
 use Tulia\Cms\Shared\Domain\WriteModel\ActionsChain\AggregateActionsChainInterface;
 use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
@@ -16,12 +16,12 @@ use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
  */
 abstract class AbstractMenuUseCase
 {
-    private MenuRepository $repository;
+    private MenuRepositoryInterface $repository;
     private EventBusInterface $eventDispatcher;
     private AggregateActionsChainInterface $actionsChain;
 
     public function __construct(
-        MenuRepository $repository,
+        MenuRepositoryInterface $repository,
         EventBusInterface $eventDispatcher,
         AggregateActionsChainInterface $actionsChain
     ) {
@@ -47,7 +47,7 @@ abstract class AbstractMenuUseCase
         $this->actionsChain->execute('update', $menu);
 
         try {
-            $this->repository->update($menu);
+            $this->repository->save($menu);
             $this->eventDispatcher->dispatchCollection($menu->collectDomainEvents());
             $this->eventDispatcher->dispatch(MenuUpdated::fromModel($menu));
         } catch (\Throwable $e) {

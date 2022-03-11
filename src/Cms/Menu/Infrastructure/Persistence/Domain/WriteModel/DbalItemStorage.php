@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Menu\Infrastructure\Persistence\Domain\WriteModel;
 
-use Tulia\Cms\Menu\Domain\WriteModel\ItemStorageInterface;
 use Tulia\Cms\Platform\Infrastructure\Persistence\Domain\AbstractLocalizableStorage;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class DbalItemStorage extends AbstractLocalizableStorage implements ItemStorageInterface
+class DbalItemStorage extends AbstractLocalizableStorage
 {
     private ConnectionInterface $connection;
 

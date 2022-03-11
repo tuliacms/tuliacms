@@ -13,7 +13,7 @@ use Tulia\Cms\Menu\Application\UseCase\DeleteMenu;
 use Tulia\Cms\Menu\Application\UseCase\UpdateMenu;
 use Tulia\Cms\Menu\Domain\ReadModel\Datatable\MenuDatatableFinderInterface;
 use Tulia\Cms\Menu\Domain\WriteModel\Exception\MenuNotFoundException;
-use Tulia\Cms\Menu\Domain\WriteModel\MenuRepository;
+use Tulia\Cms\Menu\Domain\WriteModel\MenuRepositoryInterface;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
 use Tulia\Component\Datatable\DatatableFactory;
@@ -24,12 +24,12 @@ use Tulia\Component\Templating\ViewInterface;
  */
 class Menu extends AbstractController
 {
-    private MenuRepository $repository;
+    private MenuRepositoryInterface $repository;
     private DatatableFactory $factory;
     private MenuDatatableFinderInterface $finder;
 
     public function __construct(
-        MenuRepository $repository,
+        MenuRepositoryInterface $repository,
         DatatableFactory $factory,
         MenuDatatableFinderInterface $finder
     ) {

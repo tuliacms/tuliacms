@@ -5,21 +5,20 @@ declare(strict_types=1);
 namespace Tulia\Cms\Menu\Infrastructure\Persistence\Domain\WriteModel;
 
 use PDO;
-use Tulia\Cms\Menu\Domain\WriteModel\ItemStorageInterface;
-use Tulia\Cms\Menu\Domain\WriteModel\MenuStorageInterface;
 use Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface;
 
 /**
  * @author Adam Banaszkiewicz
  */
-class DbalMenuStorage implements MenuStorageInterface
+class DbalMenuStorage
 {
     private ConnectionInterface $connection;
+    private DbalItemStorage $itemStorage;
 
-    private ItemStorageInterface $itemStorage;
-
-    public function __construct(ConnectionInterface $connection, ItemStorageInterface $itemStorage)
-    {
+    public function __construct(
+        ConnectionInterface $connection,
+        DbalItemStorage $itemStorage
+    ) {
         $this->connection = $connection;
         $this->itemStorage = $itemStorage;
     }
@@ -89,6 +88,11 @@ class DbalMenuStorage implements MenuStorageInterface
     public function delete(string $id): void
     {
         $this->connection->delete('#__menu', ['id' => $id], ['id' => PDO::PARAM_STR]);
+    }
+
+    public function exists(string $menuId): bool
+    {
+        return (bool) $this->connection->fetchFirstColumn('SELECT id FROM #__menu WHERE id = :id', ['id' => $menuId]);
     }
 
     private function storeItems(array $items, string $defaultLocale): void

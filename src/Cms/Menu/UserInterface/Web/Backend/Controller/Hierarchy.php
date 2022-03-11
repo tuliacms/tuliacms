@@ -6,8 +6,9 @@ namespace Tulia\Cms\Menu\UserInterface\Web\Backend\Controller;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Tulia\Cms\Menu\Application\UseCase\UpdateMenu;
 use Tulia\Cms\Menu\Domain\Service\MenuHierarchy;
-use Tulia\Cms\Menu\Domain\WriteModel\MenuRepository;
+use Tulia\Cms\Menu\Domain\WriteModel\MenuRepositoryInterface;
 use Tulia\Cms\Menu\Domain\WriteModel\Model\Item;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
@@ -18,11 +19,10 @@ use Tulia\Component\Templating\ViewInterface;
  */
 class Hierarchy extends AbstractController
 {
-    private MenuRepository $repository;
-
+    private MenuRepositoryInterface $repository;
     private MenuHierarchy $hierarchy;
 
-    public function __construct(MenuRepository $repository, MenuHierarchy $hierarchy)
+    public function __construct(MenuRepositoryInterface $repository, MenuHierarchy $hierarchy)
     {
         $this->repository = $repository;
         $this->hierarchy = $hierarchy;
@@ -44,18 +44,18 @@ class Hierarchy extends AbstractController
     /**
      * @CsrfToken(id="menu_hierarchy")
      */
-    public function save(Request $request, string $menuId): RedirectResponse
+    public function save(Request $request, UpdateMenu $updateMenu, string $menuId): RedirectResponse
     {
-        $taxonomy = $this->repository->find($menuId);
+        $menu = $this->repository->find($menuId);
         $hierarchy = $request->request->get('term', []);
 
         if (empty($hierarchy)) {
             return $this->redirectToRoute('backend.menu.item.hierarchy', ['menuId' => $menuId]);
         }
 
-        $this->hierarchy->updateHierarchy($taxonomy, $hierarchy);
+        $this->hierarchy->updateHierarchy($menu, $hierarchy);
 
-        $this->repository->update($taxonomy);
+        ($updateMenu)($menu);
 
         $this->setFlash('success', $this->trans('hierarchyUpdated'));
         return $this->redirectToRoute('backend.menu.item.hierarchy', ['menuId' => $menuId]);

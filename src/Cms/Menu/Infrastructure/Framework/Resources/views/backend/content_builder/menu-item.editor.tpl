@@ -75,7 +75,7 @@
             updateIdentityField($(this).attr('data-identity'), $(this).val());
         });
 
-        $('.menu-item-type[data-type="{{ item.type ?? app.request.get('content_builder_form_menu_item').type ?? null }}"]').removeClass('d-none');
+        $('.menu-item-type[data-type="{{ item.type ?? app.request.get('content_builder_form_menu_item').type ?? 'simple:homepage' }}"]').removeClass('d-none');
     });
 
     let updateIdentityField = function (type, identity) {

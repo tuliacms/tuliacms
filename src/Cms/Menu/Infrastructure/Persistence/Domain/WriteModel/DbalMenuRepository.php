@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tulia\Cms\Menu\Domain\WriteModel;
+namespace Tulia\Cms\Menu\Infrastructure\Persistence\Domain\WriteModel;
 
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Tulia\Cms\Attributes\Domain\WriteModel\AttributesRepository;
@@ -11,10 +11,8 @@ use Tulia\Cms\Menu\Domain\WriteModel\ActionsChain\MenuActionsChainInterface;
 use Tulia\Cms\Menu\Domain\WriteModel\Event\ItemAdded;
 use Tulia\Cms\Menu\Domain\WriteModel\Event\ItemRemoved;
 use Tulia\Cms\Menu\Domain\WriteModel\Event\ItemUpdated;
-use Tulia\Cms\Menu\Domain\WriteModel\Event\MenuCreated;
-use Tulia\Cms\Menu\Domain\WriteModel\Event\MenuDeleted;
-use Tulia\Cms\Menu\Domain\WriteModel\Event\MenuUpdated;
 use Tulia\Cms\Menu\Domain\WriteModel\Exception\MenuNotFoundException;
+use Tulia\Cms\Menu\Domain\WriteModel\MenuRepositoryInterface;
 use Tulia\Cms\Menu\Domain\WriteModel\Model\Item;
 use Tulia\Cms\Menu\Domain\WriteModel\Model\Menu;
 use Tulia\Cms\Shared\Infrastructure\Utils\Uuid\UuidGeneratorInterface;
@@ -23,22 +21,17 @@ use Tulia\Component\Routing\Website\CurrentWebsiteInterface;
 /**
  * @author Adam Banaszkiewicz
  */
-class MenuRepository
+class DbalMenuRepository implements MenuRepositoryInterface
 {
-    private MenuStorageInterface $storage;
-
+    private DbalMenuStorage $storage;
     private UuidGeneratorInterface $uuidGenerator;
-
     private EventDispatcherInterface $eventDispatcher;
-
     private CurrentWebsiteInterface $currentWebsite;
-
     private AttributesRepository $metadataRepository;
-
     private MenuActionsChainInterface $actionsChain;
 
     public function __construct(
-        MenuStorageInterface $storage,
+        DbalMenuStorage $storage,
         UuidGeneratorInterface $uuidGenerator,
         EventDispatcherInterface $eventDispatcher,
         CurrentWebsiteInterface $currentWebsite,
@@ -103,39 +96,11 @@ class MenuRepository
         $this->storage->beginTransaction();
 
         try {
-            $this->storage->insert($data, $this->currentWebsite->getDefaultLocale()->getCode());
-
-            foreach ($data['items'] as $item) {
-                $this->metadataRepository->persist(
-                    MetadataEnum::MENUITEM_GROUP,
-                    $item['id'],
-                    $item['metadata']
-                );
+            if ($this->storage->exists($menu->getId())) {
+                $this->storage->update($data, $this->currentWebsite->getDefaultLocale()->getCode());
+            } else {
+                $this->storage->insert($data, $this->currentWebsite->getDefaultLocale()->getCode());
             }
-
-            $this->storage->commit();
-        } catch (\Exception $e) {
-            $this->storage->rollback();
-            throw $e;
-        }
-
-        $this->dispatchItemsEvents($data);
-    }
-
-    public function update(Menu $menu): void
-    {
-        $data = $this->extract($menu);
-
-        /**
-         * We dont want to overwrite root item in update. It must be created
-         * only once, at the creating of the menu, and must not be updated forever.
-         */
-        $data = $this->removeRootItem($data);
-
-        $this->storage->beginTransaction();
-
-        try {
-            $this->storage->update($data, $this->currentWebsite->getDefaultLocale()->getCode());
 
             foreach ($data['items'] as $item) {
                 $this->metadataRepository->persist(
@@ -204,17 +169,6 @@ class MenuRepository
                 'visibility' => $item->getVisibility(),
                 'metadata' => $item->getAttributes(),
             ];
-        }
-
-        return $data;
-    }
-
-    private function removeRootItem(array $data): array
-    {
-        foreach ($data['items'] as $key => $item) {
-            if ($item['is_root']) {
-                unset($data['items'][$key]);
-            }
         }
 
         return $data;

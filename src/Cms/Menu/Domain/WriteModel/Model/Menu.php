@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Menu\Domain\WriteModel\Model;
 
+use Tulia\Cms\Menu\Domain\WriteModel\Exception\CannotModifyRootItemException;
 use Tulia\Cms\Menu\Domain\WriteModel\Exception\ItemNotFoundException;
 use Tulia\Cms\Shared\Domain\WriteModel\Model\AggregateRoot;
 
@@ -123,8 +124,14 @@ final class Menu extends AggregateRoot
         return $item;
     }
 
+    /**
+     * @throws CannotModifyRootItemException
+     */
     public function removeItem(Item $item): void
     {
+        if ($item->isRoot()) {
+            throw new CannotModifyRootItemException('Cannot remove Root item.');
+        }
         if (isset($this->items[$item->getId()]) === false) {
             return;
         }
@@ -144,14 +151,16 @@ final class Menu extends AggregateRoot
     }
 
     /**
-     * @param string $id
-     * @return Item
      * @throws ItemNotFoundException
+     * @throws CannotModifyRootItemException
      */
     public function getItem(string $id): Item
     {
         if (isset($this->items[$id]) === false) {
             throw new ItemNotFoundException(sprintf('Item with ID %s not found.', $id));
+        }
+        if ($this->items[$id]->isRoot()) {
+            throw new CannotModifyRootItemException('Cannot modify Root item.');
         }
 
         return $this->items[$id];
@@ -192,7 +201,7 @@ final class Menu extends AggregateRoot
 
     private function calculateItemLevel(Item $item): void
     {
-        $parent = $this->getItem($item->getParentId());
+        $parent = $this->items[$item->getParentId()];
         $item->setLevel($parent->getLevel() + 1);
     }
 

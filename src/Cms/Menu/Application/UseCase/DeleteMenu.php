@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tulia\Cms\Menu\Application\UseCase;
 
 use Tulia\Cms\Menu\Domain\WriteModel\Event\MenuDeleted;
-use Tulia\Cms\Menu\Domain\WriteModel\MenuRepository;
+use Tulia\Cms\Menu\Domain\WriteModel\MenuRepositoryInterface;
 use Tulia\Cms\Menu\Domain\WriteModel\Model\Menu;
 use Tulia\Cms\Shared\Domain\WriteModel\ActionsChain\AggregateActionsChainInterface;
 use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
@@ -15,12 +15,12 @@ use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
  */
 final class DeleteMenu
 {
-    private MenuRepository $repository;
+    private MenuRepositoryInterface $repository;
     private EventBusInterface $eventDispatcher;
     private AggregateActionsChainInterface $actionsChain;
 
     public function __construct(
-        MenuRepository $repository,
+        MenuRepositoryInterface $repository,
         EventBusInterface $eventDispatcher,
         AggregateActionsChainInterface $actionsChain
     ) {
