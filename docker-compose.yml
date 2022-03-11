@@ -1,0 +1,53 @@
+version: "3.1"
+services:
+    tulia_www:
+        build:
+            context: ./docker/www
+        ports:
+            - 80:80
+        volumes:
+            - ./docker/www/httpd.conf:/etc/apache2/sites-available/000-default.conf
+            - ./docker/www/php.ini:/usr/local/etc/php/conf.d/php.ini
+            - ./docker/www/docker-php-ext-xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+            - ./docker/www/docker-php-ext-opcache.ini:/usr/local/etc/php/conf.d/docker-php-ext-opcache.ini
+            - ${TULIA_DOCKER_ROOT}:/var/www/html:rw
+        expose:
+            - 9003
+        depends_on:
+            - tulia_mysql
+        networks:
+            - backend
+    tulia_mysql:
+        image: mysql:8.0.25
+        command: mysqld --sql_mode="STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION" --character-set-server=utf8 --collation-server=utf8_unicode_ci --default-authentication-plugin=mysql_native_password
+        volumes:
+            - ./docker/mysql/init:/docker-entrypoint-initdb.d
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_ROOT_HOST: '%'
+        ports:
+            - 33061:3306
+        networks:
+            - backend
+    tulia_phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        environment:
+            PMA_HOST: tulia_mysql
+            PMA_PORT: 3306
+        links:
+            - tulia_mysql
+        ports:
+            - 8000:80
+        networks:
+            - backend
+        depends_on:
+            - tulia_mysql
+    tulia_mailhog:
+        image: mailhog/mailhog:latest
+        ports:
+            - 1025:1025
+            - 8025:8025
+        networks:
+            - backend
+networks:
+    backend:
