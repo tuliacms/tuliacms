@@ -7,12 +7,10 @@ namespace Tulia\Cms\Menu\UserInterface\Web\Backend\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\Menu\Application\UseCase\UpdateMenu;
-use Tulia\Cms\Menu\Domain\Service\MenuHierarchy;
 use Tulia\Cms\Menu\Domain\WriteModel\MenuRepositoryInterface;
 use Tulia\Cms\Menu\Domain\WriteModel\Model\Item;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
-use Tulia\Component\Templating\ViewInterface;
 
 /**
  * @author Adam Banaszkiewicz
@@ -20,23 +18,24 @@ use Tulia\Component\Templating\ViewInterface;
 class Hierarchy extends AbstractController
 {
     private MenuRepositoryInterface $repository;
-    private MenuHierarchy $hierarchy;
 
-    public function __construct(MenuRepositoryInterface $repository, MenuHierarchy $hierarchy)
+    public function __construct(MenuRepositoryInterface $repository)
     {
         $this->repository = $repository;
-        $this->hierarchy = $hierarchy;
     }
 
-    public function index(string $menuId): ViewInterface
+    public function index(string $menuId)
     {
         $menu = $this->repository->find($menuId);
-        $items = iterator_to_array($menu->items());
-        $tree = $this->buildTree(Item::ROOT_ID, $items);
+
+        if (!$menu) {
+            $this->setFlash('success', $this->trans('menuNotFound', [], 'menu'));
+            return $this->redirectToRoute('backend.menu');
+        }
 
         return $this->view('@backend/menu/hierarchy/index.tpl', [
             'menu' => $menu,
-            'tree' => $tree,
+            'tree' => $this->buildTree(Item::ROOT_ID, $menu->itemsToArray()),
             'menuId' => $menuId,
         ]);
     }
@@ -47,13 +46,19 @@ class Hierarchy extends AbstractController
     public function save(Request $request, UpdateMenu $updateMenu, string $menuId): RedirectResponse
     {
         $menu = $this->repository->find($menuId);
-        $hierarchy = $request->request->get('term', []);
+
+        if (!$menu) {
+            $this->setFlash('success', $this->trans('menuNotFound', [], 'menu'));
+            return $this->redirectToRoute('backend.menu');
+        }
+
+        $hierarchy = (array) $request->request->get('term', []);
 
         if (empty($hierarchy)) {
             return $this->redirectToRoute('backend.menu.item.hierarchy', ['menuId' => $menuId]);
         }
 
-        $this->hierarchy->updateHierarchy($menu, $hierarchy);
+        $menu->updateHierarchy($hierarchy);
 
         ($updateMenu)($menu);
 
@@ -61,17 +66,17 @@ class Hierarchy extends AbstractController
         return $this->redirectToRoute('backend.menu.item.hierarchy', ['menuId' => $menuId]);
     }
 
-    private function buildTree(?string $parentId, array $terms): array
+    private function buildTree(?string $parentId, array $items): array
     {
         $tree = [];
 
-        foreach ($terms as $term) {
-            if ($term->getParentId() === $parentId) {
+        foreach ($items as $item) {
+            if ($item['parent_id'] === $parentId) {
                 $leaf = [
-                    'id' => $term->getId(),
-                    'name' => $term->getName(),
-                    'position' => $term->getPosition(),
-                    'children' => $this->buildTree($term->getId(), $terms),
+                    'id' => $item['id'],
+                    'name' => $item['name'],
+                    'position' => $item['position'],
+                    'children' => $this->buildTree($item['id'], $items),
                 ];
 
                 $tree[] = $leaf;

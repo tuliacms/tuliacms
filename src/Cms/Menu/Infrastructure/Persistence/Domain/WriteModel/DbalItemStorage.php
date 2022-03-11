@@ -111,7 +111,7 @@ ORDER BY path", [
         $mainTable['level'] = (int) $data['level'];
         $mainTable['position'] = $data['position'];
         $mainTable['is_root'] = $data['is_root'] ? '1' : '0';
-        $mainTable['menu_id'] = $data['menu'];
+        $mainTable['menu_id'] = $data['menu_id'];
         $mainTable['type'] = $data['type'];
         $mainTable['identity'] = $data['identity'];
         $mainTable['hash'] = $data['hash'];
@@ -130,7 +130,7 @@ ORDER BY path", [
         $mainTable['position'] = $data['position'];
         $mainTable['level'] = (int) $data['level'];
         $mainTable['is_root'] = $data['is_root'] ? '1' : '0';
-        $mainTable['menu_id'] = $data['menu'];
+        $mainTable['menu_id'] = $data['menu_id'];
         $mainTable['type'] = $data['type'];
         $mainTable['identity'] = $data['identity'];
         $mainTable['hash'] = $data['hash'];

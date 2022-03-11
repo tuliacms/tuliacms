@@ -12,7 +12,6 @@ use Tulia\Cms\Menu\Application\UseCase\CreateMenu;
 use Tulia\Cms\Menu\Application\UseCase\DeleteMenu;
 use Tulia\Cms\Menu\Application\UseCase\UpdateMenu;
 use Tulia\Cms\Menu\Domain\ReadModel\Datatable\MenuDatatableFinderInterface;
-use Tulia\Cms\Menu\Domain\WriteModel\Exception\MenuNotFoundException;
 use Tulia\Cms\Menu\Domain\WriteModel\MenuRepositoryInterface;
 use Tulia\Cms\Platform\Infrastructure\Framework\Controller\AbstractController;
 use Tulia\Cms\Security\Framework\Security\Http\Csrf\Annotation\CsrfToken;
@@ -58,7 +57,7 @@ class Menu extends AbstractController
     public function create(Request $request, CreateMenu $createMenu): RedirectResponse
     {
         $menu = $this->repository->createNewMenu();
-        $menu->setName($request->request->get('name'));
+        $menu->rename($request->request->get('name'));
 
         ($createMenu)($menu);
 
@@ -74,13 +73,14 @@ class Menu extends AbstractController
      */
     public function edit(Request $request, UpdateMenu $updateMenu): RedirectResponse
     {
-        try {
-            $menu = $this->repository->find($request->request->get('id'));
-        } catch (MenuNotFoundException $e) {
-            throw $this->createNotFoundException('Menu not found.', $e);
+        $menu = $this->repository->find($request->request->get('id'));
+
+        if (!$menu) {
+            $this->setFlash('success', $this->trans('menuNotFound', [], 'menu'));
+            return $this->redirectToRoute('backend.menu');
         }
 
-        $menu->setName($request->request->get('name'));
+        $menu->rename($request->request->get('name'));
 
         ($updateMenu)($menu);
 
@@ -97,7 +97,10 @@ class Menu extends AbstractController
     {
         foreach ($request->request->get('ids', []) as $id) {
             $menu = $this->repository->find($id);
-            ($deleteMenu)($menu);
+
+            if ($menu) {
+                ($deleteMenu)($menu);
+            }
         }
 
         $this->setFlash('success', $this->trans('selectedMenusWereDeleted', [], 'menu'));

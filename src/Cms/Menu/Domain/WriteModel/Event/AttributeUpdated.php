@@ -22,9 +22,9 @@ class AttributeUpdated extends DomainEvent
         $this->value = $value;
     }
 
-    public static function fromModel(Item $user, string $name, $value): self
+    public static function fromModel(Item $item, string $name, $value): self
     {
-        return new self($user->getId(), $name, $value);
+        return new self($item->getId(), $name, $value);
     }
 
     public function getName(): string

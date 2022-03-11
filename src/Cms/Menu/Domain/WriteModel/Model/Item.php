@@ -8,7 +8,8 @@ use Tulia\Cms\Attributes\Domain\WriteModel\MagickAttributesTrait;
 use Tulia\Cms\Attributes\Domain\WriteModel\Model\Attribute;
 use Tulia\Cms\Attributes\Domain\WriteModel\Model\AttributesAwareInterface;
 use Tulia\Cms\Menu\Domain\WriteModel\Event\AttributeUpdated;
-use Tulia\Cms\Menu\Domain\WriteModel\Exception\ParentItemReccurencyException;
+
+use function is_string;
 
 /**
  * @author Adam Banaszkiewicz
@@ -85,7 +86,6 @@ class Item implements AttributesAwareInterface
     {
         return [
             'id' => $this->id,
-            'menu_id' => $this->menu->getId(),
             'parent_id' => $this->parentId,
             'position' => $this->position,
             'level' => $this->level,
@@ -97,6 +97,7 @@ class Item implements AttributesAwareInterface
             'locale' => $this->locale,
             'name' => $this->name,
             'visibility' => $this->visibility,
+            'translated' => $this->translated,
             'attributes' => $this->attributes,
         ];
     }
@@ -104,11 +105,6 @@ class Item implements AttributesAwareInterface
     public function getId(): string
     {
         return $this->id;
-    }
-
-    public function setId(string $id): void
-    {
-        $this->id = $id;
     }
 
     public function getParentId(): ?string
@@ -129,7 +125,7 @@ class Item implements AttributesAwareInterface
 
         if (is_string($parentId) && $parentId !== self::ROOT_ID) {
             if (! preg_match(
-                '/[a-f0-9]{8}\-[a-f0-9]{4}\-4[a-f0-9]{3}\-(8|9|a|b)[a-f0-9]{3}\-[a-f0-9]{12}/',
+                '/[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-(8|9|a|b)[a-f0-9]{3}-[a-f0-9]{12}/',
                 $parentId,
                 $m
             )) {
@@ -138,7 +134,6 @@ class Item implements AttributesAwareInterface
         }
 
         $this->parentId = $parentId;
-        $this->recordItemChanged();
     }
 
     public function getPosition(): int
@@ -148,7 +143,6 @@ class Item implements AttributesAwareInterface
 
     public function setPosition(int $position): void
     {
-        $this->recordItemChanged();
         $this->position = $position;
     }
 
@@ -159,7 +153,6 @@ class Item implements AttributesAwareInterface
 
     public function setLevel(int $level): void
     {
-        $this->recordItemChanged();
         $this->level = $level;
     }
 
@@ -175,7 +168,6 @@ class Item implements AttributesAwareInterface
 
     public function setType(?string $type): void
     {
-        $this->recordItemChanged();
         $this->type = $type;
     }
 
@@ -186,7 +178,6 @@ class Item implements AttributesAwareInterface
 
     public function setIdentity(?string $identity): void
     {
-        $this->recordItemChanged();
         $this->identity = $identity;
     }
 
@@ -197,7 +188,6 @@ class Item implements AttributesAwareInterface
 
     public function setHash(?string $hash): void
     {
-        $this->recordItemChanged();
         $this->hash = $hash;
     }
 
@@ -208,7 +198,6 @@ class Item implements AttributesAwareInterface
 
     public function setTarget(?string $target): void
     {
-        $this->recordItemChanged();
         $this->target = $target;
     }
 
@@ -219,7 +208,6 @@ class Item implements AttributesAwareInterface
 
     public function setLocale(string $locale): void
     {
-        $this->recordItemChanged();
         $this->locale = $locale;
     }
 
@@ -240,7 +228,6 @@ class Item implements AttributesAwareInterface
 
     public function setName(?string $name): void
     {
-        $this->recordItemChanged();
         $this->name = $name;
     }
 
@@ -251,35 +238,7 @@ class Item implements AttributesAwareInterface
 
     public function setVisibility(bool $visibility): void
     {
-        $this->recordItemChanged();
         $this->visibility = $visibility;
-    }
-
-    public function unassignFromMenu(): void
-    {
-        $this->menu = null;
-    }
-
-    public function getMenu(): Menu
-    {
-        return $this->menu;
-    }
-
-    /**
-     * @param null|Item $parent
-     * @throws ParentItemReccurencyException
-     * @TODO sprawdzić jak to można zrefaktoryzować, bo nie jest używane teraz nigdzie.
-     */
-    public function setParent(?Item $parent): void
-    {
-        if ($this->parent !== $parent) {
-            if ($parent instanceof self) {
-                $this->detectParentReccurency($parent);
-                $this->level = $parent->level + 1;
-            }
-
-            $this->parent = $parent;
-        }
     }
 
     /**
@@ -296,28 +255,6 @@ class Item implements AttributesAwareInterface
 
                 $this->recordThat(AttributeUpdated::fromModel($this, $name, $value));
             }
-        }
-    }
-
-    /**
-     * @param Item $item
-     * @throws ParentItemReccurencyException
-     */
-    private function detectParentReccurency(Item $item): void
-    {
-        do {
-            $parent = $item->getParent();
-
-            if ($parent && ($parent->getId()->equals($this->getId()) || $parent->getId()->equals($item->getId()))) {
-                throw new ParentItemReccurencyException();
-            }
-        } while ($item->getParent());
-    }
-
-    private function recordItemChanged(): void
-    {
-        if ($this->menu) {
-            $this->menu->recordItemChanged($this);
         }
     }
 }

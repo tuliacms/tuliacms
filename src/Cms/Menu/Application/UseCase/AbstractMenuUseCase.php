@@ -16,9 +16,9 @@ use Tulia\Cms\Shared\Infrastructure\Bus\Event\EventBusInterface;
  */
 abstract class AbstractMenuUseCase
 {
-    private MenuRepositoryInterface $repository;
-    private EventBusInterface $eventDispatcher;
-    private AggregateActionsChainInterface $actionsChain;
+    protected MenuRepositoryInterface $repository;
+    protected EventBusInterface $eventDispatcher;
+    protected AggregateActionsChainInterface $actionsChain;
 
     public function __construct(
         MenuRepositoryInterface $repository,

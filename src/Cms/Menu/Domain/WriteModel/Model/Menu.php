@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Menu\Domain\WriteModel\Model;
 
+use Tulia\Cms\Menu\Domain\WriteModel\Event\ItemAdded;
+use Tulia\Cms\Menu\Domain\WriteModel\Event\ItemRemoved;
+use Tulia\Cms\Menu\Domain\WriteModel\Event\ItemUpdated;
 use Tulia\Cms\Menu\Domain\WriteModel\Exception\CannotModifyRootItemException;
-use Tulia\Cms\Menu\Domain\WriteModel\Exception\ItemNotFoundException;
+use Tulia\Cms\Menu\Domain\WriteModel\Exception\ParentItemReccurencyException;
 use Tulia\Cms\Shared\Domain\WriteModel\Model\AggregateRoot;
 
 /**
@@ -51,59 +54,64 @@ final class Menu extends AggregateRoot
         return $menu;
     }
 
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'website_id' => $this->websiteId,
+            'locale' => $this->locale,
+            'items' => $this->itemsToArray(),
+        ];
+    }
+
+    public function itemsToArray(): array
+    {
+        $items = [];
+
+        foreach ($this->items as $item) {
+            $items[$item->getId()] = $item->toArray();
+        }
+
+        return $items;
+    }
+
+    public function itemToArray(string $id): array
+    {
+        return $this->items[$id]->toArray();
+    }
+
+    public function collectDomainEvents(): array
+    {
+        $changes = $this->itemsChanges;
+        $this->itemsChanges = [];
+
+        foreach ($changes as $change) {
+            if ($change['type'] === 'add') {
+                $this->recordThat(new ItemAdded($this->id, $change['item']->getId()));
+            } elseif ($change['type'] === 'remove') {
+                $this->recordThat(new ItemRemoved($this->id, $change['item']->getId()));
+            } else {
+                $this->recordThat(new ItemUpdated($this->id, $change['item']->getId()));
+            }
+        }
+
+        return parent::collectDomainEvents();
+    }
+
     public function getId(): string
     {
         return $this->id;
     }
 
-    public function getWebsiteId(): string
-    {
-        return $this->websiteId;
-    }
-
-    public function setWebsiteId(string $websiteId): void
-    {
-        $this->websiteId = $websiteId;
-    }
-
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    public function setName(?string $name): void
+    public function rename(?string $name): void
     {
         $this->name = $name;
     }
 
-    /**
-     * @return Item[]
-     */
-    public function getItems(): array
+    public function getName(): string
     {
-        return $this->items;
-    }
-
-    public function setItems(array $items): void
-    {
-        $this->items = $items;
-    }
-
-    public function getItemsChanges(): array
-    {
-        $changes = $this->itemsChanges;
-        $this->itemsChanges = [];
-        return $changes;
-    }
-
-    /**
-     * @return Item[]
-     */
-    public function items(): iterable
-    {
-        foreach ($this->items as $item) {
-            yield $item;
-        }
+        return $this->name;
     }
 
     public function createNewItem(string $id): Item
@@ -124,79 +132,92 @@ final class Menu extends AggregateRoot
         return $item;
     }
 
+    public function updateItemUsingAttributes(string $itemId, array $data, ?array $attributes = null): void
+    {
+        $item = $this->items[$itemId];
+
+        $item->setName($data['name']);
+        $item->setType($data['type']);
+        $item->setVisibility($data['visibility'] ? true : false);
+        $item->setIdentity($data['identity']);
+        $item->setHash($data['hash']);
+        $item->setTarget($data['target']);
+
+        if ($attributes !== null) {
+            $item->updateAttributes($attributes);
+        }
+
+        $this->recordItemChange('update', $item);
+    }
+
     /**
      * @throws CannotModifyRootItemException
      */
-    public function removeItem(Item $item): void
+    public function removeItem(string $itemId): void
     {
-        if ($item->isRoot()) {
-            throw new CannotModifyRootItemException('Cannot remove Root item.');
-        }
-        if (isset($this->items[$item->getId()]) === false) {
+        if (isset($this->items[$itemId]) === false) {
             return;
         }
 
-        $this->removeItemChildren($item);
+        $item = $this->items[$itemId];
 
-        $this->items[$item->getId()]->unassignFromMenu();
+        if ($item->isRoot()) {
+            throw new CannotModifyRootItemException('Cannot remove Root item.');
+        }
+
+        $this->removeItemChildren($item);
 
         unset($this->items[$item->getId()]);
 
         $this->recordItemChange('remove', $item);
     }
 
-    public function hasItem(Item $item): bool
+    public function hasItem(string $id): bool
     {
-        return isset($this->items[$item->getId()]);
+        return isset($this->items[$id]);
     }
 
     /**
-     * @throws ItemNotFoundException
-     * @throws CannotModifyRootItemException
+     * @throws ParentItemReccurencyException
      */
-    public function getItem(string $id): Item
+    public function updateHierarchy(array $hierarchy): void
     {
-        if (isset($this->items[$id]) === false) {
-            throw new ItemNotFoundException(sprintf('Item with ID %s not found.', $id));
-        }
-        if ($this->items[$id]->isRoot()) {
-            throw new CannotModifyRootItemException('Cannot modify Root item.');
+        $rebuildedHierarchy = [];
+
+        foreach ($hierarchy as $child => $parent) {
+            $rebuildedHierarchy[$parent][] = $child;
         }
 
-        return $this->items[$id];
+        foreach ($rebuildedHierarchy as $parent => $items) {
+            foreach ($items as $level => $id) {
+                $item = $this->items[$id];
+                $item->setParentId($parent ?: Item::ROOT_ID);
+                $this->detectParentReccurency($item);
+                $item->setPosition($level + 1);
+                $this->recordItemChange('update', $item);
+            }
+        }
+
+        $this->calculateLevel(Item::ROOT_ID, Item::ROOT_LEVEL);
     }
 
-    public function recordItemChanged(Item $item): void
+    private function calculateLevel(string $parentId, int $baseLevel): void
     {
-        $this->recordItemChange('update', $item);
+        foreach ($this->items as $item) {
+            if ($item->getParentId() === $parentId) {
+                $item->setLevel($baseLevel + 1);
+                $this->recordItemChange('update', $item);
+                $this->calculateLevel($item->getId(), $baseLevel + 1);
+            }
+        }
     }
 
-    private function recordItemChange(string $type, Item $item): void
+    /**
+     * @throws ParentItemReccurencyException
+     */
+    private function detectParentReccurency(Item $item): void
     {
-        // Prevents multiple do the same change with the same item.
-        foreach ($this->itemsChanges as $key => $change) {
-            if ($change['type'] === $type && $change['item']->getId() === $item->getId()) {
-                unset($this->itemsChanges[$key]);
-            }
-        }
-
-        if ($type === 'update') {
-            // If item has beed added or removed already, we don't add any 'update' changes.
-            foreach ($this->itemsChanges as $change) {
-                if ($change['item']->getId() === $item->getId() && \in_array($change['type'], ['add', 'remove'])) {
-                    return;
-                }
-            }
-        } elseif ($type === 'add' || $type === 'remove') {
-            // If item has beed added or removed, we remove all the 'update' changes.
-            foreach ($this->itemsChanges as $key => $change) {
-                if ($change['item']->getId() === $item->getId() && $change['type'] === 'update') {
-                    unset($this->itemsChanges[$key]);
-                }
-            }
-        }
-
-        $this->itemsChanges[] = ['type' => $type, 'item' => $item];
+        // @todo Implement recurrency detection.
     }
 
     private function calculateItemLevel(Item $item): void
@@ -235,8 +256,36 @@ final class Menu extends AggregateRoot
             }
 
             if ($existingItem->getParentId() === $item->getId()) {
-                $this->removeItem($existingItem);
+                $this->removeItem($existingItem->getId());
             }
         }
+    }
+
+    private function recordItemChange(string $type, Item $item): void
+    {
+        // Prevents multiple do the same change with the same item.
+        foreach ($this->itemsChanges as $key => $change) {
+            if ($change['type'] === $type && $change['item']->getId() === $item->getId()) {
+                unset($this->itemsChanges[$key]);
+            }
+        }
+
+        if ($type === 'update') {
+            // If item has beed added or removed already, we don't add any 'update' changes.
+            foreach ($this->itemsChanges as $change) {
+                if ($change['item']->getId() === $item->getId() && \in_array($change['type'], ['add', 'remove'])) {
+                    return;
+                }
+            }
+        } elseif ($type === 'add' || $type === 'remove') {
+            // If item has beed added or removed, we remove all the 'update' changes.
+            foreach ($this->itemsChanges as $key => $change) {
+                if ($change['item']->getId() === $item->getId() && $change['type'] === 'update') {
+                    unset($this->itemsChanges[$key]);
+                }
+            }
+        }
+
+        $this->itemsChanges[] = ['type' => $type, 'item' => $item];
     }
 }

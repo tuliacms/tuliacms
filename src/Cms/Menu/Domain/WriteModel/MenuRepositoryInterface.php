@@ -16,7 +16,7 @@ interface MenuRepositoryInterface
 
     public function createNewItem(Menu $menu): Item;
 
-    public function find(string $id): Menu;
+    public function find(string $id): ?Menu;
 
     public function save(Menu $menu): void;
 

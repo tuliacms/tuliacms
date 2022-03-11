@@ -4,14 +4,8 @@ declare(strict_types=1);
 
 namespace Tulia\Cms\Menu\Infrastructure\Persistence\Domain\WriteModel;
 
-use Psr\EventDispatcher\EventDispatcherInterface;
 use Tulia\Cms\Attributes\Domain\WriteModel\AttributesRepository;
-use Tulia\Cms\Menu\Domain\Metadata\Item\Enum\MetadataEnum;
 use Tulia\Cms\Menu\Domain\WriteModel\ActionsChain\MenuActionsChainInterface;
-use Tulia\Cms\Menu\Domain\WriteModel\Event\ItemAdded;
-use Tulia\Cms\Menu\Domain\WriteModel\Event\ItemRemoved;
-use Tulia\Cms\Menu\Domain\WriteModel\Event\ItemUpdated;
-use Tulia\Cms\Menu\Domain\WriteModel\Exception\MenuNotFoundException;
 use Tulia\Cms\Menu\Domain\WriteModel\MenuRepositoryInterface;
 use Tulia\Cms\Menu\Domain\WriteModel\Model\Item;
 use Tulia\Cms\Menu\Domain\WriteModel\Model\Menu;
@@ -25,24 +19,21 @@ class DbalMenuRepository implements MenuRepositoryInterface
 {
     private DbalMenuStorage $storage;
     private UuidGeneratorInterface $uuidGenerator;
-    private EventDispatcherInterface $eventDispatcher;
     private CurrentWebsiteInterface $currentWebsite;
-    private AttributesRepository $metadataRepository;
+    private AttributesRepository $attributesRepository;
     private MenuActionsChainInterface $actionsChain;
 
     public function __construct(
         DbalMenuStorage $storage,
         UuidGeneratorInterface $uuidGenerator,
-        EventDispatcherInterface $eventDispatcher,
         CurrentWebsiteInterface $currentWebsite,
-        AttributesRepository $metadataRepository,
+        AttributesRepository $attributesRepository,
         MenuActionsChainInterface $actionsChain
     ) {
         $this->storage = $storage;
         $this->uuidGenerator = $uuidGenerator;
-        $this->eventDispatcher = $eventDispatcher;
         $this->currentWebsite = $currentWebsite;
-        $this->metadataRepository = $metadataRepository;
+        $this->attributesRepository = $attributesRepository;
         $this->actionsChain = $actionsChain;
     }
 
@@ -60,10 +51,7 @@ class DbalMenuRepository implements MenuRepositoryInterface
         return $menu->createNewItem($this->uuidGenerator->generate());
     }
 
-    /**
-     * @throws MenuNotFoundException
-     */
-    public function find(string $id): Menu
+    public function find(string $id): ?Menu
     {
         $data = $this->storage->find(
             $id,
@@ -72,18 +60,16 @@ class DbalMenuRepository implements MenuRepositoryInterface
         );
 
         if ($data === null) {
-            throw new MenuNotFoundException(sprintf('Menu %s not found.', $id));
+            return null;
         }
 
-        $metadata = $this->metadataRepository->findAllAggregated(MetadataEnum::MENUITEM_GROUP, array_column($data['items'], 'id'), []);
+        $metadata = $this->attributesRepository->findAllAggregated('menu_item', array_column($data['items'], 'id'), []);
 
         foreach ($data['items'] as $key => $item) {
             $data['items'][$key]['metadata'] = $metadata[$item['id']] ?? [];
         }
 
         $menu = Menu::buildFromArray($data);
-        // Reset items changes after create new Entity with data from storage.
-        $menu->getItemsChanges();
 
         $this->actionsChain->execute('find', $menu);
 
@@ -92,7 +78,7 @@ class DbalMenuRepository implements MenuRepositoryInterface
 
     public function save(Menu $menu): void
     {
-        $data = $this->extract($menu);
+        $data = $menu->toArray();
         $this->storage->beginTransaction();
 
         try {
@@ -103,10 +89,10 @@ class DbalMenuRepository implements MenuRepositoryInterface
             }
 
             foreach ($data['items'] as $item) {
-                $this->metadataRepository->persist(
-                    MetadataEnum::MENUITEM_GROUP,
+                $this->attributesRepository->persist(
+                    'menu_item',
                     $item['id'],
-                    $item['metadata']
+                    $item['attributes']
                 );
             }
 
@@ -115,62 +101,10 @@ class DbalMenuRepository implements MenuRepositoryInterface
             $this->storage->rollback();
             throw $e;
         }
-
-        $this->dispatchItemsEvents($data);
     }
 
     public function delete(Menu $menu): void
     {
         $this->storage->delete($menu->getId());
-    }
-
-    private function dispatchItemsEvents(array $data): void
-    {
-        foreach ($data['items'] as $item) {
-            if ($item['_change_type'] === 'add') {
-                $this->eventDispatcher->dispatch(new ItemAdded($data['id'], $item['id']));
-            } elseif ($item['_change_type'] === 'remove') {
-                $this->eventDispatcher->dispatch(new ItemRemoved($data['id'], $item['id']));
-            } else {
-                $this->eventDispatcher->dispatch(new ItemUpdated($data['id'], $item['id']));
-            }
-        }
-    }
-
-    private function extract(Menu $menu): array
-    {
-        $data = [];
-        $data['id'] = $menu->getId();
-        $data['name'] = $menu->getName();
-        $data['website_id'] = $menu->getWebsiteId();
-        $data['items'] = [];
-
-        $itemsChanges = $menu->getItemsChanges();
-
-        foreach ($itemsChanges as $changeData) {
-            /** @var Item $item */
-            $item = $changeData['item'];
-            $id = $item->getId();
-
-            $data['items'][$id] = [
-                '_change_type' => $changeData['type'],
-                'id' => $id,
-                'menu' => $item->getMenu() ? $item->getMenu()->getId() : null,
-                'parent_id' => $item->getParentId() ?: null,
-                'position' => $item->getPosition(),
-                'level' => $item->getLevel(),
-                'is_root' => $item->isRoot(),
-                'type' => $item->getType(),
-                'identity' => $item->getIdentity(),
-                'hash' => $item->getHash(),
-                'target' => $item->getTarget(),
-                'locale' => $item->getLocale(),
-                'name' => $item->getName(),
-                'visibility' => $item->getVisibility(),
-                'metadata' => $item->getAttributes(),
-            ];
-        }
-
-        return $data;
     }
 }

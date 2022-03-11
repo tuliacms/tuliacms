@@ -17,7 +17,6 @@ use Tulia\Cms\SearchAnything\Provider\AbstractProvider;
 class SearchProvider extends AbstractProvider
 {
     protected MenuFinderInterface $menuFinder;
-
     protected RouterInterface $router;
 
     public function __construct(

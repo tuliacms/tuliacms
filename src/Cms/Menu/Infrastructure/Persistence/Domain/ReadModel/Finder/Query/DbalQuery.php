@@ -7,7 +7,6 @@ namespace Tulia\Cms\Menu\Infrastructure\Persistence\Domain\ReadModel\Finder\Quer
 use Exception;
 use PDO;
 use Tulia\Cms\Attributes\Domain\ReadModel\Service\AttributesFinder;
-use Tulia\Cms\Menu\Domain\Metadata\Item\Enum\MetadataEnum;
 use Tulia\Cms\Menu\Domain\ReadModel\Model\Menu;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Exception\QueryException;
 use Tulia\Cms\Shared\Domain\ReadModel\Finder\Model\Collection;
@@ -88,7 +87,7 @@ class DbalQuery extends AbstractDbalQuery
 
         if ($criteria['fetch_items']) {
             $items = $this->fetchMenuItems($criteria);
-            $metadata = $this->metadataFinder->findAllAggregated(MetadataEnum::MENUITEM_GROUP, $scope, array_column($items, 'id'));
+            $metadata = $this->metadataFinder->findAllAggregated('menu_item', $scope, array_column($items, 'id'));
         }
 
         try {

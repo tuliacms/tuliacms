@@ -68,7 +68,7 @@ class DbalMenuStorage
             'name' => PDO::PARAM_STR,
         ]);
 
-        $this->storeItems($menu['items'], $defaultLocale);
+        $this->storeItems($menu['id'], $menu['items'], $defaultLocale, $menu['locale']);
     }
 
     public function update(array $menu, string $defaultLocale): void
@@ -82,7 +82,7 @@ class DbalMenuStorage
             'name' => PDO::PARAM_STR,
         ]);
 
-        $this->storeItems($menu['items'], $defaultLocale);
+        $this->storeItems($menu['id'], $menu['items'], $defaultLocale, $menu['locale']);
     }
 
     public function delete(string $id): void
@@ -95,16 +95,33 @@ class DbalMenuStorage
         return (bool) $this->connection->fetchFirstColumn('SELECT id FROM #__menu WHERE id = :id', ['id' => $menuId]);
     }
 
-    private function storeItems(array $items, string $defaultLocale): void
+    private function storeItems(string $menuId, array $items, string $defaultLocale, string $locale): void
     {
+        $currentItemsSource = $this->itemStorage->findAll($menuId, $defaultLocale, $locale);
+        $currentItems = [];
+        $newItems = [];
+
+        foreach ($currentItemsSource as $item) {
+            $currentItems[$item['id']] = $item;
+        }
         foreach ($items as $item) {
-            if ($item['_change_type'] === 'add') {
-                $this->itemStorage->insert($item, $defaultLocale);
-            } elseif ($item['_change_type'] === 'update') {
-                $this->itemStorage->update($item, $defaultLocale);
-            } elseif ($item['_change_type'] === 'remove') {
-                $this->itemStorage->delete($item['id']);
-            }
+            $newItems[$item['id']] = $item;
+        }
+
+        $toAdd = array_diff_key($newItems, $currentItems);
+        $toDelete = array_diff_key($currentItems, $newItems);
+        $toUpdate = array_diff_key($newItems, $toAdd + $toDelete);
+
+        foreach ($toAdd as $item) {
+            $item['menu_id'] = $menuId;
+            $this->itemStorage->insert($item, $defaultLocale);
+        }
+        foreach ($toUpdate as $item) {
+            $item['menu_id'] = $menuId;
+            $this->itemStorage->update($item, $defaultLocale);
+        }
+        foreach ($toDelete as $item) {
+            $this->itemStorage->delete($item['id']);
         }
     }
 }

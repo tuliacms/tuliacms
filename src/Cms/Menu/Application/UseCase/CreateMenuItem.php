@@ -10,15 +10,17 @@ use Tulia\Cms\Menu\Domain\WriteModel\Model\Menu;
 /**
  * @author Adam Banaszkiewicz
  */
-final class UpdateMenuItem extends AbstractMenuUseCase
+class CreateMenuItem extends AbstractMenuUseCase
 {
     /**
      * @param Attribute[] $attributes
      */
-    public function __invoke(Menu $menu, string $itemId, array $attributes): void
+    public function __invoke(Menu $menu, array $attributes): void
     {
+        $item = $this->repository->createNewItem($menu);
+
         $menu->updateItemUsingAttributes(
-            $itemId,
+            $item->getId(),
             $this->flattenAttributes($attributes),
             $this->removeMenuItemAttributes($attributes)
         );
