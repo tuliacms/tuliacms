@@ -35,5 +35,5 @@
 ###< phpunit/phpunit ###
 
 ###> Local Live Development ###
-/core/*
+/core
 ###< Local Live Development ###
