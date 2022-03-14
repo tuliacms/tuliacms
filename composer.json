@@ -1,67 +1,10 @@
 {
     "type": "project",
-    "license": "proprietary",
-    "minimum-stability": "stable",
-    "prefer-stable": true,
+    "name": "tuliacms/tuliacms",
+    "license": "MIT",
+    "version": "0.0.1-alpha",
     "require": {
-        "php": ">=7.4",
-        "ext-ctype": "*",
-        "ext-iconv": "*",
-        "ext-intl": "*",
-        "ext-mbstring": "*",
-        "ext-pdo": "*",
-        "ext-simplexml": "*",
-        "ext-tokenizer": "*",
-        "ext-xmlwriter": "*",
-        "ext-zip": "*",
-        "ausi/slug-generator": "^1.1",
-        "composer/package-versions-deprecated": "1.11.99.5",
-        "doctrine/annotations": "^1.13",
-        "doctrine/doctrine-bundle": "^2.5",
-        "doctrine/doctrine-migrations-bundle": "^3.2",
-        "doctrine/orm": "^2.10",
-        "intervention/image": "^2.7",
-        "jasongrimes/paginator": "^1.0",
-        "ocramius/generated-hydrator": "^4.1",
-        "ramsey/uuid": "^4.2",
-        "requtize/assetter": "^2.0",
-        "sensio/framework-extra-bundle": "^6.2",
-        "swiftmailer/swiftmailer": "^6.3",
-        "symfony/asset": "5.4.*",
-        "symfony/console": "5.4.*",
-        "symfony/dotenv": "5.4.*",
-        "symfony/expression-language": "5.4.*",
-        "symfony/flex": "^1.17|^2",
-        "symfony/form": "5.4.*",
-        "symfony/framework-bundle": "5.4.*",
-        "symfony/intl": "5.4.*",
-        "symfony/mailer": "5.4.*",
-        "symfony/mime": "5.4.*",
-        "symfony/monolog-bundle": "^3.7",
-        "symfony/process": "5.4.*",
-        "symfony/proxy-manager-bridge": "5.4.*",
-        "symfony/runtime": "5.4.*",
-        "symfony/security-bundle": "5.4.*",
-        "symfony/string": "5.4.*",
-        "symfony/translation": "5.4.*",
-        "symfony/twig-bundle": "5.4.*",
-        "symfony/validator": "5.4.*",
-        "symfony/yaml": "5.4.*",
-        "thunderer/shortcode": "^0.7.5",
-        "twig/extra-bundle": "^3.3"
-    },
-    "require-dev": {
-        "mockery/mockery": "^1.5",
-        "phpcompatibility/php-compatibility": "^9.3",
-        "phpspec/phpspec": "^7.1",
-        "phpunit/phpunit": "^9.5",
-        "roave/security-advisories": "dev-master",
-        "symfony/browser-kit": "5.4.*",
-        "symfony/css-selector": "5.4.*",
-        "symfony/debug-bundle": "5.4.*",
-        "symfony/phpunit-bridge": "^6.0",
-        "symfony/stopwatch": "5.4.*",
-        "symfony/web-profiler-bundle": "5.4.*"
+        "tuliacms/cms": "0.0.1-alpha"
     },
     "config": {
         "allow-plugins": {
@@ -77,35 +20,23 @@
     },
     "autoload": {
         "psr-4": {
-            "Tulia\\Bundle\\": "src/Bundle",
             "Tulia\\Theme\\": "extension/theme",
-            "Tulia\\Module\\": "extension/module",
-            "Tulia\\Component\\CommandBus\\": "src/Component/command-bus/src",
-            "Tulia\\Component\\Datatable\\": "src/Component/datatable/src",
-            "Tulia\\Component\\DependencyInjection\\": "src/Component/dependency-injection/src",
-            "Tulia\\Component\\Hooking\\": "src/Component/hooking/src",
-            "Tulia\\Component\\Image\\": "src/Component/image/src",
-            "Tulia\\Component\\Importer\\": "src/Component/importer/src",
-            "Tulia\\Component\\Routing\\": "src/Component/routing/src",
-            "Tulia\\Component\\Shortcode\\": "src/Component/shortcode/src",
-            "Tulia\\Component\\Templating\\": "src/Component/templating/src",
-            "Tulia\\Component\\Theme\\": "src/Component/theme/src",
-            "Tulia\\Cms\\Migrations\\": "src/Migrations",
-            "Tulia\\Cms\\Shared\\": "src/Shared",
-            "Tulia\\Cms\\": "src/Cms"
+            "Tulia\\Module\\": "extension/module"
         }
     },
-    "autoload-dev": {
-        "psr-4": {
-            "Tulia\\Tests\\Unit\\": "tests/unit",
-            "Tulia\\Component\\Routing\\Tests\\Unit\\": "src/Component/routing/tests/unit"
+    "require-dev": {
+        "symfony/web-profiler-bundle": "5.4.*",
+        "symfony/debug-bundle": "5.4.*"
+    },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "./core",
+            "options": {
+                "symlink": true
+            }
         }
-    },
-    "replace": {
-        "symfony/polyfill-ctype": "*",
-        "symfony/polyfill-iconv": "*",
-        "symfony/polyfill-php72": "*"
-    },
+    ],
     "scripts": {
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
@@ -116,15 +47,12 @@
         ],
         "post-update-cmd": [
             "@auto-scripts"
+        ],
+        "post-create-project-cmd": [
+            "@php -r \"file_exists('.env') || copy('.env.dist', '.env');\"",
+            "@composer dump-autoload -o",
+            "@auto-scripts",
+            "@php bin/console setup"
         ]
-    },
-    "conflict": {
-        "symfony/symfony": "*"
-    },
-    "extra": {
-        "symfony": {
-            "allow-contrib": false,
-            "require": "5.4.*"
-        }
     }
 }

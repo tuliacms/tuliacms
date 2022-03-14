@@ -1,1 +1,0 @@
-<a href="{{ path('backend.menu.item.list', { menuId: row.id }) }}" class="dropdown-item-with-icon" title="{{ 'menuItems'|trans({}, 'menu') }}"><i class="dropdown-icon fas fa-bars"></i> {{ 'menuItems'|trans({}, 'menu') }}</a>

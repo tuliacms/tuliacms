@@ -1,7 +1,0 @@
-twig:
-    form_themes:
-        - bootstrap_4_layout.html.twig
-        - '@form/cms_form_layout.tpl'
-    paths:
-        '%kernel.project_dir%/src/Cms/Platform/Infrastructure/Framework/Resources/views/backend': backend
-        '%kernel.project_dir%/src/Cms/Platform/Infrastructure/Framework/Resources/views/Form': form

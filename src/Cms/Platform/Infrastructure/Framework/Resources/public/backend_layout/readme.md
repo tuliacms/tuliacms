@@ -1,3 +1,0 @@
-# Preview
-
-http://localhost/preview/

@@ -1,8 +1,0 @@
-backend.import_export.importer:
-    path: /administrator/import-export/importer
-    controller: Tulia\Cms\ImportExport\UserInterface\Web\Controller\Backend\ImportController::homepage
-
-backend.import_export.importer.import:
-    path: /administrator/import-export/importer/import-file
-    controller: Tulia\Cms\ImportExport\UserInterface\Web\Controller\Backend\ImportController::importFile
-    methods: POST

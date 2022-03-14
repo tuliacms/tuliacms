@@ -1,2 +1,0 @@
-services:
-    Tulia\Cms\Shared\Infrastructure\Persistence\Doctrine\DBAL\ConnectionInterface: '@Doctrine\DBAL\Driver\Connection'

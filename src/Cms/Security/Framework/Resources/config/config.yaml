@@ -1,8 +1,0 @@
-framework:
-    templating:
-        paths:
-            - { name: backend/security, path: '%kernel.project_dir%/src/Cms/Security/Framework/Resources/views/backend' }
-            - { name: cms/security, path: '%kernel.project_dir%/src/Cms/Security/Framework/Resources/views/frontend' }
-    #translation:
-        #directory_list:
-        #    - { path: '%kernel.project_dir%/src/cms/src/Security/Framework/Resources/translations' }

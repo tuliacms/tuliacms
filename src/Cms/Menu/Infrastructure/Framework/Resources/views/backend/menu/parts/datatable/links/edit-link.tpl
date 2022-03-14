@@ -1,1 +1,0 @@
-<a href="#" data-toggle="modal" data-target="#modal-menu-edit" data-element-name="{{ row.name }}" data-element-id="{{ row.id }}" class="btn btn-secondary btn-icon-only"><i class="btn-icon fas fa-pen"></i></a>

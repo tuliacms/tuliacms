@@ -15,6 +15,11 @@ if ($_SERVER['APP_DEBUG']) {
     Debug::enable();
 }
 
+/**
+ * This is a private constant. In Your code, please use a kernel.project_dir parameter instead.
+ */
+define('__TULIA_PROJECT_DIR', dirname(__DIR__));
+
 $kernel = new TuliaKernel($_SERVER['APP_ENV'], (bool) $_SERVER['APP_DEBUG']);
 $request = Request::createFromGlobals();
 $response = $kernel->handle($request);

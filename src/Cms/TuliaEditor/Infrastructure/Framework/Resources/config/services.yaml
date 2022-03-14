@@ -1,8 +1,0 @@
-services:
-    _defaults:
-        autowire: true
-        autoconfigure: true
-
-    Tulia\Cms\TuliaEditor\:
-        resource: '../../../../*'
-        exclude: '../../../../{Infrastructure/Framework/Resources}'

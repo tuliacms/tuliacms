@@ -1,6 +1,0 @@
-backend.content_block.block_panel.builder:
-    path: /administrator/content-block/block-panel/{type}/builder
-    controller: Tulia\Cms\ContentBlock\UserInterface\Web\Backend\Controller\BlockPanel::index
-    methods: [POST]
-    requirements:
-        type: '[a-zA-Z0-9_]+'

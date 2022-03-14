@@ -1,2 +1,0 @@
-Tulia = Tulia || {};
-Tulia.Filemanager = {};
