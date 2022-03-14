@@ -36,4 +36,7 @@
 
 ###> Local Live Development ###
 /core
+tulia-local-project.json
+tulia-local-composer.json
+tulia-local-composer.lock
 ###< Local Live Development ###

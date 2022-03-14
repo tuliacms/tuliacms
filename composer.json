@@ -4,7 +4,7 @@
     "license": "MIT",
     "version": "0.0.1-alpha",
     "require": {
-        "tuliacms/cms": "0.0.1-alpha"
+        "tuliacms/cms": "dev-master"
     },
     "config": {
         "allow-plugins": {
@@ -28,15 +28,6 @@
         "symfony/web-profiler-bundle": "5.4.*",
         "symfony/debug-bundle": "5.4.*"
     },
-    "repositories": [
-        {
-            "type": "path",
-            "url": "./core",
-            "options": {
-                "symlink": true
-            }
-        }
-    ],
     "scripts": {
         "auto-scripts": {
             "cache:clear": "symfony-cmd",

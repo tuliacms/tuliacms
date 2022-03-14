@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c2a711a16d3199f47fbbfdc6ea774492",
+    "content-hash": "89a263964828373d0762c627a57ce992",
     "packages": [
         {
             "name": "ausi/slug-generator",
@@ -2226,16 +2226,16 @@
         },
         {
             "name": "monolog/monolog",
-            "version": "2.3.5",
+            "version": "2.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "fd4380d6fc37626e2f799f29d91195040137eba9"
+                "reference": "d7fd7450628561ba697b7097d86db72662f54aef"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/fd4380d6fc37626e2f799f29d91195040137eba9",
-                "reference": "fd4380d6fc37626e2f799f29d91195040137eba9",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/d7fd7450628561ba697b7097d86db72662f54aef",
+                "reference": "d7fd7450628561ba697b7097d86db72662f54aef",
                 "shasum": ""
             },
             "require": {
@@ -2257,7 +2257,7 @@
                 "phpstan/phpstan": "^0.12.91",
                 "phpunit/phpunit": "^8.5",
                 "predis/predis": "^1.1",
-                "rollbar/rollbar": "^1.3",
+                "rollbar/rollbar": "^1.3 || ^2 || ^3",
                 "ruflin/elastica": ">=0.90@dev",
                 "swiftmailer/swiftmailer": "^5.3|^6.0"
             },
@@ -2309,7 +2309,7 @@
             ],
             "support": {
                 "issues": "https://github.com/Seldaek/monolog/issues",
-                "source": "https://github.com/Seldaek/monolog/tree/2.3.5"
+                "source": "https://github.com/Seldaek/monolog/tree/2.4.0"
             },
             "funding": [
                 {
@@ -2321,7 +2321,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-10-01T21:08:31+00:00"
+            "time": "2022-03-14T12:44:37+00:00"
         },
         {
             "name": "nikic/php-parser",
@@ -8084,11 +8084,17 @@
         },
         {
             "name": "tuliacms/cms",
-            "version": "0.0.1-alpha",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tuliacms/cms.git",
+                "reference": "aa80ccfd6affef6394152b27010717c05ec98b5f"
+            },
             "dist": {
-                "type": "path",
-                "url": "./core",
-                "reference": "87333a4bbdb3f22b5efe42dca789f73daa7b6868"
+                "type": "zip",
+                "url": "https://api.github.com/repos/tuliacms/cms/zipball/aa80ccfd6affef6394152b27010717c05ec98b5f",
+                "reference": "aa80ccfd6affef6394152b27010717c05ec98b5f",
+                "shasum": ""
             },
             "require": {
                 "ausi/slug-generator": "^1.1",
@@ -8155,6 +8161,7 @@
                 "symfony/css-selector": "5.4.*",
                 "symfony/phpunit-bridge": "^6.0"
             },
+            "default-branch": true,
             "type": "package",
             "extra": {
                 "symfony": {
@@ -8164,35 +8171,28 @@
             },
             "autoload": {
                 "psr-4": {
+                    "Tulia\\Cms\\": "src/Cms",
                     "Tulia\\Bundle\\": "src/Bundle",
-                    "Tulia\\Component\\CommandBus\\": "src/Component/command-bus/src",
-                    "Tulia\\Component\\Datatable\\": "src/Component/datatable/src",
-                    "Tulia\\Component\\DependencyInjection\\": "src/Component/dependency-injection/src",
-                    "Tulia\\Component\\Hooking\\": "src/Component/hooking/src",
-                    "Tulia\\Component\\Image\\": "src/Component/image/src",
-                    "Tulia\\Component\\Importer\\": "src/Component/importer/src",
-                    "Tulia\\Component\\Routing\\": "src/Component/routing/src",
-                    "Tulia\\Component\\Shortcode\\": "src/Component/shortcode/src",
-                    "Tulia\\Component\\Templating\\": "src/Component/templating/src",
-                    "Tulia\\Component\\Theme\\": "src/Component/theme/src",
-                    "Tulia\\Cms\\Migrations\\": "src/Migrations",
                     "Tulia\\Cms\\Shared\\": "src/Shared",
-                    "Tulia\\Cms\\": "src/Cms"
+                    "Tulia\\Cms\\Migrations\\": "src/Migrations",
+                    "Tulia\\Component\\Image\\": "src/Component/image/src",
+                    "Tulia\\Component\\Theme\\": "src/Component/theme/src",
+                    "Tulia\\Component\\Routing\\": "src/Component/routing/src",
+                    "Tulia\\Component\\Importer\\": "src/Component/importer/src",
+                    "Tulia\\Component\\Datatable\\": "src/Component/datatable/src",
+                    "Tulia\\Component\\Shortcode\\": "src/Component/shortcode/src",
+                    "Tulia\\Component\\Templating\\": "src/Component/templating/src"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "Tulia\\Tests\\Unit\\": "tests/unit",
-                    "Tulia\\Component\\Routing\\Tests\\Unit\\": "src/Component/routing/tests/unit"
-                }
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
+            "support": {
+                "issues": "https://github.com/tuliacms/cms/issues",
+                "source": "https://github.com/tuliacms/cms/tree/master"
+            },
+            "time": "2022-03-14T16:45:53+00:00"
         },
         {
             "name": "twig/extra-bundle",
@@ -8514,7 +8514,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "tuliacms/cms": 15
+        "tuliacms/cms": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
