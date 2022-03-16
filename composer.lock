@@ -8088,12 +8088,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tuliacms/cms.git",
-                "reference": "aa80ccfd6affef6394152b27010717c05ec98b5f"
+                "reference": "33f41b10e0c6843481e998e00b1ac9b4bf2b05b7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tuliacms/cms/zipball/aa80ccfd6affef6394152b27010717c05ec98b5f",
-                "reference": "aa80ccfd6affef6394152b27010717c05ec98b5f",
+                "url": "https://api.github.com/repos/tuliacms/cms/zipball/33f41b10e0c6843481e998e00b1ac9b4bf2b05b7",
+                "reference": "33f41b10e0c6843481e998e00b1ac9b4bf2b05b7",
                 "shasum": ""
             },
             "require": {
@@ -8192,7 +8192,7 @@
                 "issues": "https://github.com/tuliacms/cms/issues",
                 "source": "https://github.com/tuliacms/cms/tree/master"
             },
-            "time": "2022-03-14T16:45:53+00:00"
+            "time": "2022-03-16T06:47:35+00:00"
         },
         {
             "name": "twig/extra-bundle",
