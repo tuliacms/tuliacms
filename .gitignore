@@ -7,8 +7,10 @@
 /public/bundles/
 /public/assets/
 /public/uploads/
-/extension/module/
-/extension/theme/
+/extension/module/*
+!/extension/module/.gitignore
+/extension/theme/*
+!/extension/theme/.gitignore
 /var/
 /vendor/
 /.idea/
