@@ -1,8 +1,9 @@
 FROM php:7.4-apache
-ARG USERID
-ARG GROUPID
+ARG USER_ID
+ARG GROUP_ID
 
-#RUN groupadd --non-unique --gid $GROUPID usergroup && useradd -l -d /home/user -m -s /bin/bash --non-unique --gid $GROUPID --uid $USERID -p $(date +%s | sha256sum | base64 | head -c 32 ; echo) user && chown user:usergroup /var/www
+RUN addgroup --gid $GROUP_ID user
+RUN adduser --disabled-password --gecos '' --uid $USER_ID --gid $GROUP_ID user
 
 RUN apt-get update
 RUN apt-get upgrade -y
@@ -30,11 +31,6 @@ RUN apt-get install libmagickwand-dev --no-install-recommends -y
 RUN pecl install imagick
 RUN docker-php-ext-enable imagick
 
-# Install Composer
-RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-RUN php -r "if (hash_file('sha384', 'composer-setup.php') === '906a84df04cea2aa72f40b5f787e49f22d4c2f19492ac310e8cba5b96ac8b64115ac402c8cd292b8a03482574915d1a8') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
-RUN php composer-setup.php --install-dir=/usr/local/bin --filename=composer
-RUN php -r "unlink('composer-setup.php');"
 
 ## xdebug 3
 RUN pecl install xdebug \
@@ -48,6 +44,12 @@ RUN a2enmod rewrite
 
 # Allow access to root dir
 RUN chown -R www-data:www-data /var/www/html
+
+# Install Composer
+RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+RUN php -r "if (hash_file('sha384', 'composer-setup.php') === '906a84df04cea2aa72f40b5f787e49f22d4c2f19492ac310e8cba5b96ac8b64115ac402c8cd292b8a03482574915d1a8') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
+RUN php composer-setup.php --install-dir=/usr/local/bin --filename=composer
+RUN php -r "unlink('composer-setup.php');"
 
 # Copy apache vhost file to proxy php requests to php-fpm container
 #COPY apache.conf /usr/local/apache2/conf/apache.conf

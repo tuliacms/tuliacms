@@ -11,7 +11,7 @@ services:
             - ./docker/www/docker-php-ext-xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
             - ./docker/www/docker-php-ext-opcache.ini:/usr/local/etc/php/conf.d/docker-php-ext-opcache.ini
             - ./:/var/www/html:rw
-            - "$HOME/.composer/:/home/.composer/"
+            - "$HOME/.cache/composer:/home/user/.composer/cache"
         expose:
             - 9003
         depends_on:
@@ -26,6 +26,8 @@ services:
         environment:
             MYSQL_ROOT_PASSWORD: root
             MYSQL_ROOT_HOST: '%'
+            MYSQL_USER: tulia
+            MYSQL_PASSWORD: tulia
         ports:
             - 33061:3306
         networks:
