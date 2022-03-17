@@ -41,7 +41,9 @@
         ],
         "post-create-project-cmd": [
             "@php -r \"file_exists('.env') || copy('.env.dist', '.env');\"",
-            "@composer dump-autoload -o"
+            "@composer dump-autoload -o",
+            "@auto-scripts",
+            "@php bin/console setup"
         ]
     }
 }
