@@ -1,4 +1,4 @@
-FROM php:7.4-apache
+FROM php:8.1-apache
 ARG USER_ID
 ARG GROUP_ID
 
@@ -46,17 +46,4 @@ RUN a2enmod rewrite
 RUN chown -R www-data:www-data /var/www/html
 
 # Install Composer
-RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-RUN php -r "if (hash_file('sha384', 'composer-setup.php') === '906a84df04cea2aa72f40b5f787e49f22d4c2f19492ac310e8cba5b96ac8b64115ac402c8cd292b8a03482574915d1a8') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
-RUN php composer-setup.php --install-dir=/usr/local/bin --filename=composer
-RUN php -r "unlink('composer-setup.php');"
-
-# Copy apache vhost file to proxy php requests to php-fpm container
-#COPY apache.conf /usr/local/apache2/conf/apache.conf
-#RUN echo "Include /usr/local/apache2/conf/apache.conf" >> /usr/local/apache2/conf/httpd.conf
-
-# Install nodejs and gulp
-RUN apt-get install curl
-RUN curl -sL https://deb.nodesource.com/setup_14.x | bash
-RUN apt-get install nodejs -y
-RUN npm install -g gulp-cli
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer

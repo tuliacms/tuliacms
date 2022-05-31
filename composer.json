@@ -4,6 +4,7 @@
     "license": "MIT",
     "version": "0.0.1-alpha",
     "require": {
+        "php": ">=8.1",
         "tuliacms/cms": "dev-master"
     },
     "config": {
