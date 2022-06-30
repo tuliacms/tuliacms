@@ -25,10 +25,16 @@ restart:
 
 .PHONY: install
 install:
-	$(PHPROOT) composer install \
-	&& $(PHPROOT) npm i chokidar \
-	&& $(PHPROOT) cd public/docs \
-	&& $(PHPROOT) npm install
+	cp .env.dist .env \
+    && $(PHPROOT) echo "DATABASE_URL="mysql://root:root@$(shell basename $(CURDIR))_tulia_www_1:3306/development?serverVersion=5.7"" >> .env \
+    && $(PHPROOT) composer install \
+    && $(PHPROOT) npm i chokidar \
+    && $(PHPROOT) cd public/docs \
+    && $(PHPROOT) npm install
+
+.PHONY: setup
+setup:
+	${PHPROOT} php bin/console setup
 
 .PHONY: bash
 bash:

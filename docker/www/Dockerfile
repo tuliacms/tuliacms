@@ -31,7 +31,6 @@ RUN apt-get install libmagickwand-dev --no-install-recommends -y
 RUN pecl install imagick
 RUN docker-php-ext-enable imagick
 
-
 ## xdebug 3
 RUN pecl install xdebug \
     && docker-php-ext-enable xdebug
