@@ -22,18 +22,7 @@
     "autoload": {
         "psr-4": {
             "Tulia\\Theme\\": "extension/theme",
-            "Tulia\\Module\\": "extension/module",
-            "Tulia\\Bundle\\": "core/src/Bundle",
-            "Tulia\\Component\\Datatable\\": "core/src/Component/datatable/src",
-            "Tulia\\Component\\Image\\": "core/src/Component/image/src",
-            "Tulia\\Component\\Importer\\": "core/src/Component/importer/src",
-            "Tulia\\Component\\Routing\\": "core/src/Component/routing/src",
-            "Tulia\\Component\\Shortcode\\": "core/src/Component/shortcode/src",
-            "Tulia\\Component\\Templating\\": "core/src/Component/templating/src",
-            "Tulia\\Component\\Theme\\": "core/src/Component/theme/src",
-            "Tulia\\Cms\\Migrations\\": "core/src/Migrations",
-            "Tulia\\Cms\\Shared\\": "core/src/Shared",
-            "Tulia\\Cms\\": "core/src/Cms"
+            "Tulia\\Module\\": "extension/module"
         }
     },
     "require-dev": {

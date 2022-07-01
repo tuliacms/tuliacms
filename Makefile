@@ -1,7 +1,17 @@
 .PHONY: bash behat deptrac
 
-PHPROOT = docker exec -it --user "$(id -u):$(id -g)" --workdir="/var/www/html" $(shell basename $(CURDIR))_tulia_www_1
+ifeq ($(shell test -e tulia-local-composer.json && echo -n yes),yes)
+COMPOSER_JSON = tulia-local-composer.json
+else
+COMPOSER_JSON = composer.json
+endif
+
+PHPROOT = docker exec -it --user "$(id -u):$(id -g)" -e COMPOSER_MEMORY_LIMIT=-1 -e COMPOSER=$(COMPOSER_JSON) --workdir="/var/www/html" $(shell basename $(CURDIR))_tulia_www_1
 ARGS = $(filter-out $@,$(MAKECMDGOALS))
+
+
+
+
 
 .PHONY: build
 build:
@@ -26,11 +36,15 @@ restart:
 .PHONY: install
 install:
 	cp .env.dist .env \
-    && $(PHPROOT) echo "DATABASE_URL="mysql://root:root@$(shell basename $(CURDIR))_tulia_www_1:3306/development?serverVersion=5.7"" >> .env \
+    && echo "DATABASE_URL="mysql://root:root@$(shell basename $(CURDIR))_tulia_mysql_1:3306/development?serverVersion=5.7"" >> .env \
     && $(PHPROOT) composer install \
     && $(PHPROOT) npm i chokidar \
     && $(PHPROOT) cd public/docs \
     && $(PHPROOT) npm install
+
+.PHONY: composer
+composer:
+	$(PHPROOT) composer "$(ARGS)"
 
 .PHONY: setup
 setup:
@@ -39,5 +53,13 @@ setup:
 .PHONY: bash
 bash:
 	${PHPROOT} /bin/bash
+
+.PHONY: cc
+cc:
+	${PHPROOT} php bin/console cache:clear
+
+.PHONY: console
+console:
+	${PHPROOT} php bin/console "$(ARGS)"
 
 .SILENT:
