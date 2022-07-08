@@ -48,7 +48,7 @@ composer:
 
 .PHONY: setup
 setup:
-	${PHPROOT} php bin/console setup
+	${PHPROOT} php bin/console setup -v
 
 .PHONY: bash
 bash:
@@ -56,7 +56,7 @@ bash:
 
 .PHONY: cc
 cc:
-	${PHPROOT} php bin/console cache:clear
+	${PHPROOT} php bin/console cache:clear -vvv
 
 .PHONY: console
 console:
