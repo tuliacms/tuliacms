@@ -62,4 +62,9 @@ cc:
 console:
 	${PHPROOT} php bin/console "$(ARGS)"
 
+.PHONY: recreate-local-database
+recreate-local-database:
+	${PHPROOT} php bin/console doctrine:schema:drop --force --full-database \
+	&& ${PHPROOT} php bin/console doctrine:schema:update --force
+
 .SILENT:
