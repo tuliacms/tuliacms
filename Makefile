@@ -74,14 +74,14 @@ setup-install:
 .PHONY: setup
 setup:
 	echo "Executing: \e[94mBuilding containers...\e[0m" \
-	docker-compose build --build-arg USER_ID=1000 --build-arg GROUP_ID=1000 -q \
-	echo "Executing: \e[94mStarting containers...\e[0m" \
+	&& docker-compose build --build-arg USER_ID=1000 --build-arg GROUP_ID=1000 -q \
+	&& echo "Executing: \e[94mStarting containers...\e[0m" \
 	&& make up \
-	echo "Executing: \e[94mInstalling composer dependencies...\e[0m" \
+	&& echo "Executing: \e[94mInstalling composer dependencies...\e[0m" \
 	&& make setup-install \
-	echo "Executing: \e[94mCreating local database...\e[0m" \
+	&& echo "Executing: \e[94mCreating local database...\e[0m" \
     && make recreate-local-database \
-	echo "Executing: \e[94mIt's time to setup...\e[0m" \
+	&& echo "Executing: \e[94mIt's time to setup...\e[0m" \
     && make setup-tulia
 
 .SILENT:
