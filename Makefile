@@ -65,6 +65,7 @@ console:
 .PHONY: recreate-local-database
 recreate-local-database:
 	${PHPROOT} php bin/console doctrine:schema:drop --force --full-database \
-	&& ${PHPROOT} php bin/console doctrine:schema:update --force
+	&& ${PHPROOT} php bin/console doctrine:schema:update --force \
+	&& ${PHPROOT} php bin/console doctrine:migrations:migrate --all-or-nothing --no-interaction
 
 .SILENT:
