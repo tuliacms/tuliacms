@@ -30,10 +30,11 @@
         "symfony/debug-bundle": "5.4.*"
     },
     "scripts": {
-        "auto-scripts": {
-            "cache:clear": "symfony-cmd",
-            "assets:install %PUBLIC_DIR%": "symfony-cmd"
-        },
+        "auto-scripts": [
+            "bin/console cache:clear",
+            "bin/console assets:install",
+            "bin/console assets:publish"
+        ],
         "post-install-cmd": [
             "@auto-scripts"
         ],
