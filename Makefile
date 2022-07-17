@@ -74,7 +74,7 @@ setup-install:
 .PHONY: setup
 setup:
 	echo "Executing: \e[94mBuilding containers...\e[0m" \
-	&& docker-compose build --build-arg USER_ID=1000 --build-arg GROUP_ID=1000 -q \
+	&& docker-compose build --quiet --build-arg USER_ID=1000 --build-arg GROUP_ID=1000\
 	&& echo "Executing: \e[94mStarting containers...\e[0m" \
 	&& make up \
 	&& echo "Executing: \e[94mInstalling composer dependencies...\e[0m" \
