@@ -1,4 +1,5 @@
 <?php return array (
+  'cms.theme' => 'Tulia/Lisa',
   'cms.website' =>
   array (
     'backend_prefix' => '/administrator',
