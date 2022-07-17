@@ -1,10 +1,10 @@
 .PHONY: bash behat deptrac
 
-ifeq ($(shell test -e tulia-local-composer.json && echo -n yes),yes)
-COMPOSER_JSON = tulia-local-composer.json
-else
 COMPOSER_JSON = composer.json
-endif
+
+#ifeq ($(shell test -e tulia-local-composer.json && echo -n yes),yes)
+#COMPOSER_JSON = tulia-local-composer.json
+#endif
 
 PHPROOT = docker exec -it --user "$(id -u):$(id -g)" -e COMPOSER_MEMORY_LIMIT=-1 -e COMPOSER=$(COMPOSER_JSON) --workdir="/var/www/html" $(shell basename $(CURDIR))_tulia_www_1
 ARGS = $(filter-out $@,$(MAKECMDGOALS))
