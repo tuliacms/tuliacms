@@ -38,10 +38,7 @@ install:
 	cp .env.dist .env \
     && echo "DATABASE_URL="mysql://root:root@$(shell basename $(CURDIR))_tulia_mysql_1:3306/development?serverVersion=5.7"" >> .env \
     && cp config/dynamic.php.dist config/dynamic.php \
-    && $(PHPROOT) composer install \
-    && $(PHPROOT) npm i chokidar \
-    && $(PHPROOT) cd public/docs \
-    && $(PHPROOT) npm install
+    && $(PHPROOT) composer install
 
 .PHONY: composer
 composer:
