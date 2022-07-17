@@ -1,0 +1,19 @@
+<?php return array (
+  'cms.website' =>
+  array (
+    'backend_prefix' => '/administrator',
+    'locales' =>
+    array (
+      0 =>
+      array (
+        'locale_code' => 'en_US',
+        'domain' => 'localhost',
+        'domain_development' => 'tulia.loc',
+        'path_prefix' => NULL,
+        'locale_prefix' => NULL,
+        'default' => true,
+        'ssl_mode' => 'ALLOWED_BOTH',
+      ),
+    ),
+  ),
+);
