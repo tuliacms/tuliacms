@@ -1,10 +1,10 @@
 .PHONY: bash behat deptrac
 
-ifeq ($(shell test -e tulia-local-composer.json && echo -n yes),yes)
-COMPOSER_JSON = tulia-local-composer.json
-else
+#ifeq ($(shell test -e tulia-local-composer.json && echo -n yes),yes)
+#COMPOSER_JSON = tulia-local-composer.json
+#else
 COMPOSER_JSON = composer.json
-endif
+#endif
 
 PHPROOT = docker exec -it --user "$(id -u):$(id -g)" -e COMPOSER_MEMORY_LIMIT=-1 -e COMPOSER=$(COMPOSER_JSON) --workdir="/var/www/html" $(shell basename $(CURDIR))_tulia_www_1
 ARGS = $(filter-out $@,$(MAKECMDGOALS))
@@ -37,6 +37,7 @@ restart:
 install:
 	cp .env.dist .env \
     && echo "DATABASE_URL="mysql://root:root@$(shell basename $(CURDIR))_tulia_mysql_1:3306/development?serverVersion=5.7"" >> .env \
+    && echo "<?php return array ();" >> config/dynamic.php \
     && $(PHPROOT) composer install \
     && $(PHPROOT) npm i chokidar \
     && $(PHPROOT) cd public/docs \
