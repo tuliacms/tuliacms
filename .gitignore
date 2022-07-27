@@ -19,6 +19,7 @@
 !/config/dynamic/.gitignore
 /docs/architecture/.structurizr
 /docs/architecture/workspace.json
+/composer.lock
 ###< symfony/framework-bundle ###
 
 ###> symfony/phpunit-bridge ###
