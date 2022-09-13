@@ -40,8 +40,5 @@
 
 ###> Local Live Development ###
 /core
-tulia-local-project.json
-tulia-local-composer.json
-tulia-local-composer.lock
-tulia-local-symfony.lock
+composer.local.json
 ###< Local Live Development ###

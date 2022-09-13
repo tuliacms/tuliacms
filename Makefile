@@ -1,12 +1,6 @@
 .PHONY: bash behat deptrac
 
-COMPOSER_JSON = composer.json
-
-ifeq ($(shell test -e tulia-local-composer.json && echo -n yes),yes)
-COMPOSER_JSON = tulia-local-composer.json
-endif
-
-PHPROOT = docker exec -it --user "$(id -u):$(id -g)" -e COMPOSER_MEMORY_LIMIT=-1 -e COMPOSER=$(COMPOSER_JSON) --workdir="/var/www/html" $(shell basename $(CURDIR))_tulia_www_1
+PHPROOT = docker exec -it --user "$(id -u):$(id -g)" -e COMPOSER_MEMORY_LIMIT=-1 -e --workdir="/var/www/html" $(shell basename $(CURDIR))_tulia_www_1
 ARGS = $(filter-out $@,$(MAKECMDGOALS))
 
 
@@ -23,7 +17,8 @@ rebuild:
 
 .PHONY: up
 up:
-	docker-compose up -d --no-build
+	docker-compose up -d --no-build \
+	&& echo "Ready on http://localhost/\nMailhog: http://localhost:8025/"
 
 .PHONY: down
 down:
@@ -58,7 +53,9 @@ recreate-local-database:
 	&& echo "Executing: \e[94mExecuting migrations...\e[0m" \
 	&& ${PHPROOT} php bin/console doctrine:migrations:migrate --all-or-nothing --no-interaction -q \
 	&& echo "Executing: \e[94mLoading fixtures...\e[0m" \
-	&& ${PHPROOT} php bin/console doctrine:fixtures:load --group=local-database --no-interaction
+	&& ${PHPROOT} php bin/console doctrine:fixtures:load --group=local-database --no-interaction \
+	&& echo "Executing: \e[94mRegistering options...\e[0m" \
+	&& ${PHPROOT} php bin/console options:register -q
 
 # Subcommands for setup new installation
 

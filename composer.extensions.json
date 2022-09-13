@@ -1,0 +1,18 @@
+{
+    "extra": {
+        "tuliacms": {
+            "modules": {
+                "Tulia/EditorTinymce": {
+                    "enabled": true,
+                    "placement": "extensions"
+                },
+                "SomeCustom/Extension": {
+                    "enabled": true,
+                    "placement": "vendor",
+                    "path": "vendor/some-custom/extension"
+                }
+            },
+            "themes": {}
+        }
+    }
+}
