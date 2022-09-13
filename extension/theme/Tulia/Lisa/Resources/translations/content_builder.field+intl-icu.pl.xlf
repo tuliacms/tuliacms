@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" target-language="en" datatype="plaintext" original="content_builder.field+intl-icu.en.xlf">
+        <body>
+            <trans-unit id="tuliacms.content_builder.field.lisa_theme.1">
+                <source>Left side Big image, above</source>
+                <target>Duże zdjęcie tła po lewej</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.field.lisa_theme.2">
+                <source>Left side Small image, under</source>
+                <target>Małe zdjęcie tła po lewej</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.field.lisa_theme.3">
+                <source>Content of the block</source>
+                <target>Treść bloku</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.field.lisa_theme.4">
+                <source>Small intro</source>
+                <target>Mały nagłówek</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.field.lisa_theme.5">
+                <source>Headline</source>
+                <target>Tytuł bloku</target>
+            </trans-unit>
+            <trans-unit id="tuliacms.content_builder.field.lisa_theme.6">
+                <source>Background color</source>
+                <target>Kolor tła bloku</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

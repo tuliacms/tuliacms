@@ -24,7 +24,9 @@
     "autoload": {
         "psr-4": {
             "Tulia\\Theme\\": "extension/theme",
-            "Tulia\\Module\\": "extension/module"
+            "Tulia\\Module\\": "extension/module",
+            "Tulia\\LocalTheme\\": "extension.local/theme",
+            "Tulia\\LocalModule\\": "extension.local/module"
         }
     },
     "require-dev": {

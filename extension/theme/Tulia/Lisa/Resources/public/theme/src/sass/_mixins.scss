@@ -1,0 +1,16 @@
+@mixin font-awesome-icon($icon, $size) {
+    display: block;
+    content: $icon;
+    width: $size;
+    height: $size;
+    font-size: $size;
+    line-height: 1;
+    font-family: "Font Awesome 5 Free", serif;
+    font-weight: bold;
+}
+
+@mixin vertical-align-center-absolute() {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}

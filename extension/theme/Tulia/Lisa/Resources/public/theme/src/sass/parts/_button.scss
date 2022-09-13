@@ -1,0 +1,66 @@
+@mixin btn-icon-base () {
+    top: 50%;
+    transform: translateY(-50%);
+    text-align: center;
+}
+
+@mixin btn-icon-size ($size) {
+    width: $size;
+    height: $size;
+    font-size: $size;
+}
+
+.btn {
+    border-radius: 3px;
+    background-color: #fff;
+    border: 2px solid $primary;
+    color: $primary;
+    font-weight: 700;
+}
+
+
+/**
+ * Inversed Buttons
+ */
+.btn.btn-inversed {
+    background-color: #fff;
+    color: $primary;
+    border-color: #fff;
+
+    &:hover {
+        background-color: $primary;
+        color: #fff;
+    }
+}
+
+
+
+/**
+ * Button with icons
+ */
+.btn-icon {
+    position: absolute;
+    line-height: 1;
+    @include btn-icon-size($btn-icon-size);
+}
+.btn-icon-right {
+    padding-right: $btn-padding-x * 2 + $btn-icon-size;
+    position: relative;
+}
+
+.btn-icon-right {
+    .btn-icon {
+        @include btn-icon-base();
+        right: $btn-padding-x;
+    }
+}
+
+.btn-lg {
+    &.btn-icon-right {
+        padding-right: $btn-padding-x-lg * 2 + $btn-icon-size / 2;
+    }
+
+    .btn-icon {
+        @include  btn-icon-size($btn-icon-size-lg);
+    }
+}

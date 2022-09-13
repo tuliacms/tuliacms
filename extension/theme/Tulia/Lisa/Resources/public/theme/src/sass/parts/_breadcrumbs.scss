@@ -1,0 +1,39 @@
+.breadcrumbs-container {
+    border-bottom: 1px solid rgba(0,0,0,.08);
+}
+
+.breadcrumb {
+    background-color: transparent;
+    font-size: 14px;
+    margin: 0;
+
+    .breadcrumb-item + .breadcrumb-item::before {
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+    a {
+        display: inline-block;
+        padding: 10px 0;
+    }
+
+    a:hover {
+        color: #222;
+    }
+
+    .breadcrumb-item:first-child a {
+        padding-left: 27px;
+        position: relative;
+
+        &:before {
+            display: block;
+            content: "\f015";
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
+        }
+    }
+}

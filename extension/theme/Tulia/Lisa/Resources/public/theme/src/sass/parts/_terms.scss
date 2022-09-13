@@ -1,0 +1,19 @@
+.term-page {
+    h2 {
+        font-size: 21px;
+
+        a {
+            color: #222;
+            font-weight: bold;
+            transition: .12s all;
+
+            &:hover {
+                color: $primary;
+            }
+        }
+    }
+
+    .col-4 {
+        margin-bottom: 40px;
+    }
+}

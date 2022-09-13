@@ -1,0 +1,216 @@
+framework:
+    translator:
+        paths:
+            - '%kernel.project_dir%/extension/theme/Tulia/Lisa/Resources/translations'
+
+cms:
+    public_paths:
+        - { source: '%kernel.project_dir%/extension/theme/Tulia/Lisa/Resources/public/theme/dist', target: '/theme/tulia/lisa/theme' }
+        - { source: '%kernel.project_dir%/extension/theme/Tulia/Lisa/Resources/public/tulia-editor-blocks/dist', target: '/theme/tulia/lisa/tulia-editor-blocks' }
+    templating:
+        paths:
+            - { name: theme/tulia/lisa, path: '%kernel.project_dir%/extension/theme/Tulia/Lisa/Resources/views' }
+    assetter:
+        assets:
+            tulia.lisa.main:
+                require: [ font_awesome, frontend ]
+                styles:
+                    - https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,300;0,400;0,600;0,700;0,900;1,300;1,400;1,600;1,700;1,900&display=swap
+                    - /assets/theme/tulia/lisa/theme/css/bundle.min.css
+                scripts:
+                    - /assets/theme/tulia/lisa/theme/js/bundle.min.js
+                group: head
+                included: [ bootstrap, jquery, js_cookie ]
+            tulia.lisa.customizer:
+                scripts:
+                    - /assets/theme/tulia/lisa/theme/js/customizer.js
+            tulia.lisa.editor.plugins:
+                scripts:
+                    - /assets/theme/tulia/lisa/tulia-editor-blocks/tulia-lisa-blocks.js
+                collection: tulia_editor
+    theme:
+        configuration:
+            Tulia/Lisa:
+                translation_domain: lisa-theme
+                configuration:
+                    base:
+                        assets:
+                            - tulia.lisa.main
+                        colors:
+                            - { name: primary, value: '#ff0000' }
+                        widget_spaces:
+                            - { name: homepage, label: Homepage }
+                            - { name: mainmenu, label: Main menu }
+                            - { name: footer_info, label: Footer - Info (left side) }
+                            - { name: footer_contact, label: Footer - Contact (right side) }
+                            - { name: footer_quick_links, label: Footer - Quick links (middle) }
+                        widget_styles:
+                            - { name: style-1, label: Style 1 }
+                        image_sizes:
+                            - { name: node-thumbnail, width: 500, height: 260 }
+                    customizer:
+                        assets:
+                            - tulia.lisa.customizer
+                customizer:
+                    changesets:
+                        lisa.empty:
+                            label: changesetPredefinedEmpty
+                            description: changesetPredefinedEmptyDescription
+                            data:
+                                lisa.footer.contact.type: '0'
+                                lisa.footer.contact.phone: ''
+                                lisa.footer.contact.email: ''
+                                lisa.footer.contact.address: ''
+                                lisa.footer.socials.facebook: ''
+                                lisa.footer.socials.twitter: ''
+                                lisa.footer.socials.youtube: ''
+                                hero.static.headline: ''
+                                hero.static.description: ''
+                                hero.static.background: ''
+                                hero.static.button.show: '0'
+                                hero.static.link: ''
+                                hero.static.button.label: ''
+                        lisa.hero_static_1:
+                            label: Lisa - Static Hero 1
+                            data:
+                                hero.static.headline: Lisa Theme
+                                hero.static.description: Free, clean and customizable theme for Tulia CMS
+                                hero.static.background: ''
+                                hero.static.button.show: 0
+                                hero.static.link: ''
+                                hero.static.button.label: ''
+                    builder:
+                        lisa.layout:
+                            label: Layout
+                            controls:
+                                lisa.layout.breadcrumbs:
+                                    type: select
+                                    control_options:
+                                        choices: { show: Tak, hide: Nie },
+                                    label: showBreadcrumbs
+                                    value: show
+                        lisa.header:
+                            label: header
+                            controls:
+                                lisa.header.logo.text:
+                                    type: text
+                                    label: logoText
+                                    value: Event Agency
+                                    transport: postMessage
+                        lisa.footer:
+                            label: footer
+                            controls:
+                                lisa.footer.contact.type:
+                                    type: select
+                                    control_options:
+                                        choices: { 0: Domyślnie, 1: Miejsce na moduł (footer_contact) }
+                                    label: contactSection
+                                    value: 0
+                                lisa.footer.contact.copyrights:
+                                    label: copyrights
+                                    value: Tulia CMS
+                                    transport: postMessage
+                        lisa.footer.contact:
+                            label: contact
+                            parent: lisa.footer
+                            controls:
+                                lisa.footer.contact.phone:
+                                    label: phoneNumber
+                                    value: +48 768 564 175
+                                    transport: postMessage
+                                lisa.footer.contact.email:
+                                    label: emailAddress
+                                    value: contact@event-agency.com
+                                    transport: postMessage
+                                lisa.footer.contact.address:
+                                    type: textarea
+                                    label: companyAddess
+                                    value: |
+                                        Event Agency,
+                                        St. Peter 1656,
+                                        Albuquerque
+                                    transport: postMessage
+                        lisa.footer.socials:
+                            label: socialMediaIcons
+                            parent: lisa.footer
+                            controls:
+                                lisa.footer.socials.facebook:
+                                    label: Facebook
+                                    value: '#facebook'
+                                lisa.footer.socials.twitter:
+                                    label: Twitter
+                                    value: '#twitter'
+                                lisa.footer.socials.youtube:
+                                    label: YouTube
+                                    value: '#youtube'
+                        lisa.hero:
+                            label: staticBanner
+                            parent: lisa.header
+                            controls:
+                                hero.static.headline:
+                                    label: headline
+                                    multilingual: true
+                                    transport: postMessage
+                                    value: Lisa Theme
+                                hero.static.description:
+                                    type: textarea
+                                    label: description
+                                    multilingual: true
+                                    transport: postMessage
+                                    value: Free, clean and customizable theme for Tulia CMS
+                                hero.static.background:
+                                    type: filepicker
+                                    control_options:
+                                        file_type: image
+                                    label: backgroundImage
+                                    transport: postMessage
+                                hero.static.background_mobile:
+                                    type: filepicker
+                                    control_options:
+                                        file_type: image
+                                    transport: postMessage
+                                    label: backgroundImageMobile
+                                hero.static.link:
+                                    label: link
+                                    multilingual: true
+                                    value: '#read-more'
+                                hero.static.button.show:
+                                    type: select
+                                    label: showButton
+                                    control_options:
+                                        choices: { 0: Nie, 1: Tak }
+                                    value: 1
+                                hero.static.button.label:
+                                    label: buttonLabel
+                                    multilingual: true
+                                    transport: postMessage
+                                    value: Read more
+    content_building:
+        content_type_entry:
+            contact_form:
+                layout:
+                    sections:
+                        main:
+                            groups:
+                                fields_group:
+                                    fields:
+                                        headline:
+                                            type: text
+                                            name: Headline
+                                        intro:
+                                            type: text
+                                            name: Small intro
+                                        background:
+                                            type: select
+                                            name: Background color
+                                            configuration:
+                                                -   code: choices
+                                                    value: |
+                                                        white: White
+                                                        lightgray: Lightgray
+                                        ___content_block_icon:
+                                            type: ___content_block_icon
+                                            name: null
+                                            configuration:
+                                                -   code: icon
+                                                    value: '/assets/theme/tulia/lisa/theme/images/content-block/icon/contact-form.png'

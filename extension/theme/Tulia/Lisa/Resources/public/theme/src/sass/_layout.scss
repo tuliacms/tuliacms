@@ -1,0 +1,39 @@
+.container-xxl {
+    padding-left: .9rem;
+    padding-right: .9rem;
+}
+
+@include media-breakpoint-up(sm) {
+    .container-xxl {
+        padding-left: 1.1rem;
+        padding-right: 1.1rem;
+    }
+}
+
+@include media-breakpoint-up(md) {
+    .container-xxl {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+    }
+}
+
+@include media-breakpoint-up(lg) {
+    .container-xxl {
+        padding-left: 1.8rem;
+        padding-right: 1.8rem;
+    }
+}
+
+@include media-breakpoint-up(xl) {
+    .container-xxl {
+        padding-left: 2.3rem;
+        padding-right: 2.3rem;
+    }
+}
+
+@include media-breakpoint-up(xxl) {
+    .container-xxl {
+        padding-left: 3rem;
+        padding-right: 3rem;
+    }
+}

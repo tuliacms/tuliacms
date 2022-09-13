@@ -68,7 +68,7 @@ setup-install:
 
 .PHONY: setup-cms
 setup-cms:
-	${PHPROOT} php bin/console setup
+	${PHPROOT} php bin/console cms:setup
 
 .PHONY: setup
 setup:

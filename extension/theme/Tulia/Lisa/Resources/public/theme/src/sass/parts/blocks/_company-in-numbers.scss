@@ -1,0 +1,105 @@
+.block-company-in-numbers {
+    h2 {
+        color: #000;
+        text-align: center;
+        margin-bottom: $block-margin-base;
+    }
+
+    .lead {
+        text-align: center;
+    }
+
+    .block-numbers {
+        .block-number-item {
+            text-align: center;
+
+            .block-number-item-inner {
+                margin: 10px auto;
+                width: 200px;
+                max-width: 100%;
+                border: 1px solid rgba(0,0,0,.10);
+                border-bottom: 4px solid $primary;
+                background-color: rgba(0,0,0,.03);
+                padding: 20px 10px 15px;
+                border-radius: 10px;
+                box-shadow: 0 0 0 rgba(0,0,0,.1);
+                transition: .3s all;
+
+                &:hover {
+                    box-shadow: 0 0 20px rgba($primary,.2);
+                }
+            }
+        }
+
+        .block-number {
+            color: $primary;
+            line-height: 1;
+            margin-bottom: 5px;
+
+            .block-number-counter {
+                font-size: 40px;
+                font-weight: bold;
+                display: inline-block;
+                vertical-align: middle;
+            }
+            .block-number-after {
+                font-size: 30px;
+                font-weight: bold;
+                display: inline-block;
+                vertical-align: middle;
+            }
+        }
+
+        .block-number-label {
+            font-size: 20px;
+            font-weight: 600;
+            color: #000;
+        }
+    }
+}
+
+@include media-breakpoint-up(sm) {
+    .block-company-in-numbers {
+        .block-numbers {
+            .block-number-item {
+                .block-number-item-inner {
+                    width: 250px;
+                    padding: 20px 15px 25px;
+                }
+            }
+            .block-number {
+                .block-number-counter {
+                    font-size: 50px;
+                }
+            }
+        }
+    }
+}
+
+@include media-breakpoint-up(md) {
+}
+
+@include media-breakpoint-up(lg) {
+    .block-company-in-numbers {
+        .block-numbers {
+            .block-number-item {
+                .block-number-item-inner {
+                    width: auto;
+                    max-width: 100%;
+                    padding: 40px 30px 35px;
+                }
+            }
+            .block-number {
+                .block-number-counter {
+                    font-size: 70px;
+                }
+            }
+        }
+    }
+}
+
+@include media-breakpoint-up(xl) {
+}
+
+@include media-breakpoint-up(xxl) {
+}
