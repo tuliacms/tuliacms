@@ -27,6 +27,13 @@
     {% endif %}
 
     <div class="node-content">
+        {% if edit_links_enabled() %}
+            <div class="container">
+                <div class="row">
+                    <div class="col my-4">{{ edit_links(node) }}</div>
+                </div>
+            </div>
+        {% endif %}
         {% if node.content is defined and not node.content|empty %}
             {{ node.content|default|raw }}
         {% else %}
