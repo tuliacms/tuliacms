@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <title>{% block title %}{{ title() }}{% endblock %}</title>
-        {{ theme_head() }}
+        {{ do_action('theme.head') }}
         {% block head %}{% endblock %}
     </head>
     <body class="{{ body_class(app.request) }}">
@@ -30,7 +30,7 @@
         </div>
         {% block content %}{% endblock %}
         {% include relative(_self, '_parts/footer.tpl') %}
-        {{ theme_body() }}
+        {{ do_action('theme.body') }}
         {% block afterbody %}{% endblock %}
     </body>
 </html>
