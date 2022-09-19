@@ -12,6 +12,10 @@
                     <div class="header-menu">
                         {{ widgets_space('mainmenu') }}
                     </div>
+                    {{ dump(customizer_get('lisa.header.show_language_switcher')) }}
+                    {% if customizer_get('lisa.header.show_language_switcher') == 'yes' and current_website().locales|length %}
+                        asdasd
+                    {% endif %}
                 </nav>
             </div>
         </div>

@@ -98,6 +98,10 @@
                 <source>readMoreNews</source>
                 <target>Read more news</target>
             </trans-unit>
+            <trans-unit id="tuliacms.lisa-theme.25">
+                <source>showLanguageSwitcher</source>
+                <target>Show language switcher</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

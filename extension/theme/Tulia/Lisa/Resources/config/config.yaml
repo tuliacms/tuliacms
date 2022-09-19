@@ -97,6 +97,10 @@ cms:
                                     label: logoText
                                     value: Event Agency
                                     transport: postMessage
+                                lisa.header.show_language_switcher:
+                                    type: yes_no
+                                    label: showLanguageSwitcher
+                                    value: true
                         lisa.footer:
                             label: footer
                             controls:
