@@ -48,6 +48,7 @@ cms:
                             - { name: style-1, label: Style 1 }
                         image_sizes:
                             - { name: node-thumbnail, width: 500, height: 260 }
+                            - { name: mobile-banner, width: 800, height: 600 }
                     customizer:
                         assets:
                             - tulia.lisa.customizer
@@ -84,11 +85,9 @@ cms:
                             label: Layout
                             controls:
                                 lisa.layout.breadcrumbs:
-                                    type: select
-                                    control_options:
-                                        choices: { show: Tak, hide: Nie },
+                                    type: yes_no
                                     label: showBreadcrumbs
-                                    value: show
+                                    value: yes
                         lisa.header:
                             label: header
                             controls:
@@ -107,7 +106,7 @@ cms:
                                 lisa.footer.contact.type:
                                     type: select
                                     control_options:
-                                        choices: { 0: Domyślnie, 1: Miejsce na moduł (footer_contact) }
+                                        choices: { 0: Default, 1: Widget (footer_contact) }
                                     label: contactSection
                                     value: 0
                                 lisa.footer.contact.copyrights:
@@ -179,11 +178,9 @@ cms:
                                     multilingual: true
                                     value: '#read-more'
                                 hero.static.button.show:
-                                    type: select
+                                    type: yes_no
                                     label: showButton
-                                    control_options:
-                                        choices: { 0: Nie, 1: Tak }
-                                    value: 1
+                                    value: yes
                                 hero.static.button.label:
                                     label: buttonLabel
                                     multilingual: true

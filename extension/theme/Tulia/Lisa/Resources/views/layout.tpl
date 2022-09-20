@@ -10,7 +10,7 @@
     <body class="{{ body_class(app.request) }}">
         {% block beforebody %}{% endblock %}
         {% include relative(_self, '_parts/header.tpl') %}
-        {% if not is_homepage() and customizer_get('lisa.layout.breadcrumbs') == 'show' %}
+        {% if not is_homepage() and customizer_get('lisa.layout.breadcrumbs') == 'yes' %}
             <div class="breadcrumbs-container">
                 <div class="container-xxl">
                     <div class="row">
