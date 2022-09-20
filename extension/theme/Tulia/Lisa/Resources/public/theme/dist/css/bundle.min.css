@@ -8546,18 +8546,18 @@ h1, .h1, .h1 {
   font-weight: 900;
   margin-bottom: 30px; }
 
-ul {
+ul:not(.dropdown-menu) {
   display: block;
   list-style: none;
   margin: 0 0 20px 10px;
   padding: 0; }
-  ul li {
+  ul:not(.dropdown-menu) li {
     list-style: none;
     padding: 5px 0 20px 35px;
     margin: 0;
     position: relative;
     font-size: 17px; }
-    ul li:before {
+    ul:not(.dropdown-menu) li:before {
       content: "\f00c";
       font-family: "Font Awesome 5 Free", serif;
       display: block;
@@ -8567,7 +8567,7 @@ ul {
       color: #0f61b9;
       font-size: 20px;
       font-weight: bold; }
-    ul li b, ul li strong {
+    ul:not(.dropdown-menu) li b, ul:not(.dropdown-menu) li strong {
       font-size: 120%;
       color: #000;
       line-height: 1; }
@@ -8677,6 +8677,9 @@ body header {
         padding: 8px 15px; }
     body header .navbar .navbar-nav-hoverable .submenu {
       background-color: rgba(0, 0, 0, 0.4); }
+    body header .navbar .language-switcher {
+      margin: 0 auto;
+      width: 40px; }
   body header .hamburger {
     transition: 0.12s all;
     position: fixed;
@@ -8685,7 +8688,8 @@ body header {
   body header .header-menu {
     display: none;
     margin: 0;
-    width: 100%; }
+    width: 100%;
+    align-items: center; }
 
 body .header-pillow {
   height: 70px; }
@@ -8714,6 +8718,8 @@ body.main-menu-opened header {
     display: block; }
 
 @media (min-width: 768px) {
+  body header .language-switcher {
+    margin: 0 0 0 30px !important; }
   body header .hamburger {
     display: none; }
   body header .navbar {
@@ -8725,7 +8731,7 @@ body.main-menu-opened header {
       top: 22px;
       font-size: 28px; }
   body header .header-menu {
-    display: block;
+    display: flex;
     width: initial; }
     body header .header-menu .tulia-navbar.navbar-nav {
       margin: 0; }
@@ -8752,7 +8758,9 @@ body.main-menu-opened header {
   body.body-scrolled header .navbar .logo {
     top: 22px; }
   body.body-scrolled header .navbar .tulia-navbar.navbar-nav {
-    margin-top: 0; } }
+    margin-top: 0; }
+  body.main-menu-opened header .header-menu {
+    display: block; } }
 
 @media (min-width: 1200px) {
   body header {
@@ -8762,6 +8770,8 @@ body.main-menu-opened header {
       padding-bottom: 28px; }
       body header .navbar .logo {
         top: 34px; }
+    body header .header-menu {
+      display: flex; }
   body .header-pillow {
     height: 100px; }
   body.body-scrolled header {

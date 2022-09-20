@@ -37,7 +37,7 @@ h1, .h1 {
     margin-bottom: 30px;
 }
 
-ul {
+ul:not(.dropdown-menu) {
     display: block;
     list-style: none;
     margin: 0 0 20px 10px;

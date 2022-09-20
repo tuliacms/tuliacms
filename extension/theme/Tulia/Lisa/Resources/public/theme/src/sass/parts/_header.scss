@@ -82,6 +82,11 @@ body {
             .navbar-nav-hoverable .submenu {
                 background-color: $header-color-bg;
             }
+
+            .language-switcher {
+                margin: 0 auto;
+                width: 40px;
+            }
         }
 
         .hamburger {
@@ -95,6 +100,7 @@ body {
             display: none;
             margin: 0;
             width: 100%;
+            align-items: center;
         }
     }
 
@@ -150,6 +156,10 @@ body {
 @include media-breakpoint-up(md) {
     body {
         header {
+            .language-switcher {
+                margin: 0 0 0 30px !important;
+            }
+
             .hamburger {
                 display: none;
             }
@@ -167,7 +177,7 @@ body {
             }
 
             .header-menu {
-                display: block;
+                display: flex;
                 width: initial;
 
                 .tulia-navbar.navbar-nav {
@@ -227,6 +237,14 @@ body {
                 }
             }
         }
+
+        &.main-menu-opened {
+            header {
+                .header-menu {
+                    display: block;
+                }
+            }
+        }
     }
 }
 
@@ -242,6 +260,10 @@ body {
                 .logo {
                     top: 34px;
                 }
+            }
+
+            .header-menu {
+                display: flex;
             }
         }
 

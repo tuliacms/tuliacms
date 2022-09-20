@@ -100,7 +100,7 @@ cms:
                                 lisa.header.show_language_switcher:
                                     type: yes_no
                                     label: showLanguageSwitcher
-                                    value: true
+                                    value: yes
                         lisa.footer:
                             label: footer
                             controls:

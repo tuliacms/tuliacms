@@ -11,11 +11,19 @@
                     </button>
                     <div class="header-menu">
                         {{ widgets_space('mainmenu') }}
+                        {% if customizer_get('lisa.header.show_language_switcher') == 'yes' and current_website().locales|length %}
+                            <div class="dropdown language-switcher">
+                                <a href="#" class="text-white dropdown-toggle text-uppercase" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    {{ current_website().locale.language }}
+                                </a>
+                                <ul class="dropdown-menu">
+                                    {% for locale in current_website().locales %}
+                                        <li><a href="{{ path('homepage', { _locale: locale.code }) }}" class="dropdown-item">{{ locale.code|trans_locale }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
                     </div>
-                    {{ dump(customizer_get('lisa.header.show_language_switcher')) }}
-                    {% if customizer_get('lisa.header.show_language_switcher') == 'yes' and current_website().locales|length %}
-                        asdasd
-                    {% endif %}
                 </nav>
             </div>
         </div>
