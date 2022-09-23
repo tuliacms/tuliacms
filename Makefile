@@ -1,6 +1,11 @@
 .PHONY: bash behat deptrac
 
-PHPROOT = docker exec -it --user "$(id -u):$(id -g)" -e COMPOSER_MEMORY_LIMIT=-1 -e --workdir="/var/www/html" $(shell basename $(CURDIR))_tulia_www_1
+DOT:= .
+NOTHING:= ''
+
+CONTAINER_PREFIX:= $(subst $(DOT),$(NOTHING),$(shell basename $(CURDIR)))
+
+PHPROOT = docker exec -it --user "$(id -u):$(id -g)" -e COMPOSER_MEMORY_LIMIT=-1 -e --workdir="/var/www/html" ${CONTAINER_PREFIX}_tulia_www_1
 ARGS = $(filter-out $@,$(MAKECMDGOALS))
 
 
@@ -62,7 +67,7 @@ recreate-local-database:
 .PHONY: setup-install
 setup-install:
 	cp .env.dist .env \
-    && echo "DATABASE_URL="mysql://root:root@$(shell basename $(CURDIR))_tulia_mysql_1:3306/development?serverVersion=5.7"" >> .env \
+    && echo "DATABASE_URL="mysql://root:root@${CONTAINER_PREFIX}_tulia_mysql_1:3306/development?serverVersion=5.7"" >> .env \
     && cp config/dynamic.php.dist config/dynamic.php \
     && $(PHPROOT) composer install -q
 
@@ -76,7 +81,7 @@ setup:
 	&& docker-compose build --build-arg USER_ID=1000 --build-arg GROUP_ID=1000 \
 	&& echo "Executing: \e[94mStarting containers...\e[0m" \
 	&& make up \
-	&& echo "Executing: \e[94mInstalling composer dependencies...\e[0m" \
+	&& echo "Executing: \e[94mInstalling composer dependencies, this may take while...\e[0m" \
 	&& make setup-install \
 	&& echo "Executing: \e[94mCreating local database...\e[0m" \
     && make recreate-local-database \
