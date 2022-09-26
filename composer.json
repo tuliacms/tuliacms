@@ -41,7 +41,6 @@
             "bin/console assets:publish"
         ],
         "post-install-cmd": [
-            "git clone --depth=1 https://github.com/tuliacms/theme-lisa.git extension/theme/Tulia/Lisa && rm -rf extension/theme/Tulia/Lisa/.git",
             "@auto-scripts"
         ],
         "post-update-cmd": [

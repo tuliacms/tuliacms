@@ -68,7 +68,6 @@ recreate-local-database:
 setup-install:
 	cp .env.dist .env \
     && echo "DATABASE_URL="mysql://root:root@${CONTAINER_PREFIX}_tulia_mysql_1:3306/development?serverVersion=5.7"" >> .env \
-    && cp config/dynamic.php.dist config/dynamic.php \
     && $(PHPROOT) composer install -q
 
 .PHONY: setup-cms
