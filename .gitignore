@@ -7,13 +7,8 @@
 /public/bundles/
 /public/assets/
 /public/uploads/
-/extension.local/
 /var/
 /vendor/
-/.idea/
-/config/dynamic/*
-!/config/dynamic/readme.md
-!/config/dynamic/.gitignore
 /docs/architecture/.structurizr
 /docs/architecture/workspace.json
 /composer.lock
@@ -36,6 +31,7 @@
 ###< phpunit/phpunit ###
 
 ###> Local Live Development ###
+/.idea
 /core
 composer.local.json
 ###< Local Live Development ###
