@@ -87,4 +87,9 @@ setup:
 	&& echo "Executing: \e[94mIt's time to setup...\e[0m" \
     && make setup-cms
 
+.PHONY: deploy
+deploy:
+	${PHPROOT} php bin/console deployer:detect \
+	&& php vendor/bin/dep deploy
+
 .SILENT:
