@@ -5,7 +5,7 @@ NOTHING:= ''
 
 CONTAINER_PREFIX:= $(subst $(DOT),$(NOTHING),$(shell basename $(CURDIR)))
 
-PHPROOT = docker exec -it --user "$(id -u):$(id -g)" -e COMPOSER_MEMORY_LIMIT=-1 -e --workdir="/var/www/html" ${CONTAINER_PREFIX}_tulia_www_1
+PHPROOT = docker exec -it --user "$(id -u):$(id -g)" -e COMPOSER_MEMORY_LIMIT=-1 -e --workdir="/var/www/html" ${CONTAINER_PREFIX}-tulia_www-1
 ARGS = $(filter-out $@,$(MAKECMDGOALS))
 
 
@@ -14,24 +14,24 @@ ARGS = $(filter-out $@,$(MAKECMDGOALS))
 
 .PHONY: build
 build:
-	docker-compose build --build-arg USER_ID=1000 --build-arg GROUP_ID=1000
+	docker compose build --build-arg USER_ID=1000 --build-arg GROUP_ID=1000
 
 .PHONY: rebuild
 rebuild:
-	docker-compose build --no-cache --build-arg USER_ID=1000 --build-arg GROUP_ID=1000
+	docker compose build --no-cache --build-arg USER_ID=1000 --build-arg GROUP_ID=1000
 
 .PHONY: up
 up:
-	docker-compose up -d --no-build \
+	docker compose up -d --no-build \
 	&& echo "Ready on http://localhost/\nMailhog: http://localhost:8025/"
 
 .PHONY: down
 down:
-	docker-compose stop
+	docker compose stop
 
 .PHONY: restart
 restart:
-	docker-compose restart
+	docker compose restart
 
 .PHONY: composer
 composer:
@@ -67,7 +67,7 @@ recreate-local-database:
 .PHONY: setup-install
 setup-install:
 	cp .env.dist .env \
-    && echo "DATABASE_URL="mysql://root:root@${CONTAINER_PREFIX}_tulia_mysql_1:3306/development?serverVersion=5.7"" >> .env \
+    && echo "DATABASE_URL="mysql://root:root@${CONTAINER_PREFIX}-tulia_mysql-1:3306/development?serverVersion=5.7"" >> .env \
     && $(PHPROOT) composer install -q
 
 .PHONY: setup-cms
@@ -77,13 +77,16 @@ setup-cms:
 .PHONY: setup
 setup:
 	echo "Executing: \e[94mBuilding containers...\e[0m" \
-	&& docker-compose build --build-arg USER_ID=1000 --build-arg GROUP_ID=1000 \
+	&& docker compose build --build-arg USER_ID=1000 --build-arg GROUP_ID=1000 \
 	&& echo "Executing: \e[94mStarting containers...\e[0m" \
 	&& make up \
 	&& echo "Executing: \e[94mInstalling composer dependencies, this may take while...\e[0m" \
 	&& make setup-install \
 	&& echo "Executing: \e[94mCreating local database...\e[0m" \
     && make recreate-local-database \
+	&& echo "Executing: \e[94mInstalling default theme...\e[0m" \
+	&& git clone https://github.com/tuliacms/theme.tulia.lisa.git --depth=1 extension/theme/Tulia/Lisa \
+	&& rm extension/theme/Tulia/Lisa/.git -rf \
 	&& echo "Executing: \e[94mIt's time to setup...\e[0m" \
     && make setup-cms
 
@@ -91,5 +94,9 @@ setup:
 deploy:
 	${PHPROOT} php bin/console deployer:detect \
 	&& php vendor/bin/dep deploy
+
+.PHONY: fix-vendor-permissions
+fix-vendor-permissions:
+	sudo chmod 0777 vendor -R
 
 .SILENT:

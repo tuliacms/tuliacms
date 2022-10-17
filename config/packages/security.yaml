@@ -1,0 +1,6 @@
+security:
+    access_control:
+        - { path: /auth, roles: PUBLIC_ACCESS }
+        - { path: /profile, roles: ROLE_USER }
+        - { path: /administrator/auth, roles: PUBLIC_ACCESS }
+        - { path: /administrator, roles: ROLE_ADMIN }
