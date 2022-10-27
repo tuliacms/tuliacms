@@ -84,6 +84,8 @@ setup:
 	&& make setup-install \
 	&& echo "Executing: \e[94mCreating local database...\e[0m" \
     && make recreate-local-database \
+    && echo "Executing: \e[94mLoading setup fixtures...\e[0m" \
+    && ${PHPROOT} php bin/console doctrine:fixtures:load --group=setup --no-interaction \
 	&& echo "Executing: \e[94mInstalling default theme...\e[0m" \
 	&& git clone https://github.com/tuliacms/theme.tulia.lisa.git --depth=1 extension/theme/Tulia/Lisa \
 	&& rm extension/theme/Tulia/Lisa/.git -rf \
