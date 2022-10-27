@@ -6,7 +6,6 @@ use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\ErrorHandler\Debug;
 use Tulia\Cms\Platform\Infrastructure\Framework\Console\TuliaApplication;
-use Tulia\Cms\Platform\Infrastructure\Framework\Console\ConsoleWebsiteProvider;
 use Tulia\Cms\Platform\Infrastructure\Framework\Kernel\TuliaKernel;
 
 if (!in_array(PHP_SAPI, ['cli', 'phpdbg', 'embed'], true)) {
@@ -45,6 +44,6 @@ if ($_SERVER['APP_DEBUG']) {
  */
 define('__TULIA_PROJECT_DIR', dirname(__DIR__));
 
-$kernel = new TuliaKernel($_SERVER['APP_ENV'], (bool) $_SERVER['APP_DEBUG'], ConsoleWebsiteProvider::provide($_SERVER['APP_ENV'] === 'dev'));
+$kernel = new TuliaKernel($_SERVER['APP_ENV'], (bool) $_SERVER['APP_DEBUG']);
 $application = new TuliaApplication($kernel);
 $application->run($input);
