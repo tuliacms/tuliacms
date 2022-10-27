@@ -97,6 +97,6 @@ deploy:
 
 .PHONY: fix-vendor-permissions
 fix-vendor-permissions:
-	sudo chmod 0777 vendor -R
+	sudo chmod 0777 vendor -R && sudo chown -R "$(id -nu)" vendor
 
 .SILENT:

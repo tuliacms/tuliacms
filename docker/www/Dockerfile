@@ -13,7 +13,7 @@ RUN apt-get install libonig-dev
 RUN docker-php-ext-install pdo_mysql mbstring
 
 # Installing ZIP
-RUN apt-get install -y zlib1g-dev libzip-dev
+RUN apt-get install -y zip zlib1g-dev libzip-dev unzip
 RUN docker-php-ext-configure zip
 RUN docker-php-ext-install zip
 
