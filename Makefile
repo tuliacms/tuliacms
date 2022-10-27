@@ -89,6 +89,10 @@ setup:
 	&& echo "Executing: \e[94mInstalling default theme...\e[0m" \
 	&& git clone https://github.com/tuliacms/theme.tulia.lisa.git --depth=1 extension/theme/Tulia/Lisa \
 	&& rm extension/theme/Tulia/Lisa/.git -rf \
+    && echo "Executing: \e[94mClearing cache...\e[0m" \
+    && ${PHPROOT} php bin/console cache:clear -q \
+    && echo "Executing: \e[94mPublishing assets...\e[0m" \
+    && ${PHPROOT} php bin/console assets:publish -q \
 	&& echo "Executing: \e[94mIt's time to setup...\e[0m" \
     && make setup-cms
 

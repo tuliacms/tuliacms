@@ -4,7 +4,6 @@ use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\ErrorHandler\Debug;
 use Symfony\Component\HttpFoundation\Request;
 use Tulia\Cms\Platform\Infrastructure\Framework\Kernel\TuliaKernel;
-use Tulia\Cms\Platform\Infrastructure\Framework\Request\RequestFactory;
 
 require dirname(__DIR__) . '/vendor/autoload.php';
 
@@ -21,10 +20,8 @@ if ($_SERVER['APP_DEBUG']) {
  */
 define('__TULIA_PROJECT_DIR', dirname(__DIR__));
 
-Request::setFactory(RequestFactory::factory(...));
-
 $request = Request::createFromGlobals();
-$kernel = new TuliaKernel($_SERVER['APP_ENV'], (bool) $_SERVER['APP_DEBUG'], $request->attributes->get('website'));
+$kernel = new TuliaKernel($_SERVER['APP_ENV'], (bool) $_SERVER['APP_DEBUG']);
 $response = $kernel->handle($request);
 $response->send();
 $kernel->terminate($request, $response);
