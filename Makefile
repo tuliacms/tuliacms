@@ -60,7 +60,9 @@ recreate-local-database:
 	&& echo "Executing: \e[94mLoading fixtures...\e[0m" \
 	&& ${PHPROOT} php bin/console doctrine:fixtures:load --group=local-database --no-interaction \
 	&& echo "Executing: \e[94mRegistering options...\e[0m" \
-	&& ${PHPROOT} php bin/console options:register -q
+	&& ${PHPROOT} php bin/console options:register -q \
+	&& echo "Executing: \e[94mIndexing Search Anything...\e[0m" \
+	&& ${PHPROOT} php bin/console search-anything:index --everything -q
 
 # Subcommands for setup new installation
 
