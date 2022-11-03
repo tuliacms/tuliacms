@@ -10,7 +10,7 @@ services:
             - ./docker/www/php.ini:/usr/local/etc/php/conf.d/php.ini
             - ./docker/www/docker-php-ext-xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
             - ./docker/www/docker-php-ext-opcache.ini:/usr/local/etc/php/conf.d/docker-php-ext-opcache.ini
-            - ./:/var/www/html:rw
+            - .:/var/www:rw
             - "$HOME/.cache/composer:/home/user/.composer/cache"
         expose:
             - 9003
