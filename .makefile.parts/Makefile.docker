@@ -1,0 +1,43 @@
+.PHONY: build
+build:
+	docker compose build --build-arg USER_ID=1000 --build-arg GROUP_ID=1000
+
+.PHONY: rebuild
+rebuild:
+	docker compose build --no-cache --build-arg USER_ID=1000 --build-arg GROUP_ID=1000
+
+.PHONY: up
+up:
+	docker compose up -d --no-build \
+	&& echo "Ready on http://localhost/\nMailhog: http://localhost:8025/"
+
+.PHONY: down
+down:
+	docker compose stop
+
+.PHONY: restart
+restart:
+	docker compose restart
+
+.PHONY: composer
+composer:
+	$(PHPROOT) composer "$(ARGS)"
+
+.PHONY: bash
+bash:
+	${PHPROOT} /bin/bash
+
+.PHONY: recreate-local-database
+recreate-local-database:
+	echo "Executing: \e[94mDropping database...\e[0m" \
+	&& ${PHPROOT} php bin/console doctrine:schema:drop --force --full-database -q \
+	&& echo "Executing: \e[94mRecreating schema...\e[0m" \
+	&& ${PHPROOT} php bin/console doctrine:schema:update --force -q \
+	&& echo "Executing: \e[94mExecuting migrations...\e[0m" \
+	&& ${PHPROOT} php bin/console doctrine:migrations:migrate --all-or-nothing --no-interaction -q \
+	&& echo "Executing: \e[94mLoading fixtures...\e[0m" \
+	&& ${PHPROOT} php bin/console doctrine:fixtures:load --group=local-database --no-interaction \
+	&& echo "Executing: \e[94mRegistering options...\e[0m" \
+	&& ${PHPROOT} php bin/console options:register -q \
+	&& echo "Executing: \e[94mIndexing Search Anything...\e[0m" \
+	&& ${PHPROOT} php bin/console search-anything:index --everything -q

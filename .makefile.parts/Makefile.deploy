@@ -1,0 +1,4 @@
+.PHONY: deploy
+deploy:
+	${PHPROOT} php bin/console deployer:detect \
+	&& php vendor/bin/dep deploy

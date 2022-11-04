@@ -1,0 +1,4 @@
+.PHONY: fix-vendor-permissions
+fix-vendor-permissions:
+	sudo chmod 0777 vendor -R && sudo chown -R "$(id -nu)" vendor \
+	&& sudo chmod 0777 var -R && sudo chown -R "$(id -nu)" var
