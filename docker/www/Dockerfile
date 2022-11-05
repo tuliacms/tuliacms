@@ -46,3 +46,6 @@ RUN chown -R www-data:www-data /var/www
 
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+# MySql Client to dump database
+RUN apt-get install -y mariadb-client

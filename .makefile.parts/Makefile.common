@@ -2,3 +2,8 @@
 fix-vendor-permissions:
 	sudo chmod 0777 vendor -R && sudo chown -R "$(id -nu)" vendor \
 	&& sudo chmod 0777 var -R && sudo chown -R "$(id -nu)" var
+
+.PHONY: dump-database
+dump-database:
+	${PHPROOT_NOTTY} mysqldump development --no-create-db --add-drop-table --add-drop-trigger --add-locks --host=demotuliacmsorg-tulia_mysql-1 --user=root --password=root > var/mysqldump.sql \
+	&& echo "\e[0;32mDatabase dumped to var/mysqldump.sql\e[0m"

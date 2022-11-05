@@ -2,3 +2,15 @@
 deploy:
 	${PHPROOT} php bin/console deployer:detect \
 	&& php vendor/bin/dep deploy
+
+.PHONY: deploy-unlock
+deploy-unlock:
+	php vendor/bin/dep deploy:unlock
+
+.PHONY: deploy-ssh
+deploy-ssh:
+	php vendor/bin/dep ssh
+
+.PHONY: dep
+dep:
+	php vendor/bin/dep "$(ARGS)"
