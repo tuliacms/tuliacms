@@ -1,18 +1,13 @@
 {
     "extra": {
         "tuliacms": {
-            "modules": {
-                "Tulia/EditorTinymce": {
-                    "enabled": true,
-                    "placement": "extensions"
-                },
-                "SomeCustom/Extension": {
-                    "enabled": true,
+            "themes": {
+                "tuliacms\/theme.tulia.lisa": {
                     "placement": "vendor",
-                    "path": "vendor/some-custom/extension"
+                    "path": "vendor\/tuliacms\/theme.tulia.lisa",
+                    "vendor-package-name": "tuliacms\/theme.tulia.lisa"
                 }
-            },
-            "themes": {}
+            }
         }
     }
 }
