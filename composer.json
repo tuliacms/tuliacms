@@ -3,7 +3,7 @@
     "name": "tuliacms/tuliacms",
     "license": "MIT",
     "version": "dev-master",
-    "minimum-stability": "dev",
+    "minimum-stability": "alpha",
     "require": {
         "php": ">=8.1",
         "tuliacms/cms": "dev-master",
@@ -25,8 +25,8 @@
     },
     "autoload": {
         "psr-4": {
-            "Tulia\\Theme\\": "extension/theme",
-            "Tulia\\Module\\": "extension/module"
+            "Tulia\\Local\\Theme\\": "extension/theme",
+            "Tulia\\Local\\Module\\": "extension/module"
         }
     },
     "require-dev": {
@@ -45,15 +45,8 @@
         "post-install-cmd": [
             "@auto-scripts"
         ],
-        "post-package-install": [
-            "Tulia\\Cms\\Platform\\Infrastructure\\Composer\\Scripts\\Extensions::install",
-            "@auto-scripts"
-        ],
-        "pre-package-uninstall": [
-            "Tulia\\Cms\\Platform\\Infrastructure\\Composer\\Scripts\\Extensions::preuninstall"
-        ],
-        "post-package-uninstall": [
-            "Tulia\\Cms\\Platform\\Infrastructure\\Composer\\Scripts\\Extensions::uninstall",
+        "post-autoload-dump": [
+            "Tulia\\Cms\\Platform\\Infrastructure\\Composer\\Scripts\\Extensions::discover",
             "@auto-scripts"
         ]
     },
