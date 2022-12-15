@@ -22,3 +22,5 @@ setup:
     && ${PHPROOT} php bin/console assets:publish -q \
 	&& echo "Executing: \e[94mIt's time to setup...\e[0m" \
     && ${PHPROOT} php bin/console cms:setup
+
+.SILENT::

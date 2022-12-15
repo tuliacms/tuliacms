@@ -41,3 +41,5 @@ recreate-local-database:
 	&& ${PHPROOT} php bin/console options:register -q \
 	&& echo "Executing: \e[94mIndexing Search Anything...\e[0m" \
 	&& ${PHPROOT} php bin/console search-anything:index --everything -q
+
+.SILENT::
