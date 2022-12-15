@@ -30,7 +30,6 @@
         }
     },
     "require-dev": {
-        "deployer/deployer": "^7.0",
         "doctrine/doctrine-fixtures-bundle": "^3.4",
         "roave/security-advisories": "dev-master",
         "symfony/debug-bundle": "5.4.*",
