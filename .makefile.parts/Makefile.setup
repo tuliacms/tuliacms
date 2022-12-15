@@ -7,7 +7,7 @@ setup-install:
 .PHONY: setup
 setup:
 	echo "Executing: \e[94mBuilding containers...\e[0m" \
-	&& docker compose build --build-arg USER_ID=1000 --build-arg GROUP_ID=1000 \
+	&& make build \
 	&& echo "Executing: \e[94mStarting containers...\e[0m" \
 	&& make up \
 	&& echo "Executing: \e[94mInstalling composer dependencies, this may take while...\e[0m" \
@@ -16,9 +16,6 @@ setup:
     && make recreate-local-database \
     && echo "Executing: \e[94mLoading setup fixtures...\e[0m" \
     && ${PHPROOT} php bin/console doctrine:fixtures:load --group=setup --no-interaction \
-	&& echo "Executing: \e[94mInstalling default theme...\e[0m" \
-	&& git clone https://github.com/tuliacms/theme.tulia.lisa.git --depth=1 extension/theme/Tulia/Lisa \
-	&& rm extension/theme/Tulia/Lisa/.git -rf \
     && echo "Executing: \e[94mClearing cache...\e[0m" \
     && ${PHPROOT} php bin/console cache:clear -q \
     && echo "Executing: \e[94mPublishing assets...\e[0m" \
