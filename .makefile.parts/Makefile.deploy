@@ -14,5 +14,3 @@ deploy-ssh:
 .PHONY: dep
 dep:
 	php vendor/bin/dep "$(ARGS)"
-
-.SILENT::

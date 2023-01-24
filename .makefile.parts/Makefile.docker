@@ -1,10 +1,12 @@
 .PHONY: build
 build:
-	docker compose build --build-arg USER_ID="$(shell id -u)" --build-arg GROUP_ID="$(shell id -g)"
+	export UID=$(id -u) && export GID=$(id -g) \
+	&& docker compose build
 
 .PHONY: rebuild
 rebuild:
-	docker compose build --no-cache --build-arg USER_ID="$(shell id -u)" --build-arg GROUP_ID="$(shell id -g)"
+	export UID=$(id -u) && export GID=$(id -g) \
+	&& docker compose build --no-cache
 
 .PHONY: up
 up:
@@ -36,10 +38,8 @@ recreate-local-database:
 	&& echo "Executing: \e[94mExecuting migrations...\e[0m" \
 	&& ${PHPROOT} php bin/console doctrine:migrations:migrate --all-or-nothing --no-interaction -q \
 	&& echo "Executing: \e[94mLoading fixtures...\e[0m" \
-	&& ${PHPROOT} php bin/console doctrine:fixtures:load --group=local-database --no-interaction \
+	&& ${PHPROOT} php bin/console doctrine:fixtures:load --group=local-database --no-interaction -vvv \
 	&& echo "Executing: \e[94mRegistering options...\e[0m" \
 	&& ${PHPROOT} php bin/console options:register -q \
 	&& echo "Executing: \e[94mIndexing Search Anything...\e[0m" \
 	&& ${PHPROOT} php bin/console search-anything:index --everything -q
-
-.SILENT::

@@ -2,8 +2,8 @@ DOT:= .
 NOTHING:=
 
 CONTAINER_PREFIX:= $(subst $(DOT),$(NOTHING),$(shell basename $(CURDIR)))
-PHPROOT       = docker exec -it --user "$(id -u):$(id -g)" -e COMPOSER_MEMORY_LIMIT=-1 --workdir="/var/www" ${CONTAINER_PREFIX}-tulia_www-1
-PHPROOT_NOTTY = docker exec -i  --user "$(id -u):$(id -g)" -e COMPOSER_MEMORY_LIMIT=-1 --workdir="/var/www" ${CONTAINER_PREFIX}-tulia_www-1
+PHPROOT       = DOCKER_BUILDKIT=1 HOME=${HOME} docker compose -f docker-compose.yml exec -it -e COMPOSER_MEMORY_LIMIT=-1 tulia_www
+PHPROOT_NOTTY = DOCKER_BUILDKIT=1 HOME=${HOME} docker compose -f docker-compose.yml exec -i  -e COMPOSER_MEMORY_LIMIT=-1 tulia_www
 ARGS = $(filter-out $@,$(MAKECMDGOALS))
 
 include .makefile.parts/Makefile.docker

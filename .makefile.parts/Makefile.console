@@ -5,5 +5,3 @@ console:
 .PHONY: cc
 cc:
 	${PHPROOT} php bin/console cache:clear -vvv
-
-.SILENT::

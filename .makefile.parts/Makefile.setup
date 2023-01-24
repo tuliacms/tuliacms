@@ -6,10 +6,9 @@ setup-install:
 
 .PHONY: setup
 setup:
-	echo "Executing: \e[94mBuilding containers...\e[0m" \
-	&& make build \
-	&& echo "Executing: \e[94mStarting containers...\e[0m" \
-	&& make up \
+	echo "Executing: \e[94mBuilding and starting containers...\e[0m" \
+	&& export UID=$(id -u) && export GID=$(id -g) \
+	&& docker compose -f docker-compose.yml up -d --build \
 	&& echo "Executing: \e[94mInstalling composer dependencies, this may take while...\e[0m" \
 	&& make setup-install \
 	&& echo "Executing: \e[94mCreating local database...\e[0m" \
@@ -22,5 +21,3 @@ setup:
     && ${PHPROOT} php bin/console assets:publish -q \
 	&& echo "Executing: \e[94mIt's time to setup...\e[0m" \
     && ${PHPROOT} php bin/console cms:setup
-
-.SILENT::

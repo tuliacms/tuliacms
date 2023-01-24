@@ -1,7 +1,11 @@
-version: "3.1"
 services:
     tulia_www:
-        build: ./docker/www
+        working_dir: /var/www
+        build:
+            context: ./docker/www
+            args:
+                - UID=${UID:-1000}
+                - GID=${GID:-1000}
         ports:
             - 80:80
         volumes:
@@ -9,14 +13,15 @@ services:
             - ./docker/www/php.ini:/usr/local/etc/php/conf.d/php.ini
             - ./docker/www/docker-php-ext-xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
             - ./docker/www/docker-php-ext-opcache.ini:/usr/local/etc/php/conf.d/docker-php-ext-opcache.ini
-            - .:/var/www:rw
-            - "$HOME/.cache/composer:/home/user/.composer/cache"
+            - .:/var/www
+            - "$HOME/.cache/composer:/home/tuliacms/.composer/cache"
         expose:
             - 9003
         depends_on:
             - tulia_mysql
         networks:
             - backend
+        user: 'tuliacms'
     tulia_mysql:
         image: mysql:8.0.25
         command: mysqld --sql_mode="STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION" --character-set-server=utf8 --collation-server=utf8_unicode_ci --default-authentication-plugin=mysql_native_password

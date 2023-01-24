@@ -1,9 +1,9 @@
 FROM php:8.1-apache
-ARG USER_ID
-ARG GROUP_ID
+ARG UID
+ARG GID
 
-RUN addgroup --gid $GROUP_ID user
-RUN adduser --disabled-password --gecos '' --uid $USER_ID --gid $GROUP_ID user
+RUN addgroup --gid ${GID} --system tuliacms
+RUN adduser --ingroup tuliacms --system --disabled-password --shell /bin/sh -u ${UID} tuliacms
 
 RUN apt-get update
 RUN apt-get upgrade -y
@@ -42,7 +42,7 @@ RUN docker-php-ext-configure opcache --enable-opcache \
 RUN a2enmod rewrite
 
 # Allow access to root dir
-RUN chown -R www-data:www-data /var/www
+RUN chown -R tuliacms:tuliacms /var/www
 
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer

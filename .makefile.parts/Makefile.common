@@ -7,5 +7,3 @@ fix-vendor-permissions:
 dump-database:
 	${PHPROOT_NOTTY} mysqldump development --no-create-db --add-drop-table --add-drop-trigger --add-locks --host=demotuliacmsorg-tulia_mysql-1 --user=root --password=root > var/mysqldump.sql \
 	&& echo "\e[0;32mDatabase dumped to var/mysqldump.sql\e[0m"
-
-.SILENT::
