@@ -1,13 +1,8 @@
 {
     "extra": {
         "tuliacms": {
-            "themes": {
-                "tuliacms\/theme.tulia.lisa": {
-                    "placement": "vendor",
-                    "path": "vendor\/tuliacms\/theme.tulia.lisa",
-                    "vendor-package-name": "tuliacms\/theme.tulia.lisa"
-                }
-            }
+            "modules": {},
+            "themes": {}
         }
     }
 }
