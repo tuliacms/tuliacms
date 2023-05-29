@@ -5,8 +5,8 @@
     "minimum-stability": "alpha",
     "require": {
         "php": "^8.1",
-        "tuliacms/cms": "^0.0.1-alpha.2",
-        "tuliacms/theme.tulia.lisa": "^0.1",
+        "tuliacms/cms": "^0.0.1-alpha.3",
+        "tuliacms/theme.tulia.lisa": "^0.3",
         "wikimedia/composer-merge-plugin": "^2.0"
     },
     "config": {
