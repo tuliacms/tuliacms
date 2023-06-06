@@ -2,7 +2,7 @@
 setup-install:
 	cp .env.dist .env \
     && echo "DATABASE_URL="mysql://root:root@${CONTAINER_PREFIX}-tulia_mysql-1:3306/development?serverVersion=5.7"" >> .env \
-    && $(PHPROOT) composer install -q
+    && $(PHPROOT) composer install
 
 .PHONY: setup
 setup:
