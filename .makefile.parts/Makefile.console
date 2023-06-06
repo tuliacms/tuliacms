@@ -2,6 +2,10 @@
 console:
 	${PHPROOT} php bin/console "$(ARGS)"
 
+.PHONY: require
+require:
+	${PHPROOT} composer require "$(ARGS)"
+
 .PHONY: cc
 cc:
 	${PHPROOT} php bin/console cache:clear -vvv
